@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":18,"i2":6,"i3":1,"i4":6,"i5":18,"i6":18,"i7":1,"i8":18,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":6,"i23":6,"i24":18,"i25":6,"i26":1,"i27":1,"i28":1,"i29":1,"i30":6,"i31":6,"i32":1};
+var data = {"i0":6,"i1":18,"i2":6,"i3":1,"i4":6,"i5":18,"i6":18,"i7":1,"i8":18,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":18,"i21":6,"i22":6,"i23":6,"i24":18,"i25":6,"i26":1,"i27":1,"i28":1,"i29":1,"i30":6,"i31":6,"i32":1};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -292,7 +292,7 @@ public interface <span class="typeNameLabel">EventNode&lt;T extends <a href="Eve
 </td>
 </tr>
 <tr id="i20" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeChildren(java.lang.String)">removeChildren</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Recursively removes children with the given name starting at this node.</div>
@@ -925,8 +925,8 @@ default&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/ap
 <ul class="blockList">
 <li class="blockList">
 <h4>removeChildren</h4>
-<pre class="methodSignature">void&nbsp;removeChildren&#8203;(@NotNull
-                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<pre class="methodSignature">default&nbsp;void&nbsp;removeChildren&#8203;(@NotNull
+                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
 <div class="block">Recursively removes children with the given name starting at this node.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
