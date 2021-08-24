@@ -207,7 +207,7 @@ public final class PacketUtils {
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final var temp = PacketUtils.createFramedPacket(packet);
-        final var buffer= ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
+        final var buffer = ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
         return new FramedPacket(packet.getId(), buffer, packet);
     }
 
@@ -277,13 +277,11 @@ public final class PacketUtils {
                     Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
                             ? ((PlayerSocketConnection) connection)::write :
                             byteBuffer -> {
-                                System.out.println("error");
                                 // TODO for non-socket connection
                             };
 
                     final var pair = entityIdMap.get(connection);
                     if (pair != null) {
-                        System.out.println("not null");
                         final int start = pair.leftInt();
                         final int end = pair.rightInt();
                         if (start == 0) {
@@ -295,9 +293,8 @@ public final class PacketUtils {
                             writer.accept(buffer.asByteBuffer(end, readable - end));
                         }
                     } else {
-                        ByteBuffer result = buffer.asByteBuffer(buffer.writerOffset(), buffer.writerOffset());
+                        ByteBuffer result = buffer.asByteBuffer(0, buffer.writerOffset());
                         result.position(result.limit());
-                        //System.out.println("write "+result);
                         writer.accept(result);
                     }
                 }
@@ -327,13 +324,11 @@ public final class PacketUtils {
     }
 
     public static void flush() {
-        var map = VIEWABLE_STORAGE_MAP;
+        final var map = VIEWABLE_STORAGE_MAP;
         VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
-        map.values().forEach(viewableStorage -> {
-            if (viewableStorage.entries.isEmpty()) {
-                return; // nothing to flush
-            }
+        for (ViewableStorage viewableStorage : map.values()) {
+            if (viewableStorage.entries.isEmpty()) continue;
             viewableStorage.process();
-        });
+        }
     }
 }
