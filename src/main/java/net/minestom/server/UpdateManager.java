@@ -9,6 +9,8 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.thread.SingleThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -81,9 +83,12 @@ public final class UpdateManager {
                     }
 
                     // Flush all waiting packets
-                    for (Player player : connectionManager.getOnlinePlayers()) {
-                        player.getPlayerConnection().flush();
-                    }
+                    AsyncUtils.runAsync(() -> {
+                        PacketUtils.flush();
+                        for (Player player : connectionManager.getOnlinePlayers()) {
+                            player.getPlayerConnection().flush();
+                        }
+                    });
 
                     // Disable thread until next tick
                     LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
