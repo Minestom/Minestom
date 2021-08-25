@@ -7,7 +7,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.packet.FramedPacket;
@@ -25,9 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.zip.Deflater;
@@ -236,21 +233,19 @@ public final class PacketUtils {
         }
     }
 
-    private static volatile Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
+    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
 
     private static class ViewableStorage {
         private final Viewable viewable;
-        private final Map<Integer, Entry> entries = new ConcurrentHashMap<>();
+        private final Entry entry = new ViewableStorage.Entry();
 
         private ViewableStorage(Viewable viewable) {
             this.viewable = viewable;
         }
 
         private synchronized void append(PlayerConnection playerConnection, ServerPacket serverPacket) {
-            ViewableStorage.Entry entry = entries.computeIfAbsent(serverPacket.getId(), integer -> new ViewableStorage.Entry());
             final boolean hasConnection = playerConnection != null;
             var entityIdMap = entry.entityIdMap;
-            if (hasConnection && entityIdMap.containsKey(playerConnection)) return;
 
             BinaryBuffer buffer = entry.buffer;
             final int start = buffer.writerOffset();
@@ -259,75 +254,86 @@ public final class PacketUtils {
             final int end = buffer.writerOffset();
 
             if (hasConnection) {
-                entityIdMap.put(playerConnection, IntIntPair.of(start, end));
+                List<IntIntPair> list = entityIdMap.computeIfAbsent(playerConnection, playerConnection1 -> new ArrayList<>());
+                list.add(IntIntPair.of(start, end));
             }
         }
 
-        private void process() {
-            this.entries.forEach((integer, entry) -> {
-                final var entityIdMap = entry.entityIdMap;
+        private synchronized void process() {
+            final var entityIdMap = entry.entityIdMap;
 
-                BinaryBuffer buffer = entry.buffer;
-                final int readable = buffer.readableBytes();
+            BinaryBuffer buffer = entry.buffer;
+            final int readable = buffer.readableBytes();
 
-                final Set<Player> viewers = viewable.getViewers();
-                if (viewers.isEmpty()) return;
-                for (Player player : viewers) {
-                    PlayerConnection connection = player.getPlayerConnection();
-                    Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
-                            ? ((PlayerSocketConnection) connection)::write :
-                            byteBuffer -> {
-                                // TODO for non-socket connection
-                            };
+            final Set<Player> viewers = viewable.getViewers();
+            if (viewers.isEmpty()) return;
+            for (Player player : viewers) {
+                PlayerConnection connection = player.getPlayerConnection();
+                Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
+                        ? ((PlayerSocketConnection) connection)::write :
+                        byteBuffer -> {
+                            // TODO for non-socket connection
+                        };
 
-                    final var pair = entityIdMap.get(connection);
-                    if (pair != null) {
+                final List<IntIntPair> pairs = entityIdMap.get(connection);
+                if (pairs != null) {
+                    int lastWrite = 0;
+                    for (var pair : pairs) {
                         final int start = pair.leftInt();
                         final int end = pair.rightInt();
-                        if (start == 0) {
-                            writer.accept(buffer.asByteBuffer(end, readable - end));
-                        } else if (end == readable) {
-                            writer.accept(buffer.asByteBuffer(0, start));
-                        } else {
-                            writer.accept(buffer.asByteBuffer(0, start));
-                            writer.accept(buffer.asByteBuffer(end, readable - end));
+                        if (start > lastWrite) {
+                            ByteBuffer slice = buffer.asByteBuffer(lastWrite, start);
+                            slice.position(slice.limit());
+                            writer.accept(slice);
                         }
-                    } else {
-                        ByteBuffer result = buffer.asByteBuffer(0, buffer.writerOffset());
-                        result.position(result.limit());
-                        writer.accept(result);
+                        lastWrite = end;
                     }
+                    // Write remaining
+                    final int remaining = readable - lastWrite;
+                    if (remaining > 0) {
+                        ByteBuffer remainSlice = buffer.asByteBuffer(lastWrite, remaining);
+                        remainSlice.position(remaining);
+                        writer.accept(remainSlice);
+                    }
+                } else {
+                    ByteBuffer result = buffer.asByteBuffer(0, buffer.writerOffset());
+                    result.position(result.limit());
+                    writer.accept(result);
                 }
-            });
+            }
+
+            this.entry.reset();
         }
 
         private static class Entry {
-            Map<PlayerConnection, IntIntPair> entityIdMap = new ConcurrentHashMap<>();
+            Map<PlayerConnection, List<IntIntPair>> entityIdMap = new ConcurrentHashMap<>();
             BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
+
+            void reset() {
+                this.entityIdMap.clear();
+                this.buffer.clear();
+            }
         }
     }
 
-    public static void prepareGroupedPacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
-                                            @Nullable Entity entity) {
-        if (entity != null && !entity.isAutoViewable()) {
+    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
+                                             @Nullable Player player) {
+        if (player != null && !player.isAutoViewable()) {
             // Operation cannot be optimized
-            entity.sendPacketToViewers(serverPacket);
+            player.sendPacketToViewers(serverPacket);
             return;
         }
-        final PlayerConnection playerConnection = entity instanceof Player ? ((Player) entity).getPlayerConnection() : null;
+        final PlayerConnection playerConnection = player != null ? player.getPlayerConnection() : null;
         ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, c -> new ViewableStorage(viewable));
         viewableStorage.append(playerConnection, serverPacket);
     }
 
-    public static void prepareGroupedPacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
-        prepareGroupedPacket(viewable, serverPacket, null);
+    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
+        prepareViewablePacket(viewable, serverPacket, null);
     }
 
     public static void flush() {
-        final var map = VIEWABLE_STORAGE_MAP;
-        VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
-        for (ViewableStorage viewableStorage : map.values()) {
-            if (viewableStorage.entries.isEmpty()) continue;
+        for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
             viewableStorage.process();
         }
     }
