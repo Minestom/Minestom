@@ -233,7 +233,7 @@ public final class PacketUtils {
         }
     }
 
-    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
+    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
 
     private static final class ViewableStorage {
         private final Viewable viewable;
@@ -257,9 +257,7 @@ public final class PacketUtils {
         }
 
         private synchronized void process() {
-            final Set<Player> viewers = viewable.getViewers();
-            if (viewers.isEmpty()) return;
-            for (Player player : viewers) {
+            for (Player player : viewable.getViewers()) {
                 PlayerConnection connection = player.getPlayerConnection();
                 Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
                         ? ((PlayerSocketConnection) connection)::write :
@@ -294,6 +292,8 @@ public final class PacketUtils {
         }
     }
 
+    private static final Object VIEWABLE_PACKET_LOCK = new Object();
+
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
                                              @Nullable Player player) {
         if (player != null && !player.isAutoViewable()) {
@@ -302,8 +302,10 @@ public final class PacketUtils {
             return;
         }
         final PlayerConnection playerConnection = player != null ? player.getPlayerConnection() : null;
-        ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, c -> new ViewableStorage(viewable));
-        viewableStorage.append(playerConnection, serverPacket);
+        synchronized (VIEWABLE_PACKET_LOCK) {
+            ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, ViewableStorage::new);
+            viewableStorage.append(playerConnection, serverPacket);
+        }
     }
 
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
@@ -311,9 +313,10 @@ public final class PacketUtils {
     }
 
     public static void flush() {
-        // TODO clear map
-        for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
-            viewableStorage.process();
+        synchronized (VIEWABLE_PACKET_LOCK) {
+            for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
+                viewableStorage.process();
+            }
         }
     }
 }
