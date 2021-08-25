@@ -173,7 +173,7 @@ final class BlockImpl implements Block {
     private Block compute(Map<String, String> properties) {
         Block block = propertyEntry.get(properties);
         if (block == null)
-            throw new IllegalArgumentException("Invalid properties: " + properties);
+            throw new IllegalArgumentException("Invalid properties: " + properties + " for block " + this);
         return nbt == null && handler == null ? block :
                 new BlockImpl(block.registry(), propertyEntry, block.properties(), nbt, handler);
     }
