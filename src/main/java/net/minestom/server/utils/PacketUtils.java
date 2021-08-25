@@ -235,30 +235,28 @@ public final class PacketUtils {
 
     private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
 
-    private static class ViewableStorage {
+    private static final class ViewableStorage {
         private final Viewable viewable;
-        private final Entry entry = new ViewableStorage.Entry();
+        private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new HashMap<>();
+        private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
 
         private ViewableStorage(Viewable viewable) {
             this.viewable = viewable;
         }
 
         private synchronized void append(PlayerConnection playerConnection, ServerPacket serverPacket) {
-            BinaryBuffer buffer = entry.buffer;
             final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
             if (!buffer.canWrite(framedPacket.limit())) process();
             final int start = buffer.writerOffset();
-            buffer.write(framedPacket);
+            this.buffer.write(framedPacket);
             final int end = buffer.writerOffset();
             if (playerConnection != null) {
-                List<IntIntPair> list = entry.entityIdMap.computeIfAbsent(playerConnection, playerConnection1 -> new ArrayList<>());
+                List<IntIntPair> list = entityIdMap.computeIfAbsent(playerConnection, con -> new ArrayList<>());
                 list.add(IntIntPair.of(start, end));
             }
         }
 
         private synchronized void process() {
-            BinaryBuffer buffer = entry.buffer;
-
             final Set<Player> viewers = viewable.getViewers();
             if (viewers.isEmpty()) return;
             for (Player player : viewers) {
@@ -269,44 +267,30 @@ public final class PacketUtils {
                             // TODO for non-socket connection
                         };
 
-                final List<IntIntPair> pairs = entry.entityIdMap.get(connection);
-                if (pairs != null) {
-                    // Player should not be sent at least one packet, ignore ranges
-                    int lastWrite = 0;
+                int lastWrite = 0;
+                final List<IntIntPair> pairs = entityIdMap.get(connection);
+                if (pairs != null && !pairs.isEmpty()) {
                     for (IntIntPair pair : pairs) {
                         final int start = pair.leftInt();
-                        if (start > lastWrite) {
+                        if (start != lastWrite) {
                             ByteBuffer slice = buffer.asByteBuffer(lastWrite, start);
                             slice.position(slice.limit());
                             writer.accept(slice);
                         }
                         lastWrite = pair.rightInt();
                     }
-                    // Write remaining
-                    final int remaining = buffer.writerOffset() - lastWrite;
-                    if (remaining > 0) {
-                        ByteBuffer remainSlice = buffer.asByteBuffer(lastWrite, remaining);
-                        remainSlice.position(remaining);
-                        writer.accept(remainSlice);
-                    }
-                } else {
-                    // Send full buffer
-                    ByteBuffer result = buffer.asByteBuffer(0, buffer.writerOffset());
-                    result.position(result.limit());
-                    writer.accept(result);
+                }
+                // Write remaining
+                final int remaining = buffer.writerOffset() - lastWrite;
+                if (remaining > 0) {
+                    ByteBuffer remainSlice = buffer.asByteBuffer(lastWrite, remaining);
+                    remainSlice.position(remainSlice.limit());
+                    writer.accept(remainSlice);
                 }
             }
-            this.entry.reset();
-        }
-
-        private static class Entry {
-            private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new ConcurrentHashMap<>();
-            private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
-
-            void reset() {
-                this.entityIdMap.clear();
-                this.buffer.clear();
-            }
+            // Clear state
+            this.entityIdMap.clear();
+            this.buffer.clear();
         }
     }
 
