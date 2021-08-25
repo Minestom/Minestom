@@ -244,26 +244,20 @@ public final class PacketUtils {
         }
 
         private synchronized void append(PlayerConnection playerConnection, ServerPacket serverPacket) {
-            final boolean hasConnection = playerConnection != null;
-            var entityIdMap = entry.entityIdMap;
-
             BinaryBuffer buffer = entry.buffer;
+            final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
+            if (!buffer.canWrite(framedPacket.limit())) process();
             final int start = buffer.writerOffset();
-            final ByteBuffer framedPacket = createFramedPacket(serverPacket);
-            buffer.write(framedPacket.flip());
+            buffer.write(framedPacket);
             final int end = buffer.writerOffset();
-
-            if (hasConnection) {
-                List<IntIntPair> list = entityIdMap.computeIfAbsent(playerConnection, playerConnection1 -> new ArrayList<>());
+            if (playerConnection != null) {
+                List<IntIntPair> list = entry.entityIdMap.computeIfAbsent(playerConnection, playerConnection1 -> new ArrayList<>());
                 list.add(IntIntPair.of(start, end));
             }
         }
 
         private synchronized void process() {
-            final var entityIdMap = entry.entityIdMap;
-
             BinaryBuffer buffer = entry.buffer;
-            final int readable = buffer.readableBytes();
 
             final Set<Player> viewers = viewable.getViewers();
             if (viewers.isEmpty()) return;
@@ -275,39 +269,39 @@ public final class PacketUtils {
                             // TODO for non-socket connection
                         };
 
-                final List<IntIntPair> pairs = entityIdMap.get(connection);
+                final List<IntIntPair> pairs = entry.entityIdMap.get(connection);
                 if (pairs != null) {
+                    // Player should not be sent at least one packet, ignore ranges
                     int lastWrite = 0;
-                    for (var pair : pairs) {
+                    for (IntIntPair pair : pairs) {
                         final int start = pair.leftInt();
-                        final int end = pair.rightInt();
                         if (start > lastWrite) {
                             ByteBuffer slice = buffer.asByteBuffer(lastWrite, start);
                             slice.position(slice.limit());
                             writer.accept(slice);
                         }
-                        lastWrite = end;
+                        lastWrite = pair.rightInt();
                     }
                     // Write remaining
-                    final int remaining = readable - lastWrite;
+                    final int remaining = buffer.writerOffset() - lastWrite;
                     if (remaining > 0) {
                         ByteBuffer remainSlice = buffer.asByteBuffer(lastWrite, remaining);
                         remainSlice.position(remaining);
                         writer.accept(remainSlice);
                     }
                 } else {
+                    // Send full buffer
                     ByteBuffer result = buffer.asByteBuffer(0, buffer.writerOffset());
                     result.position(result.limit());
                     writer.accept(result);
                 }
             }
-
             this.entry.reset();
         }
 
         private static class Entry {
-            Map<PlayerConnection, List<IntIntPair>> entityIdMap = new ConcurrentHashMap<>();
-            BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
+            private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new ConcurrentHashMap<>();
+            private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
 
             void reset() {
                 this.entityIdMap.clear();
@@ -333,6 +327,7 @@ public final class PacketUtils {
     }
 
     public static void flush() {
+        // TODO clear map
         for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
             viewableStorage.process();
         }
