@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -189,20 +189,27 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#build()">build</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Builds a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearDelay()">clearDelay</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears the delay interval of the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearRepeat()">clearRepeat</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears the repeat interval of the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(long,java.time.temporal.TemporalUnit)">delay</a></span>&#8203;(long&nbsp;time,
      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;unit)</code></th>
@@ -210,14 +217,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(java.time.Duration)">delay</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#makeTransient()">makeTransient</a></span>()</code></th>
 <td class="colLast">
@@ -226,7 +233,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  reload of that extension.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(long,java.time.temporal.TemporalUnit)">repeat</a></span>&#8203;(long&nbsp;time,
       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;unit)</code></th>
@@ -234,14 +241,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(java.time.Duration)">repeat</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
@@ -440,6 +447,21 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
  reload of that extension.</div>
 </li>
 </ul>
+<a id="build()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>build</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;build()</pre>
+<div class="block">Builds a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the built <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a></dd>
+</dl>
+</li>
+</ul>
 <a id="schedule()">
 <!--   -->
 </a>
@@ -451,7 +473,7 @@ public&nbsp;@NotNull <a href="Task.html" title="class in net.minestom.server.tim
 <div class="block">Schedules this <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> for execution.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the built <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a></dd>
+<dd>the scheduled <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a></dd>
 </dl>
 </li>
 </ul>
