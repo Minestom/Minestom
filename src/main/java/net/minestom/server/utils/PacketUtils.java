@@ -45,6 +45,12 @@ public final class PacketUtils {
     private PacketUtils() {
     }
 
+    @ApiStatus.Internal
+    @ApiStatus.Experimental
+    public static ByteBuffer localBuffer() {
+        return COMPRESSION_CACHE.get();
+    }
+
     /**
      * Sends a packet to an audience. This method performs the following steps in the
      * following order:
