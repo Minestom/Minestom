@@ -270,7 +270,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
                 this.tickBuffer.writeChannel(channel);
             } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
+                final String message = e.getMessage();
+                if (message == null ||
+                        (!message.equals("Broken pipe") && !message.equals("Connection reset by peer"))) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             } catch (ShortBufferException e) {
                 e.printStackTrace();
             } finally {

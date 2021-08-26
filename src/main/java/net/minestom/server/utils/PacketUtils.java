@@ -39,6 +39,9 @@ public final class PacketUtils {
     private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.SOCKET_BUFFER_SIZE);
     private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.SOCKET_BUFFER_SIZE);
 
+    private static final Object VIEWABLE_PACKET_LOCK = new Object();
+    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
+
     private PacketUtils() {
     }
 
@@ -132,6 +135,35 @@ public final class PacketUtils {
 
     public static void broadcastPacket(@NotNull ServerPacket packet) {
         sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
+    }
+
+    @ApiStatus.Experimental
+    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
+                                             @Nullable Player player) {
+        if (player != null && !player.isAutoViewable()) {
+            // Operation cannot be optimized
+            player.sendPacketToViewers(serverPacket);
+            return;
+        }
+        ViewableStorage viewableStorage;
+        synchronized (VIEWABLE_PACKET_LOCK) {
+            viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, ViewableStorage::new);
+        }
+        viewableStorage.append(serverPacket, player != null ? player.getPlayerConnection() : null);
+    }
+
+    @ApiStatus.Experimental
+    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
+        prepareViewablePacket(viewable, serverPacket, null);
+    }
+
+    @ApiStatus.Internal
+    public static void flush() {
+        synchronized (VIEWABLE_PACKET_LOCK) {
+            for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
+                viewableStorage.process();
+            }
+        }
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
@@ -233,8 +265,6 @@ public final class PacketUtils {
         }
     }
 
-    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
-
     private static final class ViewableStorage {
         private final Viewable viewable;
         private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new HashMap<>();
@@ -244,14 +274,14 @@ public final class PacketUtils {
             this.viewable = viewable;
         }
 
-        private synchronized void append(PlayerConnection playerConnection, ServerPacket serverPacket) {
+        private synchronized void append(ServerPacket serverPacket, PlayerConnection connection) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
             if (!buffer.canWrite(framedPacket.limit())) process();
             final int start = buffer.writerOffset();
             this.buffer.write(framedPacket);
             final int end = buffer.writerOffset();
-            if (playerConnection != null) {
-                List<IntIntPair> list = entityIdMap.computeIfAbsent(playerConnection, con -> new ArrayList<>());
+            if (connection != null) {
+                List<IntIntPair> list = entityIdMap.computeIfAbsent(connection, con -> new ArrayList<>());
                 list.add(IntIntPair.of(start, end));
             }
         }
@@ -289,34 +319,6 @@ public final class PacketUtils {
             // Clear state
             this.entityIdMap.clear();
             this.buffer.clear();
-        }
-    }
-
-    private static final Object VIEWABLE_PACKET_LOCK = new Object();
-
-    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
-                                             @Nullable Player player) {
-        if (player != null && !player.isAutoViewable()) {
-            // Operation cannot be optimized
-            player.sendPacketToViewers(serverPacket);
-            return;
-        }
-        final PlayerConnection playerConnection = player != null ? player.getPlayerConnection() : null;
-        synchronized (VIEWABLE_PACKET_LOCK) {
-            ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, ViewableStorage::new);
-            viewableStorage.append(playerConnection, serverPacket);
-        }
-    }
-
-    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
-        prepareViewablePacket(viewable, serverPacket, null);
-    }
-
-    public static void flush() {
-        synchronized (VIEWABLE_PACKET_LOCK) {
-            for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
-                viewableStorage.process();
-            }
         }
     }
 }
