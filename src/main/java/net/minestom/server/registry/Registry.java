@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;

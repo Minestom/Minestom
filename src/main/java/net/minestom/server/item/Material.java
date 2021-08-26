@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
@@ -51,6 +52,11 @@ public interface Material extends ProtocolObject, MaterialConstants {
     default boolean isArmor() {
         return registry().isArmor();
     }
+
+    default void setCooldown(Player player, int ticks) {
+        setCooldown(player, ticks, true);
+    }
+    void setCooldown(Player player, int ticks, boolean lagCompensation);
 
     default boolean hasState() {
         if (this == BOW || this == TRIDENT || this == CROSSBOW || this == SHIELD) {
