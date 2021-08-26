@@ -70,6 +70,7 @@ public class AnvilLoader implements IChunkLoader {
             for (RegionFile rf : alreadyLoaded.values()) {
                 rf.close();
             }
+            alreadyLoaded.clear();
         } catch (IOException e) {
             EXCEPTION_MANAGER.handleException(e);
         }
