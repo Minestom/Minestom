@@ -1739,7 +1739,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         packet.cooldownTicks = ticks;
         packet.itemId = material.id();
 
-        this.getPlayerConnection().sendPacket(packet);
+        playerConnection.sendPacket(packet);
 
         if (!lagCompensation) return;
 
@@ -1748,7 +1748,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             lagCompensatePacket.cooldownTicks = 0;
             lagCompensatePacket.itemId = material.id();
 
-            this.getPlayerConnection().sendPacket(lagCompensatePacket);
+            playerConnection.sendPacket(lagCompensatePacket);
         }).delay(ticks, TimeUnit.CLIENT_TICK).schedule();
     }
 
