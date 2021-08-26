@@ -22,4 +22,4 @@ jobs:
     steps:
       # Runs a single command using the runners shell
       - name: Trigger Jitpack Build
-        run: curl "https://jitpack.io/com/github/Minestom/Minestom/${github.sha:0:10}/build.log"
+        run: curl "https://jitpack.io/com/github/Minestom/Minestom/${GITHUB_SHA:0:10}/build.log"
