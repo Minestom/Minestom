@@ -150,7 +150,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private BelowNameTag belowNameTag;
 
-    private byte permissionLevel;
+    private int permissionLevel;
 
     private boolean reducedDebugScreenInformation;
 
@@ -1591,7 +1591,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setPermissionLevel(int permissionLevel) {
         Check.argCondition(!MathUtils.isBetween(permissionLevel, 0, 4), "permissionLevel has to be between 0 and 4");
 
-        this.permissionLevel = (byte) permissionLevel;
+        this.permissionLevel = permissionLevel;
 
         // Magic values: https://wiki.vg/Entity_statuses#Player
         // TODO remove magic values
