@@ -1196,7 +1196,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     // Cannot load chunk (auto load is not enabled)
                     return;
                 }
-                chunk.addViewer(this);
+                try {
+                    chunk.addViewer(this);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             });
         });
     }
