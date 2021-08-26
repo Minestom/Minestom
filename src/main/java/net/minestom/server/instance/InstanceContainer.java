@@ -80,7 +80,6 @@ public class InstanceContainer extends Instance {
         setChunkSupplier(DynamicChunk::new);
         // Set the default chunk loader which use the Anvil format
         setChunkLoader(new AnvilLoader("world"));
-        this.chunkLoader.loadInstance(this);
     }
 
     @Override
@@ -470,7 +469,7 @@ public class InstanceContainer extends Instance {
      *
      * @return the {@link IChunkLoader} of this instance
      */
-    public IChunkLoader getChunkLoader() {
+    public @NotNull IChunkLoader getChunkLoader() {
         return chunkLoader;
     }
 
@@ -479,8 +478,12 @@ public class InstanceContainer extends Instance {
      *
      * @param chunkLoader the new {@link IChunkLoader}
      */
-    public void setChunkLoader(IChunkLoader chunkLoader) {
+    public void setChunkLoader(@NotNull IChunkLoader chunkLoader) {
+        if (this.chunkLoader != null) {
+            this.chunkLoader.unloadInstance(this);
+        }
         this.chunkLoader = chunkLoader;
+        this.chunkLoader.loadInstance(this);
     }
 
     @Override
