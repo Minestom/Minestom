@@ -1734,6 +1734,24 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshAbilities();
     }
 
+    public void setCooldown(Material material, int ticks, boolean lagCompensation) {
+        final SetCooldownPacket packet = new SetCooldownPacket();
+        packet.cooldownTicks = ticks;
+        packet.itemId = material.id();
+
+        this.getPlayerConnection().sendPacket(packet);
+
+        if (!lagCompensation) return;
+
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            final SetCooldownPacket lagCompensatePacket = new SetCooldownPacket();
+            lagCompensatePacket.cooldownTicks = 0;
+            lagCompensatePacket.itemId = material.id();
+
+            this.getPlayerConnection().sendPacket(lagCompensatePacket);
+        }).delay(ticks, TimeUnit.CLIENT_TICK).schedule();
+    }
+
     /**
      * This is the map used to send the statistic packet.
      * It is possible to add/remove/change statistic value directly into it.

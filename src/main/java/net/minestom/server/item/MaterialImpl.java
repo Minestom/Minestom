@@ -41,25 +41,6 @@ final class MaterialImpl implements Material {
     }
 
     @Override
-    public void setCooldown(Player player, int ticks, boolean lagCompensation) {
-        final SetCooldownPacket packet = new SetCooldownPacket();
-        packet.cooldownTicks = ticks;
-        packet.itemId = this.id();
-
-        player.getPlayerConnection().sendPacket(packet);
-
-        if (!lagCompensation) return;
-
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            final SetCooldownPacket lagCompensatePacket = new SetCooldownPacket();
-            lagCompensatePacket.cooldownTicks = 0;
-            lagCompensatePacket.itemId = this.id();
-
-            player.getPlayerConnection().sendPacket(lagCompensatePacket);
-        }).delay(ticks, TimeUnit.CLIENT_TICK).schedule();
-    }
-
-    @Override
     public String toString() {
         return name();
     }

@@ -53,11 +53,6 @@ public interface Material extends ProtocolObject, MaterialConstants {
         return registry().isArmor();
     }
 
-    default void setCooldown(Player player, int ticks) {
-        setCooldown(player, ticks, true);
-    }
-    void setCooldown(Player player, int ticks, boolean lagCompensation);
-
     default boolean hasState() {
         if (this == BOW || this == TRIDENT || this == CROSSBOW || this == SHIELD) {
             return true;
