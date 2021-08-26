@@ -333,8 +333,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
             if (!filters.isEmpty()) {
-                final var filterList = List.copyOf(filters);
-                final int size = filterList.size();
+                final EventFilter<E, ?>[] filterList = filters.toArray(EventFilter[]::new);
                 final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                     final Object handler = filter.castHandler(event);
                     final Handle<E> handle = handlers.get(handler);
@@ -345,13 +344,13 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                         }
                     }
                 };
-                if (size == 1) {
-                    final var firstFilter = filterList.get(0);
+                if (filterList.length == 1) {
+                    final var firstFilter = filterList[0];
                     // Common case where there is only one filter
                     this.listenersCache.add(event -> mapper.accept(firstFilter, event));
-                } else if (size == 2) {
-                    final var firstFilter = filterList.get(0);
-                    final var secondFilter = filterList.get(1);
+                } else if (filterList.length == 2) {
+                    final var firstFilter = filterList[0];
+                    final var secondFilter = filterList[1];
                     this.listenersCache.add(event -> {
                         mapper.accept(firstFilter, event);
                         mapper.accept(secondFilter, event);
