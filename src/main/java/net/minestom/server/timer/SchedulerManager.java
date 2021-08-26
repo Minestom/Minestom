@@ -7,6 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.IExtensionObserver;
 import net.minestom.server.utils.thread.MinestomThread;
+import net.minestom.server.utils.thread.ThreadBindingExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -35,6 +36,8 @@ public final class SchedulerManager implements IExtensionObserver {
     private final AtomicInteger shutdownCounter;
     //A threaded execution
     private final ExecutorService batchesPool;
+    //Thread execution, which always uses the same Thread for a given Task
+    private final ExecutorService threadBindingPool;
     // A single threaded scheduled execution
     private final ScheduledExecutorService timerExecutionService;
     // All the registered tasks (task id = task)
@@ -66,6 +69,7 @@ public final class SchedulerManager implements IExtensionObserver {
         this.shutdownCounter = new AtomicInteger();
 
         this.batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
+        this.threadBindingPool = new ThreadBindingExecutor(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
         this.timerExecutionService = Executors.newSingleThreadScheduledExecutor();
         this.tasks = new Int2ObjectOpenHashMap<>();
         this.shutdownTasks = new Int2ObjectOpenHashMap<>();
@@ -183,13 +187,24 @@ public final class SchedulerManager implements IExtensionObserver {
     }
 
     /**
-     * Gets the execution service for all the registered {@link Task}.
+     * Gets the execution service for all the registered {@link Task}, which are not marked as thread-bound.
      *
-     * @return the execution service for all the registered {@link Task}
+     * @return the execution service for all the registered {@link Task}, which are not marked as thread-bound
      */
     @NotNull
     public ExecutorService getBatchesPool() {
         return batchesPool;
+    }
+
+    /**
+     * Gets the execution service for all the registered {@link Task}, which are marked as thread-bound.
+     * The thread to which tasks are assigned depends on their runnable hashcode. Two (or more) tasks can be bound to the same Thread.
+     *
+     * @return the execution service for all the registered {@link Task}, which are marked as thread-bound
+     */
+    @NotNull
+    public ExecutorService getThreadBindingPool() {
+        return threadBindingPool;
     }
 
     /**

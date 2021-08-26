@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +43,12 @@ public class Task implements Runnable {
     private ScheduledFuture<?> future;
     // The thread of the task
     private volatile Thread currentThreadTask;
+    // The executor service used for this task
+    private final ExecutorService executorService;
+    // Whether this task will always execute on the same thread
+    private final boolean boundToSingleThread;
+    // Action executed on the executor. Stored inside the Task to avoid changing the hashcode (which ThreadBindingExecutor relies on)
+    private final Runnable action;
 
     /**
      * Creates a task.
@@ -51,24 +58,21 @@ public class Task implements Runnable {
      * @param shutdown         Defines whether the task is a shutdown task
      * @param delay            The time to delay
      * @param repeat           The time until the repetition
+     * @param bindToSingleThread Whether to run the given task always on the same thread.
      */
-    public Task(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown, long delay, long repeat, boolean isTransient, @Nullable String owningExtension) {
+    public Task(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown, long delay, long repeat, boolean isTransient, @Nullable String owningExtension, boolean bindToSingleThread) {
         this.schedulerManager = schedulerManager;
         this.runnable = runnable;
         this.shutdown = shutdown;
         this.id = shutdown ? this.schedulerManager.getShutdownCounterIdentifier() : this.schedulerManager.getCounterIdentifier();
+        this.executorService = bindToSingleThread ? this.schedulerManager.getThreadBindingPool() : this.schedulerManager.getBatchesPool();
         this.delay = delay;
         this.repeat = repeat;
         this.isTransient = isTransient;
+        this.boundToSingleThread = bindToSingleThread;
         this.owningExtension = owningExtension;
-    }
 
-    /**
-     * Executes the task.
-     */
-    @Override
-    public void run() {
-        this.schedulerManager.getBatchesPool().execute(() -> {
+        this.action = () -> {
             this.currentThreadTask = Thread.currentThread();
             try {
                 this.runnable.run();
@@ -84,7 +88,15 @@ public class Task implements Runnable {
                 if (this.repeat == 0) this.finish();
                 this.currentThreadTask = null;
             }
-        });
+        };
+    }
+
+    /**
+     * Executes the task.
+     */
+    @Override
+    public void run() {
+        executorService.execute(action);
     }
 
     /**

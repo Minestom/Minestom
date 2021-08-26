@@ -68,6 +68,7 @@ public abstract class GLFWCapableBuffer {
     }
 
     public void changeRenderingThreadToCurrent() {
+        System.out.println("Currently on thread "+Thread.currentThread().getId());
         glfwMakeContextCurrent(glfwWindow);
         GL.createCapabilities();
     }
@@ -90,6 +91,7 @@ public abstract class GLFWCapableBuffer {
                         render(rendering);
                     }
                 })
+                .bindToSingleThread()
                 .repeat(period)
                 .schedule();
     }
