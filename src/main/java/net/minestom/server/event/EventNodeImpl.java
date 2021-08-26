@@ -220,6 +220,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);
         }
+        // TODO bindings?
+        for (EventNodeImpl<T> child : children) {
+            child.invalidateEventsFor(node);
+        }
     }
 
     private void invalidateEvent(Class<? extends T> eventClass) {
