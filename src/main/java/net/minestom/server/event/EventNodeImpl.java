@@ -339,12 +339,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                     final Object handler = filter.castHandler(event);
                     final Handle<E> handle = handlers.get(handler);
-                    if (handle != null) { // Run the listeners of the mapped node
-                        handle.update();
-                        for (Consumer<E> listener : handle.listeners) {
-                            listener.accept(event);
-                        }
-                    }
+                    if (handle != null) handle.call(event);
                 };
                 if (filterList.length == 1) {
                     final var firstFilter = filterList[0];
