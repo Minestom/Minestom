@@ -33,9 +33,9 @@ public class PlayerPositionListener {
         player.refreshReceivedTeleportId(packet.teleportId);
     }
 
-    private static void processMovement(@NotNull Player player, @NotNull Pos newPosition, boolean onGround) {
+    private static void processMovement(@NotNull Player player, @NotNull Pos packetPosition, boolean onGround) {
         final var currentPosition = player.getPosition();
-        if (currentPosition.equals(newPosition)) {
+        if (currentPosition.equals(packetPosition)) {
             // For some reason, the position is the same
             return;
         }
@@ -49,12 +49,12 @@ public class PlayerPositionListener {
             return;
         }
         // Try to move in an unloaded chunk, prevent it
-        if (!currentPosition.sameChunk(newPosition) && !ChunkUtils.isLoaded(instance, newPosition)) {
+        if (!currentPosition.sameChunk(packetPosition) && !ChunkUtils.isLoaded(instance, packetPosition)) {
             player.teleport(currentPosition);
             return;
         }
 
-        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
+        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, packetPosition);
         GlobalHandles.PLAYER_MOVE.call(playerMoveEvent);
         if (!currentPosition.equals(player.getPosition())) {
             // Player has been teleported in the event
@@ -67,13 +67,15 @@ public class PlayerPositionListener {
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();
-        if (newPosition.equals(eventPosition)) {
+        if (packetPosition.equals(eventPosition)) {
             // Event didn't change the position
-            player.refreshPosition(playerMoveEvent.getNewPosition());
+            player.refreshPosition(eventPosition);
             player.refreshOnGround(onGround);
         } else {
             // Position modified by the event
-            if (newPosition.samePoint(eventPosition)) {
+            if (packetPosition.samePoint(eventPosition)) {
+                player.refreshPosition(eventPosition, true);
+                player.refreshOnGround(onGround);
                 player.setView(eventPosition.yaw(), eventPosition.pitch());
             } else {
                 player.teleport(eventPosition);
