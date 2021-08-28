@@ -164,7 +164,7 @@ public final class SchedulerManager implements IExtensionObserver {
     }
 
     /**
-     * Gets a {@link Collection} with all the registered shutdown {@link Task}
+     * Gets a {@link Collection} with all the registered shutdown {@link Task}.
      *
      * @return a {@link Collection} with all the registered shutdown {@link Task}
      */
@@ -184,7 +184,7 @@ public final class SchedulerManager implements IExtensionObserver {
     }
 
     /**
-     * Gets the execution service for all the registered {@link Task}
+     * Gets the execution service for all the registered {@link Task}.
      *
      * @return the execution service for all the registered {@link Task}
      */
