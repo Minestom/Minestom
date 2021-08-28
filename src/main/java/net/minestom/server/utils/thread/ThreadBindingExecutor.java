@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Executor service which will always give the same thread to a given Runnable.
- * Uses {@link Runnable#hashCode()} to determine the thread to assign.
+ * Uses <pre>Runnable#hashCode()</pre> to determine the thread to assign.
  */
 public class ThreadBindingExecutor extends AbstractExecutorService {
 
