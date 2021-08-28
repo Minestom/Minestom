@@ -37,12 +37,6 @@ public class TaskBuilder {
     private boolean isTransient;
 
     /**
-     * Should this Task be run on the same thread for each run? Can be used for situations where context is bound to a
-     * single thread. (for instance OpenGL context)
-     */
-    private boolean boundToSingleThread = false;
-
-    /**
      * Creates a task builder.
      * <br>
      * <b>Note:</b> The task builder creates a normal task.
@@ -144,15 +138,6 @@ public class TaskBuilder {
     }
 
     /**
-     * Makes this Task be run on the same thread for each run. Can be used for situations where context is bound to a
-     * single thread. (for instance OpenGL context)
-     */
-    public TaskBuilder bindToSingleThread() {
-        boundToSingleThread = true;
-        return this;
-    }
-
-    /**
      * Builds a {@link Task}.
      *
      * @return the built {@link Task}
@@ -166,8 +151,7 @@ public class TaskBuilder {
                 this.delay,
                 this.repeat,
                 this.isTransient,
-                this.owningExtension,
-                this.boundToSingleThread);
+                this.owningExtension);
     }
 
     /**

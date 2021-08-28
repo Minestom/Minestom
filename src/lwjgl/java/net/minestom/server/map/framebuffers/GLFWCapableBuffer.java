@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.MapColors;
 import net.minestom.server.timer.Task;
+import net.minestom.server.utils.thread.ThreadBindingExecutor;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -26,6 +27,8 @@ public abstract class GLFWCapableBuffer {
     private final int height;
     private final ByteBuffer colorsBuffer;
     private boolean onlyMapColors;
+
+    private static ThreadBindingExecutor threadBindingPool;
 
     protected GLFWCapableBuffer(int width, int height) {
         this(width, height, GLFW_NATIVE_CONTEXT_API, GLFW_OPENGL_API);
@@ -60,6 +63,12 @@ public abstract class GLFWCapableBuffer {
                 throw new RuntimeException("("+errcode+") Failed to create GLFW Window.");
             }
         }
+
+        synchronized(GLFWCapableBuffer.class) {
+            if(threadBindingPool == null) {
+                threadBindingPool = new ThreadBindingExecutor(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
+            }
+        }
     }
 
     public GLFWCapableBuffer unbindContextFromThread() {
@@ -81,17 +90,19 @@ public abstract class GLFWCapableBuffer {
         return MinecraftServer.getSchedulerManager()
                 .buildTask(new Runnable() {
                     private boolean first = true;
-
-                    @Override
-                    public void run() {
+                    private final Runnable subAction = () -> {
                         if(first) {
                             changeRenderingThreadToCurrent();
                             first = false;
                         }
                         render(rendering);
+                    };
+
+                    @Override
+                    public void run() {
+                        threadBindingPool.execute(subAction);
                     }
                 })
-                .bindToSingleThread()
                 .repeat(period)
                 .schedule();
     }
