@@ -27,6 +27,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,19 +69,16 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    /**
-     * Creates an {@link InstanceContainer}.
-     *
-     * @param uniqueId      the unique id of the instance
-     * @param dimensionType the dimension type of the instance
-     */
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+    @ApiStatus.Experimental
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
         super(uniqueId, dimensionType);
-        // Set the default chunk supplier using DynamicChunk
         setChunkSupplier(DynamicChunk::new);
-        // Set the default chunk loader which use the Anvil format
-        setChunkLoader(new AnvilLoader("world"));
+        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader("world")));
         this.chunkLoader.loadInstance(this);
+    }
+
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+        this(uniqueId, dimensionType, null);
     }
 
     @Override
