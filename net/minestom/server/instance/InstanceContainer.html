@@ -218,9 +218,13 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,net.minestom.server.world.DimensionType)">InstanceContainer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uniqueId,
                  @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
-<td class="colLast">
-<div class="block">Creates an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>.</div>
-</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,net.minestom.server.world.DimensionType,net.minestom.server.instance.IChunkLoader)">InstanceContainer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uniqueId,
+                 @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType,
+                 @Nullable <a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a>&nbsp;loader)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -558,6 +562,21 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(java.util.UUID,net.minestom.server.world.DimensionType,net.minestom.server.instance.IChunkLoader)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>InstanceContainer</h4>
+<pre>@Experimental
+public&nbsp;InstanceContainer&#8203;(@NotNull
+                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uniqueId,
+                         @NotNull
+                         @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType,
+                         @Nullable
+                         @Nullable <a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a>&nbsp;loader)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;(java.util.UUID,net.minestom.server.world.DimensionType)">
 <!--   -->
 </a>
@@ -568,12 +587,6 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
                          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uniqueId,
                          @NotNull
                          @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</pre>
-<div class="block">Creates an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>uniqueId</code> - the unique id of the instance</dd>
-<dd><code>dimensionType</code> - the dimension type of the instance</dd>
-</dl>
 </li>
 </ul>
 </li>
