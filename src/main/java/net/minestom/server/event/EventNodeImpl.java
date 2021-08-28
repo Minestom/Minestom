@@ -273,8 +273,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         @Override
         public void call(@NotNull E event) {
-            update();
-            final Consumer<E>[] listeners = this.listeners;
+            final Consumer<E>[] listeners = updatedListeners();
             if (listeners.length == 0) return;
             for (Consumer<E> listener : listeners) {
                 listener.accept(event);
@@ -283,18 +282,19 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         @Override
         public boolean hasListener() {
-            update();
-            return listeners.length > 0;
+            return updatedListeners().length > 0;
         }
 
-        void update() {
-            if (updated) return;
+        Consumer<E>[] updatedListeners() {
+            if (updated) return listeners;
             synchronized (GLOBAL_CHILD_LOCK) {
-                if (updated) return;
+                if (updated) return listeners;
                 this.listenersCache.clear();
                 recursiveUpdate(node);
-                this.listeners = listenersCache.toArray(Consumer[]::new);
+                final Consumer<E>[] listenersArray = listenersCache.toArray(Consumer[]::new);
+                this.listeners = listenersArray;
                 this.updated = true;
+                return listenersArray;
             }
         }
 
