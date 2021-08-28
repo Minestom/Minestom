@@ -6,6 +6,8 @@ import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,14 +56,28 @@ public class PlayerPositionListener {
 
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         GlobalHandles.PLAYER_MOVE.call(playerMoveEvent);
-        // True if the event call changed the player position (possibly a teleport)
-        if (!playerMoveEvent.isCancelled() && currentPosition.equals(player.getPosition())) {
-            // Move the player
+        if (!currentPosition.equals(player.getPosition())) {
+            // Player has been teleported in the event
+            return;
+        }
+        if (playerMoveEvent.isCancelled()) {
+            // Teleport to previous position
+            PlayerConnection connection = player.getPlayerConnection();
+            connection.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId(), false));
+            return;
+        }
+        final Pos eventPosition = playerMoveEvent.getNewPosition();
+        if (newPosition.equals(eventPosition)) {
+            // Event didn't change the position
             player.refreshPosition(playerMoveEvent.getNewPosition());
             player.refreshOnGround(onGround);
         } else {
-            // Cancelled, teleport to previous position
-            player.teleport(player.getPosition());
+            // Position modified by the event
+            if (newPosition.samePoint(eventPosition)) {
+                player.setView(eventPosition.yaw(), eventPosition.pitch());
+            } else {
+                player.teleport(eventPosition);
+            }
         }
     }
 }

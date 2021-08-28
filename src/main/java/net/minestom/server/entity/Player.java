@@ -1553,6 +1553,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
     }
 
+    public int getNextTeleportId() {
+        return teleportId.incrementAndGet();
+    }
+
     public int getLastSentTeleportId() {
         return teleportId.get();
     }
@@ -1572,7 +1576,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
         if (includeSelf) {
-            playerConnection.sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, teleportId.incrementAndGet(), false));
+            playerConnection.sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId(), false));
         }
         super.synchronizePosition(includeSelf);
     }
