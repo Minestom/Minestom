@@ -23,6 +23,7 @@ import net.minestom.server.entity.metadata.monster.skeleton.SkeletonMeta;
 import net.minestom.server.entity.metadata.monster.skeleton.StrayMeta;
 import net.minestom.server.entity.metadata.monster.skeleton.WitherSkeletonMeta;
 import net.minestom.server.entity.metadata.monster.zombie.DrownedMeta;
+import net.minestom.server.entity.metadata.monster.zombie.HuskMeta;
 import net.minestom.server.entity.metadata.monster.zombie.ZombieMeta;
 import net.minestom.server.entity.metadata.monster.zombie.ZombieVillagerMeta;
 import net.minestom.server.entity.metadata.monster.zombie.ZombifiedPiglinMeta;
@@ -119,6 +120,7 @@ final class EntityTypeImpl implements EntityType {
         supplier.put("minecraft:guardian", GuardianMeta::new);
         supplier.put("minecraft:hoglin", HoglinMeta::new);
         supplier.put("minecraft:horse", HorseMeta::new);
+        supplier.put("minecraft:husk", HuskMeta::new);
         supplier.put("minecraft:illusioner", IllusionerMeta::new);
         supplier.put("minecraft:iron_golem", IronGolemMeta::new);
         supplier.put("minecraft:item", ItemEntityMeta::new);
