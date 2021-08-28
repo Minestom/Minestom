@@ -401,18 +401,7 @@ public class Inventory extends AbstractInventory implements Viewable {
         final InventoryClickResult clickResult = clickProcessor.dragging(player,
                 slot != -999 ? (isInWindow ? this : playerInventory) : null,
                 clickSlot, button,
-                clicked, cursor,
-
-                s -> isClickInWindow(s) ? getItemStack(s) :
-                        playerInventory.getItemStack(PlayerInventoryUtils.convertSlot(s, offset)),
-
-                (s, item) -> {
-                    if (isClickInWindow(s)) {
-                        setItemStack(s, item);
-                    } else {
-                        playerInventory.setItemStack(PlayerInventoryUtils.convertSlot(s, offset), item);
-                    }
-                });
+                clicked, cursor);
         if (clickResult == null || clickResult.isCancel()) {
             updateAll(player);
             return false;
