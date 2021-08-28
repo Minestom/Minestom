@@ -882,16 +882,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public void addPassenger(@NotNull Entity entity) {
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
-
         final Entity vehicle = entity.getVehicle();
         if (vehicle != null) {
             vehicle.removePassenger(entity);
         }
-
         this.passengers.add(entity);
         entity.vehicle = this;
-
         sendPacketToViewersAndSelf(getPassengersPacket());
+        entity.refreshPosition(position);
+        entity.synchronizePosition(true);
     }
 
     /**
@@ -903,11 +902,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void removePassenger(@NotNull Entity entity) {
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
-
-        if (!passengers.remove(entity))
-            return;
+        if (!passengers.remove(entity)) return;
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            player.getPlayerConnection().sendPacket(new PlayerPositionAndLookPacket(player.getPosition(),
+                    (byte) 0x00, player.getNextTeleportId(), true));
+        }
     }
 
     /**
