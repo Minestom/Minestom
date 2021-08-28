@@ -184,9 +184,9 @@ public final class SchedulerManager implements IExtensionObserver {
     }
 
     /**
-     * Gets the execution service for all the registered {@link Task}, which are not marked as thread-bound.
+     * Gets the execution service for all the registered {@link Task}
      *
-     * @return the execution service for all the registered {@link Task}, which are not marked as thread-bound
+     * @return the execution service for all the registered {@link Task}
      */
     @NotNull
     public ExecutorService getBatchesPool() {

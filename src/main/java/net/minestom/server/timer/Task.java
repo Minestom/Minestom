@@ -43,8 +43,6 @@ public class Task implements Runnable {
     private ScheduledFuture<?> future;
     // The thread of the task
     private volatile Thread currentThreadTask;
-    // The executor service used for this task
-    private final ExecutorService executorService;
 
     /**
      * Creates a task.
@@ -60,7 +58,6 @@ public class Task implements Runnable {
         this.runnable = runnable;
         this.shutdown = shutdown;
         this.id = shutdown ? this.schedulerManager.getShutdownCounterIdentifier() : this.schedulerManager.getCounterIdentifier();
-        this.executorService = this.schedulerManager.getBatchesPool();
         this.delay = delay;
         this.repeat = repeat;
         this.isTransient = isTransient;
@@ -72,7 +69,7 @@ public class Task implements Runnable {
      */
     @Override
     public void run() {
-        executorService.execute(() -> {
+        this.schedulerManager.getBatchesPool().execute(() -> {
             this.currentThreadTask = Thread.currentThread();
             try {
                 this.runnable.run();
