@@ -7,7 +7,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.IExtensionObserver;
 import net.minestom.server.utils.thread.MinestomThread;
-import net.minestom.server.utils.thread.ThreadBindingExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
