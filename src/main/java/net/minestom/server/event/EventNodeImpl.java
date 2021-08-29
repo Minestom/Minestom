@@ -262,8 +262,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
         private final EventNodeImpl<E> node;
         private final Class<E> eventType;
-        private Consumer<E>[] listeners = new Consumer[0];
-        private final List<Consumer<E>> listenersCache = new ArrayList<>();
+        private Consumer<E> listener = null;
         private volatile boolean updated;
 
         Handle(EventNodeImpl<E> node, Class<E> eventType) {
@@ -273,55 +272,125 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         @Override
         public void call(@NotNull E event) {
-            final Consumer<E>[] listeners = updatedListeners();
-            if (listeners.length == 0) return;
-            for (Consumer<E> listener : listeners) {
-                listener.accept(event);
+            final Consumer<E> listener = updatedListener();
+            if (listener != null) {
+                try {
+                    listener.accept(event);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             }
         }
 
         @Override
         public boolean hasListener() {
-            return updatedListeners().length > 0;
+            return updatedListener() != null;
         }
 
-        Consumer<E>[] updatedListeners() {
-            if (updated) return listeners;
+        @Nullable Consumer<E> updatedListener() {
+            if (updated) return listener;
             synchronized (GLOBAL_CHILD_LOCK) {
-                if (updated) return listeners;
-                this.listenersCache.clear();
-                recursiveUpdate(node);
-                final Consumer<E>[] listenersArray = listenersCache.toArray(Consumer[]::new);
-                this.listeners = listenersArray;
+                if (updated) return listener;
+                final Consumer<E> listener = createConsumer();
+                this.listener = listener;
                 this.updated = true;
-                return listenersArray;
+                return listener;
             }
         }
 
-        private void recursiveUpdate(EventNodeImpl<E> targetNode) {
+        private @Nullable Consumer<E> createConsumer() {
             // Standalone listeners
+            List<Consumer<E>> listeners = new ArrayList<>();
             forTargetEvents(eventType, type -> {
-                final ListenerEntry<E> entry = targetNode.listenerMap.get(type);
-                if (entry != null) appendEntries(entry, targetNode);
+                final ListenerEntry<E> entry = node.listenerMap.get(type);
+                if (entry != null) {
+                    final Consumer<E> result = appendEntries(entry, node);
+                    if (result != null) listeners.add(result);
+                }
             });
-            // Mapped nodes
-            handleMappedNode(targetNode);
-            // Add children
-            final Set<EventNodeImpl<E>> children = targetNode.children;
-            if (children.isEmpty()) return;
-            children.stream()
+            final Consumer<E>[] listenersArray = listeners.toArray(Consumer[]::new);
+            // Mapped
+            final Consumer<E> mappedListener = handleMappedNode(node);
+            // Children
+            final Consumer<E>[] childrenListeners = node.children.stream()
                     .filter(child -> child.eventType.isAssignableFrom(eventType)) // Invalid event type
                     .sorted(Comparator.comparing(EventNode::getPriority))
-                    .forEach(this::recursiveUpdate);
+                    .map(child -> ((Handle<E>) child.getHandle(eventType)).updatedListener())
+                    .filter(eConsumer -> eConsumer != null)
+                    .toArray(Consumer[]::new);
+            // Empty check
+            final BiPredicate<E, Object> predicate = node.predicate;
+            final EventFilter<E, ?> filter = node.filter;
+            final boolean hasPredicate = predicate != null;
+            final boolean hasListeners = listenersArray.length > 0;
+            final boolean hasMap = mappedListener != null;
+            final boolean hasChildren = childrenListeners.length > 0;
+            if (listenersArray.length == 0 && mappedListener == null && childrenListeners.length == 0) {
+                // No listener
+                return null;
+            }
+            return e -> {
+                // Filtering
+                if (hasPredicate) {
+                    final Object value = filter.getHandler(e);
+                    if (!predicate.test(e, value)) return;
+                }
+                // Normal listeners
+                if (hasListeners) {
+                    for (Consumer<E> listener : listenersArray) {
+                        listener.accept(e);
+                    }
+                }
+                // Mapped nodes
+                if (hasMap) mappedListener.accept(e);
+                // Children
+                if (hasChildren) {
+                    for (Consumer<E> childHandle : childrenListeners) {
+                        childHandle.accept(e);
+                    }
+                }
+            };
         }
 
         /**
-         * Add the node's listeners from {@link EventNode#map(EventNode, Object)}.
+         * Add listeners from {@link EventNode#addListener(EventListener)} and
+         * {@link EventNode#register(EventBinding)} to the handle list.
+         * <p>
+         * Most computation should ideally be done outside the consumers as a one-time cost.
+         */
+        private @Nullable Consumer<E> appendEntries(ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
+            final EventListener<E>[] listenersCopy = entry.listeners.toArray(EventListener[]::new);
+            final Consumer<E>[] bindingsCopy = entry.bindingConsumers.toArray(Consumer[]::new);
+            final boolean listenersEmpty = listenersCopy.length == 0;
+            final boolean bindingsEmpty = bindingsCopy.length == 0;
+            if (listenersEmpty && bindingsEmpty) return null;
+            if (bindingsEmpty && listenersCopy.length == 1) {
+                // Only one normal listener
+                final EventListener<E> listener = listenersCopy[0];
+                return e -> callListener(targetNode, listener, e);
+            }
+            // Worse case scenario, try to run everything
+            return e -> {
+                if (!listenersEmpty) {
+                    for (EventListener<E> listener : listenersCopy) {
+                        callListener(targetNode, listener, e);
+                    }
+                }
+                if (!bindingsEmpty) {
+                    for (Consumer<E> eConsumer : bindingsCopy) {
+                        eConsumer.accept(e);
+                    }
+                }
+            };
+        }
+
+        /**
+         * Create a consumer handling {@link EventNode#map(EventNode, Object)}.
          * The goal is to limit the amount of map lookup.
          */
-        private void handleMappedNode(EventNodeImpl<E> targetNode) {
+        private @Nullable Consumer<E> handleMappedNode(EventNodeImpl<E> targetNode) {
             final var mappedNodeCache = targetNode.mappedNodeCache;
-            if (mappedNodeCache.isEmpty()) return;
+            if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
             Map<Object, Handle<E>> handlers = new HashMap<>(mappedNodeCache.size());
             // Retrieve all filters used to retrieve potential handlers
@@ -334,94 +403,35 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
-            if (!filters.isEmpty()) {
-                final EventFilter<E, ?>[] filterList = filters.toArray(EventFilter[]::new);
-                final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
-                    final Object handler = filter.castHandler(event);
-                    final Handle<E> handle = handlers.get(handler);
-                    if (handle != null) handle.call(event);
+            if (filters.isEmpty()) return null;
+            final EventFilter<E, ?>[] filterList = filters.toArray(EventFilter[]::new);
+            final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
+                final Object handler = filter.castHandler(event);
+                final Handle<E> handle = handlers.get(handler);
+                if (handle != null) handle.call(event);
+            };
+            if (filterList.length == 1) {
+                final var firstFilter = filterList[0];
+                // Common case where there is only one filter
+                return event -> mapper.accept(firstFilter, event);
+            } else if (filterList.length == 2) {
+                final var firstFilter = filterList[0];
+                final var secondFilter = filterList[1];
+                return event -> {
+                    mapper.accept(firstFilter, event);
+                    mapper.accept(secondFilter, event);
                 };
-                if (filterList.length == 1) {
-                    final var firstFilter = filterList[0];
-                    // Common case where there is only one filter
-                    this.listenersCache.add(event -> mapper.accept(firstFilter, event));
-                } else if (filterList.length == 2) {
-                    final var firstFilter = filterList[0];
-                    final var secondFilter = filterList[1];
-                    this.listenersCache.add(event -> {
-                        mapper.accept(firstFilter, event);
-                        mapper.accept(secondFilter, event);
-                    });
-                } else {
-                    this.listenersCache.add(event -> {
-                        for (var filter : filterList) {
-                            mapper.accept(filter, event);
-                        }
-                    });
-                }
+            } else {
+                return event -> {
+                    for (var filter : filterList) {
+                        mapper.accept(filter, event);
+                    }
+                };
             }
-        }
-
-        /**
-         * Add listeners from {@link EventNode#addListener(EventListener)} and
-         * {@link EventNode#register(EventBinding)} to the handle list.
-         * <p>
-         * Most computation should ideally be done outside the consumers as a one-time cost.
-         */
-        private void appendEntries(ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
-            final var filter = targetNode.filter;
-            final var predicate = targetNode.predicate;
-
-            final boolean hasPredicate = predicate != null;
-            final EventListener<E>[] listenersCopy = entry.listeners.toArray(EventListener[]::new);
-            final Consumer<E>[] bindingsCopy = entry.bindingConsumers.toArray(Consumer[]::new);
-            final boolean listenersEmpty = listenersCopy.length == 0;
-            final boolean bindingsEmpty = bindingsCopy.length == 0;
-            if (!hasPredicate && listenersEmpty && bindingsEmpty)
-                return; // Nothing to run
-
-            if (!hasPredicate && bindingsEmpty && listenersCopy.length == 1) {
-                // Only one normal listener
-                final EventListener<E> listener = listenersCopy[0];
-                this.listenersCache.add(e -> callListener(targetNode, listener, e));
-                return;
-            }
-            // Worse case scenario, try to run everything
-            this.listenersCache.add(e -> {
-                if (hasPredicate) {
-                    final Object value = filter.getHandler(e);
-                    try {
-                        if (!predicate.test(e, value)) return;
-                    } catch (Throwable t) {
-                        MinecraftServer.getExceptionManager().handleException(t);
-                        return;
-                    }
-                }
-                if (!listenersEmpty) {
-                    for (EventListener<E> listener : listenersCopy) {
-                        callListener(targetNode, listener, e);
-                    }
-                }
-                if (!bindingsEmpty) {
-                    for (Consumer<E> eConsumer : bindingsCopy) {
-                        try {
-                            eConsumer.accept(e);
-                        } catch (Throwable t) {
-                            MinecraftServer.getExceptionManager().handleException(t);
-                        }
-                    }
-                }
-            });
         }
 
         static <E extends Event> void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
-            EventListener.Result result;
-            try {
-                result = listener.run(event);
-            } catch (Throwable t) {
-                result = EventListener.Result.EXCEPTION;
-                MinecraftServer.getExceptionManager().handleException(t);
-            }
+            EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 targetNode.removeListener(listener);
             }
