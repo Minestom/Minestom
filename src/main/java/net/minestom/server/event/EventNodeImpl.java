@@ -430,10 +430,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
         }
 
-        static <E extends Event> void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
+        void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 targetNode.removeListener(listener);
+                this.updated = false;
             }
         }
     }
