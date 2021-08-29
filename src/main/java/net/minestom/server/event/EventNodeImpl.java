@@ -273,12 +273,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         @Override
         public void call(@NotNull E event) {
             final Consumer<E> listener = updatedListener();
-            if (listener != null) {
-                try {
-                    listener.accept(event);
-                } catch (Throwable e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
+            if (listener == null) return;
+            try {
+                listener.accept(event);
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
 
@@ -304,19 +303,19 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             forTargetEvents(eventType, type -> {
                 final ListenerEntry<E> entry = node.listenerMap.get(type);
                 if (entry != null) {
-                    final Consumer<E> result = appendEntries(entry, node);
+                    final Consumer<E> result = listenersConsumer(entry);
                     if (result != null) listeners.add(result);
                 }
             });
             final Consumer<E>[] listenersArray = listeners.toArray(Consumer[]::new);
             // Mapped
-            final Consumer<E> mappedListener = handleMappedNode(node);
+            final Consumer<E> mappedListener = mappedConsumer();
             // Children
             final Consumer<E>[] childrenListeners = node.children.stream()
                     .filter(child -> child.eventType.isAssignableFrom(eventType)) // Invalid event type
                     .sorted(Comparator.comparing(EventNode::getPriority))
                     .map(child -> ((Handle<E>) child.getHandle(eventType)).updatedListener())
-                    .filter(eConsumer -> eConsumer != null)
+                    .filter(Objects::nonNull)
                     .toArray(Consumer[]::new);
             // Empty check
             final BiPredicate<E, Object> predicate = node.predicate;
@@ -353,12 +352,12 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         /**
-         * Add listeners from {@link EventNode#addListener(EventListener)} and
-         * {@link EventNode#register(EventBinding)} to the handle list.
+         * Create a consumer calling all listeners from {@link EventNode#addListener(EventListener)} and
+         * {@link EventNode#register(EventBinding)}.
          * <p>
          * Most computation should ideally be done outside the consumers as a one-time cost.
          */
-        private @Nullable Consumer<E> appendEntries(ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
+        private @Nullable Consumer<E> listenersConsumer(@NotNull ListenerEntry<E> entry) {
             final EventListener<E>[] listenersCopy = entry.listeners.toArray(EventListener[]::new);
             final Consumer<E>[] bindingsCopy = entry.bindingConsumers.toArray(Consumer[]::new);
             final boolean listenersEmpty = listenersCopy.length == 0;
@@ -367,13 +366,13 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             if (bindingsEmpty && listenersCopy.length == 1) {
                 // Only one normal listener
                 final EventListener<E> listener = listenersCopy[0];
-                return e -> callListener(targetNode, listener, e);
+                return e -> callListener(listener, e);
             }
             // Worse case scenario, try to run everything
             return e -> {
                 if (!listenersEmpty) {
                     for (EventListener<E> listener : listenersCopy) {
-                        callListener(targetNode, listener, e);
+                        callListener(listener, e);
                     }
                 }
                 if (!bindingsEmpty) {
@@ -388,8 +387,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
          * Create a consumer handling {@link EventNode#map(EventNode, Object)}.
          * The goal is to limit the amount of map lookup.
          */
-        private @Nullable Consumer<E> handleMappedNode(EventNodeImpl<E> targetNode) {
-            final var mappedNodeCache = targetNode.mappedNodeCache;
+        private @Nullable Consumer<E> mappedConsumer() {
+            final var mappedNodeCache = node.mappedNodeCache;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
             Map<Object, Handle<E>> handlers = new HashMap<>(mappedNodeCache.size());
@@ -430,10 +429,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
         }
 
-        void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
+        void callListener(@NotNull EventListener<E> listener, E event) {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
-                targetNode.removeListener(listener);
+                node.removeListener(listener);
                 this.updated = false;
             }
         }
