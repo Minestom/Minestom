@@ -33,7 +33,7 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
         private List<ItemStack> items = new ArrayList<>();
 
         public Builder items(@NotNull List<ItemStack> items) {
-            this.items = items;
+            this.items = new ArrayList<>(items); // defensive copy
             updateItems();
             return this;
         }
