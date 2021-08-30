@@ -4,14 +4,24 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a key to access an {@link EventNode} listeners.
+ * Represents a key to a listenable event, retrievable from {@link EventNode#getHandle(Class)}.
  * Useful to avoid map lookups.
+ * <p>
+ * It is recommended to store instances of this class in {@code static final} fields.
  *
  * @param <E> the event type
  */
 @ApiStatus.Experimental
 @ApiStatus.NonExtendable
 public interface ListenerHandle<E extends Event> {
+    /**
+     * Calls the given event.
+     * Will try to fast exit the execution when possible if {@link #hasListener()} return {@code false}.
+     * <p>
+     * Anonymous and subclasses are not supported, events must have the exact type {@code E}.
+     *
+     * @param event the event to call
+     */
     void call(@NotNull E event);
 
     /**
