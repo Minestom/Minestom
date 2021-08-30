@@ -108,8 +108,8 @@ public class PlayerInit {
 
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
                         .meta(BundleMeta.class, bundleMetaBuilder -> {
-                            bundleMetaBuilder.addItem(ItemStack.builder(Material.DIAMOND).amount(5).build());
-                            bundleMetaBuilder.addItem(ItemStack.builder(Material.RABBIT_FOOT).amount(5).build());
+                            bundleMetaBuilder.addItem(ItemStack.of(Material.DIAMOND, 5));
+                            bundleMetaBuilder.addItem(ItemStack.of(Material.RABBIT_FOOT, 5));
                         })
                         .build();
                 player.getInventory().addItemStack(bundle);

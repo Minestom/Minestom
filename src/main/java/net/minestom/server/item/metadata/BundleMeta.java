@@ -3,6 +3,7 @@ package net.minestom.server.item.metadata;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -37,12 +38,14 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
             return this;
         }
 
+        @ApiStatus.Experimental
         public Builder addItem(@NotNull ItemStack item) {
             items.add(item);
             updateItems();
             return this;
         }
 
+        @ApiStatus.Experimental
         public Builder removeItem(@NotNull ItemStack item) {
             items.remove(item);
             updateItems();
