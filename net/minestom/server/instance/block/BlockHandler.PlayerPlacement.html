@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -161,10 +161,11 @@ extends <a href="BlockHandler.Placement.html" title="class in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.block.Block,net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.entity.Player,net.minestom.server.instance.block.BlockFace,float,float,float)">PlayerPlacement</a></span>&#8203;(<a href="Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.block.Block,net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.BlockFace,float,float,float)">PlayerPlacement</a></span>&#8203;(<a href="Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
                <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
                <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+               <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                <a href="BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
                float&nbsp;cursorX,
                float&nbsp;cursorY,
@@ -210,6 +211,11 @@ extends <a href="BlockHandler.Placement.html" title="class in net.minestom.serve
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHand()">getHand</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -245,7 +251,7 @@ extends <a href="BlockHandler.Placement.html" title="class in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.instance.block.Block,net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.entity.Player,net.minestom.server.instance.block.BlockFace,float,float,float)">
+<a id="&lt;init&gt;(net.minestom.server.instance.block.Block,net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.BlockFace,float,float,float)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -256,6 +262,7 @@ public&nbsp;PlayerPlacement&#8203;(<a href="Block.html" title="interface in net.
                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                        <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
                        <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                       <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                        <a href="BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
                        float&nbsp;cursorX,
                        float&nbsp;cursorY,
@@ -280,6 +287,16 @@ public&nbsp;PlayerPlacement&#8203;(<a href="Block.html" title="interface in net.
 <h4>getPlayer</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
+</li>
+</ul>
+<a id="getHand()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHand</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;getHand()</pre>
 </li>
 </ul>
 <a id="getBlockFace()">
