@@ -255,7 +255,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @ApiStatus.Experimental
     public @NotNull NBTCompound toItemNBT() {
         final NBTCompound nbtCompound = new NBTCompound();
-        nbtCompound.setString("id", getMaterial().namespace().asString());
+        nbtCompound.setString("id", getMaterial().name());
         nbtCompound.setByte("Count", (byte) getAmount());
         nbtCompound.set("tag", getMeta().toNBT());
         return nbtCompound;

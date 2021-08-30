@@ -5,16 +5,15 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
+@ApiStatus.Experimental
 public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<BundleMeta.Builder> {
 
     private final List<ItemStack> items;
