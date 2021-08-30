@@ -7,6 +7,7 @@ import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -77,6 +78,18 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @Contract(value = "_, _ -> new", pure = true)
     public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound) {
         return fromNBT(material, nbtCompound, 1);
+    }
+
+    public static @NotNull ItemStack fromItemNBT(@NotNull NBTCompound nbtCompound) {
+        String id = nbtCompound.getString("id");
+        Check.notNull(id, "Item NBT must contain an id field.");
+        Material material = Material.fromNamespaceId(id);
+        Check.notNull(material, "Unknown material: " + id);
+
+        Byte amount = nbtCompound.getByte("Count");
+        return fromNBT(material,
+                nbtCompound.getCompound("tag"),
+                amount == null ? 0 : amount);
     }
 
     @Contract(pure = true)
@@ -226,6 +239,14 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
                 this.amount,
                 NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
+    }
+
+    public @NotNull NBTCompound toItemNBT() {
+        final NBTCompound nbtCompound = new NBTCompound();
+        nbtCompound.setString("id", getMaterial().namespace().asString());
+        nbtCompound.setByte("Count", (byte) getAmount());
+        nbtCompound.set("tag", getMeta().toNBT());
+        return nbtCompound;
     }
 
     @Contract(value = "-> new", pure = true)

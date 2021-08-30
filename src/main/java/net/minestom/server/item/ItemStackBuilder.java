@@ -46,6 +46,7 @@ public class ItemStackBuilder {
         MATERIAL_SUPPLIER_MAP.put(Material.FIREWORK_STAR, FireworkEffectMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.FIREWORK_ROCKET, FireworkMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.PLAYER_HEAD, PlayerHeadMeta.Builder::new);
+        MATERIAL_SUPPLIER_MAP.put(Material.BUNDLE, BundleMeta.Builder::new);
 
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_HELMET, LeatherArmorMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_CHESTPLATE, LeatherArmorMeta.Builder::new);
