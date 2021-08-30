@@ -157,8 +157,8 @@ public class BlockPlacementListener {
             return;
         }
         // Place the block
-        instance.placeBlock(player, resultBlock, placementPosition,
-                blockFace, packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ);
+        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, blockPosition, player, hand, blockFace,
+                packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
