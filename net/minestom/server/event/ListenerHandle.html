@@ -129,8 +129,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Experimental
 @NonExtendable
 public interface <span class="typeNameLabel">ListenerHandle&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</span></pre>
-<div class="block">Represents a key to access an <a href="EventNode.html" title="interface in net.minestom.server.event"><code>EventNode</code></a> listeners.
- Useful to avoid map lookups.</div>
+<div class="block">Represents a key to a listenable event, retrievable from <a href="EventNode.html#getHandle(java.lang.Class)"><code>EventNode.getHandle(Class)</code></a>.
+ Useful to avoid map lookups.
+ <p>
+ It is recommended to store instances of this class in <code>static final</code> fields.</div>
 </li>
 </ul>
 </div>
@@ -154,7 +156,9 @@ public interface <span class="typeNameLabel">ListenerHandle&lt;E extends <a href
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#call(E)">call</a></span>&#8203;(<a href="ListenerHandle.html" title="type parameter in ListenerHandle">E</a>&nbsp;event)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Calls the given event.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -190,6 +194,14 @@ public interface <span class="typeNameLabel">ListenerHandle&lt;E extends <a href
 <h4>call</h4>
 <pre class="methodSignature">void&nbsp;call&#8203;(@NotNull
           <a href="ListenerHandle.html" title="type parameter in ListenerHandle">E</a>&nbsp;event)</pre>
+<div class="block">Calls the given event.
+ Will try to fast exit the execution when possible if <a href="#hasListener()"><code>hasListener()</code></a> return <code>false</code>.
+ <p>
+ Anonymous and subclasses are not supported, events must have the exact type <code>E</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>event</code> - the event to call</dd>
+</dl>
 </li>
 </ul>
 <a id="hasListener()">
