@@ -34,10 +34,32 @@ public abstract class BlockPlacementRule {
      * @param blockPosition the block position
      * @param pl            the player who placed the block
      * @return the block to place, {@code null} to cancel
+     * 
+     * @deprecated use {@link #blockPlace(Instance, Block, BlockFace, Point, Player, Point)} instead
      */
-    public abstract @Nullable Block blockPlace(@NotNull Instance instance,
+    @Deprecated
+    public @Nullable Block blockPlace(@NotNull Instance instance,
                                                @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                                               @NotNull Player pl);
+                                               @NotNull Player pl) {
+        return block;
+    }
+    
+    /**
+     * Called when the block is placed.
+     *
+     * @param instance        the instance of the block
+     * @param block           the block placed
+     * @param blockFace       the block face
+     * @param blockPosition   the block position
+     * @param pl              the player who placed the block
+     * @param cursorPosition  the cursor position
+     * @return the block to place, {@code null} to cancel
+     */
+    public @Nullable Block blockPlace(@NotNull Instance instance,
+                                               @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
+                                               @NotNull Player pl, @Nullable Point cursorPosition) {
+        return blockPlace(instance, block, blockFace, blockPosition, pl);
+    }
 
     public @NotNull Block getBlock() {
         return block;
