@@ -417,7 +417,7 @@ public class BoundingBox {
 
     private class CachedFace {
 
-        private final AtomicReference<@NotNull PositionedPoints> reference = new AtomicReference<>(new PositionedPoints());
+        private final AtomicReference<@Nullable PositionedPoints> reference = new AtomicReference<>(null);
         private final Supplier<@NotNull List<Vec>> faceProducer;
 
         private CachedFace(Supplier<@NotNull List<Vec>> faceProducer) {
@@ -425,11 +425,11 @@ public class BoundingBox {
         }
 
         @NotNull List<Vec> get() {
+            //noinspection ConstantConditions
             return reference.updateAndGet(value -> {
                 Pos entityPosition = entity.getPosition();
-                if (value.lastPosition == null || !value.lastPosition.samePoint(entityPosition)) {
-                    value.lastPosition = entityPosition;
-                    value.points = faceProducer.get();
+                if (value == null || !value.lastPosition.samePoint(entityPosition)) {
+                    return new PositionedPoints(entityPosition, faceProducer.get());
                 }
                 return value;
             }).points;
@@ -439,8 +439,13 @@ public class BoundingBox {
 
     private static class PositionedPoints {
 
-        private @Nullable Pos lastPosition;
-        private @NotNull List<Vec> points = Collections.emptyList();
+        private final @NotNull Pos lastPosition;
+        private final @NotNull List<Vec> points;
+
+        private PositionedPoints(@NotNull Pos lastPosition, @NotNull List<Vec> points) {
+            this.lastPosition = lastPosition;
+            this.points = points;
+        }
 
     }
 
