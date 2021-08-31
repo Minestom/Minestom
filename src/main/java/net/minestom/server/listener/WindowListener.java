@@ -66,8 +66,6 @@ public class WindowListener {
             successful = inventory.doubleClick(player, slot);
         }
 
-        // Prevent the player from picking a ghost item in cursor
-        refreshCursorItem(player, inventory);
         // Prevent ghost item when the click is cancelled
         if (!successful) {
             player.getInventory().update();
@@ -75,6 +73,10 @@ public class WindowListener {
                 ((Inventory) inventory).update(player);
             }
         }
+
+        // Prevent the player from picking a ghost item in cursor
+        refreshCursorItem(player, inventory);
+
         // (Why is the ping packet necessary?)
         PingPacket pingPacket = new PingPacket();
         pingPacket.id = (1 << 30) | (windowId << 16);
