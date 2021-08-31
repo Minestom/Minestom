@@ -1,6 +1,5 @@
 package net.minestom.server.collision;
 
-import com.google.common.collect.ImmutableList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -23,7 +22,7 @@ public class BoundingBox {
     private final CachedFace bottomFace = new CachedFace() {
         @Override
         @NotNull List<Vec> producePoints() {
-            return ImmutableList.of(
+            return List.of(
                     new Vec(getMinX(), getMinY(), getMinZ()),
                     new Vec(getMaxX(), getMinY(), getMinZ()),
                     new Vec(getMaxX(), getMinY(), getMaxZ()),
@@ -34,7 +33,7 @@ public class BoundingBox {
     private final CachedFace topFace = new CachedFace() {
         @Override
         @NotNull List<Vec> producePoints() {
-            return ImmutableList.of(
+            return List.of(
                     new Vec(getMinX(), getMaxY(), getMinZ()),
                     new Vec(getMaxX(), getMaxY(), getMinZ()),
                     new Vec(getMaxX(), getMaxY(), getMaxZ()),
@@ -45,7 +44,7 @@ public class BoundingBox {
     private final CachedFace leftFace = new CachedFace() {
         @Override
         @NotNull List<Vec> producePoints() {
-            return ImmutableList.of(
+            return List.of(
                     new Vec(getMinX(), getMinY(), getMinZ()),
                     new Vec(getMinX(), getMaxY(), getMinZ()),
                     new Vec(getMinX(), getMaxY(), getMaxZ()),
@@ -56,7 +55,7 @@ public class BoundingBox {
     private final CachedFace rightFace = new CachedFace() {
         @Override
         @NotNull List<Vec> producePoints() {
-            return ImmutableList.of(
+            return List.of(
                     new Vec(getMaxX(), getMinY(), getMinZ()),
                     new Vec(getMaxX(), getMaxY(), getMinZ()),
                     new Vec(getMaxX(), getMaxY(), getMaxZ()),
@@ -67,7 +66,7 @@ public class BoundingBox {
     private final CachedFace frontFace = new CachedFace() {
         @Override
         @NotNull List<Vec> producePoints() {
-            return ImmutableList.of(
+            return List.of(
                     new Vec(getMinX(), getMinY(), getMinZ()),
                     new Vec(getMaxX(), getMinY(), getMinZ()),
                     new Vec(getMaxX(), getMaxY(), getMinZ()),
@@ -78,7 +77,7 @@ public class BoundingBox {
     private final CachedFace backFace = new CachedFace() {
         @Override
         @NotNull List<Vec> producePoints() {
-            return ImmutableList.of(
+            return List.of(
                     new Vec(getMinX(), getMinY(), getMaxZ()),
                     new Vec(getMaxX(), getMinY(), getMaxZ()),
                     new Vec(getMaxX(), getMaxY(), getMaxZ()),
