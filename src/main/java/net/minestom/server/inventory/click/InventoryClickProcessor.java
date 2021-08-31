@@ -129,14 +129,14 @@ public final class InventoryClickProcessor {
             final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
             if (equipmentSlot != null) {
                 // Shift-click equip
-                final ItemStack currentArmor = player.getEquipment(equipmentSlot);
+                final ItemStack currentArmor = player.getInventory().getEquipment(equipmentSlot);
                 if (currentArmor.isAir()) {
                     final int armorSlot = equipmentSlot.armorSlot();
                     InventoryClickResult result = startCondition(player, targetInventory, armorSlot, ClickType.SHIFT_CLICK, clicked, cursor);
                     if (result.isCancel()) return clickResult;
                     result.setClicked(ItemStack.AIR);
                     result.setCursor(cursor);
-                    player.setEquipment(equipmentSlot, clicked);
+                    player.getInventory().setEquipment(equipmentSlot, clicked);
                     return result;
                 }
             }

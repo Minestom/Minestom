@@ -11,19 +11,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class PickupItemEvent implements EntityEvent, ItemEvent, CancellableEvent {
 
-    private final LivingEntity livingEntity;
+    private final Entity entity;
     private final ItemEntity itemEntity;
 
     private boolean cancelled;
 
-    public PickupItemEvent(@NotNull LivingEntity livingEntity, @NotNull ItemEntity itemEntity) {
-        this.livingEntity = livingEntity;
+    public PickupItemEvent(@NotNull Entity entity, @NotNull ItemEntity itemEntity) {
+        this.entity = entity;
         this.itemEntity = itemEntity;
-    }
-
-    @NotNull
-    public LivingEntity getLivingEntity() {
-        return livingEntity;
     }
 
     @NotNull
@@ -48,6 +43,6 @@ public class PickupItemEvent implements EntityEvent, ItemEvent, CancellableEvent
 
     @Override
     public @NotNull Entity getEntity() {
-        return livingEntity;
+        return entity;
     }
 }

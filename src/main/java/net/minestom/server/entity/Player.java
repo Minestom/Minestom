@@ -29,6 +29,8 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.features.EntityFeatures;
+import net.minestom.server.entity.features.equipment.EntityFeaturePlayerEquipment;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
@@ -40,6 +42,7 @@ import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -97,7 +100,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified, EquipmentHandler {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -145,9 +148,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
 
-    // Experience orb pickup
-    protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
-
     private BelowNameTag belowNameTag;
 
     private int permissionLevel;
@@ -184,15 +184,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
 
-        setCanPickupItem(true); // By default
-
         // Allow the server to send the next keep alive packet
         refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -203,6 +200,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 .withDynamic(Identity.NAME, this::getUsername)
                 .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
                 .build();
+
+        initFeatures();
+    }
+
+    private void initFeatures() {
+        enableFeature(EntityFeatures.EQUIPMENT, EntityFeaturePlayerEquipment::new);
+
+        var attributes = enableFeature(EntityFeatures.ATTRIBUTES);
+        attributes.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(.1F);
+
+        enableFeature(EntityFeatures.LIVING);
+
+        var pickup = enableFeature(EntityFeatures.PICKUP_ITEMS);
+        pickup.setCanPickupExperience(true);
+
+        enableFeature(EntityFeatures.TEAMS);
     }
 
     /**
@@ -277,7 +290,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
 
         // Some client updates
-        this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        this.playerConnection.sendPacket(getFeature(EntityFeatures.ATTRIBUTES).getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -304,28 +317,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.update(time); // Super update (item pickup/fire management)
 
-        // Experience orb pickup
-        if (experiencePickupCooldown.isReady(time)) {
-            experiencePickupCooldown.refreshLastUpdate(time);
-            final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            for (Entity entity : entities) {
-                if (entity instanceof ExperienceOrb) {
-                    final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
-                    final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
-                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
-                            continue;
-                        PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
-                        EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
-                            entity.remove();
-                        });
-                    }
-                }
-            }
-        }
-
         // Eating animation
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
@@ -336,7 +327,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
                 // Refresh hand
                 final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-                refreshActiveHand(false, isOffHand, false);
+                getFeature(EntityFeatures.LIVING).refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
                 final boolean isFood = foodItem.getMaterial().isFood();
@@ -352,52 +343,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Tick event
         GlobalHandles.PLAYER_TICK.call(new PlayerTickEvent(this));
-    }
-
-    @Override
-    public void kill() {
-        if (!isDead()) {
-
-            Component deathText;
-            Component chatMessage;
-
-            // get death screen text to the killed player
-            {
-                if (lastDamageSource != null) {
-                    deathText = lastDamageSource.buildDeathScreenText(this);
-                } else { // may happen if killed by the server without applying damage
-                    deathText = Component.text("Killed by poor programming.");
-                }
-            }
-
-            // get death message to chat
-            {
-                if (lastDamageSource != null) {
-                    chatMessage = lastDamageSource.buildDeathMessage(this);
-                } else { // may happen if killed by the server without applying damage
-                    chatMessage = Component.text(getUsername() + " was killed by poor programming.");
-                }
-            }
-
-            // Call player death event
-            PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(this, deathText, chatMessage);
-            EventDispatcher.call(playerDeathEvent);
-
-            deathText = playerDeathEvent.getDeathText();
-            chatMessage = playerDeathEvent.getChatMessage();
-
-            // #buildDeathScreenText can return null, check here
-            if (deathText != null) {
-                playerConnection.sendPacket(DeathCombatEventPacket.of(getEntityId(), -1, deathText));
-            }
-
-            // #buildDeathMessage can return null, check here
-            if (chatMessage != null) {
-                Audiences.players().sendMessage(chatMessage);
-            }
-
-        }
-        super.kill();
     }
 
     /**
@@ -473,9 +418,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (player == this || !super.removeViewer0(player)) {
             return false;
         }
+        Team team = getTeam();
         // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            player.getPlayerConnection().sendPacket(this.getTeam().createTeamDestructionPacket());
+        if (team != null && team.getMembers().size() == 1) {// If team only contains "this" player
+            player.getPlayerConnection().sendPacket(team.createTeamDestructionPacket());
         }
         return true;
     }
@@ -733,21 +679,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Open the book
         playerConnection.sendPacket(new OpenBookPacket(Hand.OFF));
         // Restore the item in offhand
-        playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
-    }
-
-    @Override
-    public boolean isImmune(@NotNull DamageType type) {
-        if (!getGameMode().canTakeDamage()) {
-            return type != DamageType.VOID;
-        }
-        return super.isImmune(type);
-    }
-
-    @Override
-    public void setHealth(float health) {
-        super.setHealth(health);
-        this.playerConnection.sendPacket(new UpdateHealthPacket(health, food, foodSaturation));
+        playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getFeature(EntityFeatures.EQUIPMENT).getItemInOffHand()));
     }
 
     @Override
@@ -1094,8 +1026,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        sendPacketToViewersAndSelf(getPropertiesPacket());
-        sendPacketToViewersAndSelf(getEquipmentsPacket());
+        sendPacketToViewersAndSelf(getFeature(EntityFeatures.ATTRIBUTES).getPropertiesPacket());
+        sendPacketToViewersAndSelf(getFeature(EntityFeatures.EQUIPMENT).getEquipmentsPacket());
 
         getInventory().update();
 
@@ -1404,12 +1336,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return heldSlot;
     }
 
+    /**
+     * Changes the {@link Team} for the entity.
+     *
+     * @param team The new team
+     */
     public void setTeam(Team team) {
-        super.setTeam(team);
-        if (team != null) {
-            var players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            PacketUtils.sendGroupedPacket(players, team.createTeamsCreationPacket());
-        }
+        getFeature(EntityFeatures.TEAMS).setTeam(team);
+    }
+
+    /**
+     * Gets the {@link Team} of the entity.
+     *
+     * @return the {@link Team}
+     */
+    public Team getTeam() {
+        return getFeature(EntityFeatures.TEAMS).getTeam();
     }
 
     /**
@@ -1767,7 +1709,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     protected void refreshAbilities() {
         byte flags = 0;
-        if (invulnerable)
+        if (isInvulnerable())
             flags |= PlayerAbilitiesPacket.FLAG_INVULNERABLE;
         if (flying)
             flags |= PlayerAbilitiesPacket.FLAG_FLYING;
@@ -1840,7 +1782,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
-        syncEquipment(EquipmentSlot.MAIN_HAND);
+        getFeature(EntityFeatures.EQUIPMENT).syncEquipment(EquipmentSlot.MAIN_HAND);
         refreshEating(null);
     }
 
@@ -1872,7 +1814,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (hand == null)
             return null;
 
-        final ItemStack updatedItem = getItemInHand(hand);
+        final ItemStack updatedItem = getFeature(EntityFeatures.EQUIPMENT).getItemInHand(hand);
         final boolean isFood = updatedItem.getMaterial().isFood();
 
         if (isFood && !allowFood)
@@ -1978,7 +1920,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
-        connection.sendPacket(getEquipmentsPacket());
+        connection.sendPacket(getFeature(EntityFeatures.EQUIPMENT).getEquipmentsPacket());
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
         }
@@ -1987,72 +1929,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             connection.sendPacket(this.getTeam().createTeamsCreationPacket());
         }
         connection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getItemInMainHand() {
-        return inventory.getItemInMainHand();
-    }
-
-    @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInMainHand(itemStack);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getItemInOffHand() {
-        return inventory.getItemInOffHand();
-    }
-
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInOffHand(itemStack);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getHelmet() {
-        return inventory.getHelmet();
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        inventory.setHelmet(itemStack);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getChestplate() {
-        return inventory.getChestplate();
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        inventory.setChestplate(itemStack);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getLeggings() {
-        return inventory.getLeggings();
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        inventory.setLeggings(itemStack);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getBoots() {
-        return inventory.getBoots();
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        inventory.setBoots(itemStack);
     }
 
     @Override
@@ -2096,6 +1972,66 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public Player asPlayer() {
         return this;
+    }
+
+    @Override
+    public @NotNull ItemStack getItemInMainHand() {
+        return inventory.getItemInMainHand();
+    }
+
+    @Override
+    public void setItemInMainHand(@NotNull ItemStack itemStack) {
+        inventory.setItemInMainHand(itemStack);
+    }
+
+    @Override
+    public @NotNull ItemStack getItemInOffHand() {
+        return inventory.getItemInOffHand();
+    }
+
+    @Override
+    public void setItemInOffHand(@NotNull ItemStack itemStack) {
+        inventory.setItemInOffHand(itemStack);
+    }
+
+    @Override
+    public @NotNull ItemStack getHelmet() {
+        return inventory.getHelmet();
+    }
+
+    @Override
+    public void setHelmet(@NotNull ItemStack itemStack) {
+        inventory.setHelmet(itemStack);
+    }
+
+    @Override
+    public @NotNull ItemStack getChestplate() {
+        return inventory.getChestplate();
+    }
+
+    @Override
+    public void setChestplate(@NotNull ItemStack itemStack) {
+        inventory.setChestplate(itemStack);
+    }
+
+    @Override
+    public @NotNull ItemStack getLeggings() {
+        return inventory.getLeggings();
+    }
+
+    @Override
+    public void setLeggings(@NotNull ItemStack itemStack) {
+        inventory.setLeggings(itemStack);
+    }
+
+    @Override
+    public @NotNull ItemStack getBoots() {
+        return inventory.getBoots();
+    }
+
+    @Override
+    public void setBoots(@NotNull ItemStack itemStack) {
+        inventory.setBoots(itemStack);
     }
 
     /**

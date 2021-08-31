@@ -18,7 +18,7 @@ public class EntityDamageEvent implements EntityEvent, CancellableEvent {
 
     private boolean cancelled;
 
-    public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull DamageType damageType, float damage) {
+    public EntityDamageEvent(@NotNull Entity entity, @NotNull DamageType damageType, float damage) {
         this.entity = entity;
         this.damageType = damageType;
         this.damage = damage;
@@ -26,8 +26,8 @@ public class EntityDamageEvent implements EntityEvent, CancellableEvent {
 
     @NotNull
     @Override
-    public LivingEntity getEntity() {
-        return (LivingEntity) entity;
+    public Entity getEntity() {
+        return entity;
     }
 
     /**

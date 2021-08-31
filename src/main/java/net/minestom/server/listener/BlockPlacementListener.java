@@ -50,7 +50,7 @@ public class BlockPlacementListener {
             return;
         }
 
-        final ItemStack usedItem = player.getItemInHand(hand);
+        final ItemStack usedItem = player.getInventory().getItemInHand(hand);
         final Block interactedBlock = instance.getBlock(blockPosition);
 
         // Interact at block

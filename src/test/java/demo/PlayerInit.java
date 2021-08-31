@@ -65,7 +65,7 @@ public class PlayerInit {
             })
             .addListener(PlayerDeathEvent.class, event -> event.setChatMessage(Component.text("custom death message")))
             .addListener(PickupItemEvent.class, event -> {
-                final Entity entity = event.getLivingEntity();
+                final Entity entity = event.getEntity();
                 if (entity instanceof Player) {
                     // Cancel event if player does not have enough inventory space
                     final ItemStack itemStack = event.getItemEntity().getItemStack();

@@ -111,14 +111,14 @@ public class DamageType implements TagHandler {
      * @param entity the entity hit by this damage
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
-    public @Nullable SoundEvent getSound(@NotNull LivingEntity entity) {
+    public @Nullable SoundEvent getSound(@NotNull Entity entity) {
         if (entity instanceof Player) {
             return getPlayerSound((Player) entity);
         }
         return getGenericSound(entity);
     }
 
-    protected SoundEvent getGenericSound(@NotNull LivingEntity entity) {
+    protected SoundEvent getGenericSound(@NotNull Entity entity) {
         return SoundEvent.ENTITY_GENERIC_HURT;
     }
 

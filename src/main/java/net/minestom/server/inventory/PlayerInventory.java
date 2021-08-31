@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.features.EntityFeatures;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
@@ -48,7 +49,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         // Reset cursor
         setCursorItem(ItemStack.AIR);
         // Update equipments
-        this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
+        this.player.sendPacketToViewersAndSelf(player.getFeature(EntityFeatures.EQUIPMENT).getEquipmentsPacket());
     }
 
     @Override
@@ -185,7 +186,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         this.itemStacks[slot] = itemStack;
         // Sync equipment
         if (equipmentSlot != null) {
-            this.player.syncEquipment(equipmentSlot);
+            this.player.getFeature(EntityFeatures.EQUIPMENT).syncEquipment(equipmentSlot);
         }
         // Refresh slot
         sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);

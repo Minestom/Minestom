@@ -1,5 +1,8 @@
 package net.minestom.server.entity;
 
+import com.extollit.gaming.ai.path.HydrazinePathFinder;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -9,12 +12,19 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.features.EntityFeature;
+import net.minestom.server.entity.features.EntityFeatureBase;
+import net.minestom.server.entity.features.EntityFeatures;
+import net.minestom.server.entity.features.living.EntityFeatureLiving;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
@@ -53,6 +63,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -136,6 +147,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     private final Object entityTypeLock = new Object();
 
+    private final Int2ObjectMap<EntityFeatureBase> features = new Int2ObjectOpenHashMap<>();
+
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -159,6 +172,50 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     public Entity(@NotNull EntityType entityType) {
         this(entityType, UUID.randomUUID());
+    }
+
+    public <T extends EntityFeatureBase> @NotNull T enableFeature(EntityFeature<T> feature, @Nullable Function<Entity, T> implementationConstructor) {
+        if (instance != null) {
+            throw new IllegalStateException("features can be added to an entity only before it's been spawned");
+        }
+        int id = feature.getId();
+        if (features.containsKey(id)) {
+            throw new IllegalStateException("feature " + feature.getClass().getSimpleName() + " is already enabled for this entity");
+        }
+        for (var dependency : feature.getDependencies()) {
+            if (!features.containsKey(dependency.getId())) {
+                enableFeature(dependency);
+            }
+        }
+        T implementation;
+        if (implementationConstructor != null) {
+            implementation = implementationConstructor.apply(this);
+        } else {
+            implementation = feature.getDefaultImplementationFor(this);
+        }
+        features.put(id, implementation);
+        return implementation;
+    }
+
+    public <T extends EntityFeatureBase> @NotNull T enableFeature(EntityFeature<T> feature) {
+        return enableFeature(feature, null);
+    }
+
+    public boolean isFeatureEnabled(EntityFeature<?> feature) {
+        return features.containsKey(feature.getId());
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends EntityFeatureBase> @Nullable T getFeatureIfEnabled(EntityFeature<T> feature) {
+        return (T) features.get(feature.getId());
+    }
+
+    public <T extends EntityFeatureBase> @NotNull T getFeature(EntityFeature<T> feature) {
+        var result = getFeatureIfEnabled(feature);
+        if (result == null) {
+            throw new IllegalArgumentException("this entity does not have feature " + feature.getClass().getSimpleName() + " enabled");
+        }
+        return result;
     }
 
     /**
@@ -334,6 +391,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         // Head position
         playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        features.values().forEach(feature -> feature.onAddViewer(player));
         return true;
     }
 
@@ -348,6 +406,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (player == this || !viewers.remove(player)) {
             return false;
         }
+        features.values().forEach(feature -> feature.onRemoveViewer(player));
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
         player.viewableEntities.remove(this);
         return true;
@@ -446,6 +505,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             handleVoid();
 
             // Call the abstract update method
+            features.values().forEach(feature -> feature.tick(time));
             update(time);
 
             ticks++;
@@ -606,7 +666,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected void handleVoid() {
         // Kill if in void
         if (getInstance().isInVoid(this.position)) {
-            remove();
+            var feature = getFeatureIfEnabled(EntityFeatures.LIVING);
+            if (feature == null) {
+                remove();
+            } else {
+                feature.damage(DamageType.VOID, 10F);
+            }
         }
     }
 
@@ -683,6 +748,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void setBoundingBox(double x, double y, double z) {
         this.boundingBox = new BoundingBox(this, x, y, z);
+        var feature = getFeatureIfEnabled(EntityFeatures.PICKUP_ITEMS);
+        if (feature != null) {
+            feature.onBoundingBoxUpdated();
+        }
     }
 
     /**
@@ -744,8 +813,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
             refreshCurrentChunk(chunk);
             instance.UNSAFE_addEntity(this);
+            features.values().forEach(EntityFeatureBase::onSpawn);
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
+
+            var feature = getFeatureIfEnabled(EntityFeatures.NAVIGABLE);
+            if (feature != null) {
+                Navigator navigator = feature.getNavigator();
+                navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
+            }
         });
     }
 
@@ -968,7 +1044,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Sets the entity in fire visually.
      * <p>
      * WARNING: if you want to apply damage or specify a duration,
-     * see {@link LivingEntity#setFireForDuration(int, TemporalUnit)}.
+     * see {@link EntityFeatureLiving#setFireForDuration(int, TemporalUnit)}.
      *
      * @param fire should the entity be set in fire
      */
@@ -1143,6 +1219,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.entityMeta.setHasNoGravity(noGravity);
     }
 
+    public boolean isFlyingWithElytra() {
+        return this.entityMeta.isFlyingWithElytra();
+    }
+
+    public void setFlyingWithElytra(boolean isFlying) {
+        this.entityMeta.setFlyingWithElytra(isFlying);
+    }
+
     /**
      * Updates internal fields and sends updates.
      *
@@ -1300,6 +1384,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void remove() {
         if (isRemoved()) return;
+        features.values().forEach(EntityFeatureBase::onRemoval);
         // Remove passengers if any (also done with LivingEntity#kill)
         if (hasPassenger()) {
             getPassengers().forEach(this::removePassenger);
@@ -1446,7 +1531,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param x        knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
      * @param z        knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
      */
-    public void takeKnockback(final float strength, final double x, final double z) {
+    public void takeKnockback(float strength, final double x, final double z) {
+        var attributes = getFeatureIfEnabled(EntityFeatures.ATTRIBUTES);
+        if (attributes != null) {
+            strength *= 1 - attributes.getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        }
         if (strength > 0) {
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
             final Vec velocityModifier = new Vec(x, z)
@@ -1459,6 +1548,21 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
     }
 
+    /**
+     * Sends a {@link EntityAnimationPacket} to swing the main hand
+     * (can be used for attack animation).
+     */
+    public void swingMainHand() {
+        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to swing the off hand
+     * (can be used for attack animation).
+     */
+    public void swingOffHand() {
+        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
+    }
 
     /**
      * Gets the line of sight of the entity.
@@ -1563,6 +1667,21 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
     }
 
+    /**
+     * Gets the target (not-air) block position of the entity.
+     *
+     * @param maxDistance The max distance to scan before returning null
+     * @return The block position targeted by this entity, null if non are found
+     */
+    public Point getTargetBlockPosition(int maxDistance) {
+        Iterator<Point> it = new BlockIterator(this, maxDistance);
+        while (it.hasNext()) {
+            final Point position = it.next();
+            if (!getInstance().getBlock(position).isAir()) return position;
+        }
+        return null;
+    }
+
     public enum Pose {
         STANDING,
         FALL_FLYING,
@@ -1573,7 +1692,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         DYING
     }
 
-    protected boolean shouldRemove() {
+    public boolean shouldRemove() {
         return shouldRemove;
     }
 }
