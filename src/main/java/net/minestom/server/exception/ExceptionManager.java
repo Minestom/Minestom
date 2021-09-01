@@ -15,6 +15,7 @@ public final class ExceptionManager {
      * @param e the occurred exception
      */
     public void handleException(Throwable e) {
+        // TODO handle OOM exceptions
         this.getExceptionHandler().handleException(e);
     }
 

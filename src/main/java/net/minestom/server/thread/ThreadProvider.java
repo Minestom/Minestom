@@ -135,7 +135,7 @@ public abstract class ThreadProvider {
                         return;
                     try {
                         chunk.tick(time);
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
                     final var entities = chunkEntry.entities;
@@ -148,7 +148,7 @@ public abstract class ThreadProvider {
                             }
                             try {
                                 entity.tick(time);
-                            } catch (Exception e) {
+                            } catch (Throwable e) {
                                 MinecraftServer.getExceptionManager().handleException(e);
                             }
                         }
