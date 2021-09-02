@@ -38,6 +38,12 @@ public final class PacketUtils {
     private PacketUtils() {
     }
 
+    @ApiStatus.Internal
+    @ApiStatus.Experimental
+    public static ByteBuffer localBuffer() {
+        return COMPRESSION_CACHE.get();
+    }
+
     /**
      * Sends a packet to an audience. This method performs the following steps in the
      * following order:
@@ -200,7 +206,7 @@ public final class PacketUtils {
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final var temp = PacketUtils.createFramedPacket(packet);
-        final var buffer= ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
+        final var buffer = ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
         return new FramedPacket(packet.getId(), buffer, packet);
     }
 
