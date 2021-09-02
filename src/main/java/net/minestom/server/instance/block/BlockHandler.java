@@ -114,14 +114,16 @@ public interface BlockHandler {
 
     final class PlayerPlacement extends Placement {
         private final Player player;
+        private final Player.Hand hand;
         private final BlockFace blockFace;
         private final float cursorX, cursorY, cursorZ;
 
         @ApiStatus.Internal
         public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+                               Player player, Player.Hand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
             super(block, instance, blockPosition);
             this.player = player;
+            this.hand = hand;
             this.blockFace = blockFace;
             this.cursorX = cursorX;
             this.cursorY = cursorY;
@@ -130,6 +132,10 @@ public interface BlockHandler {
 
         public @NotNull Player getPlayer() {
             return player;
+        }
+
+        public @NotNull Player.Hand getHand() {
+            return hand;
         }
 
         public @NotNull BlockFace getBlockFace() {

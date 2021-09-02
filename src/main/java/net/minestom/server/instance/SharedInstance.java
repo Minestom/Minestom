@@ -3,7 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -28,9 +28,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
-                              @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
-        return instanceContainer.placeBlock(player, block, blockPosition, blockFace, cursorX, cursorY, cursorZ);
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+        return instanceContainer.placeBlock(placement);
     }
 
     @Override

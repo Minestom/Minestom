@@ -351,7 +351,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Tick event
-        EventDispatcher.call(new PlayerTickEvent(this), GlobalHandles.PLAYER_TICK);
+        GlobalHandles.PLAYER_TICK.call(new PlayerTickEvent(this));
     }
 
     @Override
@@ -418,6 +418,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         getPlayerConnection().sendPacket(respawnPacket);
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
+        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
@@ -1195,7 +1196,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     // Cannot load chunk (auto load is not enabled)
                     return;
                 }
-                chunk.addViewer(this);
+                try {
+                    chunk.addViewer(this);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             });
         });
     }
@@ -1548,6 +1553,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
     }
 
+    public int getNextTeleportId() {
+        return teleportId.incrementAndGet();
+    }
+
     public int getLastSentTeleportId() {
         return teleportId.get();
     }
@@ -1567,7 +1576,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
         if (includeSelf) {
-            playerConnection.sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, teleportId.incrementAndGet(), false));
+            playerConnection.sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId(), false));
         }
         super.synchronizePosition(includeSelf);
     }

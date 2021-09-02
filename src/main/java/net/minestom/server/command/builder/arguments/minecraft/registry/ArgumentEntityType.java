@@ -23,7 +23,7 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, true);
-        argumentNode.parser = "minecraft:entity_summon";
+        argumentNode.parser = "minecraft:resource_location";
         argumentNode.suggestionsType = SuggestionType.SUMMONABLE_ENTITIES.getIdentifier();
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});

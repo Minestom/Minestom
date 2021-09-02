@@ -13,7 +13,6 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
@@ -27,6 +26,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,19 +68,16 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    /**
-     * Creates an {@link InstanceContainer}.
-     *
-     * @param uniqueId      the unique id of the instance
-     * @param dimensionType the dimension type of the instance
-     */
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+    @ApiStatus.Experimental
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
         super(uniqueId, dimensionType);
-        // Set the default chunk supplier using DynamicChunk
         setChunkSupplier(DynamicChunk::new);
-        // Set the default chunk loader which use the Anvil format
-        setChunkLoader(new AnvilLoader("world"));
+        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader("world")));
         this.chunkLoader.loadInstance(this);
+    }
+
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+        this(uniqueId, dimensionType, null);
     }
 
     @Override
@@ -156,12 +153,12 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
-                              @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+        final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!ChunkUtils.isLoaded(chunk)) return false;
-        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block,
-                new BlockHandler.PlayerPlacement(block, this, blockPosition, player, blockFace, cursorX, cursorY, cursorZ), null);
+        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
+                placement.getBlock(), placement, null);
         return true;
     }
 
@@ -275,7 +272,7 @@ public class InstanceContainer extends Instance {
                 .whenComplete((chunk, throwable) -> {
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
-                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ), GlobalHandles.INSTANCE_CHUNK_LOAD);
+                    GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
                     synchronized (loadingChunks) {
                         this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
                     }

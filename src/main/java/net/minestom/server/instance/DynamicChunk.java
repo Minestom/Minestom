@@ -9,13 +9,13 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -40,10 +40,8 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
 
     private volatile long lastChangeTime;
-
-    private FramedPacket cachedChunkBuffer;
-    private FramedPacket cachedLightBuffer;
-    private long cachedPacketTime;
+    private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
         super(instance, biomes, chunkX, chunkZ, true);
@@ -126,34 +124,31 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void sendChunk(@NotNull Player player) {
+    public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
+        final long lastChange = getLastChangeTime();
+        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
+        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
         if (connection instanceof PlayerSocketConnection) {
-            final long lastChange = getLastChangeTime();
-            var chunkPacket = cachedChunkBuffer;
-            var lightPacket = cachedLightBuffer;
-            if (lastChange > cachedPacketTime || (chunkPacket == null || lightPacket == null)) {
-                chunkPacket = PacketUtils.allocateTrimmedPacket(createChunkPacket());
-                lightPacket = PacketUtils.allocateTrimmedPacket(createLightPacket());
-                this.cachedChunkBuffer = chunkPacket;
-                this.cachedLightBuffer = lightPacket;
-                this.cachedPacketTime = lastChange;
-            }
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.write(lightPacket);
-            socketConnection.write(chunkPacket);
+            socketConnection.write(lightPacket.body());
+            socketConnection.write(chunkPacket.body());
         } else {
-            connection.sendPacket(createLightPacket());
-            connection.sendPacket(createChunkPacket());
+            connection.sendPacket(lightPacket.packet());
+            connection.sendPacket(chunkPacket.packet());
         }
     }
 
     @Override
-    public synchronized void sendChunk() {
+    public void sendChunk() {
         if (!isLoaded()) return;
-        sendPacketToViewers(createLightPacket());
-        sendPacketToViewers(createChunkPacket());
+        if (getViewers().isEmpty()) return;
+        final long lastChange = getLastChangeTime();
+        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
+        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
+        sendPacketToViewers(lightPacket.packet());
+        sendPacketToViewers(chunkPacket.packet());
     }
 
     @NotNull

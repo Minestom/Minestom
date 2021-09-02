@@ -7,7 +7,9 @@ import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
@@ -18,13 +20,42 @@ public class BoundingBox {
     private final Entity entity;
     private final double x, y, z;
 
-    private volatile Pos lastPosition;
-    private List<Vec> bottomFace;
-    private List<Vec> topFace;
-    private List<Vec> leftFace;
-    private List<Vec> rightFace;
-    private List<Vec> frontFace;
-    private List<Vec> backFace;
+    private final CachedFace bottomFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMinY(), getMaxZ()),
+            new Vec(getMinX(), getMinY(), getMaxZ())
+    ));
+    private final CachedFace topFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMaxY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMaxZ()),
+            new Vec(getMinX(), getMaxY(), getMaxZ())
+    ));
+    private final CachedFace leftFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMinZ()),
+            new Vec(getMinX(), getMaxY(), getMinZ()),
+            new Vec(getMinX(), getMaxY(), getMaxZ()),
+            new Vec(getMinX(), getMinY(), getMaxZ())
+    ));
+    private final CachedFace rightFace = new CachedFace(() -> List.of(
+            new Vec(getMaxX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMaxZ()),
+            new Vec(getMaxX(), getMinY(), getMaxZ())
+    ));
+    private final CachedFace frontFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMinZ()),
+            new Vec(getMinX(), getMaxY(), getMinZ())
+    ));
+    private final CachedFace backFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMaxZ()),
+            new Vec(getMaxX(), getMinY(), getMaxZ()),
+            new Vec(getMaxX(), getMaxY(), getMaxZ()),
+            new Vec(getMinX(), getMaxY(), getMaxZ())
+    ));
 
     /**
      * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.
@@ -320,12 +351,7 @@ public class BoundingBox {
      * @return the points at the bottom of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getBottomFace() {
-        this.bottomFace = get(bottomFace, () ->
-                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMinY(), getMaxZ()),
-                        new Vec(getMinX(), getMinY(), getMaxZ())));
-        return bottomFace;
+        return bottomFace.get();
     }
 
     /**
@@ -334,12 +360,7 @@ public class BoundingBox {
      * @return the points at the top of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getTopFace() {
-        this.topFace = get(topFace, () ->
-                List.of(new Vec(getMinX(), getMaxY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                        new Vec(getMinX(), getMaxY(), getMaxZ())));
-        return topFace;
+        return topFace.get();
     }
 
     /**
@@ -348,12 +369,7 @@ public class BoundingBox {
      * @return the points on the left face of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getLeftFace() {
-        this.leftFace = get(leftFace, () ->
-                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
-                        new Vec(getMinX(), getMaxY(), getMinZ()),
-                        new Vec(getMinX(), getMaxY(), getMaxZ()),
-                        new Vec(getMinX(), getMinY(), getMaxZ())));
-        return leftFace;
+        return leftFace.get();
     }
 
     /**
@@ -362,12 +378,7 @@ public class BoundingBox {
      * @return the points on the right face of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getRightFace() {
-        this.rightFace = get(rightFace, () ->
-                List.of(new Vec(getMaxX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                        new Vec(getMaxX(), getMinY(), getMaxZ())));
-        return rightFace;
+        return rightFace.get();
     }
 
     /**
@@ -376,12 +387,7 @@ public class BoundingBox {
      * @return the points at the front of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getFrontFace() {
-        this.frontFace = get(frontFace, () ->
-                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMinZ()),
-                        new Vec(getMinX(), getMaxY(), getMinZ())));
-        return frontFace;
+        return frontFace.get();
     }
 
     /**
@@ -390,12 +396,7 @@ public class BoundingBox {
      * @return the points at the back of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getBackFace() {
-        this.backFace = get(backFace, () -> List.of(
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ())));
-        return backFace;
+        return backFace.get();
     }
 
     @Override
@@ -410,18 +411,42 @@ public class BoundingBox {
         return result;
     }
 
-    private @NotNull List<Vec> get(@Nullable List<Vec> face, Supplier<? extends List<Vec>> vecSupplier) {
-        final var lastPos = this.lastPosition;
-        final var entityPos = entity.getPosition();
-        if (face != null && lastPos != null && lastPos.samePoint(entityPos)) {
-            return face;
-        }
-        this.lastPosition = entityPos;
-        return vecSupplier.get();
-    }
-
     private enum Axis {
         X, Y, Z
+    }
+
+    private class CachedFace {
+
+        private final AtomicReference<@Nullable PositionedPoints> reference = new AtomicReference<>(null);
+        private final Supplier<@NotNull List<Vec>> faceProducer;
+
+        private CachedFace(Supplier<@NotNull List<Vec>> faceProducer) {
+            this.faceProducer = faceProducer;
+        }
+
+        @NotNull List<Vec> get() {
+            //noinspection ConstantConditions
+            return reference.updateAndGet(value -> {
+                Pos entityPosition = entity.getPosition();
+                if (value == null || !value.lastPosition.samePoint(entityPosition)) {
+                    return new PositionedPoints(entityPosition, faceProducer.get());
+                }
+                return value;
+            }).points;
+        }
+
+    }
+
+    private static class PositionedPoints {
+
+        private final @NotNull Pos lastPosition;
+        private final @NotNull List<Vec> points;
+
+        private PositionedPoints(@NotNull Pos lastPosition, @NotNull List<Vec> points) {
+            this.lastPosition = lastPosition;
+            this.points = points;
+        }
+
     }
 
 }

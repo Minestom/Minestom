@@ -317,9 +317,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                slot, button,
-                clicked, cursor, this::getItemStackFromPacketSlot,
-                this::setItemStackFromPacketSlot);
+                convertPlayerInventorySlot(slot, OFFSET), button, clicked, cursor);
         if (clickResult == null || clickResult.isCancel()) {
             update();
             return false;

@@ -139,8 +139,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     @ApiStatus.Internal
-    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
-                                       @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ);
+    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -732,7 +731,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         // Tick event
         {
             // Process tick events
-            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge), GlobalHandles.INSTANCE_TICK);
+            GlobalHandles.INSTANCE_TICK.call(new InstanceTickEvent(this, time, lastTickAge));
             // Set last tick age
             this.lastTickAge = time;
         }

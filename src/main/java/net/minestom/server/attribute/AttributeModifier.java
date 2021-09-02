@@ -1,10 +1,8 @@
 package net.minestom.server.attribute;
 
-import net.minestom.server.utils.UniqueIdUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Represent an attribute modifier.
@@ -24,7 +22,7 @@ public class AttributeModifier {
      * @param operation the operation to apply this modifier with
      */
     public AttributeModifier(@NotNull String name, float amount, @NotNull AttributeOperation operation) {
-        this(UniqueIdUtils.createRandomUUID(ThreadLocalRandom.current()), name, amount, operation);
+        this(UUID.randomUUID(), name, amount, operation);
     }
 
     /**

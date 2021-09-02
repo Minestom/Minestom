@@ -123,16 +123,15 @@ public final class BinaryBuffer {
         return nioBuffer.position(reader).slice().limit(writer);
     }
 
-    public void writeChannel(WritableByteChannel channel) throws IOException {
-        var writeBuffer = asByteBuffer(readerOffset, writerOffset);
-        while (writeBuffer.position() != writeBuffer.limit()) {
-            final int count = channel.write(writeBuffer);
-            if (count == -1) {
-                // EOS
-                throw new IOException("Disconnected");
-            }
-            this.readerOffset += count;
+    public boolean writeChannel(WritableByteChannel channel) throws IOException {
+        var writeBuffer = asByteBuffer(readerOffset, writerOffset - readerOffset);
+        final int count = channel.write(writeBuffer);
+        if (count == -1) {
+            // EOS
+            throw new IOException("Disconnected");
         }
+        this.readerOffset += count;
+        return writeBuffer.limit() == writeBuffer.position();
     }
 
     public void readChannel(ReadableByteChannel channel) throws IOException {

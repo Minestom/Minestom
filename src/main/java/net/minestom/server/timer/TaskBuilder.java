@@ -138,13 +138,13 @@ public class TaskBuilder {
     }
 
     /**
-     * Schedules this {@link Task} for execution.
+     * Builds a {@link Task}.
      *
      * @return the built {@link Task}
      */
     @NotNull
-    public Task schedule() {
-        Task task = new Task(
+    public Task build() {
+        return new Task(
                 this.schedulerManager,
                 this.runnable,
                 this.shutdown,
@@ -152,21 +152,17 @@ public class TaskBuilder {
                 this.repeat,
                 this.isTransient,
                 this.owningExtension);
-        if (this.shutdown) {
-            Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
-            synchronized (shutdownTasks) {
-                shutdownTasks.put(task.getId(), task);
-            }
-            if (owningExtension != null) {
-                this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, task);
-            }
-        } else {
-            Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;
-            synchronized (tasks) {
-                tasks.put(task.getId(), task);
-            }
-            task.schedule();
-        }
+    }
+
+    /**
+     * Schedules this {@link Task} for execution.
+     *
+     * @return the scheduled {@link Task}
+     */
+    @NotNull
+    public Task schedule() {
+        Task task = build();
+        task.schedule();
         return task;
     }
 }

@@ -188,21 +188,8 @@ public interface EventNode<T extends Event> {
      */
     default void call(@NotNull T event) {
         //noinspection unchecked
-        call(event, getHandle((Class<T>) event.getClass()));
+        getHandle((Class<T>) event.getClass()).call(event);
     }
-
-    /**
-     * Calls an event starting from this node.
-     * <p>
-     * The event handle can be retrieved using {@link #getHandle(Class)}
-     * and is useful to avoid map lookups for high-frequency events.
-     *
-     * @param event  the event to call
-     * @param handle the event handle linked to this node
-     * @param <E>    the event type
-     * @throws IllegalArgumentException if {@code handle}'s owner is not {@code this}
-     */
-    <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle);
 
     /**
      * Gets the handle of an event type.
@@ -211,20 +198,8 @@ public interface EventNode<T extends Event> {
      * @param <E>        the event type
      * @return the handle linked to {@code handleType}
      */
+    @ApiStatus.Experimental
     <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
-
-    /**
-     * Gets if any listener has been registered for the given handle.
-     * May trigger an update if the cached data is not correct.
-     * <p>
-     * Useful if you are able to avoid expensive computation in the case where
-     * the event is unused. Be aware that {@link #call(Event, ListenerHandle)}
-     * has similar optimization built-in.
-     *
-     * @param handle the listener handle
-     * @return true if the event has 1 or more listeners
-     */
-    boolean hasListener(@NotNull ListenerHandle<? extends T> handle);
 
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.
