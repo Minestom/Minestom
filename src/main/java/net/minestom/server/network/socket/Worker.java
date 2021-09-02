@@ -84,6 +84,7 @@ public final class Worker extends Thread {
         socket.setSendBufferSize(Server.SOCKET_BUFFER_SIZE);
         socket.setReceiveBufferSize(Server.SOCKET_BUFFER_SIZE);
         socket.setTcpNoDelay(Server.NO_DELAY);
+        socket.setSoTimeout(30 * 1000); // 30 seconds
         this.selector.wakeup();
     }
 
