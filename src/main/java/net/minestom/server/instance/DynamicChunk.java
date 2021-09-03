@@ -124,7 +124,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void sendChunk(@NotNull Player player) {
+    public synchronized void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
         final long lastChange = getLastChangeTime();
@@ -141,7 +141,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void sendChunk() {
+    public synchronized void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
         final long lastChange = getLastChangeTime();
