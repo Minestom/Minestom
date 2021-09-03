@@ -259,23 +259,31 @@ public class PlayerSocketConnection extends PlayerConnection {
         if (!channel.isOpen()) return;
         if (tickBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
         synchronized (bufferLock) {
-            if (tickBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
+            final BinaryBuffer localBuffer = this.tickBuffer;
+            if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
+
+            // Update tick buffer
+            BinaryBuffer newBuffer = POOLED_BUFFERS.poll();
+            if (newBuffer == null) newBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
+            newBuffer.clear();
+            this.tickBuffer = newBuffer;
+
             if (encrypted) {
                 final Cipher cipher = encryptCipher;
                 // Encrypt data first
-                final int remainingBytes = tickBuffer.readableBytes();
-                final byte[] bytes = tickBuffer.readRemainingBytes();
+                final int remainingBytes = localBuffer.readableBytes();
+                final byte[] bytes = localBuffer.readRemainingBytes();
                 byte[] outTempArray = new byte[cipher.getOutputSize(remainingBytes)];
                 try {
                     cipher.update(bytes, 0, remainingBytes, outTempArray);
                 } catch (ShortBufferException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
-                this.tickBuffer.clear();
-                this.tickBuffer.writeBytes(outTempArray);
+                localBuffer.clear();
+                localBuffer.writeBytes(outTempArray);
             }
 
-            this.waitingBuffers.add(tickBuffer);
+            this.waitingBuffers.add(localBuffer);
             Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
             while (iterator.hasNext()) {
                 BinaryBuffer waitingBuffer = iterator.next();
@@ -289,13 +297,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                     if (message == null ||
                             (!message.equals("Broken pipe") && !message.equals("Connection reset by peer"))) {
                         MinecraftServer.getExceptionManager().handleException(e);
-                    }                }
+                    }
+                }
             }
-            // Update tick buffer
-            BinaryBuffer newBuffer = POOLED_BUFFERS.poll();
-            if (newBuffer == null) newBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
-            newBuffer.clear();
-            this.tickBuffer = newBuffer;
         }
     }
 
