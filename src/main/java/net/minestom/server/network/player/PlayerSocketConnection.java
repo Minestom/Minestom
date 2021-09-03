@@ -256,6 +256,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void flush() {
+        boolean shouldDisconnect = false;
         if (!channel.isOpen()) return;
         synchronized (bufferLock) {
             final BinaryBuffer localBuffer = this.tickBuffer;
@@ -291,10 +292,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                             (!message.equals("Broken pipe") && !message.equals("Connection reset by peer"))) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
-                    disconnect();
+                    shouldDisconnect = true;
                 }
             }
         }
+        if(shouldDisconnect) disconnect();
     }
 
     @Override
@@ -319,6 +321,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.worker.disconnect(this, channel);
         synchronized (bufferLock) {
             POOLED_BUFFERS.addAll(waitingBuffers);
+            this.waitingBuffers.clear();
         }
     }
 
