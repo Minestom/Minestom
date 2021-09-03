@@ -257,17 +257,11 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void flush() {
         if (!channel.isOpen()) return;
-        if (tickBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
         synchronized (bufferLock) {
             final BinaryBuffer localBuffer = this.tickBuffer;
             if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
-
             // Update tick buffer
-            BinaryBuffer newBuffer = POOLED_BUFFERS.poll();
-            if (newBuffer == null) newBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
-            newBuffer.clear();
-            this.tickBuffer = newBuffer;
-
+            this.tickBuffer = getPooledBuffer();
             if (encrypted) {
                 final Cipher cipher = encryptCipher;
                 // Encrypt data first
@@ -290,7 +284,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                 try {
                     if (!waitingBuffer.writeChannel(channel)) break;
                     iterator.remove();
-                    waitingBuffer.clear();
                     POOLED_BUFFERS.add(waitingBuffer);
                 } catch (IOException e) {
                     final String message = e.getMessage();
@@ -298,10 +291,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                             (!message.equals("Broken pipe") && !message.equals("Connection reset by peer"))) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
+                    disconnect();
                 }
             }
-            // Update tick buffer
-            this.tickBuffer = getPooledBuffer();
         }
     }
 
