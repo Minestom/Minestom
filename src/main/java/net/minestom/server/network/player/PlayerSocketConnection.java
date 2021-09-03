@@ -75,7 +75,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final Object bufferLock = new Object();
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
-    private BinaryBuffer tickBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
+    private BinaryBuffer tickBuffer = getPooledBuffer();
     private volatile BinaryBuffer cacheBuffer;
 
     public PlayerSocketConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
@@ -289,10 +289,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
             }
             // Update tick buffer
-            BinaryBuffer newBuffer = POOLED_BUFFERS.poll();
-            if (newBuffer == null) newBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
-            newBuffer.clear();
-            this.tickBuffer = newBuffer;
+            this.tickBuffer = getPooledBuffer();
         }
     }
 
@@ -452,5 +449,15 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void setNonce(byte[] nonce) {
         this.nonce = nonce;
+    }
+
+    private static BinaryBuffer getPooledBuffer() {
+        BinaryBuffer newBuffer = POOLED_BUFFERS.poll();
+        if (newBuffer == null) {
+            newBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
+        } else {
+            newBuffer.clear();
+        }
+        return newBuffer;
     }
 }
