@@ -34,6 +34,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -1162,18 +1163,21 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
         final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
+
+        final Player player = this instanceof Player ? (Player) this : null;
+        final Chunk chunk = getChunk();
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
+            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), player);
         } else if (positionChange && viewChange) {
-            sendPacketToViewers(EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, isOnGround()));
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                    lastSyncedPosition, isOnGround()), player);
             // Fix head rotation
-            sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
         } else if (positionChange) {
-            sendPacketToViewers(EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround));
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), player);
         } else if (viewChange) {
-            sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
-            sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), player);
         }
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
