@@ -286,7 +286,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                 try {
                     if (!waitingBuffer.writeChannel(channel)) break;
                     iterator.remove();
-                    waitingBuffer.clear();
                     POOLED_BUFFERS.add(new SoftReference<>(waitingBuffer));
                 } catch (IOException e) {
                     final String message = e.getMessage();
@@ -297,8 +296,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                     shouldDisconnect = true;
                 }
             }
-            // Update tick buffer
-            this.tickBuffer = getPooledBuffer();
         }
         if (shouldDisconnect) disconnect();
     }
