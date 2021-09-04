@@ -31,6 +31,7 @@ import java.lang.ref.SoftReference;
 import java.net.SocketAddress;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -231,11 +232,20 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (bufferLock) {
-            if (!tickBuffer.canWrite(buffer.position())) {
-                // Tick buffer is full, flush before appending
-                flush();
+            final int size = buffer.position();
+            if (size <= BUFFER_SIZE) {
+                if (!tickBuffer.canWrite(size)) flush();
+                this.tickBuffer.write(buffer.flip());
+            } else {
+                final int bufferCount = size / BUFFER_SIZE + 1;
+                for (int i = 0; i < bufferCount; i++) {
+                    ByteBuffer slice = buffer.position(i * BUFFER_SIZE).slice();
+                    slice.limit(Math.min(slice.remaining(), BUFFER_SIZE));
+                    if (!tickBuffer.canWrite(slice.remaining())) flush();
+                    this.tickBuffer.write(slice);
+                }
+                buffer.position(size);
             }
-            this.tickBuffer.write(buffer.flip());
         }
     }
 
@@ -244,7 +254,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     public void write(@NotNull ServerPacket packet) {
-        // TODO write directly to the tick buffer
         write(PacketUtils.createFramedPacket(packet, compressed));
     }
 
@@ -287,12 +296,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                     if (!waitingBuffer.writeChannel(channel)) break;
                     iterator.remove();
                     POOLED_BUFFERS.add(new SoftReference<>(waitingBuffer));
+                } catch (ClosedChannelException e) {
+                    shouldDisconnect = true;
                 } catch (IOException e) {
-                    final String message = e.getMessage();
-                    if (message == null ||
-                            (!message.equals("Broken pipe") && !message.equals("Connection reset by peer"))) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
+                    MinecraftServer.getExceptionManager().handleException(e);
                     shouldDisconnect = true;
                 }
             }
@@ -468,11 +475,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             buffer = ref.get();
             if (buffer != null) break;
         }
-        if (buffer == null) {
-            buffer = BinaryBuffer.ofSize(BUFFER_SIZE);
-        } else {
-            buffer.clear();
-        }
-        return buffer;
+        if (buffer != null) buffer.clear();
+        return Objects.requireNonNullElseGet(buffer, () -> BinaryBuffer.ofSize(BUFFER_SIZE));
     }
 }
