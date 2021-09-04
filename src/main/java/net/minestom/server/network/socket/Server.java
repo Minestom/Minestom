@@ -19,7 +19,9 @@ public final class Server {
     public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
             Runtime.getRuntime().availableProcessors());
     public static final int MAX_PACKET_SIZE = 2_097_151; // 3 bytes var-int
-    public static final int SOCKET_BUFFER_SIZE = Integer.getInteger("minestom.buffer-size", MAX_PACKET_SIZE);
+    public static final int SOCKET_SEND_BUFFER_SIZE = Integer.getInteger("minestom.send-buffer-size", MAX_PACKET_SIZE);
+    public static final int SOCKET_RECEIVE_BUFFER_SIZE = Integer.getInteger("minestom.receive-buffer-size", 32_767);
+
     public static final boolean NO_DELAY = true;
 
     private volatile boolean stop;
@@ -52,7 +54,7 @@ public final class Server {
         serverSocket.bind(address);
         serverSocket.configureBlocking(false);
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-        serverSocket.socket().setReceiveBufferSize(SOCKET_BUFFER_SIZE);
+        serverSocket.socket();
         LOGGER.info("Server starting, wait for connections");
         new Thread(() -> {
             while (!stop) {

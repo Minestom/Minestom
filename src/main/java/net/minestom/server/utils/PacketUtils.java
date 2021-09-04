@@ -36,8 +36,8 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
-    private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.SOCKET_BUFFER_SIZE);
-    private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.SOCKET_BUFFER_SIZE);
+    private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
+    private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.MAX_PACKET_SIZE);
 
     private static final Object VIEWABLE_PACKET_LOCK = new Object();
     private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
@@ -274,7 +274,7 @@ public final class PacketUtils {
     private static final class ViewableStorage {
         private final Viewable viewable;
         private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new HashMap<>();
-        private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
+        private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_SEND_BUFFER_SIZE);
 
         private ViewableStorage(Viewable viewable) {
             this.viewable = viewable;
