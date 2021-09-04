@@ -308,7 +308,6 @@ public final class PacketUtils {
                         final int start = pair.leftInt();
                         if (start != lastWrite) {
                             ByteBuffer slice = buffer.asByteBuffer(lastWrite, start);
-                            slice.position(slice.limit());
                             writer.accept(slice);
                         }
                         lastWrite = pair.rightInt();
@@ -318,7 +317,6 @@ public final class PacketUtils {
                 final int remaining = buffer.writerOffset() - lastWrite;
                 if (remaining > 0) {
                     ByteBuffer remainSlice = buffer.asByteBuffer(lastWrite, remaining);
-                    remainSlice.position(remainSlice.limit());
                     writer.accept(remainSlice);
                 }
             }

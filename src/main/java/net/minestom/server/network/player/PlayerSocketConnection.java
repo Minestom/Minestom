@@ -230,15 +230,14 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
+    @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (bufferLock) {
-            final int size = buffer.position();
+            final int size = buffer.remaining();
             if (size <= BUFFER_SIZE) {
                 if (!tickBuffer.canWrite(size)) flush();
-                this.tickBuffer.write(buffer.flip());
+                this.tickBuffer.write(buffer);
             } else {
-                final int positionCache = buffer.position();
-                final int limitCache = buffer.limit();
                 final int bufferCount = size / BUFFER_SIZE + 1;
                 for (int i = 0; i < bufferCount; i++) {
                     buffer.position(i * BUFFER_SIZE);
@@ -246,17 +245,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                     if (!tickBuffer.canWrite(buffer.remaining())) flush();
                     this.tickBuffer.write(buffer);
                 }
-                buffer.position(positionCache).limit(limitCache);
             }
         }
     }
 
     public void write(@NotNull FramedPacket framedPacket) {
-        write(framedPacket.body());
+        write(framedPacket.body().flip());
     }
 
     public void write(@NotNull ServerPacket packet) {
-        write(PacketUtils.createFramedPacket(packet, compressed));
+        write(PacketUtils.createFramedPacket(packet, compressed).flip());
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {

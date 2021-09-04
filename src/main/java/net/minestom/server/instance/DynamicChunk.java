@@ -132,8 +132,8 @@ public class DynamicChunk extends Chunk {
         final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
         if (connection instanceof PlayerSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.write(lightPacket.body());
-            socketConnection.write(chunkPacket.body());
+            socketConnection.write(lightPacket);
+            socketConnection.write(chunkPacket);
         } else {
             connection.sendPacket(lightPacket.packet());
             connection.sendPacket(chunkPacket.packet());
