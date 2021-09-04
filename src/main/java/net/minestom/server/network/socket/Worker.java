@@ -40,7 +40,7 @@ public final class Worker extends Thread {
                     final SocketChannel channel = (SocketChannel) key.channel();
                     if (!channel.isOpen()) return;
                     if (!key.isReadable()) return;
-                    var connection = connectionMap.get(channel);
+                    PlayerSocketConnection connection = connectionMap.get(channel);
                     try {
                         var readBuffer = context.readBuffer;
                         // Consume last incomplete packet
@@ -92,7 +92,7 @@ public final class Worker extends Thread {
      * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
      */
     public static final class Context {
-        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
+        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final Inflater inflater = new Inflater();
 
