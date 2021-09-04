@@ -237,14 +237,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                 if (!tickBuffer.canWrite(size)) flush();
                 this.tickBuffer.write(buffer.flip());
             } else {
+                final int positionCache = buffer.position();
+                final int limitCache = buffer.limit();
                 final int bufferCount = size / BUFFER_SIZE + 1;
                 for (int i = 0; i < bufferCount; i++) {
-                    ByteBuffer slice = buffer.position(i * BUFFER_SIZE).slice();
-                    slice.limit(Math.min(slice.remaining(), BUFFER_SIZE));
-                    if (!tickBuffer.canWrite(slice.remaining())) flush();
-                    this.tickBuffer.write(slice);
+                    buffer.position(i * BUFFER_SIZE);
+                    buffer.limit(Math.min(size, buffer.position() + BUFFER_SIZE));
+                    if (!tickBuffer.canWrite(buffer.remaining())) flush();
+                    this.tickBuffer.write(buffer);
                 }
-                buffer.position(size);
+                buffer.position(positionCache).limit(limitCache);
             }
         }
     }
