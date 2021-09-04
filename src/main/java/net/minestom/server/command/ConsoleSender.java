@@ -25,15 +25,27 @@ public class ConsoleSender implements CommandSender {
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
     private final NBTCompound nbtCompound = new NBTCompound();
 
-    @Override
-    public void sendMessage(@NotNull String message) {
-        LOGGER.info(message);
+    @FunctionalInterface
+    interface MessageConsumer {
+        void send(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type);
     }
+
+    private MessageConsumer messageConsumer = (source, message, type) -> {
+        LOGGER.info(PLAIN_SERIALIZER.serialize(message));
+    };
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         // we don't use the serializer here as we just need the plain text of the message
-        this.sendMessage(PLAIN_SERIALIZER.serialize(message));
+        messageConsumer.send(source, message, type);
+    }
+
+    public @NotNull MessageConsumer getMessageConsumer() {
+        return messageConsumer;
+    }
+
+    public void setMessageConsumer(@NotNull MessageConsumer messageConsumer) {
+        this.messageConsumer = messageConsumer;
     }
 
     @NotNull
