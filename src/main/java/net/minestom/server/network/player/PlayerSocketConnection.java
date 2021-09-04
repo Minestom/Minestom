@@ -27,6 +27,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.net.SocketAddress;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -44,7 +45,7 @@ import java.util.zip.DataFormatException;
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
-    private final static Queue<BinaryBuffer> POOLED_BUFFERS = new ConcurrentLinkedQueue<>();
+    private final static Queue<SoftReference<BinaryBuffer>> POOLED_BUFFERS = new ConcurrentLinkedQueue<>();
     private final static int BUFFER_SIZE = 262_143;
 
     private final Worker worker;
@@ -320,7 +321,9 @@ public class PlayerSocketConnection extends PlayerConnection {
     public void disconnect() {
         this.worker.disconnect(this, channel);
         synchronized (bufferLock) {
-            POOLED_BUFFERS.addAll(waitingBuffers);
+            for (BinaryBuffer waitingBuffer : waitingBuffers) {
+                POOLED_BUFFERS.add(new SoftReference<>(waitingBuffer));
+            }
             this.waitingBuffers.clear();
         }
     }
@@ -459,12 +462,17 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     private static BinaryBuffer getPooledBuffer() {
-        BinaryBuffer newBuffer = POOLED_BUFFERS.poll();
-        if (newBuffer == null) {
-            newBuffer = BinaryBuffer.ofSize(BUFFER_SIZE);
-        } else {
-            newBuffer.clear();
+        BinaryBuffer buffer = null;
+        SoftReference<BinaryBuffer> ref;
+        while ((ref = POOLED_BUFFERS.poll()) != null) {
+            buffer = ref.get();
+            if (buffer != null) break;
         }
-        return newBuffer;
+        if (buffer == null) {
+            buffer = BinaryBuffer.ofSize(BUFFER_SIZE);
+        } else {
+            buffer.clear();
+        }
+        return buffer;
     }
 }
