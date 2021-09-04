@@ -167,8 +167,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param point the chunk position
      */
     public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
-        return loadChunk(ChunkUtils.getChunkCoordinate(point.x()),
-                ChunkUtils.getChunkCoordinate(point.z()));
+        return loadChunk(point.chunkX(), point.chunkZ());
     }
 
     /**
@@ -189,8 +188,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
      */
     public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
-        return loadOptionalChunk(ChunkUtils.getChunkCoordinate(point.x()),
-                ChunkUtils.getChunkCoordinate(point.z()));
+        return loadOptionalChunk(point.chunkX(), point.chunkZ());
     }
 
     /**
@@ -556,7 +554,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(@NotNull Point point) {
-        return getChunkAt(point.x(), point.z());
+        return getChunk(point.chunkX(), point.chunkZ());
     }
 
     /**

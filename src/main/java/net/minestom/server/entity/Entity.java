@@ -1210,8 +1210,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (instance != null) {
             final int lastChunkX = currentChunk.getChunkX();
             final int lastChunkZ = currentChunk.getChunkZ();
-            final int newChunkX = ChunkUtils.getChunkCoordinate(newPosition.x());
-            final int newChunkZ = ChunkUtils.getChunkCoordinate(newPosition.z());
+            final int newChunkX = newPosition.chunkX();
+            final int newChunkZ = newPosition.chunkZ();
             if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
                 // Entity moved in a new chunk
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);

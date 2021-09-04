@@ -72,6 +72,18 @@ public interface Point {
         return (int) Math.floor(z());
     }
 
+    @ApiStatus.Experimental
+    @Contract(pure = true)
+    default int chunkX() {
+        return ChunkUtils.getChunkCoordinate(x());
+    }
+
+    @ApiStatus.Experimental
+    @Contract(pure = true)
+    default int chunkZ() {
+        return ChunkUtils.getChunkCoordinate(z());
+    }
+
     /**
      * Creates a point with a modified X coordinate based on its value.
      *
@@ -241,7 +253,6 @@ public interface Point {
      * @return true if 'this' is in the same chunk as {@code point}
      */
     default boolean sameChunk(@NotNull Point point) {
-        return ChunkUtils.getChunkCoordinate(x()) == ChunkUtils.getChunkCoordinate(point.x()) &&
-                ChunkUtils.getChunkCoordinate(z()) == ChunkUtils.getChunkCoordinate(point.z());
+        return chunkX() == point.chunkX() && chunkZ() == point.chunkZ();
     }
 }
