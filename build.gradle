@@ -104,13 +104,13 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.7.2')
 
     // Only here to ensure J9 module support for extensions and our classloaders
-    testCompileOnly 'org.mockito:mockito-core:3.11.2'
+    testCompileOnly 'org.mockito:mockito-core:3.12.4'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.5.4'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    api 'com.google.code.gson:gson:2.8.7'
+    api 'com.google.code.gson:gson:2.8.8'
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
