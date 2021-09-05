@@ -22,7 +22,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -194,12 +193,11 @@ public final class PacketUtils {
         final int packetSize = buffer.position() - contentStart;
         if (packetSize >= MinecraftServer.getCompressionThreshold()) {
             // Packet large enough, compress
-            final int limitCache = buffer.limit();
-            buffer.position(contentStart).limit(contentStart + packetSize);
-            var uncompressedCopy = COMPRESSION_CACHE.get().put(buffer).flip();
-            buffer.position(contentStart).limit(limitCache);
+            buffer.position(contentStart);
+            final ByteBuffer uncompressedContent = buffer.slice().limit(contentStart + packetSize);
+            final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
 
-            var deflater = COMPRESSOR.get();
+            Deflater deflater = COMPRESSOR.get();
             deflater.setInput(uncompressedCopy);
             deflater.finish();
             deflater.deflate(buffer);
@@ -213,36 +211,20 @@ public final class PacketUtils {
         }
     }
 
-    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer initial, @NotNull ServerPacket packet,
-                                                boolean compression) {
-        var buffer = initial;
-        try {
-            writeFramedPacket(buffer, packet, compression);
-        } catch (BufferOverflowException e) {
-            // In the unlikely case where the packet is bigger than the default buffer size,
-            // increase to the highest authorized buffer size using heap (for cheap allocation)
-            buffer = ByteBuffer.allocate(Server.MAX_PACKET_SIZE);
-            writeFramedPacket(buffer, packet, compression);
-        }
+    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
+        ByteBuffer buffer = PACKET_BUFFER.get();
+        writeFramedPacket(buffer, packet, compression);
         return buffer;
     }
 
-    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer initial, @NotNull ServerPacket packet) {
-        return createFramedPacket(initial, packet, MinecraftServer.getCompressionThreshold() > 0);
-    }
-
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(PACKET_BUFFER.get(), packet);
-    }
-
-    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        return createFramedPacket(PACKET_BUFFER.get(), packet, compression);
+        return createFramedPacket(packet, MinecraftServer.getCompressionThreshold() > 0);
     }
 
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
-        final var temp = PacketUtils.createFramedPacket(packet);
-        final var buffer = ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
+        final ByteBuffer temp = PacketUtils.createFramedPacket(packet).flip();
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining()).put(temp).asReadOnlyBuffer();
         return new FramedPacket(packet.getId(), buffer, packet);
     }
 
