@@ -1,8 +1,8 @@
 package net.minestom.server.network.socket;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Server {
-    public static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
             Runtime.getRuntime().availableProcessors());
     public static final int MAX_PACKET_SIZE = 2_097_151; // 3 bytes var-int
@@ -43,19 +42,23 @@ public final class Server {
         }
     }
 
-    public void start(SocketAddress address) throws IOException {
+    @ApiStatus.Internal
+    public void init(SocketAddress address) throws IOException {
         if (address instanceof InetSocketAddress) {
             InetSocketAddress inetSocketAddress = (InetSocketAddress) address;
             this.address = inetSocketAddress.getHostString();
             this.port = inetSocketAddress.getPort();
         } // TODO unix domain support
 
-        this.serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(address);
-        serverSocket.configureBlocking(false);
-        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-        serverSocket.socket();
-        LOGGER.info("Server starting, wait for connections");
+        ServerSocketChannel server = ServerSocketChannel.open();
+        server.bind(address);
+        server.configureBlocking(false);
+        server.register(selector, SelectionKey.OP_ACCEPT);
+        this.serverSocket = server;
+    }
+
+    @ApiStatus.Internal
+    public void start() {
         new Thread(() -> {
             while (!stop) {
                 // Busy wait for connections
@@ -72,7 +75,7 @@ public final class Server {
                         }
                     });
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
         }, "Ms-entrypoint").start();

@@ -673,9 +673,9 @@ public final class MinecraftServer {
 
         updateManager.start();
 
-        // Init & start the TCP server
+        // Init server
         try {
-            server.start(new InetSocketAddress(address, port));
+            server.init(new InetSocketAddress(address, port));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -694,6 +694,9 @@ public final class MinecraftServer {
         } else {
             LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
         }
+
+        // Start server
+        server.start();
 
         LOGGER.info("Minestom server started successfully.");
 
