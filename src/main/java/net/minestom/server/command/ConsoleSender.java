@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -45,6 +46,9 @@ public class ConsoleSender implements CommandSender {
     }
 
     public void setMessageConsumer(@NotNull MessageConsumer messageConsumer) {
+
+        Check.notNull(messageConsumer, "Message consumer can not be null!");
+
         this.messageConsumer = messageConsumer;
     }
 
