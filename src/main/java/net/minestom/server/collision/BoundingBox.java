@@ -7,7 +7,6 @@ import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -105,20 +104,15 @@ public class BoundingBox {
     public boolean intersectWithBlock(int blockX, int blockY, int blockZ) {
         final double offsetX = 1;
         final double maxX = (double) blockX + offsetX;
-
         final boolean checkX = getMinX() < maxX && getMaxX() > (double) blockX;
-        if (!checkX)
-            return false;
+        if (!checkX) return false;
 
         final double maxY = (double) blockY + 0.99999;
-
         final boolean checkY = getMinY() < maxY && getMaxY() > (double) blockY;
-        if (!checkY)
-            return false;
+        if (!checkY) return false;
 
         final double offsetZ = 1;
         final double maxZ = (double) blockZ + offsetZ;
-
         // Z check
         return getMinZ() < maxZ && getMaxZ() > (double) blockZ;
     }
@@ -170,7 +164,6 @@ public class BoundingBox {
      */
     public boolean intersect(double x1, double y1, double z1, double x2, double y2, double z2) {
         // originally from http://www.3dkingdoms.com/weekly/weekly.php?a=3
-
         double x3 = getMinX();
         double x4 = getMaxX();
         double y3 = getMinY();
@@ -181,8 +174,8 @@ public class BoundingBox {
             return true;
         }
         if (x1 < x3 && x2 < x3 || x1 > x4 && x2 > x4 ||
-            y1 < y3 && y2 < y3 || y1 > y4 && y2 > y4 ||
-            z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
+                y1 < y3 && y2 < y3 || y1 > y4 && y2 > y4 ||
+                z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
             return false;
         }
         return isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
@@ -197,7 +190,7 @@ public class BoundingBox {
      * Used to know if the bounding box intersects a line segment.
      *
      * @param start first line segment point
-     * @param end second line segment point
+     * @param end   second line segment point
      * @return true if the bounding box intersects with the line segment, false otherwise.
      */
     public boolean intersect(@NotNull Point start, @NotNull Point end) {
@@ -212,10 +205,8 @@ public class BoundingBox {
     }
 
     private @Nullable Vec getSegmentIntersection(double dst1, double dst2, double x1, double y1, double z1, double x2, double y2, double z2) {
-        if (dst1 == dst2 || dst1 * dst2 >= 0D) {
-            return null;
-        }
-        double delta = dst1 / (dst1 - dst2);
+        if (dst1 == dst2 || dst1 * dst2 >= 0D) return null;
+        final double delta = dst1 / (dst1 - dst2);
         return new Vec(
                 x1 + (x2 - x1) * delta,
                 y1 + (y2 - y1) * delta,
@@ -224,9 +215,7 @@ public class BoundingBox {
     }
 
     private boolean isInsideBoxWithAxis(Axis axis, @Nullable Vec intersection) {
-        if (intersection == null) {
-            return false;
-        }
+        if (intersection == null) return false;
         double x1 = getMinX();
         double x2 = getMaxX();
         double y1 = getMinY();
@@ -246,8 +235,7 @@ public class BoundingBox {
      * @param z the Z offset
      * @return a new {@link BoundingBox} expanded
      */
-    @NotNull
-    public BoundingBox expand(double x, double y, double z) {
+    public @NotNull BoundingBox expand(double x, double y, double z) {
         return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
     }
 
@@ -259,8 +247,7 @@ public class BoundingBox {
      * @param z the Z offset
      * @return a new bounding box contracted
      */
-    @NotNull
-    public BoundingBox contract(double x, double y, double z) {
+    public @NotNull BoundingBox contract(double x, double y, double z) {
         return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
 
@@ -415,8 +402,7 @@ public class BoundingBox {
         X, Y, Z
     }
 
-    private class CachedFace {
-
+    private final class CachedFace {
         private final AtomicReference<@Nullable PositionedPoints> reference = new AtomicReference<>(null);
         private final Supplier<@NotNull List<Vec>> faceProducer;
 
@@ -434,11 +420,9 @@ public class BoundingBox {
                 return value;
             }).points;
         }
-
     }
 
-    private static class PositionedPoints {
-
+    private static final class PositionedPoints {
         private final @NotNull Pos lastPosition;
         private final @NotNull List<Vec> points;
 
@@ -446,7 +430,5 @@ public class BoundingBox {
             this.lastPosition = lastPosition;
             this.points = points;
         }
-
     }
-
 }

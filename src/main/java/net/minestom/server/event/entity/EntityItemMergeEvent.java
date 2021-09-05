@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
 
-    private Entity entity;
+    private final Entity entity;
     private final ItemEntity merged;
     private ItemStack result;
 
@@ -31,9 +31,8 @@ public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
      *
      * @return the source ItemEntity
      */
-    @NotNull
     @Override
-    public ItemEntity getEntity() {
+    public @NotNull ItemEntity getEntity() {
         return (ItemEntity) entity;
     }
 
@@ -44,8 +43,7 @@ public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
      *
      * @return the merged ItemEntity
      */
-    @NotNull
-    public ItemEntity getMerged() {
+    public @NotNull ItemEntity getMerged() {
         return merged;
     }
 
@@ -54,8 +52,7 @@ public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
      *
      * @return the item stack
      */
-    @NotNull
-    public ItemStack getResult() {
+    public @NotNull ItemStack getResult() {
         return result;
     }
 

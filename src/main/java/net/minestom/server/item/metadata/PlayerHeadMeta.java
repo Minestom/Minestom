@@ -40,9 +40,8 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
 
         public Builder skullOwner(@Nullable UUID skullOwner) {
             this.skullOwner = skullOwner;
-            handleCompound("SkullOwner", nbtCompound -> {
-                nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner));
-            });
+            handleCompound("SkullOwner", nbtCompound ->
+                    nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner)));
             return this;
         }
 

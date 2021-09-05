@@ -1,6 +1,5 @@
 package net.minestom.server.timer;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import org.jetbrains.annotations.NotNull;
 
