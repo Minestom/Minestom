@@ -2185,6 +2185,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/InventoryClickHandler.html#callClickEvent(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callClickEvent(Player, Inventory, int, ClickType, ItemStack, ItemStack)</a></span> - Method in interface net.minestom.server.inventory.<a href="net/minestom/server/inventory/InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/AbstractInventory.html#callItemChangeEvent(int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callItemChangeEvent(int, ItemStack, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/Inventory.html#callItemChangeEvent(int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callItemChangeEvent(int, ItemStack, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/PlayerInventory.html#callItemChangeEvent(int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callItemChangeEvent(int, ItemStack, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#callItemUpdateStateEvent(boolean,net.minestom.server.entity.Player.Hand)">callItemUpdateStateEvent(boolean, Player.Hand)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -7908,6 +7914,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryCloseEvent.html#getInventory()">getInventory()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryCloseEvent.html" title="class in net.minestom.server.event.inventory">InventoryCloseEvent</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html#getInventory()">getInventory()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryOpenEvent.html#getInventory()">getInventory()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryOpenEvent.html" title="class in net.minestom.server.event.inventory">InventoryOpenEvent</a></dt>
 <dd>
 <div class="block">Gets the inventory to open, this could have been change by the <a href="net/minestom/server/event/inventory/InventoryOpenEvent.html#setInventory(net.minestom.server.inventory.Inventory)"><code>InventoryOpenEvent.setInventory(Inventory)</code></a>.</div>
@@ -8464,6 +8472,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the new inventory to open.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html#getNewItem()">getNewItem()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></dt>
+<dd>
+<div class="block">Gets a new item on a changed slot.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/player/PlayerMoveEvent.html#getNewPosition()">getNewPosition()</a></span> - Method in class net.minestom.server.event.player.<a href="net/minestom/server/event/player/PlayerMoveEvent.html" title="class in net.minestom.server.event.player">PlayerMoveEvent</a></dt>
 <dd>
 <div class="block">Gets the target position.</div>
@@ -8746,6 +8758,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the player who is trying to click on the inventory.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/PlayerInventoryItemChangeEvent.html#getPlayer()">getPlayer()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/PlayerInventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">PlayerInventoryItemChangeEvent</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/item/ItemDropEvent.html#getPlayer()">getPlayer()</a></span> - Method in class net.minestom.server.event.item.<a href="net/minestom/server/event/item/ItemDropEvent.html" title="class in net.minestom.server.event.item">ItemDropEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/item/ItemUpdateStateEvent.html#getPlayer()">getPlayer()</a></span> - Method in class net.minestom.server.event.item.<a href="net/minestom/server/event/item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item">ItemUpdateStateEvent</a></dt>
@@ -8969,6 +8983,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/scoreboard/Team.html#getPrefix()">getPrefix()</a></span> - Method in class net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></dt>
 <dd>
 <div class="block">Gets the prefix of the team.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html#getPreviousItem()">getPreviousItem()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></dt>
+<dd>
+<div class="block">Gets a previous item that was on changed slot.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/NodeMaker.Options.html#getPreviousNodes()">getPreviousNodes()</a></span> - Method in class net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/NodeMaker.Options.html" title="class in net.minestom.server.command.builder">NodeMaker.Options</a></dt>
 <dd>&nbsp;</dd>
@@ -9392,6 +9410,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryClickEvent.html#getSlot()">getSlot()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryClickEvent</a></dt>
 <dd>
 <div class="block">Gets the clicked slot number.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html#getSlot()">getSlot()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></dt>
+<dd>
+<div class="block">Gets the changed slot number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryPreClickEvent.html#getSlot()">getSlot()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryPreClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryPreClickEvent</a></dt>
 <dd>
@@ -10882,6 +10904,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventFilter.html#INVENTORY">INVENTORY</a></span> - Static variable in interface net.minestom.server.event.<a href="net/minestom/server/event/EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/GlobalHandles.html#INVENTORY_ITEM_CHANGE_EVENT">INVENTORY_ITEM_CHANGE_EVENT</a></span> - Static variable in class net.minestom.server.event.<a href="net/minestom/server/event/GlobalHandles.html" title="class in net.minestom.server.event">GlobalHandles</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/PlayerInventory.html#INVENTORY_SIZE">INVENTORY_SIZE</a></span> - Static variable in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/event/inventory/InventoryClickEvent.html" title="class in net.minestom.server.event.inventory"><span class="typeNameLink">InventoryClickEvent</span></a> - Class in <a href="net/minestom/server/event/inventory/package-summary.html">net.minestom.server.event.inventory</a></dt>
@@ -10932,6 +10956,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Represents any event inside an <a href="net/minestom/server/inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a>.</div>
 </dd>
+<dt><a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory"><span class="typeNameLink">InventoryItemChangeEvent</span></a> - Class in <a href="net/minestom/server/event/inventory/package-summary.html">net.minestom.server.event.inventory</a></dt>
+<dd>
+<div class="block">Called when <a href="net/minestom/server/inventory/AbstractInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)"><code>AbstractInventory.safeItemInsert(int, ItemStack)</code></a> is being invoked.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html#%3Cinit%3E(net.minestom.server.inventory.Inventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">InventoryItemChangeEvent(Inventory, int, ItemStack, ItemStack)</a></span> - Constructor for class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/event/inventory/InventoryOpenEvent.html" title="class in net.minestom.server.event.inventory"><span class="typeNameLink">InventoryOpenEvent</span></a> - Class in <a href="net/minestom/server/event/inventory/package-summary.html">net.minestom.server.event.inventory</a></dt>
 <dd>
 <div class="block">Called when a player open an <a href="net/minestom/server/inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a>.</div>
@@ -14728,6 +14758,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/extras/velocity/VelocityProxy.html#PLAYER_INFO_CHANNEL">PLAYER_INFO_CHANNEL</a></span> - Static variable in class net.minestom.server.extras.velocity.<a href="net/minestom/server/extras/velocity/VelocityProxy.html" title="class in net.minestom.server.extras.velocity">VelocityProxy</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/GlobalHandles.html#PLAYER_INVENTORY_ITEM_CHANGE_EVENT">PLAYER_INVENTORY_ITEM_CHANGE_EVENT</a></span> - Static variable in class net.minestom.server.event.<a href="net/minestom/server/event/GlobalHandles.html" title="class in net.minestom.server.event">GlobalHandles</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/ServerPacketIdentifier.html#PLAYER_LIST_HEADER_AND_FOOTER">PLAYER_LIST_HEADER_AND_FOOTER</a></span> - Static variable in class net.minestom.server.network.packet.server.<a href="net/minestom/server/network/packet/server/ServerPacketIdentifier.html" title="class in net.minestom.server.network.packet.server">ServerPacketIdentifier</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/GlobalHandles.html#PLAYER_MOVE">PLAYER_MOVE</a></span> - Static variable in class net.minestom.server.event.<a href="net/minestom/server/event/GlobalHandles.html" title="class in net.minestom.server.event">GlobalHandles</a></dt>
@@ -14905,6 +14937,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Represents the inventory of a <a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>, retrieved with <a href="net/minestom/server/entity/Player.html#getInventory()"><code>Player.getInventory()</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/PlayerInventory.html#%3Cinit%3E(net.minestom.server.entity.Player)">PlayerInventory(Player)</a></span> - Constructor for class net.minestom.server.inventory.<a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/event/inventory/PlayerInventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory"><span class="typeNameLink">PlayerInventoryItemChangeEvent</span></a> - Class in <a href="net/minestom/server/event/inventory/package-summary.html">net.minestom.server.event.inventory</a></dt>
+<dd>
+<div class="block">Called when <a href="net/minestom/server/inventory/AbstractInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)"><code>AbstractInventory.safeItemInsert(int, ItemStack)</code></a> is being invoked on a <a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory"><code>PlayerInventory</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/PlayerInventoryItemChangeEvent.html#%3Cinit%3E(net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">PlayerInventoryItemChangeEvent(Player, int, ItemStack, ItemStack)</a></span> - Constructor for class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/PlayerInventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">PlayerInventoryItemChangeEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/inventory/PlayerInventoryUtils.html" title="class in net.minestom.server.utils.inventory"><span class="typeNameLink">PlayerInventoryUtils</span></a> - Class in <a href="net/minestom/server/utils/inventory/package-summary.html">net.minestom.server.utils.inventory</a></dt>
 <dd>&nbsp;</dd>
@@ -17002,14 +17040,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">S</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/AbstractInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)">safeItemInsert(int, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/Inventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)">safeItemInsert(int, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></dt>
 <dd>
 <div class="block">Inserts safely an item into the inventory.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/PlayerInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)">safeItemInsert(int, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></dt>
-<dd>
-<div class="block">Inserts an item safely (synchronized) in the appropriate slot.</div>
 </dd>
 <dt><a href="net/minestom/server/entity/metadata/water/fish/SalmonMeta.html" title="class in net.minestom.server.entity.metadata.water.fish"><span class="typeNameLink">SalmonMeta</span></a> - Class in <a href="net/minestom/server/entity/metadata/water/fish/package-summary.html">net.minestom.server.entity.metadata.water.fish</a></dt>
 <dd>&nbsp;</dd>
@@ -21260,6 +21292,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Used when the player is created.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/AbstractInventory.html#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)">UNSAFE_itemInsert(int, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/Inventory.html#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)">UNSAFE_itemInsert(int, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/inventory/PlayerInventory.html#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)">UNSAFE_itemInsert(int, ItemStack)</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/Instance.html#UNSAFE_removeEntity(net.minestom.server.entity.Entity)">UNSAFE_removeEntity(Entity)</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></dt>
 <dd>
 <div class="block">Used when an <a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> is removed from the instance, it removes all of his viewers.</div>
