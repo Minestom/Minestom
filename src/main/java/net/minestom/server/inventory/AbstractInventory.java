@@ -7,6 +7,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -20,6 +21,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
+@ApiStatus.NonExtendable
 public abstract class AbstractInventory implements InventoryClickHandler, TagHandler {
 
     private final int size;
