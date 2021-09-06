@@ -2,6 +2,7 @@ package net.minestom.server.instance.batch;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ import java.util.concurrent.ExecutorService;
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
-public interface Batch<C> extends BlockSetter {
+public interface Batch<C> extends BlockSetter, BlockGetter {
 
     ExecutorService BLOCK_BATCH_POOL = new MinestomThread(
             MinecraftServer.THREAD_COUNT_BLOCK_BATCH,

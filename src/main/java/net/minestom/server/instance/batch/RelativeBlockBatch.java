@@ -80,6 +80,34 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     @Override
+    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        if (firstEntry) {
+            // no blocks, so we immediately exit
+            return condition == Condition.NONE ? Block.AIR : null;
+        }
+
+        x -= offsetX;
+        y -= offsetY;
+        z -= offsetZ;
+
+        Check.argCondition(Math.abs(x) > Short.MAX_VALUE, "Relative x position may not be more than 16 bits long.");
+        Check.argCondition(Math.abs(y) > Short.MAX_VALUE, "Relative y position may not be more than 16 bits long.");
+        Check.argCondition(Math.abs(z) > Short.MAX_VALUE, "Relative z position may not be more than 16 bits long.");
+
+        long pos = Short.toUnsignedLong((short)x);
+        pos = (pos << 16) | Short.toUnsignedLong((short)y);
+        pos = (pos << 16) | Short.toUnsignedLong((short)z);
+
+        final var block = this.blockIdMap.get(pos);
+
+        if (block == null) {
+            return condition == Condition.NONE ? Block.AIR : null;
+        }
+
+        return block;
+    }
+
+    @Override
     public void clear() {
         synchronized (blockIdMap) {
             this.blockIdMap.clear();

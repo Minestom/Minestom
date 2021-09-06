@@ -66,6 +66,23 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     }
 
     @Override
+    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+
+        final ChunkBatch chunkBatch = chunkBatchesMap.get(chunkIndex);
+        if (chunkBatch == null) {
+            return condition == Condition.NONE ? Block.AIR : null;
+        }
+
+        final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
+        final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
+
+        return chunkBatch.getBlock(relativeX, y, relativeZ, condition);
+    }
+
+    @Override
     public void clear() {
         synchronized (chunkBatchesMap) {
             this.chunkBatchesMap.clear();
