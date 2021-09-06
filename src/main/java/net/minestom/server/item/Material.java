@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface Material extends ProtocolObject, MaterialConstants {
+public interface Material extends ProtocolObject, Materials {
 
     /**
      * Returns the material registry.

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface PotionType extends ProtocolObject, PotionTypeConstants {
+public interface PotionType extends ProtocolObject, PotionTypes {
 
     static @NotNull Collection<@NotNull PotionType> values() {
         return PotionTypeImpl.values();

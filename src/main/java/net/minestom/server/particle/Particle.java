@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface Particle extends ProtocolObject, ParticleConstants {
+public interface Particle extends ProtocolObject, Particles {
 
     static @NotNull Collection<@NotNull Particle> values() {
         return ParticleImpl.values();

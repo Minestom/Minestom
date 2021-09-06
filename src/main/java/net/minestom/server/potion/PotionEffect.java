@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface PotionEffect extends ProtocolObject, PotionEffectConstants {
+public interface PotionEffect extends ProtocolObject, PotionEffects {
 
     @Contract(pure = true)
     @NotNull Registry.PotionEffectEntry registry();

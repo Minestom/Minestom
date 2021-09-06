@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface StatisticType extends ProtocolObject, StatisticTypeConstants {
+public interface StatisticType extends ProtocolObject, StatisticTypes {
 
     static @NotNull Collection<@NotNull StatisticType> values() {
         return StatisticTypeImpl.values();

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface SoundEvent extends ProtocolObject, Sound.Type, SoundEventConstants {
+public interface SoundEvent extends ProtocolObject, Sound.Type, SoundEvents {
 
     static @NotNull Collection<@NotNull SoundEvent> values() {
         return SoundEventImpl.values();

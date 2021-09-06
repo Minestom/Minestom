@@ -20,7 +20,7 @@ import java.util.function.BiPredicate;
  * Implementations are expected to be immutable.
  */
 @ApiStatus.NonExtendable
-public interface Block extends ProtocolObject, TagReadable, BlockConstants {
+public interface Block extends ProtocolObject, TagReadable, Blocks {
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.

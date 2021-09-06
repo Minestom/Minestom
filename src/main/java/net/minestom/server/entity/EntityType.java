@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface EntityType extends ProtocolObject, EntityTypeConstants {
+public interface EntityType extends ProtocolObject, EntityTypes {
     /**
      * Returns the entity registry.
      *

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface Enchantment extends ProtocolObject, EnchantmentConstants {
+public interface Enchantment extends ProtocolObject, Enchantments {
 
     /**
      * Returns the enchantment registry.
