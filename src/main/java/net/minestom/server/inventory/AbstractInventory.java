@@ -1,7 +1,5 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.event.GlobalHandles;
-import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
