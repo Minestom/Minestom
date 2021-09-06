@@ -1,31 +1,22 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+public class CommandData implements TagHandler {
 
-public class CommandData {
+    private final NBTCompound nbt = new NBTCompound();
 
-    private final Map<String, Object> dataMap = new ConcurrentHashMap<>();
-
-    public CommandData set(@NotNull String key, Object value) {
-        this.dataMap.put(key, value);
-        return this;
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbt);
     }
 
-    @Nullable
-    public <T> T get(@NotNull String key) {
-        return (T) dataMap.get(key);
-    }
-
-    public boolean has(@NotNull String key) {
-        return dataMap.containsKey(key);
-    }
-
-    @NotNull
-    public Map<String, Object> getDataMap() {
-        return dataMap;
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        tag.write(nbt, value);
     }
 }
