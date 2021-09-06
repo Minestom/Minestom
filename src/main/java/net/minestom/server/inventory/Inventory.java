@@ -3,6 +3,8 @@ package net.minestom.server.inventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
@@ -209,19 +211,15 @@ public class Inventory extends AbstractInventory implements Viewable {
         }
     }
 
-    /**
-     * Inserts safely an item into the inventory.
-     * <p>
-     * This will update the slot for all viewers and warn the inventory that
-     * the window items packet is not up-to-date.
-     *
-     * @param slot      the internal slot id
-     * @param itemStack the item to insert
-     */
     @Override
-    protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        this.itemStacks[slot] = itemStack;
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
+        itemStacks[slot] = itemStack;
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
+    }
+
+    @Override
+    protected void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
+        GlobalHandles.INVENTORY_ITEM_CHANGE_EVENT.call(new InventoryItemChangeEvent(this, slot, previous, current));
     }
 
     /**
