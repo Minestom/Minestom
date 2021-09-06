@@ -3,6 +3,7 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -10,8 +11,6 @@ import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
@@ -149,20 +148,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         }
     }
 
-    /**
-     * Inserts an item safely (synchronized) in the appropriate slot.
-     *
-     * @param slot      an internal slot
-     * @param itemStack the item to insert at the slot
-     * @throws IllegalArgumentException if the slot {@code slot} does not exist
-     * @throws NullPointerException     if {@code itemStack} is null
-     */
     @Override
-    protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
-                "The slot {0} does not exist for player", slot);
-        Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
-
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
         EquipmentSlot equipmentSlot = null;
         if (slot == player.getHeldSlot()) {
             equipmentSlot = EquipmentSlot.MAIN_HAND;
@@ -189,6 +176,11 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         }
         // Refresh slot
         sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
+    }
+
+    @Override
+    protected InventoryItemChangeEvent getItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
+        return new InventoryItemChangeEvent(null, this, slot, previous, current);
     }
 
     /**
