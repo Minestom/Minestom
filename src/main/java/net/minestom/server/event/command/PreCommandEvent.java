@@ -1,23 +1,26 @@
-package net.minestom.server.event.player;
+package net.minestom.server.event.command;
 
-import net.minestom.server.entity.Player;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called every time a player send a message starting by '/'.
+ * Called before a command is processed by the command manager
  */
-public class PlayerCommandEvent implements PlayerEvent, CancellableEvent {
+public class PreCommandEvent implements CommandEvent, CancellableEvent {
 
-    private final Player player;
+    private final CommandSender sender;
     private String command;
-
     private boolean cancelled;
 
-    public PlayerCommandEvent(@NotNull Player player, @NotNull String command) {
-        this.player = player;
+    public PreCommandEvent(@NotNull CommandSender sender, @NotNull String command) {
+        this.sender = sender;
         this.command = command;
+    }
+
+    @Override
+    public @NotNull CommandSender getSender() {
+        return sender;
     }
 
     /**
@@ -25,16 +28,11 @@ public class PlayerCommandEvent implements PlayerEvent, CancellableEvent {
      *
      * @return the command that the player wants to execute
      */
-    @NotNull
-    public String getCommand() {
+    @Override
+    public @NotNull String getCommand() {
         return command;
     }
 
-    /**
-     * Changes the command to execute.
-     *
-     * @param command the new command
-     */
     public void setCommand(@NotNull String command) {
         this.command = command;
     }
@@ -47,10 +45,5 @@ public class PlayerCommandEvent implements PlayerEvent, CancellableEvent {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
     }
 }

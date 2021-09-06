@@ -12,7 +12,8 @@ import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.player.PlayerCommandEvent;
+import net.minestom.server.event.command.PostCommandEvent;
+import net.minestom.server.event.command.PreCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.callback.CommandCallback;
@@ -100,14 +101,13 @@ public final class CommandManager {
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
         // Command event
-        if (sender instanceof Player) {
-            final Player player = (Player) sender;
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
-            EventDispatcher.call(playerCommandEvent);
-            if (playerCommandEvent.isCancelled())
-                return CommandResult.of(CommandResult.Type.CANCELLED, command);
-            command = playerCommandEvent.getCommand();
-        }
+        final Player player = (Player) sender;
+        PreCommandEvent preCommandEvent = new PreCommandEvent(player, command);
+        EventDispatcher.call(preCommandEvent);
+        if (preCommandEvent.isCancelled())
+            return CommandResult.of(CommandResult.Type.CANCELLED, command);
+        command = preCommandEvent.getCommand();
+
         // Process the command
         final CommandResult result = dispatcher.execute(sender, command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
@@ -115,6 +115,10 @@ public final class CommandManager {
                 this.unknownCommandCallback.apply(sender, command);
             }
         }
+
+        PostCommandEvent postCommandEvent = new PostCommandEvent(player, command, result);
+        EventDispatcher.call(postCommandEvent);
+
         return result;
     }
 
