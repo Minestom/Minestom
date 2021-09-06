@@ -133,7 +133,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public final class <span class="typeNameLabel">PacketUtils</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Utils class for packets. Including writing a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink"><code>ByteBuffer</code></a>
- for network processing.</div>
+ for network processing.
+ <p>
+ Note that all methods are mostly internal and can change at any moment.
+ This is due to their very unsafe nature (use of local buffers as cache) and their potential performance impact.
+ Be sure to check the implementation code.</div>
 </li>
 </ul>
 </div>
