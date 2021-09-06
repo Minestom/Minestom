@@ -109,7 +109,7 @@ public final class PacketUtils {
             // Send grouped packet...
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
-            final ByteBuffer finalBuffer = createFramedPacket(packet);
+            final ByteBuffer finalBuffer = createFramedPacket(packet).flip();
             final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer, packet);
             // Send packet to all players
             for (Player player : players) {
@@ -228,7 +228,8 @@ public final class PacketUtils {
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final ByteBuffer temp = PacketUtils.createFramedPacket(packet).flip();
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining()).put(temp).asReadOnlyBuffer();
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining())
+                .put(temp).flip().asReadOnlyBuffer();
         return new FramedPacket(packet.getId(), buffer, packet);
     }
 
