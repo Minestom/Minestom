@@ -31,6 +31,10 @@ import java.util.zip.Deflater;
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuffer}
  * for network processing.
+ * <p>
+ * Note that all methods are mostly internal and can change at any moment.
+ * This is due to their very unsafe nature (use of local buffers as cache) and their potential performance impact.
+ * Be sure to check the implementation code.
  */
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
