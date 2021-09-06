@@ -5,6 +5,7 @@ import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
+import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerPacketEvent;
@@ -25,4 +26,5 @@ public final class GlobalHandles {
     public static final ListenerHandle<PlayerChunkLoadEvent> PLAYER_CHUNK_LOAD = EventDispatcher.getHandle(PlayerChunkLoadEvent.class);
     public static final ListenerHandle<InstanceChunkLoadEvent> INSTANCE_CHUNK_LOAD = EventDispatcher.getHandle(InstanceChunkLoadEvent.class);
     public static final ListenerHandle<InventoryItemChangeEvent> INVENTORY_ITEM_CHANGE_EVENT = EventDispatcher.getHandle(InventoryItemChangeEvent.class);
+    public static final ListenerHandle<PlayerInventoryItemChangeEvent> PLAYER_INVENTORY_ITEM_CHANGE_EVENT = EventDispatcher.getHandle(PlayerInventoryItemChangeEvent.class);
 }

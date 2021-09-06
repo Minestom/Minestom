@@ -3,6 +3,7 @@ package net.minestom.server.inventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -217,8 +218,8 @@ public class Inventory extends AbstractInventory implements Viewable {
     }
 
     @Override
-    protected InventoryItemChangeEvent getItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
-        return new InventoryItemChangeEvent(this, null, slot, previous, current);
+    protected void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
+        GlobalHandles.INVENTORY_ITEM_CHANGE_EVENT.call(new InventoryItemChangeEvent(this, slot, previous, current));
     }
 
     /**

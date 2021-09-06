@@ -65,20 +65,23 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
      *
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      */
-    protected synchronized final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        Check.argCondition(
-                !MathUtils.isBetween(slot, 0, getSize()),
-                "The slot {0} does not exist in this inventory",
-                slot
-        );
-        ItemStack previous = itemStacks[slot];
-        UNSAFE_itemInsert(slot, itemStack);
-        GlobalHandles.INVENTORY_ITEM_CHANGE_EVENT.call(getItemChangeEvent(slot, previous, itemStack));
+    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+        ItemStack previous;
+        synchronized (this) {
+            Check.argCondition(
+                    !MathUtils.isBetween(slot, 0, getSize()),
+                    "The slot {0} does not exist in this inventory",
+                    slot
+            );
+            previous = itemStacks[slot];
+            UNSAFE_itemInsert(slot, itemStack);
+        }
+        callItemChangeEvent(slot, previous, itemStack);
     }
 
     protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack);
 
-    protected abstract InventoryItemChangeEvent getItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current);
+    protected abstract void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current);
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
