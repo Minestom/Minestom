@@ -1,6 +1,7 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.event.trait.InventoryEvent;
+import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * @see PlayerInventoryItemChangeEvent
  */
 @SuppressWarnings("JavadocReference")
-public class InventoryItemChangeEvent implements InventoryEvent {
+public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
 
     private final Inventory inventory;
     private final int slot;
