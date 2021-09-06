@@ -198,7 +198,7 @@ public final class PacketUtils {
         if (packetSize >= MinecraftServer.getCompressionThreshold()) {
             // Packet large enough, compress
             buffer.position(contentStart);
-            final ByteBuffer uncompressedContent = buffer.slice().limit(contentStart + packetSize);
+            final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
             final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
 
             Deflater deflater = COMPRESSOR.get();
