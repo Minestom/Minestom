@@ -7,8 +7,11 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.FakePlayerConnection;
@@ -55,15 +58,19 @@ public class FakePlayer extends Player implements NavigableEntity {
         this.fakePlayerController = new FakePlayerController(this);
 
         if (spawnCallback != null) {
-            // FIXME
-            MinecraftServer.getGlobalEventHandler().addListener(
+            EventNode<PlayerEvent> spawnNode = EventNode.value("fake-player-listener", EventFilter.PLAYER, player -> player instanceof FakePlayer);
+
+            spawnNode.addListener(
                     EventListener.builder(PlayerSpawnEvent.class)
-                            .expireCount(1)
+                            .filter(event -> event.isFirstSpawn() && event.getPlayer().getUuid() == uuid)
                             .handler(event -> {
-                                if (event.isFirstSpawn()) {
-                                    spawnCallback.accept(this);
-                                }
-                            }).build());
+                                MinecraftServer.getGlobalEventHandler().removeChild(spawnNode);
+                                spawnCallback.accept(this);
+                            })
+                            .build()
+            );
+
+            MinecraftServer.getGlobalEventHandler().addChild(spawnNode);
         }
 
         CONNECTION_MANAGER.startPlayState(this, option.isRegistered());
