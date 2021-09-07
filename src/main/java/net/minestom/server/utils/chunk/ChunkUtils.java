@@ -1,10 +1,10 @@
 package net.minestom.server.utils.chunk;
 
-import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -163,14 +163,14 @@ public final class ChunkUtils {
     public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
         final int chunkX = point.chunkX();
         final int chunkZ = point.chunkZ();
-        LongArrayList list = new LongArrayList(); // TODO use array
+        long[] array = new long[MathUtils.square(range * 2 + 1)];
+        int i = 0;
         for (int z = -range; z <= range; ++z) {
             for (int x = -range; x <= range; ++x) {
-                final long index = getChunkIndex(chunkX + x, chunkZ + z);
-                list.add(index);
+                array[i++] = getChunkIndex(chunkX + x, chunkZ + z);
             }
         }
-        return list.elements();
+        return array;
     }
 
     /**
