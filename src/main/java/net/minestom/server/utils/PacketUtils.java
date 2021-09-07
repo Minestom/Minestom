@@ -290,11 +290,11 @@ public final class PacketUtils {
 
                 int lastWrite = 0;
                 final List<IntIntPair> pairs = entityIdMap.get(connection);
-                if (pairs != null && !pairs.isEmpty()) {
+                if (pairs != null) {
                     for (IntIntPair pair : pairs) {
                         final int start = pair.leftInt();
                         if (start != lastWrite) {
-                            ByteBuffer slice = buffer.asByteBuffer(lastWrite, start);
+                            ByteBuffer slice = buffer.asByteBuffer(lastWrite, start - lastWrite);
                             writer.accept(slice);
                         }
                         lastWrite = pair.rightInt();
