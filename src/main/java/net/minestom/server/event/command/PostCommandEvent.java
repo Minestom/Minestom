@@ -12,6 +12,7 @@ public class PostCommandEvent implements CommandEvent {
 
     private final CommandSender sender;
     private final String command;
+    private final CommandResult commandResult;
 
     public PostCommandEvent(
             @NotNull CommandSender sender,
@@ -20,6 +21,7 @@ public class PostCommandEvent implements CommandEvent {
     ) {
         this.sender = sender;
         this.command = command;
+        this.commandResult = commandResult;
     }
 
     @Override
@@ -32,8 +34,15 @@ public class PostCommandEvent implements CommandEvent {
      *
      * @return the command that the player wants to execute
      */
-    @Override
     public @NotNull String getCommand() {
         return command;
+    }
+
+    /**
+     * Gets the command result from the command.
+     * @return The command result from the command.
+     */
+    public @NotNull CommandResult getCommandResult() {
+        return commandResult;
     }
 }

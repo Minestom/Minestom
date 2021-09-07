@@ -28,7 +28,6 @@ public class PreCommandEvent implements CommandEvent, CancellableEvent {
      *
      * @return the command that the player wants to execute
      */
-    @Override
     public @NotNull String getCommand() {
         return command;
     }

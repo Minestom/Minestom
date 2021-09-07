@@ -9,11 +9,4 @@ import org.jetbrains.annotations.NotNull;
  */
 interface CommandEvent extends Event {
     @NotNull CommandSender getSender();
-
-    /**
-     * Gets the command used (command name + arguments).
-     *
-     * @return the command that the player wants to execute
-     */
-    @NotNull String getCommand();
 }
