@@ -11,31 +11,19 @@ import org.jetbrains.annotations.NotNull;
 public class PostCommandEvent implements CommandEvent {
 
     private final CommandSender sender;
-    private final String command;
     private final CommandResult commandResult;
 
     public PostCommandEvent(
             @NotNull CommandSender sender,
-            @NotNull String command,
             @NotNull CommandResult commandResult
     ) {
         this.sender = sender;
-        this.command = command;
         this.commandResult = commandResult;
     }
 
     @Override
     public @NotNull CommandSender getSender() {
         return sender;
-    }
-
-    /**
-     * Gets the command used (command name + arguments).
-     *
-     * @return the command that the player wants to execute
-     */
-    public @NotNull String getCommand() {
-        return command;
     }
 
     /**

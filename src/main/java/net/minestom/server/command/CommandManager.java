@@ -115,7 +115,7 @@ public final class CommandManager {
             }
         }
 
-        PostCommandEvent postCommandEvent = new PostCommandEvent(sender, command, result);
+        PostCommandEvent postCommandEvent = new PostCommandEvent(sender, result);
         EventDispatcher.call(postCommandEvent);
 
         return result;
