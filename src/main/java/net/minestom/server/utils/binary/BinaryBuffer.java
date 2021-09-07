@@ -42,8 +42,7 @@ public final class BinaryBuffer {
 
     public void write(ByteBuffer buffer) {
         final int size = buffer.remaining();
-        // TODO jdk 13 put with index
-        this.nioBuffer.position(writerOffset).put(buffer);
+        this.nioBuffer.put(writerOffset, buffer, 0, size);
         this.writerOffset += size;
     }
 
@@ -152,28 +151,6 @@ public final class BinaryBuffer {
                 '}';
     }
 
-    public static final class Marker {
-        private final int readerOffset, writerOffset;
-
-        private Marker(int readerOffset, int writerOffset) {
-            this.readerOffset = readerOffset;
-            this.writerOffset = writerOffset;
-        }
-
-        public int readerOffset() {
-            return readerOffset;
-        }
-
-        public int writerOffset() {
-            return writerOffset;
-        }
-
-        @Override
-        public String toString() {
-            return "Marker{" +
-                    "readerOffset=" + readerOffset +
-                    ", writerOffset=" + writerOffset +
-                    '}';
-        }
+    public record Marker(int readerOffset, int writerOffset) {
     }
 }

@@ -906,8 +906,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!passengers.remove(entity)) return;
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if (entity instanceof Player player) {
             player.getPlayerConnection().sendPacket(new PlayerPositionAndLookPacket(player.getPosition(),
                     (byte) 0x00, player.getNextTeleportId(), true));
         }
@@ -1217,9 +1216,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
                 instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
-                if (this instanceof Player) {
+                if (this instanceof Player player) {
                     // Refresh player view
-                    final Player player = (Player) this;
                     player.refreshVisibleChunks(newChunk);
                     player.refreshVisibleEntities(newChunk);
                 }

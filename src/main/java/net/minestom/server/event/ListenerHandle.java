@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <E> the event type
  */
 @ApiStatus.Experimental
-@ApiStatus.NonExtendable
-public interface ListenerHandle<E extends Event> {
+public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Handle {
     /**
      * Calls the given event.
      * Will try to fast exit the execution when possible if {@link #hasListener()} return {@code false}.

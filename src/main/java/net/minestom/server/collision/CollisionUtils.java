@@ -148,54 +148,28 @@ public class CollisionUtils {
                                                 @NotNull Pos currentPosition, @NotNull Pos newPosition) {
         final WorldBorder worldBorder = instance.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
-        switch (collisionAxis) {
-            case NONE:
-                // Apply velocity + gravity
-                return newPosition;
-            case BOTH:
-                // Apply Y velocity/gravity
-                return new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
-            case X:
-                // Apply Y/Z velocity/gravity
-                return new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
-            case Z:
-                // Apply X/Y velocity/gravity
-                return new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
-        }
-        throw new IllegalStateException("Something weird happened...");
+        return switch (collisionAxis) {
+            case NONE ->
+                    // Apply velocity + gravity
+                    newPosition;
+            case BOTH ->
+                    // Apply Y velocity/gravity
+                    new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
+            case X ->
+                    // Apply Y/Z velocity/gravity
+                    new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
+            case Z ->
+                    // Apply X/Y velocity/gravity
+                    new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
+        };
     }
 
-    public static class PhysicsResult {
-        private final Pos newPosition;
-        private final Vec newVelocity;
-        private final boolean isOnGround;
-
-        public PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround) {
-            this.newPosition = newPosition;
-            this.newVelocity = newVelocity;
-            this.isOnGround = isOnGround;
-        }
-
-        public Pos newPosition() {
-            return newPosition;
-        }
-
-        public Vec newVelocity() {
-            return newVelocity;
-        }
-
-        public boolean isOnGround() {
-            return isOnGround;
-        }
+    public record PhysicsResult(Pos newPosition,
+                                Vec newVelocity,
+                                boolean isOnGround) {
     }
 
-    private static class StepResult {
-        private final Vec newPosition;
-        private final boolean foundCollision;
-
-        public StepResult(Vec newPosition, boolean foundCollision) {
-            this.newPosition = newPosition;
-            this.foundCollision = foundCollision;
-        }
+    private record StepResult(Vec newPosition,
+                              boolean foundCollision) {
     }
 }

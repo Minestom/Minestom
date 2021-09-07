@@ -130,8 +130,7 @@ public class DynamicChunk extends Chunk {
         final long lastChange = getLastChangeTime();
         final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
         final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
-        if (connection instanceof PlayerSocketConnection) {
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+        if (connection instanceof PlayerSocketConnection socketConnection) {
             socketConnection.write(lightPacket);
             socketConnection.write(chunkPacket);
         } else {

@@ -44,8 +44,7 @@ public final class Server {
 
     @ApiStatus.Internal
     public void init(SocketAddress address) throws IOException {
-        if (address instanceof InetSocketAddress) {
-            InetSocketAddress inetSocketAddress = (InetSocketAddress) address;
+        if (address instanceof InetSocketAddress inetSocketAddress) {
             this.address = inetSocketAddress.getHostString();
             this.port = inetSocketAddress.getPort();
         } // TODO unix domain support

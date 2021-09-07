@@ -5,7 +5,6 @@ import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
 
 /**
@@ -13,18 +12,11 @@ import java.util.function.DoubleUnaryOperator;
  * <p>
  * To become record and primitive.
  */
-public final class Pos implements Point {
+public record Pos(double x, double y, double z, float yaw, float pitch) implements Point {
     public static final Pos ZERO = new Pos(0, 0, 0);
 
-    private final double x, y, z;
-    private final float yaw, pitch;
-
-    public Pos(double x, double y, double z, float yaw, float pitch) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.yaw = fixYaw(yaw);
-        this.pitch = pitch;
+    public Pos {
+        yaw = fixYaw(yaw);
     }
 
     public Pos(double x, double y, double z) {
@@ -47,8 +39,7 @@ public final class Pos implements Point {
      * @return the converted position
      */
     public static @NotNull Pos fromPoint(@NotNull Point point) {
-        if (point instanceof Pos)
-            return (Pos) point;
+        if (point instanceof Pos pos) return pos;
         return new Pos(point.x(), point.y(), point.z());
     }
 
@@ -291,34 +282,6 @@ public final class Pos implements Point {
     @Contract(pure = true)
     public @NotNull Vec asVec() {
         return new Vec(x, y, z);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pos pos = (Pos) o;
-        return Double.compare(pos.x, x) == 0 &&
-                Double.compare(pos.y, y) == 0 &&
-                Double.compare(pos.z, z) == 0 &&
-                Float.compare(pos.yaw, yaw) == 0 &&
-                Float.compare(pos.pitch, pitch) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y, z, yaw, pitch);
-    }
-
-    @Override
-    public String toString() {
-        return "Pos{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                ", yaw=" + yaw +
-                ", pitch=" + pitch +
-                '}';
     }
 
     @FunctionalInterface

@@ -346,8 +346,7 @@ public final class ConnectionManager {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
-            if (playerConnection instanceof PlayerSocketConnection) {
-                final PlayerSocketConnection socketConnection = (PlayerSocketConnection) playerConnection;
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
                 socketConnection.writeAndFlush(disconnectPacket);
                 playerConnection.disconnect();
                 try {
