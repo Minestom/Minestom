@@ -101,8 +101,7 @@ public final class CommandManager {
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
         // Command event
-        final Player player = (Player) sender;
-        PreCommandEvent preCommandEvent = new PreCommandEvent(player, command);
+        PreCommandEvent preCommandEvent = new PreCommandEvent(sender, command);
         EventDispatcher.call(preCommandEvent);
         if (preCommandEvent.isCancelled())
             return CommandResult.of(CommandResult.Type.CANCELLED, command);
