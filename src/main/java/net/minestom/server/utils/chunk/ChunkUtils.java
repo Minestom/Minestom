@@ -1,10 +1,10 @@
 package net.minestom.server.utils.chunk;
 
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -161,44 +161,16 @@ public final class ChunkUtils {
      * @return an array containing chunks index
      */
     public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
-        long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
-        int xDistance = 0;
-        int xDirection = 1;
-        int zDistance = 0;
-        int zDirection = -1;
-        int len = 1;
-        int corner = 0;
-
-        for (int i = 0; i < visibleChunks.length; i++) {
-            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + point.x());
-            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + point.z());
-            visibleChunks[i] = getChunkIndex(chunkX, chunkZ);
-
-            if (corner % 2 == 0) {
-                // step on X axis
-                xDistance += xDirection;
-
-                if (Math.abs(xDistance) == len) {
-                    // hit corner
-                    corner++;
-                    xDirection = -xDirection;
-                }
-            } else {
-                // step on Z axis
-                zDistance += zDirection;
-
-                if (Math.abs(zDistance) == len) {
-                    // hit corner
-                    corner++;
-                    zDirection = -zDirection;
-
-                    if (corner % 4 == 0) {
-                        len++;
-                    }
-                }
+        final int chunkX = point.chunkX();
+        final int chunkZ = point.chunkZ();
+        LongArrayList list = new LongArrayList(); // TODO use array
+        for (int z = -range; z <= range; ++z) {
+            for (int x = -range; x <= range; ++x) {
+                final long index = getChunkIndex(chunkX + x, chunkZ + z);
+                list.add(index);
             }
         }
-        return visibleChunks;
+        return list.elements();
     }
 
     /**
