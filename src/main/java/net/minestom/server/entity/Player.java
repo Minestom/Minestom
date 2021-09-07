@@ -2057,7 +2057,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public Locale getLocale() {
-        return settings.locale == null ? null : Locale.forLanguageTag(settings.locale);
+        final String locale = settings.locale;
+        if (locale == null) return null;
+        return Locale.forLanguageTag(locale.replace("_", "-"));
     }
 
     /**
