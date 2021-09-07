@@ -550,7 +550,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     /**
      * Gets the {@link Chunk} at the given {@link Point}, null if not loaded.
      *
-     * @param point the chunk position
+     * @param point the position
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(@NotNull Point point) {
