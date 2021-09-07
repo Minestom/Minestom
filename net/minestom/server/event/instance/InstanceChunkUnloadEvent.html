@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -158,9 +158,8 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,int,int)">InstanceChunkUnloadEvent</a></span>&#8203;(@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        int&nbsp;chunkX,
-                        int&nbsp;chunkZ)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">InstanceChunkUnloadEvent</a></span>&#8203;(@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -182,20 +181,27 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunk()">getChunk</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the chunk.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkX()">getChunkX</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the chunk X.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkZ()">getChunkZ</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the chunk Z.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance()">getInstance</a></span>()</code></th>
 <td class="colLast">
@@ -226,7 +232,7 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.instance.Instance,int,int)">
+<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -234,8 +240,8 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <h4>InstanceChunkUnloadEvent</h4>
 <pre>public&nbsp;InstanceChunkUnloadEvent&#8203;(@NotNull
                                 @NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                int&nbsp;chunkX,
-                                int&nbsp;chunkZ)</pre>
+                                @NotNull
+                                @NotNull <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 </li>
 </ul>
 </li>
@@ -283,7 +289,7 @@ public&nbsp;@NotNull <a href="../../instance/Instance.html" title="class in net.
 <a id="getChunkZ()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getChunkZ</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getChunkZ()</pre>
@@ -291,6 +297,21 @@ public&nbsp;@NotNull <a href="../../instance/Instance.html" title="class in net.
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the chunk Z</dd>
+</dl>
+</li>
+</ul>
+<a id="getChunk()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getChunk</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;getChunk()</pre>
+<div class="block">Gets the chunk.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the chunk.</dd>
 </dl>
 </li>
 </ul>
