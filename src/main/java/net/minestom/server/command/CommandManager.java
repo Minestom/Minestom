@@ -115,7 +115,7 @@ public final class CommandManager {
             }
         }
 
-        PostCommandEvent postCommandEvent = new PostCommandEvent(player, command, result);
+        PostCommandEvent postCommandEvent = new PostCommandEvent(sender, command, result);
         EventDispatcher.call(postCommandEvent);
 
         return result;
