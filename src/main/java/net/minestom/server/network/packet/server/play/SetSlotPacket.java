@@ -53,6 +53,6 @@ public class SetSlotPacket implements ServerPacket {
      * @return a set slot packet to change a player cursor item
      */
     public static @NotNull SetSlotPacket createCursorPacket(@NotNull ItemStack cursorItem) {
-        return new SetSlotPacket((byte) -1, -1, (short) 0, cursorItem);
+        return new SetSlotPacket((byte) -1, 0, (short) -1, cursorItem);
     }
 }
