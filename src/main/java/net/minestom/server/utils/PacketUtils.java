@@ -38,7 +38,7 @@ import java.util.zip.Deflater;
  */
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
+    private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
     private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
     private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.MAX_PACKET_SIZE);
 
@@ -179,7 +179,7 @@ public final class PacketUtils {
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
         if (!compression) {
-            // Length + payload
+            // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             Utils.writeVarInt(buffer, packet.getId());
             packet.write(new BinaryWriter(buffer));
@@ -187,7 +187,7 @@ public final class PacketUtils {
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             return;
         }
-        // Compressed format
+        // Compressed format https://wiki.vg/Protocol#With_compression
         final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
         final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
         final int contentStart = buffer.position();
@@ -201,7 +201,7 @@ public final class PacketUtils {
             final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
             final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
 
-            Deflater deflater = COMPRESSOR.get();
+            Deflater deflater = LOCAL_DEFLATER.get();
             deflater.setInput(uncompressedCopy);
             deflater.finish();
             deflater.deflate(buffer);
