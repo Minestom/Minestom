@@ -303,7 +303,7 @@ public final class InventoryClickProcessor {
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
                 if (index == slot) // Prevent item lose/duplication
                     return false;
-                final InventoryClickResult result = startCondition(player, inventory, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
+                final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
             });
             var itemResult = pair.left();
