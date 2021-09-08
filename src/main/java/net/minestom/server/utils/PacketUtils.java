@@ -190,8 +190,8 @@ public final class PacketUtils {
         // Compressed format https://wiki.vg/Protocol#With_compression
         final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
         final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int contentStart = buffer.position();
 
+        final int contentStart = buffer.position();
         Utils.writeVarInt(buffer, packet.getId());
         packet.write(BinaryWriter.view(buffer)); // ensure that the buffer is not resized/changed
         final int packetSize = buffer.position() - contentStart;
@@ -210,7 +210,8 @@ public final class PacketUtils {
             Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
             Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize); // Data Length
         } else {
-            Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
+            // Packet too small
+            Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
             Utils.writeVarIntHeader(buffer, uncompressedIndex, 0); // Data Length (0 since uncompressed)
         }
     }
