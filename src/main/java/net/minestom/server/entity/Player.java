@@ -1181,7 +1181,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            //playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+            this.playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null) {
                 chunk.removeViewer(this);
@@ -1193,7 +1193,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
             this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
-                    // Cannot load chunk (auto load is not enabled)
+                    // Cannot load chunk (auto-load is not enabled)
                     return;
                 }
                 try {
@@ -2057,7 +2057,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public Locale getLocale() {
-        return settings.locale == null ? null : Locale.forLanguageTag(settings.locale);
+        final String locale = settings.locale;
+        if (locale == null) return null;
+        return Locale.forLanguageTag(locale.replace("_", "-"));
     }
 
     /**

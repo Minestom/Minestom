@@ -217,7 +217,7 @@ public class InstanceContainer extends Instance {
             chunk.removeViewer(viewer);
         }
 
-        EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunkX, chunkZ));
+        EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunk));
         // Remove all entities in chunk
         getChunkEntities(chunk).forEach(entity -> {
             if (!(entity instanceof Player)) entity.remove();
@@ -272,7 +272,7 @@ public class InstanceContainer extends Instance {
                 .whenComplete((chunk, throwable) -> {
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
-                    GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
+                    GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunk));
                     synchronized (loadingChunks) {
                         this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
                     }
