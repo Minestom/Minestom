@@ -193,7 +193,7 @@ public final class PacketUtils {
         final int contentStart = buffer.position();
 
         Utils.writeVarInt(buffer, packet.getId());
-        packet.write(new BinaryWriter(buffer));
+        packet.write(BinaryWriter.view(buffer)); // ensure that the buffer is not resized/changed
         final int packetSize = buffer.position() - contentStart;
         if (packetSize >= MinecraftServer.getCompressionThreshold()) {
             // Packet large enough, compress
@@ -207,11 +207,11 @@ public final class PacketUtils {
             deflater.deflate(buffer);
             deflater.reset();
 
-            Utils.writeVarIntHeader(buffer, compressedIndex, (buffer.position() - contentStart) + 3);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize);
+            Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize); // Data Length
         } else {
             Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0);
+            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0); // Data Length (0 since uncompressed)
         }
     }
 
@@ -246,7 +246,7 @@ public final class PacketUtils {
         }
 
         public static LocalCache get(String name, int size) {
-            return CACHES.computeIfAbsent(name, s -> new LocalCache(name, size));
+            return CACHES.computeIfAbsent(name, s -> new LocalCache(s, size));
         }
 
         public String name() {
