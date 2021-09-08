@@ -42,12 +42,9 @@ public final class Utils {
     }
 
     public static void writeVarIntHeader(@NotNull ByteBuffer buffer, int startIndex, int value) {
-        final int indexCache = buffer.position();
-        buffer.position(startIndex);
-        buffer.put((byte) (value & 0x7F | 0x80));
-        buffer.put((byte) ((value >>> 7) & 0x7F | 0x80));
-        buffer.put((byte) (value >>> 14));
-        buffer.position(indexCache);
+        buffer.put(startIndex, (byte) (value & 0x7F | 0x80));
+        buffer.put(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+        buffer.put(startIndex + 2, (byte) (value >>> 14));
     }
 
     public static int writeEmptyVarIntHeader(@NotNull ByteBuffer buffer) {
