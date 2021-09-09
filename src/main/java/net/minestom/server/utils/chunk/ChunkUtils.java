@@ -99,8 +99,8 @@ public final class ChunkUtils {
      * @return the chunk X or Z based on the argument
      */
     public static int getChunkCoordinate(double xz) {
-        assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        return Math.floorDiv((int) Math.floor(xz), Chunk.CHUNK_SIZE_X);
+        // Assume chunk horizontal size being 16 (4 bits)
+        return (int) Math.floor(xz) >> 4;
     }
 
     /**
