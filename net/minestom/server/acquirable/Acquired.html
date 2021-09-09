@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":9,"i3":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,7 +130,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">Acquired&lt;T&gt;</span>
+<pre>public final class <span class="typeNameLabel">Acquired&lt;T&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 </li>
 </ul>
@@ -146,7 +146,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -158,16 +158,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="Acquired.html" title="class in net.minestom.server.acquirable">Acquired</a>&lt;T&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#local(T)">local</a></span>&#8203;(T&nbsp;value)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="Acquired.html" title="class in net.minestom.server.acquirable">Acquired</a>&lt;T&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#locked(net.minestom.server.acquirable.Acquirable)">locked</a></span>&#8203;(@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.acquirable">Acquirable</a>&lt;T&gt;&nbsp;acquirable)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unlock()">unlock</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -196,28 +186,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="local(java.lang.Object)">
-<!--   -->
-</a><a id="local(T)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>local</h4>
-<pre class="methodSignature">protected static&nbsp;&lt;T&gt;&nbsp;<a href="Acquired.html" title="class in net.minestom.server.acquirable">Acquired</a>&lt;T&gt;&nbsp;local&#8203;(@NotNull
-                                       T&nbsp;value)</pre>
-</li>
-</ul>
-<a id="locked(net.minestom.server.acquirable.Acquirable)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>locked</h4>
-<pre class="methodSignature">protected static&nbsp;&lt;T&gt;&nbsp;<a href="Acquired.html" title="class in net.minestom.server.acquirable">Acquired</a>&lt;T&gt;&nbsp;locked&#8203;(@NotNull
-                                        @NotNull <a href="Acquirable.html" title="interface in net.minestom.server.acquirable">Acquirable</a>&lt;T&gt;&nbsp;acquirable)</pre>
-</li>
-</ul>
 <a id="get()">
 <!--   -->
 </a>
