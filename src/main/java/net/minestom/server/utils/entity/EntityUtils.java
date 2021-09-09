@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 public final class EntityUtils {
 
     private EntityUtils() {
-
     }
 
     public static void forEachRange(@NotNull Instance instance, @NotNull Point point,

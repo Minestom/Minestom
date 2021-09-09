@@ -279,16 +279,15 @@ public class PlayerSocketConnection extends PlayerConnection {
                 if (encrypted) {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
-                    final int remainingBytes = localBuffer.readableBytes();
-                    final byte[] bytes = localBuffer.readRemainingBytes();
-                    byte[] outTempArray = new byte[cipher.getOutputSize(remainingBytes)];
+                    ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
+                    ByteBuffer cipherOutput = getPooledBuffer().asByteBuffer(0, BUFFER_SIZE);
                     try {
-                        cipher.update(bytes, 0, remainingBytes, outTempArray);
+                        cipher.update(cipherInput, cipherOutput);
                     } catch (ShortBufferException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
                     localBuffer.clear();
-                    localBuffer.writeBytes(outTempArray);
+                    localBuffer.write(cipherOutput.flip());
                 }
 
                 this.waitingBuffers.add(localBuffer);
