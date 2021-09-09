@@ -280,7 +280,8 @@ public class PlayerSocketConnection extends PlayerConnection {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
                     ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
-                    ByteBuffer cipherOutput = getPooledBuffer().asByteBuffer(0, BUFFER_SIZE);
+                    BinaryBuffer pooled = getPooledBuffer();
+                    ByteBuffer cipherOutput = pooled.asByteBuffer(0, BUFFER_SIZE);
                     try {
                         cipher.update(cipherInput, cipherOutput);
                     } catch (ShortBufferException e) {
@@ -288,6 +289,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     }
                     localBuffer.clear();
                     localBuffer.write(cipherOutput.flip());
+                    POOLED_BUFFERS.add(new SoftReference<>(pooled));
                 }
 
                 this.waitingBuffers.add(localBuffer);
