@@ -37,32 +37,37 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         return handler;
     }
 
-    static @Nullable ReentrantLock enter(@Nullable Thread currentThread, @Nullable TickThread elementThread) {
+    static @Nullable ReentrantLock enter(@NotNull Thread currentThread, @Nullable TickThread elementThread) {
+        if (elementThread == null) return null;
+        if (currentThread == elementThread) return null;
+        final ReentrantLock currentLock = currentThread instanceof TickThread ? ((TickThread) currentThread).getLock() : null;
+        final ReentrantLock targetLock = elementThread.getLock();
+        if (targetLock.isHeldByCurrentThread()) return null;
+
         // Monitoring
         final long time = System.nanoTime();
 
-        ReentrantLock currentLock;
-        {
-            final ReentrantLock lock = currentThread instanceof TickThread ?
-                    ((TickThread) currentThread).getLock() : null;
-            currentLock = lock != null && lock.isHeldByCurrentThread() ? lock : null;
+        // Enter the target thread
+        // TODO reduce global lock scope
+        if (currentLock != null) {
+            while (!GLOBAL_LOCK.tryLock()) {
+                currentLock.unlock();
+                currentLock.lock();
+            }
+        } else {
+            GLOBAL_LOCK.lock();
         }
-        if (currentLock != null) currentLock.unlock();
-        GLOBAL_LOCK.lock();
-        if (currentLock != null) currentLock.lock();
-
-        final ReentrantLock lock = elementThread != null ? elementThread.getLock() : null;
-        final boolean acquired = lock == null || lock.isHeldByCurrentThread();
-        if (!acquired) lock.lock();
+        targetLock.lock();
 
         // Monitoring
-        AcquirableImpl.WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
-
-        return !acquired ? lock : null;
+        WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
+        return targetLock;
     }
 
     static void leave(@Nullable ReentrantLock lock) {
-        if (lock != null) lock.unlock();
-        GLOBAL_LOCK.unlock();
+        if (lock != null) {
+            lock.unlock();
+            GLOBAL_LOCK.unlock();
+        }
     }
 }

@@ -84,8 +84,7 @@ public interface Acquirable<T> {
      * @see #sync(Consumer) for auto-closeable capability
      */
     default @NotNull Acquired<T> lock() {
-        final Optional<T> optional = local();
-        return optional.map(Acquired::local).orElseGet(() -> Acquired.locked(this));
+        return new Acquired<>(unwrap(), getHandler().getTickThread());
     }
 
     /**
