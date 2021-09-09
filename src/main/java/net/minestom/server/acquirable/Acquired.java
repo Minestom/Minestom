@@ -6,8 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Acquired<T> {
-
+public final class Acquired<T> {
     private final T value;
 
     private final boolean locked;
@@ -15,11 +14,11 @@ public class Acquired<T> {
 
     private boolean unlocked;
 
-    protected static <T> Acquired<T> local(@NotNull T value) {
+    static <T> Acquired<T> local(@NotNull T value) {
         return new Acquired<>(value, false, null, null);
     }
 
-    protected static <T> Acquired<T> locked(@NotNull Acquirable<T> acquirable) {
+    static <T> Acquired<T> locked(@NotNull Acquirable<T> acquirable) {
         final Thread currentThread = Thread.currentThread();
         final TickThread tickThread = acquirable.getHandler().getTickThread();
         return new Acquired<>(acquirable.unwrap(), true, currentThread, tickThread);
@@ -40,13 +39,11 @@ public class Acquired<T> {
     public void unlock() {
         checkLock();
         this.unlocked = true;
-        if (!locked)
-            return;
+        if (!locked) return;
         AcquirableImpl.leave(lock);
     }
 
     private void checkLock() {
         Check.stateCondition(unlocked, "The acquired element has already been unlocked!");
     }
-
 }

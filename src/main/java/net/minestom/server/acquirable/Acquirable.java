@@ -8,7 +8,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -85,7 +84,7 @@ public interface Acquirable<T> {
      * @see #sync(Consumer) for auto-closeable capability
      */
     default @NotNull Acquired<T> lock() {
-        var optional = local();
+        final Optional<T> optional = local();
         return optional.map(Acquired::local).orElseGet(() -> Acquired.locked(this));
     }
 
@@ -100,11 +99,8 @@ public interface Acquirable<T> {
      * {@link Optional#empty()} otherwise
      */
     default @NotNull Optional<T> local() {
-        final Thread currentThread = Thread.currentThread();
-        final TickThread tickThread = getHandler().getTickThread();
-        if (Objects.equals(currentThread, tickThread)) {
+        if (Thread.currentThread() == getHandler().getTickThread())
             return Optional.of(unwrap());
-        }
         return Optional.empty();
     }
 
@@ -117,7 +113,7 @@ public interface Acquirable<T> {
      * @see #async(Consumer)
      */
     default void sync(@NotNull Consumer<T> consumer) {
-        var acquired = lock();
+        Acquired<T> acquired = lock();
         consumer.accept(acquired.get());
         acquired.unlock();
     }
@@ -153,8 +149,7 @@ public interface Acquirable<T> {
     @ApiStatus.Internal
     @NotNull Handler getHandler();
 
-    class Handler {
-
+    final class Handler {
         private volatile ThreadProvider.ChunkEntry chunkEntry;
 
         public ThreadProvider.ChunkEntry getChunkEntry() {
@@ -167,8 +162,8 @@ public interface Acquirable<T> {
         }
 
         public TickThread getTickThread() {
-            return chunkEntry != null ? chunkEntry.getThread() : null;
+            final ThreadProvider.ChunkEntry entry = this.chunkEntry;
+            return entry != null ? entry.getThread() : null;
         }
     }
-
 }

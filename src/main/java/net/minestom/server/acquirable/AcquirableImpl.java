@@ -10,10 +10,9 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
-class AcquirableImpl<T> implements Acquirable<T> {
-
-    protected static final ThreadLocal<Collection<ThreadProvider.ChunkEntry>> ENTRIES = ThreadLocal.withInitial(Collections::emptySet);
-    protected static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
+final class AcquirableImpl<T> implements Acquirable<T> {
+    static final ThreadLocal<Collection<ThreadProvider.ChunkEntry>> ENTRIES = ThreadLocal.withInitial(Collections::emptySet);
+    static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
 
     /**
      * Global lock used for synchronization.
@@ -38,30 +37,23 @@ class AcquirableImpl<T> implements Acquirable<T> {
         return handler;
     }
 
-    protected static @Nullable ReentrantLock enter(@Nullable Thread currentThread, @Nullable TickThread elementThread) {
+    static @Nullable ReentrantLock enter(@Nullable Thread currentThread, @Nullable TickThread elementThread) {
         // Monitoring
-        long time = System.nanoTime();
+        final long time = System.nanoTime();
 
         ReentrantLock currentLock;
         {
-            final TickThread current = currentThread instanceof TickThread ?
-                    (TickThread) currentThread : null;
-            currentLock = current != null && current.getLock().isHeldByCurrentThread() ?
-                    current.getLock() : null;
+            final ReentrantLock lock = currentThread instanceof TickThread ?
+                    ((TickThread) currentThread).getLock() : null;
+            currentLock = lock != null && lock.isHeldByCurrentThread() ? lock : null;
         }
-        if (currentLock != null)
-            currentLock.unlock();
-
+        if (currentLock != null) currentLock.unlock();
         GLOBAL_LOCK.lock();
+        if (currentLock != null) currentLock.lock();
 
-        if (currentLock != null)
-            currentLock.lock();
-
-        final var lock = elementThread != null ? elementThread.getLock() : null;
+        final ReentrantLock lock = elementThread != null ? elementThread.getLock() : null;
         final boolean acquired = lock == null || lock.isHeldByCurrentThread();
-        if (!acquired) {
-            lock.lock();
-        }
+        if (!acquired) lock.lock();
 
         // Monitoring
         AcquirableImpl.WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
@@ -69,10 +61,8 @@ class AcquirableImpl<T> implements Acquirable<T> {
         return !acquired ? lock : null;
     }
 
-    protected static void leave(@Nullable ReentrantLock lock) {
-        if (lock != null) {
-            lock.unlock();
-        }
+    static void leave(@Nullable ReentrantLock lock) {
+        if (lock != null) lock.unlock();
         GLOBAL_LOCK.unlock();
     }
 }
