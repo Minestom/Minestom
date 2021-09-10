@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -254,39 +254,46 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>static long @NotNull []</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunksInRange(net.minestom.server.coordinate.Point,int)">getChunksInRange</a></span>&#8203;(@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunksInRange(int,int,int)">getChunksInRange</a></span>&#8203;(int&nbsp;chunkX,
+                int&nbsp;chunkZ,
                 int&nbsp;range)</code></th>
 <td class="colLast">
 <div class="block">Gets the chunks in range of a position.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
+<td class="colFirst"><code>static long @NotNull []</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunksInRange(net.minestom.server.coordinate.Point,int)">getChunksInRange</a></span>&#8203;(@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+                int&nbsp;range)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkXFromChunkIndexWithSection(long)">getChunkXFromChunkIndexWithSection</a></span>&#8203;(long&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Returns the chunk X, from a chunk index encoded with <a href="#getChunkIndexWithSection(int,int,int)"><code>getChunkIndexWithSection(int, int, int)</code></a></div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkZFromChunkIndexWithSection(long)">getChunkZFromChunkIndexWithSection</a></span>&#8203;(long&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Returns the chunk Z, from a chunk index encoded with <a href="#getChunkIndexWithSection(int,int,int)"><code>getChunkIndexWithSection(int, int, int)</code></a></div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSectionAt(int)">getSectionAt</a></span>&#8203;(int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSectionFromChunkIndexWithSection(long)">getSectionFromChunkIndexWithSection</a></span>&#8203;(long&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Returns the section, from a chunk index encoded with <a href="#getChunkIndexWithSection(int,int,int)"><code>getChunkIndexWithSection(int, int, int)</code></a></div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLoaded(net.minestom.server.instance.Instance,double,double)">isLoaded</a></span>&#8203;(@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
         double&nbsp;x,
@@ -295,20 +302,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Gets if a chunk is loaded.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLoaded(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point)">isLoaded</a></span>&#8203;(@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
         @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLoaded(net.minestom.server.instance.Chunk)">isLoaded</a></span>&#8203;(@Nullable <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Gets if a chunk is loaded.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#optionalLoadAll(net.minestom.server.instance.Instance,long%5B%5D,net.minestom.server.utils.chunk.ChunkCallback)">optionalLoadAll</a></span>&#8203;(@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                long @NotNull []&nbsp;chunks,
@@ -319,7 +326,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  <code>endCallback</code> when all the chunks in the array have been loaded.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,double,double)">retrieve</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
         <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;originChunk,
@@ -327,7 +334,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
         double&nbsp;z)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.coordinate.Point)">retrieve</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
         <a href="../../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;originChunk,
@@ -557,6 +564,26 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <pre class="methodSignature">public static&nbsp;int&nbsp;getSectionAt&#8203;(int&nbsp;y)</pre>
 </li>
 </ul>
+<a id="getChunksInRange(int,int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChunksInRange</h4>
+<pre class="methodSignature">public static&nbsp;long @NotNull []&nbsp;getChunksInRange&#8203;(int&nbsp;chunkX,
+                                                int&nbsp;chunkZ,
+                                                int&nbsp;range)</pre>
+<div class="block">Gets the chunks in range of a position.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>chunkX</code> - the initial chunk X</dd>
+<dd><code>chunkZ</code> - the initial chunk Z</dd>
+<dd><code>range</code> - how far should it retrieves chunk</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array containing chunks index</dd>
+</dl>
+</li>
+</ul>
 <a id="getChunksInRange(net.minestom.server.coordinate.Point,int)">
 <!--   -->
 </a>
@@ -566,14 +593,6 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <pre class="methodSignature">public static&nbsp;long @NotNull []&nbsp;getChunksInRange&#8203;(@NotNull
                                                 @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
                                                 int&nbsp;range)</pre>
-<div class="block">Gets the chunks in range of a position.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>point</code> - the initial point</dd>
-<dd><code>range</code> - how far should it retrieves chunk</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array containing chunks index</dd>
-</dl>
 </li>
 </ul>
 <a id="getBlockIndex(int,int,int)">
