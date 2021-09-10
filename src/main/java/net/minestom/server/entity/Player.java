@@ -556,9 +556,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (updateChunks) {
-            // Warning: loop to remove once `refreshVisibleChunks` manage it
-            previousChunks.forEach(chunk ->
-                    playerConnection.sendPacket(new UnloadChunkPacket(chunk.getChunkX(), chunk.getChunkZ())));
             refreshVisibleChunks();
         }
 
@@ -1169,13 +1166,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param newChunk the current/new player chunk (can be the current one)
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
+        final int newChunkX = newChunk.getChunkX();
+        final int newChunkZ = newChunk.getChunkZ();
+        final int range = getChunkRange();
         // Previous chunks indexes
         final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(ChunkUtils::getChunkIndex).toArray();
         // New chunks indexes
-        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
+        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunkX, newChunkZ, range);
 
         // Update client render distance
-        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
+        updateViewPosition(newChunkX, newChunkZ);
 
         // Unload old chunks
         ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {

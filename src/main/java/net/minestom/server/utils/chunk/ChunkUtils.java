@@ -156,21 +156,25 @@ public final class ChunkUtils {
     /**
      * Gets the chunks in range of a position.
      *
-     * @param point the initial point
-     * @param range how far should it retrieves chunk
+     * @param chunkX the initial chunk X
+     * @param chunkZ the initial chunk Z
+     * @param range  how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
-        final int chunkX = point.chunkX();
-        final int chunkZ = point.chunkZ();
+    public static long @NotNull [] getChunksInRange(int chunkX, int chunkZ, int range) {
+        // FIXME: currently broken using GraalVM
         long[] array = new long[MathUtils.square(range * 2 + 1)];
         int i = 0;
-        for (int z = -range; z <= range; ++z) {
-            for (int x = -range; x <= range; ++x) {
+        for (int x = -range; x <= range; ++x) {
+            for (int z = -range; z <= range; ++z) {
                 array[i++] = getChunkIndex(chunkX + x, chunkZ + z);
             }
         }
         return array;
+    }
+
+    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
+        return getChunksInRange(point.chunkX(), point.chunkZ(), range);
     }
 
     /**
