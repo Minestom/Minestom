@@ -295,23 +295,16 @@ public interface BlockHandler {
      * Handler used for loaded blocks with unknown namespace
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
-    class Dummy implements BlockHandler {
+    @ApiStatus.Internal
+    final class Dummy extends BlockHandlerBase {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        @ApiStatus.Internal
         public static @NotNull BlockHandler get(@NotNull String namespace) {
-            return DUMMY_CACHE.computeIfAbsent(namespace, s -> new Dummy(NamespaceID.from(namespace)));
+            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespaceID;
-
-        private Dummy(NamespaceID namespaceID) {
-            this.namespaceID = namespaceID;
-        }
-
-        @Override
-        public @NotNull NamespaceID getNamespaceId() {
-            return namespaceID;
+        private Dummy(String name) {
+            super(name);
         }
     }
 }
