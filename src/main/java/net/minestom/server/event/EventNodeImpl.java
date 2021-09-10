@@ -230,7 +230,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
             Handle<? super T> handle = handleMap.get(type);
-            if (handle != null) handle.markListenerDirty();
+            if (handle != null) handle.invalidate();
         });
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
@@ -289,7 +289,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             return updatedListener() != null;
         }
 
-        void markListenerDirty() {
+        void invalidate() {
             this.listenerReference.set(invalidListener);
         }
 
@@ -438,7 +438,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
-                markListenerDirty();
+                invalidate();
             }
         }
 
