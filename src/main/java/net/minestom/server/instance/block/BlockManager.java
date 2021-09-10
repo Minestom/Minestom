@@ -3,6 +3,7 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -23,17 +24,21 @@ public class BlockManager {
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
-    public synchronized void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
-        this.blockHandlerMap.put(namespace, handlerSupplier);
+    public void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+        blockHandlerMap.put(namespace, handlerSupplier);
     }
 
-    public synchronized @Nullable BlockHandler getHandler(@NotNull String namespace) {
+    public void registerHandler(@NotNull NamespaceID namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+        registerHandler(namespace.toString(), handlerSupplier);
+    }
+
+    public @Nullable BlockHandler getHandler(@NotNull String namespace) {
         final var handler = blockHandlerMap.get(namespace);
         return handler != null ? handler.get() : null;
     }
 
     @ApiStatus.Internal
-    public synchronized @Nullable BlockHandler getHandlerOrDummy(@NotNull String namespace) {
+    public @NotNull BlockHandler getHandlerOrDummy(@NotNull String namespace) {
         BlockHandler handler = getHandler(namespace);
         if (handler == null) {
             LOGGER.warn("Block {} does not have any corresponding handler, default to dummy.", namespace);
@@ -51,7 +56,7 @@ public class BlockManager {
     public synchronized void registerBlockPlacementRule(@NotNull BlockPlacementRule blockPlacementRule) {
         final int id = blockPlacementRule.getBlock().id();
         Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
-        this.placementRuleMap.put(id, blockPlacementRule);
+        placementRuleMap.put(id, blockPlacementRule);
     }
 
     /**
