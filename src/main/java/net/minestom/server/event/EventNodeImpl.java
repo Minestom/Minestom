@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -229,7 +230,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
             Handle<? super T> handle = handleMap.get(type);
-            if (handle != null) handle.updated = false;
+            if (handle != null) handle.markListenerDirty();
         });
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
@@ -260,10 +261,12 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
+
         private final EventNodeImpl<E> node;
         private final Class<E> eventType;
-        private Consumer<E> listener = null;
-        private volatile boolean updated;
+
+        private final UpdatedListener<E> invalidListener = new UpdatedListener<>(false, null);
+        private final AtomicReference<@NotNull UpdatedListener<E>> listenerReference = new AtomicReference<>(invalidListener);
 
         Handle(EventNodeImpl<E> node, Class<E> eventType) {
             this.node = node;
@@ -286,15 +289,17 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             return updatedListener() != null;
         }
 
+        void markListenerDirty() {
+            this.listenerReference.set(invalidListener);
+        }
+
         @Nullable Consumer<E> updatedListener() {
-            if (updated) return listener;
-            synchronized (GLOBAL_CHILD_LOCK) {
-                if (updated) return listener;
-                final Consumer<E> listener = createConsumer();
-                this.listener = listener;
-                this.updated = true;
-                return listener;
-            }
+            return listenerReference.updateAndGet(previous -> {
+                if (previous.valid) {
+                    return previous;
+                }
+                return new UpdatedListener<>(true, createConsumer());
+            }).consumer;
         }
 
         private @Nullable Consumer<E> createConsumer() {
@@ -433,8 +438,20 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
-                this.updated = false;
+                markListenerDirty();
             }
         }
+
+        private static class UpdatedListener<E extends Event> {
+
+            private final boolean valid;
+            private final Consumer<E> consumer;
+
+            public UpdatedListener(boolean valid, Consumer<E> consumer) {
+                this.valid = valid;
+                this.consumer = consumer;
+            }
+        }
+
     }
 }
