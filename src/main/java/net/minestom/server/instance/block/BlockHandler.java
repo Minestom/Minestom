@@ -296,15 +296,22 @@ public interface BlockHandler {
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
     @ApiStatus.Internal
-    final class Dummy extends BlockHandlerBase {
+    final class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
         public static @NotNull BlockHandler get(@NotNull String namespace) {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
+        private final NamespaceID namespace;
+
         private Dummy(String name) {
-            super(name);
+            namespace = NamespaceID.from(name);
+        }
+
+        @Override
+        public @NotNull NamespaceID getNamespaceId() {
+            return namespace;
         }
     }
 }
