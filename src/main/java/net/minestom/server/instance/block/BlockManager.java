@@ -20,11 +20,18 @@ public class BlockManager {
     // Namespace -> handler supplier
     private final Map<String, Supplier<BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
 
+    private final Map<String, BlockHandler> statelessCache = new ConcurrentHashMap<>();
+
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
     public void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
-        this.blockHandlerMap.put(namespace, handlerSupplier);
+        blockHandlerMap.put(namespace, handlerSupplier);
+    }
+
+    public void registerStatelessHandler(@NotNull String namespace, @NotNull BlockHandler handler) {
+        statelessCache.put(namespace, handler);
+        registerHandler(namespace, () -> statelessCache.get(namespace));
     }
 
     public @Nullable BlockHandler getHandler(@NotNull String namespace) {
@@ -51,7 +58,7 @@ public class BlockManager {
     public synchronized void registerBlockPlacementRule(@NotNull BlockPlacementRule blockPlacementRule) {
         final int id = blockPlacementRule.getBlock().id();
         Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
-        this.placementRuleMap.put(id, blockPlacementRule);
+        placementRuleMap.put(id, blockPlacementRule);
     }
 
     /**
