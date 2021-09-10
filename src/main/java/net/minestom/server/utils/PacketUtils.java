@@ -40,7 +40,7 @@ public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
     private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
-    private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.MAX_PACKET_SIZE);
+    private static final LocalCache LOCAL_BUFFER = LocalCache.get("local-buffer", Server.MAX_PACKET_SIZE);
 
     private static final Object VIEWABLE_PACKET_LOCK = new Object();
     private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
@@ -51,7 +51,7 @@ public final class PacketUtils {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     public static ByteBuffer localBuffer() {
-        return COMPRESSION_CACHE.get();
+        return LOCAL_BUFFER.get();
     }
 
     /**
