@@ -1251,9 +1251,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player connection
      */
-    @NotNull
-    public PlayerConnection getPlayerConnection() {
+    public @NotNull PlayerConnection getPlayerConnection() {
         return playerConnection;
+    }
+
+    /**
+     * Shortcut for {@link PlayerConnection#sendPacket(ServerPacket)}.
+     *
+     * @param packet the packet to send
+     */
+    @ApiStatus.Experimental
+    public void sendPacket(@NotNull ServerPacket packet) {
+        this.playerConnection.sendPacket(packet);
     }
 
     /**
