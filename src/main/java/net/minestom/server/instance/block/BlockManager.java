@@ -23,17 +23,17 @@ public class BlockManager {
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
-    public synchronized void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+    public void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
         this.blockHandlerMap.put(namespace, handlerSupplier);
     }
 
-    public synchronized @Nullable BlockHandler getHandler(@NotNull String namespace) {
+    public @Nullable BlockHandler getHandler(@NotNull String namespace) {
         final var handler = blockHandlerMap.get(namespace);
         return handler != null ? handler.get() : null;
     }
 
     @ApiStatus.Internal
-    public synchronized @Nullable BlockHandler getHandlerOrDummy(@NotNull String namespace) {
+    public @NotNull BlockHandler getHandlerOrDummy(@NotNull String namespace) {
         BlockHandler handler = getHandler(namespace);
         if (handler == null) {
             LOGGER.warn("Block {} does not have any corresponding handler, default to dummy.", namespace);
