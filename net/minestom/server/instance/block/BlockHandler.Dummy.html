@@ -138,7 +138,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a></dd>
 </dl>
 <hr>
-<pre>public static class <span class="typeNameLabel">BlockHandler.Dummy</span>
+<pre>@Internal
+public static final class <span class="typeNameLabel">BlockHandler.Dummy</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a></pre>
 <div class="block">Handler used for loaded blocks with unknown namespace
@@ -229,8 +230,7 @@ implements <a href="BlockHandler.html" title="interface in net.minestom.server.i
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre class="methodSignature">@Internal
-@NotNull
+<pre class="methodSignature">@NotNull
 public static&nbsp;@NotNull <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&nbsp;get&#8203;(@NotNull
                                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</pre>
 </li>
