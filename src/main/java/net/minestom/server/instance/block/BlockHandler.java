@@ -271,15 +271,13 @@ public interface BlockHandler {
     class Tick {
         private final Block block;
         private final Instance instance;
-        private final Point relativeBlockPosition;
-        private final DynamicChunk chunk;
+        private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Tick(Block block, Instance instance, Point relativeBlockPosition, DynamicChunk chunk) {
+        public Tick(Block block, Instance instance, Point blockPosition) {
             this.block = block;
             this.instance = instance;
-            this.relativeBlockPosition = relativeBlockPosition;
-            this.chunk = chunk;
+            this.blockPosition = blockPosition;
         }
 
         public @NotNull Block getBlock() {
@@ -290,17 +288,8 @@ public interface BlockHandler {
             return instance;
         }
 
-        /**
-         * Gets the block position relative to this {@link Tick}'s {@link DynamicChunk}
-         * 
-         * @return The relative block position to this Chunk
-         */
-        public @NotNull Point getRelativeBlockPosition() {
-            return relativeBlockPosition;
-        }
-
-        public @NotNull DynamicChunk getChunk() {
-            return chunk;
+        public @NotNull Point getBlockPosition() {
+            return blockPosition;
         }
     }
 
