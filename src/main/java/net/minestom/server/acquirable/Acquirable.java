@@ -98,9 +98,17 @@ public interface Acquirable<T> {
      * {@link Optional#empty()} otherwise
      */
     default @NotNull Optional<T> local() {
-        if (Thread.currentThread() == getHandler().getTickThread())
-            return Optional.of(unwrap());
+        if (isLocal()) return Optional.of(unwrap());
         return Optional.empty();
+    }
+
+    /**
+     * Gets if the acquirable element is local to this thread
+     *
+     * @return true if the element is linked to the current thread
+     */
+    default boolean isLocal() {
+        return Thread.currentThread() == getHandler().getTickThread();
     }
 
     /**
