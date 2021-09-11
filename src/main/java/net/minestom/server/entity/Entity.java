@@ -438,7 +438,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Entity tick
         {
             // Cache the number of "gravity tick"
-            this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
             velocityTick();
 
             // handle block contacts
@@ -465,6 +464,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     private void velocityTick() {
+        this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
+
         final boolean isSocketClient = PlayerUtils.isSocketClient(this);
         if (isSocketClient) {
             if (position.samePoint(previousPosition))
