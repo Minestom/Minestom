@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -186,101 +186,111 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canWrite(int)">canWrite</a></span>&#8203;(int&nbsp;size)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canRead(int)">canRead</a></span>&#8203;(int&nbsp;size)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canWrite(int)">canWrite</a></span>&#8203;(int&nbsp;size)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#capacity()">capacity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear()">clear</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy(net.minestom.server.utils.binary.BinaryBuffer)">copy</a></span>&#8203;(<a href="BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="BinaryBuffer.Marker.html" title="class in net.minestom.server.utils.binary">BinaryBuffer.Marker</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mark()">mark</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ofSize(int)">ofSize</a></span>&#8203;(int&nbsp;size)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readableBytes()">readableBytes</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readBytes(int)">readBytes</a></span>&#8203;(int&nbsp;length)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readChannel(java.nio.channels.ReadableByteChannel)">readChannel</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/channels/ReadableByteChannel.html?is-external=true" title="class or interface in java.nio.channels" class="externalLink">ReadableByteChannel</a>&nbsp;channel)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readerOffset()">readerOffset</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readerOffset(int)">readerOffset</a></span>&#8203;(int&nbsp;offset)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readRemainingBytes()">readRemainingBytes</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarInt()">readVarInt</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset(int,int)">reset</a></span>&#8203;(int&nbsp;readerOffset,
      int&nbsp;writerOffset)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset(net.minestom.server.utils.binary.BinaryBuffer.Marker)">reset</a></span>&#8203;(@NotNull <a href="BinaryBuffer.Marker.html" title="class in net.minestom.server.utils.binary">BinaryBuffer.Marker</a>&nbsp;marker)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(java.nio.ByteBuffer)">write</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryBuffer)">write</a></span>&#8203;(<a href="BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBytes(byte%5B%5D)">writeBytes</a></span>&#8203;(byte[]&nbsp;bytes)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeChannel(java.nio.channels.WritableByteChannel)">writeChannel</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/channels/WritableByteChannel.html?is-external=true" title="class or interface in java.nio.channels" class="externalLink">WritableByteChannel</a>&nbsp;channel)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writerOffset()">writerOffset</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -385,6 +395,15 @@ public&nbsp;@NotNull <a href="BinaryBuffer.Marker.html" title="class in net.mine
                   @NotNull <a href="BinaryBuffer.Marker.html" title="class in net.minestom.server.utils.binary">BinaryBuffer.Marker</a>&nbsp;marker)</pre>
 </li>
 </ul>
+<a id="canRead(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>canRead</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;canRead&#8203;(int&nbsp;size)</pre>
+</li>
+</ul>
 <a id="canWrite(int)">
 <!--   -->
 </a>
@@ -410,6 +429,15 @@ public&nbsp;@NotNull <a href="BinaryBuffer.Marker.html" title="class in net.mine
 <li class="blockList">
 <h4>readerOffset</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;readerOffset()</pre>
+</li>
+</ul>
+<a id="readerOffset(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readerOffset</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;readerOffset&#8203;(int&nbsp;offset)</pre>
 </li>
 </ul>
 <a id="writerOffset()">
@@ -463,7 +491,7 @@ public&nbsp;@NotNull <a href="BinaryBuffer.Marker.html" title="class in net.mine
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;clear()</pre>
+<pre class="methodSignature">public&nbsp;<a href="BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;clear()</pre>
 </li>
 </ul>
 <a id="asByteBuffer(int,int)">
