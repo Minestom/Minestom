@@ -3,6 +3,8 @@ package net.minestom.server.instance.block;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
@@ -269,13 +271,15 @@ public interface BlockHandler {
     class Tick {
         private final Block block;
         private final Instance instance;
-        private final Point blockPosition;
+        private final Point relativeBlockPosition;
+        private final DynamicChunk chunk;
 
         @ApiStatus.Internal
-        public Tick(Block block, Instance instance, Point blockPosition) {
+        public Tick(Block block, Instance instance, Point relativeBlockPosition, DynamicChunk chunk) {
             this.block = block;
             this.instance = instance;
-            this.blockPosition = blockPosition;
+            this.relativeBlockPosition = relativeBlockPosition;
+            this.chunk = chunk;
         }
 
         public @NotNull Block getBlock() {
@@ -286,8 +290,17 @@ public interface BlockHandler {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
+        /**
+         * Gets the block position relative to this {@link Tick}'s {@link DynamicChunk}
+         * 
+         * @return The relative block position to this Chunk
+         */
+        public @NotNull Point getRelativeBlockPosition() {
+            return relativeBlockPosition;
+        }
+
+        public @NotNull DynamicChunk getChunk() {
+            return chunk;
         }
     }
 

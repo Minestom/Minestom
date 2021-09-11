@@ -97,7 +97,7 @@ public class DynamicChunk extends Chunk {
             final int y = ChunkUtils.blockIndexToChunkPositionY(index);
             final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
             final Vec blockPosition = new Vec(x, y, z);
-            handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
+            handler.tick(new BlockHandler.Tick(block, instance, blockPosition, this));
         });
     }
 
