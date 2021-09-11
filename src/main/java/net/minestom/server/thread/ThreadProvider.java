@@ -129,16 +129,15 @@ public abstract class ThreadProvider {
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
-                for (var chunkEntry : chunkEntries) {
+                for (ChunkEntry chunkEntry : chunkEntries) {
                     final Chunk chunk = chunkEntry.chunk;
-                    if (!ChunkUtils.isLoaded(chunk))
-                        return;
+                    if (!ChunkUtils.isLoaded(chunk)) return;
                     try {
                         chunk.tick(time);
                     } catch (Throwable e) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
-                    final var entities = chunkEntry.entities;
+                    final List<Entity> entities = chunkEntry.entities;
                     if (!entities.isEmpty()) {
                         for (Entity entity : entities) {
                             if (lock.hasQueuedThreads()) {
