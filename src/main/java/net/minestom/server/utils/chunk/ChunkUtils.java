@@ -54,12 +54,6 @@ public final class ChunkUtils {
         return completableFuture;
     }
 
-    /**
-     * Gets if a chunk is loaded.
-     *
-     * @param chunk the chunk to check
-     * @return true if the chunk is loaded, false otherwise
-     */
     public static boolean isLoaded(@Nullable Chunk chunk) {
         return chunk != null && chunk.isLoaded();
     }
@@ -202,42 +196,10 @@ public final class ChunkUtils {
      * @return the instance position of the block located in {@code index}
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
-        final int x = blockIndexToPositionX(index, chunkX);
-        final int y = blockIndexToPositionY(index);
-        final int z = blockIndexToPositionZ(index, chunkZ);
+        final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
+        final int y = index >>> 4 & 0xFF;
+        final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
         return new Vec(x, y, z);
-    }
-
-    /**
-     * Converts a block chunk index to its instance position X.
-     *
-     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @param chunkX the chunk X
-     * @return the X coordinate of the block index
-     */
-    public static int blockIndexToPositionX(int index, int chunkX) {
-        return blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
-    }
-
-    /**
-     * Converts a block chunk index to its instance position Y.
-     *
-     * @param index the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @return the Y coordinate of the block index
-     */
-    public static int blockIndexToPositionY(int index) {
-        return (index >>> 4 & 0xFF);
-    }
-
-    /**
-     * Converts a block chunk index to its instance position Z.
-     *
-     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @param chunkZ the chunk Z
-     * @return the Z coordinate of the block index
-     */
-    public static int blockIndexToPositionZ(int index, int chunkZ) {
-        return blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
     }
 
     /**

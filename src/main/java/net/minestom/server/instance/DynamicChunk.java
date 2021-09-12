@@ -4,7 +4,7 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
@@ -93,10 +93,7 @@ public class DynamicChunk extends Chunk {
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
             if (handler == null) return;
-            final int x = ChunkUtils.blockIndexToPositionX(index, chunkX);
-            final int y = ChunkUtils.blockIndexToPositionY(index);
-            final int z = ChunkUtils.blockIndexToPositionZ(index, chunkZ);
-            final Vec blockPosition = new Vec(x, y, z);
+            final Point blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });
     }
