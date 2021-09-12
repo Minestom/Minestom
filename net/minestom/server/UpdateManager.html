@@ -134,7 +134,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Manager responsible for the server ticks.
  <p>
- The <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> manages the multi-thread aspect of chunk ticks.</div>
+ The <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> manages the multi-thread aspect of chunk ticks.</div>
 </li>
 </ul>
 </div>
@@ -175,10 +175,10 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getThreadProvider()">getThreadProvider</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the current <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a>.</div>
+<div class="block">Gets the current <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -204,28 +204,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalChunkLoad(net.minestom.server.instance.Chunk)">signalChunkLoad</a></span>&#8203;(@NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been loaded.</div>
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that a chunk has been loaded.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalChunkUnload(net.minestom.server.instance.Chunk)">signalChunkUnload</a></span>&#8203;(@NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been unloaded.</div>
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that a chunk has been unloaded.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalInstanceCreate(net.minestom.server.instance.Instance)">signalInstanceCreate</a></span>&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that an instance has been created.</div>
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that an instance has been created.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalInstanceDelete(net.minestom.server.instance.Instance)">signalInstanceDelete</a></span>&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that an instance has been deleted.</div>
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that an instance has been deleted.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -266,8 +266,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getThreadProvider</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a>&nbsp;getThreadProvider()</pre>
-<div class="block">Gets the current <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a>.</div>
+public&nbsp;@NotNull <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a>&nbsp;getThreadProvider()</pre>
+<div class="block">Gets the current <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current thread provider</dd>
@@ -281,7 +281,7 @@ public&nbsp;@NotNull <a href="thread/ThreadProvider.html" title="class in net.mi
 <li class="blockList">
 <h4>signalInstanceCreate</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;signalInstanceCreate&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that an instance has been created.
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that an instance has been created.
  <p>
  WARNING: should be automatically done by the <a href="instance/InstanceManager.html" title="class in net.minestom.server.instance"><code>InstanceManager</code></a>.</div>
 <dl>
@@ -297,7 +297,7 @@ public&nbsp;@NotNull <a href="thread/ThreadProvider.html" title="class in net.mi
 <li class="blockList">
 <h4>signalInstanceDelete</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;signalInstanceDelete&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that an instance has been deleted.
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that an instance has been deleted.
  <p>
  WARNING: should be automatically done by the <a href="instance/InstanceManager.html" title="class in net.minestom.server.instance"><code>InstanceManager</code></a>.</div>
 <dl>
@@ -314,7 +314,7 @@ public&nbsp;@NotNull <a href="thread/ThreadProvider.html" title="class in net.mi
 <h4>signalChunkLoad</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;signalChunkLoad&#8203;(@NotNull
                             @NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been loaded.
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that a chunk has been loaded.
  <p>
  WARNING: should be automatically done by the <a href="instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> implementation.</div>
 <dl>
@@ -331,7 +331,7 @@ public&nbsp;@NotNull <a href="thread/ThreadProvider.html" title="class in net.mi
 <h4>signalChunkUnload</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;signalChunkUnload&#8203;(@NotNull
                               @NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-<div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been unloaded.
+<div class="block">Signals the <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a> that a chunk has been unloaded.
  <p>
  WARNING: should be automatically done by the <a href="instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> implementation.</div>
 <dl>
