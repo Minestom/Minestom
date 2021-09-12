@@ -129,9 +129,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the type of the acquired object</dd>
+</dl>
 <hr>
 <pre>public final class <span class="typeNameLabel">Acquired&lt;T&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Represents an object that has been safely acquired and can be freed again.
+ <p>
+ This class should not be shared, and it is recommended to call <a href="#unlock()"><code>unlock()</code></a>
+ once the acquisition goal has been fulfilled to limit blocking time.</div>
 </li>
 </ul>
 </div>
