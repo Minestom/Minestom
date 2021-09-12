@@ -39,8 +39,7 @@ public final class ThreadDispatcher {
         this.threads = new ArrayList<>(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            final TickThread.BatchRunnable batchRunnable = new TickThread.BatchRunnable();
-            final TickThread tickThread = new TickThread(batchRunnable, i);
+            final TickThread tickThread = new TickThread(phaser, i);
             this.threads.add(tickThread);
             tickThread.start();
         }
@@ -98,7 +97,7 @@ public final class ThreadDispatcher {
             }
             // Execute tick
             this.phaser.register();
-            thread.runnable.startTick(phaser, () -> {
+            thread.startTick(() -> {
                 Acquirable.refreshEntries(chunkEntries);
 
                 final ReentrantLock lock = thread.getLock();
