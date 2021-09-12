@@ -38,6 +38,7 @@ public final class TickThread extends Thread {
 
     void startTick(@NotNull Runnable runnable) {
         this.tickRunnable = runnable;
+        this.stop = false;
         LockSupport.unpark(this);
     }
 
