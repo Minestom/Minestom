@@ -33,7 +33,6 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -164,7 +163,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     /**
      * Schedules a task to be run during the next entity tick.
-     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next entity tick
      */

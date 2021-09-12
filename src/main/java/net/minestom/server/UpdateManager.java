@@ -7,8 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.thread.SingleThreadProvider;
-import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
@@ -24,14 +23,14 @@ import java.util.function.LongConsumer;
 /**
  * Manager responsible for the server ticks.
  * <p>
- * The {@link ThreadProvider} manages the multi-thread aspect of chunk ticks.
+ * The {@link ThreadDispatcher} manages the multi-thread aspect of chunk ticks.
  */
 public final class UpdateManager {
 
     private volatile boolean stopRequested;
 
     // TODO make configurable
-    private ThreadProvider threadProvider = new SingleThreadProvider();
+    private ThreadDispatcher threadDispatcher = ThreadDispatcher.singleThread();
 
     private final Queue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
     private final Queue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
@@ -96,7 +95,7 @@ public final class UpdateManager {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
-            this.threadProvider.shutdown();
+            this.threadDispatcher.shutdown();
         }, MinecraftServer.THREAD_NAME_TICK_SCHEDULER).start();
     }
 
@@ -115,11 +114,11 @@ public final class UpdateManager {
             }
         });
         // Tick all chunks (and entities inside)
-        this.threadProvider.updateAndAwait(tickStart);
+        this.threadDispatcher.updateAndAwait(tickStart);
 
         // Clear removed entities & update threads
-        long tickTime = System.currentTimeMillis() - tickStart;
-        this.threadProvider.refreshThreads(tickTime);
+        final long tickTime = System.currentTimeMillis() - tickStart;
+        this.threadDispatcher.refreshThreads(tickTime);
     }
 
     /**
@@ -138,56 +137,56 @@ public final class UpdateManager {
     }
 
     /**
-     * Gets the current {@link ThreadProvider}.
+     * Gets the current {@link ThreadDispatcher}.
      *
      * @return the current thread provider
      */
-    public @NotNull ThreadProvider getThreadProvider() {
-        return threadProvider;
+    public @NotNull ThreadDispatcher getThreadProvider() {
+        return threadDispatcher;
     }
 
     /**
-     * Signals the {@link ThreadProvider} that an instance has been created.
+     * Signals the {@link ThreadDispatcher} that an instance has been created.
      * <p>
      * WARNING: should be automatically done by the {@link InstanceManager}.
      *
      * @param instance the instance
      */
     public void signalInstanceCreate(Instance instance) {
-        this.threadProvider.onInstanceCreate(instance);
+        this.threadDispatcher.onInstanceCreate(instance);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that an instance has been deleted.
+     * Signals the {@link ThreadDispatcher} that an instance has been deleted.
      * <p>
      * WARNING: should be automatically done by the {@link InstanceManager}.
      *
      * @param instance the instance
      */
     public void signalInstanceDelete(Instance instance) {
-        this.threadProvider.onInstanceDelete(instance);
+        this.threadDispatcher.onInstanceDelete(instance);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that a chunk has been loaded.
+     * Signals the {@link ThreadDispatcher} that a chunk has been loaded.
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param chunk the loaded chunk
      */
     public void signalChunkLoad(@NotNull Chunk chunk) {
-        this.threadProvider.onChunkLoad(chunk);
+        this.threadDispatcher.onChunkLoad(chunk);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that a chunk has been unloaded.
+     * Signals the {@link ThreadDispatcher} that a chunk has been unloaded.
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param chunk the unloaded chunk
      */
     public void signalChunkUnload(@NotNull Chunk chunk) {
-        this.threadProvider.onChunkUnload(chunk);
+        this.threadDispatcher.onChunkUnload(chunk);
     }
 
     /**

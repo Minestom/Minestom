@@ -1,7 +1,7 @@
 package net.minestom.server.acquirable;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -36,7 +36,7 @@ public interface Acquirable<T> {
      * @param entries the new chunk entries
      */
     @ApiStatus.Internal
-    static void refreshEntries(@NotNull Collection<ThreadProvider.ChunkEntry> entries) {
+    static void refreshEntries(@NotNull Collection<ThreadDispatcher.ChunkEntry> entries) {
         AcquirableImpl.ENTRIES.set(entries);
     }
 
@@ -157,19 +157,19 @@ public interface Acquirable<T> {
     @NotNull Handler getHandler();
 
     final class Handler {
-        private volatile ThreadProvider.ChunkEntry chunkEntry;
+        private volatile ThreadDispatcher.ChunkEntry chunkEntry;
 
-        public ThreadProvider.ChunkEntry getChunkEntry() {
+        public ThreadDispatcher.ChunkEntry getChunkEntry() {
             return chunkEntry;
         }
 
         @ApiStatus.Internal
-        public void refreshChunkEntry(@NotNull ThreadProvider.ChunkEntry chunkEntry) {
+        public void refreshChunkEntry(@NotNull ThreadDispatcher.ChunkEntry chunkEntry) {
             this.chunkEntry = chunkEntry;
         }
 
         public TickThread getTickThread() {
-            final ThreadProvider.ChunkEntry entry = this.chunkEntry;
+            final ThreadDispatcher.ChunkEntry entry = this.chunkEntry;
             return entry != null ? entry.getThread() : null;
         }
     }

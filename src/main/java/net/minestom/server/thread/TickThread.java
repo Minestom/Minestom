@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Thread responsible for ticking {@link net.minestom.server.instance.Chunk chunks} and {@link net.minestom.server.entity.Entity entities}.
  * <p>
- * Created in {@link ThreadProvider}, and awaken every tick with a task to execute.
+ * Created in {@link ThreadDispatcher}, and awaken every tick with a task to execute.
  */
 public class TickThread extends Thread {
 
