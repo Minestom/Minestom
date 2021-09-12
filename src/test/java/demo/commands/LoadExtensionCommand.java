@@ -8,6 +8,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 
 import java.io.IOException;
@@ -51,9 +52,9 @@ public class LoadExtensionCommand extends Command {
         }
 
         try {
-            boolean managed = extensionManager.loadDynamicExtension(extensionJar.toFile());
-            if (managed) {
-                sender.sendMessage(Component.text("Extension loaded!"));
+            Extension extension = extensionManager.loadDynamicExtension(extensionJar.toFile());
+            if (extension != null) {
+                sender.sendMessage(Component.text("Extension " + extension.getOrigin().getName() + " loaded!"));
             } else {
                 sender.sendMessage(Component.text("Failed to load extension, check your logs."));
             }

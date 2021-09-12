@@ -762,7 +762,7 @@ public class ExtensionManager {
         return true;
     }
 
-    public boolean loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
+    public @Nullable Extension loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
         if (!jarFile.exists()) {
             throw new FileNotFoundException("File '" + jarFile.getAbsolutePath() + "' does not exists. Cannot load extension.");
         }
@@ -770,10 +770,14 @@ public class ExtensionManager {
         LOGGER.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
         DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
         List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
-        return loadExtensionList(extensionsToLoad);
+        List<Extension> loadedExtensions = loadExtensionList(extensionsToLoad);
+
+        if (loadedExtensions.isEmpty()) return null;
+
+        return loadedExtensions.get(0);
     }
 
-    private boolean loadExtensionList(@NotNull List<DiscoveredExtension> extensionsToLoad) {
+    private @NotNull List<@NotNull Extension> loadExtensionList(@NotNull List<DiscoveredExtension> extensionsToLoad) {
         // ensure correct order of dependencies
         LOGGER.debug("Reorder extensions to ensure proper load order");
         extensionsToLoad = generateLoadOrder(extensionsToLoad);
@@ -801,7 +805,7 @@ public class ExtensionManager {
 
         if (newExtensions.isEmpty()) {
             LOGGER.error("No extensions to load, skipping callbacks");
-            return false;
+            return Collections.emptyList();
         }
 
         LOGGER.info("Load complete, firing preinit, init and then postinit callbacks");
@@ -809,7 +813,8 @@ public class ExtensionManager {
         newExtensions.forEach(Extension::preInitialize);
         newExtensions.forEach(Extension::initialize);
         newExtensions.forEach(Extension::postInitialize);
-        return true;
+
+        return newExtensions;
     }
 
     public void unloadExtension(@NotNull String extensionName) {
