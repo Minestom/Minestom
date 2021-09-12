@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -139,7 +139,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a></code></dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">TickThread</span>
+<pre>public final class <span class="typeNameLabel">TickThread</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a></pre>
 <div class="block">Thread responsible for ticking <a href="../instance/Chunk.html" title="class in net.minestom.server.instance"><code>chunks</code></a> and <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a>.
  <p>
@@ -157,19 +157,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Nested Class Summary</h3>
-<table class="memberSummary">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="TickThread.BatchRunnable.html" title="class in net.minestom.server.thread">TickThread.BatchRunnable</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a id="nested.classes.inherited.from.class.java.lang.Thread">
 <!--   -->
@@ -187,19 +174,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="TickThread.BatchRunnable.html" title="class in net.minestom.server.thread">TickThread.BatchRunnable</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runnable">runnable</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.java.lang.Thread">
 <!--   -->
@@ -224,7 +198,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.thread.TickThread.BatchRunnable,int)">TickThread</a></span>&#8203;(@NotNull <a href="TickThread.BatchRunnable.html" title="class in net.minestom.server.thread">TickThread.BatchRunnable</a>&nbsp;runnable,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.concurrent.Phaser,int)">TickThread</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/Phaser.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">Phaser</a>&nbsp;phaser,
           int&nbsp;number)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -255,6 +229,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#run()">run</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Shutdowns the thread.</div>
@@ -266,7 +245,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#activeCount()" title="class or interface in java.lang" class="externalLink">activeCount</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#checkAccess()" title="class or interface in java.lang" class="externalLink">checkAccess</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#countStackFrames()" title="class or interface in java.lang" class="externalLink">countStackFrames</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#currentThread()" title="class or interface in java.lang" class="externalLink">currentThread</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#dumpStack()" title="class or interface in java.lang" class="externalLink">dumpStack</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#enumerate(java.lang.Thread%5B%5D)" title="class or interface in java.lang" class="externalLink">enumerate</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getAllStackTraces()" title="class or interface in java.lang" class="externalLink">getAllStackTraces</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getContextClassLoader()" title="class or interface in java.lang" class="externalLink">getContextClassLoader</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getDefaultUncaughtExceptionHandler()" title="class or interface in java.lang" class="externalLink">getDefaultUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getId()" title="class or interface in java.lang" class="externalLink">getId</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getName()" title="class or interface in java.lang" class="externalLink">getName</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getPriority()" title="class or interface in java.lang" class="externalLink">getPriority</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getStackTrace()" title="class or interface in java.lang" class="externalLink">getStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getState()" title="class or interface in java.lang" class="externalLink">getState</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getThreadGroup()" title="class or interface in java.lang" class="externalLink">getThreadGroup</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getUncaughtExceptionHandler()" title="class or interface in java.lang" class="externalLink">getUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#holdsLock(java.lang.Object)" title="class or interface in java.lang" class="externalLink">holdsLock</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#interrupt()" title="class or interface in java.lang" class="externalLink">interrupt</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#interrupted()" title="class or interface in java.lang" class="externalLink">interrupted</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#isAlive()" title="class or interface in java.lang" class="externalLink">isAlive</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#isDaemon()" title="class or interface in java.lang" class="externalLink">isDaemon</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#isInterrupted()" title="class or interface in java.lang" class="externalLink">isInterrupted</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#join()" title="class or interface in java.lang" class="externalLink">join</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#join(long)" title="class or interface in java.lang" class="externalLink">join</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#join(long,int)" title="class or interface in java.lang" class="externalLink">join</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#onSpinWait()" title="class or interface in java.lang" class="externalLink">onSpinWait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#resume()" title="class or interface in java.lang" class="externalLink">resume</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#run()" title="class or interface in java.lang" class="externalLink">run</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setContextClassLoader(java.lang.ClassLoader)" title="class or interface in java.lang" class="externalLink">setContextClassLoader</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setDaemon(boolean)" title="class or interface in java.lang" class="externalLink">setDaemon</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)" title="class or interface in java.lang" class="externalLink">setDefaultUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setName(java.lang.String)" title="class or interface in java.lang" class="externalLink">setName</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setPriority(int)" title="class or interface in java.lang" class="externalLink">setPriority</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)" title="class or interface in java.lang" class="externalLink">setUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#sleep(long)" title="class or interface in java.lang" class="externalLink">sleep</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#sleep(long,int)" title="class or interface in java.lang" class="externalLink">sleep</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#start()" title="class or interface in java.lang" class="externalLink">start</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#stop()" title="class or interface in java.lang" class="externalLink">stop</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#suspend()" title="class or interface in java.lang" class="externalLink">suspend</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#yield()" title="class or interface in java.lang" class="externalLink">yield</a></code></li>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#activeCount()" title="class or interface in java.lang" class="externalLink">activeCount</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#checkAccess()" title="class or interface in java.lang" class="externalLink">checkAccess</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#countStackFrames()" title="class or interface in java.lang" class="externalLink">countStackFrames</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#currentThread()" title="class or interface in java.lang" class="externalLink">currentThread</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#dumpStack()" title="class or interface in java.lang" class="externalLink">dumpStack</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#enumerate(java.lang.Thread%5B%5D)" title="class or interface in java.lang" class="externalLink">enumerate</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getAllStackTraces()" title="class or interface in java.lang" class="externalLink">getAllStackTraces</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getContextClassLoader()" title="class or interface in java.lang" class="externalLink">getContextClassLoader</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getDefaultUncaughtExceptionHandler()" title="class or interface in java.lang" class="externalLink">getDefaultUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getId()" title="class or interface in java.lang" class="externalLink">getId</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getName()" title="class or interface in java.lang" class="externalLink">getName</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getPriority()" title="class or interface in java.lang" class="externalLink">getPriority</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getStackTrace()" title="class or interface in java.lang" class="externalLink">getStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getState()" title="class or interface in java.lang" class="externalLink">getState</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getThreadGroup()" title="class or interface in java.lang" class="externalLink">getThreadGroup</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#getUncaughtExceptionHandler()" title="class or interface in java.lang" class="externalLink">getUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#holdsLock(java.lang.Object)" title="class or interface in java.lang" class="externalLink">holdsLock</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#interrupt()" title="class or interface in java.lang" class="externalLink">interrupt</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#interrupted()" title="class or interface in java.lang" class="externalLink">interrupted</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#isAlive()" title="class or interface in java.lang" class="externalLink">isAlive</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#isDaemon()" title="class or interface in java.lang" class="externalLink">isDaemon</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#isInterrupted()" title="class or interface in java.lang" class="externalLink">isInterrupted</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#join()" title="class or interface in java.lang" class="externalLink">join</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#join(long)" title="class or interface in java.lang" class="externalLink">join</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#join(long,int)" title="class or interface in java.lang" class="externalLink">join</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#onSpinWait()" title="class or interface in java.lang" class="externalLink">onSpinWait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#resume()" title="class or interface in java.lang" class="externalLink">resume</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setContextClassLoader(java.lang.ClassLoader)" title="class or interface in java.lang" class="externalLink">setContextClassLoader</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setDaemon(boolean)" title="class or interface in java.lang" class="externalLink">setDaemon</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)" title="class or interface in java.lang" class="externalLink">setDefaultUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setName(java.lang.String)" title="class or interface in java.lang" class="externalLink">setName</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setPriority(int)" title="class or interface in java.lang" class="externalLink">setPriority</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#setUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)" title="class or interface in java.lang" class="externalLink">setUncaughtExceptionHandler</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#sleep(long)" title="class or interface in java.lang" class="externalLink">sleep</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#sleep(long,int)" title="class or interface in java.lang" class="externalLink">sleep</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#start()" title="class or interface in java.lang" class="externalLink">start</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#stop()" title="class or interface in java.lang" class="externalLink">stop</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#suspend()" title="class or interface in java.lang" class="externalLink">suspend</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#yield()" title="class or interface in java.lang" class="externalLink">yield</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -284,25 +263,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a id="runnable">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>runnable</h4>
-<pre>protected final&nbsp;<a href="TickThread.BatchRunnable.html" title="class in net.minestom.server.thread">TickThread.BatchRunnable</a> runnable</pre>
-</li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -310,14 +270,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.thread.TickThread.BatchRunnable,int)">
+<a id="&lt;init&gt;(java.util.concurrent.Phaser,int)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TickThread</h4>
-<pre>public&nbsp;TickThread&#8203;(@NotNull
-                  @NotNull <a href="TickThread.BatchRunnable.html" title="class in net.minestom.server.thread">TickThread.BatchRunnable</a>&nbsp;runnable,
+<pre>public&nbsp;TickThread&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/Phaser.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">Phaser</a>&nbsp;phaser,
                   int&nbsp;number)</pre>
 </li>
 </ul>
@@ -331,6 +290,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="run()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>run</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;run()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true#run()" title="class or interface in java.lang" class="externalLink">run</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true#run()" title="class or interface in java.lang" class="externalLink">run</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a></code></dd>
+</dl>
+</li>
+</ul>
 <a id="getLock()">
 <!--   -->
 </a>
@@ -414,7 +388,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
