@@ -26,7 +26,6 @@ import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -129,8 +128,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
 
     /**
      * Schedules a task to be run during the next instance tick.
-     * It ensures that the task will be executed in the same thread as the instance
-     * and its chunks/entities (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next instance tick
      */

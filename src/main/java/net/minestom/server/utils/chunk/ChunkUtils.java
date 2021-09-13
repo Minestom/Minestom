@@ -54,12 +54,6 @@ public final class ChunkUtils {
         return completableFuture;
     }
 
-    /**
-     * Gets if a chunk is loaded.
-     *
-     * @param chunk the chunk to check
-     * @return true if the chunk is loaded, false otherwise
-     */
     public static boolean isLoaded(@Nullable Chunk chunk) {
         return chunk != null && chunk.isLoaded();
     }
@@ -99,8 +93,8 @@ public final class ChunkUtils {
      * @return the chunk X or Z based on the argument
      */
     public static int getChunkCoordinate(double xz) {
-        assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        return Math.floorDiv((int) Math.floor(xz), Chunk.CHUNK_SIZE_X);
+        // Assume chunk horizontal size being 16 (4 bits)
+        return (int) Math.floor(xz) >> 4;
     }
 
     /**
@@ -156,21 +150,25 @@ public final class ChunkUtils {
     /**
      * Gets the chunks in range of a position.
      *
-     * @param point the initial point
-     * @param range how far should it retrieves chunk
+     * @param chunkX the initial chunk X
+     * @param chunkZ the initial chunk Z
+     * @param range  how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
-        final int chunkX = point.chunkX();
-        final int chunkZ = point.chunkZ();
+    public static long @NotNull [] getChunksInRange(int chunkX, int chunkZ, int range) {
+        // FIXME: currently broken using GraalVM
         long[] array = new long[MathUtils.square(range * 2 + 1)];
         int i = 0;
-        for (int z = -range; z <= range; ++z) {
-            for (int x = -range; x <= range; ++x) {
+        for (int x = -range; x <= range; ++x) {
+            for (int z = -range; z <= range; ++z) {
                 array[i++] = getChunkIndex(chunkX + x, chunkZ + z);
             }
         }
         return array;
+    }
+
+    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
+        return getChunksInRange(point.chunkX(), point.chunkZ(), range);
     }
 
     /**
@@ -198,42 +196,10 @@ public final class ChunkUtils {
      * @return the instance position of the block located in {@code index}
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
-        final int x = blockIndexToPositionX(index, chunkX);
-        final int y = blockIndexToPositionY(index);
-        final int z = blockIndexToPositionZ(index, chunkZ);
+        final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
+        final int y = index >>> 4 & 0xFF;
+        final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
         return new Vec(x, y, z);
-    }
-
-    /**
-     * Converts a block chunk index to its instance position X.
-     *
-     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @param chunkX the chunk X
-     * @return the X coordinate of the block index
-     */
-    public static int blockIndexToPositionX(int index, int chunkX) {
-        return blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
-    }
-
-    /**
-     * Converts a block chunk index to its instance position Y.
-     *
-     * @param index the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @return the Y coordinate of the block index
-     */
-    public static int blockIndexToPositionY(int index) {
-        return (index >>> 4 & 0xFF);
-    }
-
-    /**
-     * Converts a block chunk index to its instance position Z.
-     *
-     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @param chunkZ the chunk Z
-     * @return the Z coordinate of the block index
-     */
-    public static int blockIndexToPositionZ(int index, int chunkZ) {
-        return blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
     }
 
     /**

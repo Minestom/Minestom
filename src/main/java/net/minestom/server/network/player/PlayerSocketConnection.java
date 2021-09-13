@@ -37,6 +37,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * Represents a socket connection.
@@ -88,7 +89,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
-        final var readBuffer = workerContext.readBuffer;
+        final BinaryBuffer readBuffer = workerContext.readBuffer;
         // Decrypt data
         if (encrypted) {
             final Cipher cipher = decryptCipher;
@@ -104,7 +105,6 @@ public class PlayerSocketConnection extends PlayerConnection {
             readBuffer.clear();
             readBuffer.writeBytes(output);
         }
-        final int limit = readBuffer.writerOffset();
         // Read all packets
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
@@ -112,42 +112,35 @@ public class PlayerSocketConnection extends PlayerConnection {
                 // Ensure that the buffer contains the full packet (or wait for next socket read)
                 final int packetLength = readBuffer.readVarInt();
                 final int readerStart = readBuffer.readerOffset();
-                final int packetEnd = readerStart + packetLength;
-                if (packetEnd > readBuffer.writerOffset()) {
+                if (!readBuffer.canRead(packetLength)) {
                     // Integrity fail
                     throw new BufferUnderflowException();
                 }
                 // Read packet https://wiki.vg/Protocol#Packet_format
-                BinaryBuffer content;
-                int payloadLength;
-                if (!compressed) {
-                    // Compression disabled, payload is following
-                    content = readBuffer;
-                    payloadLength = packetLength;
-                } else {
+                BinaryBuffer content = readBuffer;
+                int decompressedSize = packetLength;
+                if (compressed) {
                     final int dataLength = readBuffer.readVarInt();
+                    final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
                     if (dataLength == 0) {
                         // Data is too small to be compressed, payload is following
-                        content = readBuffer;
-                        payloadLength = packetLength - (content.readerOffset() - readerStart);
+                        decompressedSize = payloadLength;
                     } else {
                         // Decompress to content buffer
-                        content = workerContext.contentBuffer;
-                        payloadLength = dataLength;
-                        final var contentStartMark = content.mark();
+                        content = workerContext.contentBuffer.clear();
+                        decompressedSize = dataLength;
                         try {
-                            final var inflater = workerContext.inflater;
-                            inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), packetEnd));
-                            inflater.inflate(content.asByteBuffer(0, content.capacity()));
+                            Inflater inflater = workerContext.inflater;
+                            inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
+                            inflater.inflate(content.asByteBuffer(0, dataLength));
                             inflater.reset();
                         } catch (DataFormatException e) {
                             MinecraftServer.getExceptionManager().handleException(e);
                         }
-                        content.reset(contentStartMark);
                     }
                 }
                 // Process packet
-                ByteBuffer payload = content.asByteBuffer(content.readerOffset(), payloadLength);
+                ByteBuffer payload = content.asByteBuffer(content.readerOffset(), decompressedSize);
                 final int packetId = Utils.readVarInt(payload);
                 try {
                     packetProcessor.process(this, packetId, payload);
@@ -162,7 +155,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     }
                 }
                 // Position buffer to read the next packet
-                readBuffer.reset(packetEnd, limit);
+                readBuffer.readerOffset(readerStart + packetLength);
             } catch (BufferUnderflowException e) {
                 readBuffer.reset(beginMark);
                 this.cacheBuffer = BinaryBuffer.copy(readBuffer);
@@ -279,16 +272,17 @@ public class PlayerSocketConnection extends PlayerConnection {
                 if (encrypted) {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
-                    final int remainingBytes = localBuffer.readableBytes();
-                    final byte[] bytes = localBuffer.readRemainingBytes();
-                    byte[] outTempArray = new byte[cipher.getOutputSize(remainingBytes)];
+                    ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
+                    BinaryBuffer pooled = getPooledBuffer();
+                    ByteBuffer cipherOutput = pooled.asByteBuffer(0, BUFFER_SIZE);
                     try {
-                        cipher.update(bytes, 0, remainingBytes, outTempArray);
+                        cipher.update(cipherInput, cipherOutput);
                     } catch (ShortBufferException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
                     localBuffer.clear();
-                    localBuffer.writeBytes(outTempArray);
+                    localBuffer.write(cipherOutput.flip());
+                    POOLED_BUFFERS.add(new SoftReference<>(pooled));
                 }
 
                 this.waitingBuffers.add(localBuffer);

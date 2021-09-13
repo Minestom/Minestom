@@ -38,9 +38,9 @@ import java.util.zip.Deflater;
  */
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
+    private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
     private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
-    private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.MAX_PACKET_SIZE);
+    private static final LocalCache LOCAL_BUFFER = LocalCache.get("local-buffer", Server.MAX_PACKET_SIZE);
 
     private static final Object VIEWABLE_PACKET_LOCK = new Object();
     private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
@@ -51,7 +51,7 @@ public final class PacketUtils {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     public static ByteBuffer localBuffer() {
-        return COMPRESSION_CACHE.get();
+        return LOCAL_BUFFER.get();
     }
 
     /**
@@ -179,7 +179,7 @@ public final class PacketUtils {
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
         if (!compression) {
-            // Length + payload
+            // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             Utils.writeVarInt(buffer, packet.getId());
             packet.write(new BinaryWriter(buffer));
@@ -187,13 +187,13 @@ public final class PacketUtils {
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             return;
         }
-        // Compressed format
+        // Compressed format https://wiki.vg/Protocol#With_compression
         final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
         final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int contentStart = buffer.position();
 
+        final int contentStart = buffer.position();
         Utils.writeVarInt(buffer, packet.getId());
-        packet.write(new BinaryWriter(buffer));
+        packet.write(BinaryWriter.view(buffer)); // ensure that the buffer is not resized/changed
         final int packetSize = buffer.position() - contentStart;
         if (packetSize >= MinecraftServer.getCompressionThreshold()) {
             // Packet large enough, compress
@@ -201,17 +201,18 @@ public final class PacketUtils {
             final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
             final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
 
-            Deflater deflater = COMPRESSOR.get();
+            Deflater deflater = LOCAL_DEFLATER.get();
             deflater.setInput(uncompressedCopy);
             deflater.finish();
             deflater.deflate(buffer);
             deflater.reset();
 
-            Utils.writeVarIntHeader(buffer, compressedIndex, (buffer.position() - contentStart) + 3);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize);
+            Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize); // Data Length
         } else {
-            Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0);
+            // Packet too small
+            Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0); // Data Length (0 since uncompressed)
         }
     }
 
@@ -246,7 +247,7 @@ public final class PacketUtils {
         }
 
         public static LocalCache get(String name, int size) {
-            return CACHES.computeIfAbsent(name, s -> new LocalCache(name, size));
+            return CACHES.computeIfAbsent(name, s -> new LocalCache(s, size));
         }
 
         public String name() {
