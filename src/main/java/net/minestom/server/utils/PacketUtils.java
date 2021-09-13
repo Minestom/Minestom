@@ -17,6 +17,7 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -265,17 +266,23 @@ public final class PacketUtils {
     private static final class ViewableStorage {
         private final Viewable viewable;
         private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new HashMap<>();
-        private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_SEND_BUFFER_SIZE);
+        private BinaryBuffer buffer;
 
         private ViewableStorage(Viewable viewable) {
             this.viewable = viewable;
         }
 
         private synchronized void append(ServerPacket serverPacket, PlayerConnection connection) {
+            if (buffer == null) buffer = PooledBuffers.get();
             final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
-            if (!buffer.canWrite(framedPacket.limit())) process();
+            final int packetSize = framedPacket.limit();
+            if (packetSize >= buffer.capacity()) {
+                processSingle(framedPacket, connection);
+                return;
+            }
+            if (!buffer.canWrite(packetSize)) process();
             final int start = buffer.writerOffset();
-            this.buffer.write(framedPacket);
+            buffer.write(framedPacket);
             final int end = buffer.writerOffset();
             if (connection != null) {
                 List<IntIntPair> list = entityIdMap.computeIfAbsent(connection, con -> new ArrayList<>());
@@ -284,6 +291,7 @@ public final class PacketUtils {
         }
 
         private synchronized void process() {
+            if (buffer == null) return; // TODO: there is nothing in the buffer, remove from VIEWABLE_STORAGE_MAP
             for (Player player : viewable.getViewers()) {
                 PlayerConnection connection = player.getPlayerConnection();
                 Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
@@ -313,7 +321,19 @@ public final class PacketUtils {
             }
             // Clear state
             this.entityIdMap.clear();
-            this.buffer.clear();
+            this.buffer = null;
+        }
+
+        private synchronized void processSingle(ByteBuffer buffer, PlayerConnection exception) {
+            process();
+            for (Player player : viewable.getViewers()) {
+                PlayerConnection connection = player.getPlayerConnection();
+                if (Objects.equals(connection, exception)) continue;
+                if(connection instanceof PlayerSocketConnection){
+                    ((PlayerSocketConnection)connection).write(buffer.position(0));
+                }
+                // TODO for non-socket connection
+            }
         }
     }
 }
