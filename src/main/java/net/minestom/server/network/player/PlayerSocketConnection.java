@@ -16,6 +16,7 @@ import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import java.io.IOException;
-import java.lang.ref.SoftReference;
 import java.net.SocketAddress;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -35,7 +35,6 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -47,8 +46,6 @@ import java.util.zip.Inflater;
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
-    private final static Queue<SoftReference<BinaryBuffer>> POOLED_BUFFERS = new ConcurrentLinkedQueue<>();
-    private final static int BUFFER_SIZE = 262_143;
 
     private final Worker worker;
     private final SocketChannel channel;
@@ -78,7 +75,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final Object bufferLock = new Object();
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
-    private BinaryBuffer tickBuffer = getPooledBuffer();
+    private BinaryBuffer tickBuffer = PooledBuffers.get();
     private volatile BinaryBuffer cacheBuffer;
 
     public PlayerSocketConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
@@ -226,16 +223,17 @@ public class PlayerSocketConnection extends PlayerConnection {
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (bufferLock) {
+            final int capacity = tickBuffer.capacity();
             final int size = buffer.remaining();
-            if (size <= BUFFER_SIZE) {
+            if (size <= capacity) {
                 if (!tickBuffer.canWrite(size)) flush();
                 if (!isOnline()) return;
                 this.tickBuffer.write(buffer);
             } else {
-                final int bufferCount = size / BUFFER_SIZE + 1;
+                final int bufferCount = size / capacity + 1;
                 for (int i = 0; i < bufferCount; i++) {
-                    buffer.position(i * BUFFER_SIZE);
-                    buffer.limit(Math.min(size, buffer.position() + BUFFER_SIZE));
+                    buffer.position(i * capacity);
+                    buffer.limit(Math.min(size, buffer.position() + capacity));
                     if (!tickBuffer.canWrite(buffer.remaining())) flush();
                     if (!isOnline()) return;
                     this.tickBuffer.write(buffer);
@@ -268,13 +266,13 @@ public class PlayerSocketConnection extends PlayerConnection {
             if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
             // Update tick buffer
             try {
-                this.tickBuffer = getPooledBuffer();
+                this.tickBuffer = PooledBuffers.get();
                 if (encrypted) {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
                     ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
-                    BinaryBuffer pooled = getPooledBuffer();
-                    ByteBuffer cipherOutput = pooled.asByteBuffer(0, BUFFER_SIZE);
+                    BinaryBuffer pooled = PooledBuffers.get();
+                    ByteBuffer cipherOutput = pooled.asByteBuffer(0, pooled.capacity());
                     try {
                         cipher.update(cipherInput, cipherOutput);
                     } catch (ShortBufferException e) {
@@ -282,7 +280,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     }
                     localBuffer.clear();
                     localBuffer.write(cipherOutput.flip());
-                    POOLED_BUFFERS.add(new SoftReference<>(pooled));
+                    PooledBuffers.add(pooled);
                 }
 
                 this.waitingBuffers.add(localBuffer);
@@ -292,7 +290,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     try {
                         if (!waitingBuffer.writeChannel(channel)) break;
                         iterator.remove();
-                        POOLED_BUFFERS.add(new SoftReference<>(waitingBuffer));
+                        PooledBuffers.add(waitingBuffer);
                     } catch (ClosedChannelException e) {
                         shouldDisconnect = true;
                     } catch (IOException e) {
@@ -331,7 +329,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         synchronized (bufferLock) {
             if (!waitingBuffers.isEmpty()) {
                 for (BinaryBuffer waitingBuffer : waitingBuffers) {
-                    POOLED_BUFFERS.add(new SoftReference<>(waitingBuffer));
+                    PooledBuffers.add(waitingBuffer);
                 }
                 this.waitingBuffers.clear();
             }
@@ -470,16 +468,5 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void setNonce(byte[] nonce) {
         this.nonce = nonce;
-    }
-
-    private static BinaryBuffer getPooledBuffer() {
-        BinaryBuffer buffer = null;
-        SoftReference<BinaryBuffer> ref;
-        while ((ref = POOLED_BUFFERS.poll()) != null) {
-            buffer = ref.get();
-            if (buffer != null) break;
-        }
-        if (buffer != null) buffer.clear();
-        return Objects.requireNonNullElseGet(buffer, () -> BinaryBuffer.ofSize(BUFFER_SIZE));
     }
 }
