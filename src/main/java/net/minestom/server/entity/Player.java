@@ -546,21 +546,27 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
             previousChunks.forEach(chunk -> chunk.removeViewer(this));
+
+            //TODO: entity#removeViewer sends a packet for each removed entity
+            //Sending destroy entity packets is not necessary when the dimension changes
+            //and, potentially, this could also be rewritten to send only a single DestroyEntitiesPacket
+            //with the list of all destroyed entities
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
-
-        super.setInstance(instance, spawnPosition);
 
         if (dimensionChange) {
             sendDimension(instance.getDimensionType());
         }
 
+        super.setInstance(instance, spawnPosition);
+
         if (updateChunks) {
             refreshVisibleChunks();
         }
 
+        synchronizePosition(true); // So the player doesn't get stuck
+
         if (dimensionChange || firstSpawn) {
-            synchronizePosition(true); // So the player doesn't get stuck
             this.inventory.update();
         }
 
