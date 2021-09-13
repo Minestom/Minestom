@@ -561,11 +561,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
-            // Warning: loop to remove once `refreshVisibleChunks` manage it
-            if(!dimensionChange) { //The client already forcefully unloads all chunks & entities when the dimension changes
-                previousChunks.forEach(chunk ->
-                        playerConnection.sendPacket(new UnloadChunkPacket(chunk.getChunkX(), chunk.getChunkZ())));
-            }
             refreshVisibleChunks();
         }
 
