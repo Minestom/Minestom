@@ -1,5 +1,8 @@
 package net.minestom.server.extras.selfmodification;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -14,6 +17,8 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
      * Main of the main class of the extension linked to this classloader
      */
     private final String mainClassName;
+
+    private final Logger logger = LoggerFactory.getLogger(MinestomExtensionClassLoader.class);
 
     public MinestomExtensionClassLoader(String extensionName, String mainClassName, URL[] urls, MinestomRootClassLoader root) {
         super(extensionName, urls, root);
@@ -95,7 +100,7 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        System.err.println("Class loader "+getName()+" finalized.");
+        logger.info("Class loader " + getName() + " finalized.");
     }
 
     /**
