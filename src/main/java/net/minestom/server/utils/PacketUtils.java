@@ -266,14 +266,14 @@ public final class PacketUtils {
     private static final class ViewableStorage {
         private final Viewable viewable;
         private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new HashMap<>();
-        private BinaryBuffer buffer;
+        private final BinaryBuffer buffer = PooledBuffers.get();
 
         private ViewableStorage(Viewable viewable) {
             this.viewable = viewable;
+            PooledBuffers.registerBuffer(this, buffer);
         }
 
         private synchronized void append(ServerPacket serverPacket, PlayerConnection connection) {
-            if (buffer == null) buffer = PooledBuffers.get();
             final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
@@ -291,7 +291,8 @@ public final class PacketUtils {
         }
 
         private synchronized void process() {
-            if (buffer == null) return; // TODO: there is nothing in the buffer, remove from VIEWABLE_STORAGE_MAP
+            if (buffer.writerOffset() == 0)
+                return; // TODO: there is nothing in the buffer, remove from VIEWABLE_STORAGE_MAP
             for (Player player : viewable.getViewers()) {
                 PlayerConnection connection = player.getPlayerConnection();
                 Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
@@ -321,7 +322,7 @@ public final class PacketUtils {
             }
             // Clear state
             this.entityIdMap.clear();
-            this.buffer = null;
+            this.buffer.clear();
         }
 
         private synchronized void processSingle(ByteBuffer buffer, PlayerConnection exception) {
@@ -329,8 +330,8 @@ public final class PacketUtils {
             for (Player player : viewable.getViewers()) {
                 PlayerConnection connection = player.getPlayerConnection();
                 if (Objects.equals(connection, exception)) continue;
-                if(connection instanceof PlayerSocketConnection){
-                    ((PlayerSocketConnection)connection).write(buffer.position(0));
+                if (connection instanceof PlayerSocketConnection) {
+                    ((PlayerSocketConnection) connection).write(buffer.position(0));
                 }
                 // TODO for non-socket connection
             }

@@ -35,6 +35,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -75,7 +76,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final Object bufferLock = new Object();
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
-    private BinaryBuffer tickBuffer = PooledBuffers.get();
+    private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(PooledBuffers.get());
     private volatile BinaryBuffer cacheBuffer;
 
     public PlayerSocketConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
@@ -83,6 +84,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.worker = worker;
         this.channel = channel;
         this.remoteAddress = remoteAddress;
+        PooledBuffers.registerBuffer(this, tickBuffer);
     }
 
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
@@ -223,20 +225,25 @@ public class PlayerSocketConnection extends PlayerConnection {
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (bufferLock) {
-            final int capacity = tickBuffer.capacity();
+            BinaryBuffer localBuffer = tickBuffer.getPlain();
+            final int capacity = localBuffer.capacity();
             final int size = buffer.remaining();
             if (size <= capacity) {
-                if (!tickBuffer.canWrite(size)) flush();
-                if (!isOnline()) return;
-                this.tickBuffer.write(buffer);
+                if (!localBuffer.canWrite(size)) {
+                    flush();
+                    localBuffer = tickBuffer.getPlain();
+                }
+                localBuffer.write(buffer);
             } else {
                 final int bufferCount = size / capacity + 1;
                 for (int i = 0; i < bufferCount; i++) {
                     buffer.position(i * capacity);
                     buffer.limit(Math.min(size, buffer.position() + capacity));
-                    if (!tickBuffer.canWrite(buffer.remaining())) flush();
-                    if (!isOnline()) return;
-                    this.tickBuffer.write(buffer);
+                    if (!localBuffer.canWrite(buffer.remaining())) {
+                        flush();
+                        localBuffer = tickBuffer.getPlain();
+                    }
+                    localBuffer.write(buffer);
                 }
             }
         }
@@ -262,11 +269,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         boolean shouldDisconnect = false;
         if (!channel.isOpen()) return;
         synchronized (bufferLock) {
-            final BinaryBuffer localBuffer = this.tickBuffer;
+            final BinaryBuffer localBuffer = tickBuffer.getPlain();
             if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
             // Update tick buffer
             try {
-                this.tickBuffer = PooledBuffers.get();
+                this.tickBuffer.setPlain(PooledBuffers.get());
                 if (encrypted) {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
