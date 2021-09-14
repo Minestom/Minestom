@@ -130,7 +130,9 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     @Override
     public void update() {
-        sendPacketToViewers(createNewWindowItemsPacket());
+        for(Player player : viewers) {
+            player.getPlayerConnection().sendPacket(createNewWindowItemsPacket(player));
+        }
     }
 
     /**
@@ -145,7 +147,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(createNewWindowItemsPacket());
+        playerConnection.sendPacket(createNewWindowItemsPacket(player));
     }
 
     @NotNull
@@ -227,8 +229,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      *
      * @return a new {@link WindowItemsPacket} packet
      */
-    private @NotNull WindowItemsPacket createNewWindowItemsPacket() {
-        return new WindowItemsPacket(getWindowId(), 0, getItemStacks(), ItemStack.AIR);
+    private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
+        return new WindowItemsPacket(getWindowId(), 0, getItemStacks(), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
     }
 
     /**
@@ -315,7 +317,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 isInWindow ? this : playerInventory,
                 isInWindow ? playerInventory : this,
                 0, isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1,
-                player, slot, clicked, cursor);
+                player, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -419,7 +421,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 ItemStack.AIR;
         final ItemStack cursor = getCursorItem(player);
         final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
-                this, player, slot, clicked, cursor);
+                this, player, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;

@@ -546,24 +546,27 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
             previousChunks.forEach(chunk -> chunk.removeViewer(this));
+
+            //TODO: entity#removeViewer sends a packet for each removed entity
+            //Sending destroy entity packets is not necessary when the dimension changes
+            //and, potentially, this could also be rewritten to send only a single DestroyEntitiesPacket
+            //with the list of all destroyed entities
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
-
-        super.setInstance(instance, spawnPosition);
 
         if (dimensionChange) {
             sendDimension(instance.getDimensionType());
         }
 
+        super.setInstance(instance, spawnPosition);
+
         if (updateChunks) {
-            // Warning: loop to remove once `refreshVisibleChunks` manage it
-            previousChunks.forEach(chunk ->
-                    playerConnection.sendPacket(new UnloadChunkPacket(chunk.getChunkX(), chunk.getChunkZ())));
             refreshVisibleChunks();
         }
 
+        synchronizePosition(true); // So the player doesn't get stuck
+
         if (dimensionChange || firstSpawn) {
-            synchronizePosition(true); // So the player doesn't get stuck
             this.inventory.update();
         }
 
@@ -1169,19 +1172,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param newChunk the current/new player chunk (can be the current one)
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
+        final int newChunkX = newChunk.getChunkX();
+        final int newChunkZ = newChunk.getChunkZ();
+        final int range = getChunkRange();
         // Previous chunks indexes
         final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(ChunkUtils::getChunkIndex).toArray();
         // New chunks indexes
-        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
+        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunkX, newChunkZ, range);
 
         // Update client render distance
-        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
+        updateViewPosition(newChunkX, newChunkZ);
 
         // Unload old chunks
         ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            //playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+            this.playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null) {
                 chunk.removeViewer(this);
@@ -1193,7 +1199,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
             this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
-                    // Cannot load chunk (auto load is not enabled)
+                    // Cannot load chunk (auto-load is not enabled)
                     return;
                 }
                 try {
@@ -1251,9 +1257,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player connection
      */
-    @NotNull
-    public PlayerConnection getPlayerConnection() {
+    public @NotNull PlayerConnection getPlayerConnection() {
         return playerConnection;
+    }
+
+    /**
+     * Shortcut for {@link PlayerConnection#sendPacket(ServerPacket)}.
+     *
+     * @param packet the packet to send
+     */
+    @ApiStatus.Experimental
+    public void sendPacket(@NotNull ServerPacket packet) {
+        this.playerConnection.sendPacket(packet);
     }
 
     /**
@@ -1270,8 +1285,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player settings
      */
-    @NotNull
-    public PlayerSettings getSettings() {
+    public @NotNull PlayerSettings getSettings() {
         return settings;
     }
 
@@ -1284,8 +1298,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return dimensionType;
     }
 
-    @NotNull
-    public PlayerInventory getInventory() {
+    public @NotNull PlayerInventory getInventory() {
         return inventory;
     }
 
@@ -1432,8 +1445,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
-    @Nullable
-    public Inventory getOpenInventory() {
+    public @Nullable Inventory getOpenInventory() {
         return openInventory;
     }
 
@@ -1444,7 +1456,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
      */
     public boolean openInventory(@NotNull Inventory inventory) {
-
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
@@ -1454,7 +1465,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
-
             if (newInventory == null) {
                 // just close the inventory
                 return;
@@ -1466,9 +1476,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             playerConnection.sendPacket(openWindowPacket);
             newInventory.addViewer(this);
             this.openInventory = newInventory;
-
         });
-
         return !inventoryOpenEvent.isCancelled();
     }
 
@@ -1927,8 +1935,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
-    @NotNull
-    protected PlayerInfoPacket getAddPlayerToList() {
+    protected @NotNull PlayerInfoPacket getAddPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         PlayerInfoPacket.AddPlayer addPlayer =
@@ -1954,14 +1961,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to remove the player
      */
-    @NotNull
-    protected PlayerInfoPacket getRemovePlayerToList() {
+    protected @NotNull PlayerInfoPacket getRemovePlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-
-        PlayerInfoPacket.RemovePlayer removePlayer =
-                new PlayerInfoPacket.RemovePlayer(getUuid());
-
-        playerInfoPacket.playerInfos.add(removePlayer);
+        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
         return playerInfoPacket;
     }
 
@@ -1989,9 +1991,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         connection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
-    @NotNull
     @Override
-    public ItemStack getItemInMainHand() {
+    public @NotNull ItemStack getItemInMainHand() {
         return inventory.getItemInMainHand();
     }
 
@@ -2000,9 +2001,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setItemInMainHand(itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getItemInOffHand() {
+    public @NotNull ItemStack getItemInOffHand() {
         return inventory.getItemInOffHand();
     }
 
@@ -2011,9 +2011,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setItemInOffHand(itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getHelmet() {
+    public @NotNull ItemStack getHelmet() {
         return inventory.getHelmet();
     }
 
@@ -2022,9 +2021,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setHelmet(itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getChestplate() {
+    public @NotNull ItemStack getChestplate() {
         return inventory.getChestplate();
     }
 
@@ -2033,9 +2031,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setChestplate(itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getLeggings() {
+    public @NotNull ItemStack getLeggings() {
         return inventory.getLeggings();
     }
 
@@ -2044,9 +2041,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setLeggings(itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getBoots() {
+    public @NotNull ItemStack getBoots() {
         return inventory.getBoots();
     }
 
@@ -2057,7 +2053,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public Locale getLocale() {
-        return settings.locale == null ? null : Locale.forLanguageTag(settings.locale);
+        final String locale = settings.locale;
+        if (locale == null) return null;
+        return Locale.forLanguageTag(locale.replace("_", "-"));
     }
 
     /**
@@ -2121,16 +2119,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         RIGHT
     }
 
-    /**
-     * @deprecated See {@link ChatMessageType}
-     */
-    @Deprecated
-    public enum ChatMode {
-        ENABLED,
-        COMMANDS_ONLY,
-        HIDDEN
-    }
-
     public class PlayerSettings {
 
         private String locale;
@@ -2160,17 +2148,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          */
         public byte getViewDistance() {
             return viewDistance;
-        }
-
-        /**
-         * Gets the player chat mode.
-         *
-         * @return the player chat mode
-         * @deprecated Use {@link #getChatMessageType()}
-         */
-        @Deprecated
-        public ChatMode getChatMode() {
-            return ChatMode.values()[chatMessageType.ordinal()];
         }
 
         /**

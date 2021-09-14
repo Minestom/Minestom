@@ -200,7 +200,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      * @return the position of this chunk
      */
     public @NotNull Point toPosition() {
-        return new Vec(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+        return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
     /**

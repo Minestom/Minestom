@@ -33,7 +33,6 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -164,7 +163,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     /**
      * Schedules a task to be run during the next entity tick.
-     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next entity tick
      */
@@ -438,7 +436,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Entity tick
         {
             // Cache the number of "gravity tick"
-            this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
             velocityTick();
 
             // handle block contacts
@@ -465,6 +462,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     private void velocityTick() {
+        this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
+
         final boolean isSocketClient = PlayerUtils.isSocketClient(this);
         if (isSocketClient) {
             if (position.samePoint(previousPosition))
@@ -626,8 +625,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity type
      */
-    @NotNull
-    public EntityType getEntityType() {
+    public @NotNull EntityType getEntityType() {
         return entityType;
     }
 
@@ -636,8 +634,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity unique id
      */
-    @NotNull
-    public UUID getUuid() {
+    public @NotNull UUID getUuid() {
         return uuid;
     }
 
@@ -650,7 +647,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Refresh internal map
         Entity.ENTITY_BY_UUID.remove(this.uuid);
         Entity.ENTITY_BY_UUID.put(uuid, this);
-
         this.uuid = uuid;
     }
 
@@ -668,8 +664,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity bounding box
      */
-    @NotNull
-    public BoundingBox getBoundingBox() {
+    public @NotNull BoundingBox getBoundingBox() {
         return boundingBox;
     }
 
@@ -868,8 +863,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity vehicle, or null if there is not any
      */
-    @Nullable
-    public Entity getVehicle() {
+    public @Nullable Entity getVehicle() {
         return vehicle;
     }
 
@@ -926,13 +920,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return an unmodifiable list containing all the entity passengers
      */
-    @NotNull
-    public Set<Entity> getPassengers() {
+    public @NotNull Set<@NotNull Entity> getPassengers() {
         return Collections.unmodifiableSet(passengers);
     }
 
-    @NotNull
-    protected SetPassengersPacket getPassengersPacket() {
+    protected @NotNull SetPassengersPacket getPassengersPacket() {
         SetPassengersPacket passengersPacket = new SetPassengersPacket();
         passengersPacket.vehicleEntityId = getEntityId();
 
@@ -1063,8 +1055,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity pose
      */
-    @NotNull
-    public Pose getPose() {
+    public @NotNull Pose getPose() {
         return this.entityMeta.getPose();
     }
 
@@ -1251,8 +1242,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return an unmodifiable list of all this entity effects
      */
-    @NotNull
-    public List<TimedPotion> getActiveEffects() {
+    public @NotNull List<@NotNull TimedPotion> getActiveEffects() {
         return Collections.unmodifiableList(effects);
     }
 

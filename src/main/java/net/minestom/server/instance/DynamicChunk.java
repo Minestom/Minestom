@@ -4,7 +4,7 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
@@ -93,10 +93,7 @@ public class DynamicChunk extends Chunk {
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
             if (handler == null) return;
-            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-            final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-            final Vec blockPosition = new Vec(x, y, z);
+            final Point blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });
     }
@@ -104,18 +101,17 @@ public class DynamicChunk extends Chunk {
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         // Verify if the block object is present
-        final var entry = !entries.isEmpty() ?
+        final Block entry = !entries.isEmpty() ?
                 entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
         if (entry != null || condition == Condition.CACHED) {
             return entry;
         }
         // Retrieve the block from state id
         final Section section = getOptionalSection(y);
-        if (section == null)
-            return Block.AIR;
+        if (section == null) return Block.AIR; // Section is unloaded
         final short blockStateId = section.getBlockAt(x, y, z);
-        return blockStateId > 0 ?
-                Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR) : Block.AIR;
+        if (blockStateId == -1) return Block.AIR; // Section is empty
+        return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
     }
 
     @Override

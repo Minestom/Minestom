@@ -8,6 +8,7 @@ import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -42,7 +43,7 @@ public final class Worker extends Thread {
                     if (!key.isReadable()) return;
                     PlayerSocketConnection connection = connectionMap.get(channel);
                     try {
-                        var readBuffer = context.readBuffer;
+                        BinaryBuffer readBuffer = context.readBuffer.clear();
                         // Consume last incomplete packet
                         connection.consumeCache(readBuffer);
                         // Read & process
@@ -51,8 +52,6 @@ public final class Worker extends Thread {
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
-                    } finally {
-                        context.clearBuffers();
                     }
                 });
             } catch (IOException e) {
@@ -80,7 +79,7 @@ public final class Worker extends Thread {
         this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
-        var socket = channel.socket();
+        Socket socket = channel.socket();
         socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
         socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
         socket.setTcpNoDelay(Server.NO_DELAY);
@@ -95,10 +94,5 @@ public final class Worker extends Thread {
         public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final Inflater inflater = new Inflater();
-
-        void clearBuffers() {
-            this.readBuffer.clear();
-            this.contentBuffer.clear();
-        }
     }
 }

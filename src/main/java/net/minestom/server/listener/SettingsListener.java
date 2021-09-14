@@ -5,14 +5,11 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerSettingsChangeEvent;
 import net.minestom.server.network.packet.client.play.ClientSettingsPacket;
 
-public class SettingsListener {
-
+public final class SettingsListener {
     public static void listener(ClientSettingsPacket packet, Player player) {
         Player.PlayerSettings settings = player.getSettings();
-        settings.refresh(packet.locale, packet.viewDistance, packet.chatMessageType, packet.chatColors, packet.displayedSkinParts, packet.mainHand);
-
-        PlayerSettingsChangeEvent playerSettingsChangeEvent = new PlayerSettingsChangeEvent(player);
-        EventDispatcher.call(playerSettingsChangeEvent);
+        final byte viewDistance = (byte) Math.abs(packet.viewDistance);
+        settings.refresh(packet.locale, viewDistance, packet.chatMessageType, packet.chatColors, packet.displayedSkinParts, packet.mainHand);
+        EventDispatcher.call(new PlayerSettingsChangeEvent(player));
     }
-
 }

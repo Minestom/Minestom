@@ -142,16 +142,18 @@ public final class InventoryClickProcessor {
             }
         }
 
+        clickResult.setCancel(true);
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
-                clickResult.setCancel(true);
                 return false;
             }
+            clickResult.setCancel(false);
             return true;
         }, start, end, step);
+
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
         clickResult.setClicked(itemResult);
         return clickResult;
@@ -285,7 +287,7 @@ public final class InventoryClickProcessor {
 
     public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
                                                      @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
+        InventoryClickResult clickResult = startCondition(player, clickedInventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
         if (cursor.isAir()) return clickResult.cancelled();
 
@@ -301,7 +303,7 @@ public final class InventoryClickProcessor {
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
                 if (index == slot) // Prevent item lose/duplication
                     return false;
-                final InventoryClickResult result = startCondition(player, inventory, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
+                final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
             });
             var itemResult = pair.left();

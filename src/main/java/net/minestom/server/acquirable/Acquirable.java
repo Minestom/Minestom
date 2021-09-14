@@ -1,14 +1,13 @@
 package net.minestom.server.acquirable;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -37,7 +36,7 @@ public interface Acquirable<T> {
      * @param entries the new chunk entries
      */
     @ApiStatus.Internal
-    static void refreshEntries(@NotNull Collection<ThreadProvider.ChunkEntry> entries) {
+    static void refreshEntries(@NotNull Collection<ThreadDispatcher.ChunkEntry> entries) {
         AcquirableImpl.ENTRIES.set(entries);
     }
 
@@ -85,8 +84,7 @@ public interface Acquirable<T> {
      * @see #sync(Consumer) for auto-closeable capability
      */
     default @NotNull Acquired<T> lock() {
-        var optional = local();
-        return optional.map(Acquired::local).orElseGet(() -> Acquired.locked(this));
+        return new Acquired<>(unwrap(), getHandler().getTickThread());
     }
 
     /**
@@ -100,12 +98,17 @@ public interface Acquirable<T> {
      * {@link Optional#empty()} otherwise
      */
     default @NotNull Optional<T> local() {
-        final Thread currentThread = Thread.currentThread();
-        final TickThread tickThread = getHandler().getTickThread();
-        if (Objects.equals(currentThread, tickThread)) {
-            return Optional.of(unwrap());
-        }
+        if (isLocal()) return Optional.of(unwrap());
         return Optional.empty();
+    }
+
+    /**
+     * Gets if the acquirable element is local to this thread
+     *
+     * @return true if the element is linked to the current thread
+     */
+    default boolean isLocal() {
+        return Thread.currentThread() == getHandler().getTickThread();
     }
 
     /**
@@ -117,7 +120,7 @@ public interface Acquirable<T> {
      * @see #async(Consumer)
      */
     default void sync(@NotNull Consumer<T> consumer) {
-        var acquired = lock();
+        Acquired<T> acquired = lock();
         consumer.accept(acquired.get());
         acquired.unlock();
     }
@@ -153,22 +156,21 @@ public interface Acquirable<T> {
     @ApiStatus.Internal
     @NotNull Handler getHandler();
 
-    class Handler {
+    final class Handler {
+        private volatile ThreadDispatcher.ChunkEntry chunkEntry;
 
-        private volatile ThreadProvider.ChunkEntry chunkEntry;
-
-        public ThreadProvider.ChunkEntry getChunkEntry() {
+        public ThreadDispatcher.ChunkEntry getChunkEntry() {
             return chunkEntry;
         }
 
         @ApiStatus.Internal
-        public void refreshChunkEntry(@NotNull ThreadProvider.ChunkEntry chunkEntry) {
+        public void refreshChunkEntry(@NotNull ThreadDispatcher.ChunkEntry chunkEntry) {
             this.chunkEntry = chunkEntry;
         }
 
         public TickThread getTickThread() {
-            return chunkEntry != null ? chunkEntry.getThread() : null;
+            final ThreadDispatcher.ChunkEntry entry = this.chunkEntry;
+            return entry != null ? entry.getThread() : null;
         }
     }
-
 }
