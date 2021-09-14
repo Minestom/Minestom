@@ -199,7 +199,8 @@ public final class PacketUtils {
         Utils.writeVarInt(buffer, packet.getId());
         packet.write(BinaryWriter.view(buffer)); // ensure that the buffer is not resized/changed
         final int packetSize = buffer.position() - contentStart;
-        if (packetSize >= MinecraftServer.getCompressionThreshold()) {
+        final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
+        if (compressed) {
             // Packet large enough, compress
             buffer.position(contentStart);
             final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
@@ -210,14 +211,10 @@ public final class PacketUtils {
             deflater.finish();
             deflater.deflate(buffer);
             deflater.reset();
-
-            Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize); // Data Length
-        } else {
-            // Packet too small
-            Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0); // Data Length (0 since uncompressed)
         }
+        // Packet header (Packet + Data Length)
+        Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+        Utils.writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
