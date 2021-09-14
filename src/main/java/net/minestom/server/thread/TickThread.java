@@ -25,13 +25,10 @@ public final class TickThread extends Thread {
 
     @Override
     public void run() {
+        LockSupport.park(this);
         while (!stop) {
-            final Runnable localRunnable = tickRunnable;
-            if (localRunnable != null) {
-                localRunnable.run();
-                this.tickRunnable = null;
-                this.phaser.arriveAndDeregister();
-            }
+            this.tickRunnable.run();
+            this.phaser.arriveAndDeregister();
             LockSupport.park(this);
         }
     }
