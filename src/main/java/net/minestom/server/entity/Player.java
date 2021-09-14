@@ -1658,6 +1658,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshAbilities();
     }
 
+    @Override
+    public void setSneaking(boolean sneaking) {
+        if(isFlying()) { //If we are flying, don't set the players pose to sneaking as this can clip them through blocks
+            this.entityMeta.setSneaking(sneaking);
+        } else {
+            super.setSneaking(sneaking);
+        }
+    }
+
     /**
      * Gets if the player is currently flying.
      *
