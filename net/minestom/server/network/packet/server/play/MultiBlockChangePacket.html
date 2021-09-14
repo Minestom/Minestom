@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -159,7 +159,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="MultiBlockChangePacket.BlockChange.html" title="class in net.minestom.server.network.packet.server.play">MultiBlockChangePacket.BlockChange</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="MultiBlockChangePacket.BlockEntry.html" title="class in net.minestom.server.network.packet.server.play">MultiBlockChangePacket.BlockEntry</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -181,7 +181,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="MultiBlockChangePacket.BlockChange.html" title="class in net.minestom.server.network.packet.server.play">MultiBlockChangePacket.BlockChange</a>[]</code></td>
+<td class="colFirst"><code><a href="MultiBlockChangePacket.BlockEntry.html" title="class in net.minestom.server.network.packet.server.play">MultiBlockChangePacket.BlockEntry</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockChanges">blockChanges</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -238,7 +238,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -252,35 +252,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocalBlockPosAsShort(int,int,int)">getLocalBlockPosAsShort</a></span>&#8203;(int&nbsp;x,
-                       int&nbsp;y,
-                       int&nbsp;z)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getXFromLocalBlockPosAsShort(short)">getXFromLocalBlockPosAsShort</a></span>&#8203;(short&nbsp;localPos)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getYFromLocalBlockPosAsShort(short)">getYFromLocalBlockPosAsShort</a></span>&#8203;(short&nbsp;localPos)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getZFromLocalBlockPosAsShort(short)">getZFromLocalBlockPosAsShort</a></span>&#8203;(short&nbsp;localPos)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">
 <div class="block">Reads from a <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -353,7 +331,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <ul class="blockListLast">
 <li class="blockList">
 <h4>blockChanges</h4>
-<pre>public&nbsp;<a href="MultiBlockChangePacket.BlockChange.html" title="class in net.minestom.server.network.packet.server.play">MultiBlockChangePacket.BlockChange</a>[] blockChanges</pre>
+<pre>public&nbsp;<a href="MultiBlockChangePacket.BlockEntry.html" title="class in net.minestom.server.network.packet.server.play">MultiBlockChangePacket.BlockEntry</a>[] blockChanges</pre>
 </li>
 </ul>
 </li>
@@ -421,44 +399,6 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>reader</code> - the reader to read from</dd>
 </dl>
-</li>
-</ul>
-<a id="getLocalBlockPosAsShort(int,int,int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getLocalBlockPosAsShort</h4>
-<pre class="methodSignature">public static&nbsp;short&nbsp;getLocalBlockPosAsShort&#8203;(int&nbsp;x,
-                                            int&nbsp;y,
-                                            int&nbsp;z)</pre>
-</li>
-</ul>
-<a id="getXFromLocalBlockPosAsShort(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getXFromLocalBlockPosAsShort</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;getXFromLocalBlockPosAsShort&#8203;(short&nbsp;localPos)</pre>
-</li>
-</ul>
-<a id="getZFromLocalBlockPosAsShort(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getZFromLocalBlockPosAsShort</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;getZFromLocalBlockPosAsShort&#8203;(short&nbsp;localPos)</pre>
-</li>
-</ul>
-<a id="getYFromLocalBlockPosAsShort(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getYFromLocalBlockPosAsShort</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;getYFromLocalBlockPosAsShort&#8203;(short&nbsp;localPos)</pre>
 </li>
 </ul>
 <a id="getId()">
