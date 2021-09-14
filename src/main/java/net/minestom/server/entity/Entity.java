@@ -1069,8 +1069,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param pose the new entity pose
      */
     public void setPose(@NotNull Pose pose) {
-        System.out.println("Set pose: " + pose);
-
         this.entityMeta.setPose(pose);
     }
 
