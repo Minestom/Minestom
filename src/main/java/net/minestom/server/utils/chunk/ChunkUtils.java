@@ -115,14 +115,6 @@ public final class ChunkUtils {
         return getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
     }
 
-    public static long getChunkIndexWithSection(int chunkX, int chunkZ, int section) {
-        long l = 0L;
-        l |= ((long) chunkX & 4194303L) << 42;
-        l |= ((long) section & 1048575L);
-        l |= ((long) chunkZ & 4194303L) << 20;
-        return l;
-    }
-
     /**
      * Converts a chunk index to its chunk X position.
      *
@@ -230,26 +222,5 @@ public final class ChunkUtils {
      */
     public static int blockIndexToChunkPositionZ(int index) {
         return (index >> 28) & 0xF; // 28-32 bits
-    }
-
-    /**
-     * Returns the section, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
-     */
-    public static int getSectionFromChunkIndexWithSection(long index) {
-        return (int) (index & 1048575L);
-    }
-
-    /**
-     * Returns the chunk X, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
-     */
-    public static int getChunkXFromChunkIndexWithSection(long index) {
-        return (int) ((index >> 42) & 4194303L);
-    }
-
-    /**
-     * Returns the chunk Z, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
-     */
-    public static int getChunkZFromChunkIndexWithSection(long index) {
-        return (int) ((index >> 20) & 4194303L);
     }
 }
