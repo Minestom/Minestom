@@ -1682,6 +1682,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param flying should the player fly
      */
     public void setFlying(boolean flying) {
+        if(this.flying != flying) {
+            Pose pose = getPose();
+
+            if(this.isSneaking() && pose == Pose.STANDING) {
+                setPose(Pose.SNEAKING);
+            } else if(pose == Pose.SNEAKING) {
+                setPose(Pose.STANDING);
+            }
+        }
+
         this.flying = flying;
         refreshAbilities();
     }
