@@ -106,13 +106,13 @@ public final class UpdateManager {
      */
     private void serverTick(long tickStart) {
         // Tick all instances
-        MinecraftServer.getInstanceManager().getInstances().forEach(instance -> {
+        for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
             try {
                 instance.tick(tickStart);
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
-        });
+        }
         // Tick all chunks (and entities inside)
         this.threadDispatcher.updateAndAwait(tickStart);
 
