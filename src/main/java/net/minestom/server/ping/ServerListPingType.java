@@ -140,6 +140,7 @@ public enum ServerListPingType {
             jsonObject.add("description", NAMED_RGB.serializeToTree(data.getDescription()));
         }
 
+        data.getExtraJson().forEach(jsonObject::add);
         return jsonObject;
     }
 

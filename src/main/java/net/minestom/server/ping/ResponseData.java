@@ -22,6 +22,7 @@ public class ResponseData {
     private static final Component DEFAULT_DESCRIPTION = Component.text("Minestom Server");
 
     private final List<NamedAndIdentified> entries;
+    private final Map<String, JsonObject> extraJson;
 
     private String version;
     private int protocol;
@@ -36,6 +37,7 @@ public class ResponseData {
      */
     public ResponseData() {
         this.entries = new ArrayList<>();
+        this.extraJson = new HashMap<>();
         this.version = MinecraftServer.VERSION_NAME;
         this.protocol = MinecraftServer.PROTOCOL_VERSION;
         this.online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
@@ -313,6 +315,25 @@ public class ResponseData {
      */
     public boolean arePlayersHidden() {
         return playersHidden;
+    }
+
+    /**
+     * Adds an extra json property
+     *
+     * @param property the property to put the object into
+     * @param value the object
+     */
+    public void addExtraJson(@NotNull String property, @NotNull JsonObject value) {
+        extraJson.put(property, value);
+    }
+
+    /**
+     * Gets the extra json that has been added
+     *
+     * @return the extra json
+     */
+    public @NotNull Map<String, JsonObject> getExtraJson() {
+        return extraJson;
     }
 
     /**
