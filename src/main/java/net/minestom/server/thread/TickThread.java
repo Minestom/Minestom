@@ -40,17 +40,14 @@ public final class TickThread extends Thread {
         }
     }
 
-    void startTick(@NotNull Runnable runnable) {
+    void startTick(Collection<ThreadDispatcher.ChunkEntry> entries, Runnable runnable) {
         this.tickRunnable = runnable;
+        this.entries = entries;
         LockSupport.unpark(this);
     }
 
     public Collection<ThreadDispatcher.ChunkEntry> entries() {
         return isTicking ? entries : Collections.emptyList();
-    }
-
-    void updateEntries(Collection<ThreadDispatcher.ChunkEntry> entries) {
-        this.entries = entries;
     }
 
     /**

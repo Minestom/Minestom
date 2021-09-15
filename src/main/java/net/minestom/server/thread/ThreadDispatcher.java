@@ -88,7 +88,6 @@ public final class ThreadDispatcher {
      */
     public void updateAndAwait(long time) {
         for (var entry : threadChunkMap.entrySet()) {
-            final TickThread thread = entry.getKey();
             final Set<ChunkEntry> chunkEntries = entry.getValue();
             if (chunkEntries == null || chunkEntries.isEmpty()) {
                 // Nothing to tick
@@ -96,9 +95,8 @@ public final class ThreadDispatcher {
             }
             // Execute tick
             this.phaser.register();
-            thread.startTick(() -> {
-                thread.updateEntries(chunkEntries);
-
+            final TickThread thread = entry.getKey();
+            thread.startTick(chunkEntries, () -> {
                 final ReentrantLock lock = thread.lock();
                 lock.lock();
                 for (ChunkEntry chunkEntry : chunkEntries) {
