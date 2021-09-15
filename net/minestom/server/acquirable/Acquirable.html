@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":1,"i2":1,"i3":6,"i4":18,"i5":18,"i6":18,"i7":1,"i8":1,"i9":1,"i10":18,"i11":6};
+var data = {"i0":18,"i1":1,"i2":1,"i3":6,"i4":18,"i5":18,"i6":18,"i7":1,"i8":1,"i9":18,"i10":6};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -227,27 +227,19 @@ public interface <span class="typeNameLabel">Acquirable&lt;T&gt;</span></pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEntries(java.util.Collection)">refreshEntries</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a>&gt;&nbsp;entries)</code></th>
-<td class="colLast">
-<div class="block">Mostly for internal use, external calls are unrecommended as they could lead
- to unexpected behavior.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetAcquiringTime()">resetAcquiringTime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets <a href="#getAcquiringTime()"><code>getAcquiringTime()</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sync(java.util.function.Consumer)">sync</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;&nbsp;consumer)</code></th>
 <td class="colLast">
 <div class="block">Locks the acquirable element, execute <code>consumer</code> synchronously and unlock the thread.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="Acquirable.html" title="type parameter in Acquirable">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unwrap()">unwrap</a></span>()</code></th>
 <td class="colLast">
@@ -287,23 +279,6 @@ static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the entities ticked in the current thread</dd>
-</dl>
-</li>
-</ul>
-<a id="refreshEntries(java.util.Collection)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>refreshEntries</h4>
-<pre class="methodSignature">@Internal
-static&nbsp;void&nbsp;refreshEntries&#8203;(@NotNull
-                           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a>&gt;&nbsp;entries)</pre>
-<div class="block">Mostly for internal use, external calls are unrecommended as they could lead
- to unexpected behavior.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entries</code> - the new chunk entries</dd>
 </dl>
 </li>
 </ul>

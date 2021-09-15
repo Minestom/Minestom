@@ -4949,6 +4949,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/EntityMetaDataPacket.html#entries">entries</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/EntityMetaDataPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityMetaDataPacket</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/TickThread.html#entries()">entries()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/TickThread.html" title="class in net.minestom.server.thread">TickThread</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Metadata.Entry.html#%3Cinit%3E(byte,net.minestom.server.entity.Metadata.Value)">Entry(byte, Metadata.Value&lt;T&gt;)</a></span> - Constructor for class net.minestom.server.entity.<a href="net/minestom/server/entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Metadata.Entry.html#%3Cinit%3E(net.minestom.server.utils.binary.BinaryReader)">Entry(BinaryReader)</a></span> - Constructor for class net.minestom.server.entity.<a href="net/minestom/server/entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a></dt>
@@ -8127,10 +8129,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/storage/StorageManager.html#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)">getLocation(String, StorageOptions, StorageSystem)</a></span> - Method in class net.minestom.server.storage.<a href="net/minestom/server/storage/StorageManager.html" title="class in net.minestom.server.storage">StorageManager</a></dt>
 <dd>
 <div class="block">Used to get an access to the specified location.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/thread/TickThread.html#getLock()">getLock()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/TickThread.html" title="class in net.minestom.server.thread">TickThread</a></dt>
-<dd>
-<div class="block">Gets the lock used to ensure the safety of entity acquisition.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/metadata/CompassMeta.html#getLodestoneDimension()">getLodestoneDimension()</a></span> - Method in class net.minestom.server.item.metadata.<a href="net/minestom/server/item/metadata/CompassMeta.html" title="class in net.minestom.server.item.metadata">CompassMeta</a></dt>
 <dd>&nbsp;</dd>
@@ -12282,6 +12280,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns a new <a href="net/minestom/server/acquirable/Acquired.html" title="class in net.minestom.server.acquirable"><code>Acquired</code></a> object which will be locked to the current thread.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/TickThread.html#lock()">lock()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/TickThread.html" title="class in net.minestom.server.thread">TickThread</a></dt>
+<dd>
+<div class="block">Gets the lock used to ensure the safety of entity acquisition.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/MapDataPacket.html#locked">locked</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/MapDataPacket.html" title="class in net.minestom.server.network.packet.server.play">MapDataPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/ServerDifficultyPacket.html#locked">locked</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/ServerDifficultyPacket.html" title="class in net.minestom.server.network.packet.server.play">ServerDifficultyPacket</a></dt>
@@ -16276,11 +16278,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#refreshEating(net.minestom.server.entity.Player.Hand,long)">refreshEating(Player.Hand, long)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/acquirable/Acquirable.html#refreshEntries(java.util.Collection)">refreshEntries(Collection&lt;ThreadDispatcher.ChunkEntry&gt;)</a></span> - Static method in interface net.minestom.server.acquirable.<a href="net/minestom/server/acquirable/Acquirable.html" title="interface in net.minestom.server.acquirable">Acquirable</a></dt>
-<dd>
-<div class="block">Mostly for internal use, external calls are unrecommended as they could lead
- to unexpected behavior.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#refreshFlying(boolean)">refreshFlying(boolean)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
 <div class="block">Updates the internal flying field.</div>
