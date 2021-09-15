@@ -612,8 +612,21 @@ public class ExtensionManager {
         return extensions.get(name.toLowerCase());
     }
 
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <E> E getExtension(@NotNull Class<E> type) {
+        return (E) extensions.values().stream()
+                .filter(extension -> extension.getClass().isAssignableFrom(type))
+                .findAny().orElse(null);
+    }
+
     public boolean hasExtension(@NotNull String name) {
         return extensions.containsKey(name);
+    }
+
+    public boolean hasExtension(@NotNull Class<?> type) {
+        return extensions.values().stream()
+                .anyMatch(extension -> extension.getClass().isAssignableFrom(type));
     }
 
     /**
@@ -708,20 +721,16 @@ public class ExtensionManager {
         MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
     }
 
-    public boolean reload(@NotNull String extensionName) {
-        Extension ext = extensions.get(extensionName.toLowerCase());
-        if (ext == null) {
-            throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
-        }
-
-        File originalJar = ext.getOrigin().getOriginalJar();
+    private boolean reload(@NotNull Extension extension) {
+        String extensionName = extension.getOrigin().getName();
+        File originalJar = extension.getOrigin().getOriginalJar();
         if (originalJar == null) {
             LOGGER.error("Cannot reload extension {} that is not from a .jar file!", extensionName);
             return false;
         }
 
         LOGGER.info("Reload extension {} from jar file {}", extensionName, originalJar.getAbsolutePath());
-        List<String> dependents = new LinkedList<>(ext.getDependents()); // copy dependents list
+        List<String> dependents = new LinkedList<>(extension.getDependents()); // copy dependents list
         List<File> originalJarsOfDependents = new LinkedList<>();
 
         for (String dependentID : dependents) {
@@ -738,7 +747,7 @@ public class ExtensionManager {
         }
 
         LOGGER.info("Unloading extension {}", extensionName);
-        unload(ext);
+        unload(extension);
 
         System.gc();
 
@@ -760,6 +769,24 @@ public class ExtensionManager {
         loadExtensionList(extensionsToReload);
 
         return true;
+    }
+
+    public boolean reload(@NotNull String extensionName) {
+        Extension ext = extensions.get(extensionName.toLowerCase());
+        if (ext == null) {
+            throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
+        }
+
+        return reload(ext);
+    }
+
+    public boolean reload(@NotNull Class<?> type) {
+        Extension ext = (Extension) getExtension(type);
+        if (ext == null) {
+            throw new IllegalArgumentException("Extension " + type.getSimpleName() + " is not currently loaded.");
+        }
+
+        return reload(ext);
     }
 
     public boolean loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
@@ -812,14 +839,9 @@ public class ExtensionManager {
         return true;
     }
 
-    public void unloadExtension(@NotNull String extensionName) {
-        Extension ext = extensions.get(extensionName.toLowerCase());
-
-        if (ext == null) {
-            throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
-        }
-
-        List<String> dependents = new LinkedList<>(ext.getDependents()); // copy dependents list
+    private void unloadExtension(@NotNull Extension extension) {
+        String extensionName = extension.getOrigin().getName();
+        List<String> dependents = new LinkedList<>(extension.getDependents()); // copy dependents list
 
         for (String dependentID : dependents) {
             Extension dependentExt = extensions.get(dependentID.toLowerCase());
@@ -828,10 +850,28 @@ public class ExtensionManager {
         }
 
         LOGGER.info("Unloading extension {}", extensionName);
-        unload(ext);
+        unload(extension);
 
         // call GC to try to get rid of classes and classloader
         System.gc();
+    }
+
+    public void unloadExtension(@NotNull String extensionName) {
+        Extension ext = extensions.get(extensionName.toLowerCase());
+        if (ext == null) {
+            throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
+        }
+
+        unloadExtension(ext);
+    }
+
+    public void unloadExtension(@NotNull Class<?> type) {
+        Extension ext = (Extension) getExtension(type);
+        if (ext == null) {
+            throw new IllegalArgumentException("Extension " + type.getSimpleName() + " is not currently loaded.");
+        }
+
+        unloadExtension(ext);
     }
 
     /**
