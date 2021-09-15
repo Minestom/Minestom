@@ -92,17 +92,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Decrypt data
         if (encrypted) {
             final Cipher cipher = decryptCipher;
-            final int remainingBytes = readBuffer.readableBytes();
-            final byte[] bytes = readBuffer.readRemainingBytes();
-            byte[] output = new byte[cipher.getOutputSize(remainingBytes)];
+            ByteBuffer input = readBuffer.asByteBuffer(0, readBuffer.writerOffset());
             try {
-                cipher.update(bytes, 0, remainingBytes, output, 0);
+                cipher.update(input, input.duplicate());
             } catch (ShortBufferException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
                 return;
             }
-            readBuffer.clear();
-            readBuffer.writeBytes(output);
         }
         // Read all packets
         while (readBuffer.readableBytes() > 0) {
@@ -278,16 +274,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
                     ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
-                    BinaryBuffer pooled = PooledBuffers.get();
-                    ByteBuffer cipherOutput = pooled.asByteBuffer(0, pooled.capacity());
                     try {
-                        cipher.update(cipherInput, cipherOutput);
+                        cipher.update(cipherInput, cipherInput.duplicate());
                     } catch (ShortBufferException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
-                    localBuffer.clear();
-                    localBuffer.write(cipherOutput.flip());
-                    PooledBuffers.add(pooled);
                 }
 
                 this.waitingBuffers.add(localBuffer);
