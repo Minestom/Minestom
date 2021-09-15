@@ -96,17 +96,6 @@ public enum ServerListPingType {
         }
     }
 
-    private static JsonObject customModernResponse;
-
-    /**
-     * Bypasses getModernPingResponse
-     *
-     * @param jsonObject the response
-     */
-    public static void setCustomModernResponse(JsonObject jsonObject) {
-        customModernResponse = jsonObject;
-    }
-
     /**
      * Creates a modern ping response for client versions above the Netty rewrite (1.7+).
      *
@@ -115,10 +104,6 @@ public enum ServerListPingType {
      * @return the response
      */
     public static @NotNull JsonObject getModernPingResponse(@NotNull ResponseData data, boolean supportsFullRgb) {
-        if (customModernResponse != null) {
-            return customModernResponse;
-        }
-
         // version
         final JsonObject versionObject = new JsonObject();
         versionObject.addProperty("name", data.getVersion());
