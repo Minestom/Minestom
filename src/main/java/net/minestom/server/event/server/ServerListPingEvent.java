@@ -1,5 +1,6 @@
 package net.minestom.server.event.server;
 
+import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
@@ -21,6 +22,7 @@ public class ServerListPingEvent implements CancellableEvent {
 
     private boolean cancelled = false;
     private ResponseData responseData;
+    private JsonObject customResponse;
 
     /**
      * Creates a new server list ping event with no player connection.
@@ -67,6 +69,37 @@ public class ServerListPingEvent implements CancellableEvent {
      */
     public void setResponseData(@NotNull ResponseData responseData) {
         this.responseData = Objects.requireNonNull(responseData);
+    }
+
+    /**
+     * Sets a custom json response, bypassing the regular response data.
+     *
+     * @param customResponse the response
+     */
+    public void setCustomResponse(JsonObject customResponse) {
+        this.customResponse = customResponse;
+    }
+
+    /**
+     * Gets the custom json response.
+     * This will be null if a custom response has not been set.
+     *
+     * @return the response
+     */
+    public @Nullable JsonObject getCustomResponse() {
+        return customResponse;
+    }
+
+    /**
+     * Gets the json response.
+     *
+     * @return the response
+     */
+    public @NotNull String getResponse() {
+        if (customResponse == null) {
+            return type.getPingResponse(responseData);
+        }
+        return customResponse.toString();
     }
 
     /**
