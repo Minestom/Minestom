@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -98,9 +97,9 @@ public final class ThreadDispatcher {
             // Execute tick
             this.phaser.register();
             thread.startTick(() -> {
-                Acquirable.refreshEntries(chunkEntries);
+                thread.updateEntries(chunkEntries);
 
-                final ReentrantLock lock = thread.getLock();
+                final ReentrantLock lock = thread.lock();
                 lock.lock();
                 for (ChunkEntry chunkEntry : chunkEntries) {
                     final Chunk chunk = chunkEntry.chunk;

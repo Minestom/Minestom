@@ -3,6 +3,8 @@ package net.minestom.server.thread;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,6 +20,9 @@ public final class TickThread extends Thread {
     private volatile boolean stop;
     private Runnable tickRunnable;
 
+    private boolean isTicking;
+    private Collection<ThreadDispatcher.ChunkEntry> entries;
+
     public TickThread(Phaser phaser, int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
         this.phaser = phaser;
@@ -27,7 +32,9 @@ public final class TickThread extends Thread {
     public void run() {
         LockSupport.park(this);
         while (!stop) {
+            this.isTicking = true;
             this.tickRunnable.run();
+            this.isTicking = false;
             this.phaser.arriveAndDeregister();
             LockSupport.park(this);
         }
@@ -38,12 +45,20 @@ public final class TickThread extends Thread {
         LockSupport.unpark(this);
     }
 
+    public Collection<ThreadDispatcher.ChunkEntry> entries() {
+        return isTicking ? entries : Collections.emptyList();
+    }
+
+    void updateEntries(Collection<ThreadDispatcher.ChunkEntry> entries) {
+        this.entries = entries;
+    }
+
     /**
      * Gets the lock used to ensure the safety of entity acquisition.
      *
      * @return the thread lock
      */
-    public @NotNull ReentrantLock getLock() {
+    public @NotNull ReentrantLock lock() {
         return lock;
     }
 
