@@ -156,7 +156,9 @@ public final class ThreadDispatcher {
         while (true) {
             final Chunk chunk = chunkUpdateQueue.pollFirst();
             if (chunk == null) break;
-            updateChunk(chunk);
+            // Update chunk's thread
+            ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+            if (chunkEntry != null) chunkEntry.thread = retrieveThread(chunk);
             this.chunkUpdateQueue.addLast(chunk);
             if (++counter > size || System.currentTimeMillis() >= endTime)
                 break;
@@ -199,14 +201,6 @@ public final class ThreadDispatcher {
     private TickThread retrieveThread(Chunk chunk) {
         final int threadId = Math.abs(provider.findThread(chunk)) % threads.size();
         return threads.get(threadId);
-    }
-
-    private void updateChunk(@NotNull Chunk chunk) {
-        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
-        if (chunkEntry == null) return;
-        Collection<ChunkEntry> chunks = threadChunkMap.get(chunkEntry.thread);
-        if (chunks == null || chunks.isEmpty()) return;
-        chunkEntry.thread = retrieveThread(chunk);
     }
 
     private void processLoadedChunks() {
