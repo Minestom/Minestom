@@ -77,7 +77,9 @@ public final class UpdateManager {
                         final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
                         final double tickTimeMs = tickTime / 1e6D;
                         final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
-                        this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
+                        for (Consumer<TickMonitor> consumer : tickMonitors) {
+                            consumer.accept(tickMonitor);
+                        }
                         Acquirable.resetAcquiringTime();
                     }
 
