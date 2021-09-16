@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -139,7 +139,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a></code></dd>
 </dl>
 <hr>
-<pre>public final class <span class="typeNameLabel">TickThread</span>
+<pre>@Internal
+public final class <span class="typeNameLabel">TickThread</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a></pre>
 <div class="block">Thread responsible for ticking <a href="../instance/Chunk.html" title="class in net.minestom.server.instance"><code>chunks</code></a> and <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a>.
  <p>
@@ -237,13 +238,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#run()">run</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Shutdowns the thread.</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Thread">
@@ -322,7 +316,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="lock()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>lock</h4>
 <pre class="methodSignature">@NotNull
@@ -332,16 +326,6 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the thread lock</dd>
 </dl>
-</li>
-</ul>
-<a id="shutdown()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>shutdown</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;shutdown()</pre>
-<div class="block">Shutdowns the thread. Cannot be undone.</div>
 </li>
 </ul>
 </li>

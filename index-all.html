@@ -2444,6 +2444,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/effects/Effects.html#CHORUS_FLOWER_GROWN">CHORUS_FLOWER_GROWN</a></span> - net.minestom.server.effects.<a href="net/minestom/server/effects/Effects.html" title="enum in net.minestom.server.effects">Effects</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html#chunk()">chunk()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/instance/Chunk.html" title="class in net.minestom.server.instance"><span class="typeNameLink">Chunk</span></a> - Class in <a href="net/minestom/server/instance/package-summary.html">net.minestom.server.instance</a></dt>
 <dd>
 <div class="block">A chunk is a part of an <a href="net/minestom/server/instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.</div>
@@ -4595,6 +4597,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">An array with all entities in the team</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html#entities()">entities()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/ArgumentType.html#Entities(java.lang.String)">Entities(String)</a></span> - Static method in class net.minestom.server.command.builder.arguments.<a href="net/minestom/server/command/builder/arguments/ArgumentType.html" title="class in net.minestom.server.command.builder.arguments">ArgumentType</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -6440,8 +6444,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the chunk.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html#getChunk()">getChunk()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/Instance.html#getChunk(int,int)">getChunk(int, int)</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></dt>
 <dd>
 <div class="block">Gets the loaded <a href="net/minestom/server/instance/Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> at a position.</div>
@@ -6993,8 +6995,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the entities in the instance;</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html#getEntities()">getEntities()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/scoreboard/TeamManager.html#getEntities(net.minestom.server.scoreboard.Team)">getEntities(Team)</a></span> - Method in class net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/TeamManager.html" title="class in net.minestom.server.scoreboard">TeamManager</a></dt>
 <dd>
 <div class="block">Gets a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> with all registered <a href="net/minestom/server/entity/LivingEntity.html" title="class in net.minestom.server.entity"><code>LivingEntity</code></a> in the team
@@ -9653,8 +9653,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the skin textures value.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html#getThread()">getThread()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/UpdateManager.html#getThreadProvider()">getThreadProvider()</a></span> - Method in class net.minestom.server.<a href="net/minestom/server/UpdateManager.html" title="class in net.minestom.server">UpdateManager</a></dt>
 <dd>
 <div class="block">Gets the current <a href="net/minestom/server/thread/ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a>.</div>
@@ -19452,10 +19450,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Shutdowns all the <a href="net/minestom/server/thread/TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/thread/TickThread.html#shutdown()">shutdown()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/TickThread.html" title="class in net.minestom.server.thread">TickThread</a></dt>
-<dd>
-<div class="block">Shutdowns the thread.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/timer/SchedulerManager.html#shutdown()">shutdown()</a></span> - Method in class net.minestom.server.timer.<a href="net/minestom/server/timer/SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a></dt>
 <dd>
 <div class="block">Shutdowns all normal tasks and call the registered shutdown tasks.</div>
@@ -20550,6 +20544,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/client/play/ClientTabCompletePacket.html#text">text</a></span> - Variable in class net.minestom.server.network.packet.client.play.<a href="net/minestom/server/network/packet/client/play/ClientTabCompletePacket.html" title="class in net.minestom.server.network.packet.client.play">ClientTabCompletePacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/world/biomes/Biome.Category.html#THE_END">THE_END</a></span> - net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.Category.html" title="enum in net.minestom.server.world.biomes">Biome.Category</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html#thread()">thread()</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/ThreadDispatcher.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadDispatcher.ChunkEntry</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/MinecraftServer.html#THREAD_COUNT_BLOCK_BATCH">THREAD_COUNT_BLOCK_BATCH</a></span> - Static variable in class net.minestom.server.<a href="net/minestom/server/MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></dt>
 <dd>&nbsp;</dd>
