@@ -148,7 +148,6 @@ public final class ChunkUtils {
      * @return an array containing chunks index
      */
     public static long @NotNull [] getChunksInRange(int chunkX, int chunkZ, int range) {
-        // FIXME: currently broken using GraalVM
         long[] array = new long[MathUtils.square(range * 2 + 1)];
         int i = 0;
         for (int x = -range; x <= range; ++x) {
