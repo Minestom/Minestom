@@ -1,10 +1,14 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.Chunk;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,12 +18,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>
  * Created in {@link ThreadDispatcher}, and awaken every tick with a task to execute.
  */
+@ApiStatus.Internal
 public final class TickThread extends Thread {
     private final ReentrantLock lock = new ReentrantLock();
     private final Phaser phaser;
     private volatile boolean stop;
-    private Runnable tickRunnable;
 
+    private long tickTime;
     private boolean isTicking;
     private Collection<ThreadDispatcher.ChunkEntry> entries;
 
@@ -33,16 +38,46 @@ public final class TickThread extends Thread {
         LockSupport.park(this);
         while (!stop) {
             this.isTicking = true;
-            this.tickRunnable.run();
+            tick();
             this.isTicking = false;
             this.phaser.arriveAndDeregister();
             LockSupport.park(this);
         }
     }
 
-    void startTick(Collection<ThreadDispatcher.ChunkEntry> entries, Runnable runnable) {
-        this.tickRunnable = runnable;
+    private void tick() {
+        this.lock.lock();
+        for (ThreadDispatcher.ChunkEntry entry : entries) {
+            final Chunk chunk = entry.chunk();
+            try {
+                chunk.tick(tickTime);
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+            final List<Entity> entities = entry.entities();
+            if (!entities.isEmpty()) {
+                for (Entity entity : entities) {
+                    if (lock.hasQueuedThreads()) {
+                        this.lock.unlock();
+                        // #acquire() callbacks should be called here
+                        this.lock.lock();
+                    }
+                    try {
+                        entity.tick(tickTime);
+                    } catch (Throwable e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }
+            }
+        }
+        this.lock.unlock();
+        // #acquire() callbacks
+    }
+
+    void startTick(Collection<ThreadDispatcher.ChunkEntry> entries, long tickTime) {
+        this.tickTime = tickTime;
         this.entries = entries;
+        this.stop = false;
         LockSupport.unpark(this);
     }
 
@@ -59,10 +94,7 @@ public final class TickThread extends Thread {
         return lock;
     }
 
-    /**
-     * Shutdowns the thread. Cannot be undone.
-     */
-    public void shutdown() {
+    void shutdown() {
         this.stop = true;
         LockSupport.unpark(this);
     }

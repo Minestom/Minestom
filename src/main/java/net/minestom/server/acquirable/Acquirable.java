@@ -27,7 +27,7 @@ public interface Acquirable<T> {
         final Thread currentThread = Thread.currentThread();
         if (currentThread instanceof TickThread) {
             return ((TickThread) currentThread).entries().stream()
-                    .flatMap(chunkEntry -> chunkEntry.getEntities().stream());
+                    .flatMap(chunkEntry -> chunkEntry.entities().stream());
         }
         return Stream.empty();
     }
@@ -162,7 +162,7 @@ public interface Acquirable<T> {
 
         public TickThread getTickThread() {
             final ThreadDispatcher.ChunkEntry entry = this.chunkEntry;
-            return entry != null ? entry.getThread() : null;
+            return entry != null ? entry.thread() : null;
         }
     }
 }

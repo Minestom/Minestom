@@ -5,13 +5,11 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Phaser;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Used to link chunks into multiple groups.
@@ -98,37 +96,8 @@ public final class ThreadDispatcher {
             }
             // Execute tick
             this.phaser.register();
-            final TickThread thread = entry.getKey();
-            thread.startTick(chunkEntries, () -> {
-                final ReentrantLock lock = thread.lock();
-                lock.lock();
-                for (ChunkEntry chunkEntry : chunkEntries) {
-                    final Chunk chunk = chunkEntry.chunk;
-                    if (!ChunkUtils.isLoaded(chunk)) return;
-                    try {
-                        chunk.tick(time);
-                    } catch (Throwable e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
-                    final List<Entity> entities = chunkEntry.entities;
-                    if (!entities.isEmpty()) {
-                        for (Entity entity : entities) {
-                            if (lock.hasQueuedThreads()) {
-                                lock.unlock();
-                                // #acquire() callbacks should be called here
-                                lock.lock();
-                            }
-                            try {
-                                entity.tick(time);
-                            } catch (Throwable e) {
-                                MinecraftServer.getExceptionManager().handleException(e);
-                            }
-                        }
-                    }
-                }
-                lock.unlock();
-                // #acquire() callbacks
-            });
+            TickThread thread = entry.getKey();
+            thread.startTick(chunkEntries, time);
         }
         this.phaser.arriveAndAwaitAdvance();
     }
@@ -268,15 +237,15 @@ public final class ThreadDispatcher {
             this.chunk = chunk;
         }
 
-        public @NotNull TickThread getThread() {
+        public @NotNull TickThread thread() {
             return thread;
         }
 
-        public @NotNull Chunk getChunk() {
+        public @NotNull Chunk chunk() {
             return chunk;
         }
 
-        public @NotNull List<Entity> getEntities() {
+        public @NotNull List<Entity> entities() {
             return entities;
         }
 
