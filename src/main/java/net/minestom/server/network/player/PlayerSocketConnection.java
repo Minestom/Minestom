@@ -263,7 +263,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void flush() {
         boolean shouldDisconnect = false;
-        if (!channel.isOpen()) return;
         synchronized (bufferLock) {
             final BinaryBuffer localBuffer = tickBuffer.getPlain();
             if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
