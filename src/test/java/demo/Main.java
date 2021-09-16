@@ -39,6 +39,7 @@ public class Main {
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
         commandManager.register(new PlayersCommand());
+        commandManager.register(new FindCommand());
         commandManager.register(new PotionCommand());
         commandManager.register(new TitleCommand());
         commandManager.register(new BookCommand());
@@ -49,6 +50,7 @@ public class Main {
         commandManager.register(new RemoveCommand());
         commandManager.register(new GiveCommand());
         commandManager.register(new SetBlockCommand());
+
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

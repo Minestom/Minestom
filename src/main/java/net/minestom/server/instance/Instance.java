@@ -495,13 +495,27 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         int maxX = ChunkUtils.getChunkCoordinate(point.x() + range);
         int minZ = ChunkUtils.getChunkCoordinate(point.z() - range);
         int maxZ = ChunkUtils.getChunkCoordinate(point.z() + range);
+
+        // Cache squared range to prevent sqrt operations
+        double squaredRange = range * range;
+
         List<Entity> result = new ArrayList<>();
         synchronized (entitiesLock) {
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
                     Chunk chunk = getChunk(x, z);
-                    if (chunk != null) {
-                        result.addAll(getChunkEntities(chunk));
+
+                    if (chunk == null) {
+                        continue;
+                    }
+
+                    Set<Entity> chunkEntities = getChunkEntities(chunk);
+
+                    // Filter all entities out of range
+                    for (Entity chunkEntity : chunkEntities) {
+                        if (point.distanceSquared(chunkEntity.getPosition()) < squaredRange) {
+                            result.add(chunkEntity);
+                        }
                     }
                 }
             }
