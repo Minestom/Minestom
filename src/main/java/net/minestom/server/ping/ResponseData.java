@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class ResponseData {
     private static final Component DEFAULT_DESCRIPTION = Component.text("Minestom Server");
 
     private final List<NamedAndIdentified> entries;
-    private final Map<String, JsonObject> extraJson;
+    private final Map<String, Object> extraJson;
 
     private String version;
     private int protocol;
@@ -321,9 +322,9 @@ public class ResponseData {
      * Adds an extra json property
      *
      * @param property the property to put the object into
-     * @param value the object
+     * @param value    the object
      */
-    public void addExtraJson(@NotNull String property, @NotNull JsonObject value) {
+    public void addExtraJson(@NotNull String property, @Nullable Object value) {
         extraJson.put(property, value);
     }
 
@@ -332,7 +333,7 @@ public class ResponseData {
      *
      * @return the extra json
      */
-    public @NotNull Map<String, JsonObject> getExtraJson() {
+    public @NotNull Map<String, Object> getExtraJson() {
         return extraJson;
     }
 
