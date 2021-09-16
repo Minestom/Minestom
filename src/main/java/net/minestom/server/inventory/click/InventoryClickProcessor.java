@@ -149,6 +149,8 @@ public final class InventoryClickProcessor {
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
+            if (itemStack.isAir())
+                return false; // Ignore air click
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
                 return false;
