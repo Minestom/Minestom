@@ -321,7 +321,7 @@ public final class PacketUtils {
                 }
 
                 // Handle single entry
-                if (singleEntry != null && !singleEntry.exception.equals(connection)) {
+                if (singleEntry != null && !Objects.equals(singleEntry.exception, connection)) {
                     writer.accept(singleEntry.buffer.position(0));
                 }
             }
