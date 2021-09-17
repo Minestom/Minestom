@@ -164,7 +164,7 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
-    private @NotNull ChunkDataPacket createChunkPacket() {
+    private synchronized @NotNull ChunkDataPacket createChunkPacket() {
         ChunkDataPacket packet = new ChunkDataPacket();
         packet.biomes = biomes;
         packet.chunkX = chunkX;
@@ -174,7 +174,7 @@ public class DynamicChunk extends Chunk {
         return packet;
     }
 
-    private @NotNull UpdateLightPacket createLightPacket() {
+    private synchronized @NotNull UpdateLightPacket createLightPacket() {
         long skyMask = 0;
         long blockMask = 0;
         List<byte[]> skyLights = new ArrayList<>();
