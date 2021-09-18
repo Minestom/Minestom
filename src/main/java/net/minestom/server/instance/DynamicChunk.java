@@ -21,10 +21,7 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -122,18 +119,29 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void sendChunk(@NotNull Player player) {
+    public void sendLightData(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
         final long lastChange = getLastChangeTime();
         final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
-        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
         if (connection instanceof PlayerSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.write(lightPacket);
-            socketConnection.write(chunkPacket);
         } else {
             connection.sendPacket(lightPacket.packet());
+        }
+    }
+
+    @Override
+    public void sendChunk(@NotNull Player player) {
+        if (!isLoaded()) return;
+        final PlayerConnection connection = player.getPlayerConnection();
+        final long lastChange = getLastChangeTime();
+        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
+        if (connection instanceof PlayerSocketConnection) {
+            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            socketConnection.write(chunkPacket);
+        } else {
             connection.sendPacket(chunkPacket.packet());
         }
     }
@@ -177,8 +185,6 @@ public class DynamicChunk extends Chunk {
     }
 
     private synchronized @NotNull UpdateLightPacket createLightPacket() {
-        long skyMask = 0;
-        long blockMask = 0;
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
@@ -199,18 +205,17 @@ public class DynamicChunk extends Chunk {
 
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
-                skyMask |= 1L << index;
+                updateLightPacket.skyLightMask.set(index);
+            } else {
+                updateLightPacket.emptySkyLightMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
-                blockMask |= 1L << index;
+                updateLightPacket.blockLightMask.set(index);
+            } else {
+                updateLightPacket.emptyBlockLightMask.set(index);
             }
         }
-
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[0];
-        updateLightPacket.emptyBlockLightMask = new long[0];
         return updateLightPacket;
     }
 
