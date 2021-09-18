@@ -11,7 +11,6 @@ import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CollisionUtils {
@@ -76,7 +75,7 @@ public class CollisionUtils {
      * @return result of the step
      */
     private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, List<Vec> corners) {
-        final List<Vec> mutableCorners = new ArrayList<>(corners);
+        final Vec[] mutableCorners = corners.toArray(Vec[]::new);
         final double sign = Math.signum(stepAmount);
         final int blockLength = (int) stepAmount;
         final double remainingLength = stepAmount - blockLength;
@@ -95,7 +94,7 @@ public class CollisionUtils {
         // find the corner which moved the least
         double smallestDisplacement = Double.POSITIVE_INFINITY;
         for (int i = 0; i < corners.size(); i++) {
-            final double displacement = corners.get(i).distance(mutableCorners.get(i));
+            final double displacement = corners.get(i).distance(mutableCorners[i]);
             if (displacement < smallestDisplacement) {
                 smallestDisplacement = displacement;
             }
@@ -112,10 +111,10 @@ public class CollisionUtils {
      * @param corners  the corners of the bounding box to consider
      * @return true if found collision
      */
-    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, List<Vec> corners) {
+    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
         final double sign = Math.signum(amount);
-        for (int cornerIndex = 0; cornerIndex < corners.size(); cornerIndex++) {
-            final Vec originalCorner = corners.get(cornerIndex);
+        for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
+            final Vec originalCorner = corners[cornerIndex];
             final Vec newCorner = originalCorner.add(axis.mul(amount));
             final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
@@ -126,13 +125,13 @@ public class CollisionUtils {
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block != null && block.isSolid()) {
-                corners.set(cornerIndex, new Vec(
+                corners[cornerIndex] = new Vec(
                         Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : originalCorner.x(),
                         Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : originalCorner.y(),
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z()));
+                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z());
                 return true;
             }
-            corners.set(cornerIndex, newCorner);
+            corners[cornerIndex] = newCorner;
         }
         return false;
     }
