@@ -1670,7 +1670,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="net/minestom/server/instance/block/BlockGetter.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">BlockGetter</span></a> - Interface in <a href="net/minestom/server/instance/block/package-summary.html">net.minestom.server.instance.block</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/instance/block/BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block"><span class="typeNameLink">BlockGetter.Condition</span></a> - Enum in <a href="net/minestom/server/instance/block/package-summary.html">net.minestom.server.instance.block</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Represents a hint to retrieve blocks more efficiently.</div>
+</dd>
 <dt><a href="net/minestom/server/instance/block/BlockHandler.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler</span></a> - Interface in <a href="net/minestom/server/instance/block/package-summary.html">net.minestom.server.instance.block</a></dt>
 <dd>
 <div class="block">Interface used to provide block behavior.</div>
@@ -2145,7 +2147,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/BlockGetter.Condition.html#CACHED">CACHED</a></span> - net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block">BlockGetter.Condition</a></dt>
 <dd>
-<div class="block">Returns a block only if it has a handler or nbt.</div>
+<div class="block">Hints that the method should return only if the block is cached.</div>
 </dd>
 <dt><a href="net/minestom/server/network/packet/CachedPacket.html" title="class in net.minestom.server.network.packet"><span class="typeNameLink">CachedPacket</span></a> - Class in <a href="net/minestom/server/network/packet/package-summary.html">net.minestom.server.network.packet</a></dt>
 <dd>&nbsp;</dd>
@@ -21065,6 +21067,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Creates an event node which accepts any event of the given type which passes
  the provided condition.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/BlockGetter.Condition.html#TYPE">TYPE</a></span> - net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block">BlockGetter.Condition</a></dt>
+<dd>
+<div class="block">Hints that we only care about the block type.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Metadata.html#TYPE_BOOLEAN">TYPE_BOOLEAN</a></span> - Static variable in class net.minestom.server.entity.<a href="net/minestom/server/entity/Metadata.html" title="class in net.minestom.server.entity">Metadata</a></dt>
 <dd>&nbsp;</dd>

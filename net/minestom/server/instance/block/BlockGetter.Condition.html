@@ -143,8 +143,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="BlockGetter.html" title="interface in net.minestom.server.instance.block">BlockGetter</a></dd>
 </dl>
 <hr>
-<pre>public static enum <span class="typeNameLabel">BlockGetter.Condition</span>
+<pre>@Experimental
+public static enum <span class="typeNameLabel">BlockGetter.Condition</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink">Enum</a>&lt;<a href="BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block">BlockGetter.Condition</a>&gt;</pre>
+<div class="block">Represents a hint to retrieve blocks more efficiently.
+ Implementing interfaces do not have to honor this.</div>
 </li>
 </ul>
 </div>
@@ -167,13 +170,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#CACHED">CACHED</a></span></code></th>
 <td class="colLast">
-<div class="block">Returns a block only if it has a handler or nbt.</div>
+<div class="block">Hints that the method should return only if the block is cached.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#NONE">NONE</a></span></code></th>
 <td class="colLast">
 <div class="block">Returns a block no matter what.</div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#TYPE">TYPE</a></span></code></th>
+<td class="colLast">
+<div class="block">Hints that we only care about the block type.</div>
 </td>
 </tr>
 </table>
@@ -254,13 +263,26 @@ the order they are declared.</div>
 <a id="CACHED">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>CACHED</h4>
 <pre>public static final&nbsp;<a href="BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block">BlockGetter.Condition</a> CACHED</pre>
-<div class="block">Returns a block only if it has a handler or nbt.
+<div class="block">Hints that the method should return only if the block is cached.
  <p>
- Should be more performant than <a href="#NONE"><code>NONE</code></a>.</div>
+ Useful if you are only interested in a block handler or nbt.</div>
+</li>
+</ul>
+<a id="TYPE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>TYPE</h4>
+<pre>public static final&nbsp;<a href="BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block">BlockGetter.Condition</a> TYPE</pre>
+<div class="block">Hints that we only care about the block type.
+ <p>
+ Useful if you need to retrieve registry information about the block.
+ Be aware that the returned block may not return the proper handler/nbt.</div>
 </li>
 </ul>
 </li>
