@@ -27,7 +27,7 @@ public final class RelativeVec {
         this.relativeZ = relativeZ;
     }
 
-    public @NotNull CoordinateType getCoordinateType() {
+    public @NotNull CoordinateType coordinateType() {
         return this.coordinateType;
     }
 
