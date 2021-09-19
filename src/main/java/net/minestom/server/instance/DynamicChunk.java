@@ -177,8 +177,6 @@ public class DynamicChunk extends Chunk {
     }
 
     private synchronized @NotNull UpdateLightPacket createLightPacket() {
-        long skyMask = 0;
-        long blockMask = 0;
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
@@ -199,18 +197,13 @@ public class DynamicChunk extends Chunk {
 
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
-                skyMask |= 1L << index;
+                updateLightPacket.skyLightMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
-                blockMask |= 1L << index;
+                updateLightPacket.blockLightMask.set(index);
             }
         }
-
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[0];
-        updateLightPacket.emptyBlockLightMask = new long[0];
         return updateLightPacket;
     }
 
