@@ -242,6 +242,16 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return getChunk(chunkX, chunkZ) != null;
+    }
+
+    @Override
+    public boolean isChunkLoaded(Point point) {
+        return isChunkLoaded(point.chunkX(), point.chunkZ());
+    }
+
+    @Override
     public @NotNull CompletableFuture<Void> saveInstance() {
         return chunkLoader.saveInstance(this);
     }

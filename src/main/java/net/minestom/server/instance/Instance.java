@@ -221,6 +221,21 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ this chunk Z
+     * @return true if the chunk is loaded
+     */
+    public abstract boolean isChunkLoaded(int chunkX, int chunkZ);
+
+    /**
+     *
+     * @param point coordinate of a block or other
+     * @return true if the chunk is loaded
+     */
+    public abstract boolean isChunkLoaded(Point point);
+
+    /**
      * Saves the current instance tags.
      * <p>
      * Warning: only the global instance data will be saved, not chunks.
