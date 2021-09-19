@@ -137,11 +137,14 @@ public class DynamicChunk extends Chunk {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
         final long lastChange = getLastChangeTime();
+        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
         final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
         if (connection instanceof PlayerSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            socketConnection.write(lightPacket);
             socketConnection.write(chunkPacket);
         } else {
+            connection.sendPacket(lightPacket.packet());
             connection.sendPacket(chunkPacket.packet());
         }
     }
@@ -206,11 +209,13 @@ public class DynamicChunk extends Chunk {
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
                 updateLightPacket.skyLightMask.set(index);
+                updateLightPacket.skyLightMask.set(index);
             } else {
                 updateLightPacket.emptySkyLightMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
+                updateLightPacket.blockLightMask.set(index);
                 updateLightPacket.blockLightMask.set(index);
             } else {
                 updateLightPacket.emptyBlockLightMask.set(index);
