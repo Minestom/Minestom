@@ -15,6 +15,7 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.inventory.PlayerSelectTradeEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.PlayerDeathEvent;
@@ -71,6 +72,11 @@ public class PlayerInit {
                     final ItemStack itemStack = event.getItemEntity().getItemStack();
                     event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
                 }
+            })
+            .addListener(PlayerSelectTradeEvent.class, (event) -> {
+                Player player = event.getPlayer();
+                int slot = event.getSlot();
+                player.sendMessage("Slot selected: " + slot);
             })
             .addListener(ItemDropEvent.class, event -> {
                 final Player player = event.getPlayer();
