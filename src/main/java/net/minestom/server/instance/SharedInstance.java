@@ -58,16 +58,6 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return instanceContainer.isChunkLoaded(chunkX, chunkZ);
-    }
-
-    @Override
-    public boolean isChunkLoaded(Point point) {
-        return instanceContainer.isChunkLoaded(point);
-    }
-
-    @Override
     public @NotNull CompletableFuture<Void> saveInstance() {
         return instanceContainer.saveInstance();
     }

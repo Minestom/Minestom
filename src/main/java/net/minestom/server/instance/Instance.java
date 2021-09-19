@@ -226,14 +226,18 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param chunkZ this chunk Z
      * @return true if the chunk is loaded
      */
-    public abstract boolean isChunkLoaded(int chunkX, int chunkZ);
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return getChunk(chunkX, chunkZ) != null;
+    }
 
     /**
      *
      * @param point coordinate of a block or other
      * @return true if the chunk is loaded
      */
-    public abstract boolean isChunkLoaded(Point point);
+    public boolean isChunkLoaded(Point point) {
+        return isChunkLoaded(point.chunkX(), point.chunkZ());
+    }
 
     /**
      * Saves the current instance tags.
