@@ -27,6 +27,10 @@ public final class RelativeVec {
         this.relativeZ = relativeZ;
     }
 
+    public @NotNull CoordinateType getCoordinateType() {
+        return this.coordinateType;
+    }
+
     /**
      * Gets the location based on the relative fields and {@code position}.
      *
