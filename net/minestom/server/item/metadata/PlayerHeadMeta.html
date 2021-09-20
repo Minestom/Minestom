@@ -189,7 +189,7 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <td class="colFirst"><code>protected </code></td>
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.item.ItemMetaBuilder,java.util.UUID,net.minestom.server.entity.PlayerSkin)">PlayerHeadMeta</a></span>&#8203;(@NotNull <a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;skullOwner,
-              <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</code></th>
+              @Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -211,7 +211,7 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSkin()">getPlayerSkin</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -267,7 +267,8 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <pre>protected&nbsp;PlayerHeadMeta&#8203;(@NotNull
                          @NotNull <a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;skullOwner,
-                         <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</pre>
+                         @Nullable
+                         @Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</pre>
 </li>
 </ul>
 </li>
@@ -295,7 +296,8 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getPlayerSkin</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;getPlayerSkin()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;getPlayerSkin()</pre>
 </li>
 </ul>
 </li>
