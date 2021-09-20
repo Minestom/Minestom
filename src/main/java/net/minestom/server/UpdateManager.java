@@ -26,11 +26,10 @@ import java.util.function.LongConsumer;
  * The {@link ThreadDispatcher} manages the multi-thread aspect of chunk ticks.
  */
 public final class UpdateManager {
-
     private volatile boolean stopRequested;
 
     // TODO make configurable
-    private ThreadDispatcher threadDispatcher = ThreadDispatcher.singleThread();
+    private final ThreadDispatcher threadDispatcher = ThreadDispatcher.singleThread();
 
     private final Queue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
     private final Queue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
@@ -46,96 +45,7 @@ public final class UpdateManager {
      * Starts the server loop in the update thread.
      */
     void start() {
-        final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-
-        new Thread(() -> {
-            while (!stopRequested) {
-                try {
-                    long currentTime = System.nanoTime();
-                    final long tickStart = System.currentTimeMillis();
-
-                    // Tick start callbacks
-                    doTickCallback(tickStartCallbacks, tickStart);
-
-                    // Waiting players update (newly connected clients waiting to get into the server)
-                    connectionManager.updateWaitingPlayers();
-
-                    // Keep Alive Handling
-                    connectionManager.handleKeepAlive(tickStart);
-
-                    // Server tick (chunks/entities)
-                    serverTick(tickStart);
-
-                    // the time that the tick took in nanoseconds
-                    final long tickTime = System.nanoTime() - currentTime;
-
-                    // Tick end callbacks
-                    doTickCallback(tickEndCallbacks, tickTime);
-
-                    // Monitoring
-                    if (!tickMonitors.isEmpty()) {
-                        final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
-                        final double tickTimeMs = tickTime / 1e6D;
-                        final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
-                        for (Consumer<TickMonitor> consumer : tickMonitors) {
-                            consumer.accept(tickMonitor);
-                        }
-                        Acquirable.resetAcquiringTime();
-                    }
-
-                    // Flush all waiting packets
-                    AsyncUtils.runAsync(() -> {
-                        PacketUtils.flush();
-                        for (Player player : connectionManager.getOnlinePlayers()) {
-                            player.getPlayerConnection().flush();
-                        }
-                    });
-
-                    // Disable thread until next tick
-                    LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
-                } catch (Exception e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
-            }
-            this.threadDispatcher.shutdown();
-        }, MinecraftServer.THREAD_NAME_TICK_SCHEDULER).start();
-    }
-
-    /**
-     * Executes a server tick and returns only once all the futures are completed.
-     *
-     * @param tickStart the time of the tick in milliseconds
-     */
-    private void serverTick(long tickStart) {
-        // Tick all instances
-        for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
-            try {
-                instance.tick(tickStart);
-            } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-        }
-        // Tick all chunks (and entities inside)
-        this.threadDispatcher.updateAndAwait(tickStart);
-
-        // Clear removed entities & update threads
-        final long tickTime = System.currentTimeMillis() - tickStart;
-        this.threadDispatcher.refreshThreads(tickTime);
-    }
-
-    /**
-     * Used to execute tick-related callbacks.
-     *
-     * @param callbacks the callbacks to execute
-     * @param value     the value to give to the consumers
-     */
-    private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
-        if (!callbacks.isEmpty()) {
-            LongConsumer callback;
-            while ((callback = callbacks.poll()) != null) {
-                callback.accept(value);
-            }
-        }
+        new TickSchedulerThread().start();
     }
 
     /**
@@ -244,5 +154,96 @@ public final class UpdateManager {
      */
     public void stop() {
         this.stopRequested = true;
+    }
+
+    private final class TickSchedulerThread extends Thread {
+        private final ThreadDispatcher threadDispatcher = UpdateManager.this.threadDispatcher;
+
+        TickSchedulerThread() {
+            super(MinecraftServer.THREAD_NAME_TICK_SCHEDULER);
+        }
+
+        @Override
+        public void run() {
+            final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            while (!stopRequested) {
+                try {
+                    long currentTime = System.nanoTime();
+                    final long tickStart = System.currentTimeMillis();
+
+                    // Tick start callbacks
+                    doTickCallback(tickStartCallbacks, tickStart);
+
+                    // Waiting players update (newly connected clients waiting to get into the server)
+                    connectionManager.updateWaitingPlayers();
+
+                    // Keep Alive Handling
+                    connectionManager.handleKeepAlive(tickStart);
+
+                    // Server tick (chunks/entities)
+                    serverTick(tickStart);
+
+                    // the time that the tick took in nanoseconds
+                    final long tickTime = System.nanoTime() - currentTime;
+
+                    // Tick end callbacks
+                    doTickCallback(tickEndCallbacks, tickTime);
+
+                    // Monitoring
+                    if (!tickMonitors.isEmpty()) {
+                        final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
+                        final double tickTimeMs = tickTime / 1e6D;
+                        final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
+                        for (Consumer<TickMonitor> consumer : tickMonitors) {
+                            consumer.accept(tickMonitor);
+                        }
+                        Acquirable.resetAcquiringTime();
+                    }
+
+                    // Flush all waiting packets
+                    AsyncUtils.runAsync(() -> {
+                        PacketUtils.flush();
+                        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                            player.getPlayerConnection().flush();
+                        }
+                    });
+
+                    // Disable thread until next tick
+                    LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+            this.threadDispatcher.shutdown();
+        }
+
+        /**
+         * Executes a server tick and returns only once all the futures are completed.
+         *
+         * @param tickStart the time of the tick in milliseconds
+         */
+        private void serverTick(long tickStart) {
+            // Tick all instances
+            for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
+                try {
+                    instance.tick(tickStart);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+            // Tick all chunks (and entities inside)
+            this.threadDispatcher.updateAndAwait(tickStart);
+
+            // Clear removed entities & update threads
+            final long tickTime = System.currentTimeMillis() - tickStart;
+            this.threadDispatcher.refreshThreads(tickTime);
+        }
+
+        private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
+            LongConsumer callback;
+            while ((callback = callbacks.poll()) != null) {
+                callback.accept(value);
+            }
+        }
     }
 }
