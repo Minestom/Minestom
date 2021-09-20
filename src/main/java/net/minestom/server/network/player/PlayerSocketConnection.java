@@ -210,12 +210,17 @@ public class PlayerSocketConnection extends PlayerConnection {
                     serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                             GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
                 }
-                write(serverPacket);
+                writePacket(serverPacket);
             } else {
                 // Player is probably not logged yet
                 writeAndFlush(serverPacket);
             }
         }
+    }
+
+    @Override
+    public void sendFramedPacket(@NotNull FramedPacket framedPacket) {
+        write(framedPacket.body().duplicate().position(0));
     }
 
     @ApiStatus.Internal
@@ -245,17 +250,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    public void write(@NotNull FramedPacket framedPacket) {
-        write(framedPacket.body().duplicate().position(0));
-    }
-
-    public void write(@NotNull ServerPacket packet) {
+    private void writePacket(@NotNull ServerPacket packet) {
         write(PacketUtils.createFramedPacket(packet, compressed).flip());
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
         synchronized (bufferLock) {
-            write(packet);
+            writePacket(packet);
             flush();
         }
     }

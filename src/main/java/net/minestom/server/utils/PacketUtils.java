@@ -120,12 +120,7 @@ public final class PacketUtils {
             for (Player player : players) {
                 if (!player.isOnline() || !playerValidator.isValid(player))
                     continue;
-                final PlayerConnection connection = player.getPlayerConnection();
-                if (connection instanceof PlayerSocketConnection) {
-                    ((PlayerSocketConnection) connection).write(framedPacket);
-                } else {
-                    connection.sendPacket(packet);
-                }
+                player.getPlayerConnection().sendFramedPacket(framedPacket);
             }
         } else {
             // Write the same packet for each individual players
@@ -218,12 +213,14 @@ public final class PacketUtils {
         Utils.writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
     }
 
+    @ApiStatus.Internal
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
         ByteBuffer buffer = PACKET_BUFFER.get();
         writeFramedPacket(buffer, packet, compression);
         return buffer;
     }
 
+    @ApiStatus.Internal
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
         return createFramedPacket(packet, MinecraftServer.getCompressionThreshold() > 0);
     }
