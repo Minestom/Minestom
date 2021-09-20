@@ -6,8 +6,8 @@ import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.LockSupport;
@@ -25,8 +25,7 @@ public final class TickThread extends Thread {
     private volatile boolean stop;
 
     private long tickTime;
-    private boolean isTicking;
-    private Collection<ThreadDispatcher.ChunkEntry> entries;
+    private final List<ThreadDispatcher.ChunkEntry> entries = new ArrayList<>();
 
     public TickThread(Phaser phaser, int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
@@ -37,9 +36,7 @@ public final class TickThread extends Thread {
     public void run() {
         LockSupport.park(this);
         while (!stop) {
-            this.isTicking = true;
             tick();
-            this.isTicking = false;
             this.phaser.arriveAndDeregister();
             LockSupport.park(this);
         }
@@ -74,15 +71,17 @@ public final class TickThread extends Thread {
         // #acquire() callbacks
     }
 
-    void startTick(Collection<ThreadDispatcher.ChunkEntry> entries, long tickTime) {
+    void startTick(long tickTime) {
+        if (entries.isEmpty())
+            return; // Nothing to tick
+        this.phaser.register();
         this.tickTime = tickTime;
-        this.entries = entries;
         this.stop = false;
         LockSupport.unpark(this);
     }
 
     public Collection<ThreadDispatcher.ChunkEntry> entries() {
-        return isTicking ? entries : Collections.emptyList();
+        return entries;
     }
 
     /**

@@ -19,8 +19,6 @@ public final class ThreadDispatcher {
     private final ThreadProvider provider;
     private final List<TickThread> threads;
 
-    // Contains all the chunks being ticked in a thread
-    private final Map<TickThread, Collection<ChunkEntry>> threadChunkMap = new HashMap<>();
     // Chunk -> ChunkEntry mapping
     private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
     // Queue to update chunks linked thread
@@ -37,7 +35,6 @@ public final class ThreadDispatcher {
     private ThreadDispatcher(ThreadProvider provider, int threadCount) {
         this.provider = provider;
         this.threads = new ArrayList<>(threadCount);
-
         for (int i = 0; i < threadCount; i++) {
             final TickThread tickThread = new TickThread(phaser, i);
             this.threads.add(tickThread);
@@ -88,16 +85,8 @@ public final class ThreadDispatcher {
      * @param time the tick time in milliseconds
      */
     public void updateAndAwait(long time) {
-        for (var entry : threadChunkMap.entrySet()) {
-            final Collection<ChunkEntry> chunkEntries = entry.getValue();
-            if (chunkEntries == null || chunkEntries.isEmpty()) {
-                // Nothing to tick
-                continue;
-            }
-            // Execute tick
-            this.phaser.register();
-            TickThread thread = entry.getKey();
-            thread.startTick(chunkEntries, time);
+        for (TickThread thread : threads) {
+            thread.startTick(time);
         }
         this.phaser.arriveAndAwaitAdvance();
     }
@@ -177,7 +166,7 @@ public final class ThreadDispatcher {
         while ((chunk = chunkLoadRequests.poll()) != null) {
             final TickThread thread = retrieveThread(chunk);
             final ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
-            this.threadChunkMap.computeIfAbsent(thread, t -> new ArrayList<>()).add(chunkEntry);
+            thread.entries().add(chunkEntry);
             this.chunkEntryMap.put(chunk, chunkEntry);
             this.chunkUpdateQueue.add(chunk);
         }
@@ -188,9 +177,8 @@ public final class ThreadDispatcher {
         while ((chunk = chunkUnloadRequests.poll()) != null) {
             final ChunkEntry chunkEntry = chunkEntryMap.remove(chunk);
             if (chunkEntry != null) {
-                final TickThread thread = chunkEntry.thread;
-                Collection<ChunkEntry> chunks = threadChunkMap.get(thread);
-                if (chunks != null) chunks.remove(chunkEntry);
+                TickThread thread = chunkEntry.thread;
+                thread.entries().remove(chunkEntry);
             }
             this.chunkUpdateQueue.remove(chunk);
         }
