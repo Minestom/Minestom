@@ -895,6 +895,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!passengers.remove(entity)) return;
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
+        entity.synchronizePosition(false);
         if (entity instanceof Player) {
             Player player = (Player) entity;
             player.getPlayerConnection().sendPacket(new PlayerPositionAndLookPacket(player.getPosition(),
