@@ -274,7 +274,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Recipes end
 
         // Tags
-        this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
+        this.playerConnection.sendFramedPacket(TagsPacket.DEFAULT_TAGS);
 
         // Some client updates
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
@@ -1660,7 +1660,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void setSneaking(boolean sneaking) {
-        if(isFlying()) { //If we are flying, don't set the players pose to sneaking as this can clip them through blocks
+        if (isFlying()) { //If we are flying, don't set the players pose to sneaking as this can clip them through blocks
             this.entityMeta.setSneaking(sneaking);
         } else {
             super.setSneaking(sneaking);
@@ -1696,12 +1696,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshFlying(boolean flying) {
         //When the player starts or stops flying, their pose needs to change
-        if(this.flying != flying) {
+        if (this.flying != flying) {
             Pose pose = getPose();
 
-            if(this.isSneaking() && pose == Pose.STANDING) {
+            if (this.isSneaking() && pose == Pose.STANDING) {
                 setPose(Pose.SNEAKING);
-            } else if(pose == Pose.SNEAKING) {
+            } else if (pose == Pose.SNEAKING) {
                 setPose(Pose.STANDING);
             }
         }
