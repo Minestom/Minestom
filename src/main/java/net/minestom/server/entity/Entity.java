@@ -305,11 +305,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean addViewer(@NotNull Player player) {
+        if (player == this) return false;
         return addViewer0(player);
     }
 
     protected boolean addViewer0(@NotNull Player player) {
-        if (player == this || !this.viewers.add(player)) {
+        if (!this.viewers.add(player)) {
             return false;
         }
         player.viewableEntities.add(this);
@@ -335,11 +336,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean removeViewer(@NotNull Player player) {
+        if (player == this) return false;
         return removeViewer0(player);
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
-        if (player == this || !viewers.remove(player)) {
+        if (!viewers.remove(player)) {
             return false;
         }
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
