@@ -321,7 +321,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         playerConnection.sendPacket(getMetadataPacket());
         // Passenger
-        if (hasPassenger()) {
+        final Set<Entity> passengers = this.passengers;
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                passenger.addViewer(player);
+            }
             playerConnection.sendPacket(getPassengersPacket());
         }
         // Head position
