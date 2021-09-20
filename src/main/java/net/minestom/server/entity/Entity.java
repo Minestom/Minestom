@@ -131,11 +131,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
-    /**
-     * Lock used to support #switchEntityType
-     */
-    private final Object entityTypeLock = new Object();
-
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -310,9 +305,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean addViewer(@NotNull Player player) {
-        synchronized (this.entityTypeLock) {
-            return addViewer0(player);
-        }
+        return addViewer0(player);
     }
 
     protected boolean addViewer0(@NotNull Player player) {
@@ -338,9 +331,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean removeViewer(@NotNull Player player) {
-        synchronized (this.entityTypeLock) {
-            return removeViewer0(player);
-        }
+        return removeViewer0(player);
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
@@ -369,16 +360,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @param entityType the new entity type
      */
-    public void switchEntityType(@NotNull EntityType entityType) {
-        synchronized (entityTypeLock) {
-            this.entityType = entityType;
-            this.metadata = new Metadata(this);
-            this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+    public synchronized void switchEntityType(@NotNull EntityType entityType) {
+        this.entityType = entityType;
+        this.metadata = new Metadata(this);
+        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
-            Set<Player> viewers = new HashSet<>(getViewers());
-            getViewers().forEach(this::removeViewer0);
-            viewers.forEach(this::addViewer0);
-        }
+        Set<Player> viewers = new HashSet<>(getViewers());
+        getViewers().forEach(this::removeViewer0);
+        viewers.forEach(this::addViewer0);
     }
 
     @NotNull
