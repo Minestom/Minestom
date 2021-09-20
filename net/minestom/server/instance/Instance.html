@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10,"i7":10,"i8":10,"i9":6,"i10":6,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":6,"i27":6,"i28":10,"i29":6,"i30":10,"i31":6,"i32":10,"i33":6,"i34":10,"i35":6,"i36":6,"i37":6,"i38":10,"i39":10,"i40":6,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":6,"i50":10,"i51":10,"i52":10};
+var data = {"i0":6,"i1":6,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10,"i7":10,"i8":10,"i9":6,"i10":6,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":6,"i27":10,"i28":10,"i29":6,"i30":10,"i31":6,"i32":10,"i33":6,"i34":10,"i35":6,"i36":10,"i37":6,"i38":6,"i39":6,"i40":10,"i41":10,"i42":6,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":6,"i52":10,"i53":10,"i54":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -489,20 +489,31 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 </td>
 </tr>
 <tr id="i27" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isChunkLoaded(int,int)">isChunkLoaded</a></span>&#8203;(int&nbsp;chunkX,
+             int&nbsp;chunkZ)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i28" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isChunkLoaded(net.minestom.server.coordinate.Point)">isChunkLoaded</a></span>&#8203;(<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInVoid(net.minestom.server.coordinate.Point)">isInVoid</a></span>&#8203;(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Determines whether a position in the void.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRegistered()">isRegistered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the instance has been registered in <a href="InstanceManager.html" title="class in net.minestom.server.instance"><code>InstanceManager</code></a>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>abstract @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(int,int)">loadChunk</a></span>&#8203;(int&nbsp;chunkX,
          int&nbsp;chunkZ)</code></th>
@@ -510,14 +521,14 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="block">Forces the generation of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, even if no file and <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> are defined.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(net.minestom.server.coordinate.Point)">loadChunk</a></span>&#8203;(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Loads the chunk at the given <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate"><code>Point</code></a> with a callback.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>abstract @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadOptionalChunk(int,int)">loadOptionalChunk</a></span>&#8203;(int&nbsp;chunkX,
                  int&nbsp;chunkZ)</code></th>
@@ -526,7 +537,7 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
  <a href="#hasEnabledAutoChunkLoad()"><code>hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadOptionalChunk(net.minestom.server.coordinate.Point)">loadOptionalChunk</a></span>&#8203;(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
 <td class="colLast">
@@ -534,45 +545,45 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
  at the given <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate"><code>Point</code></a> with a callback.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#placeBlock(net.minestom.server.instance.block.BlockHandler.Placement)">placeBlock</a></span>&#8203;(<a href="block/BlockHandler.Placement.html" title="class in net.minestom.server.instance.block">BlockHandler.Placement</a>&nbsp;placement)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointers.html?is-external=true" title="class or interface in net.kyori.adventure.pointer" class="externalLink">Pointers</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pointers()">pointers</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>abstract @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunksToStorage()">saveChunksToStorage</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Saves multiple chunks to permanent storage.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>abstract @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunkToStorage(net.minestom.server.instance.Chunk)">saveChunkToStorage</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to permanent storage.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>abstract @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveInstance()">saveInstance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Saves the current instance tags.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Schedules a task to be run during the next instance tick.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendBlockAction(net.minestom.server.coordinate.Point,byte,byte)">sendBlockAction</a></span>&#8203;(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
                byte&nbsp;actionId,
@@ -581,28 +592,28 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="block">Sends a <a href="../network/packet/server/play/BlockActionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>BlockActionPacket</code></a> for all the viewers of the specific position.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkGenerator(net.minestom.server.instance.ChunkGenerator)">setChunkGenerator</a></span>&#8203;(@Nullable <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator)</code></th>
 <td class="colLast">
 <div class="block">Changes the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setExplosionSupplier(net.minestom.server.instance.ExplosionSupplier)">setExplosionSupplier</a></span>&#8203;(@Nullable <a href="ExplosionSupplier.html" title="interface in net.minestom.server.instance">ExplosionSupplier</a>&nbsp;supplier)</code></th>
 <td class="colLast">
 <div class="block">Registers the <a href="ExplosionSupplier.html" title="interface in net.minestom.server.instance"><code>ExplosionSupplier</code></a> to use in this instance.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRegistered(boolean)">setRegistered</a></span>&#8203;(boolean&nbsp;registered)</code></th>
 <td class="colLast">
 <div class="block">Changes the registered field.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTag(net.minestom.server.tag.Tag,T)">setTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
       T&nbsp;value)</code></th>
@@ -610,35 +621,35 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="block">Writes the specified type.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTime(long)">setTime</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Changes the current time in the instance, from 0 to 24000.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTimeRate(int)">setTimeRate</a></span>&#8203;(int&nbsp;timeRate)</code></th>
 <td class="colLast">
 <div class="block">Changes the time rate of the instance</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTimeUpdate(java.time.Duration)">setTimeUpdate</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;timeUpdate)</code></th>
 <td class="colLast">
 <div class="block">Changes the rate at which the client is updated about the time</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long)">tick</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Performs a single tick in the instance, including scheduled tasks from <a href="#scheduleNextTick(java.util.function.Consumer)"><code>scheduleNextTick(Consumer)</code></a>.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadChunk(int,int)">unloadChunk</a></span>&#8203;(int&nbsp;chunkX,
            int&nbsp;chunkZ)</code></th>
@@ -646,14 +657,14 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="block">Unloads the chunk at the given position.</div>
 </td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadChunk(net.minestom.server.instance.Chunk)">unloadChunk</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Schedules the removal of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, this method does not promise when it will be done.</div>
 </td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_addEntity(net.minestom.server.entity.Entity)">UNSAFE_addEntity</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
@@ -661,14 +672,14 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
  and add viewers if <code>entity</code> is a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_removeEntity(net.minestom.server.entity.Entity)">UNSAFE_removeEntity</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Used when an <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> is removed from the instance, it removes all of his viewers.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_switchEntityChunk(net.minestom.server.entity.Entity,net.minestom.server.instance.Chunk,net.minestom.server.instance.Chunk)">UNSAFE_switchEntityChunk</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                         @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;lastChunk,
@@ -1051,6 +1062,38 @@ public abstract&nbsp;@Nullable <a href="Chunk.html" title="class in net.minestom
 <dd><code>chunkZ</code> - the chunk Z</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the chunk at the specified position, null if not loaded</dd>
+</dl>
+</li>
+</ul>
+<a id="isChunkLoaded(int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isChunkLoaded</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isChunkLoaded&#8203;(int&nbsp;chunkX,
+                             int&nbsp;chunkZ)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>chunkX</code> - the chunk X</dd>
+<dd><code>chunkZ</code> - this chunk Z</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the chunk is loaded</dd>
+</dl>
+</li>
+</ul>
+<a id="isChunkLoaded(net.minestom.server.coordinate.Point)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isChunkLoaded</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isChunkLoaded&#8203;(<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>point</code> - coordinate of a block or other</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the chunk is loaded</dd>
 </dl>
 </li>
 </ul>
