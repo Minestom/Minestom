@@ -1188,9 +1188,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void refreshCoordinate(Point newPosition) {
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
-                passenger.position = passenger.position.withCoord(newPosition);
-                passenger.previousPosition = passenger.position;
-                passenger.refreshCoordinate(newPosition);
+                final Pos oldPassengerPos = passenger.position;
+                final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
+                        newPosition.y() + getEyeHeight(),
+                        newPosition.z());
+                passenger.position = newPassengerPos;
+                passenger.previousPosition = oldPassengerPos;
+                passenger.refreshCoordinate(newPassengerPos);
             }
         }
         final Instance instance = getInstance();
