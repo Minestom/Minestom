@@ -469,6 +469,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             return;
         }
 
+        if (vehicle != null) return;
+
         final boolean noGravity = hasNoGravity();
         final boolean hasVelocity = hasVelocity();
         if (!hasVelocity && noGravity) {
