@@ -242,8 +242,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
-            refreshPosition(position);
-            previousPosition = position;
+            this.position = position;
+            this.previousPosition = position;
+            refreshCoordinate(position);
             synchronizePosition(true);
         };
 
