@@ -1,5 +1,6 @@
 package net.minestom.server.exception;
 
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,7 +16,12 @@ public final class ExceptionManager {
      * @param e the occurred exception
      */
     public void handleException(Throwable e) {
-        // TODO handle OOM exceptions
+        if (e instanceof OutOfMemoryError) {
+            // OOM should be handled manually
+            e.printStackTrace();
+            MinecraftServer.stopCleanly();
+            return;
+        }
         this.getExceptionHandler().handleException(e);
     }
 
