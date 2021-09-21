@@ -68,7 +68,7 @@ public final class Worker extends Thread {
             MinecraftServer.getConnectionManager().removePlayer(connection);
             connection.refreshOnline(false);
             Player player = connection.getPlayer();
-            if (player != null) {
+            if (player != null && !player.isRemoved()) {
                 player.scheduleNextTick(Entity::remove);
             }
         } catch (IOException e) {
