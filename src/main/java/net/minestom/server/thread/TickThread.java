@@ -36,14 +36,20 @@ public final class TickThread extends Thread {
     public void run() {
         LockSupport.park(this);
         while (!stop) {
-            tick();
+            this.lock.lock();
+            try {
+                tick();
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+            this.lock.unlock();
+            // #acquire() callbacks
             this.phaser.arriveAndDeregister();
             LockSupport.park(this);
         }
     }
 
     private void tick() {
-        this.lock.lock();
         for (ThreadDispatcher.ChunkEntry entry : entries) {
             final Chunk chunk = entry.chunk();
             try {
@@ -67,8 +73,6 @@ public final class TickThread extends Thread {
                 }
             }
         }
-        this.lock.unlock();
-        // #acquire() callbacks
     }
 
     void startTick(long tickTime) {
