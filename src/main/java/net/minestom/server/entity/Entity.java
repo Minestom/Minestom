@@ -24,6 +24,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -1386,9 +1387,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
-        sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
+        final Pos posCache = this.position;
+        final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
+        PacketUtils.prepareViewablePacket(currentChunk, packet, this instanceof Player ? (Player) this : null);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
-        this.lastSyncedPosition = position;
+        this.lastSyncedPosition = posCache;
     }
 
     /**
