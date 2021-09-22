@@ -263,46 +263,60 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void flush() {
-        boolean shouldDisconnect = false;
-        synchronized (bufferLock) {
-            final BinaryBuffer localBuffer = tickBuffer.getPlain();
-            if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
-            // Update tick buffer
-            try {
-                this.tickBuffer.setPlain(PooledBuffers.get());
-                if (encrypted) {
-                    final Cipher cipher = encryptCipher;
-                    // Encrypt data first
-                    ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
-                    try {
-                        cipher.update(cipherInput, cipherInput.duplicate());
-                    } catch (ShortBufferException e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+        try {
+            synchronized (bufferLock) {
+                final BinaryBuffer localBuffer = tickBuffer.getPlain();
+                final boolean emptyWaitingList = waitingBuffers.isEmpty();
+                if (localBuffer.readableBytes() == 0 && emptyWaitingList) return;
+                // Update tick buffer
+                try {
+                    // Encryption support
+                    if (encrypted) {
+                        ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
+                        try {
+                            this.encryptCipher.update(cipherInput, cipherInput.duplicate());
+                        } catch (ShortBufferException e) {
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        }
                     }
-                }
 
-                this.waitingBuffers.add(localBuffer);
-                Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
-                while (iterator.hasNext()) {
-                    BinaryBuffer waitingBuffer = iterator.next();
                     try {
-                        if (!waitingBuffer.writeChannel(channel)) break;
-                        iterator.remove();
-                        PooledBuffers.add(waitingBuffer);
-                    } catch (ClosedChannelException e) {
-                        shouldDisconnect = true;
+                        // Try to write the current buffer
+                        if (emptyWaitingList && localBuffer.writeChannel(channel)) {
+                            // Can reuse buffer
+                            localBuffer.clear();
+                            return;
+                        }
+                        this.tickBuffer.setPlain(PooledBuffers.get());
+                        this.waitingBuffers.add(localBuffer);
+                        if (emptyWaitingList) return;
+                        // Write as much as possible from the waiting list
+                        Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
+                        while (iterator.hasNext()) {
+                            BinaryBuffer waitingBuffer = iterator.next();
+                            try {
+                                if (!waitingBuffer.writeChannel(channel)) break;
+                                iterator.remove();
+                                PooledBuffers.add(waitingBuffer);
+                            } catch (IOException e) {
+                                MinecraftServer.getExceptionManager().handleException(e);
+                                throw new ClosedChannelException();
+                            }
+                        }
                     } catch (IOException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
-                        shouldDisconnect = true;
+                        throw new ClosedChannelException();
                     }
+
+                } catch (OutOfMemoryError e) {
+                    this.waitingBuffers.clear();
+                    System.gc(); // Explicit gc forcing buffers to be collected
+                    throw new ClosedChannelException();
                 }
-            } catch (OutOfMemoryError e) {
-                this.waitingBuffers.clear();
-                System.gc(); // Explicit gc forcing buffers to be collected
-                shouldDisconnect = true;
             }
+        } catch (ClosedChannelException e) {
+            disconnect();
         }
-        if (shouldDisconnect) disconnect();
     }
 
     @Override
