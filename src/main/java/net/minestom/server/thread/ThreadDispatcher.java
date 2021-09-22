@@ -1,19 +1,15 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Phaser;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Function;
 
 /**
  * Used to link chunks into multiple groups.
@@ -23,10 +19,12 @@ public final class ThreadDispatcher {
     private final ThreadProvider provider;
     private final List<TickThread> threads;
 
-    private final Map<TickThread, Set<ChunkEntry>> threadChunkMap = new HashMap<>();
+    // Chunk -> ChunkEntry mapping
     private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
+    // Queue to update chunks linked thread
     private final ArrayDeque<Chunk> chunkUpdateQueue = new ArrayDeque<>();
 
+    // Requests consumed at the end of each tick
     private final Queue<Chunk> chunkLoadRequests = new ConcurrentLinkedQueue<>();
     private final Queue<Chunk> chunkUnloadRequests = new ConcurrentLinkedQueue<>();
     private final Queue<Entity> entityUpdateRequests = new ConcurrentLinkedQueue<>();
@@ -37,7 +35,6 @@ public final class ThreadDispatcher {
     private ThreadDispatcher(ThreadProvider provider, int threadCount) {
         this.provider = provider;
         this.threads = new ArrayList<>(threadCount);
-
         for (int i = 0; i < threadCount; i++) {
             final TickThread tickThread = new TickThread(phaser, i);
             this.threads.add(tickThread);
@@ -88,47 +85,8 @@ public final class ThreadDispatcher {
      * @param time the tick time in milliseconds
      */
     public void updateAndAwait(long time) {
-        for (var entry : threadChunkMap.entrySet()) {
-            final TickThread thread = entry.getKey();
-            final Set<ChunkEntry> chunkEntries = entry.getValue();
-            if (chunkEntries == null || chunkEntries.isEmpty()) {
-                // Nothing to tick
-                continue;
-            }
-            // Execute tick
-            this.phaser.register();
-            thread.startTick(() -> {
-                Acquirable.refreshEntries(chunkEntries);
-
-                final ReentrantLock lock = thread.getLock();
-                lock.lock();
-                for (ChunkEntry chunkEntry : chunkEntries) {
-                    final Chunk chunk = chunkEntry.chunk;
-                    if (!ChunkUtils.isLoaded(chunk)) return;
-                    try {
-                        chunk.tick(time);
-                    } catch (Throwable e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
-                    final List<Entity> entities = chunkEntry.entities;
-                    if (!entities.isEmpty()) {
-                        for (Entity entity : entities) {
-                            if (lock.hasQueuedThreads()) {
-                                lock.unlock();
-                                // #acquire() callbacks should be called here
-                                lock.lock();
-                            }
-                            try {
-                                entity.tick(time);
-                            } catch (Throwable e) {
-                                MinecraftServer.getExceptionManager().handleException(e);
-                            }
-                        }
-                    }
-                }
-                lock.unlock();
-                // #acquire() callbacks
-            });
+        for (TickThread thread : threads) {
+            thread.startTick(time);
         }
         this.phaser.arriveAndAwaitAdvance();
     }
@@ -155,15 +113,11 @@ public final class ThreadDispatcher {
         int counter = 0;
         while (true) {
             final Chunk chunk = chunkUpdateQueue.pollFirst();
-            if (!ChunkUtils.isLoaded(chunk)) {
-                removeChunk(chunk);
-                continue;
-            }
-            // Update chunk threads
-            switchChunk(chunk);
-            // Add back to the deque
-            chunkUpdateQueue.addLast(chunk);
-
+            if (chunk == null) break;
+            // Update chunk's thread
+            ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+            if (chunkEntry != null) chunkEntry.thread = retrieveThread(chunk);
+            this.chunkUpdateQueue.addLast(chunk);
             if (++counter > size || System.currentTimeMillis() >= endTime)
                 break;
         }
@@ -202,47 +156,17 @@ public final class ThreadDispatcher {
         this.entityRemovalRequests.add(entity);
     }
 
-    private void switchChunk(@NotNull Chunk chunk) {
-        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
-        if (chunkEntry == null) return;
-        Set<ChunkEntry> chunks = threadChunkMap.get(chunkEntry.thread);
-        if (chunks == null || chunks.isEmpty()) return;
-        chunks.remove(chunkEntry);
-        setChunkThread(chunk, tickThread -> {
-            chunkEntry.thread = tickThread;
-            return chunkEntry;
-        });
-    }
-
-    private @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
-                                               @NotNull Function<TickThread, ChunkEntry> chunkEntrySupplier) {
+    private TickThread retrieveThread(Chunk chunk) {
         final int threadId = Math.abs(provider.findThread(chunk)) % threads.size();
-        TickThread thread = threads.get(threadId);
-        Set<ChunkEntry> chunks = threadChunkMap.computeIfAbsent(thread, tickThread -> new HashSet<>());
-
-        ChunkEntry chunkEntry = chunkEntrySupplier.apply(thread);
-        chunks.add(chunkEntry);
-        return chunkEntry;
-    }
-
-    private void removeChunk(Chunk chunk) {
-        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
-        if (chunkEntry != null) {
-            TickThread thread = chunkEntry.thread;
-            Set<ChunkEntry> chunks = threadChunkMap.get(thread);
-            if (chunks != null) {
-                chunks.remove(chunkEntry);
-            }
-            chunkEntryMap.remove(chunk);
-        }
-        this.chunkUpdateQueue.remove(chunk);
+        return threads.get(threadId);
     }
 
     private void processLoadedChunks() {
         Chunk chunk;
         while ((chunk = chunkLoadRequests.poll()) != null) {
-            Chunk finalChunk = chunk;
-            ChunkEntry chunkEntry = setChunkThread(chunk, (thread) -> new ChunkEntry(thread, finalChunk));
+            final TickThread thread = retrieveThread(chunk);
+            final ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
+            thread.entries().add(chunkEntry);
             this.chunkEntryMap.put(chunk, chunkEntry);
             this.chunkUpdateQueue.add(chunk);
         }
@@ -251,7 +175,12 @@ public final class ThreadDispatcher {
     private void processUnloadedChunks() {
         Chunk chunk;
         while ((chunk = chunkUnloadRequests.poll()) != null) {
-            removeChunk(chunk);
+            final ChunkEntry chunkEntry = chunkEntryMap.remove(chunk);
+            if (chunkEntry != null) {
+                TickThread thread = chunkEntry.thread;
+                thread.entries().remove(chunkEntry);
+            }
+            this.chunkUpdateQueue.remove(chunk);
         }
     }
 
@@ -296,15 +225,15 @@ public final class ThreadDispatcher {
             this.chunk = chunk;
         }
 
-        public @NotNull TickThread getThread() {
+        public @NotNull TickThread thread() {
             return thread;
         }
 
-        public @NotNull Chunk getChunk() {
+        public @NotNull Chunk chunk() {
             return chunk;
         }
 
-        public @NotNull List<Entity> getEntities() {
+        public @NotNull List<Entity> entities() {
             return entities;
         }
 

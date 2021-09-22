@@ -92,17 +92,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Decrypt data
         if (encrypted) {
             final Cipher cipher = decryptCipher;
-            final int remainingBytes = readBuffer.readableBytes();
-            final byte[] bytes = readBuffer.readRemainingBytes();
-            byte[] output = new byte[cipher.getOutputSize(remainingBytes)];
+            ByteBuffer input = readBuffer.asByteBuffer(0, readBuffer.writerOffset());
             try {
-                cipher.update(bytes, 0, remainingBytes, output, 0);
+                cipher.update(input, input.duplicate());
             } catch (ShortBufferException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
                 return;
             }
-            readBuffer.clear();
-            readBuffer.writeBytes(output);
         }
         // Read all packets
         while (readBuffer.readableBytes() > 0) {
@@ -214,12 +210,17 @@ public class PlayerSocketConnection extends PlayerConnection {
                     serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                             GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
                 }
-                write(serverPacket);
+                writePacket(serverPacket);
             } else {
                 // Player is probably not logged yet
                 writeAndFlush(serverPacket);
             }
         }
+    }
+
+    @Override
+    public void sendFramedPacket(@NotNull FramedPacket framedPacket) {
+        write(framedPacket.body().duplicate().position(0));
     }
 
     @ApiStatus.Internal
@@ -249,17 +250,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    public void write(@NotNull FramedPacket framedPacket) {
-        write(framedPacket.body().position(0));
-    }
-
-    public void write(@NotNull ServerPacket packet) {
+    private void writePacket(@NotNull ServerPacket packet) {
         write(PacketUtils.createFramedPacket(packet, compressed).flip());
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
         synchronized (bufferLock) {
-            write(packet);
+            writePacket(packet);
             flush();
         }
     }
@@ -267,7 +264,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void flush() {
         boolean shouldDisconnect = false;
-        if (!channel.isOpen()) return;
         synchronized (bufferLock) {
             final BinaryBuffer localBuffer = tickBuffer.getPlain();
             if (localBuffer.readableBytes() == 0 && waitingBuffers.isEmpty()) return;
@@ -278,16 +274,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                     final Cipher cipher = encryptCipher;
                     // Encrypt data first
                     ByteBuffer cipherInput = localBuffer.asByteBuffer(0, localBuffer.writerOffset());
-                    BinaryBuffer pooled = PooledBuffers.get();
-                    ByteBuffer cipherOutput = pooled.asByteBuffer(0, pooled.capacity());
                     try {
-                        cipher.update(cipherInput, cipherOutput);
+                        cipher.update(cipherInput, cipherInput.duplicate());
                     } catch (ShortBufferException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
                     }
-                    localBuffer.clear();
-                    localBuffer.write(cipherOutput.flip());
-                    PooledBuffers.add(pooled);
                 }
 
                 this.waitingBuffers.add(localBuffer);

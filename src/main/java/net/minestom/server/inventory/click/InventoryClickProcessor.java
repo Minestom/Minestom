@@ -5,7 +5,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.*;
+import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
@@ -146,6 +149,8 @@ public final class InventoryClickProcessor {
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
+            if (itemStack.isAir())
+                return false; // Ignore air click
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
                 return false;
@@ -154,7 +159,12 @@ public final class InventoryClickProcessor {
             return true;
         }, start, end, step);
 
-        ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
+        final ItemStack itemResult = pair.left();
+        final Map<Integer, ItemStack> itemChangesMap = pair.right();
+        itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
+            targetInventory.setItemStack(s, itemStack);
+            callClickEvent(player, targetInventory, s, ClickType.SHIFT_CLICK, itemStack, cursor);
+        });
         clickResult.setClicked(itemResult);
         return clickResult;
     }
@@ -306,9 +316,13 @@ public final class InventoryClickProcessor {
                 final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
             });
-            var itemResult = pair.left();
-            var map = pair.right();
-            return TransactionOption.ALL.fill(inv, itemResult, map);
+            final ItemStack itemResult = pair.left();
+            var itemChangesMap = pair.right();
+            itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
+                inv.setItemStack(s, itemStack);
+                callClickEvent(player, inv, s, ClickType.DOUBLE_CLICK, itemStack, cursor);
+            });
+            return itemResult;
         };
 
         ItemStack remain = cursorRule.apply(cursor, remainingAmount);

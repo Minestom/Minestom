@@ -139,12 +139,16 @@ public class AnvilLoader implements IChunkLoader {
                     for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                         try {
                             final BlockState blockState = section.get(x, y, z);
-                            Block block = Objects.requireNonNull(Block.fromNamespaceId(blockState.getName()))
-                                    .withProperties(blockState.getProperties());
-                            BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
-                            if (handler != null) {
-                                block = block.withHandler(handler);
-                            }
+                            final String blockName = blockState.getName();
+                            if (blockName.equals("minecraft:air")) continue;
+                            Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName));
+                            // Properties
+                            final Map<String, String> properties = blockState.getProperties();
+                            if (!properties.isEmpty()) block = block.withProperties(properties);
+                            // Handler
+                            final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
+                            if (handler != null) block = block.withHandler(handler);
+
                             chunk.setBlock(x, y + yOffset, z, block);
                         } catch (Exception e) {
                             EXCEPTION_MANAGER.handleException(e);

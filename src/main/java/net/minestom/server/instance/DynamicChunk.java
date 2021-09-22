@@ -101,10 +101,12 @@ public class DynamicChunk extends Chunk {
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         // Verify if the block object is present
-        final Block entry = !entries.isEmpty() ?
-                entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
-        if (entry != null || condition == Condition.CACHED) {
-            return entry;
+        if (condition != Condition.TYPE) {
+            final Block entry = !entries.isEmpty() ?
+                    entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
+            if (entry != null || condition == Condition.CACHED) {
+                return entry;
+            }
         }
         // Retrieve the block from state id
         final Section section = getOptionalSection(y);
@@ -120,15 +122,16 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void sendChunk(@NotNull Player player) {
+    public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
         final long lastChange = getLastChangeTime();
         final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
         final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
-        if (connection instanceof PlayerSocketConnection socketConnection) {
-            socketConnection.write(lightPacket);
-            socketConnection.write(chunkPacket);
+        if (connection instanceof PlayerSocketConnection) {
+            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            socketConnection.sendFramedPacket(lightPacket);
+            socketConnection.sendFramedPacket(chunkPacket);
         } else {
             connection.sendPacket(lightPacket.packet());
             connection.sendPacket(chunkPacket.packet());
@@ -136,7 +139,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void sendChunk() {
+    public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
         final long lastChange = getLastChangeTime();
@@ -163,7 +166,7 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
-    private @NotNull ChunkDataPacket createChunkPacket() {
+    private synchronized @NotNull ChunkDataPacket createChunkPacket() {
         ChunkDataPacket packet = new ChunkDataPacket();
         packet.biomes = biomes;
         packet.chunkX = chunkX;
@@ -173,9 +176,7 @@ public class DynamicChunk extends Chunk {
         return packet;
     }
 
-    private @NotNull UpdateLightPacket createLightPacket() {
-        long skyMask = 0;
-        long blockMask = 0;
+    private synchronized @NotNull UpdateLightPacket createLightPacket() {
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
@@ -196,18 +197,13 @@ public class DynamicChunk extends Chunk {
 
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
-                skyMask |= 1L << index;
+                updateLightPacket.skyLightMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
-                blockMask |= 1L << index;
+                updateLightPacket.blockLightMask.set(index);
             }
         }
-
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[0];
-        updateLightPacket.emptyBlockLightMask = new long[0];
         return updateLightPacket;
     }
 

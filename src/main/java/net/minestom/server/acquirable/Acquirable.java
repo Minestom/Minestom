@@ -7,7 +7,6 @@ import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -25,19 +24,12 @@ public interface Acquirable<T> {
      * @return the entities ticked in the current thread
      */
     static @NotNull Stream<@NotNull Entity> currentEntities() {
-        return AcquirableImpl.ENTRIES.get().stream()
-                .flatMap(chunkEntry -> chunkEntry.getEntities().stream());
-    }
-
-    /**
-     * Mostly for internal use, external calls are unrecommended as they could lead
-     * to unexpected behavior.
-     *
-     * @param entries the new chunk entries
-     */
-    @ApiStatus.Internal
-    static void refreshEntries(@NotNull Collection<ThreadDispatcher.ChunkEntry> entries) {
-        AcquirableImpl.ENTRIES.set(entries);
+        final Thread currentThread = Thread.currentThread();
+        if (currentThread instanceof TickThread) {
+            return ((TickThread) currentThread).entries().stream()
+                    .flatMap(chunkEntry -> chunkEntry.entities().stream());
+        }
+        return Stream.empty();
     }
 
     /**
@@ -170,7 +162,7 @@ public interface Acquirable<T> {
 
         public TickThread getTickThread() {
             final ThreadDispatcher.ChunkEntry entry = this.chunkEntry;
-            return entry != null ? entry.getThread() : null;
+            return entry != null ? entry.thread() : null;
         }
     }
 }

@@ -1,17 +1,13 @@
 package net.minestom.server.acquirable;
 
-import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 final class AcquirableImpl<T> implements Acquirable<T> {
-    static final ThreadLocal<Collection<ThreadDispatcher.ChunkEntry>> ENTRIES = ThreadLocal.withInitial(Collections::emptySet);
     static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
 
     /**
@@ -40,8 +36,8 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     static @Nullable ReentrantLock enter(@NotNull Thread currentThread, @Nullable TickThread elementThread) {
         if (elementThread == null) return null;
         if (currentThread == elementThread) return null;
-        final ReentrantLock currentLock = currentThread instanceof TickThread ? ((TickThread) currentThread).getLock() : null;
-        final ReentrantLock targetLock = elementThread.getLock();
+        final ReentrantLock currentLock = currentThread instanceof TickThread ? ((TickThread) currentThread).lock() : null;
+        final ReentrantLock targetLock = elementThread.lock();
         if (targetLock.isHeldByCurrentThread()) return null;
 
         // Monitoring

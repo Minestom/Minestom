@@ -131,11 +131,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
-    /**
-     * Lock used to support #switchEntityType
-     */
-    private final Object entityTypeLock = new Object();
-
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -247,8 +242,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
-            refreshPosition(position);
-            previousPosition = position;
+            this.position = position;
+            this.previousPosition = position;
+            refreshCoordinate(position);
             synchronizePosition(true);
         };
 
@@ -310,13 +306,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean addViewer(@NotNull Player player) {
-        synchronized (this.entityTypeLock) {
-            return addViewer0(player);
-        }
+        if (player == this) return false;
+        return addViewer0(player);
     }
 
     protected boolean addViewer0(@NotNull Player player) {
-        if (player == this || !this.viewers.add(player)) {
+        if (!this.viewers.add(player)) {
             return false;
         }
         player.viewableEntities.add(this);
@@ -328,7 +323,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         playerConnection.sendPacket(getMetadataPacket());
         // Passenger
-        if (hasPassenger()) {
+        final Set<Entity> passengers = this.passengers;
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                passenger.addViewer(player);
+            }
             playerConnection.sendPacket(getPassengersPacket());
         }
         // Head position
@@ -338,13 +337,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean removeViewer(@NotNull Player player) {
-        synchronized (this.entityTypeLock) {
-            return removeViewer0(player);
-        }
+        if (player == this) return false;
+        return removeViewer0(player);
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
-        if (player == this || !viewers.remove(player)) {
+        if (!viewers.remove(player)) {
             return false;
         }
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
@@ -369,16 +367,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @param entityType the new entity type
      */
-    public void switchEntityType(@NotNull EntityType entityType) {
-        synchronized (entityTypeLock) {
-            this.entityType = entityType;
-            this.metadata = new Metadata(this);
-            this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+    public synchronized void switchEntityType(@NotNull EntityType entityType) {
+        this.entityType = entityType;
+        this.metadata = new Metadata(this);
+        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
-            Set<Player> viewers = new HashSet<>(getViewers());
-            getViewers().forEach(this::removeViewer0);
-            viewers.forEach(this::addViewer0);
-        }
+        Set<Player> viewers = new HashSet<>(getViewers());
+        getViewers().forEach(this::removeViewer0);
+        viewers.forEach(this::addViewer0);
     }
 
     @NotNull
@@ -473,6 +469,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             previousPosition = position;
             return;
         }
+
+        if (vehicle != null) return;
 
         final boolean noGravity = hasNoGravity();
         final boolean hasVelocity = hasVelocity();
@@ -900,7 +898,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!passengers.remove(entity)) return;
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
-        if (entity instanceof Player player) {
+        entity.synchronizePosition(false);
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
             player.getPlayerConnection().sendPacket(new PlayerPositionAndLookPacket(player.getPosition(),
                     (byte) 0x00, player.getNextTeleportId(), true));
         }
@@ -1191,9 +1191,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void refreshCoordinate(Point newPosition) {
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
-                passenger.position = passenger.position.withCoord(newPosition);
-                passenger.previousPosition = passenger.position;
-                passenger.refreshCoordinate(newPosition);
+                final Pos oldPassengerPos = passenger.position;
+                final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
+                        newPosition.y() + getEyeHeight(),
+                        newPosition.z());
+                passenger.position = newPassengerPos;
+                passenger.previousPosition = oldPassengerPos;
+                passenger.refreshCoordinate(newPassengerPos);
             }
         }
         final Instance instance = getInstance();

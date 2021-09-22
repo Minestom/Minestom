@@ -1,6 +1,5 @@
 package net.minestom.server.utils;
 
-import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -122,10 +121,11 @@ public final class Utils {
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            final Short2ShortLinkedOpenHashMap paletteBlockMap = palette.getPaletteBlockMap();
-            writeVarInt(buffer, paletteBlockMap.size());
-            for (short paletteValue : paletteBlockMap.values()) {
-                writeVarInt(buffer, paletteValue);
+            final short[] paletteBlockArray = palette.getPaletteBlockArray();
+            final int paletteSize = palette.getLastPaletteIndex() + 1;
+            writeVarInt(buffer, paletteSize);
+            for (int i = 0; i < paletteSize; i++) {
+                writeVarInt(buffer, paletteBlockArray[i]);
             }
         }
 

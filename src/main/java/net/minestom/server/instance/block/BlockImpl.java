@@ -92,9 +92,7 @@ final class BlockImpl implements Block {
 
     @Override
     public @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties) {
-        if (properties.isEmpty()) {
-            return this;
-        }
+        if (properties.isEmpty()) return this;
         if (this.properties.size() == properties.size()) {
             return compute(properties); // Map should be complete
         }
@@ -171,6 +169,7 @@ final class BlockImpl implements Block {
     }
 
     private Block compute(Map<String, String> properties) {
+        if (this.properties.equals(properties)) return this;
         Block block = propertyEntry.get(properties);
         if (block == null)
             throw new IllegalArgumentException("Invalid properties: " + properties + " for block " + this);

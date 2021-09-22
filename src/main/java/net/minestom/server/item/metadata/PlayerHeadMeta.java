@@ -19,7 +19,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
     private final PlayerSkin playerSkin;
 
     protected PlayerHeadMeta(@NotNull ItemMetaBuilder metaBuilder, UUID skullOwner,
-                             PlayerSkin playerSkin) {
+                             @Nullable PlayerSkin playerSkin) {
         super(metaBuilder);
         this.skullOwner = skullOwner;
         this.playerSkin = playerSkin;
@@ -29,7 +29,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
         return skullOwner;
     }
 
-    public PlayerSkin getPlayerSkin() {
+    public @Nullable PlayerSkin getPlayerSkin() {
         return playerSkin;
     }
 
@@ -48,6 +48,11 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
         public Builder playerSkin(@Nullable PlayerSkin playerSkin) {
             this.playerSkin = playerSkin;
             handleCompound("SkullOwner", nbtCompound -> {
+                if (playerSkin == null) {
+                    nbtCompound.removeTag("Properties");
+                    return;
+                }
+
                 NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
                 String value = this.playerSkin.getTextures() == null ? "" : this.playerSkin.getTextures();
                 String signature = this.playerSkin.getSignature() == null ? "" : this.playerSkin.getSignature();

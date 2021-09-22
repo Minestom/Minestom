@@ -1,6 +1,7 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -67,8 +68,8 @@ public final class Worker extends Thread {
             MinecraftServer.getConnectionManager().removePlayer(connection);
             connection.refreshOnline(false);
             Player player = connection.getPlayer();
-            if (player != null) {
-                player.remove();
+            if (player != null && !player.isRemoved()) {
+                player.scheduleNextTick(Entity::remove);
             }
         } catch (IOException e) {
             e.printStackTrace();

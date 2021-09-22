@@ -78,7 +78,7 @@ public final class BinaryBuffer {
     }
 
     public boolean canRead(int size) {
-        return readerOffset + size < capacity;
+        return readerOffset + size <= writerOffset;
     }
 
     public boolean canWrite(int size) {

@@ -23,7 +23,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -346,17 +345,10 @@ public final class ConnectionManager {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
-            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-                socketConnection.writeAndFlush(disconnectPacket);
-                playerConnection.disconnect();
-                try {
-                    socketConnection.getChannel().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                player.remove();
-            }
+            playerConnection.sendPacket(disconnectPacket);
+            playerConnection.flush();
+            player.remove();
+            playerConnection.disconnect();
         }
         this.players.clear();
         this.connectionPlayerMap.clear();

@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +22,11 @@ public interface BlockGetter {
         return Objects.requireNonNull(getBlock(point, Condition.NONE));
     }
 
+    /**
+     * Represents a hint to retrieve blocks more efficiently.
+     * Implementing interfaces do not have to honor this.
+     */
+    @ApiStatus.Experimental
     enum Condition {
         /**
          * Returns a block no matter what.
@@ -28,10 +34,17 @@ public interface BlockGetter {
          */
         NONE,
         /**
-         * Returns a block only if it has a handler or nbt.
+         * Hints that the method should return only if the block is cached.
          * <p>
-         * Should be more performant than {@link #NONE}.
+         * Useful if you are only interested in a block handler or nbt.
          */
-        CACHED
+        CACHED,
+        /**
+         * Hints that we only care about the block type.
+         * <p>
+         * Useful if you need to retrieve registry information about the block.
+         * Be aware that the returned block may not return the proper handler/nbt.
+         */
+        TYPE
     }
 }
