@@ -78,6 +78,10 @@ public final class BinaryBuffer {
         reset(marker.readerOffset(), marker.writerOffset());
     }
 
+    public boolean canRead(int size) {
+        return readerOffset + size <= writerOffset;
+    }
+
     public boolean canWrite(int size) {
         return writerOffset + size < capacity;
     }
@@ -88,6 +92,10 @@ public final class BinaryBuffer {
 
     public int readerOffset() {
         return readerOffset;
+    }
+
+    public void readerOffset(int offset) {
+        this.readerOffset = offset;
     }
 
     public int writerOffset() {
@@ -114,9 +122,10 @@ public final class BinaryBuffer {
         return readBytes(readableBytes());
     }
 
-    public void clear() {
+    public BinaryBuffer clear() {
         this.readerOffset = 0;
         this.writerOffset = 0;
+        return this;
     }
 
     public ByteBuffer asByteBuffer(int reader, int writer) {

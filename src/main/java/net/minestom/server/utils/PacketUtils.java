@@ -17,11 +17,13 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,10 +40,13 @@ import java.util.zip.Deflater;
  */
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
-    private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
-    private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.MAX_PACKET_SIZE);
+    private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
 
+    /// Local buffers
+    private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
+    private static final LocalCache LOCAL_BUFFER = LocalCache.get("local-buffer", Server.MAX_PACKET_SIZE);
+
+    // Viewable packets
     private static final Object VIEWABLE_PACKET_LOCK = new Object();
     private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
 
@@ -51,7 +56,7 @@ public final class PacketUtils {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     public static ByteBuffer localBuffer() {
-        return COMPRESSION_CACHE.get();
+        return LOCAL_BUFFER.get();
     }
 
     /**
@@ -115,12 +120,7 @@ public final class PacketUtils {
             for (Player player : players) {
                 if (!player.isOnline() || !playerValidator.isValid(player))
                     continue;
-                final PlayerConnection connection = player.getPlayerConnection();
-                if (connection instanceof PlayerSocketConnection) {
-                    ((PlayerSocketConnection) connection).write(framedPacket);
-                } else {
-                    connection.sendPacket(packet);
-                }
+                player.getPlayerConnection().sendFramedPacket(framedPacket);
             }
         } else {
             // Write the same packet for each individual players
@@ -179,7 +179,7 @@ public final class PacketUtils {
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
         if (!compression) {
-            // Length + payload
+            // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             Utils.writeVarInt(buffer, packet.getId());
             packet.write(new BinaryWriter(buffer));
@@ -187,40 +187,40 @@ public final class PacketUtils {
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             return;
         }
-        // Compressed format
+        // Compressed format https://wiki.vg/Protocol#With_compression
         final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
         final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int contentStart = buffer.position();
 
+        final int contentStart = buffer.position();
         Utils.writeVarInt(buffer, packet.getId());
-        packet.write(new BinaryWriter(buffer));
+        packet.write(BinaryWriter.view(buffer)); // ensure that the buffer is not resized/changed
         final int packetSize = buffer.position() - contentStart;
-        if (packetSize >= MinecraftServer.getCompressionThreshold()) {
+        final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
+        if (compressed) {
             // Packet large enough, compress
             buffer.position(contentStart);
             final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
             final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
 
-            Deflater deflater = COMPRESSOR.get();
+            Deflater deflater = LOCAL_DEFLATER.get();
             deflater.setInput(uncompressedCopy);
             deflater.finish();
             deflater.deflate(buffer);
             deflater.reset();
-
-            Utils.writeVarIntHeader(buffer, compressedIndex, (buffer.position() - contentStart) + 3);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize);
-        } else {
-            Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
-            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0);
         }
+        // Packet header (Packet + Data Length)
+        Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+        Utils.writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
     }
 
+    @ApiStatus.Internal
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
         ByteBuffer buffer = PACKET_BUFFER.get();
         writeFramedPacket(buffer, packet, compression);
         return buffer;
     }
 
+    @ApiStatus.Internal
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
         return createFramedPacket(packet, MinecraftServer.getCompressionThreshold() > 0);
     }
@@ -246,7 +246,7 @@ public final class PacketUtils {
         }
 
         public static LocalCache get(String name, int size) {
-            return CACHES.computeIfAbsent(name, s -> new LocalCache(name, size));
+            return CACHES.computeIfAbsent(name, s -> new LocalCache(s, size));
         }
 
         public String name() {
@@ -259,19 +259,25 @@ public final class PacketUtils {
     }
 
     private static final class ViewableStorage {
-        private final Viewable viewable;
+        private final WeakReference<Viewable> viewable;
         private final Map<PlayerConnection, List<IntIntPair>> entityIdMap = new HashMap<>();
-        private final BinaryBuffer buffer = BinaryBuffer.ofSize(Server.SOCKET_SEND_BUFFER_SIZE);
+        private final BinaryBuffer buffer = PooledBuffers.get();
 
         private ViewableStorage(Viewable viewable) {
-            this.viewable = viewable;
+            this.viewable = new WeakReference<>(viewable);
+            PooledBuffers.registerBuffer(this, buffer);
         }
 
         private synchronized void append(ServerPacket serverPacket, PlayerConnection connection) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
-            if (!buffer.canWrite(framedPacket.limit())) process();
+            final int packetSize = framedPacket.limit();
+            if (packetSize >= buffer.capacity()) {
+                process(new SingleEntry(framedPacket, connection));
+                return;
+            }
+            if (!buffer.canWrite(packetSize)) process();
             final int start = buffer.writerOffset();
-            this.buffer.write(framedPacket);
+            buffer.write(framedPacket);
             final int end = buffer.writerOffset();
             if (connection != null) {
                 List<IntIntPair> list = entityIdMap.computeIfAbsent(connection, con -> new ArrayList<>());
@@ -279,7 +285,11 @@ public final class PacketUtils {
             }
         }
 
-        private synchronized void process() {
+        private synchronized void process(@Nullable SingleEntry singleEntry) {
+            if (buffer.writerOffset() == 0)
+                return; // TODO: there is nothing in the buffer, remove from VIEWABLE_STORAGE_MAP
+            final Viewable viewable = this.viewable.get();
+            if (viewable == null) return;
             for (Player player : viewable.getViewers()) {
                 PlayerConnection connection = player.getPlayerConnection();
                 Consumer<ByteBuffer> writer = connection instanceof PlayerSocketConnection
@@ -306,10 +316,29 @@ public final class PacketUtils {
                     ByteBuffer remainSlice = buffer.asByteBuffer(lastWrite, remaining);
                     writer.accept(remainSlice);
                 }
+
+                // Handle single entry
+                if (singleEntry != null && !Objects.equals(singleEntry.exception, connection)) {
+                    writer.accept(singleEntry.buffer.position(0));
+                }
             }
             // Clear state
             this.entityIdMap.clear();
             this.buffer.clear();
+        }
+
+        private void process() {
+            process(null);
+        }
+
+        private static final class SingleEntry {
+            private final ByteBuffer buffer;
+            private final PlayerConnection exception;
+
+            public SingleEntry(ByteBuffer buffer, PlayerConnection exception) {
+                this.buffer = buffer;
+                this.exception = exception;
+            }
         }
     }
 }

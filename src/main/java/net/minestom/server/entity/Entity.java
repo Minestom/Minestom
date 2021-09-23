@@ -24,6 +24,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -33,7 +34,6 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -132,11 +132,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
-    /**
-     * Lock used to support #switchEntityType
-     */
-    private final Object entityTypeLock = new Object();
-
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -164,7 +159,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     /**
      * Schedules a task to be run during the next entity tick.
-     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next entity tick
      */
@@ -249,8 +243,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
-            refreshPosition(position);
-            previousPosition = position;
+            this.position = position;
+            this.previousPosition = position;
+            refreshCoordinate(position);
             synchronizePosition(true);
         };
 
@@ -312,13 +307,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean addViewer(@NotNull Player player) {
-        synchronized (this.entityTypeLock) {
-            return addViewer0(player);
-        }
+        if (player == this) return false;
+        return addViewer0(player);
     }
 
     protected boolean addViewer0(@NotNull Player player) {
-        if (player == this || !this.viewers.add(player)) {
+        if (!this.viewers.add(player)) {
             return false;
         }
         player.viewableEntities.add(this);
@@ -330,7 +324,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         playerConnection.sendPacket(getMetadataPacket());
         // Passenger
-        if (hasPassenger()) {
+        final Set<Entity> passengers = this.passengers;
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                passenger.addViewer(player);
+            }
             playerConnection.sendPacket(getPassengersPacket());
         }
         // Head position
@@ -340,13 +338,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public final boolean removeViewer(@NotNull Player player) {
-        synchronized (this.entityTypeLock) {
-            return removeViewer0(player);
-        }
+        if (player == this) return false;
+        return removeViewer0(player);
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
-        if (player == this || !viewers.remove(player)) {
+        if (!viewers.remove(player)) {
             return false;
         }
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
@@ -371,16 +368,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @param entityType the new entity type
      */
-    public void switchEntityType(@NotNull EntityType entityType) {
-        synchronized (entityTypeLock) {
-            this.entityType = entityType;
-            this.metadata = new Metadata(this);
-            this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+    public synchronized void switchEntityType(@NotNull EntityType entityType) {
+        this.entityType = entityType;
+        this.metadata = new Metadata(this);
+        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
-            Set<Player> viewers = new HashSet<>(getViewers());
-            getViewers().forEach(this::removeViewer0);
-            viewers.forEach(this::addViewer0);
-        }
+        Set<Player> viewers = new HashSet<>(getViewers());
+        getViewers().forEach(this::removeViewer0);
+        viewers.forEach(this::addViewer0);
     }
 
     @NotNull
@@ -438,7 +433,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Entity tick
         {
             // Cache the number of "gravity tick"
-            this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
             velocityTick();
 
             // handle block contacts
@@ -465,6 +459,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     private void velocityTick() {
+        this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
+
         final boolean isSocketClient = PlayerUtils.isSocketClient(this);
         if (isSocketClient) {
             if (position.samePoint(previousPosition))
@@ -474,6 +470,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             previousPosition = position;
             return;
         }
+
+        if (vehicle != null) return;
 
         final boolean noGravity = hasNoGravity();
         final boolean hasVelocity = hasVelocity();
@@ -626,8 +624,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity type
      */
-    @NotNull
-    public EntityType getEntityType() {
+    public @NotNull EntityType getEntityType() {
         return entityType;
     }
 
@@ -636,8 +633,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity unique id
      */
-    @NotNull
-    public UUID getUuid() {
+    public @NotNull UUID getUuid() {
         return uuid;
     }
 
@@ -650,7 +646,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Refresh internal map
         Entity.ENTITY_BY_UUID.remove(this.uuid);
         Entity.ENTITY_BY_UUID.put(uuid, this);
-
         this.uuid = uuid;
     }
 
@@ -668,8 +663,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity bounding box
      */
-    @NotNull
-    public BoundingBox getBoundingBox() {
+    public @NotNull BoundingBox getBoundingBox() {
         return boundingBox;
     }
 
@@ -868,8 +862,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity vehicle, or null if there is not any
      */
-    @Nullable
-    public Entity getVehicle() {
+    public @Nullable Entity getVehicle() {
         return vehicle;
     }
 
@@ -906,6 +899,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!passengers.remove(entity)) return;
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
+        entity.synchronizePosition(false);
         if (entity instanceof Player) {
             Player player = (Player) entity;
             player.getPlayerConnection().sendPacket(new PlayerPositionAndLookPacket(player.getPosition(),
@@ -927,13 +921,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return an unmodifiable list containing all the entity passengers
      */
-    @NotNull
-    public Set<Entity> getPassengers() {
+    public @NotNull Set<@NotNull Entity> getPassengers() {
         return Collections.unmodifiableSet(passengers);
     }
 
-    @NotNull
-    protected SetPassengersPacket getPassengersPacket() {
+    protected @NotNull SetPassengersPacket getPassengersPacket() {
         SetPassengersPacket passengersPacket = new SetPassengersPacket();
         passengersPacket.vehicleEntityId = getEntityId();
 
@@ -1064,8 +1056,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return the entity pose
      */
-    @NotNull
-    public Pose getPose() {
+    public @NotNull Pose getPose() {
         return this.entityMeta.getPose();
     }
 
@@ -1201,9 +1192,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void refreshCoordinate(Point newPosition) {
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
-                passenger.position = passenger.position.withCoord(newPosition);
-                passenger.previousPosition = passenger.position;
-                passenger.refreshCoordinate(newPosition);
+                final Pos oldPassengerPos = passenger.position;
+                final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
+                        newPosition.y() + getEyeHeight(),
+                        newPosition.z());
+                passenger.position = newPassengerPos;
+                passenger.previousPosition = oldPassengerPos;
+                passenger.refreshCoordinate(newPassengerPos);
             }
         }
         final Instance instance = getInstance();
@@ -1253,8 +1248,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return an unmodifiable list of all this entity effects
      */
-    @NotNull
-    public List<TimedPotion> getActiveEffects() {
+    public @NotNull List<@NotNull TimedPotion> getActiveEffects() {
         return Collections.unmodifiableList(effects);
     }
 
@@ -1393,9 +1387,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
-        sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
+        final Pos posCache = this.position;
+        final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
+        PacketUtils.prepareViewablePacket(currentChunk, packet, this instanceof Player ? (Player) this : null);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
-        this.lastSyncedPosition = position;
+        this.lastSyncedPosition = posCache;
     }
 
     /**

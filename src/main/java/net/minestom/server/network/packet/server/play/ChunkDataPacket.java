@@ -186,7 +186,7 @@ public class ChunkDataPacket implements ServerPacket {
                         int paletteSize = reader.readVarInt();
                         for (int i = 0; i < paletteSize; i++) {
                             final int paletteValue = reader.readVarInt();
-                            palette.getPaletteBlockMap().put((short) i, (short) paletteValue);
+                            palette.getPaletteBlockArray()[i] = (short) paletteValue;
                             palette.getBlockPaletteMap().put((short) paletteValue, (short) i);
                         }
                     }

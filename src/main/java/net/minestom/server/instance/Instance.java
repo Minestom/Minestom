@@ -26,7 +26,6 @@ import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -129,8 +128,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
 
     /**
      * Schedules a task to be run during the next instance tick.
-     * It ensures that the task will be executed in the same thread as the instance
-     * and its chunks/entities (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next instance tick
      */
@@ -222,6 +219,25 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return the chunk at the specified position, null if not loaded
      */
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
+
+    /**
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ this chunk Z
+     * @return true if the chunk is loaded
+     */
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return getChunk(chunkX, chunkZ) != null;
+    }
+
+    /**
+     *
+     * @param point coordinate of a block or other
+     * @return true if the chunk is loaded
+     */
+    public boolean isChunkLoaded(Point point) {
+        return isChunkLoaded(point.chunkX(), point.chunkZ());
+    }
 
     /**
      * Saves the current instance tags.
@@ -498,13 +514,27 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         int maxX = ChunkUtils.getChunkCoordinate(point.x() + range);
         int minZ = ChunkUtils.getChunkCoordinate(point.z() - range);
         int maxZ = ChunkUtils.getChunkCoordinate(point.z() + range);
+
+        // Cache squared range to prevent sqrt operations
+        double squaredRange = range * range;
+
         List<Entity> result = new ArrayList<>();
         synchronized (entitiesLock) {
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
                     Chunk chunk = getChunk(x, z);
-                    if (chunk != null) {
-                        result.addAll(getChunkEntities(chunk));
+
+                    if (chunk == null) {
+                        continue;
+                    }
+
+                    Set<Entity> chunkEntities = getChunkEntities(chunk);
+
+                    // Filter all entities out of range
+                    for (Entity chunkEntity : chunkEntities) {
+                        if (point.distanceSquared(chunkEntity.getPosition()) < squaredRange) {
+                            result.add(chunkEntity);
+                        }
                     }
                 }
             }

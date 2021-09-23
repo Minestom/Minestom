@@ -5,7 +5,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.*;
+import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
@@ -142,17 +145,26 @@ public final class InventoryClickProcessor {
             }
         }
 
+        clickResult.setCancel(true);
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
+            if (itemStack.isAir())
+                return false; // Ignore air click
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
-                clickResult.setCancel(true);
                 return false;
             }
+            clickResult.setCancel(false);
             return true;
         }, start, end, step);
-        ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
+
+        final ItemStack itemResult = pair.left();
+        final Map<Integer, ItemStack> itemChangesMap = pair.right();
+        itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
+            targetInventory.setItemStack(s, itemStack);
+            callClickEvent(player, targetInventory, s, ClickType.SHIFT_CLICK, itemStack, cursor);
+        });
         clickResult.setClicked(itemResult);
         return clickResult;
     }
@@ -285,7 +297,7 @@ public final class InventoryClickProcessor {
 
     public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
                                                      @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
+        InventoryClickResult clickResult = startCondition(player, clickedInventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
         if (cursor.isAir()) return clickResult.cancelled();
 
@@ -301,12 +313,16 @@ public final class InventoryClickProcessor {
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
                 if (index == slot) // Prevent item lose/duplication
                     return false;
-                final InventoryClickResult result = startCondition(player, inventory, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
+                final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
             });
-            var itemResult = pair.left();
-            var map = pair.right();
-            return TransactionOption.ALL.fill(inv, itemResult, map);
+            final ItemStack itemResult = pair.left();
+            var itemChangesMap = pair.right();
+            itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
+                inv.setItemStack(s, itemStack);
+                callClickEvent(player, inv, s, ClickType.DOUBLE_CLICK, itemStack, cursor);
+            });
+            return itemResult;
         };
 
         ItemStack remain = cursorRule.apply(cursor, remainingAmount);

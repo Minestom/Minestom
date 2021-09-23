@@ -124,8 +124,7 @@ public final class BenchmarkManager {
         for (ThreadInfo threadInfo2 : threadInfo) {
             if (threadInfo2 == null) continue; // Can happen if the thread does not exist
             final String name = threadInfo2.getThreadName();
-            final boolean shouldBenchmark = THREADS.stream().anyMatch(name::startsWith);
-            if (!shouldBenchmark) continue;
+            if (THREADS.stream().noneMatch(name::startsWith)) continue;
 
             final long id = threadInfo2.getThreadId();
 

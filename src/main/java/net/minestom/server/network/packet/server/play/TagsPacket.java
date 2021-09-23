@@ -2,10 +2,13 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -13,7 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TagsPacket implements ServerPacket {
-    private static final TagsPacket REQUIRED_TAGS_PACKET = new TagsPacket(MinecraftServer.getTagManager().getTagMap());
+    @ApiStatus.Internal
+    public static final FramedPacket DEFAULT_TAGS = PacketUtils.allocateTrimmedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
 
     public Map<Tag.BasicType, List<Tag>> tagsMap;
 
@@ -68,15 +72,5 @@ public class TagsPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.TAGS;
-    }
-
-    /**
-     * Gets the {@link TagsPacket} sent to every {@link net.minestom.server.entity.Player}
-     * on login.
-     *
-     * @return the default tags packet
-     */
-    public static @NotNull TagsPacket getRequiredTagsPacket() {
-        return REQUIRED_TAGS_PACKET;
     }
 }

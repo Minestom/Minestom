@@ -5,6 +5,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * See https://wiki.vg/Protocol#Click_Window for more information.
  */
+@ApiStatus.NonExtendable
 public interface InventoryClickHandler {
 
     /**
@@ -78,8 +80,6 @@ public interface InventoryClickHandler {
 
     default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
-        EventDispatcher.call(inventoryClickEvent);
+        EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }
-
 }

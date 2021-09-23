@@ -7,8 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.thread.SingleThreadProvider;
-import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
@@ -24,14 +23,13 @@ import java.util.function.LongConsumer;
 /**
  * Manager responsible for the server ticks.
  * <p>
- * The {@link ThreadProvider} manages the multi-thread aspect of chunk ticks.
+ * The {@link ThreadDispatcher} manages the multi-thread aspect of chunk ticks.
  */
 public final class UpdateManager {
-
     private volatile boolean stopRequested;
 
     // TODO make configurable
-    private ThreadProvider threadProvider = new SingleThreadProvider();
+    private final ThreadDispatcher threadDispatcher = ThreadDispatcher.singleThread();
 
     private final Queue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
     private final Queue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
@@ -47,147 +45,60 @@ public final class UpdateManager {
      * Starts the server loop in the update thread.
      */
     void start() {
-        final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-
-        new Thread(() -> {
-            while (!stopRequested) {
-                try {
-                    long currentTime = System.nanoTime();
-                    final long tickStart = System.currentTimeMillis();
-
-                    // Tick start callbacks
-                    doTickCallback(tickStartCallbacks, tickStart);
-
-                    // Waiting players update (newly connected clients waiting to get into the server)
-                    connectionManager.updateWaitingPlayers();
-
-                    // Keep Alive Handling
-                    connectionManager.handleKeepAlive(tickStart);
-
-                    // Server tick (chunks/entities)
-                    serverTick(tickStart);
-
-                    // the time that the tick took in nanoseconds
-                    final long tickTime = System.nanoTime() - currentTime;
-
-                    // Tick end callbacks
-                    doTickCallback(tickEndCallbacks, tickTime);
-
-                    // Monitoring
-                    if (!tickMonitors.isEmpty()) {
-                        final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
-                        final double tickTimeMs = tickTime / 1e6D;
-                        final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
-                        this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
-                        Acquirable.resetAcquiringTime();
-                    }
-
-                    // Flush all waiting packets
-                    AsyncUtils.runAsync(() -> {
-                        PacketUtils.flush();
-                        for (Player player : connectionManager.getOnlinePlayers()) {
-                            player.getPlayerConnection().flush();
-                        }
-                    });
-
-                    // Disable thread until next tick
-                    LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
-                } catch (Exception e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
-            }
-            this.threadProvider.shutdown();
-        }, MinecraftServer.THREAD_NAME_TICK_SCHEDULER).start();
+        new TickSchedulerThread().start();
     }
 
     /**
-     * Executes a server tick and returns only once all the futures are completed.
-     *
-     * @param tickStart the time of the tick in milliseconds
-     */
-    private void serverTick(long tickStart) {
-        // Tick all instances
-        MinecraftServer.getInstanceManager().getInstances().forEach(instance -> {
-            try {
-                instance.tick(tickStart);
-            } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-        });
-        // Tick all chunks (and entities inside)
-        this.threadProvider.updateAndAwait(tickStart);
-
-        // Clear removed entities & update threads
-        long tickTime = System.currentTimeMillis() - tickStart;
-        this.threadProvider.refreshThreads(tickTime);
-    }
-
-    /**
-     * Used to execute tick-related callbacks.
-     *
-     * @param callbacks the callbacks to execute
-     * @param value     the value to give to the consumers
-     */
-    private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
-        if (!callbacks.isEmpty()) {
-            LongConsumer callback;
-            while ((callback = callbacks.poll()) != null) {
-                callback.accept(value);
-            }
-        }
-    }
-
-    /**
-     * Gets the current {@link ThreadProvider}.
+     * Gets the current {@link ThreadDispatcher}.
      *
      * @return the current thread provider
      */
-    public @NotNull ThreadProvider getThreadProvider() {
-        return threadProvider;
+    public @NotNull ThreadDispatcher getThreadProvider() {
+        return threadDispatcher;
     }
 
     /**
-     * Signals the {@link ThreadProvider} that an instance has been created.
+     * Signals the {@link ThreadDispatcher} that an instance has been created.
      * <p>
      * WARNING: should be automatically done by the {@link InstanceManager}.
      *
      * @param instance the instance
      */
     public void signalInstanceCreate(Instance instance) {
-        this.threadProvider.onInstanceCreate(instance);
+        this.threadDispatcher.onInstanceCreate(instance);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that an instance has been deleted.
+     * Signals the {@link ThreadDispatcher} that an instance has been deleted.
      * <p>
      * WARNING: should be automatically done by the {@link InstanceManager}.
      *
      * @param instance the instance
      */
     public void signalInstanceDelete(Instance instance) {
-        this.threadProvider.onInstanceDelete(instance);
+        this.threadDispatcher.onInstanceDelete(instance);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that a chunk has been loaded.
+     * Signals the {@link ThreadDispatcher} that a chunk has been loaded.
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param chunk the loaded chunk
      */
     public void signalChunkLoad(@NotNull Chunk chunk) {
-        this.threadProvider.onChunkLoad(chunk);
+        this.threadDispatcher.onChunkLoad(chunk);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that a chunk has been unloaded.
+     * Signals the {@link ThreadDispatcher} that a chunk has been unloaded.
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param chunk the unloaded chunk
      */
     public void signalChunkUnload(@NotNull Chunk chunk) {
-        this.threadProvider.onChunkUnload(chunk);
+        this.threadDispatcher.onChunkUnload(chunk);
     }
 
     /**
@@ -243,5 +154,96 @@ public final class UpdateManager {
      */
     public void stop() {
         this.stopRequested = true;
+    }
+
+    private final class TickSchedulerThread extends Thread {
+        private final ThreadDispatcher threadDispatcher = UpdateManager.this.threadDispatcher;
+
+        TickSchedulerThread() {
+            super(MinecraftServer.THREAD_NAME_TICK_SCHEDULER);
+        }
+
+        @Override
+        public void run() {
+            final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            while (!stopRequested) {
+                try {
+                    long currentTime = System.nanoTime();
+                    final long tickStart = System.currentTimeMillis();
+
+                    // Tick start callbacks
+                    doTickCallback(tickStartCallbacks, tickStart);
+
+                    // Waiting players update (newly connected clients waiting to get into the server)
+                    connectionManager.updateWaitingPlayers();
+
+                    // Keep Alive Handling
+                    connectionManager.handleKeepAlive(tickStart);
+
+                    // Server tick (chunks/entities)
+                    serverTick(tickStart);
+
+                    // the time that the tick took in nanoseconds
+                    final long tickTime = System.nanoTime() - currentTime;
+
+                    // Tick end callbacks
+                    doTickCallback(tickEndCallbacks, tickTime);
+
+                    // Monitoring
+                    if (!tickMonitors.isEmpty()) {
+                        final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
+                        final double tickTimeMs = tickTime / 1e6D;
+                        final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
+                        for (Consumer<TickMonitor> consumer : tickMonitors) {
+                            consumer.accept(tickMonitor);
+                        }
+                        Acquirable.resetAcquiringTime();
+                    }
+
+                    // Flush all waiting packets
+                    AsyncUtils.runAsync(() -> {
+                        PacketUtils.flush();
+                        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                            player.getPlayerConnection().flush();
+                        }
+                    });
+
+                    // Disable thread until next tick
+                    LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+            this.threadDispatcher.shutdown();
+        }
+
+        /**
+         * Executes a server tick and returns only once all the futures are completed.
+         *
+         * @param tickStart the time of the tick in milliseconds
+         */
+        private void serverTick(long tickStart) {
+            // Tick all instances
+            for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
+                try {
+                    instance.tick(tickStart);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+            // Tick all chunks (and entities inside)
+            this.threadDispatcher.updateAndAwait(tickStart);
+
+            // Clear removed entities & update threads
+            final long tickTime = System.currentTimeMillis() - tickStart;
+            this.threadDispatcher.refreshThreads(tickTime);
+        }
+
+        private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
+            LongConsumer callback;
+            while ((callback = callbacks.poll()) != null) {
+                callback.accept(value);
+            }
+        }
     }
 }

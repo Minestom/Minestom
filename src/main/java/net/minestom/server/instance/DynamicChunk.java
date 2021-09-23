@@ -4,7 +4,7 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
@@ -93,10 +93,7 @@ public class DynamicChunk extends Chunk {
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
             if (handler == null) return;
-            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-            final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-            final Vec blockPosition = new Vec(x, y, z);
+            final Point blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });
     }
@@ -104,18 +101,19 @@ public class DynamicChunk extends Chunk {
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         // Verify if the block object is present
-        final var entry = !entries.isEmpty() ?
-                entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
-        if (entry != null || condition == Condition.CACHED) {
-            return entry;
+        if (condition != Condition.TYPE) {
+            final Block entry = !entries.isEmpty() ?
+                    entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
+            if (entry != null || condition == Condition.CACHED) {
+                return entry;
+            }
         }
         // Retrieve the block from state id
         final Section section = getOptionalSection(y);
-        if (section == null)
-            return Block.AIR;
+        if (section == null) return Block.AIR; // Section is unloaded
         final short blockStateId = section.getBlockAt(x, y, z);
-        return blockStateId > 0 ?
-                Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR) : Block.AIR;
+        if (blockStateId == -1) return Block.AIR; // Section is empty
+        return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
     }
 
     @Override
@@ -124,7 +122,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void sendChunk(@NotNull Player player) {
+    public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
         final long lastChange = getLastChangeTime();
@@ -132,8 +130,8 @@ public class DynamicChunk extends Chunk {
         final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
         if (connection instanceof PlayerSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.write(lightPacket);
-            socketConnection.write(chunkPacket);
+            socketConnection.sendFramedPacket(lightPacket);
+            socketConnection.sendFramedPacket(chunkPacket);
         } else {
             connection.sendPacket(lightPacket.packet());
             connection.sendPacket(chunkPacket.packet());
@@ -141,7 +139,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void sendChunk() {
+    public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
         final long lastChange = getLastChangeTime();
@@ -168,7 +166,7 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
-    private @NotNull ChunkDataPacket createChunkPacket() {
+    private synchronized @NotNull ChunkDataPacket createChunkPacket() {
         ChunkDataPacket packet = new ChunkDataPacket();
         packet.biomes = biomes;
         packet.chunkX = chunkX;
@@ -178,9 +176,7 @@ public class DynamicChunk extends Chunk {
         return packet;
     }
 
-    private @NotNull UpdateLightPacket createLightPacket() {
-        long skyMask = 0;
-        long blockMask = 0;
+    private synchronized @NotNull UpdateLightPacket createLightPacket() {
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
@@ -201,18 +197,13 @@ public class DynamicChunk extends Chunk {
 
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
-                skyMask |= 1L << index;
+                updateLightPacket.skyLightMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
-                blockMask |= 1L << index;
+                updateLightPacket.blockLightMask.set(index);
             }
         }
-
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[0];
-        updateLightPacket.emptyBlockLightMask = new long[0];
         return updateLightPacket;
     }
 

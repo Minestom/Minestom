@@ -7,6 +7,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 public class UpdateLightPacket implements ServerPacket {
@@ -16,11 +17,11 @@ public class UpdateLightPacket implements ServerPacket {
     //todo make changeable
     public boolean trustEdges = true;
 
-    public long[] skyLightMask = new long[0];
-    public long[] blockLightMask = new long[0];
+    public BitSet skyLightMask = new BitSet();
+    public BitSet blockLightMask = new BitSet();
 
-    public long[] emptySkyLightMask = new long[0];
-    public long[] emptyBlockLightMask = new long[0];
+    public BitSet emptySkyLightMask = new BitSet();
+    public BitSet emptyBlockLightMask = new BitSet();
 
     public List<byte[]> skyLight = new ArrayList<>();
     public List<byte[]> blockLight = new ArrayList<>();
@@ -38,11 +39,11 @@ public class UpdateLightPacket implements ServerPacket {
 
         writer.writeBoolean(trustEdges);
 
-        writer.writeLongArray(skyLightMask);
-        writer.writeLongArray(blockLightMask);
+        writer.writeLongArray(skyLightMask.toLongArray());
+        writer.writeLongArray(blockLightMask.toLongArray());
 
-        writer.writeLongArray(emptySkyLightMask);
-        writer.writeLongArray(emptyBlockLightMask);
+        writer.writeLongArray(emptySkyLightMask.toLongArray());
+        writer.writeLongArray(emptyBlockLightMask.toLongArray());
 
         writer.writeVarInt(skyLight.size());
         for (byte[] bytes : skyLight) {
@@ -64,11 +65,11 @@ public class UpdateLightPacket implements ServerPacket {
 
         trustEdges = reader.readBoolean();
 
-        skyLightMask = reader.readLongArray();
-        blockLightMask = reader.readLongArray();
+        skyLightMask = BitSet.valueOf(reader.readLongArray());
+        blockLightMask = BitSet.valueOf(reader.readLongArray());
 
-        emptySkyLightMask = reader.readLongArray();
-        emptyBlockLightMask = reader.readLongArray();
+        emptySkyLightMask = BitSet.valueOf(reader.readLongArray());
+        emptyBlockLightMask = BitSet.valueOf(reader.readLongArray());
 
         // sky light
         skyLight.clear();
