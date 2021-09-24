@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
