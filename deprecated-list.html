@@ -442,69 +442,63 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/pathfinding/Navigator.html#setPathPosition(net.minestom.server.coordinate.Point)">net.minestom.server.entity.pathfinding.Navigator.setPathPosition&#8203;(Point)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Please use <a href="net/minestom/server/entity/pathfinding/Navigator.html#setPathTo(net.minestom.server.coordinate.Point)"><code>Navigator.setPathTo(Point)</code></a></div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/Player.html#callItemUpdateStateEvent(boolean,net.minestom.server.entity.Player.Hand)">net.minestom.server.entity.Player.callItemUpdateStateEvent&#8203;(boolean, Player.Hand)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/Player.html#callItemUpdateStateEvent(net.minestom.server.entity.Player.Hand)"><code>Player.callItemUpdateStateEvent(Hand)</code></a> instead</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/Player.html#sendJsonMessage(java.lang.String)">net.minestom.server.entity.Player.sendJsonMessage&#8203;(String)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/Player.html#sendTitleTime(int,int,int)">net.minestom.server.entity.Player.sendTitleTime&#8203;(int, int, int)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/Player.html#showTitle(net.kyori.adventure.title.Title)"><code>Player.showTitle(Title)</code></a>. Note that this will overwrite the
  existing title. This is expected behavior and will be the case in 1.17.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/event/GlobalEventHandler.html#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">net.minestom.server.event.GlobalEventHandler.addEventCallback&#8203;(Class&lt;V&gt;, EventCallback&lt;V&gt;)</a></th>
 <td class="colLast">
 <div class="deprecationComment">use <a href="net/minestom/server/event/EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)"><code>EventNode.addListener(Class, Consumer)</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/event/handler/EventHandler.html#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">net.minestom.server.event.handler.EventHandler.addEventCallback&#8203;(Class&lt;V&gt;, EventCallback&lt;V&gt;)</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/event/handler/EventHandler.html#getEventNode()">net.minestom.server.event.handler.EventHandler.getEventNode()</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/inventory/InventoryType.html#getAdditionalSlot()">net.minestom.server.inventory.InventoryType.getAdditionalSlot()</a></th>
 <td class="colLast">
 <div class="deprecationComment">use <a href="net/minestom/server/inventory/InventoryType.html#getSize()"><code>InventoryType.getSize()</code></a></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/MinecraftServer.html#getResponseDataConsumer()">net.minestom.server.MinecraftServer.getResponseDataConsumer()</a></th>
 <td class="colLast">
 <div class="deprecationComment">listen to the <a href="net/minestom/server/event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> instead</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)">net.minestom.server.MinecraftServer.start&#8203;(String, int, ResponseDataConsumer)</a></th>
 <td class="colLast">
 <div class="deprecationComment">use <a href="net/minestom/server/MinecraftServer.html#start(java.lang.String,int)"><code>MinecraftServer.start(String, int)</code></a> and listen to the <a href="net/minestom/server/event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> event instead of ResponseDataConsumer</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/network/ConnectionManager.html#getReceivePacketConsumers()">net.minestom.server.network.ConnectionManager.getReceivePacketConsumers()</a></th>
 <td class="colLast">
 <div class="deprecationComment">see <a href="net/minestom/server/event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/network/ConnectionManager.html#getSendPacketConsumers()">net.minestom.server.network.ConnectionManager.getSendPacketConsumers()</a></th>
 <td class="colLast">
 <div class="deprecationComment">all packet listening methods will ultimately be removed.
@@ -512,13 +506,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  It is instead recommended to use a proxy, improving scalability and increasing server performance</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">net.minestom.server.network.ConnectionManager.onPacketReceive&#8203;(ClientPacketConsumer)</a></th>
 <td class="colLast">
 <div class="deprecationComment">listen to <a href="net/minestom/server/event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">net.minestom.server.network.ConnectionManager.onPacketSend&#8203;(ServerPacketConsumer)</a></th>
 <td class="colLast">
 <div class="deprecationComment">all packet listening methods will ultimately be removed.
@@ -526,55 +520,55 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  It is instead recommended to use a proxy, improving scalability and increasing server performance</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.Iterable)">net.minestom.server.ping.ResponseData.addPlayer&#8203;(Iterable&lt;Player&gt;)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/ping/ResponseData.html#addEntries(java.util.Collection)"><code>ResponseData.addEntries(Collection)</code></a>}</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseData.html#build()">net.minestom.server.ping.ResponseData.build()</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/ping/ServerListPingType.html#getPingResponse(net.minestom.server.ping.ResponseData)"><code>ServerListPingType.getPingResponse(ResponseData)</code></a></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseData.html#clearPlayers()">net.minestom.server.ping.ResponseData.clearPlayers()</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/ping/ResponseData.html#clearEntries()"><code>ResponseData.clearEntries()</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseData.html#getPlayers()">net.minestom.server.ping.ResponseData.getPlayers()</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/ping/ResponseData.html#getEntries()"><code>ResponseData.getEntries()</code></a>. This return value is now unmodifiable and this operation is incredibly costly.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseData.html#setDescription(java.lang.String)">net.minestom.server.ping.ResponseData.setDescription&#8203;(String)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/ping/ResponseData.html#setDescription(net.kyori.adventure.text.Component)"><code>ResponseData.setDescription(Component)</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseData.html#setName(java.lang.String)">net.minestom.server.ping.ResponseData.setName&#8203;(String)</a></th>
 <td class="colLast">
 <div class="deprecationComment">This is named incorrectly, use <a href="net/minestom/server/ping/ResponseData.html#setVersion(java.lang.String)"><code>ResponseData.setVersion(String)</code></a> instead</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/scoreboard/Scoreboard.html#getCreationObjectivePacket(java.lang.String,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">net.minestom.server.scoreboard.Scoreboard.getCreationObjectivePacket&#8203;(String, ScoreboardObjectivePacket.Type)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/scoreboard/Scoreboard.html#getCreationObjectivePacket(net.kyori.adventure.text.Component,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)"><code>Scoreboard.getCreationObjectivePacket(Component, ScoreboardObjectivePacket.Type)</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/scoreboard/Sidebar.html#setTitle(java.lang.String)">net.minestom.server.scoreboard.Sidebar.setTitle&#8203;(String)</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/scoreboard/Sidebar.html#setTitle(net.kyori.adventure.text.Component)"><code>Sidebar.setTitle(Component)</code></a></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/tag/Tag.html#Custom(java.lang.String,net.minestom.server.tag.TagSerializer)">net.minestom.server.tag.Tag.Custom&#8203;(String, TagSerializer&lt;T&gt;)</a></th>
 <td class="colLast">
 <div class="deprecationComment">use <a href="net/minestom/server/tag/Tag.html#Structure(java.lang.String,net.minestom.server.tag.TagSerializer)"><code>Tag.Structure(String, TagSerializer)</code></a> instead</div>

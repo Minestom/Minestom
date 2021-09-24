@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":42,"i10":10,"i11":10,"i12":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,7 +130,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">Navigator</span>
+<pre>public final class <span class="typeNameLabel">Navigator</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Necessary object for all <a href="NavigableEntity.html" title="interface in net.minestom.server.entity.pathfinding"><code>NavigableEntity</code></a>.</div>
 </li>
@@ -168,7 +168,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -180,37 +180,23 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@Nullable com.extollit.gaming.ai.path.model.IPath</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPath()">getPath</a></span>()</code></th>
+<td class="colFirst"><code>@NotNull <a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathingEntity()">getPathingEntity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable com.extollit.gaming.ai.path.HydrazinePathFinder</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathFinder()">getPathFinder</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the assigned pathfinder.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathingEntity()">getPathingEntity</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the pathing entity.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathPosition()">getPathPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the target pathfinder position.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#jump(float)">jump</a></span>&#8203;(float&nbsp;height)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveTowards(net.minestom.server.coordinate.Point,double)">moveTowards</a></span>&#8203;(@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;direction,
            double&nbsp;speed)</code></th>
@@ -220,31 +206,17 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  Also update the yaw/pitch of the entity to look along 'direction'</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPath(com.extollit.gaming.ai.path.model.IPath)">setPath</a></span>&#8203;(@Nullable com.extollit.gaming.ai.path.model.IPath&nbsp;path)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathFinder(com.extollit.gaming.ai.path.HydrazinePathFinder)">setPathFinder</a></span>&#8203;(@Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;pathFinder)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathPosition(net.minestom.server.coordinate.Point)">setPathPosition</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pathPosition)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.coordinate.Point)"><code>setPathTo(Point)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.coordinate.Point)">setPathTo</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.coordinate.Point,boolean)">setPathTo</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
          boolean&nbsp;bestEffort)</code></th>
@@ -252,9 +224,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(float)">tick</a></span>&#8203;(float&nbsp;speed)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick()">tick</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -368,57 +340,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="tick(float)">
+<a id="tick()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>tick</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;tick&#8203;(float&nbsp;speed)</pre>
-</li>
-</ul>
-<a id="getPathingEntity()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPathingEntity</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a>&nbsp;getPathingEntity()</pre>
-<div class="block">Gets the pathing entity.
- <p>
- Used by the pathfinder.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the pathing entity</dd>
-</dl>
-</li>
-</ul>
-<a id="getPathFinder()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPathFinder</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;getPathFinder()</pre>
-<div class="block">Gets the assigned pathfinder.
- <p>
- Can be null if the navigable element hasn't been assigned to an <a href="../../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> yet.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current pathfinder, null if none</dd>
-</dl>
-</li>
-</ul>
-<a id="setPathFinder(com.extollit.gaming.ai.path.HydrazinePathFinder)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPathFinder</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPathFinder&#8203;(@Nullable
-                          @Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;pathFinder)</pre>
+<pre class="methodSignature">@Internal
+public&nbsp;void&nbsp;tick()</pre>
 </li>
 </ul>
 <a id="getPathPosition()">
@@ -436,53 +365,36 @@ public&nbsp;@Nullable <a href="../../coordinate/Point.html" title="interface in 
 </dl>
 </li>
 </ul>
-<a id="setPathPosition(net.minestom.server.coordinate.Point)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPathPosition</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setPathPosition&#8203;(@Nullable
-                            @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pathPosition)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.coordinate.Point)"><code>setPathTo(Point)</code></a></div>
-</div>
-<div class="block">Changes the position this element is trying to reach.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pathPosition</code> - the new current path position</dd>
-</dl>
-</li>
-</ul>
-<a id="getPath()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPath</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable com.extollit.gaming.ai.path.model.IPath&nbsp;getPath()</pre>
-</li>
-</ul>
-<a id="setPath(com.extollit.gaming.ai.path.model.IPath)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPath</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPath&#8203;(@Nullable
-                    @Nullable com.extollit.gaming.ai.path.model.IPath&nbsp;path)</pre>
-</li>
-</ul>
 <a id="getEntity()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
+</li>
+</ul>
+<a id="getPathingEntity()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPathingEntity</h4>
+<pre class="methodSignature">@Internal
+@NotNull
+public&nbsp;@NotNull <a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a>&nbsp;getPathingEntity()</pre>
+</li>
+</ul>
+<a id="setPathFinder(com.extollit.gaming.ai.path.HydrazinePathFinder)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setPathFinder</h4>
+<pre class="methodSignature">@Internal
+public&nbsp;void&nbsp;setPathFinder&#8203;(@Nullable
+                          @Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;pathFinder)</pre>
 </li>
 </ul>
 </li>
