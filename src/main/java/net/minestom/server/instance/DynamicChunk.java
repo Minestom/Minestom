@@ -119,20 +119,6 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void sendLightData(@NotNull Player player) {
-        if (!isLoaded()) return;
-        final PlayerConnection connection = player.getPlayerConnection();
-        final long lastChange = getLastChangeTime();
-        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
-        if (connection instanceof PlayerSocketConnection) {
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.write(lightPacket);
-        } else {
-            connection.sendPacket(lightPacket.packet());
-        }
-    }
-
-    @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();

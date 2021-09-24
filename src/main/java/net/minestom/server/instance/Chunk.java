@@ -133,8 +133,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     public abstract void sendChunk(@NotNull Player player);
 
-    public abstract void sendLightData(@NotNull Player player);
-
     public abstract void sendChunk();
 
     /**

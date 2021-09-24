@@ -22,6 +22,11 @@ public class ChunkGeneratorDemo implements ChunkGenerator {
                     batch.setBlock(x, y, z, Block.STONE);
                 }
             }
+
+        // Test for MC-162253
+//        if (chunkX % 5 == 0 && chunkZ % 5 == 0) {
+            batch.setBlock(7, 90, 7, Block.GREEN_CONCRETE);
+//        }
     }
 
     @Override

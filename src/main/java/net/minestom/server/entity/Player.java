@@ -1195,31 +1195,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         });
         // Load new chunks
-        final Set<IntIntImmutablePair> newChunks = new HashSet<>();
-        final Set<IntIntImmutablePair> lightDataChunks = new HashSet<>();
         ArrayUtils.forDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            newChunks.add(new IntIntImmutablePair(chunkX,chunkZ));
-        });
-
-        // Get neighbouring (and self) chunks whose light data should be sent to the client
-        for (IntIntImmutablePair chunkPos : newChunks) {
-            for (int x = -1; x <= 1; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    lightDataChunks.add(new IntIntImmutablePair(chunkPos.leftInt()+x, chunkPos.rightInt()+z));
-                }
-            }
-        }
-
-        // Remove already loaded chunks
-        // Might not need to remove, needs more testing
-        lightDataChunks.removeIf(pos -> Arrays.stream(lastVisibleChunks).anyMatch(x -> x == ChunkUtils.getChunkIndex(pos.leftInt(), pos.rightInt())));
-
-        // Send data
-        lightDataChunks.parallelStream().forEach(pos -> instance.loadChunk(pos.leftInt(), pos.rightInt()).thenAccept(c -> c.sendLightData(this)));
-        newChunks.parallelStream().forEach(pos -> {
-            this.instance.loadOptionalChunk(pos.leftInt(), pos.rightInt()).thenAccept(chunk -> {
+            this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto-load is not enabled)
                     return;

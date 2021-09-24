@@ -4,6 +4,8 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 public class Section implements PublicCloneable<Section> {
 
     private final Palette palette;
@@ -12,6 +14,8 @@ public class Section implements PublicCloneable<Section> {
     private byte[] blockLight = new byte[0];
 
     private Section(Palette palette) {
+        this.skyLight = new byte[2048];
+        Arrays.fill(this.skyLight, (byte)255);
         this.palette = palette;
     }
 
