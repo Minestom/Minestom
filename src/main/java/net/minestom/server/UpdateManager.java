@@ -6,6 +6,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
@@ -154,7 +155,7 @@ public final class UpdateManager {
         this.stopRequested = true;
     }
 
-    private final class TickSchedulerThread extends Thread {
+    private final class TickSchedulerThread extends MinestomThread {
         private final ThreadDispatcher threadDispatcher = UpdateManager.this.threadDispatcher;
 
         TickSchedulerThread() {

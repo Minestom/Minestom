@@ -18,6 +18,7 @@ import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.PooledBuffers;
+import net.minestom.server.utils.cache.LocalCache;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.zip.Deflater;
 
@@ -43,8 +43,8 @@ public final class PacketUtils {
     private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
 
     /// Local buffers
-    private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.MAX_PACKET_SIZE);
-    private static final LocalCache LOCAL_BUFFER = LocalCache.get("local-buffer", Server.MAX_PACKET_SIZE);
+    private static final LocalCache<ByteBuffer> PACKET_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
+    private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
     private static final Object VIEWABLE_PACKET_LOCK = new Object();
@@ -56,7 +56,7 @@ public final class PacketUtils {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     public static ByteBuffer localBuffer() {
-        return LOCAL_BUFFER.get();
+        return LOCAL_BUFFER.get().clear();
     }
 
     /**
@@ -215,7 +215,7 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        ByteBuffer buffer = PACKET_BUFFER.get();
+        ByteBuffer buffer = PACKET_BUFFER.get().clear();
         writeFramedPacket(buffer, packet, compression);
         return buffer;
     }
@@ -231,31 +231,6 @@ public final class PacketUtils {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining())
                 .put(temp).flip().asReadOnlyBuffer();
         return new FramedPacket(packet.getId(), buffer, packet);
-    }
-
-    @ApiStatus.Internal
-    public static final class LocalCache {
-        private static final Map<String, LocalCache> CACHES = new ConcurrentHashMap<>();
-
-        private final String name;
-        private final ThreadLocal<ByteBuffer> cache;
-
-        private LocalCache(String name, int size) {
-            this.name = name;
-            this.cache = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(size));
-        }
-
-        public static LocalCache get(String name, int size) {
-            return CACHES.computeIfAbsent(name, s -> new LocalCache(s, size));
-        }
-
-        public String name() {
-            return name;
-        }
-
-        public ByteBuffer get() {
-            return cache.get().clear();
-        }
     }
 
     private static final class ViewableStorage {

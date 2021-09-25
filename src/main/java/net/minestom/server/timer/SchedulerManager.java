@@ -6,7 +6,7 @@ import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.IExtensionObserver;
-import net.minestom.server.utils.thread.MinestomThread;
+import net.minestom.server.thread.MinestomThreadPool;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -65,7 +65,7 @@ public final class SchedulerManager implements IExtensionObserver {
         this.counter = new AtomicInteger();
         this.shutdownCounter = new AtomicInteger();
 
-        this.batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
+        this.batchesPool = new MinestomThreadPool(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
         this.timerExecutionService = Executors.newSingleThreadScheduledExecutor();
         this.tasks = new Int2ObjectOpenHashMap<>();
         this.shutdownTasks = new Int2ObjectOpenHashMap<>();
