@@ -40,7 +40,7 @@ import java.util.zip.Deflater;
  */
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
+    private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
 
     /// Local buffers
     private static final LocalCache<ByteBuffer> PACKET_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);

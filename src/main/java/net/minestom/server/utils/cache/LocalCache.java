@@ -27,8 +27,12 @@ public final class LocalCache<T> {
         this.fallback = ThreadLocal.withInitial(supplier);
     }
 
+    public static <T> LocalCache<T> of(@NotNull Supplier<T> supplier) {
+        return new LocalCache<>(supplier);
+    }
+
     public static LocalCache<ByteBuffer> ofBuffer(int size) {
-        return new LocalCache<>(() -> ByteBuffer.allocateDirect(size));
+        return of(() -> ByteBuffer.allocateDirect(size));
     }
 
     public T get() {
