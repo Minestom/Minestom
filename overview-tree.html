@@ -228,6 +228,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="net/minestom/server/utils/async/package-tree.html">net.minestom.server.utils.async</a>, </li>
 <li><a href="net/minestom/server/utils/binary/package-tree.html">net.minestom.server.utils.binary</a>, </li>
 <li><a href="net/minestom/server/utils/block/package-tree.html">net.minestom.server.utils.block</a>, </li>
+<li><a href="net/minestom/server/utils/cache/package-tree.html">net.minestom.server.utils.cache</a>, </li>
 <li><a href="net/minestom/server/utils/callback/package-tree.html">net.minestom.server.utils.callback</a>, </li>
 <li><a href="net/minestom/server/utils/callback/validator/package-tree.html">net.minestom.server.utils.callback.validator</a>, </li>
 <li><a href="net/minestom/server/utils/chunk/package-tree.html">net.minestom.server.utils.chunk</a>, </li>
@@ -263,7 +264,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.utils.thread.<a href="net/minestom/server/utils/thread/ThreadBindingExecutor.html" title="class in net.minestom.server.utils.thread"><span class="typeNameLink">ThreadBindingExecutor</span></a></li>
 <li class="circle">java.util.concurrent.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ThreadPoolExecutor.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink"><span class="typeNameLink">ThreadPoolExecutor</span></a>
 <ul>
-<li class="circle">net.minestom.server.utils.thread.<a href="net/minestom/server/utils/thread/MinestomThread.html" title="class in net.minestom.server.utils.thread"><span class="typeNameLink">MinestomThread</span></a></li>
+<li class="circle">net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThreadPool.html" title="class in net.minestom.server.thread"><span class="typeNameLink">MinestomThreadPool</span></a></li>
 </ul>
 </li>
 </ul>
@@ -1024,6 +1025,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.map.framebuffers.<a href="net/minestom/server/map/framebuffers/LargeFramebufferDefaultView.html" title="class in net.minestom.server.map.framebuffers"><span class="typeNameLink">LargeFramebufferDefaultView</span></a> (implements net.minestom.server.map.<a href="net/minestom/server/map/Framebuffer.html" title="interface in net.minestom.server.map">Framebuffer</a>)</li>
 <li class="circle">net.minestom.server.map.framebuffers.<a href="net/minestom/server/map/framebuffers/LargeGraphics2DFramebuffer.html" title="class in net.minestom.server.map.framebuffers"><span class="typeNameLink">LargeGraphics2DFramebuffer</span></a> (implements net.minestom.server.map.<a href="net/minestom/server/map/LargeFramebuffer.html" title="interface in net.minestom.server.map">LargeFramebuffer</a>)</li>
 <li class="circle">net.minestom.server.network.packet.client.status.<a href="net/minestom/server/network/packet/client/status/LegacyServerListPingPacket.html" title="class in net.minestom.server.network.packet.client.status"><span class="typeNameLink">LegacyServerListPingPacket</span></a> (implements net.minestom.server.network.packet.client.<a href="net/minestom/server/network/packet/client/ClientPreplayPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPreplayPacket</a>)</li>
+<li class="circle">net.minestom.server.utils.cache.<a href="net/minestom/server/utils/cache/LocalCache.html" title="class in net.minestom.server.utils.cache"><span class="typeNameLink">LocalCache</span></a>&lt;T&gt;</li>
 <li class="circle">net.minestom.server.network.packet.server.login.<a href="net/minestom/server/network/packet/server/login/LoginDisconnectPacket.html" title="class in net.minestom.server.network.packet.server.login"><span class="typeNameLink">LoginDisconnectPacket</span></a> (implements net.minestom.server.network.packet.server.<a href="net/minestom/server/network/packet/server/ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a>)</li>
 <li class="circle">net.minestom.server.network.packet.server.login.<a href="net/minestom/server/network/packet/server/login/LoginPluginRequestPacket.html" title="class in net.minestom.server.network.packet.server.login"><span class="typeNameLink">LoginPluginRequestPacket</span></a> (implements net.minestom.server.network.packet.server.<a href="net/minestom/server/network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>)</li>
 <li class="circle">net.minestom.server.network.packet.client.login.<a href="net/minestom/server/network/packet/client/login/LoginPluginResponsePacket.html" title="class in net.minestom.server.network.packet.client.login"><span class="typeNameLink">LoginPluginResponsePacket</span></a> (implements net.minestom.server.network.packet.client.<a href="net/minestom/server/network/packet/client/ClientPreplayPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPreplayPacket</a>)</li>
@@ -1091,7 +1093,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/PacketListenerManager.html" title="class in net.minestom.server.listener.manager"><span class="typeNameLink">PacketListenerManager</span></a></li>
 <li class="circle">net.minestom.server.network.<a href="net/minestom/server/network/PacketProcessor.html" title="class in net.minestom.server.network"><span class="typeNameLink">PacketProcessor</span></a></li>
 <li class="circle">net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.html" title="class in net.minestom.server.utils"><span class="typeNameLink">PacketUtils</span></a></li>
-<li class="circle">net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.LocalCache.html" title="class in net.minestom.server.utils"><span class="typeNameLink">PacketUtils.LocalCache</span></a></li>
 <li class="circle">net.minestom.server.instance.palette.<a href="net/minestom/server/instance/palette/Palette.html" title="class in net.minestom.server.instance.palette"><span class="typeNameLink">Palette</span></a> (implements net.minestom.server.utils.clone.<a href="net/minestom/server/utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;)</li>
 <li class="circle">net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/ParsedCommand.html" title="class in net.minestom.server.command.builder"><span class="typeNameLink">ParsedCommand</span></a></li>
 <li class="circle">net.minestom.server.particle.<a href="net/minestom/server/particle/ParticleCreator.html" title="class in net.minestom.server.particle"><span class="typeNameLink">ParticleCreator</span></a></li>
@@ -1298,7 +1299,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/TeamsPacket.html" title="class in net.minestom.server.network.packet.server.play"><span class="typeNameLink">TeamsPacket</span></a> (implements net.minestom.server.network.packet.server.<a href="net/minestom/server/network/packet/server/ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a>)</li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Thread</span></a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>)
 <ul>
+<li class="circle">net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread"><span class="typeNameLink">MinestomThread</span></a>
+<ul>
 <li class="circle">net.minestom.server.thread.<a href="net/minestom/server/thread/TickThread.html" title="class in net.minestom.server.thread"><span class="typeNameLink">TickThread</span></a></li>
+</ul>
+</li>
 <li class="circle">net.minestom.server.network.socket.<a href="net/minestom/server/network/socket/Worker.html" title="class in net.minestom.server.network.socket"><span class="typeNameLink">Worker</span></a></li>
 </ul>
 </li>

@@ -125,7 +125,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Thread</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="MinestomThread.html" title="class in net.minestom.server.thread">net.minestom.server.thread.MinestomThread</a></li>
+<li>
+<ul class="inheritance">
 <li>net.minestom.server.thread.TickThread</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -141,7 +146,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>@Internal
 public final class <span class="typeNameLabel">TickThread</span>
-extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a></pre>
+extends <a href="MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></pre>
 <div class="block">Thread responsible for ticking <a href="../instance/Chunk.html" title="class in net.minestom.server.instance"><code>chunks</code></a> and <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a>.
  <p>
  Created in <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a>, and awaken every tick with a task to execute.</div>
@@ -175,6 +180,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.thread.MinestomThread">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;net.minestom.server.thread.<a href="MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></h3>
+<code><a href="MinestomThread.html#LOCAL_COUNT">LOCAL_COUNT</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.java.lang.Thread">
 <!--   -->
@@ -239,6 +251,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.thread.MinestomThread">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;net.minestom.server.thread.<a href="MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></h3>
+<code><a href="MinestomThread.html#localCache(int,java.util.function.Supplier)">localCache</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Thread">
 <!--   -->

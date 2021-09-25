@@ -5933,7 +5933,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/binary/PooledBuffers.html#get()">get()</a></span> - Static method in class net.minestom.server.utils.binary.<a href="net/minestom/server/utils/binary/PooledBuffers.html" title="class in net.minestom.server.utils.binary">PooledBuffers</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/PacketUtils.LocalCache.html#get()">get()</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.LocalCache.html" title="class in net.minestom.server.utils">PacketUtils.LocalCache</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/cache/LocalCache.html#get()">get()</a></span> - Method in class net.minestom.server.utils.cache.<a href="net/minestom/server/utils/cache/LocalCache.html" title="class in net.minestom.server.utils.cache">LocalCache</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/map/framebuffers/DirectFramebuffer.html#get(int,int)">get(int, int)</a></span> - Method in class net.minestom.server.map.framebuffers.<a href="net/minestom/server/map/framebuffers/DirectFramebuffer.html" title="class in net.minestom.server.map.framebuffers">DirectFramebuffer</a></dt>
 <dd>&nbsp;</dd>
@@ -5978,8 +5978,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/NamespaceIDHashMap.html#get(java.lang.Object)">get(Object)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/NamespaceIDHashMap.html" title="class in net.minestom.server.utils">NamespaceIDHashMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/NamespaceIDHashMap.html#get(java.lang.String)">get(String)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/NamespaceIDHashMap.html" title="class in net.minestom.server.utils">NamespaceIDHashMap</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/PacketUtils.LocalCache.html#get(java.lang.String,int)">get(String, int)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.LocalCache.html" title="class in net.minestom.server.utils">PacketUtils.LocalCache</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/NamespaceIDHashMap.html#get(java.lang.String,java.lang.String)">get(String, String)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/NamespaceIDHashMap.html" title="class in net.minestom.server.utils">NamespaceIDHashMap</a></dt>
 <dd>&nbsp;</dd>
@@ -12253,8 +12251,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/location/RelativeVec.CoordinateType.html#LOCAL">LOCAL</a></span> - net.minestom.server.utils.location.<a href="net/minestom/server/utils/location/RelativeVec.CoordinateType.html" title="enum in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThread.html#LOCAL_COUNT">LOCAL_COUNT</a></span> - Static variable in class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/PacketUtils.html#localBuffer()">localBuffer()</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.html" title="class in net.minestom.server.utils">PacketUtils</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThread.html#localCache(int,java.util.function.Supplier)">localCache(int, Supplier&lt;T&gt;)</a></span> - Method in class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/utils/cache/LocalCache.html" title="class in net.minestom.server.utils.cache"><span class="typeNameLink">LocalCache</span></a>&lt;<a href="net/minestom/server/utils/cache/LocalCache.html" title="type parameter in LocalCache">T</a>&gt; - Class in <a href="net/minestom/server/utils/cache/package-summary.html">net.minestom.server.utils.cache</a></dt>
+<dd>
+<div class="block">Faster alternative to <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ThreadLocal.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>ThreadLocal</code></a> when called from a <a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread"><code>MinestomThread</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/client/play/ClientSettingsPacket.html#locale">locale</a></span> - Variable in class net.minestom.server.network.packet.client.play.<a href="net/minestom/server/network/packet/client/play/ClientSettingsPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientSettingsPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/adventure/Localizable.html" title="interface in net.minestom.server.adventure"><span class="typeNameLink">Localizable</span></a> - Interface in <a href="net/minestom/server/adventure/package-summary.html">net.minestom.server.adventure</a></dt>
@@ -12944,13 +12950,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/terminal/MinestomTerminal.html#%3Cinit%3E()">MinestomTerminal()</a></span> - Constructor for class net.minestom.server.terminal.<a href="net/minestom/server/terminal/MinestomTerminal.html" title="class in net.minestom.server.terminal">MinestomTerminal</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="net/minestom/server/utils/thread/MinestomThread.html" title="class in net.minestom.server.utils.thread"><span class="typeNameLink">MinestomThread</span></a> - Class in <a href="net/minestom/server/utils/thread/package-summary.html">net.minestom.server.utils.thread</a></dt>
+<dt><a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread"><span class="typeNameLink">MinestomThread</span></a> - Class in <a href="net/minestom/server/thread/package-summary.html">net.minestom.server.thread</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/thread/MinestomThread.html#%3Cinit%3E(int,java.lang.String)">MinestomThread(int, String)</a></span> - Constructor for class net.minestom.server.utils.thread.<a href="net/minestom/server/utils/thread/MinestomThread.html" title="class in net.minestom.server.utils.thread">MinestomThread</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThread.html#%3Cinit%3E(java.lang.String)">MinestomThread(String)</a></span> - Constructor for class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThread.html#%3Cinit%3E(java.lang.Runnable,java.lang.String)">MinestomThread(Runnable, String)</a></span> - Constructor for class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThread.html#%3Cinit%3E(java.lang.Runnable)">MinestomThread(Runnable)</a></span> - Constructor for class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/thread/MinestomThreadPool.html" title="class in net.minestom.server.thread"><span class="typeNameLink">MinestomThreadPool</span></a> - Class in <a href="net/minestom/server/thread/package-summary.html">net.minestom.server.thread</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThreadPool.html#%3Cinit%3E(int,java.lang.String)">MinestomThreadPool(int, String)</a></span> - Constructor for class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThreadPool.html" title="class in net.minestom.server.thread">MinestomThreadPool</a></dt>
 <dd>
 <div class="block">Creates a non-local thread pool executor</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/thread/MinestomThread.html#%3Cinit%3E(int,java.lang.String,boolean)">MinestomThread(int, String, boolean)</a></span> - Constructor for class net.minestom.server.utils.thread.<a href="net/minestom/server/utils/thread/MinestomThread.html" title="class in net.minestom.server.utils.thread">MinestomThread</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThreadPool.html#%3Cinit%3E(int,java.lang.String,boolean)">MinestomThreadPool(int, String, boolean)</a></span> - Constructor for class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThreadPool.html" title="class in net.minestom.server.thread">MinestomThreadPool</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/palette/Palette.html#MINIMUM_BITS_PER_ENTRY">MINIMUM_BITS_PER_ENTRY</a></span> - Static variable in class net.minestom.server.instance.palette.<a href="net/minestom/server/instance/palette/Palette.html" title="class in net.minestom.server.instance.palette">Palette</a></dt>
 <dd>
@@ -13134,8 +13148,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/PlayerInfoPacket.AddPlayer.Property.html#name">name</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/registry/ProtocolObject.html#name()">name()</a></span> - Method in interface net.minestom.server.registry.<a href="net/minestom/server/registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/PacketUtils.LocalCache.html#name()">name()</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.LocalCache.html" title="class in net.minestom.server.utils">PacketUtils.LocalCache</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/world/biomes/Biome.BiomeBuilder.html#name(net.minestom.server.utils.NamespaceID)">name(NamespaceID)</a></span> - Method in class net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.BiomeBuilder.html" title="class in net.minestom.server.world.biomes">Biome.BiomeBuilder</a></dt>
 <dd>&nbsp;</dd>
@@ -13524,6 +13536,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/block/package-summary.html">net.minestom.server.utils.block</a> - package net.minestom.server.utils.block</dt>
 <dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/utils/cache/package-summary.html">net.minestom.server.utils.cache</a> - package net.minestom.server.utils.cache</dt>
+<dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/callback/package-summary.html">net.minestom.server.utils.callback</a> - package net.minestom.server.utils.callback</dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/callback/validator/package-summary.html">net.minestom.server.utils.callback.validator</a> - package net.minestom.server.utils.callback.validator</dt>
@@ -13814,6 +13828,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Creates a new <a href="net/minestom/server/acquirable/Acquirable.html" title="interface in net.minestom.server.acquirable"><code>Acquirable</code></a> object.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/cache/LocalCache.html#ofBuffer(int)">ofBuffer(int)</a></span> - Static method in class net.minestom.server.utils.cache.<a href="net/minestom/server/utils/cache/LocalCache.html" title="class in net.minestom.server.utils.cache">LocalCache</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.Hand.html#OFF">OFF</a></span> - net.minestom.server.entity.<a href="net/minestom/server/entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/EquipmentSlot.html#OFF_HAND">OFF_HAND</a></span> - net.minestom.server.entity.<a href="net/minestom/server/entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a></dt>
@@ -14355,8 +14371,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Utils class for packets.</div>
 </dd>
-<dt><a href="net/minestom/server/utils/PacketUtils.LocalCache.html" title="class in net.minestom.server.utils"><span class="typeNameLink">PacketUtils.LocalCache</span></a> - Class in <a href="net/minestom/server/utils/package-summary.html">net.minestom.server.utils</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/client/play/ClientEditBookPacket.html#pages">pages</a></span> - Variable in class net.minestom.server.network.packet.client.play.<a href="net/minestom/server/network/packet/client/play/ClientEditBookPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientEditBookPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/metadata/WritableBookMeta.Builder.html#pages(java.util.List)">pages(List&lt;Component&gt;)</a></span> - Method in class net.minestom.server.item.metadata.<a href="net/minestom/server/item/metadata/WritableBookMeta.Builder.html" title="class in net.minestom.server.item.metadata">WritableBookMeta.Builder</a></dt>
@@ -19449,7 +19463,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/thread/ThreadBindingExecutor.html#shutdown()">shutdown()</a></span> - Method in class net.minestom.server.utils.thread.<a href="net/minestom/server/utils/thread/ThreadBindingExecutor.html" title="class in net.minestom.server.utils.thread">ThreadBindingExecutor</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/thread/MinestomThread.html#shutdownAll()">shutdownAll()</a></span> - Static method in class net.minestom.server.utils.thread.<a href="net/minestom/server/utils/thread/MinestomThread.html" title="class in net.minestom.server.utils.thread">MinestomThread</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/thread/MinestomThreadPool.html#shutdownAll()">shutdownAll()</a></span> - Static method in class net.minestom.server.thread.<a href="net/minestom/server/thread/MinestomThreadPool.html" title="class in net.minestom.server.thread">MinestomThreadPool</a></dt>
 <dd>
 <div class="block">Shutdown all the thread pools</div>
 </dd>
