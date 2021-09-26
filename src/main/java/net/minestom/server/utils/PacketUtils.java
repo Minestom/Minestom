@@ -178,11 +178,12 @@ public final class PacketUtils {
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
+        BinaryWriter writerView = BinaryWriter.view(buffer); // ensure that the buffer is not resized
         if (!compression) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             Utils.writeVarInt(buffer, packet.getId());
-            packet.write(new BinaryWriter(buffer));
+            packet.write(writerView);
             final int finalSize = buffer.position() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             return;
@@ -193,7 +194,7 @@ public final class PacketUtils {
 
         final int contentStart = buffer.position();
         Utils.writeVarInt(buffer, packet.getId());
-        packet.write(BinaryWriter.view(buffer)); // ensure that the buffer is not resized/changed
+        packet.write(writerView);
         final int packetSize = buffer.position() - contentStart;
         final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
         if (compressed) {
