@@ -52,8 +52,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
-    private volatile boolean encrypted = false;
-    private volatile boolean compressed = false;
+    private boolean encrypted = false;
+    private boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
     private byte[] nonce = new byte[4];
@@ -174,9 +174,11 @@ public class PlayerSocketConnection extends PlayerConnection {
      */
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
-        this.decryptCipher = MojangCrypt.getCipher(2, secretKey);
-        this.encryptCipher = MojangCrypt.getCipher(1, secretKey);
-        this.encrypted = true;
+        synchronized (bufferLock) {
+            this.decryptCipher = MojangCrypt.getCipher(2, secretKey);
+            this.encryptCipher = MojangCrypt.getCipher(1, secretKey);
+            this.encrypted = true;
+        }
     }
 
     /**
@@ -189,7 +191,9 @@ public class PlayerSocketConnection extends PlayerConnection {
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
         writeAndFlush(new SetCompressionPacket(threshold));
-        this.compressed = true;
+        synchronized (bufferLock) {
+            this.compressed = true;
+        }
     }
 
     /**
