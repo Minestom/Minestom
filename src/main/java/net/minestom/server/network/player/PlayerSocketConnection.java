@@ -262,18 +262,18 @@ public class PlayerSocketConnection extends PlayerConnection {
                 compressed = this.compressed;
                 final BinaryBuffer localBuffer = tickBuffer.getPlain();
                 if (localBuffer.canWrite(512)) { // Inline threshold
-                    var buff = localBuffer.writerBuffer();
+                    ByteBuffer buff = localBuffer.writerBuffer();
                     PacketUtils.writeFramedPacket(buff, packet, compressed);
-                    localBuffer.reset(localBuffer.readerOffset(), buff.position());
-                } else {
-                    write(PacketUtils.createFramedPacket(packet, compressed).flip());
-                    flush();
+                    localBuffer.writerOffset(buff.position());
+                    return;
                 }
             }
-        } catch (BufferOverflowException e) {
-            write(PacketUtils.createFramedPacket(packet, compressed).flip());
-            flush();
+        } catch (BufferOverflowException ignored) {
+            // Empty
         }
+        // Fallback code
+        write(PacketUtils.createFramedPacket(packet, compressed).flip());
+        flush();
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {

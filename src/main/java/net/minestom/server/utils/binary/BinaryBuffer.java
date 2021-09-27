@@ -102,6 +102,10 @@ public final class BinaryBuffer {
         return writerOffset;
     }
 
+    public void writerOffset(int offset) {
+        this.writerOffset = offset;
+    }
+
     public int readableBytes() {
         return writerOffset - readerOffset;
     }
