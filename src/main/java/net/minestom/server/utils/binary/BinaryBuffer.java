@@ -132,6 +132,10 @@ public final class BinaryBuffer {
         return nioBuffer.position(reader).slice().limit(writer);
     }
 
+    public ByteBuffer writerBuffer() {
+        return nioBuffer.position(writerOffset);
+    }
+
     public boolean writeChannel(WritableByteChannel channel) throws IOException {
         var writeBuffer = asByteBuffer(readerOffset, writerOffset - readerOffset);
         final int count = channel.write(writeBuffer);
