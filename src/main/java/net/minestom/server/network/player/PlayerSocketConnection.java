@@ -29,7 +29,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -256,20 +255,11 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     private void writePacket(@NotNull ServerPacket packet) {
-        boolean compressed = false;
-        try {
-            synchronized (bufferLock) {
-                compressed = this.compressed;
-                final BinaryBuffer localBuffer = tickBuffer.getPlain();
-                if (localBuffer.canWrite(512)) { // Inline threshold
-                    ByteBuffer buff = localBuffer.writerBuffer();
-                    PacketUtils.writeFramedPacket(buff, packet, compressed);
-                    localBuffer.writerOffset(buff.position());
-                    return;
-                }
-            }
-        } catch (BufferOverflowException ignored) {
-            // Empty
+        boolean compressed;
+        synchronized (bufferLock) {
+            compressed = this.compressed;
+            final boolean result = PacketUtils.inlineWrite(tickBuffer.getPlain(), packet, compressed);
+            if (result) return;
         }
         // Fallback code
         write(PacketUtils.createFramedPacket(packet, compressed).flip());

@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.function.Consumer;
@@ -215,6 +216,26 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
+    public static boolean inlineWrite(BinaryBuffer buffer, ServerPacket packet, boolean compressed) {
+        try {
+            if (buffer.canWrite(512)) { // Inline threshold
+                ByteBuffer buff = buffer.writerBuffer();
+                PacketUtils.writeFramedPacket(buff, packet, compressed);
+                buffer.writerOffset(buff.position());
+                return true;
+            }
+        } catch (BufferOverflowException ignored) {
+            // Empty
+        }
+        return false;
+    }
+
+    @ApiStatus.Internal
+    public static boolean inlineWrite(BinaryBuffer buffer, ServerPacket packet) {
+        return inlineWrite(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+    }
+
+    @ApiStatus.Internal
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
         ByteBuffer buffer = PACKET_BUFFER.get().clear();
         writeFramedPacket(buffer, packet, compression);
@@ -245,19 +266,17 @@ public final class PacketUtils {
         }
 
         private synchronized void append(ServerPacket serverPacket, PlayerConnection connection) {
-            final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
-            final int packetSize = framedPacket.limit();
-            if (packetSize >= buffer.capacity()) {
-                process(new SingleEntry(framedPacket, connection));
-                return;
-            }
-            if (!buffer.canWrite(packetSize)) process();
             final int start = buffer.writerOffset();
-            buffer.write(framedPacket);
-            final int end = buffer.writerOffset();
-            if (connection != null) {
-                List<IntIntPair> list = entityIdMap.computeIfAbsent(connection, con -> new ArrayList<>());
-                list.add(IntIntPair.of(start, end));
+            final boolean inlineResult = inlineWrite(buffer, serverPacket);
+            if (inlineResult) {
+                final int end = buffer.writerOffset();
+                if (connection != null) {
+                    List<IntIntPair> list = entityIdMap.computeIfAbsent(connection, con -> new ArrayList<>());
+                    list.add(IntIntPair.of(start, end));
+                }
+            } else {
+                final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
+                process(new SingleEntry(framedPacket, connection));
             }
         }
 
