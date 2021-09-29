@@ -85,6 +85,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.channel = channel;
         this.remoteAddress = remoteAddress;
         PooledBuffers.registerBuffer(this, tickBuffer);
+        PooledBuffers.registerBuffers(this, waitingBuffers);
     }
 
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
@@ -342,14 +343,6 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        synchronized (bufferLock) {
-            if (!waitingBuffers.isEmpty()) {
-                for (BinaryBuffer waitingBuffer : waitingBuffers) {
-                    PooledBuffers.add(waitingBuffer);
-                }
-                this.waitingBuffers.clear();
-            }
-        }
         this.worker.disconnect(this, channel);
     }
 
