@@ -1,5 +1,6 @@
 package net.minestom.server.utils.thread;
 
+import net.minestom.server.thread.MinestomThreadPool;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadBindingExecutor extends AbstractExecutorService {
 
-    private MinestomThread[] threadExecutors;
+    private MinestomThreadPool[] threadExecutors;
 
     /**
      * Creates a non-local thread-binding executor
@@ -31,15 +32,15 @@ public class ThreadBindingExecutor extends AbstractExecutorService {
      * @param local    set to true if this executor is only used inside a method and should *not* be kept in the internal list of executors
      */
     public ThreadBindingExecutor(int nThreads, String name, boolean local) {
-        threadExecutors = new MinestomThread[nThreads];
+        threadExecutors = new MinestomThreadPool[nThreads];
         for (int i = 0; i < nThreads; i++) {
-            threadExecutors[i] = new MinestomThread(1, name, local);
+            threadExecutors[i] = new MinestomThreadPool(1, name, local);
         }
     }
 
     @Override
     public void shutdown() {
-        for (MinestomThread t : threadExecutors) {
+        for (MinestomThreadPool t : threadExecutors) {
             t.shutdown();
         }
     }
@@ -48,7 +49,7 @@ public class ThreadBindingExecutor extends AbstractExecutorService {
     @Override
     public List<Runnable> shutdownNow() {
         List<Runnable> allTasks = new LinkedList<>();
-        for (MinestomThread t : threadExecutors) {
+        for (MinestomThreadPool t : threadExecutors) {
             allTasks.addAll(t.shutdownNow());
         }
         return allTasks;
@@ -56,7 +57,7 @@ public class ThreadBindingExecutor extends AbstractExecutorService {
 
     @Override
     public boolean isShutdown() {
-        for (MinestomThread t : threadExecutors) {
+        for (MinestomThreadPool t : threadExecutors) {
             if(!t.isShutdown())
                 return false;
         }
@@ -65,7 +66,7 @@ public class ThreadBindingExecutor extends AbstractExecutorService {
 
     @Override
     public boolean isTerminated() {
-        for (MinestomThread t : threadExecutors) {
+        for (MinestomThreadPool t : threadExecutors) {
             if(!t.isShutdown())
                 return false;
         }
@@ -75,7 +76,7 @@ public class ThreadBindingExecutor extends AbstractExecutorService {
     @Override
     public boolean awaitTermination(long timeout, @NotNull TimeUnit unit) throws InterruptedException {
         boolean terminated = true;
-        for (MinestomThread t : threadExecutors) {
+        for (MinestomThreadPool t : threadExecutors) {
             terminated &= t.awaitTermination(timeout, unit);
         }
         return terminated;

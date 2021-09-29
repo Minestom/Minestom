@@ -1,7 +1,6 @@
 package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
@@ -49,7 +48,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         aiTick(time);
 
         // Path finding
-        this.navigator.tick(getAttributeValue(Attribute.MOVEMENT_SPEED));
+        this.navigator.tick();
 
         // Fire, item pickup, ...
         super.update(time);
