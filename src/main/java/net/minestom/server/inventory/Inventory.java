@@ -184,6 +184,14 @@ public class Inventory extends AbstractInventory implements Viewable {
     }
 
     /**
+     * Called when the inventory is closed by {@link Player#closeInventory()}
+     *
+     * @param player The player whose inventory was closed
+     */
+    public void onClose(@NotNull Player player) {
+    }
+
+    /**
      * Gets the cursor item of a viewer.
      *
      * @param player the player to get the cursor item from

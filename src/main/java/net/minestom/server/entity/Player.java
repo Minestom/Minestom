@@ -1514,6 +1514,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(closeWindowPacket);
         inventory.update();
         this.didCloseInventory = true;
+
+        if (openInventory != null) {
+            openInventory.onClose(this);
+        }
     }
 
     /**
