@@ -184,9 +184,9 @@ public class Inventory extends AbstractInventory implements Viewable {
     }
 
     /**
-     * Called when the inventory is clsoed by {@link Player#closeInventory()}
+     * Called when the inventory is closed by {@link Player#closeInventory()}
      *
-     * @param player The player who's inventory was closed
+     * @param player The player whose inventory was closed
      */
     public void onClose(@NotNull Player player) {
     }
