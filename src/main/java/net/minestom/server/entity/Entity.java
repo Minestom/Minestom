@@ -883,8 +883,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.passengers.add(entity);
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
-        entity.refreshPosition(position);
-        entity.synchronizePosition(true);
+
+        // Updates the position of the new passenger, and then teleports the passenger
+        updatePassengerPosition(position, entity);
+        entity.synchronizePosition(false);
     }
 
     /**
@@ -900,11 +902,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
         entity.synchronizePosition(false);
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            player.getPlayerConnection().sendPacket(new PlayerPositionAndLookPacket(player.getPosition(),
-                    (byte) 0x00, player.getNextTeleportId(), true));
-        }
     }
 
     /**
@@ -1180,6 +1177,36 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
+     * @return The height offset for passengers of this vehicle
+     */
+    private double getPassengerHeightOffset() {
+        // TODO: Move this logic elsewhere
+        if (entityType == EntityType.BOAT) {
+            return -0.1;
+        } else if (entityType == EntityType.MINECART) {
+            return 0.0;
+        } else {
+            return entityType.height() * 0.75;
+        }
+    }
+
+    /**
+     * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
+     * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     * @param newPosition The X,Y,Z position of this vehicle
+     * @param passenger The passenger to be moved
+     */
+    private void updatePassengerPosition(Point newPosition, Entity passenger) {
+        final Pos oldPassengerPos = passenger.position;
+        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
+                newPosition.y() + getPassengerHeightOffset(),
+                newPosition.z());
+        passenger.position = newPassengerPos;
+        passenger.previousPosition = oldPassengerPos;
+        passenger.refreshCoordinate(newPassengerPos);
+    }
+
+    /**
      * Used to refresh the entity and its passengers position
      * - put the entity in the right instance chunk
      * - update the viewable chunks (load and unload)
@@ -1192,13 +1219,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void refreshCoordinate(Point newPosition) {
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
-                final Pos oldPassengerPos = passenger.position;
-                final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                        newPosition.y() + getEyeHeight(),
-                        newPosition.z());
-                passenger.position = newPassengerPos;
-                passenger.previousPosition = oldPassengerPos;
-                passenger.refreshCoordinate(newPassengerPos);
+                updatePassengerPosition(newPosition, passenger);
             }
         }
         final Instance instance = getInstance();
