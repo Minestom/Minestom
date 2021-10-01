@@ -884,8 +884,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
 
-        // Update the position of the new passenger, and then teleport the passenger
-        this.refreshCoordinate(position);
+        // Updates the position of the new passenger, and then teleports the passenger
+        updatePassengerPosition(position, entity);
         entity.synchronizePosition(false);
     }
 
@@ -1191,6 +1191,22 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
+     * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
+     * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     * @param newPosition The X,Y,Z position of this vehicle
+     * @param passenger The passenger to be moved
+     */
+    private void updatePassengerPosition(Point newPosition, Entity passenger) {
+        final Pos oldPassengerPos = passenger.position;
+        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
+                newPosition.y() + getPassengerHeightOffset(),
+                newPosition.z());
+        passenger.position = newPassengerPos;
+        passenger.previousPosition = oldPassengerPos;
+        passenger.refreshCoordinate(newPassengerPos);
+    }
+
+    /**
      * Used to refresh the entity and its passengers position
      * - put the entity in the right instance chunk
      * - update the viewable chunks (load and unload)
@@ -1203,13 +1219,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void refreshCoordinate(Point newPosition) {
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
-                final Pos oldPassengerPos = passenger.position;
-                final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                        newPosition.y() + getPassengerHeightOffset(),
-                        newPosition.z());
-                passenger.position = newPassengerPos;
-                passenger.previousPosition = oldPassengerPos;
-                passenger.refreshCoordinate(newPassengerPos);
+                updatePassengerPosition(newPosition, passenger);
             }
         }
         final Instance instance = getInstance();
