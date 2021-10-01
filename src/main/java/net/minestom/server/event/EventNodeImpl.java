@@ -1,6 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
@@ -14,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final Object GLOBAL_CHILD_LOCK = new Object();
@@ -260,18 +262,36 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
+        private static final List<EventFilter<? extends Event, ?>> FILTERS =
+                List.of(EventFilter.ENTITY, EventFilter.ITEM, EventFilter.INSTANCE, EventFilter.INVENTORY, EventFilter.BLOCK);
+
         private final EventNodeImpl<E> node;
         private final Class<E> eventType;
+        private final List<EventFilter<E, ?>> filters;
         private Consumer<E> listener = null;
         private volatile boolean updated;
 
         Handle(EventNodeImpl<E> node, Class<E> eventType) {
             this.node = node;
             this.eventType = eventType;
+            this.filters = FILTERS.stream()
+                    .filter(filter -> filter.eventType().isAssignableFrom(eventType))
+                    .map(eventFilter -> (EventFilter<E, ?>) eventFilter)
+                    .collect(Collectors.toList());
         }
 
         @Override
         public void call(@NotNull E event) {
+            // Per-handler listeners
+            if(node instanceof GlobalEventHandler){
+                for (var filter : filters) {
+                    var handle = filter.getHandler(event);
+                    if (handle instanceof EventHandler) {
+                        ((EventHandler) handle).getEventNode().call(event);
+                    }
+                }
+            }
+            // Global listeners
             final Consumer<E> listener = updatedListener();
             if (listener == null) return;
             try {

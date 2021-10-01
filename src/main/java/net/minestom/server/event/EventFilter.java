@@ -27,6 +27,7 @@ import java.util.function.Function;
  * @param <E> The event type to filter
  * @param <H> The handler type to filter on.
  */
+@ApiStatus.NonExtendable
 public interface EventFilter<E extends Event, H> {
 
     EventFilter<Event, ?> ALL = from(Event.class, null, null);
@@ -37,6 +38,7 @@ public interface EventFilter<E extends Event, H> {
     EventFilter<InventoryEvent, Inventory> INVENTORY = from(InventoryEvent.class, Inventory.class, InventoryEvent::getInventory);
     EventFilter<BlockEvent, Block> BLOCK = from(BlockEvent.class, Block.class, BlockEvent::getBlock);
 
+    @ApiStatus.Internal
     static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> eventType,
                                                        @Nullable Class<H> handlerType,
                                                        @Nullable Function<E, H> handlerGetter) {

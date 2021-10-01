@@ -1,5 +1,9 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.handler.EventHandler;
+import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -22,7 +26,7 @@ import java.util.function.UnaryOperator;
  * Represents an inventory where items can be modified/retrieved.
  */
 @ApiStatus.NonExtendable
-public abstract class AbstractInventory implements InventoryClickHandler, TagHandler {
+public abstract class AbstractInventory implements InventoryClickHandler, EventHandler<InventoryEvent>, TagHandler {
 
     private final int size;
     protected final ItemStack[] itemStacks;
@@ -34,6 +38,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
 
     private final Object nbtLock = new Object();
     private final NBTCompound nbt = new NBTCompound();
+
+    private final EventNode<InventoryEvent> node = EventNode.type(toString(), EventFilter.INVENTORY);
 
     protected AbstractInventory(int size) {
         this.size = size;
@@ -253,5 +259,10 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
         synchronized (nbtLock) {
             tag.write(nbt, value);
         }
+    }
+
+    @Override
+    public @NotNull EventNode<InventoryEvent> getEventNode() {
+        return node;
     }
 }
