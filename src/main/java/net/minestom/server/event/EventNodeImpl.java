@@ -262,32 +262,45 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
+        // Represents all the registered filters
         private static final List<EventFilter<? extends Event, ?>> FILTERS =
                 List.of(EventFilter.ENTITY, EventFilter.ITEM, EventFilter.INSTANCE, EventFilter.INVENTORY, EventFilter.BLOCK);
+        // Represents the filters where the handler has a node
+        private static final List<EventFilter<? extends Event, ? extends EventHandler>> HANDLER_FILTERS = List.of(EventFilter.INVENTORY);
 
         private final EventNodeImpl<E> node;
         private final Class<E> eventType;
         private final List<EventFilter<E, ?>> filters;
+        private final List<EventFilter<E, ? extends EventHandler>> handlerFilters;
+        private final boolean isGlobalNode;
         private Consumer<E> listener = null;
         private volatile boolean updated;
 
         Handle(EventNodeImpl<E> node, Class<E> eventType) {
             this.node = node;
             this.eventType = eventType;
+            // Filters linked to this event type
             this.filters = FILTERS.stream()
                     .filter(filter -> filter.eventType().isAssignableFrom(eventType))
                     .map(eventFilter -> (EventFilter<E, ?>) eventFilter)
                     .collect(Collectors.toList());
+            // Filters with EventHandler support
+            this.handlerFilters = HANDLER_FILTERS.stream()
+                    .filter(filter -> filter.eventType().isAssignableFrom(eventType))
+                    .map(eventFilter -> (EventFilter<E, ? extends EventHandler>) eventFilter)
+                    .collect(Collectors.toList());
+
+            this.isGlobalNode = node instanceof GlobalEventHandler;
         }
 
         @Override
         public void call(@NotNull E event) {
             // Per-handler listeners
-            if(node instanceof GlobalEventHandler){
-                for (var filter : filters) {
-                    var handle = filter.getHandler(event);
-                    if (handle instanceof EventHandler) {
-                        ((EventHandler) handle).getEventNode().call(event);
+            if (isGlobalNode) {
+                for (var filter : handlerFilters) {
+                    EventHandler handle = filter.getHandler(event);
+                    if (handle != null) {
+                        handle.getEventNode().call(event);
                     }
                 }
             }
