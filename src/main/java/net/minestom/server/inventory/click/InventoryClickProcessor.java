@@ -239,7 +239,7 @@ public final class InventoryClickProcessor {
                         finalCursorAmount -= slotSize;
                     }
                     inv.setItemStack(s, slotItem);
-                    callClickEvent(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+                    callClickEvent(player, inv, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
                 }
                 // Update the cursor
                 clickResult.setCursor(stackingRule.apply(cursor, finalCursorAmount));
@@ -284,7 +284,7 @@ public final class InventoryClickProcessor {
                         finalCursorAmount -= 1;
                     }
                     inv.setItemStack(s, slotItem);
-                    callClickEvent(player, inventory, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
+                    callClickEvent(player, inv, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
                 }
                 // Update the cursor
                 clickResult.setCursor(stackingRule.apply(cursor, finalCursorAmount));
