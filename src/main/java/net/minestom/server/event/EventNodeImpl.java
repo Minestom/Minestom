@@ -264,12 +264,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     static final class Handle<E extends Event> implements ListenerHandle<E> {
-        private static final VarHandle UPDATED;
         // Represents all the registered filters
         private static final List<EventFilter<? extends Event, ?>> FILTERS =
                 List.of(EventFilter.ENTITY, EventFilter.ITEM, EventFilter.INSTANCE, EventFilter.INVENTORY, EventFilter.BLOCK);
         // Represents the filters where the handler has a node
         private static final List<EventFilter<? extends Event, ? extends EventHandler>> HANDLER_FILTERS = List.of(EventFilter.INVENTORY);
+        private static final VarHandle UPDATED;
 
         static {
             try {
