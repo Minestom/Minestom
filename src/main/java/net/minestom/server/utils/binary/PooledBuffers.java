@@ -4,6 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.ref.Cleaner;
 import java.lang.ref.SoftReference;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -47,6 +48,10 @@ public final class PooledBuffers {
         CLEANER.register(ref, new BufferCleaner(buffer));
     }
 
+    public static void registerBuffers(Object ref, Collection<BinaryBuffer> buffers) {
+        CLEANER.register(ref, new BuffersCleaner(buffers));
+    }
+
     private static final class BufferRefCleaner implements Runnable {
         private final AtomicReference<BinaryBuffer> bufferRef;
 
@@ -70,6 +75,22 @@ public final class PooledBuffers {
         @Override
         public void run() {
             add(buffer);
+        }
+    }
+
+    private static final class BuffersCleaner implements Runnable {
+        private final Collection<BinaryBuffer> buffers;
+
+        public BuffersCleaner(Collection<BinaryBuffer> buffers) {
+            this.buffers = buffers;
+        }
+
+        @Override
+        public void run() {
+            if (buffers.isEmpty()) return;
+            for (BinaryBuffer buffer : buffers) {
+                add(buffer);
+            }
         }
     }
 }

@@ -149,8 +149,6 @@ public final class InventoryClickProcessor {
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
-            if (itemStack.isAir())
-                return false; // Ignore air click
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
                 return false;
@@ -241,7 +239,7 @@ public final class InventoryClickProcessor {
                         finalCursorAmount -= slotSize;
                     }
                     inv.setItemStack(s, slotItem);
-                    callClickEvent(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+                    callClickEvent(player, inv, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
                 }
                 // Update the cursor
                 clickResult.setCursor(stackingRule.apply(cursor, finalCursorAmount));
@@ -286,7 +284,7 @@ public final class InventoryClickProcessor {
                         finalCursorAmount -= 1;
                     }
                     inv.setItemStack(s, slotItem);
-                    callClickEvent(player, inventory, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
+                    callClickEvent(player, inv, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
                 }
                 // Update the cursor
                 clickResult.setCursor(stackingRule.apply(cursor, finalCursorAmount));

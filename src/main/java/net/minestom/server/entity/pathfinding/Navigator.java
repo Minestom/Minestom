@@ -14,6 +14,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.position.PositionUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,11 +23,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Necessary object for all {@link NavigableEntity}.
  */
-public class Navigator {
-
+public final class Navigator {
     private final PFPathingEntity pathingEntity;
     private HydrazinePathFinder pathFinder;
-    private IPath path;
     private Point pathPosition;
 
     private final Entity entity;
@@ -88,30 +87,24 @@ public class Navigator {
             // Tried to set path to the same target position
             return false;
         }
-
         final Instance instance = entity.getInstance();
-
         if (pathFinder == null) {
             // Unexpected error
             return false;
         }
-
-        pathFinder.reset();
+        this.pathFinder.reset();
         if (point == null) {
             return false;
         }
-
         // Can't path with a null instance.
         if (instance == null) {
             return false;
         }
-
         // Can't path outside the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
         if (!worldBorder.isInside(point)) {
             return false;
         }
-
         // Can't path in an unloaded chunk
         final Chunk chunk = instance.getChunkAt(point);
         if (!ChunkUtils.isLoaded(chunk)) {
@@ -126,11 +119,9 @@ public class Navigator {
                 point.y(),
                 point.z(),
                 pathOptions);
-        this.path = path;
 
         final boolean success = path != null;
         this.pathPosition = success ? point : null;
-
         return success;
     }
 
@@ -141,55 +132,14 @@ public class Navigator {
         return setPathTo(position, true);
     }
 
-    public synchronized void tick(float speed) {
-        // No pathfinding tick for dead entities
+    @ApiStatus.Internal
+    public synchronized void tick() {
+        if (pathPosition == null) return; // No path
         if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
-            return;
-
-        if (pathPosition != null) {
-            IPath path = pathFinder.updatePathFor(pathingEntity);
-            this.path = path;
-
-            if (path != null) {
-                final Point targetPosition = pathingEntity.getTargetPosition();
-                if (targetPosition != null) {
-                    moveTowards(targetPosition, speed);
-                }
-            } else {
-                if (pathPosition != null) {
-                    this.pathPosition = null;
-                    pathFinder.reset();
-                }
-            }
+            return; // No pathfinding tick for dead entities
+        if (pathFinder.updatePathFor(pathingEntity) == null) {
+            reset();
         }
-    }
-
-    /**
-     * Gets the pathing entity.
-     * <p>
-     * Used by the pathfinder.
-     *
-     * @return the pathing entity
-     */
-    @NotNull
-    public PFPathingEntity getPathingEntity() {
-        return pathingEntity;
-    }
-
-    /**
-     * Gets the assigned pathfinder.
-     * <p>
-     * Can be null if the navigable element hasn't been assigned to an {@link Instance} yet.
-     *
-     * @return the current pathfinder, null if none
-     */
-    @Nullable
-    public HydrazinePathFinder getPathFinder() {
-        return pathFinder;
-    }
-
-    public void setPathFinder(@Nullable HydrazinePathFinder pathFinder) {
-        this.pathFinder = pathFinder;
     }
 
     /**
@@ -201,28 +151,22 @@ public class Navigator {
         return pathPosition;
     }
 
-    /**
-     * Changes the position this element is trying to reach.
-     *
-     * @param pathPosition the new current path position
-     * @deprecated Please use {@link #setPathTo(Point)}
-     */
-    @Deprecated
-    public void setPathPosition(@Nullable Point pathPosition) {
-        this.pathPosition = pathPosition;
-    }
-
-    @Nullable
-    public IPath getPath() {
-        return path;
-    }
-
-    public void setPath(@Nullable IPath path) {
-        this.path = path;
-    }
-
-    @NotNull
-    public Entity getEntity() {
+    public @NotNull Entity getEntity() {
         return entity;
+    }
+
+    @ApiStatus.Internal
+    public @NotNull PFPathingEntity getPathingEntity() {
+        return pathingEntity;
+    }
+
+    @ApiStatus.Internal
+    public void setPathFinder(@Nullable HydrazinePathFinder pathFinder) {
+        this.pathFinder = pathFinder;
+    }
+
+    private void reset() {
+        this.pathPosition = null;
+        this.pathFinder.reset();
     }
 }

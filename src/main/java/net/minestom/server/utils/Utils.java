@@ -48,8 +48,7 @@ public final class Utils {
 
     public static int writeEmptyVarIntHeader(@NotNull ByteBuffer buffer) {
         final int index = buffer.position();
-        buffer.putShort((short) 0);
-        buffer.put((byte) 0);
+        buffer.position(index + 3); // Skip 3 bytes
         return index;
     }
 

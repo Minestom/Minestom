@@ -14,12 +14,12 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Thread responsible for ticking {@link net.minestom.server.instance.Chunk chunks} and {@link net.minestom.server.entity.Entity entities}.
+ * Thread responsible for ticking {@link Chunk chunks} and {@link Entity entities}.
  * <p>
  * Created in {@link ThreadDispatcher}, and awaken every tick with a task to execute.
  */
 @ApiStatus.Internal
-public final class TickThread extends Thread {
+public final class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
     private final Phaser phaser;
     private volatile boolean stop;
