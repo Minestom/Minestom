@@ -34,7 +34,7 @@ public class ChunkDataPacket implements ServerPacket {
 
     private static final byte CHUNK_SECTION_COUNT = 16;
 
-    public NBTCompound heightmapsNBT;
+    public NBTCompound heightmapsNBT = new NBTCompound();
 
     public ChunkDataPacket() {
     }
