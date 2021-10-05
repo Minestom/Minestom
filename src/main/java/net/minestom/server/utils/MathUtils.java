@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -95,5 +96,10 @@ public final class MathUtils {
 
     public static double mod(final double a, final double b) {
         return (a % b + b) % b;
+    }
+
+    public static int bitsToRepresent(int n) {
+        Check.argCondition(n < 1, "n must be greater than 0");
+        return Integer.SIZE - Integer.numberOfLeadingZeros(n);
     }
 }

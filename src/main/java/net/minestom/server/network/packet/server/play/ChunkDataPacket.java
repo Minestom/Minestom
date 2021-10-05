@@ -34,11 +34,7 @@ public class ChunkDataPacket implements ServerPacket {
 
     private static final byte CHUNK_SECTION_COUNT = 16;
 
-    /**
-     * Heightmaps NBT, as read from raw packet data.
-     * Only filled by #read, and unused at the moment.
-     */
-    public NBTCompound heightmapsNBT;
+    public NBTCompound heightmapsNBT = new NBTCompound();
 
     public ChunkDataPacket() {
     }
@@ -73,24 +69,8 @@ public class ChunkDataPacket implements ServerPacket {
             writer.writeLong(value);
         }
 
-        // TODO: don't hardcode heightmaps
         // Heightmap
-        int[] motionBlocking = new int[16 * 16];
-        int[] worldSurface = new int[16 * 16];
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                motionBlocking[x + z * 16] = 4;
-                worldSurface[x + z * 16] = 5;
-            }
-        }
-
-        {
-            writer.writeNBT("",
-                    new NBTCompound()
-                            .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, 9))
-                            .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, 9))
-            );
-        }
+        writer.writeNBT("", heightmapsNBT);
 
         // Biomes
         if (biomes == null || biomes.length == 0) {
