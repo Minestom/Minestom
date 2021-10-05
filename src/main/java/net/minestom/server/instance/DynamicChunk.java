@@ -16,10 +16,13 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,6 +176,23 @@ public class DynamicChunk extends Chunk {
         packet.chunkZ = chunkZ;
         packet.sections = sectionMap.clone(); // TODO deep clone
         packet.entries = entries.clone();
+
+        // TODO: don't hardcode heightmaps
+        // Heightmap
+        int dimensionHeight = getInstance().getDimensionType().getHeight();
+        int[] motionBlocking = new int[16 * 16];
+        int[] worldSurface = new int[16 * 16];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                motionBlocking[x + z * 16] = 0;
+                worldSurface[x + z * 16] = dimensionHeight - 1;
+            }
+        }
+        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
+        packet.heightmapsNBT = new NBTCompound()
+                .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
+                .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+
         return packet;
     }
 
