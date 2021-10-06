@@ -7,10 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an {@link EntityEvent} which happen in {@link Entity#getInstance()}.
+ * Useful if you need to listen to entity events happening in its instance.
  * <p>
  * Be aware that the entity's instance must be non-null.
  */
 @ApiStatus.Internal
+@ApiStatus.Experimental
 public interface EntityInstanceEvent extends EntityEvent, InstanceEvent {
     @Override
     default @NotNull Instance getInstance() {
