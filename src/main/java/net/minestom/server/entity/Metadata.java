@@ -223,6 +223,7 @@ public class Metadata {
     public void setIndex(int index, @NotNull Value<?> value) {
         final Entry<?> entry = new Entry<>((byte) index, value);
         this.metadataMap.put((byte) index, entry);
+        this.metadataCache.updateTimestamp();
 
         // Send metadata packet to update viewers and self
         if (this.entity != null && this.entity.isActive()) {
@@ -244,7 +245,6 @@ public class Metadata {
         synchronized (this.notNotifiedChanges) {
             this.notifyAboutChanges = notifyAboutChanges;
             if (notifyAboutChanges) {
-                this.metadataCache.updateTimestamp();
                 entries = this.notNotifiedChanges.values();
                 if (entries.isEmpty()) {
                     return;
