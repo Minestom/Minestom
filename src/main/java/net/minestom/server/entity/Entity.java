@@ -322,7 +322,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (hasVelocity()) {
             playerConnection.sendPacket(getVelocityPacket());
         }
-        playerConnection.sendPacket(getMetadataPacket());
+        playerConnection.sendFramedPacket(metadata.updatedPacket());
         // Passenger
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
@@ -1386,15 +1386,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {
         return new EntityVelocityPacket(getEntityId(), getVelocityForPacket());
-    }
-
-    /**
-     * Gets an {@link EntityMetaDataPacket} sent when adding viewers. Used for synchronization.
-     *
-     * @return The {@link EntityMetaDataPacket} related to this entity
-     */
-    public @NotNull EntityMetaDataPacket getMetadataPacket() {
-        return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
 
     /**

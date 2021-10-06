@@ -51,6 +51,7 @@ import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -484,6 +485,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         this.playerConnection.sendPacket(packet);
         super.sendPacketToViewersAndSelf(packet);
+    }
+
+    @Override
+    public void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
+        this.playerConnection.sendFramedPacket(framedPacket);
+        super.sendPacketToViewersAndSelf(framedPacket);
     }
 
     /**
@@ -1096,7 +1103,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
-        sendPacketToViewersAndSelf(getMetadataPacket());
+        sendPacketToViewersAndSelf(metadata.updatedPacket());
         sendPacketToViewersAndSelf(createPropertiesPacket());
         sendPacketToViewersAndSelf(getEquipmentsPacket());
 
@@ -1999,7 +2006,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         connection.sendPacket(getAddPlayerToList());
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
-        connection.sendPacket(getMetadataPacket());
+        connection.sendFramedPacket(metadata.updatedPacket());
         connection.sendPacket(getEquipmentsPacket());
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());

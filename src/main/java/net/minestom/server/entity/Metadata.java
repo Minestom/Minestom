@@ -5,6 +5,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.CachedPacket;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -206,6 +208,8 @@ public class Metadata {
     private volatile boolean notifyAboutChanges = true;
     private final Map<Byte, Entry<?>> notNotifiedChanges = new HashMap<>();
 
+    private final CachedPacket metadataCache = new CachedPacket(this::createMetadataPacket);
+
     public Metadata(@Nullable Entity entity) {
         this.entity = entity;
     }
@@ -240,6 +244,7 @@ public class Metadata {
         synchronized (this.notNotifiedChanges) {
             this.notifyAboutChanges = notifyAboutChanges;
             if (notifyAboutChanges) {
+                this.metadataCache.updateTimestamp();
                 entries = this.notNotifiedChanges.values();
                 if (entries.isEmpty()) {
                     return;
@@ -256,6 +261,14 @@ public class Metadata {
     @NotNull
     public Collection<Entry<?>> getEntries() {
         return metadataMap.values();
+    }
+
+    public FramedPacket updatedPacket() {
+        return metadataCache.retrieve();
+    }
+
+    private EntityMetaDataPacket createMetadataPacket() {
+        return new EntityMetaDataPacket(entity != null ? entity.getEntityId() : 0, getEntries());
     }
 
     public static class Entry<T> implements Writeable {

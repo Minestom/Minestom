@@ -67,9 +67,7 @@ public class UseItemListener {
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
                 player.refreshActiveHand(true, hand == Player.Hand.OFF, riptideSpinAttack);
-                player.sendPacketToViewers(player.getMetadataPacket());
             });
         }
     }
-
 }
