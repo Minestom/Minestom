@@ -277,7 +277,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.sendFramedPacket(TagsPacket.DEFAULT_TAGS);
 
         // Some client updates
-        this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        this.playerConnection.sendPacket(createPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -1097,7 +1097,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        sendPacketToViewersAndSelf(getPropertiesPacket());
+        sendPacketToViewersAndSelf(createPropertiesPacket());
         sendPacketToViewersAndSelf(getEquipmentsPacket());
 
         getInventory().update();

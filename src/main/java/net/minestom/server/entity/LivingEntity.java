@@ -19,6 +19,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
@@ -51,6 +52,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected BoundingBox expandedBoundingBox;
 
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
+    private final CachedPacket attributeCache = new CachedPacket(this::createPropertiesPacket);
 
     // Abilities
     protected boolean invulnerable;
@@ -474,6 +476,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attributeInstance the modified attribute instance
      */
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
+        this.attributeCache.updateTimestamp();
         if (attributeInstance.getAttribute().isShared()) {
             boolean self = false;
             if (this instanceof Player) {
@@ -482,7 +485,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 // connection null during Player initialization (due to #super call)
                 self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
             }
-            EntityPropertiesPacket propertiesPacket = getPropertiesPacket(Collections.singleton(attributeInstance));
+            EntityPropertiesPacket propertiesPacket = createPropertiesPacket(Collections.singleton(attributeInstance));
             if (self) {
                 sendPacketToViewersAndSelf(propertiesPacket);
             } else {
@@ -536,7 +539,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEquipmentsPacket());
-        playerConnection.sendPacket(getPropertiesPacket());
+        playerConnection.sendFramedPacket(attributeCache.retrieve());
         if (getTeam() != null) {
             playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
         }
@@ -591,50 +594,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     protected void refreshIsDead(boolean isDead) {
         this.isDead = isDead;
-    }
-
-    /**
-     * Gets an {@link EntityPropertiesPacket} for this entity with all of its attributes values.
-     *
-     * @return an {@link EntityPropertiesPacket} linked to this entity
-     */
-    @NotNull
-    protected EntityPropertiesPacket getPropertiesPacket() {
-        return getPropertiesPacket(attributeModifiers.values());
-    }
-
-    /**
-     * Gets an {@link EntityPropertiesPacket} for this entity with the specified attribute values.
-     *
-     * @param attributes the attributes to include in the packet
-     * @return an {@link EntityPropertiesPacket} linked to this entity
-     */
-    @NotNull
-    protected EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
-        // Get all the attributes which should be sent to the client
-        final AttributeInstance[] instances = attributes.stream()
-                .filter(i -> i.getAttribute().isShared())
-                .toArray(AttributeInstance[]::new);
-
-
-        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
-        propertiesPacket.entityId = getEntityId();
-
-        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
-        for (int i = 0; i < properties.length; ++i) {
-            EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
-
-            final float value = instances[i].getBaseValue();
-
-            property.instance = instances[i];
-            property.attribute = instances[i].getAttribute();
-            property.value = value;
-
-            properties[i] = property;
-        }
-
-        propertiesPacket.properties = properties;
-        return propertiesPacket;
     }
 
     @Override
@@ -750,5 +709,35 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void takeKnockback(float strength, final double x, final double z) {
         strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
         super.takeKnockback(strength, x, z);
+    }
+
+    protected @NotNull EntityPropertiesPacket createPropertiesPacket() {
+        return createPropertiesPacket(attributeModifiers.values());
+    }
+
+    protected @NotNull EntityPropertiesPacket createPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
+        // Get all the attributes which should be sent to the client
+        final AttributeInstance[] instances = attributes.stream()
+                .filter(i -> i.getAttribute().isShared())
+                .toArray(AttributeInstance[]::new);
+
+        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
+        propertiesPacket.entityId = getEntityId();
+
+        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
+        for (int i = 0; i < properties.length; ++i) {
+            EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
+
+            final float value = instances[i].getBaseValue();
+
+            property.instance = instances[i];
+            property.attribute = instances[i].getAttribute();
+            property.value = value;
+
+            properties[i] = property;
+        }
+
+        propertiesPacket.properties = properties;
+        return propertiesPacket;
     }
 }
