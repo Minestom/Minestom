@@ -52,7 +52,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected BoundingBox expandedBoundingBox;
 
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
-    private final CachedPacket attributeCache = new CachedPacket(this::createPropertiesPacket);
+    protected final CachedPacket attributeCache = new CachedPacket(this::createPropertiesPacket);
 
     // Abilities
     protected boolean invulnerable;
