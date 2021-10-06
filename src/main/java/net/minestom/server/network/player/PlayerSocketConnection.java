@@ -125,14 +125,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                         // Decompress to content buffer
                         content = workerContext.contentBuffer.clear();
                         decompressedSize = dataLength;
-                        try {
-                            Inflater inflater = workerContext.inflater;
-                            inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
-                            inflater.inflate(content.asByteBuffer(0, dataLength));
-                            inflater.reset();
-                        } catch (DataFormatException e) {
-                            MinecraftServer.getExceptionManager().handleException(e);
-                        }
+                        Inflater inflater = workerContext.inflater;
+                        inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
+                        inflater.inflate(content.asByteBuffer(0, dataLength));
+                        inflater.reset();
                     }
                 }
                 // Process packet
@@ -156,6 +152,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                 readBuffer.reset(beginMark);
                 this.cacheBuffer = BinaryBuffer.copy(readBuffer);
                 break;
+            } catch (DataFormatException e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+                disconnect();
+                return;
             }
         }
     }

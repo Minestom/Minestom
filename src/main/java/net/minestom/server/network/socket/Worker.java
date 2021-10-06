@@ -53,9 +53,12 @@ public final class Worker extends Thread {
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
+                    } catch (IllegalArgumentException e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                        connection.disconnect();
                     }
                 });
-            } catch (IOException e) {
+            } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }
