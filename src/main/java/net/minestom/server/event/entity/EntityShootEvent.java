@@ -4,13 +4,13 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called with {@link EntityProjectile#shoot(Point, double, double)}
  */
-public class EntityShootEvent implements EntityEvent, CancellableEvent {
+public class EntityShootEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
     private final Entity projectile;
