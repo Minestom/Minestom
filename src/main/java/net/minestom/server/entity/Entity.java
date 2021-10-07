@@ -322,7 +322,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (hasVelocity()) {
             playerConnection.sendPacket(getVelocityPacket());
         }
-        playerConnection.sendFramedPacket(metadata.updatedPacket());
+        playerConnection.sendPacket(metadata.updatedPacket());
         // Passenger
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
@@ -1193,8 +1193,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
      * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     *
      * @param newPosition The X,Y,Z position of this vehicle
-     * @param passenger The passenger to be moved
+     * @param passenger   The passenger to be moved
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;

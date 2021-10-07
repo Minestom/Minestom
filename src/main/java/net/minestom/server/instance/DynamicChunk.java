@@ -10,10 +10,8 @@ import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.CachedPacket;
-import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -126,21 +124,16 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        final PlayerConnection connection = player.getPlayerConnection();
-        final FramedPacket lightPacket = lightCache.retrieve();
-        final FramedPacket chunkPacket = chunkCache.retrieve();
-        connection.sendFramedPacket(lightPacket);
-        connection.sendFramedPacket(chunkPacket);
+        player.sendPacket(lightCache.retrieve());
+        player.sendPacket(chunkCache.retrieve());
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        final FramedPacket lightPacket = lightCache.retrieve();
-        final FramedPacket chunkPacket = chunkCache.retrieve();
-        sendPacketToViewers(lightPacket.packet());
-        sendPacketToViewers(chunkPacket.packet());
+        sendPacketToViewers(lightCache.retrieve());
+        sendPacketToViewers(chunkCache.retrieve());
     }
 
     @NotNull

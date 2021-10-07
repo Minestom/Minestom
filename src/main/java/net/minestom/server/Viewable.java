@@ -62,6 +62,13 @@ public interface Viewable {
         PacketUtils.sendGroupedPacket(getViewers(), packet);
     }
 
+    @ApiStatus.Experimental
+    default void sendPacketToViewers(@NotNull FramedPacket framedPacket) {
+        for (Player viewer : getViewers()) {
+            viewer.sendPacket(framedPacket);
+        }
+    }
+
     /**
      * Sends multiple packets to all viewers.
      * <p>
@@ -89,9 +96,7 @@ public interface Viewable {
 
     @ApiStatus.Experimental
     default void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
-        for(Player viewer : getViewers()){
-            viewer.getPlayerConnection().sendFramedPacket(framedPacket);
-        }
+        sendPacketToViewers(framedPacket);
     }
 
     /**

@@ -275,10 +275,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Recipes end
 
         // Tags
-        this.playerConnection.sendFramedPacket(TagsPacket.DEFAULT_TAGS);
+        this.playerConnection.sendPacket(TagsPacket.DEFAULT_TAGS);
 
         // Some client updates
-        this.playerConnection.sendFramedPacket(attributeCache.retrieve()); // Send default properties
+        this.playerConnection.sendPacket(attributeCache.retrieve()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -489,7 +489,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
-        this.playerConnection.sendFramedPacket(framedPacket);
+        this.playerConnection.sendPacket(framedPacket);
         super.sendPacketToViewersAndSelf(framedPacket);
     }
 
@@ -1278,6 +1278,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.sendPacket(packet);
     }
 
+    @ApiStatus.Experimental
+    public void sendPacket(@NotNull FramedPacket framedPacket) {
+        this.playerConnection.sendPacket(framedPacket);
+    }
+
     /**
      * Gets if the player is online or not.
      *
@@ -2006,7 +2011,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         connection.sendPacket(getAddPlayerToList());
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
-        connection.sendFramedPacket(metadata.updatedPacket());
+        connection.sendPacket(metadata.updatedPacket());
         connection.sendPacket(getEquipmentsPacket());
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
