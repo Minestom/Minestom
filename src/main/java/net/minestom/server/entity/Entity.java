@@ -24,6 +24,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -81,7 +82,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected Entity vehicle;
 
     // Velocity
-    protected Vec velocity = Vec.ZERO; // Movement in block per second
+    protected final CachedPacket velocityCache = new CachedPacket(this::createVelocityPacket);
+    private Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean hasPhysics = true;
 
     /**
@@ -320,7 +322,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
-            playerConnection.sendPacket(getVelocityPacket());
+            playerConnection.sendPacket(velocityCache.retrieve());
         }
         playerConnection.sendPacket(metadata.updatedPacket());
         // Passenger
@@ -466,7 +468,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             if (position.samePoint(previousPosition))
                 return; // Didn't move since last tick
             // Calculate velocity from client
-            velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
+            refreshVelocity(position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND));
             previousPosition = position;
             return;
         }
@@ -501,9 +503,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // World border collision
         final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         if (finalVelocityPosition.samePoint(position)) {
-            this.velocity = Vec.ZERO;
+            refreshVelocity(Vec.ZERO);
             if (hasVelocity) {
-                sendPacketToViewers(getVelocityPacket());
+                sendPacketToViewers(velocityCache.retrieve());
             }
             return;
         }
@@ -526,7 +528,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             final double airDrag = this instanceof LivingEntity ? 0.91 : 0.98;
             final double drag = this.onGround ?
                     finalChunk.getBlock(position).registry().friction() : airDrag;
-            this.velocity = newVelocity
+            final Vec updatedVelocity = newVelocity
                     // Convert from block/tick to block/sec
                     .mul(tps)
                     // Apply drag
@@ -537,10 +539,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                     ))
                     // Prevent infinitely decreasing velocity
                     .apply(Vec.Operator.EPSILON);
+            refreshVelocity(updatedVelocity);
         }
         // Verify if velocity packet has to be sent
         if (hasVelocity || gravityTickCount > 0) {
-            sendPacketToViewers(getVelocityPacket());
+            sendPacketToViewers(velocityCache.retrieve());
         }
     }
 
@@ -780,9 +783,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public void setVelocity(@NotNull Vec velocity) {
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         EventDispatcher.callCancellable(entityVelocityEvent, () -> {
-            this.velocity = entityVelocityEvent.getVelocity();
-            sendPacketToViewersAndSelf(getVelocityPacket());
+            refreshVelocity(entityVelocityEvent.getVelocity());
+            sendPacketToViewersAndSelf(velocityCache.retrieve());
         });
+    }
+
+    protected final void refreshVelocity(Vec velocity) {
+        this.velocity = velocity;
+        this.velocityCache.updateTimestamp();
     }
 
     /**
@@ -1385,7 +1393,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return this.velocity.mul(8000f / MinecraftServer.TICK_PER_SECOND);
     }
 
-    protected @NotNull EntityVelocityPacket getVelocityPacket() {
+    protected @NotNull EntityVelocityPacket createVelocityPacket() {
         return new EntityVelocityPacket(getEntityId(), getVelocityForPacket());
     }
 

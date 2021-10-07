@@ -1,5 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -7,9 +10,6 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -89,7 +89,7 @@ public class EntityProjectile extends Entity {
         dz += random.nextGaussian() * spread;
 
         final double mul = 20 * power;
-        this.velocity = new Vec(dx * mul, dy * mul, dz * mul);
+        refreshVelocity(new Vec(dx * mul, dy * mul, dz * mul));
         setView(
                 (float) Math.toDegrees(Math.atan2(dx, dz)),
                 (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))
@@ -106,8 +106,8 @@ public class EntityProjectile extends Entity {
                 return;
             }
             super.onGround = true;
-            this.velocity = Vec.ZERO;
-            sendPacketToViewersAndSelf(getVelocityPacket());
+            refreshVelocity(Vec.ZERO);
+            sendPacketToViewersAndSelf(velocityCache.retrieve());
             setNoGravity(true);
             onStuck();
         } else {

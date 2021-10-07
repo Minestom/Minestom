@@ -1102,7 +1102,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacketsToViewers(getEntityType().registry().spawnType().getSpawnPacket(this));
 
         // Update for viewers
-        sendPacketToViewersAndSelf(getVelocityPacket());
+        sendPacketToViewersAndSelf(velocityCache.retrieve());
         sendPacketToViewersAndSelf(metadata.updatedPacket());
         sendPacketToViewersAndSelf(attributeCache.retrieve());
         sendPacketToViewersAndSelf(getEquipmentsPacket());
@@ -2010,7 +2010,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void showPlayer(@NotNull PlayerConnection connection) {
         connection.sendPacket(getAddPlayerToList());
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
-        connection.sendPacket(getVelocityPacket());
+        connection.sendPacket(velocityCache.retrieve());
         connection.sendPacket(metadata.updatedPacket());
         connection.sendPacket(getEquipmentsPacket());
         if (hasPassenger()) {

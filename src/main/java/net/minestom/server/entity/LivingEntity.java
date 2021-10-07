@@ -280,7 +280,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         setHealth(0);
 
         // Reset velocity
-        this.velocity = Vec.ZERO;
+        refreshVelocity(Vec.ZERO);
 
         // Remove passengers if any
         if (hasPassenger()) {
