@@ -1,7 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +70,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
             handleCollection(pages, "pages", () -> {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
                 for (Component page : pages) {
-                    list.add(new NBTString(GsonComponentSerializer.gson().serialize(page)));
+                    list.add(new NBTString(LegacyComponentSerializer.legacyAmpersand().serialize(page)));
                 }
                 return list;
             });
@@ -94,7 +94,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
             if (nbtCompound.containsKey("pages")) {
                 final NBTList<NBTString> list = nbtCompound.getList("pages");
                 for (NBTString page : list) {
-                    this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
+                    this.pages.add(LegacyComponentSerializer.legacyAmpersand().deserialize(page.getValue()));
                 }
                 pages(pages);
             }
