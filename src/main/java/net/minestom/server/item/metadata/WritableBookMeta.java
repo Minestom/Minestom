@@ -1,5 +1,7 @@
 package net.minestom.server.item.metadata;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -19,11 +21,11 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
     private final String author;
     private final String title;
-    private final List<String> pages;
+    private final List<Component> pages;
 
     protected WritableBookMeta(@NotNull ItemMetaBuilder metaBuilder,
                                @Nullable String author, @Nullable String title,
-                               @NotNull List<@NotNull String> pages) {
+                               @NotNull List<@NotNull Component> pages) {
         super(metaBuilder);
         this.author = author;
         this.title = title;
@@ -38,7 +40,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         return title;
     }
 
-    public @NotNull List<@NotNull String> getPages() {
+    public @NotNull List<@NotNull Component> getPages() {
         return Collections.unmodifiableList(pages);
     }
 
@@ -46,7 +48,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         private String author;
         private String title;
-        private List<String> pages = new ArrayList<>();
+        private List<Component> pages = new ArrayList<>();
 
         public Builder author(@Nullable String author) {
             this.author = author;
@@ -62,13 +64,13 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
             return this;
         }
 
-        public Builder pages(@NotNull List<@NotNull String> pages) {
+        public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = new ArrayList<>(pages);
 
             handleCollection(pages, "pages", () -> {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-                for (String page : pages) {
-                    list.add(new NBTString(page));
+                for (Component page : pages) {
+                    list.add(new NBTString(LegacyComponentSerializer.legacyAmpersand().serialize(page)));
                 }
                 return list;
             });
@@ -92,7 +94,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
             if (nbtCompound.containsKey("pages")) {
                 final NBTList<NBTString> list = nbtCompound.getList("pages");
                 for (NBTString page : list) {
-                    this.pages.add(page.getValue());
+                    this.pages.add(LegacyComponentSerializer.legacyAmpersand().deserialize(page.getValue()));
                 }
                 pages(pages);
             }
