@@ -3,10 +3,11 @@ package net.minestom.server.event.item;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class PickupExperienceEvent implements CancellableEvent, PlayerEvent {
+public class PickupExperienceEvent implements CancellableEvent, PlayerEvent, EntityInstanceEvent {
 
     private final Player player;
     private final ExperienceOrb experienceOrb;
