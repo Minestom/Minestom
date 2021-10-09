@@ -4,25 +4,13 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 @ApiStatus.Experimental
 public interface EntityTracking {
-    static EntityTracking synchronize(EntityTracking entityTracking) {
-        return entityTracking instanceof EntityTrackingImpl.Synchronized ?
-                entityTracking : new EntityTrackingImpl.Synchronized(entityTracking);
-    }
 
     /**
      * Register an entity to be tracked.
      */
     void register(Entity entity, Point spawnPoint);
-
-    /**
-     * Same as #register() but also return the stream from #chunkRangeEntities().
-     */
-    List<Entity> registerAndView(Entity entity, Point spawnPoint, int range);
 
     /**
      * Unregister an entity tracking.
@@ -36,37 +24,34 @@ public interface EntityTracking {
     void move(Entity entity, Point oldPoint, Point newPoint);
 
     /**
-     * Called every time an entity move, you may want to verify if the new
-     * position is in a different chunk.
-     * <p>
-     * Must returns the entities to add & remove.
+     * Gets the entities newly visible and invisible from one position to another.
      */
-    List<Result> moveAndView(Entity entity, Point oldPoint, Point newPoint);
+    void difference(Point p1, Point p2, UpdateCallback callback);
 
     /**
-     * Returns the entities within a range.
+     * Gets the entities within a range.
      */
-    List<Entity> nearbyEntities(Point point, double range);
+    void nearbyEntities(Point point, double range, Query query);
 
     /**
-     * Returns the entities present in the specified chunk.
+     * Gets the entities present in the specified chunk.
      */
-    List<Entity> chunkEntities(Point chunkPoint);
+    void chunkEntities(Point chunkPoint, Query query);
 
     /**
-     * Returns the entities present and in range of the specified chunk.
+     * Gets the entities present and in range of the specified chunk.
      * <p>
      * This is used for auto-viewable features.
      */
-    List<Entity> chunkRangeEntities(Point chunkPoint, int range);
+    void chunkRangeEntities(Point chunkPoint, int range, Query query);
 
-    /**
-     * Returns the entities newly visible and invisible from one position to another.
-     */
-    List<Result> difference(Point p1, Point p2);
+    interface UpdateCallback {
+        void add(Entity entity);
 
-    class Result {
-        private Stream<Entity> addition;
-        private Stream<Entity> removal;
+        void remove(Entity entity);
+    }
+
+    interface Query {
+        void consume(Entity entity);
     }
 }
