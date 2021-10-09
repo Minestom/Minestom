@@ -852,6 +852,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.defaultEatingTime = defaultEatingTime;
     }
 
+    @Override
+    public double getEyeHeight() {
+        switch (getPose()) {
+            case SLEEPING:
+                return 0.2;
+            case FALL_FLYING:
+            case SWIMMING:
+            case SPIN_ATTACK:
+                return 0.4;
+            case SNEAKING:
+                return 1.27;
+            default:
+                return 1.62;
+        }
+    }
+
     /**
      * Gets the player display name in the tab-list.
      *

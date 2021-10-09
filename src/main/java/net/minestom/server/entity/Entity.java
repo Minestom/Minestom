@@ -1276,7 +1276,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return boundingBox.getHeight() * 0.85;
+        return getPose() == Pose.SLEEPING ? 0.2 : (boundingBox.getHeight() * 0.85);
     }
 
     /**
