@@ -19,23 +19,19 @@ final class EntityTrackingImpl {
 
         @Override
         public void register(Entity entity, Point spawnPoint) {
-            this.chunkEntities.computeIfAbsent(getIndex(spawnPoint), c -> new ArrayList<>())
-                    .add(entity);
+            getAt(spawnPoint).add(entity);
         }
 
         @Override
         public void unregister(Entity entity, Point point) {
-            this.chunkEntities.computeIfAbsent(getIndex(point), c -> new ArrayList<>())
-                    .remove(entity);
+            getAt(point).remove(entity);
         }
 
         @Override
         public void move(Entity entity, Point oldPoint, Point newPoint) {
             if (!oldPoint.sameChunk(newPoint)) {
-                this.chunkEntities.computeIfAbsent(getIndex(oldPoint), c -> new ArrayList<>())
-                        .remove(entity);
-                this.chunkEntities.computeIfAbsent(getIndex(newPoint), c -> new ArrayList<>())
-                        .add(entity);
+                getAt(oldPoint).remove(entity);
+                getAt(newPoint).add(entity);
             }
         }
 
@@ -55,7 +51,7 @@ final class EntityTrackingImpl {
 
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
-                    final var chunkEntities = this.chunkEntities.get(getIndex(x, z));
+                    final List<Entity> chunkEntities = getAt(x, z);
                     if (chunkEntities == null || chunkEntities.isEmpty()) continue;
                     // Filter all entities out of range
                     for (Entity chunkEntity : chunkEntities) {
@@ -69,7 +65,7 @@ final class EntityTrackingImpl {
 
         @Override
         public void chunkEntities(Point chunkPoint, Query query) {
-            final List<Entity> entities = chunkEntities.get(getIndex(chunkPoint));
+            final List<Entity> entities = getAt(chunkPoint);
             if (entities != null && !entities.isEmpty()) {
                 for (Entity entity : entities) {
                     query.consume(entity);
@@ -89,12 +85,12 @@ final class EntityTrackingImpl {
             }
         }
 
-        private static long getIndex(int chunkX, int chunkZ) {
-            return ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        private List<Entity> getAt(int chunkX, int chunkZ) {
+            return chunkEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ), l -> new ArrayList<>());
         }
 
-        private static long getIndex(Point point) {
-            return ChunkUtils.getChunkIndex(point.chunkX(), point.chunkZ());
+        private List<Entity> getAt(Point point) {
+            return getAt(point.chunkX(), point.chunkZ());
         }
     }
 
