@@ -47,7 +47,27 @@ final class EntityTrackingImpl {
 
         @Override
         public List<Entity> nearbyEntities(Point point, double range) {
-            return null; // TODO
+            final int minX = ChunkUtils.getChunkCoordinate(point.x() - range);
+            final int maxX = ChunkUtils.getChunkCoordinate(point.x() + range);
+            final int minZ = ChunkUtils.getChunkCoordinate(point.z() - range);
+            final int maxZ = ChunkUtils.getChunkCoordinate(point.z() + range);
+            // Cache squared range to prevent sqrt operations
+            final double squaredRange = range * range;
+
+            List<Entity> result = new ArrayList<>();
+            for (int x = minX; x <= maxX; ++x) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    final var chunkEntities = this.chunkEntities.get(getIndex(x, z));
+                    if (chunkEntities == null || chunkEntities.isEmpty()) continue;
+                    // Filter all entities out of range
+                    for (Entity chunkEntity : chunkEntities) {
+                        if (point.distanceSquared(chunkEntity.getPosition()) < squaredRange) {
+                            result.add(chunkEntity);
+                        }
+                    }
+                }
+            }
+            return result;
         }
 
         @Override
@@ -57,12 +77,23 @@ final class EntityTrackingImpl {
 
         @Override
         public List<Entity> chunkRangeEntities(Point chunkPoint, int range) {
-            return null; // TODO
+            List<Entity> entities = new ArrayList<>();
+            final long[] chunksInRange = ChunkUtils.getChunksInRange(chunkPoint, range);
+            for (long chunkIndex : chunksInRange) {
+                final List<Entity> ent = chunkEntities.get(chunkIndex);
+                if (ent == null || ent.isEmpty()) continue;
+                entities.addAll(ent);
+            }
+            return entities;
         }
 
         @Override
         public List<Result> difference(Point p1, Point p2) {
             return null; // TODO
+        }
+
+        private static long getIndex(int chunkX, int chunkZ) {
+            return ChunkUtils.getChunkIndex(chunkX, chunkZ);
         }
 
         private static long getIndex(Point point) {
