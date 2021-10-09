@@ -420,6 +420,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(respawnEvent);
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level
         refreshIsDead(false);
+        updatePose();
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);

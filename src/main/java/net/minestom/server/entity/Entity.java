@@ -15,6 +15,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
@@ -985,8 +986,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param sneaking true to make the entity sneak
      */
     public void setSneaking(boolean sneaking) {
-        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
         this.entityMeta.setSneaking(sneaking);
+        updatePose();
     }
 
     /**
@@ -1067,6 +1068,20 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
+    }
+
+    public void updatePose() {
+        if (entityMeta.isFlyingWithElytra()) {
+            setPose(Pose.FALL_FLYING);
+        } else if (entityMeta.isSwimming()) {
+            setPose(Pose.SWIMMING);
+        } else if (this instanceof LivingEntity && ((LivingEntityMeta) entityMeta).isInRiptideSpinAttack()) {
+            setPose(Pose.SPIN_ATTACK);
+        } else if (entityMeta.isSneaking()) {
+            setPose(Pose.SNEAKING);
+        } else {
+            setPose(Pose.STANDING);
+        }
     }
 
     /**

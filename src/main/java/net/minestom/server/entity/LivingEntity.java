@@ -275,6 +275,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
+        setPose(Pose.DYING);
         setHealth(0);
 
         // Reset velocity
@@ -573,6 +574,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
             meta.setNotifyAboutChanges(true);
+
+            updatePose(); // Riptide spin attack has a pose
         }
     }
 
@@ -582,6 +585,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     public void setFlyingWithElytra(boolean isFlying) {
         this.entityMeta.setFlyingWithElytra(isFlying);
+        updatePose();
     }
 
     /**
