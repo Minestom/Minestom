@@ -1,7 +1,5 @@
 package net.minestom.server.instance;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -28,7 +26,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -41,7 +38,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
@@ -79,14 +75,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    // Entities present in this instance
-    protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
-    protected final Set<Player> players = ConcurrentHashMap.newKeySet();
-    protected final Set<EntityCreature> creatures = ConcurrentHashMap.newKeySet();
-    protected final Set<ExperienceOrb> experienceOrbs = ConcurrentHashMap.newKeySet();
-    // Entities per chunk
-    protected final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
-    protected final Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
+    private final EntityTracking entityTracking = new EntityTrackingImpl.PerChunk();
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -452,7 +441,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     public @NotNull Set<@NotNull Entity> getEntities() {
-        return Collections.unmodifiableSet(entities);
+        return Collections.emptySet(); // TODO
     }
 
     /**
@@ -462,7 +451,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return Collections.unmodifiableSet(players);
+        return Collections.emptySet(); // TODO
     }
 
     /**
@@ -471,7 +460,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
     public @NotNull Set<@NotNull EntityCreature> getCreatures() {
-        return Collections.unmodifiableSet(creatures);
+        return Collections.emptySet(); // TODO
     }
 
     /**
@@ -480,7 +469,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
     public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
-        return Collections.unmodifiableSet(experienceOrbs);
+        return Collections.emptySet(); // TODO
     }
 
     /**
@@ -491,15 +480,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        if (!ChunkUtils.isLoaded(chunk))
-            return Collections.emptySet();
-        final Set<Entity> entities;
-        synchronized (entitiesLock) {
-            if ((entities = chunkEntities.get(ChunkUtils.getChunkIndex(chunk))) == null) {
-                return Collections.emptySet();
-            }
-        }
-        return Collections.unmodifiableSet(entities);
+        Set<Entity> result = new HashSet<>();
+        this.entityTracking.chunkEntities(chunk.toPosition(), result::add);
+        return result;
     }
 
     /**
@@ -510,35 +493,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return entities that are not further than the specified distance from the transmitted position.
      */
     public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
-        int minX = ChunkUtils.getChunkCoordinate(point.x() - range);
-        int maxX = ChunkUtils.getChunkCoordinate(point.x() + range);
-        int minZ = ChunkUtils.getChunkCoordinate(point.z() - range);
-        int maxZ = ChunkUtils.getChunkCoordinate(point.z() + range);
-
-        // Cache squared range to prevent sqrt operations
-        double squaredRange = range * range;
-
         List<Entity> result = new ArrayList<>();
-        synchronized (entitiesLock) {
-            for (int x = minX; x <= maxX; ++x) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    Chunk chunk = getChunk(x, z);
-
-                    if (chunk == null) {
-                        continue;
-                    }
-
-                    Set<Entity> chunkEntities = getChunkEntities(chunk);
-
-                    // Filter all entities out of range
-                    for (Entity chunkEntity : chunkEntities) {
-                        if (point.distanceSquared(chunkEntity.getPosition()) < squaredRange) {
-                            result.add(chunkEntity);
-                        }
-                    }
-                }
-            }
-        }
+        this.entityTracking.nearbyEntities(point, range, result::add);
         return result;
     }
 
@@ -587,6 +543,10 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         return getChunk(point.chunkX(), point.chunkZ());
     }
 
+    public EntityTracking getEntityTracking() {
+        return entityTracking;
+    }
+
     /**
      * Gets the instance unique id.
      *
@@ -624,7 +584,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
             }
 
             // Send all visible entities
-            EntityUtils.forEachRange(this, entityPosition, MinecraftServer.getEntityViewDistance(), ent -> {
+            this.entityTracking.chunkRangeEntities(entityPosition, MinecraftServer.getEntityViewDistance(), ent -> {
                 if (isPlayer) {
                     if (ent.isAutoViewable())
                         ent.addViewer((Player) entity);
@@ -639,7 +599,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
             // Load the chunk if not already (or throw an error if auto chunk load is disabled)
             loadOptionalChunk(entityPosition).thenAccept(chunk -> {
                 Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, {0}", entityPosition);
-                UNSAFE_addEntityToChunk(entity, chunk);
+                entityTracking.register(entity, entityPosition);
             });
         });
     }
@@ -660,73 +620,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
             entity.getViewers().forEach(entity::removeViewer);
 
             // Remove the entity from cache
-            final Chunk chunk = getChunkAt(entity.getPosition());
-            Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
-            UNSAFE_removeEntityFromChunk(entity, chunk);
+            this.entityTracking.unregister(entity, entity.getPosition());
         });
-    }
-
-    /**
-     * Changes an entity chunk.
-     *
-     * @param entity    the entity to change its chunk
-     * @param lastChunk the last entity chunk
-     * @param newChunk  the new entity chunk
-     */
-    @ApiStatus.Internal
-    public synchronized void UNSAFE_switchEntityChunk(@NotNull Entity entity, @NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
-        Check.notNull(newChunk, "The chunk {0} is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)", newChunk);
-        Check.argCondition(!newChunk.isLoaded(), "Chunk {0} has been unloaded previously", newChunk);
-        final long oldIndex = ChunkUtils.getChunkIndex(lastChunk);
-        final long newIndex = ChunkUtils.getChunkIndex(newChunk);
-        synchronized (entitiesLock) {
-            removeEntityChunk(oldIndex, entity);
-            addEntityChunk(newIndex, entity);
-        }
-    }
-
-    private void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
-        synchronized (entitiesLock) {
-            addEntityChunk(chunkIndex, entity);
-            this.entities.add(entity);
-            if (entity instanceof Player) {
-                this.players.add((Player) entity);
-            } else if (entity instanceof EntityCreature) {
-                this.creatures.add((EntityCreature) entity);
-            } else if (entity instanceof ExperienceOrb) {
-                this.experienceOrbs.add((ExperienceOrb) entity);
-            }
-        }
-    }
-
-    private void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
-        synchronized (entitiesLock) {
-            removeEntityChunk(chunkIndex, entity);
-            this.entities.remove(entity);
-            if (entity instanceof Player) {
-                this.players.remove(entity);
-            } else if (entity instanceof EntityCreature) {
-                this.creatures.remove(entity);
-            } else if (entity instanceof ExperienceOrb) {
-                this.experienceOrbs.remove(entity);
-            }
-        }
-    }
-
-    private void addEntityChunk(long index, Entity entity) {
-        this.chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet()).add(entity);
-    }
-
-    private void removeEntityChunk(long index, Entity entity) {
-        var chunkEntities = this.chunkEntities.get(index);
-        if (chunkEntities != null) {
-            chunkEntities.remove(entity);
-            if (chunkEntities.isEmpty()) {
-                this.chunkEntities.remove(index);
-            }
-        }
     }
 
     /**

@@ -21,7 +21,7 @@ public interface EntityTracking {
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
-    void move(Entity entity, Point oldPoint, Point newPoint);
+    void move(Entity entity, Point oldPoint, Point newPoint, UpdateCallback callback);
 
     /**
      * Gets the entities newly visible and invisible from one position to another.

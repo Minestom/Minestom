@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -28,16 +29,31 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void move(Entity entity, Point oldPoint, Point newPoint) {
+        public void move(Entity entity, Point oldPoint, Point newPoint, UpdateCallback callback) {
             if (!oldPoint.sameChunk(newPoint)) {
                 getAt(oldPoint).remove(entity);
                 getAt(newPoint).add(entity);
+                difference(oldPoint, newPoint, callback);
             }
         }
 
         @Override
         public void difference(Point p1, Point p2, UpdateCallback callback) {
-
+            final int range = MinecraftServer.getEntityViewDistance();
+            // Remove
+            ChunkUtils.forDifferingChunksInRange(p2.chunkX(), p2.chunkZ(), range, p1.chunkX(), p1.chunkZ(), range, chunkIndex -> {
+                final List<Entity> entities = getAt(chunkIndex);
+                for (Entity entity : entities) {
+                    callback.remove(entity);
+                }
+            });
+            // Add
+            ChunkUtils.forDifferingChunksInRange(p1.chunkX(), p1.chunkZ(), range, p2.chunkX(), p2.chunkZ(), range, chunkIndex -> {
+                final List<Entity> entities = getAt(chunkIndex);
+                for (Entity entity : entities) {
+                    callback.add(entity);
+                }
+            });
         }
 
         @Override
@@ -85,8 +101,12 @@ final class EntityTrackingImpl {
             }
         }
 
+        private List<Entity> getAt(long index) {
+            return chunkEntities.computeIfAbsent(index, l -> new ArrayList<>());
+        }
+
         private List<Entity> getAt(int chunkX, int chunkZ) {
-            return chunkEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ), l -> new ArrayList<>());
+            return getAt(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         }
 
         private List<Entity> getAt(Point point) {

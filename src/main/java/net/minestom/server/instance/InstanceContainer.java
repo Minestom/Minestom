@@ -226,9 +226,6 @@ public class InstanceContainer extends Instance {
         synchronized (chunks) {
             this.chunks.remove(index);
         }
-        synchronized (entitiesLock) {
-            this.chunkEntities.remove(index);
-        }
         chunk.unload();
         UPDATE_MANAGER.signalChunkUnload(chunk);
     }

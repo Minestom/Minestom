@@ -19,6 +19,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.EntityTracking;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
@@ -1193,8 +1194,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
      * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     *
      * @param newPosition The X,Y,Z position of this vehicle
-     * @param passenger The passenger to be moved
+     * @param passenger   The passenger to be moved
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
@@ -1224,6 +1226,21 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         final Instance instance = getInstance();
         if (instance != null) {
+            this.instance.getEntityTracking().move(this, previousPosition, newPosition,
+                    new EntityTracking.UpdateCallback() {
+                        @Override
+                        public void add(Entity entity) {
+                            if (entity instanceof Player) addViewer((Player) entity);
+                            if (Entity.this instanceof Player) entity.addViewer((Player) Entity.this);
+                        }
+
+                        @Override
+                        public void remove(Entity entity) {
+                            if (entity instanceof Player) removeViewer((Player) entity);
+                            if (Entity.this instanceof Player) entity.removeViewer((Player) Entity.this);
+                        }
+                    });
+
             final int lastChunkX = currentChunk.getChunkX();
             final int lastChunkZ = currentChunk.getChunkZ();
             final int newChunkX = newPosition.chunkX();
@@ -1232,12 +1249,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 // Entity moved in a new chunk
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
                     player.refreshVisibleChunks(newChunk);
-                    player.refreshVisibleEntities(newChunk);
                 }
                 refreshCurrentChunk(newChunk);
             }
