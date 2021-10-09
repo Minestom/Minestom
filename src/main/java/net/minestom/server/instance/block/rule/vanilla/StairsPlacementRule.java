@@ -27,7 +27,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace,
-                            @NotNull Point blockPosition, @NotNull Player player) {
+                            @NotNull Point blockPosition, @NotNull Player player, @NotNull Vec cursorPosition) {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
