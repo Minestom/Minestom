@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @ApiStatus.Experimental
@@ -21,7 +22,7 @@ public interface EntityTracking {
     /**
      * Same as #register() but also return the stream from #chunkRangeEntities().
      */
-    Stream<Entity> registerAndView(Entity entity, Chunk spawnChunk, int range);
+    List<Entity> registerAndView(Entity entity, Chunk spawnChunk, int range);
 
     /**
      * Unregister an entity tracking.
@@ -40,29 +41,29 @@ public interface EntityTracking {
      * <p>
      * Must returns the entities to add & remove.
      */
-    Stream<Result> moveAndView(Entity entity, Point oldPoint, Point newPoint);
+    List<Result> moveAndView(Entity entity, Point oldPoint, Point newPoint);
 
     /**
      * Returns the entities within a range.
      */
-    Stream<Entity> nearbyEntities(Point point, double range);
+    List<Entity> nearbyEntities(Point point, double range);
 
     /**
      * Returns the entities present in the specified chunk.
      */
-    Stream<Entity> chunkEntities(Point chunkPoint);
+    List<Entity> chunkEntities(Point chunkPoint);
 
     /**
      * Returns the entities present and in range of the specified chunk.
      * <p>
      * This is used for auto-viewable features.
      */
-    Stream<Entity> chunkRangeEntities(Point chunkPoint, int range);
+    List<Entity> chunkRangeEntities(Point chunkPoint, int range);
 
     /**
      * Returns the entities newly visible and invisible from one position to another.
      */
-    Stream<Result> difference(Point p1, Point p2);
+    List<Result> difference(Point p1, Point p2);
 
     class Result {
         private Stream<Entity> addition;

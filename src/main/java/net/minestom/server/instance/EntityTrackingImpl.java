@@ -3,7 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 final class EntityTrackingImpl {
     static final class Synchronized implements EntityTracking {
@@ -23,7 +23,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public Stream<Entity> registerAndView(Entity entity, Chunk spawnChunk, int range) {
+        public List<Entity> registerAndView(Entity entity, Chunk spawnChunk, int range) {
             synchronized (mutex) {
                 return t.registerAndView(entity, spawnChunk, range);
             }
@@ -44,35 +44,35 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public Stream<Result> moveAndView(Entity entity, Point oldPoint, Point newPoint) {
+        public List<Result> moveAndView(Entity entity, Point oldPoint, Point newPoint) {
             synchronized (mutex) {
                 return t.moveAndView(entity, oldPoint, newPoint);
             }
         }
 
         @Override
-        public Stream<Entity> nearbyEntities(Point point, double range) {
+        public List<Entity> nearbyEntities(Point point, double range) {
             synchronized (mutex) {
                 return t.nearbyEntities(point, range);
             }
         }
 
         @Override
-        public Stream<Entity> chunkEntities(Point chunkPoint) {
+        public List<Entity> chunkEntities(Point chunkPoint) {
             synchronized (mutex) {
                 return t.chunkEntities(chunkPoint);
             }
         }
 
         @Override
-        public Stream<Entity> chunkRangeEntities(Point chunkPoint, int range) {
+        public List<Entity> chunkRangeEntities(Point chunkPoint, int range) {
             synchronized (mutex) {
                 return t.chunkRangeEntities(chunkPoint, range);
             }
         }
 
         @Override
-        public Stream<Result> difference(Point p1, Point p2) {
+        public List<Result> difference(Point p1, Point p2) {
             synchronized (mutex) {
                 return t.difference(p1, p2);
             }
