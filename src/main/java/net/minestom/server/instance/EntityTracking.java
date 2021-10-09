@@ -17,17 +17,17 @@ public interface EntityTracking {
     /**
      * Register an entity to be tracked.
      */
-    void register(Entity entity, Chunk spawnChunk);
+    void register(Entity entity, Point spawnPoint);
 
     /**
      * Same as #register() but also return the stream from #chunkRangeEntities().
      */
-    List<Entity> registerAndView(Entity entity, Chunk spawnChunk, int range);
+    List<Entity> registerAndView(Entity entity, Point spawnPoint, int range);
 
     /**
      * Unregister an entity tracking.
      */
-    void unregister(Entity entity, Chunk chunk);
+    void unregister(Entity entity, Point point);
 
     /**
      * Called every time an entity move, you may want to verify if the new

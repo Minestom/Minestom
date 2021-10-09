@@ -2,10 +2,77 @@ package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
-import java.util.List;
+import java.util.*;
 
 final class EntityTrackingImpl {
+
+    /**
+     * Default tracking implementation storing entities per-chunk.
+     */
+    static final class PerChunk implements EntityTracking {
+        private final Map<Long, List<Entity>> chunkEntities = new HashMap<>();
+
+        @Override
+        public void register(Entity entity, Point spawnPoint) {
+            this.chunkEntities.computeIfAbsent(getIndex(spawnPoint), c -> new ArrayList<>())
+                    .add(entity);
+        }
+
+        @Override
+        public List<Entity> registerAndView(Entity entity, Point spawnPoint, int range) {
+            register(entity, spawnPoint);
+            return null; // TODO
+        }
+
+        @Override
+        public void unregister(Entity entity, Point point) {
+            this.chunkEntities.computeIfAbsent(getIndex(point), c -> new ArrayList<>())
+                    .remove(entity);
+        }
+
+        @Override
+        public void move(Entity entity, Point oldPoint, Point newPoint) {
+            // TODO
+            if (!oldPoint.sameChunk(newPoint)) {
+
+            }
+        }
+
+        @Override
+        public List<Result> moveAndView(Entity entity, Point oldPoint, Point newPoint) {
+            return null; // TODO
+        }
+
+        @Override
+        public List<Entity> nearbyEntities(Point point, double range) {
+            return null; // TODO
+        }
+
+        @Override
+        public List<Entity> chunkEntities(Point chunkPoint) {
+            return chunkEntities.getOrDefault(getIndex(chunkPoint), Collections.emptyList());
+        }
+
+        @Override
+        public List<Entity> chunkRangeEntities(Point chunkPoint, int range) {
+            return null; // TODO
+        }
+
+        @Override
+        public List<Result> difference(Point p1, Point p2) {
+            return null; // TODO
+        }
+
+        private static long getIndex(Point point) {
+            return ChunkUtils.getChunkIndex(point.chunkX(), point.chunkZ());
+        }
+    }
+
+    /**
+     * Synchronize all tracking methods.
+     */
     static final class Synchronized implements EntityTracking {
         private final EntityTracking t;
         private final Object mutex;
@@ -16,23 +83,23 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void register(Entity entity, Chunk spawnChunk) {
+        public void register(Entity entity, Point spawnPoint) {
             synchronized (mutex) {
-                t.register(entity, spawnChunk);
+                t.register(entity, spawnPoint);
             }
         }
 
         @Override
-        public List<Entity> registerAndView(Entity entity, Chunk spawnChunk, int range) {
+        public List<Entity> registerAndView(Entity entity, Point spawnPoint, int range) {
             synchronized (mutex) {
-                return t.registerAndView(entity, spawnChunk, range);
+                return t.registerAndView(entity, spawnPoint, range);
             }
         }
 
         @Override
-        public void unregister(Entity entity, Chunk chunk) {
+        public void unregister(Entity entity, Point point) {
             synchronized (mutex) {
-                t.unregister(entity, chunk);
+                t.unregister(entity, point);
             }
         }
 
