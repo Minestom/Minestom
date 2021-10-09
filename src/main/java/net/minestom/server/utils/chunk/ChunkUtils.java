@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.LongConsumer;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -137,6 +138,20 @@ public final class ChunkUtils {
 
     public static int getSectionAt(int y) {
         return y / Chunk.CHUNK_SECTION_SIZE;
+    }
+
+    /**
+     * Calls the callback for every chunk with in newRange of newChunkX, newChunkZ that isn't within oldRange of oldChunkX oldChunkZ
+     */
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ, int newRange, int oldChunkX, int oldChunkZ, int oldRange, @NotNull LongConsumer callback) {
+        // Find the chunks
+        for (int x = newChunkX - newRange; x <= newChunkX + newRange; x++) {
+            for (int z = newChunkZ - newRange; z <= newChunkZ + newRange; z++) {
+                if (Math.abs(x - oldChunkX) > oldRange || Math.abs(z - oldChunkZ) > oldRange) {
+                    callback.accept(getChunkIndex(x, z));
+                }
+            }
+        }
     }
 
     /**

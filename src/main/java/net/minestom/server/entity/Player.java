@@ -64,7 +64,6 @@ import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.statistic.PlayerStatistic;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.TickUtils;
@@ -134,6 +133,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private byte heldSlot;
 
     private Pos respawnPoint;
+
+    private int lastViewDistance = -1;
 
     private int food;
     private float foodSaturation;
@@ -561,6 +562,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
+            lastViewDistance = -1;
             refreshVisibleChunks();
         }
 
@@ -1174,17 +1176,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
         final int newChunkX = newChunk.getChunkX();
         final int newChunkZ = newChunk.getChunkZ();
+        final int oldChunkX = currentChunk.getChunkX();
+        final int oldChunkZ = currentChunk.getChunkZ();
         final int range = getChunkRange();
-        // Previous chunks indexes
-        final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(ChunkUtils::getChunkIndex).toArray();
-        // New chunks indexes
-        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunkX, newChunkZ, range);
 
         // Update client render distance
         updateViewPosition(newChunkX, newChunkZ);
 
         // Unload old chunks
-        ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {
+        ChunkUtils.forDifferingChunksInRange(oldChunkX, oldChunkZ, lastViewDistance, newChunkX, newChunkZ, range, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
             this.playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
@@ -1194,7 +1194,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         });
         // Load new chunks
-        ArrayUtils.forDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks, chunkIndex -> {
+        ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, range, oldChunkX, oldChunkZ, lastViewDistance, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
             this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
@@ -1209,6 +1209,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
             });
         });
+
+        lastViewDistance = range;
     }
 
     public void refreshVisibleChunks() {
