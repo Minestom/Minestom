@@ -20,19 +20,19 @@ final class EntityTrackingImpl {
 
         @Override
         public void register(Entity entity, Point spawnPoint) {
-            getAt(spawnPoint).add(entity);
+            get(spawnPoint).add(entity);
         }
 
         @Override
         public void unregister(Entity entity, Point point) {
-            getAt(point).remove(entity);
+            get(point).remove(entity);
         }
 
         @Override
         public void move(Entity entity, Point oldPoint, Point newPoint, UpdateCallback callback) {
             if (!oldPoint.sameChunk(newPoint)) {
-                getAt(oldPoint).remove(entity);
-                getAt(newPoint).add(entity);
+                get(oldPoint).remove(entity);
+                get(newPoint).add(entity);
                 difference(oldPoint, newPoint, callback);
             }
         }
@@ -42,14 +42,16 @@ final class EntityTrackingImpl {
             final int range = MinecraftServer.getEntityViewDistance();
             // Remove
             ChunkUtils.forDifferingChunksInRange(p2.chunkX(), p2.chunkZ(), range, p1.chunkX(), p1.chunkZ(), range, chunkIndex -> {
-                final List<Entity> entities = getAt(chunkIndex);
+                final List<Entity> entities = getOptional(chunkIndex);
+                if (entities == null) return;
                 for (Entity entity : entities) {
                     callback.remove(entity);
                 }
             });
             // Add
             ChunkUtils.forDifferingChunksInRange(p1.chunkX(), p1.chunkZ(), range, p2.chunkX(), p2.chunkZ(), range, chunkIndex -> {
-                final List<Entity> entities = getAt(chunkIndex);
+                final List<Entity> entities = getOptional(chunkIndex);
+                if (entities == null) return;
                 for (Entity entity : entities) {
                     callback.add(entity);
                 }
@@ -67,7 +69,7 @@ final class EntityTrackingImpl {
 
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
-                    final List<Entity> chunkEntities = getAt(x, z);
+                    final List<Entity> chunkEntities = getOptional(x, z);
                     if (chunkEntities == null || chunkEntities.isEmpty()) continue;
                     // Filter all entities out of range
                     for (Entity chunkEntity : chunkEntities) {
@@ -81,7 +83,7 @@ final class EntityTrackingImpl {
 
         @Override
         public void chunkEntities(Point chunkPoint, Query query) {
-            final List<Entity> entities = getAt(chunkPoint);
+            final List<Entity> entities = getOptional(chunkPoint);
             if (entities != null && !entities.isEmpty()) {
                 for (Entity entity : entities) {
                     query.consume(entity);
@@ -93,7 +95,7 @@ final class EntityTrackingImpl {
         public void chunkRangeEntities(Point chunkPoint, int range, Query query) {
             final long[] chunksInRange = ChunkUtils.getChunksInRange(chunkPoint, range);
             for (long chunkIndex : chunksInRange) {
-                final List<Entity> entities = chunkEntities.get(chunkIndex);
+                final List<Entity> entities = getOptional(chunkIndex);
                 if (entities == null || entities.isEmpty()) continue;
                 for (Entity entity : entities) {
                     query.consume(entity);
@@ -101,16 +103,28 @@ final class EntityTrackingImpl {
             }
         }
 
-        private List<Entity> getAt(long index) {
+        private List<Entity> get(long index) {
             return chunkEntities.computeIfAbsent(index, l -> new ArrayList<>());
         }
 
-        private List<Entity> getAt(int chunkX, int chunkZ) {
-            return getAt(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        private List<Entity> get(int chunkX, int chunkZ) {
+            return get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         }
 
-        private List<Entity> getAt(Point point) {
-            return getAt(point.chunkX(), point.chunkZ());
+        private List<Entity> get(Point point) {
+            return get(point.chunkX(), point.chunkZ());
+        }
+
+        private List<Entity> getOptional(long index) {
+            return chunkEntities.get(index);
+        }
+
+        private List<Entity> getOptional(int chunkX, int chunkZ) {
+            return getOptional(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        }
+
+        private List<Entity> getOptional(Point point) {
+            return getOptional(point.chunkX(), point.chunkZ());
         }
     }
 
