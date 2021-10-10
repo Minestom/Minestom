@@ -17,6 +17,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.AgeableMobMeta;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
@@ -680,6 +681,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return the entity bounding box for the pose
      */
     public @NotNull BoundingBox getBoundingBox(Pose pose) {
+        if (entityMeta instanceof ArmorStandMeta && ((ArmorStandMeta) entityMeta).isMarker()) {
+            return new BoundingBox(this, 0, 0, 0);
+        }
+
         if (pose == Pose.SLEEPING || pose == Pose.DYING) {
             return sleepingBoundingBox;
         }
