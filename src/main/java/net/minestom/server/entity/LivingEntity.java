@@ -15,7 +15,6 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
@@ -200,23 +199,20 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-
-            final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            for (Entity entity : entities) {
+            this.instance.getEntityTracking().nearbyEntities(position, 3, entity -> {
                 if (entity instanceof ItemEntity) {
                     // Do not pick up if not visible
                     if (this instanceof Player && !entity.isViewer((Player) this))
-                        continue;
+                        return;
 
                     final ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
-                        continue;
+                        return;
 
                     final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                     if (expandedBoundingBox.intersect(itemBoundingBox)) {
                         if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
-                            continue;
+                            return;
                         PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                         EventDispatcher.callCancellable(pickupItemEvent, () -> {
                             final ItemStack item = itemEntity.getItemStack();
@@ -225,7 +221,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                         });
                     }
                 }
-            }
+            });
         }
     }
 

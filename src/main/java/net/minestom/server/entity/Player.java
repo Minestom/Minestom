@@ -307,15 +307,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
-            final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            for (Entity entity : entities) {
+            this.instance.getEntityTracking().nearbyEntities(position, 3, entity -> {
                 if (entity instanceof ExperienceOrb) {
                     final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
                     final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
                     if (expandedBoundingBox.intersect(itemBoundingBox)) {
                         if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
-                            continue;
+                            return;
                         PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                         EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                             short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
@@ -323,7 +321,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         });
                     }
                 }
-            }
+            });
         }
 
         // Eating animation

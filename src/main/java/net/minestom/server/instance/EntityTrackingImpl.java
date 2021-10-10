@@ -7,8 +7,8 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 final class EntityTrackingImpl {
 
@@ -104,7 +104,7 @@ final class EntityTrackingImpl {
         }
 
         private List<Entity> get(long index) {
-            return chunkEntities.computeIfAbsent(index, l -> new ArrayList<>());
+            return chunkEntities.computeIfAbsent(index, l -> new CopyOnWriteArrayList<>());
         }
 
         private List<Entity> get(int chunkX, int chunkZ) {
