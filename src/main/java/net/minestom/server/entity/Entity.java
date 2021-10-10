@@ -1227,7 +1227,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Instance instance = getInstance();
         if (instance != null) {
             this.instance.getEntityTracking().move(this, previousPosition, newPosition,
-                    new EntityTracking.UpdateCallback() {
+                    new EntityTracking.Update() {
                         @Override
                         public void add(Entity entity) {
                             if (entity instanceof Player) addViewer((Player) entity);

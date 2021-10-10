@@ -21,12 +21,12 @@ public interface EntityTracking {
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
-    void move(Entity entity, Point oldPoint, Point newPoint, UpdateCallback callback);
+    void move(Entity entity, Point oldPoint, Point newPoint, Update update);
 
     /**
      * Gets the entities newly visible and invisible from one position to another.
      */
-    void difference(Point p1, Point p2, UpdateCallback callback);
+    void difference(Point p1, Point p2, Update update);
 
     /**
      * Gets the entities within a range.
@@ -45,7 +45,7 @@ public interface EntityTracking {
      */
     void chunkRangeEntities(Point chunkPoint, int range, Query query);
 
-    interface UpdateCallback {
+    interface Update {
         void add(Entity entity);
 
         void remove(Entity entity);

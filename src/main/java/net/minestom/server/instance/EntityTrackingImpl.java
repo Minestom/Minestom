@@ -29,23 +29,23 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void move(Entity entity, Point oldPoint, Point newPoint, UpdateCallback callback) {
+        public void move(Entity entity, Point oldPoint, Point newPoint, Update update) {
             if (!oldPoint.sameChunk(newPoint)) {
                 get(oldPoint).remove(entity);
                 get(newPoint).add(entity);
-                difference(oldPoint, newPoint, callback);
+                difference(oldPoint, newPoint, update);
             }
         }
 
         @Override
-        public void difference(Point p1, Point p2, UpdateCallback callback) {
+        public void difference(Point p1, Point p2, Update update) {
             final int range = MinecraftServer.getEntityViewDistance();
             // Remove
             ChunkUtils.forDifferingChunksInRange(p2.chunkX(), p2.chunkZ(), range, p1.chunkX(), p1.chunkZ(), range, chunkIndex -> {
                 final List<Entity> entities = getOptional(chunkIndex);
                 if (entities == null) return;
                 for (Entity entity : entities) {
-                    callback.remove(entity);
+                    update.remove(entity);
                 }
             });
             // Add
@@ -53,7 +53,7 @@ final class EntityTrackingImpl {
                 final List<Entity> entities = getOptional(chunkIndex);
                 if (entities == null) return;
                 for (Entity entity : entities) {
-                    callback.add(entity);
+                    update.add(entity);
                 }
             });
         }
