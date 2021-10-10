@@ -545,8 +545,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public void setBoundingBox(double x, double y, double z) {
-        super.setBoundingBox(x, y, z);
+    public void setBoundingBox(BoundingBox boundingBox) {
+        super.setBoundingBox(boundingBox);
         this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
     }
 

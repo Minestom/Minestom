@@ -98,6 +98,8 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+    private final BoundingBox sneakingBoundingBox = new BoundingBox(this, 0.6, 1.5, 0.6);
+    private final BoundingBox smallBoundingBox = new BoundingBox(this, 0.6, 0.6, 0.6);
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -850,6 +852,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDefaultEatingTime(long defaultEatingTime) {
         this.defaultEatingTime = defaultEatingTime;
+    }
+
+    @Override
+    public @NotNull BoundingBox getBoundingBox(Pose pose) {
+        if (pose == Pose.SPIN_ATTACK || pose == Pose.SWIMMING || pose == Pose.FALL_FLYING) {
+            return smallBoundingBox;
+        } else if (pose == Pose.SNEAKING) {
+            return sneakingBoundingBox;
+        } else {
+            return super.getBoundingBox(pose);
+        }
     }
 
     @Override

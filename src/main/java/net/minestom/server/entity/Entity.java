@@ -14,6 +14,7 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.metadata.AgeableMobMeta;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
@@ -70,6 +71,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
+    private final BoundingBox sleepingBoundingBox = new BoundingBox(this, 0.2, 0.2, 0.2);
+
     protected Instance instance;
     protected Chunk currentChunk;
     protected Pos position;
@@ -77,6 +80,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
+    private BoundingBox standingBoundingBox;
     private BoundingBox boundingBox;
 
     protected Entity vehicle;
@@ -660,6 +664,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
+     * Returns the current bounding box (based on pose).
      * Is used to check collision with coordinates or other blocks/entities.
      *
      * @return the entity bounding box
@@ -669,7 +674,30 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
-     * Changes the internal entity bounding box.
+     * Returns the bounding box for a specific pose.
+     *
+     * @param pose the pose
+     * @return the entity bounding box for the pose
+     */
+    public @NotNull BoundingBox getBoundingBox(Pose pose) {
+        if (pose == Pose.SLEEPING || pose == Pose.DYING) {
+            return sleepingBoundingBox;
+        }
+
+        if (entityMeta instanceof AgeableMobMeta && ((AgeableMobMeta) entityMeta).isBaby()) {
+            return new BoundingBox(this,
+                    standingBoundingBox.getWidth() / 2,
+                    standingBoundingBox.getHeight() / 2,
+                    standingBoundingBox.getDepth() / 2
+            );
+        }
+
+        return standingBoundingBox;
+    }
+
+    /**
+     * Changes the internal entity standing bounding box.
+     * When the pose is not standing, a different bounding box may be used for collision.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
@@ -678,18 +706,20 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param z the bounding box Z size
      */
     public void setBoundingBox(double x, double y, double z) {
-        this.boundingBox = new BoundingBox(this, x, y, z);
+        setBoundingBox(new BoundingBox(this, x, y, z));
     }
 
     /**
-     * Changes the internal entity bounding box.
+     * Changes the internal entity standing bounding box.
+     * When the pose is not standing, a different bounding box may be used for collision.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
      * @param boundingBox the new bounding box
      */
     public void setBoundingBox(BoundingBox boundingBox) {
-        this.boundingBox = boundingBox;
+        this.standingBoundingBox = boundingBox;
+        this.boundingBox = getBoundingBox(getPose());
     }
 
     /**
@@ -1068,6 +1098,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
+        this.boundingBox = getBoundingBox(pose);
     }
 
     public void updatePose() {
