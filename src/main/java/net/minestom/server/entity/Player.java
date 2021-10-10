@@ -1180,18 +1180,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Update client render distance
         updateViewPosition(newChunkX, newChunkZ);
 
-        // Unload old chunks
-        ChunkUtils.forDifferingChunksInRange(oldChunkX, oldChunkZ, lastViewDistance, newChunkX, newChunkZ, range, chunkIndex -> {
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            this.playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk != null) {
-                chunk.removeViewer(this);
-            }
-        });
-        // Load new chunks
         ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, range, oldChunkX, oldChunkZ, lastViewDistance, chunkIndex -> {
+            // Load new chunks
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
             this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
@@ -1205,6 +1195,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
+        }, chunkIndex -> {
+            // Unload old chunks
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            this.playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+            if (chunk != null) {
+                chunk.removeViewer(this);
+            }
         });
 
         lastViewDistance = range;

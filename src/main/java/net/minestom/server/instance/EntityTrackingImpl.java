@@ -38,18 +38,17 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void difference(Point p1, Point p2, Update update) {
+        public void difference(Point from, Point to, Update update) {
             final int range = MinecraftServer.getEntityViewDistance();
-            // Add
-            ChunkUtils.forDifferingChunksInRange(p2.chunkX(), p2.chunkZ(), range, p1.chunkX(), p1.chunkZ(), range, chunkIndex -> {
+            ChunkUtils.forDifferingChunksInRange(to.chunkX(), to.chunkZ(), range, from.chunkX(), from.chunkZ(), range, chunkIndex -> {
+                // Add
                 final List<Entity> entities = getOptional(chunkIndex);
                 if (entities == null) return;
                 for (Entity entity : entities) {
                     update.add(entity);
                 }
-            });
-            // Remove
-            ChunkUtils.forDifferingChunksInRange(p1.chunkX(), p1.chunkZ(), range, p2.chunkX(), p2.chunkZ(), range, chunkIndex -> {
+            }, chunkIndex -> {
+                // Remove
                 final List<Entity> entities = getOptional(chunkIndex);
                 if (entities == null) return;
                 for (Entity entity : entities) {

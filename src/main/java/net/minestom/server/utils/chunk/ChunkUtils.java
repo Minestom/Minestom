@@ -154,6 +154,30 @@ public final class ChunkUtils {
         }
     }
 
+
+    /**
+     * Calls newCallback for every chunk with in newRange of newChunkX, newChunkZ that isn't within oldRange of oldChunkX oldChunkZ
+     *
+     * Calls oldCallback for every chunk with in oldRange of oldChunkX, oldChunkZ that isn't within newRange of newChunkX newChunkZ
+     */
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ, int newRange,
+                                                 int oldChunkX, int oldChunkZ, int oldRange,
+                                                 @NotNull LongConsumer newCallback,
+                                                 @NotNull LongConsumer oldCallback) {
+        // Find the new chunks
+        forDifferingChunksInRange(
+                newChunkX, newChunkZ, newRange,
+                oldChunkX, oldChunkZ, oldRange,
+                newCallback
+                );
+        // Find the old chunks
+        forDifferingChunksInRange(
+                oldChunkX, oldChunkZ, oldRange,
+                newChunkX, newChunkZ, newRange,
+                oldCallback
+        );
+    }
+
     public static void forChunksInRange(int chunkX, int chunkZ, int range, LongConsumer consumer) {
         for (int x = -range; x <= range; ++x) {
             for (int z = -range; z <= range; ++z) {

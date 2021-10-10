@@ -26,7 +26,7 @@ public interface EntityTracking {
     /**
      * Gets the entities newly visible and invisible from one position to another.
      */
-    void difference(Point p1, Point p2, Update update);
+    void difference(Point from, Point to, Update update);
 
     /**
      * Gets the entities within a range.
