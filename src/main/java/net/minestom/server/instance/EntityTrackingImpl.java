@@ -93,14 +93,13 @@ final class EntityTrackingImpl {
 
         @Override
         public void chunkRangeEntities(Point chunkPoint, int range, Query query) {
-            final long[] chunksInRange = ChunkUtils.getChunksInRange(chunkPoint, range);
-            for (long chunkIndex : chunksInRange) {
+            ChunkUtils.forChunksInRange(chunkPoint, range, chunkIndex -> {
                 final List<Entity> entities = getOptional(chunkIndex);
-                if (entities == null || entities.isEmpty()) continue;
+                if (entities == null || entities.isEmpty()) return;
                 for (Entity entity : entities) {
                     query.consume(entity);
                 }
-            }
+            });
         }
 
         private List<Entity> get(long index) {
