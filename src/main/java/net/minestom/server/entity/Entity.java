@@ -1144,6 +1144,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
         this.position = position;
+        this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
         }

@@ -20,19 +20,19 @@ final class EntityTrackingImpl {
 
         @Override
         public void register(Entity entity, Point spawnPoint) {
-            get(spawnPoint).add(entity);
+            addTo(spawnPoint, entity);
         }
 
         @Override
         public void unregister(Entity entity, Point point) {
-            get(point).remove(entity);
+            removeFrom(point, entity);
         }
 
         @Override
         public void move(Entity entity, Point oldPoint, Point newPoint, Update update) {
             if (!oldPoint.sameChunk(newPoint)) {
-                get(oldPoint).remove(entity);
-                get(newPoint).add(entity);
+                removeFrom(oldPoint, entity);
+                addTo(newPoint, entity);
                 difference(oldPoint, newPoint, update);
             }
         }
@@ -101,16 +101,17 @@ final class EntityTrackingImpl {
             });
         }
 
-        private List<Entity> get(long index) {
-            return chunkEntities.computeIfAbsent(index, l -> new CopyOnWriteArrayList<>());
+        private void addTo(Point chunkPoint, Entity entity) {
+            this.chunkEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkPoint.chunkX(), chunkPoint.chunkZ()),
+                    l -> new CopyOnWriteArrayList<>()).add(entity);
         }
 
-        private List<Entity> get(int chunkX, int chunkZ) {
-            return get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-        }
-
-        private List<Entity> get(Point point) {
-            return get(point.chunkX(), point.chunkZ());
+        private void removeFrom(Point chunkPoint, Entity entity) {
+            final long index = ChunkUtils.getChunkIndex(chunkPoint.chunkX(), chunkPoint.chunkZ());
+            List<Entity> entities = this.chunkEntities.get(index);
+            if (entities == null) return;
+            entities.remove(entity);
+            if (entities.isEmpty()) this.chunkEntities.remove(index);
         }
 
         private List<Entity> getOptional(long index) {
