@@ -482,11 +482,8 @@ public final class MinecraftServer {
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
         if (started) {
-            for (final Player player : connectionManager.getOnlinePlayers()) {
-                final Chunk playerChunk = player.getChunk();
-                if (playerChunk != null) {
-                    player.refreshVisibleEntities(playerChunk);
-                }
+            for (Player player : connectionManager.getOnlinePlayers()) {
+                // TODO
             }
         }
     }

@@ -69,7 +69,6 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -1218,38 +1217,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (chunk != null) {
             refreshVisibleChunks(chunk);
         }
-    }
-
-    /**
-     * Refreshes the list of entities that the player should be able to see based
-     * on {@link MinecraftServer#getEntityViewDistance()} and {@link Entity#isAutoViewable()}.
-     *
-     * @param newChunk the new chunk of the player (can be the current one)
-     */
-    public void refreshVisibleEntities(@NotNull Chunk newChunk) {
-        final int entityViewDistance = MinecraftServer.getEntityViewDistance();
-        final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
-        // Manage already viewable entities
-        this.viewableEntities.stream()
-                .filter(entity -> entity.getDistance(this) > maximalDistance)
-                .forEach(entity -> {
-                    // Entity shouldn't be viewable anymore
-                    if (isAutoViewable()) {
-                        entity.removeViewer(this);
-                    }
-                    if (entity instanceof Player && entity.isAutoViewable()) {
-                        removeViewer((Player) entity);
-                    }
-                });
-        // Manage entities in unchecked chunks
-        EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
-            if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
-                entity.addViewer(this);
-            }
-            if (entity instanceof Player && isAutoViewable() && !viewers.contains(entity)) {
-                addViewer((Player) entity);
-            }
-        });
     }
 
     /**
