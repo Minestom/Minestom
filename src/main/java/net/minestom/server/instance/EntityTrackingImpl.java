@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,17 +20,17 @@ final class EntityTrackingImpl {
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
-        public void register(Entity entity, Point spawnPoint) {
+        public void register(@NotNull Entity entity, @NotNull Point spawnPoint) {
             addTo(spawnPoint, entity);
         }
 
         @Override
-        public void unregister(Entity entity, Point point) {
+        public void unregister(@NotNull Entity entity, @NotNull Point point) {
             removeFrom(point, entity);
         }
 
         @Override
-        public void move(Entity entity, Point oldPoint, Point newPoint, Update update) {
+        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, Update update) {
             if (!oldPoint.sameChunk(newPoint)) {
                 removeFrom(oldPoint, entity);
                 addTo(newPoint, entity);
@@ -38,7 +39,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void difference(Point from, Point to, Update update) {
+        public void difference(@NotNull Point from, @NotNull Point to, @NotNull Update update) {
             final int range = MinecraftServer.getEntityViewDistance();
             ChunkUtils.forDifferingChunksInRange(to.chunkX(), to.chunkZ(), range, from.chunkX(), from.chunkZ(), range, chunkIndex -> {
                 // Add
@@ -58,7 +59,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void nearbyEntities(Point point, double range, Query query) {
+        public void nearbyEntities(@NotNull Point point, double range, @NotNull Query query) {
             final int minX = ChunkUtils.getChunkCoordinate(point.x() - range);
             final int maxX = ChunkUtils.getChunkCoordinate(point.x() + range);
             final int minZ = ChunkUtils.getChunkCoordinate(point.z() - range);
@@ -81,7 +82,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void chunkEntities(Point chunkPoint, Query query) {
+        public void chunkEntities(@NotNull Point chunkPoint, @NotNull Query query) {
             final List<Entity> entities = getOptional(chunkPoint);
             if (entities != null && !entities.isEmpty()) {
                 for (Entity entity : entities) {
@@ -91,7 +92,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void chunkRangeEntities(Point chunkPoint, int range, Query query) {
+        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
             ChunkUtils.forChunksInRange(chunkPoint, range, chunkIndex -> {
                 final List<Entity> entities = getOptional(chunkIndex);
                 if (entities == null || entities.isEmpty()) return;
