@@ -742,6 +742,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             instance.UNSAFE_addEntity(this);
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
+            // Send all visible entities
+            instance.getEntityTracking().chunkRangeEntities(spawnPosition, MinecraftServer.getEntityViewDistance(), ent -> {
+                if (this instanceof Player && ent.isAutoViewable()) {
+                    ent.addViewer((Player) this);
+                }
+                if (ent instanceof Player && isAutoViewable()) {
+                    addViewer((Player) ent);
+                }
+            });
         });
     }
 

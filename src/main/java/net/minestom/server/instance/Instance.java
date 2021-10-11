@@ -210,7 +210,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
-     *
      * @param chunkX the chunk X
      * @param chunkZ this chunk Z
      * @return true if the chunk is loaded
@@ -220,7 +219,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     /**
-     *
      * @param point coordinate of a block or other
      * @return true if the chunk is loaded
      */
@@ -575,31 +573,16 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         EventDispatcher.callCancellable(event, () -> {
             final Pos entityPosition = entity.getPosition();
-            final boolean isPlayer = entity instanceof Player;
-
-            if (isPlayer) {
+            if (entity instanceof Player) {
                 final Player player = (Player) entity;
                 getWorldBorder().init(player);
                 player.getPlayerConnection().sendPacket(createTimePacket());
             }
 
-            // Send all visible entities
-            this.entityTracking.chunkRangeEntities(entityPosition, MinecraftServer.getEntityViewDistance(), ent -> {
-                if (isPlayer) {
-                    if (ent.isAutoViewable())
-                        ent.addViewer((Player) entity);
-                }
-
-                if (ent instanceof Player) {
-                    if (entity.isAutoViewable())
-                        entity.addViewer((Player) ent);
-                }
-            });
-
             // Load the chunk if not already (or throw an error if auto chunk load is disabled)
             loadOptionalChunk(entityPosition).thenAccept(chunk -> {
                 Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, {0}", entityPosition);
-                entityTracking.register(entity, entityPosition);
+                this.entityTracking.register(entity, entityPosition);
             });
         });
     }
