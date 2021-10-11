@@ -103,6 +103,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private final int id;
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final EntityTracking.Update trackingUpdate = new EntityTracking.Update() {
+        @Override
+        public void add(Entity entity) {
+            if (entity instanceof Player && isAutoViewable()) addViewer((Player) entity);
+            if (Entity.this instanceof Player && entity.isAutoViewable()) entity.addViewer((Player) Entity.this);
+        }
+
+        @Override
+        public void remove(Entity entity) {
+            if (entity instanceof Player && isAutoViewable()) removeViewer((Player) entity);
+            if (Entity.this instanceof Player && entity.isAutoViewable()) entity.removeViewer((Player) Entity.this);
+        }
+    };
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
@@ -740,17 +753,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
             refreshCurrentChunk(chunk);
             instance.UNSAFE_addEntity(this);
+            // Send all visible entities
+            instance.getEntityTracking().chunkRangeEntities(spawnPosition, MinecraftServer.getEntityViewDistance(), trackingUpdate::add);
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
-            // Send all visible entities
-            instance.getEntityTracking().chunkRangeEntities(spawnPosition, MinecraftServer.getEntityViewDistance(), ent -> {
-                if (this instanceof Player && ent.isAutoViewable()) {
-                    ent.addViewer((Player) this);
-                }
-                if (ent instanceof Player && isAutoViewable()) {
-                    addViewer((Player) ent);
-                }
-            });
         });
     }
 
@@ -1236,21 +1242,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         final Instance instance = getInstance();
         if (instance != null) {
-            this.instance.getEntityTracking().move(this, previousPosition, newPosition,
-                    new EntityTracking.Update() {
-                        @Override
-                        public void add(Entity entity) {
-                            if (entity instanceof Player) addViewer((Player) entity);
-                            if (Entity.this instanceof Player) entity.addViewer((Player) Entity.this);
-                        }
-
-                        @Override
-                        public void remove(Entity entity) {
-                            if (entity instanceof Player) removeViewer((Player) entity);
-                            if (Entity.this instanceof Player) entity.removeViewer((Player) Entity.this);
-                        }
-                    });
-
+            this.instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
             final int lastChunkX = currentChunk.getChunkX();
             final int lastChunkZ = currentChunk.getChunkZ();
             final int newChunkX = newPosition.chunkX();
