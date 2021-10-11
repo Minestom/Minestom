@@ -9,7 +9,10 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final class EntityTrackingImpl {
@@ -18,15 +21,19 @@ final class EntityTrackingImpl {
      * Default tracking implementation storing entities per-chunk.
      */
     static final class PerChunk implements EntityTracking {
+        private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
+        private final Set<Entity> entitiesView = Collections.unmodifiableSet(entities);
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
         public void register(@NotNull Entity entity, @NotNull Point spawnPoint) {
+            if (!entities.add(entity)) return;
             addTo(spawnPoint, entity);
         }
 
         @Override
         public void unregister(@NotNull Entity entity, @NotNull Point point) {
+            this.entities.remove(entity);
             removeFrom(point, entity);
         }
 
@@ -101,6 +108,11 @@ final class EntityTrackingImpl {
                     query.consume(entity);
                 }
             });
+        }
+
+        @Override
+        public @NotNull Set<@NotNull Entity> entities() {
+            return entitiesView;
         }
 
         private void addTo(Point chunkPoint, Entity entity) {

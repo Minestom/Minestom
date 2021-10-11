@@ -5,6 +5,9 @@ import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Set;
 
 @ApiStatus.Experimental
 public interface EntityTracking {
@@ -46,6 +49,12 @@ public interface EntityTracking {
      * This is used for auto-viewable features.
      */
     void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query);
+
+    /**
+     * Gets all the entities tracked by this class.
+     */
+    @UnmodifiableView
+    @NotNull Set<@NotNull Entity> entities();
 
     /**
      * Callback to know the newly visible entities and those to remove.

@@ -441,7 +441,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     public @NotNull Set<@NotNull Entity> getEntities() {
-        return Collections.emptySet(); // TODO
+        return entityTracking.entities();
     }
 
     /**
