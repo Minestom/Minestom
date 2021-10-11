@@ -1257,7 +1257,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         final Instance instance = getInstance();
         if (instance != null) {
-            this.instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
+            instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
             final int lastChunkX = currentChunk.getChunkX();
             final int lastChunkZ = currentChunk.getChunkZ();
             final int newChunkX = newPosition.chunkX();
