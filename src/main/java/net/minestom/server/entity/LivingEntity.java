@@ -199,7 +199,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracking().nearbyEntities(position, 3, entity -> {
+            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), entity -> {
                 if (entity instanceof ItemEntity) {
                     // Do not pick up if not visible
                     if (this instanceof Player && !entity.isViewer((Player) this))

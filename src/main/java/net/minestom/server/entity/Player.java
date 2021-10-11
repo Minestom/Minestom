@@ -307,7 +307,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracking().nearbyEntities(position, 3, entity -> {
+            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), entity -> {
                 if (entity instanceof ExperienceOrb) {
                     final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
                     final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
