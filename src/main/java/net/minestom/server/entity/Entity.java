@@ -103,17 +103,28 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private final int id;
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
     private final EntityTracking.Update trackingUpdate = new EntityTracking.Update() {
         @Override
         public void add(Entity entity) {
-            if (entity instanceof Player && isAutoViewable()) addViewer((Player) entity);
-            if (Entity.this instanceof Player && entity.isAutoViewable()) entity.addViewer((Player) Entity.this);
+            if (Entity.this == entity) return;
+            if (entity instanceof Player && isAutoViewable() && !manualViewers.contains(entity)) {
+                addViewer0((Player) entity);
+            }
+            if (Entity.this instanceof Player && entity.isAutoViewable() && !entity.manualViewers.contains(Entity.this)) {
+                entity.addViewer0((Player) Entity.this);
+            }
         }
 
         @Override
         public void remove(Entity entity) {
-            if (entity instanceof Player && isAutoViewable()) removeViewer((Player) entity);
-            if (Entity.this instanceof Player && entity.isAutoViewable()) entity.removeViewer((Player) Entity.this);
+            if (Entity.this == entity) return;
+            if (entity instanceof Player && isAutoViewable() && !entity.manualViewers.contains(Entity.this)) {
+                removeViewer0((Player) entity);
+            }
+            if (Entity.this instanceof Player && entity.isAutoViewable() && !manualViewers.contains(entity)) {
+                entity.removeViewer0((Player) Entity.this);
+            }
         }
     };
     private final NBTCompound nbtCompound = new NBTCompound();
@@ -322,7 +333,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
-        return addViewer0(player);
+        final boolean result = addViewer0(player);
+        if (viewers.contains(player)) manualViewers.add(player);
+        return result;
     }
 
     protected boolean addViewer0(@NotNull Player player) {
@@ -353,7 +366,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean removeViewer(@NotNull Player player) {
         if (player == this) return false;
-        return removeViewer0(player);
+        final boolean result = removeViewer0(player);
+        if (!viewers.contains(player)) manualViewers.remove(player);
+        return result;
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
