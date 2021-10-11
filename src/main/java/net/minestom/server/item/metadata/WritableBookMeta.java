@@ -70,7 +70,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
             handleCollection(pages, "pages", () -> {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
                 for (Component page : pages) {
-                    list.add(new NBTString(LegacyComponentSerializer.legacyAmpersand().serialize(page)));
+                    list.add(new NBTString(LegacyComponentSerializer.legacySection().serialize(page)));
                 }
                 return list;
             });
@@ -94,7 +94,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
             if (nbtCompound.containsKey("pages")) {
                 final NBTList<NBTString> list = nbtCompound.getList("pages");
                 for (NBTString page : list) {
-                    this.pages.add(LegacyComponentSerializer.legacyAmpersand().deserialize(page.getValue()));
+                    this.pages.add(LegacyComponentSerializer.legacySection().deserialize(page.getValue()));
                 }
                 pages(pages);
             }
