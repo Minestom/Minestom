@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,11 +31,11 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, Update update) {
+        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update update) {
             if (!oldPoint.sameChunk(newPoint)) {
                 removeFrom(oldPoint, entity);
                 addTo(newPoint, entity);
-                difference(oldPoint, newPoint, update);
+                if (update != null) difference(oldPoint, newPoint, update);
             }
         }
 
