@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final class EntityTrackingImpl {
@@ -21,7 +21,7 @@ final class EntityTrackingImpl {
      * Default tracking implementation storing entities per-chunk.
      */
     static final class PerChunk implements EntityTracking {
-        private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
+        private final Set<Entity> entities = new HashSet<>();
         private final Set<Entity> entitiesView = Collections.unmodifiableSet(entities);
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
@@ -79,7 +79,7 @@ final class EntityTrackingImpl {
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
                     final List<Entity> chunkEntities = getOptional(x, z);
-                    if (chunkEntities == null || chunkEntities.isEmpty()) continue;
+                    if (chunkEntities == null) continue;
                     // Filter all entities out of range
                     for (Entity chunkEntity : chunkEntities) {
                         if (point.distanceSquared(chunkEntity.getPosition()) < squaredRange) {
@@ -93,10 +93,9 @@ final class EntityTrackingImpl {
         @Override
         public void chunkEntities(@NotNull Point chunkPoint, @NotNull Query query) {
             final List<Entity> entities = getOptional(chunkPoint);
-            if (entities != null && !entities.isEmpty()) {
-                for (Entity entity : entities) {
-                    query.consume(entity);
-                }
+            if (entities == null) return;
+            for (Entity entity : entities) {
+                query.consume(entity);
             }
         }
 
@@ -104,7 +103,7 @@ final class EntityTrackingImpl {
         public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
             ChunkUtils.forChunksInRange(chunkPoint, range, chunkIndex -> {
                 final List<Entity> entities = getOptional(chunkIndex);
-                if (entities == null || entities.isEmpty()) return;
+                if (entities == null) return;
                 for (Entity entity : entities) {
                     query.consume(entity);
                 }
