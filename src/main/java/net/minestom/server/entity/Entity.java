@@ -801,12 +801,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private void removeFromInstance(Instance instance) {
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(instance, this);
-        EventDispatcher.callCancellable(event, () -> {
-            // Remove this entity from players viewable list and send delete entities packet
-            getViewers().forEach(this::removeViewer);
-            // Remove the entity from cache
-            instance.getEntityTracking().unregister(this, position);
-        });
+        EventDispatcher.callCancellable(event, () ->
+                instance.getEntityTracking().unregister(this, position, trackingUpdate));
     }
 
     /**

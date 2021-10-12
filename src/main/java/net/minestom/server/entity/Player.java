@@ -543,7 +543,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Set<Chunk> previousChunks = Set.copyOf(viewableChunks);
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
-            previousChunks.forEach(chunk -> chunk.removeViewer(this));
+            if (updateChunks) previousChunks.forEach(chunk -> chunk.removeViewer(this));
 
             //TODO: entity#removeViewer sends a packet for each removed entity
             //Sending destroy entity packets is not necessary when the dimension changes
@@ -559,7 +559,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
-            lastViewDistance = -1;
+            this.lastViewDistance = -1;
             refreshVisibleChunks();
         }
 

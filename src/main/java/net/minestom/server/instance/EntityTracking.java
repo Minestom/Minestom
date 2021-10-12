@@ -20,7 +20,7 @@ public interface EntityTracking {
     /**
      * Unregister an entity tracking.
      */
-    void unregister(@NotNull Entity entity, @NotNull Point point);
+    void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update update);
 
     /**
      * Called every time an entity move, you may want to verify if the new

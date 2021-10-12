@@ -34,9 +34,10 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void unregister(@NotNull Entity entity, @NotNull Point point) {
-            this.entities.remove(entity);
+        public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
+            if (!entities.remove(entity)) return;
             removeFrom(point, entity);
+            if (update != null) chunkRangeEntities(point, MinecraftServer.getEntityViewDistance(), update::remove);
         }
 
         @Override
