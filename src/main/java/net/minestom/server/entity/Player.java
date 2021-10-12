@@ -87,6 +87,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.LongConsumer;
 import java.util.function.UnaryOperator;
 
 /**
@@ -112,8 +113,31 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
-    // Chunks that the player can view
-    protected final Set<Chunk> viewableChunks = ConcurrentHashMap.newKeySet();
+    private final LongConsumer chunkAdder = chunkIndex -> {
+        // Load new chunks
+        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
+            if (chunk == null) {
+                // Cannot load chunk (auto-load is not enabled)
+                return;
+            }
+            try {
+                chunk.addViewer(this);
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
+    };
+    private final LongConsumer chunkRemover = chunkIndex -> {
+        // Unload old chunks
+        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            chunk.removeViewer(this);
+        }
+    };
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
@@ -132,8 +156,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private byte heldSlot;
 
     private Pos respawnPoint;
-
-    private int lastViewDistance = -1;
 
     private int food;
     private float foodSaturation;
@@ -461,7 +483,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
-        this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+        ChunkUtils.forChunksInRange(position, getChunkRange(), chunkRemover);
         // Remove from the tab-list
         PacketUtils.broadcastPacket(getRemovePlayerToList());
     }
@@ -540,10 +562,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
-        final Set<Chunk> previousChunks = Set.copyOf(viewableChunks);
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
-            if (updateChunks) previousChunks.forEach(chunk -> chunk.removeViewer(this));
+            if (updateChunks) ChunkUtils.forChunksInRange(spawnPosition, getChunkRange(), chunkRemover);
 
             //TODO: entity#removeViewer sends a packet for each removed entity
             //Sending destroy entity packets is not necessary when the dimension changes
@@ -558,10 +579,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.setInstance(instance, spawnPosition);
 
-        if (updateChunks) {
-            this.lastViewDistance = -1;
-            refreshVisibleChunks();
-        }
+        if (updateChunks) ChunkUtils.forChunksInRange(spawnPosition, getChunkRange(), chunkAdder);
 
         synchronizePosition(true); // So the player doesn't get stuck
 
@@ -1176,44 +1194,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int oldChunkX = currentChunk.getChunkX();
         final int oldChunkZ = currentChunk.getChunkZ();
         final int range = getChunkRange();
-
-        // Update client render distance
         updateViewPosition(newChunkX, newChunkZ);
-
-        ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, range, oldChunkX, oldChunkZ, lastViewDistance, chunkIndex -> {
-            // Load new chunks
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
-                if (chunk == null) {
-                    // Cannot load chunk (auto-load is not enabled)
-                    return;
-                }
-                try {
-                    chunk.addViewer(this);
-                } catch (Exception e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
-            });
-        }, chunkIndex -> {
-            // Unload old chunks
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            this.playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk != null) {
-                chunk.removeViewer(this);
-            }
-        });
-
-        lastViewDistance = range;
-    }
-
-    public void refreshVisibleChunks() {
-        final Chunk chunk = getChunk();
-        if (chunk != null) {
-            refreshVisibleChunks(chunk);
-        }
+        ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, range, oldChunkX, oldChunkZ, range, chunkAdder, chunkRemover);
     }
 
     /**
@@ -1503,18 +1485,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
         this.didCloseInventory = didCloseInventory;
-    }
-
-    /**
-     * Gets the player viewable chunks.
-     * <p>
-     * WARNING: adding or removing a chunk there will not load/unload it,
-     * use {@link Chunk#addViewer(Player)} or {@link Chunk#removeViewer(Player)}.
-     *
-     * @return a {@link Set} containing all the chunks that the player sees
-     */
-    public Set<Chunk> getViewableChunks() {
-        return viewableChunks;
     }
 
     /**
@@ -1899,7 +1869,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * based on which one is the lowest
      */
     public int getChunkRange() {
-        return Math.min(getSettings().viewDistance, MinecraftServer.getChunkViewDistance());
+        return MinecraftServer.getChunkViewDistance();
     }
 
     /**
@@ -2181,9 +2151,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          */
         public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand) {
-
-            final boolean viewDistanceChanged = this.viewDistance != viewDistance;
-
             this.locale = locale;
             this.viewDistance = viewDistance;
             this.chatMessageType = chatMessageType;
@@ -2193,11 +2160,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // TODO: Use the metadata object here
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
-
-            // Client changed his view distance in the settings
-            if (viewDistanceChanged) {
-                refreshVisibleChunks();
-            }
         }
 
     }

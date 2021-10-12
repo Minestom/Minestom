@@ -14,6 +14,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -271,18 +272,8 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
-
-        // Add to the viewable chunks set
-        player.getViewableChunks().add(this);
-
-        // Send the chunk data & light packets to the player
         sendChunk(player);
-
-        if (result) {
-            PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-            GlobalHandles.PLAYER_CHUNK_LOAD.call(playerChunkLoadEvent);
-        }
-
+        if (result) GlobalHandles.PLAYER_CHUNK_LOAD.call(new PlayerChunkLoadEvent(player, chunkX, chunkZ));
         return result;
     }
 
@@ -296,15 +287,8 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
-
-        // Remove from the viewable chunks set
-        player.getViewableChunks().remove(this);
-
-        if (result) {
-            PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
-            EventDispatcher.call(playerChunkUnloadEvent);
-        }
-
+        player.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+        if (result) EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunkX, chunkZ));
         return result;
     }
 
