@@ -270,8 +270,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
+            this.previousPosition = this.position;
             this.position = position;
-            this.previousPosition = position;
             refreshCoordinate(position);
             synchronizePosition(true);
         };
@@ -493,17 +493,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private void velocityTick() {
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-
-        final boolean isSocketClient = PlayerUtils.isSocketClient(this);
-        if (isSocketClient) {
-            if (position.samePoint(previousPosition))
-                return; // Didn't move since last tick
-            // Calculate velocity from client
-            velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
-            previousPosition = position;
-            return;
-        }
-
+        if (PlayerUtils.isSocketClient(this)) return;
         if (vehicle != null) return;
 
         final boolean noGravity = hasNoGravity();
@@ -1197,7 +1187,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
+            // Update player velocity
+            if (PlayerUtils.isSocketClient(this)) {
+                // Calculate from client
+                this.velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
+            }
         }
+        // Update viewers
         final boolean viewChange = !position.sameView(lastSyncedPosition);
         final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
         final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
@@ -1270,11 +1266,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
-        if (hasPassenger()) {
-            for (Entity passenger : getPassengers()) {
+        // Passengers update
+        final Set<Entity> passengers = getPassengers();
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
                 updatePassengerPosition(newPosition, passenger);
             }
         }
+        // Handle chunk switch
         final Instance instance = getInstance();
         if (instance != null) {
             instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
@@ -1287,7 +1286,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
                 if (this instanceof Player) {
-                    // Refresh player view
                     final Player player = (Player) this;
                     player.refreshVisibleChunks(newChunk);
                 }
