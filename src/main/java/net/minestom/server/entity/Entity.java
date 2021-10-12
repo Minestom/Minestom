@@ -18,6 +18,8 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
+import net.minestom.server.event.instance.AddEntityToInstanceEvent;
+import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracking;
 import net.minestom.server.instance.Instance;
@@ -759,9 +761,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
-        if (previousInstance != null) {
-            previousInstance.UNSAFE_removeEntity(this);
-        }
+        if (previousInstance != null && instance != previousInstance) removeFromInstance(previousInstance);
         this.position = spawnPosition;
         this.previousPosition = spawnPosition;
         this.isActive = true;
@@ -769,9 +769,17 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return instance.loadOptionalChunk(position).thenAccept(chunk -> {
             Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
             refreshCurrentChunk(chunk);
-            instance.UNSAFE_addEntity(this);
-            // Send all visible entities
-            instance.getEntityTracking().chunkRangeEntities(spawnPosition, MinecraftServer.getEntityViewDistance(), trackingUpdate::add);
+            EventDispatcher.callCancellable(new AddEntityToInstanceEvent(instance, this), () -> {
+                if (this instanceof Player) {
+                    // TODO
+                    final Player player = (Player) this;
+                    //instance.getWorldBorder().init(player);
+                    //player.getPlayerConnection().sendPacket(instance.createTimePacket());
+                }
+            });
+            if (!Objects.equals(previousInstance, instance)) {
+                instance.getEntityTracking().register(this, spawnPosition, trackingUpdate);
+            }
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
         });
@@ -792,6 +800,16 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
         return setInstance(instance, this.position);
+    }
+
+    private void removeFromInstance(Instance instance) {
+        RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(instance, this);
+        EventDispatcher.callCancellable(event, () -> {
+            // Remove this entity from players viewable list and send delete entities packet
+            getViewers().forEach(this::removeViewer);
+            // Remove the entity from cache
+            instance.getEntityTracking().unregister(this, position);
+        });
     }
 
     /**
@@ -1366,8 +1384,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
-        if (instance != null) {
-            instance.UNSAFE_removeEntity(this);
+
+        Instance currentInstance = this.instance;
+        if (currentInstance != null) {
+            removeFromInstance(currentInstance);
         }
     }
 

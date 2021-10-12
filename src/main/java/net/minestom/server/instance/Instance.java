@@ -7,18 +7,14 @@ import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
-import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
-import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.block.*;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
@@ -552,59 +548,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public @NotNull UUID getUniqueId() {
         return uniqueId;
-    }
-
-    // UNSAFE METHODS (need most of the time to be synchronized)
-
-    /**
-     * Used when called {@link Entity#setInstance(Instance)}, it is used to refresh viewable chunks
-     * and add viewers if {@code entity} is a {@link Player}.
-     * <p>
-     * Warning: unsafe, you probably want to use {@link Entity#setInstance(Instance)} instead.
-     *
-     * @param entity the entity to add
-     */
-    @ApiStatus.Internal
-    public void UNSAFE_addEntity(@NotNull Entity entity) {
-        final Instance lastInstance = entity.getInstance();
-        if (lastInstance != null && lastInstance != this) {
-            lastInstance.UNSAFE_removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
-        }
-        AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
-        EventDispatcher.callCancellable(event, () -> {
-            final Pos entityPosition = entity.getPosition();
-            if (entity instanceof Player) {
-                final Player player = (Player) entity;
-                getWorldBorder().init(player);
-                player.getPlayerConnection().sendPacket(createTimePacket());
-            }
-
-            // Load the chunk if not already (or throw an error if auto chunk load is disabled)
-            loadOptionalChunk(entityPosition).thenAccept(chunk -> {
-                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, {0}", entityPosition);
-                this.entityTracking.register(entity, entityPosition);
-            });
-        });
-    }
-
-    /**
-     * Used when an {@link Entity} is removed from the instance, it removes all of his viewers.
-     * <p>
-     * Warning: unsafe, you probably want to set the entity to another instance.
-     *
-     * @param entity the entity to remove
-     */
-    @ApiStatus.Internal
-    public void UNSAFE_removeEntity(@NotNull Entity entity) {
-        if (entity.getInstance() != this) return;
-        RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
-        EventDispatcher.callCancellable(event, () -> {
-            // Remove this entity from players viewable list and send delete entities packet
-            entity.getViewers().forEach(entity::removeViewer);
-
-            // Remove the entity from cache
-            this.entityTracking.unregister(entity, entity.getPosition());
-        });
     }
 
     /**

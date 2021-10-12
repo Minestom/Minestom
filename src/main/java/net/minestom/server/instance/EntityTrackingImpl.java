@@ -26,9 +26,10 @@ final class EntityTrackingImpl {
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
-        public void register(@NotNull Entity entity, @NotNull Point spawnPoint) {
+        public void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update) {
             if (!entities.add(entity)) return;
             addTo(spawnPoint, entity);
+            if (update != null) chunkRangeEntities(spawnPoint, MinecraftServer.getEntityViewDistance(), update::add);
         }
 
         @Override

@@ -15,7 +15,7 @@ public interface EntityTracking {
     /**
      * Register an entity to be tracked.
      */
-    void register(@NotNull Entity entity, @NotNull Point spawnPoint);
+    void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update);
 
     /**
      * Unregister an entity tracking.
