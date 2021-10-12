@@ -354,7 +354,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                passenger.addViewer(player);
+                if (passenger != player) {
+                    passenger.addViewer0(player);
+                }
             }
             playerConnection.sendPacket(getPassengersPacket());
         }
