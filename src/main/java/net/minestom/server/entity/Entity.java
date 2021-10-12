@@ -751,25 +751,32 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
-        if (previousInstance != null && instance != previousInstance) removeFromInstance(previousInstance);
+        if (Objects.equals(previousInstance, instance)) {
+            return teleport(spawnPosition); // Already in the instance, teleport to spawn point
+        }
+        AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
+        EventDispatcher.call(event);
+        if (event.isCancelled()) return null; // TODO what to return?
+
+        if (previousInstance != null) {
+            // Must remove from previous instance before updating
+            removeFromInstance(previousInstance);
+        } else {
+            this.isActive = true;
+        }
         this.position = spawnPosition;
         this.previousPosition = spawnPosition;
-        this.isActive = true;
         this.instance = instance;
-        return instance.loadOptionalChunk(position).thenAccept(chunk -> {
+        return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
             refreshCurrentChunk(chunk);
-            EventDispatcher.callCancellable(new AddEntityToInstanceEvent(instance, this), () -> {
-                if (this instanceof Player) {
-                    // TODO
-                    final Player player = (Player) this;
-                    //instance.getWorldBorder().init(player);
-                    //player.getPlayerConnection().sendPacket(instance.createTimePacket());
-                }
-            });
-            if (!Objects.equals(previousInstance, instance)) {
-                instance.getEntityTracking().register(this, spawnPosition, trackingUpdate);
+            if (this instanceof Player) {
+                // TODO
+                final Player player = (Player) this;
+                //instance.getWorldBorder().init(player);
+                //player.getPlayerConnection().sendPacket(instance.createTimePacket());
             }
+            instance.getEntityTracking().register(this, spawnPosition, trackingUpdate);
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
         });

@@ -507,8 +507,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            return AsyncUtils.VOID_FUTURE
-                    .thenRun(() -> spawnPlayer(instance, spawnPosition, false, false, false));
+            spawnPlayer(instance, spawnPosition, false, false, false);
+            return AsyncUtils.VOID_FUTURE;
         }
     }
 
