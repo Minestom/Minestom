@@ -1272,24 +1272,23 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         // Handle chunk switch
         final Instance instance = getInstance();
-        if (instance != null) {
-            instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
-            final int lastChunkX = currentChunk.getChunkX();
-            final int lastChunkZ = currentChunk.getChunkZ();
-            final int newChunkX = newPosition.chunkX();
-            final int newChunkZ = newPosition.chunkZ();
-            if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
-                // Entity moved in a new chunk
-                final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
-                Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-                if (this instanceof Player) { // Update visible chunks
-                    final Player player = (Player) this;
-                    player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
-                    ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
-                            player.getChunkRange(), player.chunkAdder, player.chunkRemover);
-                }
-                refreshCurrentChunk(newChunk);
+        assert instance != null;
+        instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
+        final int lastChunkX = currentChunk.getChunkX();
+        final int lastChunkZ = currentChunk.getChunkZ();
+        final int newChunkX = newPosition.chunkX();
+        final int newChunkZ = newPosition.chunkZ();
+        if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
+            // Entity moved in a new chunk
+            final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
+            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
+            if (this instanceof Player) { // Update visible chunks
+                final Player player = (Player) this;
+                player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
+                ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
+                        player.getChunkRange(), player.chunkAdder, player.chunkRemover);
             }
+            refreshCurrentChunk(newChunk);
         }
     }
 
