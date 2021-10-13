@@ -579,7 +579,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.setInstance(instance, spawnPosition);
 
-        if (updateChunks) ChunkUtils.forChunksInRange(spawnPosition, getChunkRange(), chunkAdder);
+        if (updateChunks) {
+            sendPacket(new UpdateViewPositionPacket(spawnPosition.chunkX(), spawnPosition.chunkZ()));
+            ChunkUtils.forChunksInRange(spawnPosition, getChunkRange(), chunkAdder);
+        }
 
         synchronizePosition(true); // So the player doesn't get stuck
 
