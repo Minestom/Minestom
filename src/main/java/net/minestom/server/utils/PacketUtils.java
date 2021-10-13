@@ -47,7 +47,6 @@ public final class PacketUtils {
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
-    private static final Object VIEWABLE_PACKET_LOCK = new Object();
     private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
 
     private PacketUtils() {
@@ -155,7 +154,7 @@ public final class PacketUtils {
             return;
         }
         ViewableStorage viewableStorage;
-        synchronized (VIEWABLE_PACKET_LOCK) {
+        synchronized (VIEWABLE_STORAGE_MAP) {
             viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, ViewableStorage::new);
         }
         viewableStorage.append(serverPacket, player != null ? player.getPlayerConnection() : null);
@@ -168,10 +167,9 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        synchronized (VIEWABLE_PACKET_LOCK) {
-            for (ViewableStorage viewableStorage : VIEWABLE_STORAGE_MAP.values()) {
-                viewableStorage.process(null);
-            }
+        synchronized (VIEWABLE_STORAGE_MAP) {
+            VIEWABLE_STORAGE_MAP.values().parallelStream()
+                    .forEach(viewableStorage -> viewableStorage.process(null));
         }
     }
 
