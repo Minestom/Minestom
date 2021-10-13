@@ -182,6 +182,11 @@ public final class UpdateManager {
                     // Server tick (chunks/entities)
                     serverTick(tickStart);
 
+                    // Flush all waiting packets
+                    PacketUtils.flush();
+                    connectionManager.getOnlinePlayers().parallelStream().forEach(player ->
+                            player.getPlayerConnection().flush());
+
                     // the time that the tick took in nanoseconds
                     final long tickTime = System.nanoTime() - currentTime;
 
@@ -198,11 +203,6 @@ public final class UpdateManager {
                         }
                         Acquirable.resetAcquiringTime();
                     }
-
-                    // Flush all waiting packets
-                    PacketUtils.flush();
-                    connectionManager.getOnlinePlayers().parallelStream().forEach(player ->
-                            player.getPlayerConnection().flush());
 
                     // Disable thread until next tick
                     LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
