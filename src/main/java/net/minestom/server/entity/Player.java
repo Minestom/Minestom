@@ -51,6 +51,7 @@ import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -298,7 +299,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Recipes end
 
         // Tags
-        this.playerConnection.sendFramedPacket(TagsPacket.DEFAULT_TAGS);
+        this.playerConnection.sendPacket(TagsPacket.DEFAULT_TAGS);
 
         // Some client updates
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
@@ -506,6 +507,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         this.playerConnection.sendPacket(packet);
         super.sendPacketToViewersAndSelf(packet);
+    }
+
+    @Override
+    public void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
+        this.playerConnection.sendPacket(framedPacket);
+        super.sendPacketToViewersAndSelf(framedPacket);
     }
 
     /**
@@ -1196,6 +1203,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Experimental
     public void sendPacket(@NotNull ServerPacket packet) {
         this.playerConnection.sendPacket(packet);
+    }
+
+    @ApiStatus.Experimental
+    public void sendPacket(@NotNull FramedPacket framedPacket) {
+        this.playerConnection.sendPacket(framedPacket);
     }
 
     /**

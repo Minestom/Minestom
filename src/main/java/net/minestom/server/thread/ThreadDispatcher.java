@@ -101,8 +101,8 @@ public final class ThreadDispatcher {
     public void refreshThreads(long tickTime) {
         processLoadedChunks();
         processUnloadedChunks();
-        processRemovedEntities();
         processUpdatedEntities();
+        processRemovedEntities();
         if (provider.getChunkRefreshType() == ThreadProvider.RefreshType.NEVER)
             return;
 
