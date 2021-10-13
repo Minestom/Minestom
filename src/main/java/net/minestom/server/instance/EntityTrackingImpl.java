@@ -142,4 +142,77 @@ final class EntityTrackingImpl {
         }
     }
 
+    static final class Synchronized implements EntityTracking {
+        private final EntityTracking t;
+        private final Object mutex;
+
+        public Synchronized(EntityTracking entityTracking) {
+            this.t = entityTracking;
+            this.mutex = this;
+        }
+
+        @Override
+        public void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update) {
+            synchronized (mutex) {
+                t.register(entity, spawnPoint, update);
+            }
+        }
+
+        @Override
+        public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
+            synchronized (mutex) {
+                t.unregister(entity, point, update);
+            }
+        }
+
+        @Override
+        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update update) {
+            synchronized (mutex) {
+                t.move(entity, oldPoint, newPoint, update);
+            }
+        }
+
+        @Override
+        public void difference(@NotNull Point from, @NotNull Point to, @NotNull Update update) {
+            synchronized (mutex) {
+                t.difference(from, to, update);
+            }
+        }
+
+        @Override
+        public void nearbyEntities(@NotNull Point point, double range, @NotNull Query query) {
+            synchronized (mutex) {
+                t.nearbyEntities(point, range, query);
+            }
+        }
+
+        @Override
+        public void chunkEntities(@NotNull Point chunkPoint, @NotNull Query query) {
+            synchronized (mutex) {
+                t.chunkEntities(chunkPoint, query);
+            }
+        }
+
+        @Override
+        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
+            synchronized (mutex) {
+                t.chunkRangeEntities(chunkPoint, range, query);
+            }
+        }
+
+        @Override
+        public @UnmodifiableView @NotNull Set<@NotNull Entity> entities() {
+            synchronized (mutex) {
+                return t.entities();
+            }
+        }
+
+        @Override
+        public @UnmodifiableView @NotNull Set<@NotNull Player> players() {
+            synchronized (mutex) {
+                return t.players();
+            }
+        }
+    }
+
 }

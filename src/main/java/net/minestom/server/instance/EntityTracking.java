@@ -13,6 +13,11 @@ import java.util.Set;
 @ApiStatus.Experimental
 public interface EntityTracking {
 
+    static @NotNull EntityTracking synchronize(@NotNull EntityTracking entityTracking) {
+        return entityTracking instanceof EntityTrackingImpl.Synchronized ?
+                entityTracking : new EntityTrackingImpl.Synchronized(entityTracking);
+    }
+
     /**
      * Register an entity to be tracked.
      */
