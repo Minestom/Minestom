@@ -5,8 +5,10 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,11 +26,14 @@ final class EntityTrackingImpl {
     static final class PerChunk implements EntityTracking {
         private final Set<Entity> entities = new HashSet<>();
         private final Set<Entity> entitiesView = Collections.unmodifiableSet(entities);
+        private final Set<Player> players = new HashSet<>();
+        private final Set<Player> playersView = Collections.unmodifiableSet(players);
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
         public void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update) {
             if (!entities.add(entity)) return;
+            if (entity instanceof Player) players.add((Player) entity);
             addTo(spawnPoint, entity);
             if (update != null) chunkRangeEntities(spawnPoint, MinecraftServer.getEntityViewDistance(), update::add);
         }
@@ -36,6 +41,7 @@ final class EntityTrackingImpl {
         @Override
         public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
             if (!entities.remove(entity)) return;
+            if (entity instanceof Player) players.remove(entity);
             removeFrom(point, entity);
             if (update != null) chunkRangeEntities(point, MinecraftServer.getEntityViewDistance(), update::remove);
         }
@@ -115,6 +121,11 @@ final class EntityTrackingImpl {
         @Override
         public @NotNull Set<@NotNull Entity> entities() {
             return entitiesView;
+        }
+
+        @Override
+        public @UnmodifiableView @NotNull Set<@NotNull Player> players() {
+            return playersView;
         }
 
         private void addTo(Point chunkPoint, Entity entity) {

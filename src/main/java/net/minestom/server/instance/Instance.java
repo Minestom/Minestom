@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -445,7 +446,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return Collections.emptySet(); // TODO
+        return entityTracking.players();
     }
 
     /**
@@ -453,8 +454,12 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
+    @Deprecated
     public @NotNull Set<@NotNull EntityCreature> getCreatures() {
-        return Collections.emptySet(); // TODO
+        return entityTracking.entities().stream()
+                .filter(EntityCreature.class::isInstance)
+                .map(entity -> (EntityCreature) entity)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
@@ -462,8 +467,12 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
+    @Deprecated
     public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
-        return Collections.emptySet(); // TODO
+        return entityTracking.entities().stream()
+                .filter(ExperienceOrb.class::isInstance)
+                .map(entity -> (ExperienceOrb) entity)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**

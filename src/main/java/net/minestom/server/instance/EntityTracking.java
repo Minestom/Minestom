@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,12 @@ public interface EntityTracking {
      */
     @UnmodifiableView
     @NotNull Set<@NotNull Entity> entities();
+
+    /**
+     * Gets all the players tracked by this class.
+     */
+    @UnmodifiableView
+    @NotNull Set<@NotNull Player> players();
 
     /**
      * Callback to know the newly visible entities and those to remove.
