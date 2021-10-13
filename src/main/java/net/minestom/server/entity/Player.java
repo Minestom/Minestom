@@ -532,9 +532,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (e.g. SharedInstance)
         if (!InstanceUtils.areLinked(currentInstance, instance) || !spawnPosition.sameChunk(this.position)) {
             final boolean firstSpawn = currentInstance == null;
+            final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
+            final Thread runThread = Thread.currentThread();
             return instance.loadOptionalChunk(spawnPosition)
-                    .thenRun(() -> spawnPlayer(instance, spawnPosition, firstSpawn,
-                            !Objects.equals(dimensionType, instance.getDimensionType()), true));
+                    .thenRun(() -> {
+                        if (runThread == Thread.currentThread()) {
+                            spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
+                        } else {
+                            instance.scheduleNextTick(i ->
+                                    spawnPlayer(i, spawnPosition, firstSpawn, dimensionChange, true));
+                        }
+                    });
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
@@ -582,9 +590,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
-        if (dimensionChange) {
-            sendDimension(instance.getDimensionType());
-        }
+        if (dimensionChange) sendDimension(instance.getDimensionType());
 
         super.setInstance(instance, spawnPosition);
 
@@ -599,9 +605,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.inventory.update();
         }
 
-        PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
-        EventDispatcher.call(spawnEvent);
-
+        EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
         this.playerConnection.flush();
     }
 
