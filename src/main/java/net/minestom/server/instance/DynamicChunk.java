@@ -10,11 +10,8 @@ import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.CachedPacket;
-import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -42,7 +39,6 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
 
-    private volatile long lastChangeTime;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
@@ -52,7 +48,8 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        this.lastChangeTime = System.currentTimeMillis();
+        this.chunkCache.updateTimestamp();
+        this.lightCache.updateTimestamp();
         // Update pathfinder
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
@@ -121,35 +118,22 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public long getLastChangeTime() {
-        return lastChangeTime;
+        return chunkCache.lastChange();
     }
 
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        final PlayerConnection connection = player.getPlayerConnection();
-        final long lastChange = getLastChangeTime();
-        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
-        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
-        if (connection instanceof PlayerSocketConnection) {
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.sendFramedPacket(lightPacket);
-            socketConnection.sendFramedPacket(chunkPacket);
-        } else {
-            connection.sendPacket(lightPacket.packet());
-            connection.sendPacket(chunkPacket.packet());
-        }
+        player.sendPacket(lightCache.retrieve());
+        player.sendPacket(chunkCache.retrieve());
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        final long lastChange = getLastChangeTime();
-        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
-        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
-        sendPacketToViewers(lightPacket.packet());
-        sendPacketToViewers(chunkPacket.packet());
+        sendPacketToViewers(lightCache.retrieve());
+        sendPacketToViewers(chunkCache.retrieve());
     }
 
     @NotNull
