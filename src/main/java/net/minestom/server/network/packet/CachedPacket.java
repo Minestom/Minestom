@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public final class CachedPacket {
     private final Supplier<ServerPacket> supplier;
+    private volatile long lastChange;
     private volatile long packetTimestamp;
     private SoftReference<FramedPacket> packet;
 
@@ -17,7 +18,12 @@ public final class CachedPacket {
         this.supplier = supplier;
     }
 
-    public FramedPacket retrieveFramedPacket(long lastChange) {
+    public void updateTimestamp() {
+        this.lastChange = System.currentTimeMillis();
+    }
+
+    public FramedPacket retrieve() {
+        final long lastChange = this.lastChange;
         final long timestamp = packetTimestamp;
         final var ref = packet;
         FramedPacket cache = ref != null ? ref.get() : null;
@@ -27,5 +33,9 @@ public final class CachedPacket {
             this.packetTimestamp = lastChange;
         }
         return cache;
+    }
+
+    public long lastChange() {
+        return lastChange;
     }
 }

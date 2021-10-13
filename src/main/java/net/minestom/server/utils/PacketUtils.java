@@ -120,7 +120,7 @@ public final class PacketUtils {
             for (Player player : players) {
                 if (!player.isOnline() || !playerValidator.isValid(player))
                     continue;
-                player.getPlayerConnection().sendFramedPacket(framedPacket);
+                player.getPlayerConnection().sendPacket(framedPacket);
             }
         } else {
             // Write the same packet for each individual players
