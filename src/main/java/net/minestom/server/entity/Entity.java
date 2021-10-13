@@ -771,10 +771,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
             refreshCurrentChunk(chunk);
             if (this instanceof Player) {
-                // TODO
                 final Player player = (Player) this;
-                //instance.getWorldBorder().init(player);
-                //player.getPlayerConnection().sendPacket(instance.createTimePacket());
+                instance.getWorldBorder().init(player);
+                player.sendPacket(instance.createTimePacket());
             }
             instance.getEntityTracking().register(this, spawnPosition, trackingUpdate);
             spawn();

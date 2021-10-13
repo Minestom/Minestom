@@ -411,7 +411,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
-    private @NotNull TimeUpdatePacket createTimePacket() {
+    @ApiStatus.Internal
+    public @NotNull TimeUpdatePacket createTimePacket() {
         long time = this.time;
         if (timeRate == 0) {
             //Negative values stop the sun and moon from moving
