@@ -1286,7 +1286,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 final Player player = (Player) this;
                 player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
                 ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
-                        player.getChunkRange(), player.chunkAdder, player.chunkRemover);
+                        MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
             }
             refreshCurrentChunk(newChunk);
         }

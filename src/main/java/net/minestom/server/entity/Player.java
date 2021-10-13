@@ -482,7 +482,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(position, getChunkRange(), chunkRemover);
+        ChunkUtils.forChunksInRange(position, MinecraftServer.getChunkViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketUtils.broadcastPacket(getRemovePlayerToList());
     }
@@ -577,7 +577,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
-            if (updateChunks) ChunkUtils.forChunksInRange(spawnPosition, getChunkRange(), chunkRemover);
+            if (updateChunks)
+                ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkRemover);
 
             //TODO: entity#removeViewer sends a packet for each removed entity
             //Sending destroy entity packets is not necessary when the dimension changes
@@ -592,7 +593,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         if (updateChunks) {
             sendPacket(new UpdateViewPositionPacket(spawnPosition.chunkX(), spawnPosition.chunkZ()));
-            ChunkUtils.forChunksInRange(spawnPosition, getChunkRange(), chunkAdder);
+            ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
         }
 
         synchronizePosition(true); // So the player doesn't get stuck
@@ -1842,15 +1843,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
         this.vehicleInformation.refresh(sideways, forward, jump, unmount);
-    }
-
-    /**
-     * @return the chunk range of the viewers,
-     * which is {@link MinecraftServer#getChunkViewDistance()} or {@link PlayerSettings#getViewDistance()}
-     * based on which one is the lowest
-     */
-    public int getChunkRange() {
-        return MinecraftServer.getChunkViewDistance();
     }
 
     /**
