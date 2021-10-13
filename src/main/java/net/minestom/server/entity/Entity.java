@@ -336,7 +336,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
         final boolean result = addViewer0(player);
-        if (viewers.contains(player)) manualViewers.add(player);
+        if (result) manualViewers.add(player);
         return result;
     }
 
@@ -371,7 +371,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public final boolean removeViewer(@NotNull Player player) {
         if (player == this) return false;
         final boolean result = removeViewer0(player);
-        if (!viewers.contains(player)) manualViewers.remove(player);
+        if (result) manualViewers.remove(player);
         return result;
     }
 
