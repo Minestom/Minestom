@@ -335,9 +335,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
-        final boolean result = addViewer0(player);
-        if (result) manualViewers.add(player);
-        return result;
+        final boolean added = addViewer0(player);
+        if (added) manualViewers.add(player);
+        return added;
     }
 
     protected boolean addViewer0(@NotNull Player player) {
@@ -370,9 +370,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean removeViewer(@NotNull Player player) {
         if (player == this) return false;
-        final boolean result = removeViewer0(player);
-        if (result) manualViewers.remove(player);
-        return result;
+        final boolean removed = removeViewer0(player);
+        if (removed) manualViewers.remove(player);
+        return removed;
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
