@@ -131,6 +131,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     };
     final LongConsumer chunkRemover = chunkIndex -> {
         // Unload old chunks
+        final Instance instance = this.instance;
+        if (instance == null) return;
         final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
         final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
