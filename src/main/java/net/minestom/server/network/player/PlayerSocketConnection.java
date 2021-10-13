@@ -224,7 +224,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendFramedPacket(@NotNull FramedPacket framedPacket) {
+    public void sendPacket(@NotNull FramedPacket framedPacket) {
         write(framedPacket.body().duplicate().position(0));
     }
 
