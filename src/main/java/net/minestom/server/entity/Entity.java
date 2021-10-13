@@ -444,11 +444,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             return;
         }
 
-        // Fix current chunk being null if the entity has been spawned before
-        if (currentChunk == null) {
-            refreshCurrentChunk(instance.getChunkAt(position));
-        }
-
         // Check if the entity chunk is loaded
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
