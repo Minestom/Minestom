@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,11 +43,6 @@ public interface EntityTracking {
     void difference(@NotNull Point from, @NotNull Point to, @NotNull Update update);
 
     /**
-     * Gets the entities within a range.
-     */
-    void nearbyEntities(@NotNull Point point, double range, @NotNull Query query);
-
-    /**
      * Gets the entities present in the specified chunk.
      */
     void chunkEntities(int chunkX, int chunkZ, @NotNull Query query);
@@ -62,6 +58,20 @@ public interface EntityTracking {
      */
     default void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
         forChunksInRange(chunkPoint, range, (chunkX, chunkZ) -> chunkEntities(chunkX, chunkZ, query));
+    }
+
+    /**
+     * Gets the entities within a range.
+     */
+    default void nearbyEntities(@NotNull Point point, double range, @NotNull Query query) {
+        final int chunkRange = Math.abs((int) (range / Chunk.CHUNK_SECTION_SIZE)) + 1;
+        final double squaredRange = range * range;
+        ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) ->
+                chunkEntities(chunkX, chunkZ, entity -> {
+                    if (point.distanceSquared(entity.getPosition()) < squaredRange) {
+                        query.consume(entity);
+                    }
+                }));
     }
 
     /**

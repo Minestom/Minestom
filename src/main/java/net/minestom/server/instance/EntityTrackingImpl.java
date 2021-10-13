@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
+import static net.minestom.server.utils.chunk.ChunkUtils.forDifferingChunksInRange;
+import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
 
 final class EntityTrackingImpl {
 
@@ -73,29 +74,6 @@ final class EntityTrackingImpl {
                             update.remove(entity);
                         }
                     });
-        }
-
-        @Override
-        public void nearbyEntities(@NotNull Point point, double range, @NotNull Query query) {
-            final int minX = getChunkCoordinate(point.x() - range);
-            final int maxX = getChunkCoordinate(point.x() + range);
-            final int minZ = getChunkCoordinate(point.z() - range);
-            final int maxZ = getChunkCoordinate(point.z() + range);
-            // Cache squared range to prevent sqrt operations
-            final double squaredRange = range * range;
-
-            for (int x = minX; x <= maxX; ++x) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    final List<Entity> chunkEntities = this.chunkEntities.get(getChunkIndex(x, z));
-                    if (chunkEntities == null) continue;
-                    // Filter all entities out of range
-                    for (Entity chunkEntity : chunkEntities) {
-                        if (point.distanceSquared(chunkEntity.getPosition()) < squaredRange) {
-                            query.consume(chunkEntity);
-                        }
-                    }
-                }
-            }
         }
 
         @Override
@@ -169,16 +147,23 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void nearbyEntities(@NotNull Point point, double range, @NotNull Query query) {
+        public void chunkEntities(int chunkX, int chunkZ, @NotNull Query query) {
             synchronized (mutex) {
-                t.nearbyEntities(point, range, query);
+                t.chunkEntities(chunkX, chunkZ, query);
             }
         }
 
         @Override
-        public void chunkEntities(int chunkX, int chunkZ, @NotNull Query query) {
+        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
             synchronized (mutex) {
-                t.chunkEntities(chunkX, chunkZ, query);
+                t.chunkRangeEntities(chunkPoint, range, query);
+            }
+        }
+
+        @Override
+        public void nearbyEntities(@NotNull Point point, double range, @NotNull Query query) {
+            synchronized (mutex) {
+                t.nearbyEntities(point, range, query);
             }
         }
 
