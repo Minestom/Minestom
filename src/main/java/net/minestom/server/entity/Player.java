@@ -113,7 +113,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
-    private final LongConsumer chunkAdder = chunkIndex -> {
+    final LongConsumer chunkAdder = chunkIndex -> {
         // Load new chunks
         final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
         final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
@@ -129,7 +129,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         });
     };
-    private final LongConsumer chunkRemover = chunkIndex -> {
+    final LongConsumer chunkRemover = chunkIndex -> {
         // Unload old chunks
         final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
         final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
@@ -1118,13 +1118,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacketToViewersAndSelf(getEquipmentsPacket());
 
         getInventory().update();
-
-        {
-            // Send new chunks
-            final Chunk chunk = instance.getChunkAt(position);
-            Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
-            refreshVisibleChunks(chunk);
-        }
     }
 
     /**
@@ -1177,25 +1170,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setLevel(int level) {
         this.level = level;
         this.playerConnection.sendPacket(new SetExperiencePacket(exp, level, 0));
-    }
-
-    /**
-     * Called when the player changes chunk (move from one to another).
-     * Can also be used to refresh the list of chunks that the client should see based on {@link #getChunkRange()}.
-     * <p>
-     * It does remove and add the player from the chunks viewers list when removed or added.
-     * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}.
-     *
-     * @param newChunk the current/new player chunk (can be the current one)
-     */
-    public void refreshVisibleChunks(@NotNull Chunk newChunk) {
-        final int newChunkX = newChunk.getChunkX();
-        final int newChunkZ = newChunk.getChunkZ();
-        final int oldChunkX = currentChunk.getChunkX();
-        final int oldChunkZ = currentChunk.getChunkZ();
-        final int range = getChunkRange();
-        updateViewPosition(newChunkX, newChunkZ);
-        ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, range, oldChunkX, oldChunkZ, range, chunkAdder, chunkRemover);
     }
 
     /**
@@ -1485,16 +1459,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
         this.didCloseInventory = didCloseInventory;
-    }
-
-    /**
-     * Sends a {@link UpdateViewPositionPacket}  to the player.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     */
-    public void updateViewPosition(int chunkX, int chunkZ) {
-        playerConnection.sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
     }
 
     public int getNextTeleportId() {
