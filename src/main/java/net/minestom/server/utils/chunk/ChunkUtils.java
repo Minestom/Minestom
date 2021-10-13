@@ -5,13 +5,13 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.callback.OptionalCallback;
+import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.LongConsumer;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -141,11 +141,11 @@ public final class ChunkUtils {
 
     public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
                                                  int oldChunkX, int oldChunkZ,
-                                                 int range, @NotNull LongConsumer callback) {
+                                                 int range, @NotNull IntegerBiConsumer callback) {
         for (int x = newChunkX - range; x <= newChunkX + range; x++) {
             for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
                 if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
-                    callback.accept(getChunkIndex(x, z));
+                    callback.accept(x, z);
                 }
             }
         }
@@ -153,22 +153,23 @@ public final class ChunkUtils {
 
     public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
                                                  int oldChunkX, int oldChunkZ,
-                                                 int range, @NotNull LongConsumer newCallback, @NotNull LongConsumer oldCallback) {
+                                                 int range,
+                                                 @NotNull IntegerBiConsumer newCallback, @NotNull IntegerBiConsumer oldCallback) {
         // Find the new chunks
         forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
         // Find the old chunks
         forDifferingChunksInRange(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
     }
 
-    public static void forChunksInRange(int chunkX, int chunkZ, int range, LongConsumer consumer) {
+    public static void forChunksInRange(int chunkX, int chunkZ, int range, IntegerBiConsumer consumer) {
         for (int x = -range; x <= range; ++x) {
             for (int z = -range; z <= range; ++z) {
-                consumer.accept(getChunkIndex(chunkX + x, chunkZ + z));
+                consumer.accept(chunkX + x, chunkZ + z);
             }
         }
     }
 
-    public static void forChunksInRange(@NotNull Point point, int range, LongConsumer consumer) {
+    public static void forChunksInRange(@NotNull Point point, int range, IntegerBiConsumer consumer) {
         forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
     }
 

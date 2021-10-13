@@ -58,16 +58,16 @@ final class EntityTrackingImpl {
         @Override
         public void difference(@NotNull Point from, @NotNull Point to, @NotNull Update update) {
             forDifferingChunksInRange(to.chunkX(), to.chunkZ(), from.chunkX(), from.chunkZ(),
-                    MinecraftServer.getEntityViewDistance(), chunkIndex -> {
+                    MinecraftServer.getEntityViewDistance(), (chunkX, chunkZ) -> {
                         // Add
-                        final List<Entity> entities = chunkEntities.get(chunkIndex);
+                        final List<Entity> entities = chunkEntities.get(getChunkIndex(chunkX, chunkZ));
                         if (entities == null) return;
                         for (Entity entity : entities) {
                             update.add(entity);
                         }
-                    }, chunkIndex -> {
+                    }, (chunkX, chunkZ) -> {
                         // Remove
-                        final List<Entity> entities = chunkEntities.get(chunkIndex);
+                        final List<Entity> entities = chunkEntities.get(getChunkIndex(chunkX, chunkZ));
                         if (entities == null) return;
                         for (Entity entity : entities) {
                             update.remove(entity);
@@ -99,23 +99,12 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void chunkEntities(@NotNull Point chunkPoint, @NotNull Query query) {
-            final List<Entity> entities = chunkEntities.get(getChunkIndex(chunkPoint.chunkX(), chunkPoint.chunkZ()));
+        public void chunkEntities(int chunkX, int chunkZ, @NotNull Query query) {
+            final List<Entity> entities = chunkEntities.get(getChunkIndex(chunkX, chunkZ));
             if (entities == null) return;
             for (Entity entity : entities) {
                 query.consume(entity);
             }
-        }
-
-        @Override
-        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
-            forChunksInRange(chunkPoint, range, chunkIndex -> {
-                final List<Entity> entities = chunkEntities.get(chunkIndex);
-                if (entities == null) return;
-                for (Entity entity : entities) {
-                    query.consume(entity);
-                }
-            });
         }
 
         @Override
@@ -187,16 +176,9 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void chunkEntities(@NotNull Point chunkPoint, @NotNull Query query) {
+        public void chunkEntities(int chunkX, int chunkZ, @NotNull Query query) {
             synchronized (mutex) {
-                t.chunkEntities(chunkPoint, query);
-            }
-        }
-
-        @Override
-        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
-            synchronized (mutex) {
-                t.chunkRangeEntities(chunkPoint, range, query);
+                t.chunkEntities(chunkX, chunkZ, query);
             }
         }
 

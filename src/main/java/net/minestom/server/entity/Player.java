@@ -70,6 +70,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -88,7 +89,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.LongConsumer;
 import java.util.function.UnaryOperator;
 
 /**
@@ -114,10 +114,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
-    final LongConsumer chunkAdder = chunkIndex -> {
+    final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
             if (chunk == null) {
                 // Cannot load chunk (auto-load is not enabled)
@@ -130,12 +128,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         });
     };
-    final LongConsumer chunkRemover = chunkIndex -> {
+    final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         final Instance instance = this.instance;
         if (instance == null) return;
-        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk != null) {
             chunk.removeViewer(this);

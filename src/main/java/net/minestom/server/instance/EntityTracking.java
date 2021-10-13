@@ -10,6 +10,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Set;
 
+import static net.minestom.server.utils.chunk.ChunkUtils.forChunksInRange;
+
 @ApiStatus.Experimental
 public interface EntityTracking {
 
@@ -47,14 +49,20 @@ public interface EntityTracking {
     /**
      * Gets the entities present in the specified chunk.
      */
-    void chunkEntities(@NotNull Point chunkPoint, @NotNull Query query);
+    void chunkEntities(int chunkX, int chunkZ, @NotNull Query query);
+
+    default void chunkEntities(@NotNull Point point, @NotNull Query query) {
+        chunkEntities(point.chunkX(), point.chunkZ(), query);
+    }
 
     /**
      * Gets the entities present and in range of the specified chunk.
      * <p>
      * This is used for auto-viewable features.
      */
-    void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query);
+    default void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
+        forChunksInRange(chunkPoint, range, (chunkX, chunkZ) -> chunkEntities(chunkX, chunkZ, query));
+    }
 
     /**
      * Gets all the entities tracked by this class.
