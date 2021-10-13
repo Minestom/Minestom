@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":18,"i5":6,"i6":18,"i7":18,"i8":18};
+var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":18,"i5":6,"i6":18,"i7":18,"i8":18,"i9":18,"i10":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -204,12 +204,22 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewers(net.minestom.server.network.packet.FramedPacket)">sendPacketToViewers</a></span>&#8203;(@NotNull <a href="network/packet/FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;framedPacket)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a></span>&#8203;(@NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet to all viewers.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.FramedPacket)">sendPacketToViewersAndSelf</a></span>&#8203;(@NotNull <a href="network/packet/FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;framedPacket)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></span>&#8203;(@NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
@@ -317,6 +327,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 </li>
 </ul>
+<a id="sendPacketToViewers(net.minestom.server.network.packet.FramedPacket)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendPacketToViewers</h4>
+<pre class="methodSignature">@Experimental
+default&nbsp;void&nbsp;sendPacketToViewers&#8203;(@NotNull
+                                 @NotNull <a href="network/packet/FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;framedPacket)</pre>
+</li>
+</ul>
 <a id="sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">
 <!--   -->
 </a>
@@ -350,6 +371,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packet</code> - the packet to send</dd>
 </dl>
+</li>
+</ul>
+<a id="sendPacketToViewersAndSelf(net.minestom.server.network.packet.FramedPacket)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendPacketToViewersAndSelf</h4>
+<pre class="methodSignature">@Experimental
+default&nbsp;void&nbsp;sendPacketToViewersAndSelf&#8203;(@NotNull
+                                        @NotNull <a href="network/packet/FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;framedPacket)</pre>
 </li>
 </ul>
 <a id="getViewersAsAudience()">
