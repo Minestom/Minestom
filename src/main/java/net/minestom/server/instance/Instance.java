@@ -547,6 +547,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         return getChunk(point.chunkX(), point.chunkZ());
     }
 
+    @ApiStatus.Experimental
     public EntityTracking getEntityTracking() {
         return entityTracking;
     }
