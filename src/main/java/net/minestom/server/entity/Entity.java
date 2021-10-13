@@ -1290,10 +1290,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
                 if (this instanceof Player) { // Update visible chunks
                     final Player player = (Player) this;
-                    final int range = player.getChunkRange();
                     player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
-                    ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, range, lastChunkX, lastChunkZ, range,
-                            player.chunkAdder, player.chunkRemover);
+                    ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
+                            player.getChunkRange(), player.chunkAdder, player.chunkRemover);
                 }
                 refreshCurrentChunk(newChunk);
             }

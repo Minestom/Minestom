@@ -139,43 +139,25 @@ public final class ChunkUtils {
         return y / Chunk.CHUNK_SECTION_SIZE;
     }
 
-    /**
-     * Calls the callback for every chunk with in newRange of newChunkX, newChunkZ that isn't within oldRange of oldChunkX oldChunkZ
-     */
-    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ, int newRange,
-                                                 int oldChunkX, int oldChunkZ, int oldRange,
-                                                 @NotNull LongConsumer callback) {
-        for (int x = newChunkX - newRange; x <= newChunkX + newRange; x++) {
-            for (int z = newChunkZ - newRange; z <= newChunkZ + newRange; z++) {
-                if (Math.abs(x - oldChunkX) > oldRange || Math.abs(z - oldChunkZ) > oldRange) {
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
+                                                 int oldChunkX, int oldChunkZ,
+                                                 int range, @NotNull LongConsumer callback) {
+        for (int x = newChunkX - range; x <= newChunkX + range; x++) {
+            for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
+                if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
                     callback.accept(getChunkIndex(x, z));
                 }
             }
         }
     }
 
-
-    /**
-     * Calls newCallback for every chunk with in newRange of newChunkX, newChunkZ that isn't within oldRange of oldChunkX oldChunkZ
-     *
-     * Calls oldCallback for every chunk with in oldRange of oldChunkX, oldChunkZ that isn't within newRange of newChunkX newChunkZ
-     */
-    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ, int newRange,
-                                                 int oldChunkX, int oldChunkZ, int oldRange,
-                                                 @NotNull LongConsumer newCallback,
-                                                 @NotNull LongConsumer oldCallback) {
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
+                                                 int oldChunkX, int oldChunkZ,
+                                                 int range, @NotNull LongConsumer newCallback, @NotNull LongConsumer oldCallback) {
         // Find the new chunks
-        forDifferingChunksInRange(
-                newChunkX, newChunkZ, newRange,
-                oldChunkX, oldChunkZ, oldRange,
-                newCallback
-                );
+        forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
         // Find the old chunks
-        forDifferingChunksInRange(
-                oldChunkX, oldChunkZ, oldRange,
-                newChunkX, newChunkZ, newRange,
-                oldCallback
-        );
+        forDifferingChunksInRange(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
     }
 
     public static void forChunksInRange(int chunkX, int chunkZ, int range, LongConsumer consumer) {

@@ -51,22 +51,22 @@ final class EntityTrackingImpl {
 
         @Override
         public void difference(@NotNull Point from, @NotNull Point to, @NotNull Update update) {
-            final int range = MinecraftServer.getEntityViewDistance();
-            forDifferingChunksInRange(to.chunkX(), to.chunkZ(), range, from.chunkX(), from.chunkZ(), range, chunkIndex -> {
-                // Add
-                final List<Entity> entities = chunkEntities.get(chunkIndex);
-                if (entities == null) return;
-                for (Entity entity : entities) {
-                    update.add(entity);
-                }
-            }, chunkIndex -> {
-                // Remove
-                final List<Entity> entities = chunkEntities.get(chunkIndex);
-                if (entities == null) return;
-                for (Entity entity : entities) {
-                    update.remove(entity);
-                }
-            });
+            forDifferingChunksInRange(to.chunkX(), to.chunkZ(), from.chunkX(), from.chunkZ(),
+                    MinecraftServer.getEntityViewDistance(), chunkIndex -> {
+                        // Add
+                        final List<Entity> entities = chunkEntities.get(chunkIndex);
+                        if (entities == null) return;
+                        for (Entity entity : entities) {
+                            update.add(entity);
+                        }
+                    }, chunkIndex -> {
+                        // Remove
+                        final List<Entity> entities = chunkEntities.get(chunkIndex);
+                        if (entities == null) return;
+                        for (Entity entity : entities) {
+                            update.remove(entity);
+                        }
+                    });
         }
 
         @Override
