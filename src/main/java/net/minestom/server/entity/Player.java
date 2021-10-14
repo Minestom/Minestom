@@ -39,6 +39,7 @@ import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.EntityTracking;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -329,7 +330,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), entity -> {
+            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), EntityTracking.Target.ENTITIES, entity -> {
                 if (entity instanceof ExperienceOrb) {
                     final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
                     final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();

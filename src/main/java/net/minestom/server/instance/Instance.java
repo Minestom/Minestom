@@ -485,7 +485,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
         Set<Entity> result = new HashSet<>();
-        this.entityTracking.chunkEntities(chunk.toPosition(), result::add);
+        this.entityTracking.chunkEntities(chunk.toPosition(), EntityTracking.Target.ENTITIES, result::add);
         return result;
     }
 
@@ -498,7 +498,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
         List<Entity> result = new ArrayList<>();
-        this.entityTracking.nearbyEntities(point, range, result::add);
+        this.entityTracking.nearbyEntities(point, range, EntityTracking.Target.ENTITIES, result::add);
         return result;
     }
 
