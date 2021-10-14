@@ -89,16 +89,8 @@ final class EntityTrackingImpl {
         public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
             // Gets reference to all chunk entities lists within the range
             // This is used to avoid a map lookup per chunk
-            final List<Entity>[] rangeEntities = chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkPoint),
-                    chunkIndex -> {
-                        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                        List<List<Entity>> entities = new ArrayList<>();
-                        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(),
-                                (x, z) -> entities.add(computeChunkEntities(x, z)));
-                        return entities.toArray(List[]::new);
-                    });
-            for (List<Entity> entities : rangeEntities) {
+            final long index = ChunkUtils.getChunkIndex(chunkPoint);
+            for (List<Entity> entities : chunkRangeEntities.computeIfAbsent(index, this::rangeEntities)) {
                 for (Entity entity : entities) {
                     query.consume(entity);
                 }
@@ -126,6 +118,15 @@ final class EntityTrackingImpl {
 
         private List<Entity> computeChunkEntities(int chunkX, int chunkZ) {
             return chunkEntities.computeIfAbsent(getChunkIndex(chunkX, chunkZ), l -> new CopyOnWriteArrayList<>());
+        }
+
+        private List<Entity>[] rangeEntities(long chunkIndex) {
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            List<List<Entity>> entities = new ArrayList<>();
+            ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(),
+                    (x, z) -> entities.add(computeChunkEntities(x, z)));
+            return entities.toArray(List[]::new);
         }
     }
 
