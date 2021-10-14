@@ -13,6 +13,11 @@ import java.util.Set;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.forChunksInRange;
 
+/**
+ * Defines how {@link Entity entities} are tracked within an {@link Instance instance}.
+ * <p>
+ * Implementations are expected to be thread-safe, {@link #synchronize(EntityTracking)} can be used to synchronize every call.
+ */
 @ApiStatus.Experimental
 public interface EntityTracking {
 
