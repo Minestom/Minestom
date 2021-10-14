@@ -123,10 +123,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         @Override
         public void remove(Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player && isAutoViewable() && !entity.manualViewers.contains(Entity.this)) {
+            if (entity instanceof Player && isAutoViewable() &&
+                    (entity.manualViewers.isEmpty() || !entity.manualViewers.contains(Entity.this))) {
                 removeViewer0((Player) entity);
             }
-            if (Entity.this instanceof Player && entity.isAutoViewable() && !manualViewers.contains(entity)) {
+            if (Entity.this instanceof Player && entity.isAutoViewable() &&
+                    (manualViewers.isEmpty() || !manualViewers.contains(entity))) {
                 entity.removeViewer0((Player) Entity.this);
             }
         }
