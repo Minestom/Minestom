@@ -89,6 +89,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 /**
@@ -530,15 +531,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final boolean firstSpawn = currentInstance == null;
             final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
             final Thread runThread = Thread.currentThread();
-            return instance.loadOptionalChunk(spawnPosition)
+            CompletableFuture<Void> future = new CompletableFuture<>();
+            final Consumer<Instance> runnable = (i) -> {
+                spawnPlayer(i, spawnPosition, firstSpawn, dimensionChange, true);
+                future.complete(null);
+            };
+            instance.loadOptionalChunk(spawnPosition)
                     .thenRun(() -> {
                         if (runThread == Thread.currentThread()) {
-                            spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
+                            runnable.accept(instance);
                         } else {
-                            instance.scheduleNextTick(i ->
-                                    spawnPlayer(i, spawnPosition, firstSpawn, dimensionChange, true));
+                            instance.scheduleNextTick(runnable);
                         }
                     });
+            return future;
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
