@@ -125,18 +125,18 @@ final class EntityTrackingImpl {
         public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
             // Gets reference to all chunk entities lists within the range
             // This is used to avoid a map lookup per chunk
-            TargetEntry<Entity> entry = (TargetEntry<Entity>) entries[target.ordinal()];
-            Long2ObjectMap<List<Entity>[]> map = entry.chunkRangeEntities;
-            Long2ObjectMap<List<Entity>> chunkEntities = entry.chunkEntities;
-            var range = map.computeIfAbsent(ChunkUtils.getChunkIndex(point), chunkIndex -> {
-                final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                List<List<Entity>> entities = new ArrayList<>();
-                ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
-                        (x, z) -> entities.add(chunkEntities.computeIfAbsent(getChunkIndex(x, z), listSupplier())));
-                return entities.toArray(List[]::new);
-            });
-            for (var entities : range) {
+            final TargetEntry<? extends Entity> entry = entries[target.ordinal()];
+            final Long2ObjectMap<List<Entity>> chunkEntities = Long2ObjectMap.class.cast(entry.chunkEntities);
+            var range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
+                    chunkIndex -> {
+                        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                        List<List<Entity>> entities = new ArrayList<>();
+                        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
+                                (x, z) -> entities.add(chunkEntities.computeIfAbsent(getChunkIndex(x, z), listSupplier())));
+                        return entities.toArray(List[]::new);
+                    });
+            for (List<? extends Entity> entities : range) {
                 for (Entity entity : entities) query.consume((T) entity);
             }
         }
