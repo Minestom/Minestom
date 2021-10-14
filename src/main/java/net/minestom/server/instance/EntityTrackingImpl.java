@@ -27,8 +27,10 @@ final class EntityTrackingImpl {
         private final Set<Entity> entitiesView = Collections.unmodifiableSet(entities);
         private final Set<Player> players = new HashSet<>();
         private final Set<Player> playersView = Collections.unmodifiableSet(players);
+        // Chunk index -> entities inside it
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
+        // Chunk index -> lists of visible entities (references to chunkEntities entries)
         private final Long2ObjectMap<List<Entity>[]> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
