@@ -447,7 +447,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return entityTracking.players();
+        return entityTracking.entities(EntityTracking.Target.PLAYERS);
     }
 
     /**

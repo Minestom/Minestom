@@ -54,28 +54,21 @@ final class EntityTrackingImpl {
      * Default tracking implementation storing entities per-chunk.
      */
     static final class PerChunk implements EntityTracking {
-        private static final int ENTITIES_INDEX = Target.ENTITIES.ordinal();
-        private static final int PLAYERS_INDEX = Target.PLAYERS.ordinal();
-
-        private final Set<Entity> entitiesView;
-        private final Set<Player> playersView;
+        private static final Long2ObjectFunction<List<Entity>> LIST_SUPPLIER = l -> new CopyOnWriteArrayList<>();
 
         // Store all data associated to a Target
         // The array index is the Target enum ordinal
-        private final TargetEntry<? extends Entity>[] entries = new TargetEntry[targets().size()];
+        private final TargetEntry<Entity>[] entries = new TargetEntry[targets().size()];
 
         {
             Arrays.setAll(entries, value -> new TargetEntry<>());
-            this.entitiesView = Collections.unmodifiableSet(entries[ENTITIES_INDEX].entities);
-            this.playersView = (Set<Player>) Collections.unmodifiableSet(entries[PLAYERS_INDEX].entities);
         }
 
         @Override
         public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
             for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
-                    Set<Entity> entities = (Set<Entity>) entries[target.ordinal()].entities;
-                    entities.add(entity);
+                    this.entries[target.ordinal()].entities.add(entity);
                 }
             }
             addTo(point, entity);
@@ -86,7 +79,7 @@ final class EntityTrackingImpl {
         public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
             for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
-                    entries[target.ordinal()].entities.remove(entity);
+                    this.entries[target.ordinal()].entities.remove(entity);
                 }
             }
             removeFrom(point, entity);
@@ -104,63 +97,51 @@ final class EntityTrackingImpl {
 
         @Override
         public <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
-            Long2ObjectMap<List<Entity>> map = Long2ObjectMap.class.cast(entries[target.ordinal()].chunkEntities);
+            final TargetEntry<Entity> entry = entries[target.ordinal()];
             forDifferingChunksInRange(to.chunkX(), to.chunkZ(), from.chunkX(), from.chunkZ(),
                     MinecraftServer.getEntityViewDistance(), (chunkX, chunkZ) -> {
                         // Add
-                        final List<? extends Entity> entities = map.get(getChunkIndex(chunkX, chunkZ));
+                        final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
                         if (entities == null || entities.isEmpty()) return;
-                        for (Entity entity : entities) {
-                            update.add((T) entity);
-                        }
+                        for (Entity entity : entities) update.add((T) entity);
                     }, (chunkX, chunkZ) -> {
                         // Remove
-                        final List<? extends Entity> entities = map.get(getChunkIndex(chunkX, chunkZ));
+                        final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
                         if (entities == null || entities.isEmpty()) return;
-                        for (Entity entity : entities) {
-                            update.remove((T) entity);
-                        }
+                        for (Entity entity : entities) update.remove((T) entity);
                     });
         }
 
         @Override
         public <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
-            final Long2ObjectMap<List<Entity>> map = Long2ObjectMap.class.cast(entries[target.ordinal()].chunkEntities);
-            final var entities = map.get(getChunkIndex(chunkX, chunkZ));
+            final TargetEntry<Entity> entry = entries[target.ordinal()];
+            final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
             if (entities == null || entities.isEmpty()) return;
-            for (Entity entity : entities) {
-                query.consume((T) entity);
-            }
+            for (Entity entity : entities) query.consume((T) entity);
         }
 
         @Override
         public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
             // Gets reference to all chunk entities lists within the range
             // This is used to avoid a map lookup per chunk
-            final TargetEntry<? extends Entity> entry = entries[target.ordinal()];
-            final Long2ObjectMap<List<Entity>> chunkEntities = Long2ObjectMap.class.cast(entry.chunkEntities);
-            var range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
+            final TargetEntry<Entity> entry = entries[target.ordinal()];
+            final List<Entity>[] range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
                     chunkIndex -> {
                         final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
                         final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                         List<List<Entity>> entities = new ArrayList<>();
                         ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
-                                (x, z) -> entities.add(chunkEntities.computeIfAbsent(getChunkIndex(x, z), listSupplier())));
+                                (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), LIST_SUPPLIER)));
                         return entities.toArray(List[]::new);
                     });
-            for (List<? extends Entity> entities : range) {
+            for (List<Entity> entities : range) {
                 for (Entity entity : entities) query.consume((T) entity);
             }
         }
 
         @Override
-        public @NotNull Set<@NotNull Entity> entities() {
-            return entitiesView;
-        }
-
-        @Override
-        public @UnmodifiableView @NotNull Set<@NotNull Player> players() {
-            return playersView;
+        public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
+            return (Set<T>) Collections.unmodifiableSet(entries[target.ordinal()].entities);
         }
 
         private static Target<? extends Entity> findViewingTarget(Entity entity) {
@@ -172,15 +153,12 @@ final class EntityTrackingImpl {
             return Target.PLAYERS;
         }
 
-        private static Long2ObjectFunction<List<Entity>> listSupplier() {
-            return l -> new CopyOnWriteArrayList<>();
-        }
-
         private void addTo(Point chunkPoint, Entity entity) {
             final long index = getChunkIndex(chunkPoint);
             for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
-                    chunkEntities(target).computeIfAbsent(index, listSupplier()).add(entity);
+                    List<Entity> entities = entries[target.ordinal()].chunkEntities.computeIfAbsent(index, LIST_SUPPLIER);
+                    entities.add(entity);
                 }
             }
         }
@@ -189,14 +167,10 @@ final class EntityTrackingImpl {
             final long index = getChunkIndex(chunkPoint);
             for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
-                    var entities = chunkEntities(target).get(index);
+                    List<Entity> entities = entries[target.ordinal()].chunkEntities.get(index);
                     if (entities != null) entities.remove(entity);
                 }
             }
-        }
-
-        private Long2ObjectMap<List<Entity>> chunkEntities(Target<?> target) {
-            return ((TargetEntry<Entity>) entries[target.ordinal()]).chunkEntities;
         }
 
         private static final class TargetEntry<T extends Entity> {
@@ -221,65 +195,58 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
+        public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
             synchronized (mutex) {
                 t.register(entity, point, update);
             }
         }
 
         @Override
-        public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
+        public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
             synchronized (mutex) {
                 t.unregister(entity, point, update);
             }
         }
 
         @Override
-        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update update) {
+        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update) {
             synchronized (mutex) {
                 t.move(entity, oldPoint, newPoint, update);
             }
         }
 
         @Override
-        public void difference(@NotNull Point from, @NotNull Point to, @NotNull Target target, @NotNull Update update) {
+        public <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
             synchronized (mutex) {
                 t.difference(from, to, target, update);
             }
         }
 
         @Override
-        public void chunkEntities(int chunkX, int chunkZ, @NotNull Target target, @NotNull Query query) {
+        public <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
             synchronized (mutex) {
                 t.chunkEntities(chunkX, chunkZ, target, query);
             }
         }
 
         @Override
-        public void visibleEntities(@NotNull Point point, @NotNull Target target, @NotNull Query query) {
+        public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
             synchronized (mutex) {
                 t.visibleEntities(point, target, query);
             }
         }
 
         @Override
-        public void nearbyEntities(@NotNull Point point, double range, @NotNull Target target, @NotNull Query query) {
+        public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
             synchronized (mutex) {
                 t.nearbyEntities(point, range, target, query);
             }
         }
 
         @Override
-        public @UnmodifiableView @NotNull Set<@NotNull Entity> entities() {
+        public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
             synchronized (mutex) {
-                return t.entities();
-            }
-        }
-
-        @Override
-        public @UnmodifiableView @NotNull Set<@NotNull Player> players() {
-            synchronized (mutex) {
-                return t.players();
+                return t.entities(target);
             }
         }
     }

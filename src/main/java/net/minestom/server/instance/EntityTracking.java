@@ -87,13 +87,12 @@ public interface EntityTracking {
      * Gets all the entities tracked by this class.
      */
     @UnmodifiableView
-    @NotNull Set<@NotNull Entity> entities();
+    @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target);
 
-    /**
-     * Gets all the players tracked by this class.
-     */
     @UnmodifiableView
-    @NotNull Set<@NotNull Player> players();
+    default @NotNull Set<@NotNull Entity> entities() {
+        return entities(Target.ENTITIES);
+    }
 
     /**
      * Represents the type of entity you want to retrieve.
