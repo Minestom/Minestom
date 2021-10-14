@@ -912,16 +912,16 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @throws IllegalStateException if {@link #getInstance()} returns null or the passenger cannot be added
      */
     public void addPassenger(@NotNull Entity entity) {
-        Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+        final Instance currentInstance = this.instance;
+        Check.stateCondition(currentInstance == null, "You need to set an instance using Entity#setInstance");
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
         final Entity vehicle = entity.getVehicle();
-        if (vehicle != null) {
-            vehicle.removePassenger(entity);
-        }
+        if (vehicle != null) vehicle.removePassenger(entity);
+        if (!currentInstance.equals(entity.getInstance()))
+            entity.setInstance(currentInstance, position).join();
         this.passengers.add(entity);
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
-
         // Updates the position of the new passenger, and then teleports the passenger
         updatePassengerPosition(position, entity);
         entity.synchronizePosition(false);
