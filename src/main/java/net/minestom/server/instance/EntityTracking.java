@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.List;
 import java.util.Set;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.forChunksInRange;
@@ -96,20 +95,17 @@ public interface EntityTracking {
     @UnmodifiableView
     @NotNull Set<@NotNull Player> players();
 
+    /**
+     * Represents the type of entity you want to retrieve.
+     *
+     * @param <E> the entity type
+     */
     @ApiStatus.NonExtendable
     interface Target<E extends Entity> {
         Target<Entity> ENTITIES = EntityTrackingImpl.create(Entity.class);
         Target<Player> PLAYERS = EntityTrackingImpl.create(Player.class);
         Target<ItemEntity> ITEMS = EntityTrackingImpl.create(ItemEntity.class);
         Target<ExperienceOrb> EXPERIENCE_ORBS = EntityTrackingImpl.create(ExperienceOrb.class);
-
-        static List<Target<?>> values() {
-            return List.of(ENTITIES, PLAYERS, ITEMS, EXPERIENCE_ORBS);
-        }
-
-        static int count() {
-            return EntityTrackingImpl.TARGET_COUNTER.get();
-        }
 
         Class<E> type();
 

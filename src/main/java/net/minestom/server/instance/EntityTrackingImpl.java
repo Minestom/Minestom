@@ -23,6 +23,18 @@ final class EntityTrackingImpl {
 
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
 
+    static List<EntityTracking.Target<?>> targets;
+
+    static List<EntityTracking.Target<?>> targets() {
+        // Lazy init required to avoid initializer error
+        List<EntityTracking.Target<?>> local = targets;
+        if (local == null) {
+            local = List.of(EntityTracking.Target.ENTITIES, EntityTracking.Target.PLAYERS, EntityTracking.Target.ITEMS, EntityTracking.Target.EXPERIENCE_ORBS);
+            targets = local;
+        }
+        return local;
+    }
+
     static <T extends Entity> EntityTracking.Target<T> create(Class<T> type) {
         final int ordinal = TARGET_COUNTER.getAndIncrement();
         return new EntityTracking.Target<>() {
@@ -50,7 +62,7 @@ final class EntityTrackingImpl {
 
         // Store all data associated to a Target
         // The array index is the Target enum ordinal
-        private final TargetEntry<? extends Entity>[] entries = new TargetEntry[Target.count()];
+        private final TargetEntry<? extends Entity>[] entries = new TargetEntry[targets().size()];
 
         {
             Arrays.setAll(entries, value -> new TargetEntry<>());
@@ -60,7 +72,7 @@ final class EntityTrackingImpl {
 
         @Override
         public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
-            for (var target : Target.values()) {
+            for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
                     Set<Entity> entities = (Set<Entity>) entries[target.ordinal()].entities;
                     entities.add(entity);
@@ -72,7 +84,7 @@ final class EntityTrackingImpl {
 
         @Override
         public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
-            for (var target : Target.values()) {
+            for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
                     entries[target.ordinal()].entities.remove(entity);
                 }
@@ -166,7 +178,7 @@ final class EntityTrackingImpl {
 
         private void addTo(Point chunkPoint, Entity entity) {
             final long index = getChunkIndex(chunkPoint);
-            for (var target : Target.values()) {
+            for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
                     chunkEntities(target).computeIfAbsent(index, listSupplier()).add(entity);
                 }
@@ -175,7 +187,7 @@ final class EntityTrackingImpl {
 
         private void removeFrom(Point chunkPoint, Entity entity) {
             final long index = getChunkIndex(chunkPoint);
-            for (var target : Target.values()) {
+            for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
                     var entities = chunkEntities(target).get(index);
                     if (entities != null) entities.remove(entity);
