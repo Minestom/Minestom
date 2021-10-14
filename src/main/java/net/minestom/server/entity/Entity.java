@@ -1372,19 +1372,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public void remove() {
         if (isRemoved()) return;
         // Remove passengers if any (also done with LivingEntity#kill)
-        if (hasPassenger()) {
-            getPassengers().forEach(this::removePassenger);
-        }
-        var vehicle = this.vehicle;
-        if (vehicle != null) {
-            vehicle.removePassenger(this);
-        }
+        Set<Entity> passengers = getPassengers();
+        if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
+        final Entity vehicle = this.vehicle;
+        if (vehicle != null) vehicle.removePassenger(this);
         MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
-
         Instance currentInstance = this.instance;
         if (currentInstance != null) {
             removeFromInstance(currentInstance);
