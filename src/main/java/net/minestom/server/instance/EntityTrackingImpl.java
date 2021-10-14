@@ -6,14 +6,12 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.forDifferingChunksInRange;
@@ -30,6 +28,8 @@ final class EntityTrackingImpl {
         private final Set<Player> players = new HashSet<>();
         private final Set<Player> playersView = Collections.unmodifiableSet(players);
         private final Long2ObjectMap<List<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
+
+        private final Long2ObjectMap<List<Entity>[]> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
         public void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update) {
@@ -86,6 +86,26 @@ final class EntityTrackingImpl {
         }
 
         @Override
+        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
+            // Gets reference to all chunk entities lists within the range
+            // This is used to avoid a map lookup per chunk
+            final List<Entity>[] rangeEntities = chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkPoint),
+                    chunkIndex -> {
+                        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                        List<List<Entity>> entities = new ArrayList<>();
+                        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(),
+                                (x, z) -> entities.add(computeChunkEntities(x, z)));
+                        return entities.toArray(List[]::new);
+                    });
+            for (List<Entity> entities : rangeEntities) {
+                for (Entity entity : entities) {
+                    query.consume(entity);
+                }
+            }
+        }
+
+        @Override
         public @NotNull Set<@NotNull Entity> entities() {
             return entitiesView;
         }
@@ -96,16 +116,16 @@ final class EntityTrackingImpl {
         }
 
         private void addTo(Point chunkPoint, Entity entity) {
-            this.chunkEntities.computeIfAbsent(getChunkIndex(chunkPoint.chunkX(), chunkPoint.chunkZ()),
-                    l -> new CopyOnWriteArrayList<>()).add(entity);
+            computeChunkEntities(chunkPoint.chunkX(), chunkPoint.chunkZ()).add(entity);
         }
 
         private void removeFrom(Point chunkPoint, Entity entity) {
-            final long index = getChunkIndex(chunkPoint.chunkX(), chunkPoint.chunkZ());
-            List<Entity> entities = this.chunkEntities.get(index);
-            if (entities == null) return;
-            entities.remove(entity);
-            if (entities.isEmpty()) this.chunkEntities.remove(index);
+            List<Entity> entities = this.chunkEntities.get(getChunkIndex(chunkPoint));
+            if (entities != null) entities.remove(entity);
+        }
+
+        private List<Entity> computeChunkEntities(int chunkX, int chunkZ) {
+            return chunkEntities.computeIfAbsent(getChunkIndex(chunkX, chunkZ), l -> new CopyOnWriteArrayList<>());
         }
     }
 

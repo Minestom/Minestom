@@ -115,6 +115,10 @@ public final class ChunkUtils {
         return getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
     }
 
+    public static long getChunkIndex(@NotNull Point point) {
+        return getChunkIndex(point.chunkX(), point.chunkZ());
+    }
+
     /**
      * Converts a chunk index to its chunk X position.
      *
