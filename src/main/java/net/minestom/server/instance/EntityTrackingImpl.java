@@ -32,11 +32,11 @@ final class EntityTrackingImpl {
         private final Long2ObjectMap<List<Entity>[]> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
 
         @Override
-        public void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update) {
+        public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
             if (!entities.add(entity)) return;
             if (entity instanceof Player) players.add((Player) entity);
-            addTo(spawnPoint, entity);
-            if (update != null) chunkRangeEntities(spawnPoint, MinecraftServer.getEntityViewDistance(), update::add);
+            addTo(point, entity);
+            if (update != null) visibleEntities(point, update::add);
         }
 
         @Override
@@ -44,7 +44,7 @@ final class EntityTrackingImpl {
             if (!entities.remove(entity)) return;
             if (entity instanceof Player) players.remove(entity);
             removeFrom(point, entity);
-            if (update != null) chunkRangeEntities(point, MinecraftServer.getEntityViewDistance(), update::remove);
+            if (update != null) visibleEntities(point, update::remove);
         }
 
         @Override
@@ -86,10 +86,10 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
+        public void visibleEntities(@NotNull Point point, @NotNull Query query) {
             // Gets reference to all chunk entities lists within the range
             // This is used to avoid a map lookup per chunk
-            final long index = ChunkUtils.getChunkIndex(chunkPoint);
+            final long index = ChunkUtils.getChunkIndex(point);
             for (List<Entity> entities : chunkRangeEntities.computeIfAbsent(index, this::rangeEntities)) {
                 for (Entity entity : entities) {
                     query.consume(entity);
@@ -124,7 +124,7 @@ final class EntityTrackingImpl {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
             List<List<Entity>> entities = new ArrayList<>();
-            ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(),
+            ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
                     (x, z) -> entities.add(computeChunkEntities(x, z)));
             return entities.toArray(List[]::new);
         }
@@ -140,9 +140,9 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update) {
+        public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update update) {
             synchronized (mutex) {
-                t.register(entity, spawnPoint, update);
+                t.register(entity, point, update);
             }
         }
 
@@ -175,9 +175,9 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
+        public void visibleEntities(@NotNull Point point, @NotNull Query query) {
             synchronized (mutex) {
-                t.chunkRangeEntities(chunkPoint, range, query);
+                t.visibleEntities(point, query);
             }
         }
 

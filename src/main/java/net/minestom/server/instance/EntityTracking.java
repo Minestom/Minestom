@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -29,7 +30,7 @@ public interface EntityTracking {
     /**
      * Register an entity to be tracked.
      */
-    void register(@NotNull Entity entity, @NotNull Point spawnPoint, @Nullable Update update);
+    void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update update);
 
     /**
      * Unregister an entity tracking.
@@ -57,12 +58,13 @@ public interface EntityTracking {
     }
 
     /**
-     * Gets the entities present and in range of the specified chunk.
+     * Gets the entities present in range of the specified chunk.
      * <p>
      * This is used for auto-viewable features.
      */
-    default void chunkRangeEntities(@NotNull Point chunkPoint, int range, @NotNull Query query) {
-        forChunksInRange(chunkPoint, range, (chunkX, chunkZ) -> chunkEntities(chunkX, chunkZ, query));
+    default void visibleEntities(@NotNull Point point, @NotNull Query query) {
+        forChunksInRange(point, MinecraftServer.getEntityViewDistance(),
+                (chunkX, chunkZ) -> chunkEntities(chunkX, chunkZ, query));
     }
 
     /**
