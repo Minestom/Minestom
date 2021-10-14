@@ -200,29 +200,22 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), EntityTracking.Target.ENTITIES, entity -> {
-                if (entity instanceof ItemEntity) {
-                    // Do not pick up if not visible
-                    if (this instanceof Player && !entity.isViewer((Player) this))
-                        return;
-
-                    final ItemEntity itemEntity = (ItemEntity) entity;
-                    if (!itemEntity.isPickable())
-                        return;
-
-                    final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
-                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
-                            return;
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                        EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                            final ItemStack item = itemEntity.getItemStack();
-                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
-                            entity.remove();
-                        });
-                    }
-                }
-            });
+            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), EntityTracking.Target.ITEMS,
+                    itemEntity -> {
+                        if (this instanceof Player && !itemEntity.isViewer((Player) this)) return;
+                        if (!itemEntity.isPickable()) return;
+                        final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
+                        if (expandedBoundingBox.intersect(itemBoundingBox)) {
+                            if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
+                                return;
+                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                                final ItemStack item = itemEntity.getItemStack();
+                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
+                                itemEntity.remove();
+                            });
+                        }
+                    });
         }
     }
 

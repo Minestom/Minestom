@@ -3,6 +3,8 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.ExperienceOrb;
+import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -31,12 +33,12 @@ public interface EntityTracking {
     /**
      * Register an entity to be tracked.
      */
-    void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update< Entity> update);
+    void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update);
 
     /**
      * Unregister an entity tracking.
      */
-    void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update< Entity> update);
+    void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update);
 
     /**
      * Called every time an entity move, you may want to verify if the new
@@ -98,9 +100,11 @@ public interface EntityTracking {
     interface Target<E extends Entity> {
         Target<Entity> ENTITIES = EntityTrackingImpl.create(Entity.class);
         Target<Player> PLAYERS = EntityTrackingImpl.create(Player.class);
+        Target<ItemEntity> ITEMS = EntityTrackingImpl.create(ItemEntity.class);
+        Target<ExperienceOrb> EXPERIENCE_ORBS = EntityTrackingImpl.create(ExperienceOrb.class);
 
         static List<Target<?>> values() {
-            return List.of(ENTITIES, PLAYERS);
+            return List.of(ENTITIES, PLAYERS, ITEMS, EXPERIENCE_ORBS);
         }
 
         static int count() {
