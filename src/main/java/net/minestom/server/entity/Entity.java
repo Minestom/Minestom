@@ -106,7 +106,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
-    private final EntityTracking.Update trackingUpdate = new EntityTracking.Update() {
+    private final EntityTracking.Update<Entity> trackingUpdate = new EntityTracking.Update<>() {
         @Override
         public void add(Entity entity) {
             if (Entity.this == entity) return;
@@ -537,6 +537,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         if (this instanceof ItemEntity) {
             // TODO find other exceptions
+            this.previousPosition = this.position;
             this.position = finalVelocityPosition;
             refreshCoordinate(finalVelocityPosition);
         } else {
