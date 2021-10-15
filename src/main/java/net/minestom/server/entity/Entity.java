@@ -395,6 +395,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
+     * Gets if this entity's viewers can be predicted from surrounding chunks.
+     */
+    public boolean hasPredictableViewers() {
+        return manualViewers.isEmpty() && isAutoViewable();
+    }
+
+    /**
      * Changes the entity type of this entity.
      * <p>
      * Works by changing the internal entity type field and by calling {@link #removeViewer(Player)}

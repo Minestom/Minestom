@@ -154,7 +154,7 @@ public final class PacketUtils {
     @ApiStatus.Experimental
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
                                              @Nullable Entity entity) {
-        if (entity != null && !entity.isAutoViewable()) {
+        if (entity != null && !entity.hasPredictableViewers()) {
             // Operation cannot be optimized
             entity.sendPacketToViewers(serverPacket);
             return;
