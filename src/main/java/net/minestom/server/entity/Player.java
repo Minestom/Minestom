@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
@@ -99,6 +100,8 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+
+    private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -448,9 +451,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(new PlayerDisconnectEvent(this));
         super.remove();
         this.packets.clear();
-        if (getOpenInventory() != null) {
-            getOpenInventory().removeViewer(this);
-        }
+        final Inventory currentInventory = getOpenInventory();
+        if (currentInventory != null) currentInventory.removeViewer(this);
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
         // Advancement tabs cache
         {
@@ -467,6 +469,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
         // Remove from the tab-list
         PacketUtils.broadcastPacket(getRemovePlayerToList());
+
+        // Prevent the player from being stuck in loading screen, or just unable to interact with the server
+        // This should be considered as a bug, since the player will ultimately time out anyway.
+        if (playerConnection.isOnline()) kick(REMOVE_MESSAGE);
     }
 
     @Override
