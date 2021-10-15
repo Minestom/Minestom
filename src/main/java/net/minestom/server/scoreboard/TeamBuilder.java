@@ -137,7 +137,7 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder updateSeeInvisiblePlayers() {
-        return this.updateFriendlyFlags((byte) 0x01);
+        return this.updateFriendlyFlags((byte) 0x02);
     }
 
     /**
@@ -250,7 +250,7 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder seeInvisiblePlayers() {
-        return this.friendlyFlags((byte) 0x01);
+        return this.friendlyFlags((byte) 0x02);
     }
 
     /**
