@@ -125,11 +125,17 @@ public final class BinaryBuffer {
     public BinaryBuffer clear() {
         this.readerOffset = 0;
         this.writerOffset = 0;
+        this.nioBuffer.limit(capacity);
         return this;
     }
 
     public ByteBuffer asByteBuffer(int reader, int writer) {
         return nioBuffer.position(reader).slice().limit(writer);
+    }
+
+    @ApiStatus.Internal
+    public ByteBuffer view(int position, int limit) {
+        return nioBuffer.limit(limit).position(position);
     }
 
     public boolean writeChannel(WritableByteChannel channel) throws IOException {
