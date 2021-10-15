@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -65,7 +66,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
+        public synchronized void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
             for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
                     this.entries[target.ordinal()].entities.add(entity);
@@ -76,7 +77,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
+        public synchronized void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
             for (var target : targets()) {
                 if (target.type().isInstance(entity)) {
                     this.entries[target.ordinal()].entities.remove(entity);
@@ -87,7 +88,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update) {
+        public synchronized void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update) {
             if (!oldPoint.sameChunk(newPoint)) {
                 removeFrom(oldPoint, entity);
                 addTo(newPoint, entity);
@@ -96,7 +97,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
+        public synchronized <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
             final TargetEntry<Entity> entry = entries[target.ordinal()];
             forDifferingChunksInRange(to.chunkX(), to.chunkZ(), from.chunkX(), from.chunkZ(),
                     MinecraftServer.getEntityViewDistance(), (chunkX, chunkZ) -> {
@@ -113,7 +114,7 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
+        public synchronized <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
             final TargetEntry<Entity> entry = entries[target.ordinal()];
             final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
             if (entities == null || entities.isEmpty()) return;
@@ -125,16 +126,19 @@ final class EntityTrackingImpl {
             // Gets reference to all chunk entities lists within the range
             // This is used to avoid a map lookup per chunk
             final TargetEntry<Entity> entry = entries[target.ordinal()];
-            final List<Entity>[] range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
-                    chunkIndex -> {
-                        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                        List<List<Entity>> entities = new ArrayList<>();
-                        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
-                                (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), LIST_SUPPLIER)));
-                        return entities.toArray(List[]::new);
-                    });
-            for (List<Entity> entities : range) {
+            final List<Entity>[] range;
+            synchronized (this) {
+                range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
+                        chunkIndex -> {
+                            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                            List<List<Entity>> entities = new ArrayList<>();
+                            ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
+                                    (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), LIST_SUPPLIER)));
+                            return entities.toArray(List[]::new);
+                        });
+            }
+            for (List<Entity> entities : range) { // LIST_SUPPLIER provide thread-safe lists
                 if (entities.isEmpty()) continue;
                 for (Entity entity : entities) query.consume((T) entity);
             }
@@ -175,80 +179,11 @@ final class EntityTrackingImpl {
         }
 
         private static final class TargetEntry<T extends Entity> {
-            private final Set<T> entities = new HashSet<>();
+            private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
             // Chunk index -> entities inside it
             private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>();
             // Chunk index -> lists of visible entities (references to chunkEntities entries)
             private final Long2ObjectMap<List<T>[]> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
-        }
-    }
-
-    /**
-     * Synchronizes every method.
-     */
-    static final class Synchronized implements EntityTracking {
-        private final EntityTracking t;
-        private final Object mutex;
-
-        public Synchronized(EntityTracking entityTracking) {
-            this.t = entityTracking;
-            this.mutex = this;
-        }
-
-        @Override
-        public void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
-            synchronized (mutex) {
-                t.register(entity, point, update);
-            }
-        }
-
-        @Override
-        public void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
-            synchronized (mutex) {
-                t.unregister(entity, point, update);
-            }
-        }
-
-        @Override
-        public void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update) {
-            synchronized (mutex) {
-                t.move(entity, oldPoint, newPoint, update);
-            }
-        }
-
-        @Override
-        public <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
-            synchronized (mutex) {
-                t.difference(from, to, target, update);
-            }
-        }
-
-        @Override
-        public <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
-            synchronized (mutex) {
-                t.chunkEntities(chunkX, chunkZ, target, query);
-            }
-        }
-
-        @Override
-        public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
-            synchronized (mutex) {
-                t.visibleEntities(point, target, query);
-            }
-        }
-
-        @Override
-        public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
-            synchronized (mutex) {
-                t.nearbyEntities(point, range, target, query);
-            }
-        }
-
-        @Override
-        public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
-            synchronized (mutex) {
-                return t.entities(target);
-            }
         }
     }
 
