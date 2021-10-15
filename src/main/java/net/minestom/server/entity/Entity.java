@@ -1202,20 +1202,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
-        final Player player = this instanceof Player ? (Player) this : null;
         final Chunk chunk = getChunk();
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
         } else if (positionChange && viewChange) {
             PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, isOnGround()), player);
+                    lastSyncedPosition, isOnGround()), this);
             // Fix head rotation
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), player);
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), this);
         } else if (viewChange) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
-            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
         }
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
@@ -1461,7 +1460,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected void synchronizePosition(boolean includeSelf) {
         final Pos posCache = this.position;
         final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
-        PacketUtils.prepareViewablePacket(currentChunk, packet, this instanceof Player ? (Player) this : null);
+        PacketUtils.prepareViewablePacket(currentChunk, packet, this);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = posCache;
     }
