@@ -135,6 +135,7 @@ final class EntityTrackingImpl {
                         return entities.toArray(List[]::new);
                     });
             for (List<Entity> entities : range) {
+                if (entities.isEmpty()) continue;
                 for (Entity entity : entities) query.consume((T) entity);
             }
         }
