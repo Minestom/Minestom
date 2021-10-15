@@ -146,7 +146,7 @@ final class EntityTrackingImpl {
 
         @Override
         public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
-            return (Set<T>) Collections.unmodifiableSet(entries[target.ordinal()].entities);
+            return (Set<T>) entries[target.ordinal()].entitiesView;
         }
 
         private static Target<? extends Entity> findViewingTarget(Entity entity) {
@@ -180,6 +180,7 @@ final class EntityTrackingImpl {
 
         private static final class TargetEntry<T extends Entity> {
             private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
+            private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
             // Chunk index -> entities inside it
             private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>();
             // Chunk index -> lists of visible entities (references to chunkEntities entries)
