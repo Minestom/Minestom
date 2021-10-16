@@ -147,6 +147,18 @@ final class EntityTrackingImpl {
         }
 
         @Override
+        public synchronized <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
+            final int chunkRange = Math.abs((int) (range / Chunk.CHUNK_SECTION_SIZE)) + 1;
+            final double squaredRange = range * range;
+            ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) ->
+                    chunkEntities(chunkX, chunkZ, target, entity -> {
+                        if (point.distanceSquared(entity.getPosition()) < squaredRange) {
+                            query.consume(entity);
+                        }
+                    }));
+        }
+
+        @Override
         public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
             return (Set<T>) entries[target.ordinal()].entitiesView;
         }

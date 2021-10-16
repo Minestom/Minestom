@@ -5,7 +5,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,16 +66,7 @@ public interface EntityTracking {
     /**
      * Gets the entities within a range.
      */
-    default <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
-        final int chunkRange = Math.abs((int) (range / Chunk.CHUNK_SECTION_SIZE)) + 1;
-        final double squaredRange = range * range;
-        ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) ->
-                chunkEntities(chunkX, chunkZ, target, entity -> {
-                    if (point.distanceSquared(entity.getPosition()) < squaredRange) {
-                        query.consume(entity);
-                    }
-                }));
-    }
+    <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query);
 
     /**
      * Gets all the entities tracked by this class.
