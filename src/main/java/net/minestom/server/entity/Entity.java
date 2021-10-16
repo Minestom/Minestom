@@ -40,6 +40,7 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
+import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -278,6 +279,29 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.position = position.withView(yaw, pitch);
         sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), yaw));
         sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), yaw, pitch, onGround));
+    }
+
+    /**
+     * Changes the view of the entity so that it looks in a direction to the given position.
+     *
+     * @param position the position to look at.
+     */
+    public void lookAt(@NotNull Pos position) {
+        Vec delta = position.sub(getPosition()).asVec().normalize();
+        setView(
+                PositionUtils.getLookYaw(delta.x(), delta.z()),
+                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
+        );
+    }
+
+    /**
+     * Changes the view of the entity so that it looks in a direction to the given entity.
+     *
+     * @param entity the entity to look at.
+     */
+    public void lookAt(@NotNull Entity entity) {
+        Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
+        lookAt(entity.position);
     }
 
     /**
