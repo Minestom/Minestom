@@ -21,7 +21,7 @@ import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.EntityTracking;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
@@ -106,7 +106,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
-    private final EntityTracking.Update<Entity> trackingUpdate = new EntityTracking.Update<>() {
+    private final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
         @Override
         public void add(Entity entity) {
             if (Entity.this == entity) return;

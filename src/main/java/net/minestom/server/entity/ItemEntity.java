@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
-import net.minestom.server.instance.EntityTracking;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.time.Cooldown;
@@ -70,7 +70,7 @@ public class ItemEntity extends Entity {
                 (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
-            this.instance.getEntityTracking().nearbyEntities(position, mergeRange, EntityTracking.Target.ITEMS,
+            this.instance.getEntityTracking().nearbyEntities(position, mergeRange, EntityTracker.Target.ITEMS,
                     itemEntity -> {
                         if (itemEntity == this) return;
                         if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;

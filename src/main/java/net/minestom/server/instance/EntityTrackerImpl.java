@@ -20,25 +20,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static net.minestom.server.utils.chunk.ChunkUtils.forDifferingChunksInRange;
 import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
 
-final class EntityTrackingImpl {
+final class EntityTrackerImpl {
 
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
 
-    static List<EntityTracking.Target<?>> targets;
+    static List<EntityTracker.Target<?>> targets;
 
-    static List<EntityTracking.Target<?>> targets() {
+    static List<EntityTracker.Target<?>> targets() {
         // Lazy init required to avoid initializer error
-        List<EntityTracking.Target<?>> local = targets;
+        List<EntityTracker.Target<?>> local = targets;
         if (local == null) {
-            local = List.of(EntityTracking.Target.ENTITIES, EntityTracking.Target.PLAYERS, EntityTracking.Target.ITEMS, EntityTracking.Target.EXPERIENCE_ORBS);
+            local = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
             targets = local;
         }
         return local;
     }
 
-    static <T extends Entity> EntityTracking.Target<T> create(Class<T> type) {
+    static <T extends Entity> EntityTracker.Target<T> create(Class<T> type) {
         final int ordinal = TARGET_COUNTER.getAndIncrement();
-        return new EntityTracking.Target<>() {
+        return new EntityTracker.Target<>() {
             @Override
             public Class<T> type() {
                 return type;
@@ -54,7 +54,7 @@ final class EntityTrackingImpl {
     /**
      * Default tracking implementation storing entities per-chunk.
      */
-    static final class PerChunk implements EntityTracking {
+    static final class PerChunk implements EntityTracker {
         private static final Long2ObjectFunction<List<Entity>> LIST_SUPPLIER = l -> new CopyOnWriteArrayList<>();
 
         // Store all data associated to a Target

@@ -15,7 +15,7 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.EntityTracking;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
@@ -200,7 +200,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), EntityTracking.Target.ITEMS,
+            this.instance.getEntityTracking().nearbyEntities(position, expandedBoundingBox.getWidth(), EntityTracker.Target.ITEMS,
                     itemEntity -> {
                         if (this instanceof Player && !itemEntity.isViewer((Player) this)) return;
                         if (!itemEntity.isPickable()) return;

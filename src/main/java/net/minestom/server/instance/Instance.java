@@ -72,7 +72,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final EntityTracking entityTracking = new EntityTrackingImpl.PerChunk();
+    private final EntityTracker entityTracker = new EntityTrackerImpl.PerChunk();
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -437,7 +437,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     public @NotNull Set<@NotNull Entity> getEntities() {
-        return entityTracking.entities();
+        return entityTracker.entities();
     }
 
     /**
@@ -447,7 +447,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return entityTracking.entities(EntityTracking.Target.PLAYERS);
+        return entityTracker.entities(EntityTracker.Target.PLAYERS);
     }
 
     /**
@@ -457,7 +457,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @Deprecated
     public @NotNull Set<@NotNull EntityCreature> getCreatures() {
-        return entityTracking.entities().stream()
+        return entityTracker.entities().stream()
                 .filter(EntityCreature.class::isInstance)
                 .map(entity -> (EntityCreature) entity)
                 .collect(Collectors.toUnmodifiableSet());
@@ -470,7 +470,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @Deprecated
     public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
-        return entityTracking.entities().stream()
+        return entityTracker.entities().stream()
                 .filter(ExperienceOrb.class::isInstance)
                 .map(entity -> (ExperienceOrb) entity)
                 .collect(Collectors.toUnmodifiableSet());
@@ -485,7 +485,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
         Set<Entity> result = new HashSet<>();
-        this.entityTracking.chunkEntities(chunk.toPosition(), EntityTracking.Target.ENTITIES, result::add);
+        this.entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES, result::add);
         return result;
     }
 
@@ -498,7 +498,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
         List<Entity> result = new ArrayList<>();
-        this.entityTracking.nearbyEntities(point, range, EntityTracking.Target.ENTITIES, result::add);
+        this.entityTracker.nearbyEntities(point, range, EntityTracker.Target.ENTITIES, result::add);
         return result;
     }
 
@@ -548,8 +548,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     @ApiStatus.Experimental
-    public EntityTracking getEntityTracking() {
-        return entityTracking;
+    public EntityTracker getEntityTracking() {
+        return entityTracker;
     }
 
     /**

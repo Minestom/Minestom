@@ -18,7 +18,7 @@ import java.util.Set;
  * Implementations are expected to be thread-safe.
  */
 @ApiStatus.Experimental
-public interface EntityTracking {
+public interface EntityTracker {
 
     /**
      * Register an entity to be tracked.
@@ -86,10 +86,10 @@ public interface EntityTracking {
      */
     @ApiStatus.NonExtendable
     interface Target<E extends Entity> {
-        Target<Entity> ENTITIES = EntityTrackingImpl.create(Entity.class);
-        Target<Player> PLAYERS = EntityTrackingImpl.create(Player.class);
-        Target<ItemEntity> ITEMS = EntityTrackingImpl.create(ItemEntity.class);
-        Target<ExperienceOrb> EXPERIENCE_ORBS = EntityTrackingImpl.create(ExperienceOrb.class);
+        Target<Entity> ENTITIES = EntityTrackerImpl.create(Entity.class);
+        Target<Player> PLAYERS = EntityTrackerImpl.create(Player.class);
+        Target<ItemEntity> ITEMS = EntityTrackerImpl.create(ItemEntity.class);
+        Target<ExperienceOrb> EXPERIENCE_ORBS = EntityTrackerImpl.create(ExperienceOrb.class);
 
         Class<E> type();
 
