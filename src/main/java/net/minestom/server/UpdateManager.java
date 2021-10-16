@@ -185,7 +185,6 @@ public final class UpdateManager {
 
                     // Flush all waiting packets
                     PacketUtils.flush();
-
                     AsyncUtils.runAsync(() -> MinecraftServer.getConnectionManager()
                             .getOnlinePlayers()
                             .parallelStream()
