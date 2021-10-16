@@ -97,9 +97,11 @@ final class EntityTrackingImpl {
         }
 
         @Override
-        public synchronized <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
+        public <T extends Entity> void difference(int oldChunkX, int oldChunkZ,
+                                                  int newChunkX, int newChunkZ,
+                                                  @NotNull Target<T> target, @NotNull Update<T> update) {
             final TargetEntry<Entity> entry = entries[target.ordinal()];
-            forDifferingChunksInRange(to.chunkX(), to.chunkZ(), from.chunkX(), from.chunkZ(),
+            forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ,
                     MinecraftServer.getEntityViewDistance(), (chunkX, chunkZ) -> {
                         // Add
                         final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));

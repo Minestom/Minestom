@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
@@ -13,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Set;
-
-import static net.minestom.server.utils.chunk.ChunkUtils.forChunksInRange;
 
 /**
  * Defines how {@link Entity entities} are tracked within an {@link Instance instance}.
@@ -41,9 +38,15 @@ public interface EntityTracking {
     void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update);
 
     /**
-     * Gets the entities newly visible and invisible from one position to another.
+     * Gets the entities newly visible and invisible from one chunk to another.
      */
-    <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update);
+    <T extends Entity> void difference(int oldChunkX, int oldChunkZ,
+                                       int newChunkX, int newChunkZ,
+                                       @NotNull Target<T> target, @NotNull Update<T> update);
+
+    default <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
+        difference(from.chunkX(), from.chunkZ(), to.chunkX(), to.chunkZ(), target, update);
+    }
 
     /**
      * Gets the entities present in the specified chunk.
@@ -59,10 +62,7 @@ public interface EntityTracking {
      * <p>
      * This is used for auto-viewable features.
      */
-    default <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
-        forChunksInRange(point, MinecraftServer.getEntityViewDistance(),
-                (chunkX, chunkZ) -> chunkEntities(chunkX, chunkZ, target, query));
-    }
+    <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query);
 
     /**
      * Gets the entities within a range.
