@@ -1,5 +1,8 @@
 package net.minestom.server.utils.validate;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +17,15 @@ public final class Check {
 
     private Check() {
 
+    }
+
+    public static void ensureStrictMode(Acquirable<?> acquirable) {
+        if (!MinecraftServer.STRICT_MODE) return;
+        final TickThread thread = acquirable.getHandler().getTickThread();
+        if (Thread.currentThread() == thread) return;
+        if (thread != null && thread.lock().isHeldByCurrentThread()) return;
+        // TODO if thread is null but the global lock is acquired
+        throw new IllegalStateException("Entity is accessed from an unauthorized thread!");
     }
 
     @Contract("null, _ -> fail")

@@ -78,6 +78,7 @@ public final class MinecraftServer {
     // Can be modified at performance cost when increased
     public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
+    public static final boolean STRICT_MODE = Boolean.getBoolean("minestom.strict-mode");
 
     // Network monitoring
     private static int rateLimit = 300;
