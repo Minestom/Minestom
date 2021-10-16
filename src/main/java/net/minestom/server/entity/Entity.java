@@ -782,7 +782,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 instance.getWorldBorder().init(player);
                 player.sendPacket(instance.createTimePacket());
             }
-            instance.getEntityTracking().register(this, spawnPosition, trackingUpdate);
+            instance.getEntityTracker().register(this, spawnPosition, trackingUpdate);
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
         });
@@ -808,7 +808,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void removeFromInstance(Instance instance) {
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(instance, this);
         EventDispatcher.callCancellable(event, () ->
-                instance.getEntityTracking().unregister(this, position, trackingUpdate));
+                instance.getEntityTracker().unregister(this, position, trackingUpdate));
     }
 
     /**
@@ -1284,7 +1284,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracking().move(this, previousPosition, newPosition, trackingUpdate);
+        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();

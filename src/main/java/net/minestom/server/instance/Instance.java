@@ -548,7 +548,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     @ApiStatus.Experimental
-    public EntityTracker getEntityTracking() {
+    public EntityTracker getEntityTracker() {
         return entityTracker;
     }
 
