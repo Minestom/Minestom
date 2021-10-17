@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class that allows to instantiate entities with projectile-like physics handling.
@@ -165,17 +166,18 @@ public class EntityProjectile extends Entity {
                         .filter(entity -> entity instanceof LivingEntity)
                         .collect(Collectors.toSet());
             }
+
+            final Pos finalPos = pos;
+            Stream<Entity> victims = entities.stream().filter(entity -> entity.getBoundingBox().intersect(finalPos));
+
             /*
-              We won't check collisions with entities for first ticks of arrow's life, because it spawns in the
-              shooter and will immediately damage him.
+              We won't check collisions with self for first ticks of arrow's life, because it spawns in the
+              shooter and will immediately be triggered by him.
              */
             if (getAliveTicks() < 3) {
-                continue;
+                victims = victims.filter(entity -> entity != getShooter());
             }
-            final Pos finalPos = pos;
-            Optional<Entity> victimOptional = entities.stream()
-                    .filter(entity -> entity.getBoundingBox().intersect(finalPos))
-                    .findAny();
+            Optional<Entity> victimOptional = victims.findAny();
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
                 victim.setArrowCount(victim.getArrowCount() + 1);
