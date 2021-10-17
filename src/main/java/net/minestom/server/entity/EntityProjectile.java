@@ -2,11 +2,10 @@ package net.minestom.server.entity;
 
 import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -17,6 +16,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,11 +26,31 @@ import java.util.stream.Stream;
 public class EntityProjectile extends Entity {
 
     private final Entity shooter;
+    private final @Nullable Predicate<Entity> victimsPredicate;
 
-    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
+    /**
+     * Constructs new projectile.
+     *
+     * @param shooter shooter of the projectile: may be null.
+     * @param entityType type of the projectile.
+     * @param victimsPredicate if this projectile must not be able to hit entities, leave this null;
+     *                         otherwise it's a predicate for those entities that may be hit by that projectile.
+     */
+    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType, @Nullable Predicate<Entity> victimsPredicate) {
         super(entityType);
         this.shooter = shooter;
+        this.victimsPredicate = victimsPredicate;
         setup();
+    }
+
+    /**
+     * Constructs new projectile that can hit living entities.
+     *
+     * @param shooter shooter of the projectile: may be null.
+     * @param entityType type of the projectile.
+     */
+    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
+        this(shooter, entityType, entity -> entity instanceof LivingEntity);
     }
 
     private void setup() {
@@ -58,6 +78,14 @@ public class EntityProjectile extends Entity {
      * Probably you want to add some random velocity to arrows in such case.
      */
     public void onUnstuck() {
+
+    }
+
+    /**
+     * Called when this projectile hits an entity.
+     * Probably you want to call {@link EntityDamageEvent} in such case.
+     */
+    public void onHit(Entity entity) {
 
     }
 
@@ -99,10 +127,19 @@ public class EntityProjectile extends Entity {
 
     @Override
     public void tick(long time) {
-        final var posBefore = getPosition();
+        final Pos posBefore = getPosition();
         super.tick(time);
-        final var posNow = getPosition();
-        if (isStuck(posBefore, posNow)) {
+        final Pos posNow = getPosition();
+        final State state = getState(posBefore, posNow);
+        // TODO: swap to sealed switch
+        if (state == State.Flying) {
+            if (!super.onGround) {
+                return;
+            }
+            super.onGround = false;
+            setNoGravity(false);
+            onUnstuck();
+        } else if (state == State.StuckInBlock) {
             if (super.onGround) {
                 return;
             }
@@ -112,26 +149,22 @@ public class EntityProjectile extends Entity {
             setNoGravity(true);
             onStuck();
         } else {
-            if (!super.onGround) {
-                return;
-            }
-            super.onGround = false;
-            setNoGravity(false);
-            onUnstuck();
+            onHit(((State.HitEntity) state).entity);
+            remove();
         }
     }
 
     /**
-     * Checks whether an arrow is stuck in block / hit an entity.
+     * Checks whether a projectile is stuck in block / hit an entity.
      *
      * @param pos    position right before current tick.
      * @param posNow position after current tick.
-     * @return if an arrow is stuck in block / hit an entity.
+     * @return current state of the projectile.
      */
     @SuppressWarnings("ConstantConditions")
-    private boolean isStuck(Pos pos, Pos posNow) {
+    private State getState(Pos pos, Pos posNow) {
         if (pos.samePoint(posNow)) {
-            return true;
+            return State.StuckInBlock;
         }
 
         Instance instance = getInstance();
@@ -155,14 +188,17 @@ public class EntityProjectile extends Entity {
             }
             if (instance.getBlock(pos).isSolid()) {
                 teleport(pos);
-                return true;
+                return State.StuckInBlock;
+            }
+            if (victimsPredicate == null) {
+                continue;
             }
             Chunk currentChunk = instance.getChunkAt(pos);
             if (currentChunk != chunk) {
                 chunk = currentChunk;
                 entities = instance.getChunkEntities(chunk)
                         .stream()
-                        .filter(entity -> entity instanceof LivingEntity)
+                        .filter(victimsPredicate)
                         .collect(Collectors.toSet());
             }
 
@@ -170,21 +206,32 @@ public class EntityProjectile extends Entity {
             Stream<Entity> victims = entities.stream().filter(entity -> entity.getBoundingBox().intersect(finalPos));
 
             /*
-              We won't check collisions with self for first ticks of arrow's life, because it spawns in the
+              We won't check collisions with self for first ticks of projectile's life, because it spawns in the
               shooter and will immediately be triggered by him.
              */
             if (getAliveTicks() < 3) {
                 victims = victims.filter(entity -> entity != getShooter());
             }
-            Optional<Entity> victimOptional = victims.findAny();
-            if (victimOptional.isPresent()) {
-                LivingEntity victim = (LivingEntity) victimOptional.get();
-                victim.setArrowCount(victim.getArrowCount() + 1);
-                EventDispatcher.call(new EntityAttackEvent(this, victim));
-                remove();
-                return super.onGround;
+            Optional<Entity> victim = victims.findAny();
+            if (victim.isPresent()) {
+                return new State.HitEntity(victim.get());
             }
         }
-        return false;
+        return State.Flying;
+    }
+
+    // TODO: swap to sealed
+    private interface State {
+        State Flying = new State() {};
+        State StuckInBlock = new State() {};
+
+        final class HitEntity implements State {
+
+            private final Entity entity;
+
+            public HitEntity(Entity entity) {
+                this.entity = entity;
+            }
+        }
     }
 }
