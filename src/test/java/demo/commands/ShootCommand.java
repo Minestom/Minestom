@@ -20,17 +20,17 @@ public class ShootCommand extends Command {
         super("shoot");
         setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
-        var typeArg = ArgumentType.Word("type").from("default", "spectral", "colored");
+        var typeArg = ArgumentType.Word("type").from("default", "spectral", "colored", "ender");
         setArgumentCallback(this::onTypeError, typeArg);
         addSyntax(this::onShootCommand, typeArg);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Correct usage: shoot [default/spectral/colored]"));
+        sender.sendMessage(Component.text("Correct usage: shoot [default/spectral/colored/ender]"));
     }
 
     private void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral' or 'colored'"));
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral', 'colored' or 'ender'"));
     }
 
     private void onShootCommand(CommandSender sender, CommandContext context) {
@@ -39,15 +39,18 @@ public class ShootCommand extends Command {
         EntityProjectile projectile;
         switch (mode) {
             case "default":
-                projectile = new EntityProjectile(player, EntityType.ARROW);
+                projectile = new EntityProjectile.EntityArrow(player, false);
                 break;
             case "spectral":
-                projectile = new EntityProjectile(player, EntityType.SPECTRAL_ARROW);
+                projectile = new EntityProjectile.EntityArrow(player, true);
                 break;
             case "colored":
-                projectile = new EntityProjectile(player, EntityType.ARROW);
+                projectile = new EntityProjectile.EntityArrow(player, false);
                 var meta = (ArrowMeta) projectile.getEntityMeta();
                 meta.setColor(ThreadLocalRandom.current().nextInt());
+                break;
+            case "ender":
+                projectile = new EntityProjectile(player, EntityType.ENDER_PEARL, null);
                 break;
             default:
                 return;
