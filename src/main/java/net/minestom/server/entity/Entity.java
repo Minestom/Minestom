@@ -1547,8 +1547,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         var it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
-            Block block = instance.getBlock(it.next());
-            if (!block.isAir() && !block.isLiquid()) {
+            if (instance.getBlock(it.next()).isSolid()) {
                 return false;
             }
         }
@@ -1585,8 +1584,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         var iterator = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (iterator.hasNext()) {
             Point blockPos = iterator.next();
-            Block block = instance.getBlock(blockPos);
-            if (!block.isAir() && !block.isLiquid()) {
+            if (instance.getBlock(blockPos).isSolid()) {
                 maxVisibleDistanceSquared = blockPos.distanceSquared(position);
                 break;
             }
