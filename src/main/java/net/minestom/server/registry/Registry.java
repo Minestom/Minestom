@@ -79,7 +79,7 @@ public final class Registry {
         private final Int2ObjectOpenHashMap<T> idMap = new Int2ObjectOpenHashMap<>();
         private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
 
-        private boolean initialized;
+        private final boolean initialized;
 
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
