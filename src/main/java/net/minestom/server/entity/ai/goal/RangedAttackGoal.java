@@ -124,6 +124,7 @@ public class RangedAttackGoal extends GoalSelector {
             if (pathPosition != null) {
                 navigator.setPathTo(null);
             }
+            this.entityCreature.lookAt(target);
             return;
         }
         final var targetPosition = target.getPosition();

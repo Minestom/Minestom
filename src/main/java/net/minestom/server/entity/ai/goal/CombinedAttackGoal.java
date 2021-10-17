@@ -198,6 +198,7 @@ public class CombinedAttackGoal extends GoalSelector {
             if (pathPosition != null) {
                 navigator.setPathTo(null);
             }
+            this.entityCreature.lookAt(target);
             return;
         }
         // Otherwise going to the target.
