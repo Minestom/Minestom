@@ -1,14 +1,15 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +32,8 @@ public class EntityProjectile extends Entity {
     /**
      * Constructs new projectile.
      *
-     * @param shooter shooter of the projectile: may be null.
-     * @param entityType type of the projectile.
+     * @param shooter          shooter of the projectile: may be null.
+     * @param entityType       type of the projectile.
      * @param victimsPredicate if this projectile must not be able to hit entities, leave this null;
      *                         otherwise it's a predicate for those entities that may be hit by that projectile.
      */
@@ -46,7 +47,7 @@ public class EntityProjectile extends Entity {
     /**
      * Constructs new projectile that can hit living entities.
      *
-     * @param shooter shooter of the projectile: may be null.
+     * @param shooter    shooter of the projectile: may be null.
      * @param entityType type of the projectile.
      */
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
@@ -222,8 +223,10 @@ public class EntityProjectile extends Entity {
 
     // TODO: swap to sealed
     private interface State {
-        State Flying = new State() {};
-        State StuckInBlock = new State() {};
+        State Flying = new State() {
+        };
+        State StuckInBlock = new State() {
+        };
 
         final class HitEntity implements State {
 
@@ -232,6 +235,45 @@ public class EntityProjectile extends Entity {
             public HitEntity(Entity entity) {
                 this.entity = entity;
             }
+        }
+    }
+
+    public static class EntityArrow extends EntityProjectile {
+
+        /**
+         * Constructs new arrow.
+         *
+         * @param shooter          shooter of the arrow: may be null.
+         * @param isSpectral       whether this arrow is a spectral or a regular one.
+         * @param victimsPredicate if this arrow must not be able to hit entities, leave this null;
+         *                         otherwise it's a predicate for those entities that may be hit by that arrow.
+         */
+        public EntityArrow(@Nullable Entity shooter, boolean isSpectral, @Nullable Predicate<LivingEntity> victimsPredicate) {
+            super(shooter, isSpectral ? EntityTypes.SPECTRAL_ARROW : EntityTypes.ARROW, cast(victimsPredicate));
+        }
+
+        /**
+         * Constructs new arrow that can hit living entities.
+         *
+         * @param shooter    shooter of the arrow: may be null.
+         * @param isSpectral whether this arrow is a spectral or a regular one.
+         */
+        public EntityArrow(@Nullable Entity shooter, boolean isSpectral) {
+            super(shooter, isSpectral ? EntityTypes.SPECTRAL_ARROW : EntityTypes.ARROW);
+        }
+
+        private static @Nullable Predicate<Entity> cast(@Nullable Predicate<LivingEntity> livingEntityPredicate) {
+            if (livingEntityPredicate == null) {
+                return null;
+            }
+            return entity -> entity instanceof LivingEntity && livingEntityPredicate.test((LivingEntity) entity);
+        }
+
+        @Override
+        public void onHit(Entity entity) {
+            final LivingEntity casted = (LivingEntity) entity;
+            casted.setArrowCount(casted.getArrowCount() + 1);
+            EventDispatcher.call(new EntityAttackEvent(this, casted));
         }
     }
 }
