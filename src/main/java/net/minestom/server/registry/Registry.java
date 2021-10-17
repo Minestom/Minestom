@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
@@ -77,8 +76,10 @@ public final class Registry {
         // namespace -> registry data
         private final Map<String, T> namespaceMap = new HashMap<>();
         // id -> registry data
-        private final Int2ObjectMap<T> idMap = new Int2ObjectOpenHashMap<>();
+        private final Int2ObjectOpenHashMap<T> idMap = new Int2ObjectOpenHashMap<>();
         private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
+
+        private boolean initialized;
 
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
@@ -88,6 +89,8 @@ public final class Registry {
                 final JsonObject object = entry.getValue().getAsJsonObject();
                 loader.accept(this, namespace, object);
             }
+            this.initialized = true;
+            this.idMap.trim();
         }
 
         public T get(@NotNull String namespace) {
@@ -107,6 +110,7 @@ public final class Registry {
         }
 
         public void register(@NotNull T value) {
+            Check.stateCondition(initialized, "Registering is only available within the loader lambda.");
             this.idMap.put(value.id(), value);
             this.namespaceMap.put(value.name(), value);
         }
