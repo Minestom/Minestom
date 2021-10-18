@@ -72,7 +72,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final EntityTracker entityTracker = new EntityTrackerImpl.PerChunk();
+    private final EntityTracker entityTracker = new EntityTrackerImpl();
 
     // the uuid of this instance
     protected UUID uniqueId;
