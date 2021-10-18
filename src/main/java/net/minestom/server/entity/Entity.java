@@ -345,11 +345,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected boolean addViewer0(@NotNull Player player) {
-        if (!this.viewers.add(player)) {
-            return false;
-        }
-        player.viewableEntities.add(this);
-
+        if (!this.viewers.add(player)) return false;
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
@@ -380,11 +376,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
-        if (!viewers.remove(player)) {
-            return false;
-        }
+        if (!viewers.remove(player)) return false;
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
-        player.viewableEntities.remove(this);
         return true;
     }
 

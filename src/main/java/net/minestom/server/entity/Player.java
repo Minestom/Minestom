@@ -88,7 +88,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -110,8 +109,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private String username;
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
-    // All the entities that this player can see
-    protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
 
     private int latency;
     private Component displayName;
@@ -482,7 +479,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
         // Clear all viewable entities
-        this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+        this.instance.getEntityTracker().visibleEntities(position, EntityTracker.Target.ENTITIES,
+                entity -> entity.removeViewer(this));
         // Clear all viewable chunks
         ChunkUtils.forChunksInRange(position, MinecraftServer.getChunkViewDistance(), chunkRemover);
         // Remove from the tab-list
@@ -595,7 +593,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             //Sending destroy entity packets is not necessary when the dimension changes
             //and, potentially, this could also be rewritten to send only a single DestroyEntitiesPacket
             //with the list of all destroyed entities
-            this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+            this.instance.getEntityTracker().visibleEntities(position, EntityTracker.Target.ENTITIES,
+                    entity -> entity.removeViewer(this));
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType());
