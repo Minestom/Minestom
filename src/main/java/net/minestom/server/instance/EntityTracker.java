@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -100,9 +101,11 @@ public interface EntityTracker {
      * Callback to know the newly visible entities and those to remove.
      */
     interface Update<E extends Entity> {
-        void add(E entity);
+        void add(@NotNull E entity);
 
-        void remove(E entity);
+        void remove(@NotNull E entity);
+
+        void viewerReferences(@Nullable List<List<Player>> players);
     }
 
     /**

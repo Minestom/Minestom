@@ -47,7 +47,10 @@ final class EntityTrackerImpl implements EntityTracker {
                 entry.addToChunk(index, entity);
             }
         }
-        if (update != null) visibleEntities(point, findViewingTarget(entity), update::add);
+        if (update != null) {
+            visibleEntities(point, (Target<Entity>) findViewingTarget(entity), update::add);
+            update.viewerReferences(references(Target.PLAYERS, point));
+        }
     }
 
     @Override
@@ -60,7 +63,10 @@ final class EntityTrackerImpl implements EntityTracker {
                 entry.removeFromChunk(index, entity);
             }
         }
-        if (update != null) visibleEntities(point, findViewingTarget(entity), update::remove);
+        if (update != null) {
+            visibleEntities(point, (Target<Entity>) findViewingTarget(entity), update::remove);
+            update.viewerReferences(null);
+        }
     }
 
     @Override
@@ -75,7 +81,10 @@ final class EntityTrackerImpl implements EntityTracker {
                     entry.removeFromChunk(oldIndex, entity);
                 }
             }
-            if (update != null) difference(oldPoint, newPoint, (Target<Entity>) findViewingTarget(entity), update);
+            if (update != null) {
+                difference(oldPoint, newPoint, (Target<Entity>) findViewingTarget(entity), update);
+                update.viewerReferences(references(Target.PLAYERS, newPoint));
+            }
         }
     }
 
@@ -108,25 +117,25 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
-        // Gets reference to all chunk entities lists within the range
-        // This is used to avoid a map lookup per chunk
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
-        final List<Entity>[] range;
-        synchronized (this) {
-            range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
-                    chunkIndex -> {
-                        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                        List<List<Entity>> entities = new ArrayList<>();
-                        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
-                                (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), LIST_SUPPLIER)));
-                        return entities.toArray(List[]::new);
-                    });
-        }
-        for (List<Entity> entities : range) { // LIST_SUPPLIER provide thread-safe lists
+        for (List<T> entities : references(target, point)) { // LIST_SUPPLIER provide thread-safe lists
             if (entities.isEmpty()) continue;
             for (Entity entity : entities) query.consume((T) entity);
         }
+    }
+
+    private synchronized <E extends Entity> List<List<E>> references(@NotNull Target<E> target, Point point) {
+        // Gets reference to all chunk entities lists within the range
+        // This is used to avoid a map lookup per chunk
+        final TargetEntry<E> entry = (TargetEntry<E>) entries[target.ordinal()];
+        return entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
+                chunkIndex -> {
+                    final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                    final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                    List<List<E>> entities = new ArrayList<>();
+                    ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
+                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<E>) LIST_SUPPLIER.apply(i))));
+                    return List.copyOf(entities);
+                });
     }
 
     @Override
@@ -161,7 +170,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Chunk index -> entities inside it
         private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>();
         // Chunk index -> lists of visible entities (references to chunkEntities entries)
-        private final Long2ObjectMap<List<T>[]> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
+        private final Long2ObjectMap<List<List<T>>> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
 
         void addToChunk(long index, T entity) {
             this.chunkEntities.computeIfAbsent(index, i -> (List<T>) LIST_SUPPLIER.apply(i)).add(entity);
