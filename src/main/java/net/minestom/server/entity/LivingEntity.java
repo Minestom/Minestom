@@ -206,8 +206,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                         if (!itemEntity.isPickable()) return;
                         final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                         if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                            if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
-                                return;
+                            if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled()) return;
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                             EventDispatcher.callCancellable(pickupItemEvent, () -> {
                                 final ItemStack item = itemEntity.getItemStack();
