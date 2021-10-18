@@ -88,6 +88,7 @@ final class EntityView {
             public Player next() {
                 synchronized (mutex) {
                     final Player value = next;
+                    if (value == null) return current.next();
                     next = null;
                     return value;
                 }
