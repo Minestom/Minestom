@@ -37,8 +37,8 @@ final class EntityTrackerImpl implements EntityTracker {
     private final TargetEntry<Entity>[] entries = TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
 
     @Override
-    public <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
-                                            @NotNull Target<T> target, @Nullable Update<T> update) {
+    public synchronized <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
+                                                         @NotNull Target<T> target, @Nullable Update<T> update) {
         final long index = getChunkIndex(point);
         for (TargetEntry<Entity> entry : entries) {
             if (entry.target.type().isInstance(entity)) {
@@ -50,8 +50,8 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
-                                              @NotNull Target<T> target, @Nullable Update<T> update) {
+    public synchronized <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
+                                                           @NotNull Target<T> target, @Nullable Update<T> update) {
         final long index = getChunkIndex(point);
         for (TargetEntry<Entity> entry : entries) {
             if (entry.target.type().isInstance(entity)) {
@@ -63,9 +63,9 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public <T extends Entity> void move(@NotNull Entity entity,
-                                        @NotNull Point oldPoint, @NotNull Point newPoint,
-                                        @NotNull Target<T> target, @Nullable Update<T> update) {
+    public synchronized <T extends Entity> void move(@NotNull Entity entity,
+                                                     @NotNull Point oldPoint, @NotNull Point newPoint,
+                                                     @NotNull Target<T> target, @Nullable Update<T> update) {
         if (!oldPoint.sameChunk(newPoint)) {
             final long oldIndex = getChunkIndex(oldPoint);
             final long newIndex = getChunkIndex(newPoint);
