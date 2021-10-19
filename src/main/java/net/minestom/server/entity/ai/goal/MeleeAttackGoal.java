@@ -81,6 +81,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Attack the target entity
             if (entityCreature.getDistance(target) <= range) {
+                entityCreature.lookAt(target);
                 if (!Cooldown.hasCooldown(time, lastHit, delay)) {
                     entityCreature.attack(target, true);
                     this.lastHit = time;
