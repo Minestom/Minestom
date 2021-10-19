@@ -118,10 +118,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private GameMode gameMode;
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
-            if (chunk != null && chunk.addViewer(this)) {
-                chunk.sendChunk(this);
-                GlobalHandles.PLAYER_CHUNK_LOAD.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+        this.instance.loadOptionalChunk(chunkX, chunkZ).whenComplete((chunk, throwable) -> {
+            if(throwable != null){
+                MinecraftServer.getExceptionManager().handleException(throwable);
+                return;
+            }
+            try{
+                if (chunk != null) {
+                    chunk.sendChunk(this);
+                    GlobalHandles.PLAYER_CHUNK_LOAD.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+                }
+            }catch (Exception e){
+                MinecraftServer.getExceptionManager().handleException(throwable);
             }
         });
     };
@@ -130,7 +138,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Instance instance = this.instance;
         if (instance == null) return;
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk != null && chunk.removeViewer(this)) {
+        if (chunk != null) {
             sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
             EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
         }

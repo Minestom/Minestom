@@ -48,7 +48,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             visibleEntities(point, target, update::add);
-            update.viewerReferences(references(Target.PLAYERS, point));
+            update.viewerReferences(references(point, Target.PLAYERS));
         }
     }
 
@@ -83,7 +83,7 @@ final class EntityTrackerImpl implements EntityTracker {
             }
             if (update != null) {
                 difference(oldPoint, newPoint, target, update);
-                update.viewerReferences(references(Target.PLAYERS, newPoint));
+                update.viewerReferences(references(newPoint, Target.PLAYERS));
             }
         }
     }
@@ -117,23 +117,23 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
-        for (List<T> entities : references(target, point)) { // LIST_SUPPLIER provide thread-safe lists
+        for (List<T> entities : references(point, target)) {
             if (entities.isEmpty()) continue;
             for (Entity entity : entities) query.consume((T) entity);
         }
     }
 
-    private synchronized <E extends Entity> List<List<E>> references(@NotNull Target<E> target, Point point) {
+    @Override
+    public synchronized @NotNull <T extends Entity> List<List<T>> references(int chunkX, int chunkZ, @NotNull Target<T> target) {
         // Gets reference to all chunk entities lists within the range
         // This is used to avoid a map lookup per chunk
-        final TargetEntry<E> entry = (TargetEntry<E>) entries[target.ordinal()];
-        return entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
+        final TargetEntry<T> entry = (TargetEntry<T>) entries[target.ordinal()];
+        return entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ),
                 chunkIndex -> {
-                    final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                    final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                    List<List<E>> entities = new ArrayList<>();
-                    ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
-                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<E>) LIST_SUPPLIER.apply(i))));
+                    List<List<T>> entities = new ArrayList<>();
+                    ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex),
+                            MinecraftServer.getEntityViewDistance(),
+                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.apply(i))));
                     return List.copyOf(entities);
                 });
     }

@@ -73,6 +73,15 @@ public interface EntityTracker {
                                             @NotNull Target<T> target, @NotNull Query<T> query);
 
     /**
+     * Gets a list containing references to all the entity lists visible from a chunk
+     */
+    <T extends Entity> @NotNull List<List<T>> references(int chunkX, int chunkZ, @NotNull Target<T> target);
+
+    default <T extends Entity> @NotNull List<List<T>> references(@NotNull Point point, @NotNull Target<T> target) {
+        return references(point.chunkX(), point.chunkZ(), target);
+    }
+
+    /**
      * Gets the entities within a range.
      */
     <T extends Entity> void nearbyEntities(@NotNull Point point, double range,

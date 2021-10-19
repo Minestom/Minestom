@@ -41,9 +41,10 @@ public final class ViewEngine {
         }
     }
 
-    public boolean ensureAutoViewer(Player player) {
+    public boolean ensureAutoViewer(Entity entity) {
+        if (!(entity instanceof Player)) return true;
         synchronized (mutex) {
-            return manualViewers.isEmpty() || manualViewers.contains(player);
+            return manualViewers.isEmpty() || manualViewers.contains(entity);
         }
     }
 
