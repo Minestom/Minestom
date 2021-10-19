@@ -116,11 +116,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             if (Entity.this == entity) return;
             if (entity instanceof Player && isAutoViewable() &&
                     viewers.ensureAutoViewer(entity)) {
-                addViewer0((Player) entity);
+                updateNewViewer((Player) entity);
             }
             if (Entity.this instanceof Player && entity.isAutoViewable() &&
                     entity.viewers.ensureAutoViewer(Entity.this)) {
-                entity.addViewer0((Player) Entity.this);
+                entity.updateNewViewer((Player) Entity.this);
             }
         }
 
@@ -129,11 +129,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             if (Entity.this == entity) return;
             if (entity instanceof Player && isAutoViewable() &&
                     entity.viewers.ensureAutoViewer(Entity.this)) {
-                removeViewer0((Player) entity);
+                updateOldViewer((Player) entity);
             }
             if (Entity.this instanceof Player && entity.isAutoViewable() &&
                     viewers.ensureAutoViewer(entity)) {
-                entity.removeViewer0((Player) Entity.this);
+                entity.updateOldViewer((Player) Entity.this);
             }
         }
 
@@ -371,12 +371,34 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
+        if (!addViewer0(player)) return false;
         if (!viewers.attemptAdd(player)) return false;
-        addViewer0(player);
+        updateNewViewer(player);
         return true;
     }
 
+    @ApiStatus.Internal
     protected boolean addViewer0(@NotNull Player player) {
+        // Only here to keep some kind of backward compatibility
+        return true;
+    }
+
+    @Override
+    public final boolean removeViewer(@NotNull Player player) {
+        if (player == this) return false;
+        if (!removeViewer0(player)) return false;
+        if (!viewers.attemptRemove(player)) return false;
+        updateOldViewer(player);
+        return true;
+    }
+
+    @ApiStatus.Internal
+    protected boolean removeViewer0(@NotNull Player player) {
+        // Only here to keep some kind of backward compatibility
+        return true;
+    }
+
+    private void updateNewViewer(@NotNull Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
@@ -395,20 +417,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         // Head position
         playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
-        return true;
     }
 
-    @Override
-    public final boolean removeViewer(@NotNull Player player) {
-        if (player == this) return false;
-        if (!viewers.attemptRemove(player)) return false;
-        removeViewer0(player);
-        return true;
-    }
-
-    protected boolean removeViewer0(@NotNull Player player) {
+    private void updateOldViewer(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
-        return true;
     }
 
     @Override

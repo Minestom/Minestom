@@ -119,16 +119,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).whenComplete((chunk, throwable) -> {
-            if(throwable != null){
+            if (throwable != null) {
                 MinecraftServer.getExceptionManager().handleException(throwable);
                 return;
             }
-            try{
+            try {
                 if (chunk != null) {
                     chunk.sendChunk(this);
                     GlobalHandles.PLAYER_CHUNK_LOAD.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(throwable);
             }
         });
@@ -497,9 +497,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     protected boolean removeViewer0(@NotNull Player player) {
-        if (player == this || !super.removeViewer0(player)) {
-            return false;
-        }
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
             player.getPlayerConnection().sendPacket(this.getTeam().createTeamDestructionPacket());
