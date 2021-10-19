@@ -80,13 +80,11 @@ public final class ViewEngine {
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 // Manual viewers
-                for (Player player : ViewEngine.this.manualViewers) action.accept(player);
+                ViewEngine.this.manualViewers.forEach(action);
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
-                    for (List<Player> players : auto) {
-                        for (Player player : players) action.accept(player);
-                    }
+                    for (List<Player> players : auto) players.forEach(action);
                 }
             }
         }
