@@ -116,11 +116,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         public void add(@NotNull Entity entity) {
             if (Entity.this == entity) return;
             if (entity instanceof Player && isAutoViewable() &&
-                    viewEngine.ensureAutoViewer(entity)) {
+                    entity.viewEngine.ensureAutoViewer(Entity.this)) {
                 updateNewViewer((Player) entity);
             }
             if (Entity.this instanceof Player && entity.isAutoViewable() &&
-                    entity.viewEngine.ensureAutoViewer(Entity.this)) {
+                    viewEngine.ensureAutoViewer(entity)) {
                 entity.updateNewViewer((Player) Entity.this);
             }
         }
@@ -383,14 +383,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @ApiStatus.Internal
     protected boolean addViewer0(@NotNull Player player) {
-        if (!viewEngine.attemptAdd(player)) return false;
+        if (!viewEngine.manualAdd(player)) return false;
         updateNewViewer(player);
         return true;
     }
 
     @ApiStatus.Internal
     protected boolean removeViewer0(@NotNull Player player) {
-        if (!viewEngine.attemptRemove(player)) return false;
+        if (!viewEngine.manualRemove(player)) return false;
         updateOldViewer(player);
         return true;
     }

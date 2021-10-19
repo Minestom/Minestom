@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.Viewable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -8,11 +9,35 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
+/**
+ * Defines which players are able to see this element.
+ */
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
+    /**
+     * Represents viewers that have been added manually using {@link Viewable#addViewer(Player)}.
+     */
     private final Set<Player> manualViewers = new HashSet<>();
+    /**
+     * Represents viewers that should normally be auto-visible
+     * but have been manually removed using {@link Viewable#removeViewer(Player)}.
+     */
+    private final Set<Player> exceptionViewersMap = new HashSet<>();
+    /**
+     * Predicate used to define if a player should be auto-viewable.
+     * <p>
+     * Useful if you want to filter based on rank.
+     */
+    private final Predicate<Player> autoViewPredicate;
+    /**
+     * References of all the player lists surrounding the entity.
+     * <p>
+     * Used as an efficient way to represent visible entities
+     * without continuously updating an internal collection.
+     */
     private List<List<Player>> autoViewable;
 
     private final Set<Player> set = new SetImpl();
@@ -20,35 +45,46 @@ public final class ViewEngine {
 
     public ViewEngine(@Nullable Entity entity) {
         this.entity = entity;
+        this.autoViewPredicate = player -> {
+            if (player == entity) return false;
+            return !setContain(exceptionViewersMap, player);
+        };
     }
 
     public synchronized void updateReferences(@Nullable List<List<Player>> references) {
         this.autoViewable = references;
     }
 
-    public boolean attemptAdd(@NotNull Player player) {
+    public boolean manualAdd(@NotNull Player player) {
         synchronized (mutex) {
+            this.exceptionViewersMap.remove(player);
             return manualViewers.add(player);
         }
     }
 
-    public boolean attemptRemove(@NotNull Player player) {
+    public boolean manualRemove(@NotNull Player player) {
         synchronized (mutex) {
-            return manualViewers.remove(player);
+            if (!manualViewers.isEmpty() && manualViewers.remove(player)) return true;
+            return exceptionViewersMap.add(player);
         }
     }
 
     public boolean hasPredictableViewers() {
+        // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
             return entity != null && entity.isAutoViewable() &&
-                    manualViewers.isEmpty();
+                    manualViewers.isEmpty() &&
+                    exceptionViewersMap.isEmpty();
         }
     }
 
     public boolean ensureAutoViewer(@NotNull Entity entity) {
         if (!(entity instanceof Player)) return true;
+        // Ensure that an entity can be auto-viewed
+        // In this case, it should be neither in the manual nor exception map
         synchronized (mutex) {
-            return manualViewers.isEmpty() || !manualViewers.contains(entity);
+            if (setContain(manualViewers, entity)) return false;
+            return autoViewPredicate.test((Player) entity);
         }
     }
 
@@ -70,7 +106,10 @@ public final class ViewEngine {
                 int size = ViewEngine.this.manualViewers.size();
                 final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
-                    for (List<Player> players : auto) size += players.size();
+                    for (List<Player> players : auto) {
+                        if (players.isEmpty()) continue;
+                        size += players.stream().filter(autoViewPredicate).count();
+                    }
                 }
                 return size;
             }
@@ -79,14 +118,13 @@ public final class ViewEngine {
         @Override
         public boolean contains(Object o) {
             synchronized (mutex) {
-                // Manual viewers
-                final Set<Player> manual = ViewEngine.this.manualViewers;
-                if (!manual.isEmpty() && manual.contains(o)) return true;
+                if (setContain(ViewEngine.this.manualViewers, o)) return true;
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
                     for (List<Player> players : auto) {
-                        if (players.contains(o)) return true;
+                        if (players.isEmpty()) continue;
+                        return players.contains(o) && autoViewPredicate.test((Player) o);
                     }
                 }
             }
@@ -101,13 +139,17 @@ public final class ViewEngine {
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
-                    for (List<Player> players : auto) players.forEach(action);
+                    for (List<Player> players : auto) {
+                        if (players.isEmpty()) continue;
+                        players.stream().filter(autoViewPredicate).forEach(action);
+                    }
                 }
             }
         }
 
         final class It implements Iterator<Player> {
             private Iterator<Player> current = ViewEngine.this.manualViewers.iterator();
+            private boolean autoIterator = false; // True if the current iterator comes from the auto-viewable references
             private int index;
             private Player next;
 
@@ -119,7 +161,7 @@ public final class ViewEngine {
                     if (current == null || !current.hasNext()) return false;
                     if (next != null) return true;
                     this.next = current.next();
-                    return next != entity;
+                    return autoIterator ? ViewEngine.this.autoViewPredicate.test(next) : next != entity;
                 }
             }
 
@@ -141,9 +183,14 @@ public final class ViewEngine {
                     if (updated >= auto.size()) return null;
                     final List<Player> players = auto.get(updated);
                     if (players.isEmpty()) continue;
+                    this.autoIterator = true;
                     return players.iterator();
                 }
             }
         }
+    }
+
+    private static boolean setContain(Set<?> set, Object object) {
+        return !set.isEmpty() && set.contains(object);
     }
 }

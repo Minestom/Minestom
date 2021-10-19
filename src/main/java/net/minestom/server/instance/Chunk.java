@@ -267,7 +267,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        return viewers.attemptAdd(player);
+        return viewers.manualAdd(player);
     }
 
     /**
@@ -278,7 +278,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        return viewers.attemptRemove(player);
+        return viewers.manualRemove(player);
     }
 
     @Override
