@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -72,6 +73,15 @@ public interface EntityTracker {
                                             @NotNull Target<T> target, @NotNull Query<T> query);
 
     /**
+     * Gets a list containing references to all the entity lists visible from a chunk
+     */
+    <T extends Entity> @NotNull List<List<T>> references(int chunkX, int chunkZ, @NotNull Target<T> target);
+
+    default <T extends Entity> @NotNull List<List<T>> references(@NotNull Point point, @NotNull Target<T> target) {
+        return references(point.chunkX(), point.chunkZ(), target);
+    }
+
+    /**
      * Gets the entities within a range.
      */
     <T extends Entity> void nearbyEntities(@NotNull Point point, double range,
@@ -109,9 +119,11 @@ public interface EntityTracker {
      * Callback to know the newly visible entities and those to remove.
      */
     interface Update<E extends Entity> {
-        void add(E entity);
+        void add(@NotNull E entity);
 
-        void remove(E entity);
+        void remove(@NotNull E entity);
+
+        void viewerReferences(@Nullable List<List<Player>> players);
     }
 
     /**

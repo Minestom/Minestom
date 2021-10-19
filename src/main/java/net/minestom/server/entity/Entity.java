@@ -38,6 +38,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -104,38 +105,42 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private boolean autoViewable;
     private final int id;
-    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
+    private final ViewEngine viewEngine = new ViewEngine(this);
+    protected final Set<Player> viewers = viewEngine.asSet();
     // Players must be aware of all surrounding entities
     // General entities should only be aware of surrounding players to update their viewing list
     private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
             EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
     private final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
         @Override
-        public void add(Entity entity) {
+        public void add(@NotNull Entity entity) {
             if (Entity.this == entity) return;
             if (entity instanceof Player && isAutoViewable() &&
-                    (manualViewers.isEmpty() || !manualViewers.contains(entity))) {
-                addViewer0((Player) entity);
+                    entity.viewEngine.ensureAutoViewer(Entity.this)) {
+                updateNewViewer((Player) entity);
             }
             if (Entity.this instanceof Player && entity.isAutoViewable() &&
-                    (entity.manualViewers.isEmpty() || !entity.manualViewers.contains(Entity.this))) {
-                entity.addViewer0((Player) Entity.this);
+                    viewEngine.ensureAutoViewer(entity)) {
+                entity.updateNewViewer((Player) Entity.this);
             }
         }
 
         @Override
-        public void remove(Entity entity) {
+        public void remove(@NotNull Entity entity) {
             if (Entity.this == entity) return;
             if (entity instanceof Player && isAutoViewable() &&
-                    (entity.manualViewers.isEmpty() || !entity.manualViewers.contains(Entity.this))) {
-                removeViewer0((Player) entity);
+                    entity.viewEngine.ensureAutoViewer(Entity.this)) {
+                updateOldViewer((Player) entity);
             }
             if (Entity.this instanceof Player && entity.isAutoViewable() &&
-                    (manualViewers.isEmpty() || !manualViewers.contains(entity))) {
-                entity.removeViewer0((Player) Entity.this);
+                    viewEngine.ensureAutoViewer(entity)) {
+                entity.updateOldViewer((Player) Entity.this);
             }
+        }
+
+        @Override
+        public void viewerReferences(@Nullable List<List<Player>> players) {
+            viewEngine.updateReferences(players);
         }
     };
     private final NBTCompound nbtCompound = new NBTCompound();
@@ -367,13 +372,30 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
-        final boolean added = addViewer0(player);
-        if (added) manualViewers.add(player);
-        return added;
+        return addViewer0(player);
     }
 
+    @Override
+    public final boolean removeViewer(@NotNull Player player) {
+        if (player == this) return false;
+        return removeViewer0(player);
+    }
+
+    @ApiStatus.Internal
     protected boolean addViewer0(@NotNull Player player) {
-        if (!this.viewers.add(player)) return false;
+        if (!viewEngine.manualAdd(player)) return false;
+        updateNewViewer(player);
+        return true;
+    }
+
+    @ApiStatus.Internal
+    protected boolean removeViewer0(@NotNull Player player) {
+        if (!viewEngine.manualRemove(player)) return false;
+        updateOldViewer(player);
+        return true;
+    }
+
+    private void updateNewViewer(@NotNull Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
@@ -392,34 +414,22 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
         // Head position
         playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
-        return true;
     }
 
-    @Override
-    public final boolean removeViewer(@NotNull Player player) {
-        if (player == this) return false;
-        final boolean removed = removeViewer0(player);
-        if (removed) manualViewers.remove(player);
-        return removed;
-    }
-
-    protected boolean removeViewer0(@NotNull Player player) {
-        if (!viewers.remove(player)) return false;
+    private void updateOldViewer(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
-        return true;
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull Set<Player> getViewers() {
+        return viewers;
     }
 
     /**
      * Gets if this entity's viewers can be predicted from surrounding chunks.
      */
     public boolean hasPredictableViewers() {
-        return manualViewers.isEmpty() && isAutoViewable();
+        return viewEngine.hasPredictableViewers();
     }
 
     /**

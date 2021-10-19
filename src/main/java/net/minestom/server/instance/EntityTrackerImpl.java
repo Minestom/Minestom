@@ -46,7 +46,10 @@ final class EntityTrackerImpl implements EntityTracker {
                 entry.addToChunk(index, entity);
             }
         }
-        if (update != null) visibleEntities(point, target, update::add);
+        if (update != null) {
+            visibleEntities(point, target, update::add);
+            update.viewerReferences(references(point, Target.PLAYERS));
+        }
     }
 
     @Override
@@ -59,7 +62,10 @@ final class EntityTrackerImpl implements EntityTracker {
                 entry.removeFromChunk(index, entity);
             }
         }
-        if (update != null) visibleEntities(point, target, update::remove);
+        if (update != null) {
+            visibleEntities(point, target, update::remove);
+            update.viewerReferences(null);
+        }
     }
 
     @Override
@@ -75,7 +81,10 @@ final class EntityTrackerImpl implements EntityTracker {
                     entry.removeFromChunk(oldIndex, entity);
                 }
             }
-            if (update != null) difference(oldPoint, newPoint, target, update);
+            if (update != null) {
+                difference(oldPoint, newPoint, target, update);
+                update.viewerReferences(references(newPoint, Target.PLAYERS));
+            }
         }
     }
 
@@ -108,25 +117,25 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
-        // Gets reference to all chunk entities lists within the range
-        // This is used to avoid a map lookup per chunk
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
-        final List<Entity>[] range;
-        synchronized (this) {
-            range = entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(point),
-                    chunkIndex -> {
-                        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                        List<List<Entity>> entities = new ArrayList<>();
-                        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(),
-                                (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), LIST_SUPPLIER)));
-                        return entities.toArray(List[]::new);
-                    });
-        }
-        for (List<Entity> entities : range) { // LIST_SUPPLIER provide thread-safe lists
+        for (List<T> entities : references(point, target)) {
             if (entities.isEmpty()) continue;
             for (Entity entity : entities) query.consume((T) entity);
         }
+    }
+
+    @Override
+    public synchronized @NotNull <T extends Entity> List<List<T>> references(int chunkX, int chunkZ, @NotNull Target<T> target) {
+        // Gets reference to all chunk entities lists within the range
+        // This is used to avoid a map lookup per chunk
+        final TargetEntry<T> entry = (TargetEntry<T>) entries[target.ordinal()];
+        return entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ),
+                chunkIndex -> {
+                    List<List<T>> entities = new ArrayList<>();
+                    ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex),
+                            MinecraftServer.getEntityViewDistance(),
+                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.apply(i))));
+                    return List.copyOf(entities);
+                });
     }
 
     @Override
@@ -153,7 +162,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Chunk index -> entities inside it
         private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>();
         // Chunk index -> lists of visible entities (references to chunkEntities entries)
-        private final Long2ObjectMap<List<T>[]> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
+        private final Long2ObjectMap<List<List<T>>> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
 
         TargetEntry(Target<T> target) {
             this.target = target;
