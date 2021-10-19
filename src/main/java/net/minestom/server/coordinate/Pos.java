@@ -180,7 +180,7 @@ public final class Pos implements Point {
     @Override
     @Contract(pure = true)
     public @NotNull Pos withX(@NotNull DoubleUnaryOperator operator) {
-        return new Pos(operator.applyAsDouble(x), y, z);
+        return new Pos(operator.applyAsDouble(x), y, z, yaw, pitch);
     }
 
     @Override
@@ -192,7 +192,7 @@ public final class Pos implements Point {
     @Override
     @Contract(pure = true)
     public @NotNull Pos withY(@NotNull DoubleUnaryOperator operator) {
-        return new Pos(x, operator.applyAsDouble(y), z);
+        return new Pos(x, operator.applyAsDouble(y), z, yaw, pitch);
     }
 
     @Override
@@ -204,7 +204,7 @@ public final class Pos implements Point {
     @Override
     @Contract(pure = true)
     public @NotNull Pos withZ(@NotNull DoubleUnaryOperator operator) {
-        return new Pos(x, y, operator.applyAsDouble(z));
+        return new Pos(x, y, operator.applyAsDouble(z), yaw, pitch);
     }
 
     @Override

@@ -5,16 +5,19 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.function.LongFunction;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.forDifferingChunksInRange;
@@ -22,7 +25,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
 
 final class EntityTrackerImpl implements EntityTracker {
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
-    static List<EntityTracker.Target<?>> targets = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
+    static List<EntityTracker.Target<?>> TARGETS = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
     private static final LongFunction<List<Entity>> LIST_SUPPLIER = l -> new CopyOnWriteArrayList<>();
 
     static <T extends Entity> EntityTracker.Target<T> create(Class<T> type) {
@@ -31,58 +34,55 @@ final class EntityTrackerImpl implements EntityTracker {
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
-    private final TargetEntry<Entity>[] entries = new TargetEntry[targets.size()];
-
-    {
-        Arrays.setAll(entries, value -> new TargetEntry<>());
-    }
+    private final TargetEntry<Entity>[] entries = TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
 
     @Override
-    public synchronized void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
+    public <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
+                                            @NotNull Target<T> target, @Nullable Update<T> update) {
         final long index = getChunkIndex(point);
-        for (var target : targets) {
-            if (target.type().isInstance(entity)) {
-                TargetEntry<Entity> entry = this.entries[target.ordinal()];
+        for (TargetEntry<Entity> entry : entries) {
+            if (entry.target.type().isInstance(entity)) {
                 entry.entities.add(entity);
                 entry.addToChunk(index, entity);
             }
         }
         if (update != null) {
-            visibleEntities(point, (Target<Entity>) findViewingTarget(entity), update::add);
+            visibleEntities(point, target, update::add);
             update.viewerReferences(references(Target.PLAYERS, point));
         }
     }
 
     @Override
-    public synchronized void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
+    public <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
+                                              @NotNull Target<T> target, @Nullable Update<T> update) {
         final long index = getChunkIndex(point);
-        for (var target : targets) {
-            if (target.type().isInstance(entity)) {
-                TargetEntry<Entity> entry = this.entries[target.ordinal()];
+        for (TargetEntry<Entity> entry : entries) {
+            if (entry.target.type().isInstance(entity)) {
                 entry.entities.remove(entity);
                 entry.removeFromChunk(index, entity);
             }
         }
         if (update != null) {
-            visibleEntities(point, (Target<Entity>) findViewingTarget(entity), update::remove);
+            visibleEntities(point, target, update::remove);
             update.viewerReferences(null);
         }
     }
 
     @Override
-    public synchronized void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update) {
+    public <T extends Entity> void move(@NotNull Entity entity,
+                                        @NotNull Point oldPoint, @NotNull Point newPoint,
+                                        @NotNull Target<T> target, @Nullable Update<T> update) {
         if (!oldPoint.sameChunk(newPoint)) {
             final long oldIndex = getChunkIndex(oldPoint);
             final long newIndex = getChunkIndex(newPoint);
-            for (var target : targets) {
-                if (target.type().isInstance(entity)) {
-                    TargetEntry<Entity> entry = this.entries[target.ordinal()];
+            for (TargetEntry<Entity> entry : entries) {
+                if (entry.target.type().isInstance(entity)) {
                     entry.addToChunk(newIndex, entity);
                     entry.removeFromChunk(oldIndex, entity);
                 }
             }
             if (update != null) {
-                difference(oldPoint, newPoint, (Target<Entity>) findViewingTarget(entity), update);
+                difference(oldPoint, newPoint, target, update);
                 update.viewerReferences(references(Target.PLAYERS, newPoint));
             }
         }
@@ -155,22 +155,18 @@ final class EntityTrackerImpl implements EntityTracker {
         return (Set<T>) entries[target.ordinal()].entitiesView;
     }
 
-    private static Target<? extends Entity> findViewingTarget(Entity entity) {
-        if (entity instanceof Player) {
-            // Players must be aware of all surrounding entities
-            return Target.ENTITIES;
-        }
-        // General entities should only be aware of surrounding players to update their viewing list
-        return Target.PLAYERS;
-    }
-
     private static final class TargetEntry<T extends Entity> {
+        private final EntityTracker.Target<T> target;
         private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
         private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
         // Chunk index -> entities inside it
         private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>();
         // Chunk index -> lists of visible entities (references to chunkEntities entries)
         private final Long2ObjectMap<List<List<T>>> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
+
+        TargetEntry(Target<T> target) {
+            this.target = target;
+        }
 
         void addToChunk(long index, T entity) {
             this.chunkEntities.computeIfAbsent(index, i -> (List<T>) LIST_SUPPLIER.apply(i)).add(entity);

@@ -24,18 +24,22 @@ public interface EntityTracker {
     /**
      * Register an entity to be tracked.
      */
-    void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update);
+    <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
+                                     @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
      * Unregister an entity tracking.
      */
-    void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update);
+    <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
+                                       @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
-    void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update);
+    <T extends Entity> void move(@NotNull Entity entity,
+                                 @NotNull Point oldPoint, @NotNull Point newPoint,
+                                 @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
      * Gets the entities newly visible and invisible from one chunk to another.
@@ -44,16 +48,19 @@ public interface EntityTracker {
                                        int newChunkX, int newChunkZ,
                                        @NotNull Target<T> target, @NotNull Update<T> update);
 
-    default <T extends Entity> void difference(@NotNull Point from, @NotNull Point to, @NotNull Target<T> target, @NotNull Update<T> update) {
+    default <T extends Entity> void difference(@NotNull Point from, @NotNull Point to,
+                                               @NotNull Target<T> target, @NotNull Update<T> update) {
         difference(from.chunkX(), from.chunkZ(), to.chunkX(), to.chunkZ(), target, update);
     }
 
     /**
      * Gets the entities present in the specified chunk.
      */
-    <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query);
+    <T extends Entity> void chunkEntities(int chunkX, int chunkZ,
+                                          @NotNull Target<T> target, @NotNull Query<T> query);
 
-    default <T extends Entity> void chunkEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
+    default <T extends Entity> void chunkEntities(@NotNull Point point,
+                                                  @NotNull Target<T> target, @NotNull Query<T> query) {
         chunkEntities(point.chunkX(), point.chunkZ(), target, query);
     }
 
@@ -62,12 +69,14 @@ public interface EntityTracker {
      * <p>
      * This is used for auto-viewable features.
      */
-    <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query);
+    <T extends Entity> void visibleEntities(@NotNull Point point,
+                                            @NotNull Target<T> target, @NotNull Query<T> query);
 
     /**
      * Gets the entities within a range.
      */
-    <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query);
+    <T extends Entity> void nearbyEntities(@NotNull Point point, double range,
+                                           @NotNull Target<T> target, @NotNull Query<T> query);
 
     /**
      * Gets all the entities tracked by this class.

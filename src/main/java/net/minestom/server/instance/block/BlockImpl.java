@@ -3,7 +3,6 @@ package net.minestom.server.instance.block;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
@@ -18,7 +17,7 @@ import java.util.function.Function;
 
 final class BlockImpl implements Block {
     // Block state -> block object
-    private static final Int2ObjectMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectOpenHashMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
                 final JsonObject stateObject = object.remove("states").getAsJsonObject();
@@ -42,6 +41,10 @@ final class BlockImpl implements Block {
             .expireAfterWrite(Duration.ofMinutes(5))
             .weakValues()
             .build();
+
+    static {
+        BLOCK_STATE_MAP.trim();
+    }
 
     static Block get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
