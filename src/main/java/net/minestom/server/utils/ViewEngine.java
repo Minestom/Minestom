@@ -41,9 +41,9 @@ public final class ViewEngine {
         }
     }
 
-    public boolean ensureAutoViewer(Entity entity) {
+    public boolean ensureAutoViewer(Player player) {
         synchronized (mutex) {
-            return manualViewers.isEmpty() || manualViewers.contains(entity);
+            return manualViewers.isEmpty() || manualViewers.contains(player);
         }
     }
 
@@ -100,6 +100,7 @@ public final class ViewEngine {
 
             private Iterator<Player> nextIterator() {
                 final List<List<Player>> auto = autoViewable;
+                if (auto == null) return null;
                 while (true) {
                     final int updated = index++;
                     if (updated >= auto.size()) return null;

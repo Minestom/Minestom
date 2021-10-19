@@ -6,28 +6,22 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
-import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
-import net.minestom.server.event.player.PlayerChunkLoadEvent;
-import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
 
@@ -59,8 +53,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final ViewEngine viewers = new ViewEngine(null);
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
@@ -263,39 +256,30 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     }
 
     /**
-     * Sends the chunk to {@code player} and add it to the player viewing chunks collection
-     * and send a {@link PlayerChunkLoadEvent}.
+     * Adds the player to the viewing collection. Chunk packet must be sent manually.
      *
      * @param player the viewer to add
      * @return true if the player has just been added to the viewer collection
      */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
-        sendChunk(player);
-        if (result) GlobalHandles.PLAYER_CHUNK_LOAD.call(new PlayerChunkLoadEvent(player, chunkX, chunkZ));
-        return result;
+        return viewers.attemptAdd(player);
     }
 
     /**
-     * Removes the chunk to the player viewing chunks collection
-     * and send a {@link PlayerChunkUnloadEvent}.
+     * Removes the player from the viewing collection. Chunk packet must be sent manually.
      *
      * @param player the viewer to remove
      * @return true if the player has just been removed to the viewer collection
      */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
-        player.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-        if (result) EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunkX, chunkZ));
-        return result;
+        return viewers.attemptRemove(player);
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull Set<Player> getViewers() {
+        return viewers.asSet();
     }
 
     @Override

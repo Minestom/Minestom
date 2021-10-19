@@ -114,10 +114,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         @Override
         public void add(@NotNull Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player && isAutoViewable() && viewers.ensureAutoViewer(entity)) {
+            if (entity instanceof Player && isAutoViewable() &&
+                    viewers.ensureAutoViewer((Player) entity)) {
                 addViewer0((Player) entity);
             }
-            if (Entity.this instanceof Player && entity.isAutoViewable() && entity.viewers.ensureAutoViewer(Entity.this)) {
+            if (Entity.this instanceof Player && entity.isAutoViewable() &&
+                    entity.viewers.ensureAutoViewer((Player) Entity.this)) {
                 entity.addViewer0((Player) Entity.this);
             }
         }
@@ -125,10 +127,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         @Override
         public void remove(@NotNull Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player && isAutoViewable() && entity.viewers.ensureAutoViewer(Entity.this)) {
+            if (entity instanceof Player && isAutoViewable() &&
+                    entity.viewers.ensureAutoViewer((Player) Entity.this)) {
                 removeViewer0((Player) entity);
             }
-            if (Entity.this instanceof Player && entity.isAutoViewable() && viewers.ensureAutoViewer(entity)) {
+            if (Entity.this instanceof Player && entity.isAutoViewable() &&
+                    viewers.ensureAutoViewer((Player) entity)) {
                 entity.removeViewer0((Player) Entity.this);
             }
         }
