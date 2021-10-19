@@ -51,8 +51,10 @@ public final class ViewEngine {
         };
     }
 
-    public synchronized void updateReferences(@Nullable List<List<Player>> references) {
-        this.autoViewable = references;
+    public void updateReferences(@Nullable List<List<Player>> references) {
+        synchronized (mutex) {
+            this.autoViewable = references;
+        }
     }
 
     public boolean manualAdd(@NotNull Player player) {
