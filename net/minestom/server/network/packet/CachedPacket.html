@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -153,7 +153,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Supplier)">CachedPacket</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;supplier)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Supplier)">CachedPacket</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;supplier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -175,18 +175,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lastChange()">lastChange</a></span>()</code></th>
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#invalidate()">invalidate</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve()">retrieve</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTimestamp()">updateTimestamp</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -219,7 +214,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CachedPacket</h4>
-<pre>public&nbsp;CachedPacket&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;supplier)</pre>
+<pre>public&nbsp;CachedPacket&#8203;(@NotNull
+                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;supplier)</pre>
 </li>
 </ul>
 </li>
@@ -232,31 +228,23 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="updateTimestamp()">
+<a id="invalidate()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>updateTimestamp</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;updateTimestamp()</pre>
+<h4>invalidate</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;invalidate()</pre>
 </li>
 </ul>
 <a id="retrieve()">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>retrieve</h4>
-<pre class="methodSignature">public&nbsp;<a href="FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;retrieve()</pre>
-</li>
-</ul>
-<a id="lastChange()">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>lastChange</h4>
-<pre class="methodSignature">public&nbsp;long&nbsp;lastChange()</pre>
+<h4>retrieve</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;retrieve()</pre>
 </li>
 </ul>
 </li>
