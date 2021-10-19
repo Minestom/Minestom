@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,44 +37,47 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized void register(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
+    public <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
+                                            @NotNull Target<T> target, @Nullable Update<T> update) {
         final long index = getChunkIndex(point);
-        for (var target : targets) {
-            if (target.type().isInstance(entity)) {
-                TargetEntry<Entity> entry = this.entries[target.ordinal()];
+        for (Target<?> t : targets) {
+            if (t.type().isInstance(entity)) {
+                TargetEntry<Entity> entry = this.entries[t.ordinal()];
                 entry.entities.add(entity);
                 entry.addToChunk(index, entity);
             }
         }
-        if (update != null) visibleEntities(point, findViewingTarget(entity), update::add);
+        if (update != null) visibleEntities(point, target, update::add);
     }
 
     @Override
-    public synchronized void unregister(@NotNull Entity entity, @NotNull Point point, @Nullable Update<Entity> update) {
+    public <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
+                                              @NotNull Target<T> target, @Nullable Update<T> update) {
         final long index = getChunkIndex(point);
-        for (var target : targets) {
-            if (target.type().isInstance(entity)) {
-                TargetEntry<Entity> entry = this.entries[target.ordinal()];
+        for (var t : targets) {
+            if (t.type().isInstance(entity)) {
+                TargetEntry<Entity> entry = this.entries[t.ordinal()];
                 entry.entities.remove(entity);
                 entry.removeFromChunk(index, entity);
             }
         }
-        if (update != null) visibleEntities(point, findViewingTarget(entity), update::remove);
+        if (update != null) visibleEntities(point, target, update::remove);
     }
 
     @Override
-    public synchronized void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint, @Nullable Update<Entity> update) {
+    public <T extends Entity> void move(@NotNull Entity entity, @NotNull Point oldPoint, @NotNull Point newPoint,
+                                        @NotNull Target<T> target, @Nullable Update<T> update) {
         if (!oldPoint.sameChunk(newPoint)) {
             final long oldIndex = getChunkIndex(oldPoint);
             final long newIndex = getChunkIndex(newPoint);
-            for (var target : targets) {
-                if (target.type().isInstance(entity)) {
-                    TargetEntry<Entity> entry = this.entries[target.ordinal()];
+            for (var t : targets) {
+                if (t.type().isInstance(entity)) {
+                    TargetEntry<Entity> entry = this.entries[t.ordinal()];
                     entry.addToChunk(newIndex, entity);
                     entry.removeFromChunk(oldIndex, entity);
                 }
             }
-            if (update != null) difference(oldPoint, newPoint, (Target<Entity>) findViewingTarget(entity), update);
+            if (update != null) difference(oldPoint, newPoint, target, update);
         }
     }
 
@@ -144,15 +146,6 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
         return (Set<T>) entries[target.ordinal()].entitiesView;
-    }
-
-    private static Target<? extends Entity> findViewingTarget(Entity entity) {
-        if (entity instanceof Player) {
-            // Players must be aware of all surrounding entities
-            return Target.ENTITIES;
-        }
-        // General entities should only be aware of surrounding players to update their viewing list
-        return Target.PLAYERS;
     }
 
     private static final class TargetEntry<T extends Entity> {

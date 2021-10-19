@@ -107,6 +107,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
+    // Players must be aware of all surrounding entities
+    // General entities should only be aware of surrounding players to update their viewing list
+    private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
+            EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
     private final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
         @Override
         public void add(Entity entity) {
@@ -799,7 +803,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 instance.getWorldBorder().init(player);
                 player.sendPacket(instance.createTimePacket());
             }
-            instance.getEntityTracker().register(this, spawnPosition, trackingUpdate);
+            instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
             spawn();
             EventDispatcher.call(new EntitySpawnEvent(this, instance));
         });
@@ -825,7 +829,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void removeFromInstance(Instance instance) {
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(instance, this);
         EventDispatcher.callCancellable(event, () ->
-                instance.getEntityTracker().unregister(this, position, trackingUpdate));
+                instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate));
     }
 
     /**
@@ -1301,7 +1305,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingUpdate);
+        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingTarget, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
