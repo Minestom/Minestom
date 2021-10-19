@@ -161,18 +161,10 @@ public final class ViewEngine {
             private Player next;
 
             private Player getMaybeNext() {
-                synchronized (mutex) {
-                    if (current.hasNext()) {
-                        return current.next();
-                    } else {
-                        this.current = nextIterator();
-                        if (current == null || !current.hasNext()) {
-                            return null;
-                        } else {
-                            return current.next();
-                        }
-                    }
-                }
+                if(current.hasNext()) return current.next();
+                this.current = nextIterator();
+                if(current != null && current.hasNext()) return current.next();
+                return null;
             }
 
             @Override
