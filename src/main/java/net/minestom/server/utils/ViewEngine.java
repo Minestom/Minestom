@@ -108,7 +108,9 @@ public final class ViewEngine {
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
-                        size += players.stream().filter(autoViewPredicate).count();
+                        for (Player player : players) {
+                            if (autoViewPredicate.test(player)) size++;
+                        }
                     }
                 }
                 return size;
@@ -141,7 +143,9 @@ public final class ViewEngine {
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
-                        players.stream().filter(autoViewPredicate).forEach(action);
+                        for (Player player : players) {
+                            if (autoViewPredicate.test(player)) action.accept(player);
+                        }
                     }
                 }
             }
