@@ -371,30 +371,26 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
-        if (!addViewer0(player)) return false;
+        return addViewer0(player);
+    }
+
+    @Override
+    public final boolean removeViewer(@NotNull Player player) {
+        if (player == this) return false;
+        return removeViewer0(player);
+    }
+
+    @ApiStatus.Internal
+    protected boolean addViewer0(@NotNull Player player) {
         if (!viewers.attemptAdd(player)) return false;
         updateNewViewer(player);
         return true;
     }
 
     @ApiStatus.Internal
-    protected boolean addViewer0(@NotNull Player player) {
-        // Only here to keep some kind of backward compatibility
-        return true;
-    }
-
-    @Override
-    public final boolean removeViewer(@NotNull Player player) {
-        if (player == this) return false;
-        if (!removeViewer0(player)) return false;
+    protected boolean removeViewer0(@NotNull Player player) {
         if (!viewers.attemptRemove(player)) return false;
         updateOldViewer(player);
-        return true;
-    }
-
-    @ApiStatus.Internal
-    protected boolean removeViewer0(@NotNull Player player) {
-        // Only here to keep some kind of backward compatibility
         return true;
     }
 
