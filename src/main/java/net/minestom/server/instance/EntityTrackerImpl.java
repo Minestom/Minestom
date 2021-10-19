@@ -25,12 +25,11 @@ import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
 
 final class EntityTrackerImpl implements EntityTracker {
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
-    static List<EntityTracker.Target<?>> TARGETS = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
     private static final LongFunction<List<Entity>> LIST_SUPPLIER = l -> new CopyOnWriteArrayList<>();
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
-    private final TargetEntry<Entity>[] entries = TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
+    private final TargetEntry<Entity>[] entries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
 
     @Override
     public synchronized <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,

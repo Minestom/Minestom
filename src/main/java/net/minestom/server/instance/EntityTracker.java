@@ -110,6 +110,8 @@ public interface EntityTracker {
         Target<ItemEntity> ITEMS = create(ItemEntity.class);
         Target<ExperienceOrb> EXPERIENCE_ORBS = create(ExperienceOrb.class);
 
+        List<EntityTracker.Target<? extends Entity>> TARGETS = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
+
         Class<E> type();
 
         int ordinal();
