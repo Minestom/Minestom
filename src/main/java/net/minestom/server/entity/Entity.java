@@ -38,6 +38,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -103,7 +104,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private boolean autoViewable;
     private final int id;
-    protected final EntityView viewers = new EntityView(this);
+    protected final ViewEngine viewers = new ViewEngine(this);
     private final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
         @Override
         public void add(@NotNull Entity entity) {

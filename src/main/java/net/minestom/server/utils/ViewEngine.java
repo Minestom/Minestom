@@ -1,49 +1,53 @@
-package net.minestom.server.entity;
+package net.minestom.server.utils;
+
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 
-final class EntityView {
+@ApiStatus.Internal
+public final class ViewEngine {
     private final Entity entity;
     private final Set<Player> manualViewers = new HashSet<>();
-    private volatile List<List<Player>> autoViewable;
+    private List<List<Player>> autoViewable;
 
     private final Set<Player> set = new SetImpl();
-
     private final Object mutex = this;
 
-    EntityView(Entity entity) {
+    public ViewEngine(Entity entity) {
         this.entity = entity;
     }
 
-    void updateReferences(List<List<Player>> references) {
+    public synchronized void updateReferences(List<List<Player>> references) {
         this.autoViewable = references;
     }
 
-    boolean attemptAdd(Player player) {
+    public boolean attemptAdd(Player player) {
         synchronized (mutex) {
             return manualViewers.add(player);
         }
     }
 
-    boolean attemptRemove(Player player) {
+    public boolean attemptRemove(Player player) {
         synchronized (mutex) {
             return manualViewers.remove(player);
         }
     }
 
-    boolean hasPredictableViewers() {
+    public boolean hasPredictableViewers() {
         synchronized (mutex) {
             return entity.isAutoViewable() && manualViewers.isEmpty();
         }
     }
 
-    boolean ensureAutoViewer(Entity entity) {
+    public boolean ensureAutoViewer(Entity entity) {
         synchronized (mutex) {
             return manualViewers.isEmpty() || manualViewers.contains(entity);
         }
     }
 
-    Set<Player> asSet() {
+    public Set<Player> asSet() {
         return set;
     }
 
@@ -68,7 +72,7 @@ final class EntityView {
         }
 
         final class It implements Iterator<Player> {
-            private Iterator<Player> current = EntityView.this.manualViewers.iterator();
+            private Iterator<Player> current = ViewEngine.this.manualViewers.iterator();
             private int index;
             private Player next;
 
