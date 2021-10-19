@@ -77,6 +77,23 @@ public final class ViewEngine {
         }
 
         @Override
+        public boolean contains(Object o) {
+            synchronized (mutex) {
+                // Manual viewers
+                final Set<Player> manual = ViewEngine.this.manualViewers;
+                if (!manual.isEmpty() && manual.contains(o)) return true;
+                // Auto
+                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                if (auto != null) {
+                    for (List<Player> players : auto) {
+                        if (players.contains(o)) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 // Manual viewers
