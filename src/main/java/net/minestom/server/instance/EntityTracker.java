@@ -115,6 +115,7 @@ public interface EntityTracker {
         int ordinal();
 
         private static <T extends Entity> EntityTracker.Target<T> create(Class<T> type) {
+            final int ordinal = EntityTrackerImpl.TARGET_COUNTER.getAndIncrement();
             return new Target<>() {
                 @Override
                 public Class<T> type() {
@@ -123,7 +124,7 @@ public interface EntityTracker {
 
                 @Override
                 public int ordinal() {
-                    return EntityTrackerImpl.TARGET_COUNTER.getAndIncrement();
+                    return ordinal;
                 }
             };
         }
