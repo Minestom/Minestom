@@ -4,6 +4,7 @@ import net.minestom.server.Viewable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -159,24 +160,41 @@ public final class ViewEngine {
             private int index;
             private Player next;
 
+            private Player getMaybeNext() {
+                synchronized (mutex) {
+                    if (current.hasNext()) {
+                        return current.next();
+                    } else {
+                        this.current = nextIterator();
+                        if (current == null || !current.hasNext()) {
+                            return null;
+                        } else {
+                            return current.next();
+                        }
+                    }
+                }
+            }
+
             @Override
+            @Contract(mutates = "this")
             public boolean hasNext() {
                 synchronized (mutex) {
-                    if (current.hasNext()) return true;
-                    this.current = nextIterator();
-                    if (current == null || !current.hasNext()) return false;
-                    if (next != null) return true;
-                    this.next = current.next();
-                    return autoIterator ? ViewEngine.this.autoViewPredicate.test(next) : next != entity;
+                    if (next == null) {
+                        do {
+                            next = getMaybeNext();
+                            if (next == null) return false;
+                        } while (autoIterator ? !ViewEngine.this.autoViewPredicate.test(next) : next == entity);
+                    }
                 }
+                return true;
             }
 
             @Override
             public Player next() {
                 synchronized (mutex) {
-                    final Player value = next;
-                    if (value == null) return current.next();
-                    next = null;
+                    final Player value = this.next;
+                    if (value == null && hasNext()) return this.next;
+                    this.next = null;
                     return value;
                 }
             }
