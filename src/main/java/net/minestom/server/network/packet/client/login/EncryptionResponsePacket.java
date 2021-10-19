@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class EncryptionResponsePacket implements ClientPreplayPacket {
-    private static final MOJANG_AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined").concat("?username=%s&serverId=%s");
+    private static final String MOJANG_AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined").concat("?username=%s&serverId=%s");
     private static final Gson GSON = new Gson();
     private byte[] sharedSecret;
     private byte[] verifyToken;
