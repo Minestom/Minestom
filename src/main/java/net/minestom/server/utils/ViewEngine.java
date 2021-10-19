@@ -3,8 +3,11 @@ package net.minestom.server.utils;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public final class ViewEngine {
@@ -15,21 +18,21 @@ public final class ViewEngine {
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
-    public ViewEngine(Entity entity) {
+    public ViewEngine(@Nullable Entity entity) {
         this.entity = entity;
     }
 
-    public synchronized void updateReferences(List<List<Player>> references) {
+    public synchronized void updateReferences(@Nullable List<List<Player>> references) {
         this.autoViewable = references;
     }
 
-    public boolean attemptAdd(Player player) {
+    public boolean attemptAdd(@NotNull Player player) {
         synchronized (mutex) {
             return manualViewers.add(player);
         }
     }
 
-    public boolean attemptRemove(Player player) {
+    public boolean attemptRemove(@NotNull Player player) {
         synchronized (mutex) {
             return manualViewers.remove(player);
         }
@@ -37,14 +40,15 @@ public final class ViewEngine {
 
     public boolean hasPredictableViewers() {
         synchronized (mutex) {
-            return entity.isAutoViewable() && manualViewers.isEmpty();
+            return entity != null && entity.isAutoViewable() &&
+                    manualViewers.isEmpty();
         }
     }
 
-    public boolean ensureAutoViewer(Entity entity) {
+    public boolean ensureAutoViewer(@NotNull Entity entity) {
         if (!(entity instanceof Player)) return true;
         synchronized (mutex) {
-            return manualViewers.isEmpty() || manualViewers.contains(entity);
+            return manualViewers.isEmpty() || !manualViewers.contains(entity);
         }
     }
 
@@ -54,7 +58,7 @@ public final class ViewEngine {
 
     final class SetImpl extends AbstractSet<Player> {
         @Override
-        public Iterator<Player> iterator() {
+        public @NotNull Iterator<Player> iterator() {
             synchronized (mutex) {
                 return new It();
             }
@@ -63,12 +67,27 @@ public final class ViewEngine {
         @Override
         public int size() {
             synchronized (mutex) {
-                int size = manualViewers.size();
-                final List<List<Player>> auto = autoViewable;
+                int size = ViewEngine.this.manualViewers.size();
+                final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
                     for (List<Player> players : auto) size += players.size();
                 }
                 return size;
+            }
+        }
+
+        @Override
+        public void forEach(Consumer<? super Player> action) {
+            synchronized (mutex) {
+                // Manual viewers
+                for (Player player : ViewEngine.this.manualViewers) action.accept(player);
+                // Auto
+                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                if (auto != null) {
+                    for (List<Player> players : auto) {
+                        for (Player player : players) action.accept(player);
+                    }
+                }
             }
         }
 
