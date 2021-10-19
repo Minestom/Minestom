@@ -28,10 +28,6 @@ final class EntityTrackerImpl implements EntityTracker {
     static List<EntityTracker.Target<?>> TARGETS = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
     private static final LongFunction<List<Entity>> LIST_SUPPLIER = l -> new CopyOnWriteArrayList<>();
 
-    static <T extends Entity> EntityTracker.Target<T> create(Class<T> type) {
-        return new TargetImpl<>(type, TARGET_COUNTER.getAndIncrement());
-    }
-
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
     private final TargetEntry<Entity>[] entries = TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
@@ -175,26 +171,6 @@ final class EntityTrackerImpl implements EntityTracker {
         void removeFromChunk(long index, T entity) {
             List<T> entities = chunkEntities.get(index);
             if (entities != null) entities.remove(entity);
-        }
-    }
-
-    private static final class TargetImpl<E extends Entity> implements EntityTracker.Target<E> {
-        private final Class<E> type;
-        private final int ordinal;
-
-        public TargetImpl(Class<E> type, int ordinal) {
-            this.type = type;
-            this.ordinal = ordinal;
-        }
-
-        @Override
-        public Class<E> type() {
-            return type;
-        }
-
-        @Override
-        public int ordinal() {
-            return ordinal;
         }
     }
 }

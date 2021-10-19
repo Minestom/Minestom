@@ -105,14 +105,28 @@ public interface EntityTracker {
      */
     @ApiStatus.NonExtendable
     interface Target<E extends Entity> {
-        Target<Entity> ENTITIES = EntityTrackerImpl.create(Entity.class);
-        Target<Player> PLAYERS = EntityTrackerImpl.create(Player.class);
-        Target<ItemEntity> ITEMS = EntityTrackerImpl.create(ItemEntity.class);
-        Target<ExperienceOrb> EXPERIENCE_ORBS = EntityTrackerImpl.create(ExperienceOrb.class);
+        Target<Entity> ENTITIES = create(Entity.class);
+        Target<Player> PLAYERS = create(Player.class);
+        Target<ItemEntity> ITEMS = create(ItemEntity.class);
+        Target<ExperienceOrb> EXPERIENCE_ORBS = create(ExperienceOrb.class);
 
         Class<E> type();
 
         int ordinal();
+
+        private static <T extends Entity> EntityTracker.Target<T> create(Class<T> type) {
+            return new Target<>() {
+                @Override
+                public Class<T> type() {
+                    return type;
+                }
+
+                @Override
+                public int ordinal() {
+                    return EntityTrackerImpl.TARGET_COUNTER.getAndIncrement();
+                }
+            };
+        }
     }
 
     /**
