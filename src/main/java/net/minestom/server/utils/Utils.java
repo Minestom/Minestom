@@ -1,6 +1,5 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -108,31 +107,6 @@ public final class Utils {
         final long uuidLeast = (long) array[2] << 32 | array[3] & 0xFFFFFFFFL;
 
         return new UUID(uuidMost, uuidLeast);
-    }
-
-    public static void writePaletteBlocks(ByteBuffer buffer, Palette palette) {
-        final short blockCount = palette.getBlockCount();
-        final int bitsPerEntry = palette.getBitsPerEntry();
-
-        buffer.putShort(blockCount);
-        buffer.put((byte) bitsPerEntry);
-
-        // Palette
-        if (bitsPerEntry < 9) {
-            // Palette has to exist
-            final short[] paletteBlockArray = palette.getPaletteBlockArray();
-            final int paletteSize = palette.getLastPaletteIndex() + 1;
-            writeVarInt(buffer, paletteSize);
-            for (int i = 0; i < paletteSize; i++) {
-                writeVarInt(buffer, paletteBlockArray[i]);
-            }
-        }
-
-        final long[] blocks = palette.getBlocks();
-        writeVarInt(buffer, blocks.length);
-        for (long datum : blocks) {
-            buffer.putLong(datum);
-        }
     }
 
     private static final int[] MAGIC = {
