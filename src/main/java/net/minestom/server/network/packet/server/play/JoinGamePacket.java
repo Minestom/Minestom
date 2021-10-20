@@ -24,6 +24,7 @@ public class JoinGamePacket implements ServerPacket {
     public long hashedSeed;
     public int maxPlayers = 0; // Unused
     public int viewDistance;
+    public int simulationViewDistance = 8;
     public boolean reducedDebugInfo = false;
     public boolean enableRespawnScreen = true;
     public boolean isDebug = false;
@@ -63,6 +64,7 @@ public class JoinGamePacket implements ServerPacket {
         writer.writeLong(hashedSeed);
         writer.writeVarInt(maxPlayers);
         writer.writeVarInt(viewDistance);
+        writer.writeVarInt(simulationViewDistance);
         writer.writeBoolean(reducedDebugInfo);
         writer.writeBoolean(enableRespawnScreen);
         //debug

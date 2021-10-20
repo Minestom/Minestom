@@ -11,6 +11,8 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
+import net.minestom.server.network.packet.server.play.data.ChunkPacketData;
+import net.minestom.server.network.packet.server.play.data.LightPacketData;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -20,10 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -125,14 +124,14 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        player.sendPackets(lightCache, chunkCache);
+        player.sendPacket(chunkCache.retrieve());
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        sendPacketsToViewers(lightCache, chunkCache);
+        sendPacketToViewers(chunkCache.retrieve());
     }
 
     @NotNull
@@ -153,42 +152,49 @@ public class DynamicChunk extends Chunk {
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {
-        ChunkDataPacket packet = new ChunkDataPacket();
-        packet.biomes = biomes;
-        packet.chunkX = chunkX;
-        packet.chunkZ = chunkZ;
-        packet.sections = sectionMap.clone(); // TODO deep clone
-        packet.entries = entries.clone();
-
+        final NBTCompound heightmapsNBT;
         // TODO: don't hardcode heightmaps
         // Heightmap
-        int dimensionHeight = getInstance().getDimensionType().getHeight();
-        int[] motionBlocking = new int[16 * 16];
-        int[] worldSurface = new int[16 * 16];
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                motionBlocking[x + z * 16] = 0;
-                worldSurface[x + z * 16] = dimensionHeight - 1;
+        {
+            int dimensionHeight = getInstance().getDimensionType().getHeight();
+            int[] motionBlocking = new int[16 * 16];
+            int[] worldSurface = new int[16 * 16];
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    motionBlocking[x + z * 16] = 0;
+                    worldSurface[x + z * 16] = dimensionHeight - 1;
+                }
             }
+            final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
+            heightmapsNBT = new NBTCompound()
+                    .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
+                    .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
         }
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        packet.heightmapsNBT = new NBTCompound()
-                .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
-                .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
 
+        ChunkDataPacket packet = new ChunkDataPacket();
+        packet.chunkX = chunkX;
+        packet.chunkZ = chunkZ;
+        // TODO deep clone sections
+        packet.chunkData = new ChunkPacketData(heightmapsNBT, sectionMap, entries);
+        packet.lightData = createLightData();
         return packet;
     }
 
     private synchronized @NotNull UpdateLightPacket createLightPacket() {
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
-
         UpdateLightPacket updateLightPacket = new UpdateLightPacket();
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
+        updateLightPacket.lightData = createLightData();
+        return updateLightPacket;
+    }
 
-        updateLightPacket.skyLight = skyLights;
-        updateLightPacket.blockLight = blockLights;
+    private LightPacketData createLightData() {
+        BitSet skyMask = new BitSet();
+        BitSet blockMask = new BitSet();
+        BitSet emptySkyMask = new BitSet();
+        BitSet emptyBlockMask = new BitSet();
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
 
         final var sections = getSections();
         for (var entry : sections.entrySet()) {
@@ -200,14 +206,17 @@ public class DynamicChunk extends Chunk {
 
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
-                updateLightPacket.skyLightMask.set(index);
+                skyMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
-                updateLightPacket.blockLightMask.set(index);
+                blockMask.set(index);
             }
         }
-        return updateLightPacket;
+        return new LightPacketData(true,
+                skyMask, blockMask,
+                emptySkyMask, emptyBlockMask,
+                skyLights, blockLights);
     }
 
     private @Nullable Section getOptionalSection(int y) {
