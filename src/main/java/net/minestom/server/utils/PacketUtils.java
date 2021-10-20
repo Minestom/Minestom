@@ -271,34 +271,28 @@ public final class PacketUtils {
         }
 
         private synchronized void process(Viewable viewable) {
-            if (buffer.writerOffset() == 0) {
-                clear();
-                return;
-            }
+            final int size = buffer.writerOffset();
+            if (size == 0) return;
             for (Player player : viewable.getViewers()) {
                 final PlayerConnection connection = player.getPlayerConnection();
-                int lastWrite = 0;
-                final LongList pairs;
-                if (!entityIdMap.isEmpty() && (pairs = entityIdMap.get(player.getEntityId())) != null) {
-                    for (LongIterator it = pairs.longIterator(); it.hasNext(); ) {
+                final LongList pairs = entityIdMap.get(player.getEntityId());
+                if (pairs != null) {
+                    // Ensure that we skip the specified parts of the buffer
+                    int lastWrite = 0;
+                    for (LongIterator it = pairs.iterator(); it.hasNext(); ) {
                         final long offsets = it.nextLong();
                         final int start = (int) (offsets >> 32);
-                        final int end = (int) offsets;
-                        if (start != lastWrite) {
-                            ByteBuffer slice = buffer.view(lastWrite, start);
-                            writeTo(connection, slice);
-                        }
-                        lastWrite = end;
+                        if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
+                        lastWrite = (int) offsets; // End = last 32 bits
                     }
-                }
-                // Write remaining
-                final int remaining = buffer.writerOffset() - lastWrite;
-                if (remaining > 0) {
-                    ByteBuffer remainSlice = buffer.view(lastWrite, buffer.writerOffset());
-                    writeTo(connection, remainSlice);
+                    if (size != lastWrite) writeTo(connection, buffer.view(lastWrite, size));
+                } else {
+                    // Write all
+                    writeTo(connection, buffer.view(0, size));
                 }
             }
-            clear();
+            this.buffer.clear();
+            this.entityIdMap.clear();
         }
 
         private static void writeTo(PlayerConnection connection, ByteBuffer buffer) {
@@ -307,11 +301,6 @@ public final class PacketUtils {
                 return;
             }
             // TODO for non-socket connection
-        }
-
-        private void clear() {
-            this.entityIdMap.clear();
-            this.buffer.clear();
         }
     }
 }
