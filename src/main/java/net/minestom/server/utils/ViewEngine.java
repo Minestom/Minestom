@@ -87,12 +87,17 @@ public final class ViewEngine {
         // In this case, it should be neither in the manual nor exception map
         synchronized (mutex) {
             if (setContain(manualViewers, entity)) return false;
-            return autoViewPredicate.test((Player) entity);
+            return isAutoValid((Player) entity);
         }
     }
 
     public Set<Player> asSet() {
         return set;
+    }
+
+    private boolean isAutoValid(Player player) {
+        // Gets if the given auto-viewable player is actually viewed.
+        return player != entity && autoViewPredicate.test(player);
     }
 
     final class SetImpl extends AbstractSet<Player> {
@@ -112,11 +117,28 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (autoViewPredicate.test(player)) size++;
+                            if (isAutoValid(player)) size++;
                         }
                     }
                 }
                 return size;
+            }
+        }
+
+        @Override
+        public boolean isEmpty() {
+            synchronized (mutex) {
+                if (!ViewEngine.this.manualViewers.isEmpty()) return false;
+                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                if (auto != null) {
+                    for (List<Player> players : auto) {
+                        if (players.isEmpty()) continue;
+                        for (Player player : players) {
+                            if (isAutoValid(player)) return false;
+                        }
+                    }
+                }
+                return true;
             }
         }
 
@@ -129,7 +151,7 @@ public final class ViewEngine {
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
-                        return players.contains(o) && autoViewPredicate.test((Player) o);
+                        return players.contains(o) && isAutoValid((Player) o);
                     }
                 }
             }
@@ -147,7 +169,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (autoViewPredicate.test(player)) action.accept(player);
+                            if (isAutoValid(player)) action.accept(player);
                         }
                     }
                 }
@@ -161,9 +183,9 @@ public final class ViewEngine {
             private Player next;
 
             private Player getMaybeNext() {
-                if(current.hasNext()) return current.next();
+                if (current.hasNext()) return current.next();
                 this.current = nextIterator();
-                if(current != null && current.hasNext()) return current.next();
+                if (current != null && current.hasNext()) return current.next();
                 return null;
             }
 
@@ -175,7 +197,7 @@ public final class ViewEngine {
                         do {
                             next = getMaybeNext();
                             if (next == null) return false;
-                        } while (autoIterator ? !ViewEngine.this.autoViewPredicate.test(next) : next == entity);
+                        } while (autoIterator ? !isAutoValid(next) : next == entity);
                     }
                 }
                 return true;
