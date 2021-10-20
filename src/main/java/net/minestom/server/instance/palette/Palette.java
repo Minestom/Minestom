@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +18,7 @@ import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
  * 0 is always interpreted as being air, reason being that the block array will be filled with it during initialization.
  */
 @ApiStatus.Internal
-public final class Palette implements PublicCloneable<Palette> {
+public final class Palette implements Writeable, PublicCloneable<Palette> {
 
     /**
      * The maximum bits per entry value.
@@ -284,6 +286,26 @@ public final class Palette implements PublicCloneable<Palette> {
             return MAXIMUM_BITS_PER_ENTRY;
         }
         return bitsPerEntry;
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeByte((byte) bitsPerEntry);
+        // Palette
+        if (bitsPerEntry < 9) {
+            // Palette has to exist
+            final short[] paletteBlockArray = getPaletteBlockArray();
+            final int paletteSize = getLastPaletteIndex() + 1;
+            writer.writeVarInt(paletteSize);
+            for (int i = 0; i < paletteSize; i++) {
+                writer.writeVarInt(paletteBlockArray[i]);
+            }
+        }
+        // Raw
+        writer.writeVarInt(blocks.length);
+        for (long datum : blocks) {
+            writer.writeLong(datum);
+        }
     }
 
     @Override
