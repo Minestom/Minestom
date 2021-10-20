@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play.data;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
@@ -28,16 +28,19 @@ public final class ChunkPacketData implements Writeable {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeNBT("", this.heightmaps);
         // Data
-        ByteBuffer localBuffer = PacketUtils.localBuffer();
-        for (int i = 0; i < 0; i++) { // FIXME: palettes
-            final Section section = Objects.requireNonNullElseGet(sections.get(i), Section::new);
-            final Palette blockPalette = section.getPalette();
-            writer.writeShort(blockPalette.getBlockCount());
-            blockPalette.write(writer); // Blocks
-            new Palette(2, 2).write(writer);  // Biomes
+        {
+            final ByteBuffer buffer = writer.getBuffer();
+            final int index = Utils.writeEmptyVarIntHeader(buffer);
+            for (int i = 0; i < 16; i++) { // TODO: variable section count
+                final Section section = Objects.requireNonNullElseGet(sections.get(i), Section::new);
+                final Palette blockPalette = section.getPalette();
+                writer.writeShort(blockPalette.getBlockCount());
+                blockPalette.write(writer); // Blocks
+                new Palette(2, 2).write(writer);  // Biomes
+            }
+            final int dataLength = buffer.position() - index - 3;
+            Utils.writeVarIntHeader(buffer, index, dataLength);
         }
-        writer.writeVarInt(localBuffer.position());
-        writer.write(localBuffer);
         // Block entities
         writer.writeVarInt(0);
     }
