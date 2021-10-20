@@ -534,20 +534,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final boolean firstSpawn = currentInstance == null;
             final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
             final Thread runThread = Thread.currentThread();
-            CompletableFuture<Void> future = new CompletableFuture<>();
-            final Consumer<Instance> runnable = (i) -> {
-                spawnPlayer(i, spawnPosition, firstSpawn, dimensionChange, true);
-                future.complete(null);
-            };
-            instance.loadOptionalChunk(spawnPosition)
-                    .thenRun(() -> {
-                        if (runThread == Thread.currentThread()) {
-                            runnable.accept(instance);
-                        } else {
-                            instance.scheduleNextTick(runnable);
-                        }
-                    });
-            return future;
+            final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition, firstSpawn, dimensionChange, true);
+            // Wait for all surrounding chunks to load
+            List<CompletableFuture<Chunk>> futures = new ArrayList<>();
+            ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(),
+                    (chunkX, chunkZ) -> futures.add(instance.loadOptionalChunk(chunkX, chunkZ)));
+            return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).thenRun(() -> {
+                if (runThread == Thread.currentThread()) {
+                    runnable.accept(instance);
+                } else {
+                    instance.scheduleNextTick(runnable);
+                }
+            });
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
