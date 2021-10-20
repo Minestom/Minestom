@@ -184,8 +184,7 @@ public final class ViewEngine {
             @Override
             public boolean hasNext() {
                 synchronized (mutex) {
-                    if (next != null) return true;
-                    return (next = findNext()) != null;
+                    return next != null || (next = findNext()) != null;
                 }
             }
 
