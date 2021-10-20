@@ -4,7 +4,6 @@ import net.minestom.server.Viewable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,48 +181,47 @@ public final class ViewEngine {
             private int index;
             private Player next;
 
-            private Player getMaybeNext() {
-                if (current.hasNext()) return current.next();
-                this.current = nextIterator();
-                if (current != null && current.hasNext()) return current.next();
-                return null;
-            }
-
             @Override
-            @Contract(mutates = "this")
             public boolean hasNext() {
                 synchronized (mutex) {
-                    if (next == null) {
-                        do {
-                            next = getMaybeNext();
-                            if (next == null) return false;
-                        } while (autoIterator ? !isAutoValid(next) : next == entity);
-                    }
+                    if (next != null) return true;
+                    return (next = findNext()) != null;
                 }
-                return true;
             }
 
             @Override
             public Player next() {
                 synchronized (mutex) {
-                    final Player value = this.next;
-                    if (value == null && hasNext()) return this.next;
+                    if (next == null && !hasNext()) return null;
+                    final Player temp = this.next;
                     this.next = null;
-                    return value;
+                    return temp;
                 }
             }
 
-            private Iterator<Player> nextIterator() {
-                final List<List<Player>> auto = autoViewable;
-                if (auto == null) return null;
-                while (true) {
-                    final int updated = index++;
-                    if (updated >= auto.size()) return null;
-                    final List<Player> players = auto.get(updated);
-                    if (players.isEmpty()) continue;
-                    this.autoIterator = true;
-                    return players.iterator();
+            private Player findNext() {
+                Player result;
+                if ((result = nextValidEntry(current)) != null) return result;
+                this.autoIterator = true;
+                if (autoViewable == null) return null;
+                for (int i = index + 1; i < autoViewable.size(); i++) {
+                    final List<Player> players = autoViewable.get(i);
+                    Iterator<Player> iterator = players.iterator();
+                    if ((result = nextValidEntry(iterator)) != null) {
+                        this.current = iterator;
+                        this.index = i;
+                        return result;
+                    }
                 }
+                return null;
+            }
+
+            private Player nextValidEntry(Iterator<Player> iterator) {
+                while (iterator.hasNext()) {
+                    final Player player = iterator.next();
+                    if (autoIterator ? isAutoValid(player) : player != entity) return player;
+                }
+                return null;
             }
         }
     }
