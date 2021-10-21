@@ -17,7 +17,7 @@ import java.io.IOException;
 public class BlockEntityDataPacket implements ServerPacket {
 
     public Point blockPosition;
-    public byte action;
+    public int action;
     public NBTCompound nbtCompound;
 
     public BlockEntityDataPacket() {
@@ -39,7 +39,7 @@ public class BlockEntityDataPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         blockPosition = reader.readBlockPosition();
-        action = reader.readByte();
+        action = reader.readVarInt();
         try {
             NBT tag = reader.readTag();
             if (tag instanceof NBTCompound) {
