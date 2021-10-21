@@ -227,6 +227,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         joinGamePacket.dimensionType = dimensionType;
         joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.viewDistance = MinecraftServer.getChunkViewDistance();
+        joinGamePacket.simulationDistance = MinecraftServer.getChunkViewDistance();
         joinGamePacket.reducedDebugInfo = false;
         joinGamePacket.isFlat = levelFlat;
         playerConnection.sendPacket(joinGamePacket);
