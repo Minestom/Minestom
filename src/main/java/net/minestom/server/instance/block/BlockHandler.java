@@ -86,8 +86,7 @@ public interface BlockHandler {
      * Will in the future rely on sealed classes (https://openjdk.java.net/jeps/409)
      * and record pattern for the implementations (https://openjdk.java.net/jeps/405).
      */
-    @ApiStatus.NonExtendable
-    class Placement {
+    sealed class Placement permits PlayerPlacement {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -155,8 +154,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Destroy {
+    sealed class Destroy permits PlayerDestroy {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -195,8 +193,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Interaction {
+    final class Interaction {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -233,8 +230,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Touch {
+    final class Touch {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -265,8 +261,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Tick {
+    final class Tick {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
