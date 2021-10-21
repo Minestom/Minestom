@@ -185,7 +185,7 @@ public class DynamicChunk extends Chunk {
         ChunkDataPacket packet = new ChunkDataPacket();
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
-        packet.chunkData = new ChunkData(heightmapsNBT, writer.getBuffer().flip(), entries);
+        packet.chunkData = new ChunkData(heightmapsNBT, writer.toByteArray(), entries);
         packet.lightData = createLightData();
         return packet;
     }
