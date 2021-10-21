@@ -44,7 +44,7 @@ public final class ChunkData implements Writeable {
             writer.writeByte((byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
             writer.writeShort((short) point.blockY()); // y
 
-            writer.writeVarInt(0); // TODO block entity id
+            writer.writeVarInt(registry.blockEntityId());
 
 
             final NBTCompound resultNbt = new NBTCompound();
