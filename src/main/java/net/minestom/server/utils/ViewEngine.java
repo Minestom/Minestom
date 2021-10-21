@@ -191,7 +191,7 @@ public final class ViewEngine {
             @Override
             public Player next() {
                 synchronized (mutex) {
-                    if (next == null && !hasNext()) return null;
+                    if (next == null) return findNext();
                     final Player temp = this.next;
                     this.next = null;
                     return temp;
