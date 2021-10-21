@@ -26,7 +26,8 @@ import java.util.function.UnaryOperator;
  * Represents an inventory where items can be modified/retrieved.
  */
 @ApiStatus.NonExtendable
-public abstract class AbstractInventory implements InventoryClickHandler, EventHandler<InventoryEvent>, TagHandler {
+public sealed abstract class AbstractInventory implements InventoryClickHandler, EventHandler<InventoryEvent>, TagHandler
+        permits Inventory, PlayerInventory {
 
     private final int size;
     protected final ItemStack[] itemStacks;
@@ -68,7 +69,6 @@ public abstract class AbstractInventory implements InventoryClickHandler, EventH
      *
      * @param slot      the internal slot id
      * @param itemStack the item to insert (use air instead of null)
-     *
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      */
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {

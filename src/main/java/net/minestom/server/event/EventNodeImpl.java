@@ -17,7 +17,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-class EventNodeImpl<T extends Event> implements EventNode<T> {
+non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final Object GLOBAL_CHILD_LOCK = new Object();
 
     private final Map<Class<? extends T>, Handle<T>> handleMap = new ConcurrentHashMap<>();
