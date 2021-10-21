@@ -28,6 +28,9 @@ public class Team implements PacketGroupingAudience {
 
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
+    private static final byte ALLOW_FRIENDLY_FIRE_BIT = 0x01;
+    private static final byte SEE_INVISIBLE_PLAYERS_BIT = 0x02;
+
     /**
      * A collection of all registered entities who are on the team.
      */
@@ -294,6 +297,44 @@ public class Team implements PacketGroupingAudience {
     public void updateFriendlyFlags(byte flag) {
         this.setFriendlyFlags(flag);
         this.sendUpdatePacket();
+    }
+
+    private boolean getFriendlyFlagBit(byte index) {
+        return (this.friendlyFlags & index) == index;
+    }
+
+    private void setFriendlyFlagBit(byte index, boolean value) {
+        if (value) {
+            this.friendlyFlags |= index;
+        } else {
+            this.friendlyFlags &= ~index;
+        }
+    }
+
+    public void setAllowFriendlyFire(boolean value) {
+        this.setFriendlyFlagBit(ALLOW_FRIENDLY_FIRE_BIT, value);
+    }
+
+    public void updateAllowFriendlyFire(boolean value) {
+        this.setAllowFriendlyFire(value);
+        this.sendUpdatePacket();
+    }
+
+    public boolean isAllowFriendlyFire() {
+        return this.getFriendlyFlagBit(ALLOW_FRIENDLY_FIRE_BIT);
+    }
+
+    public void setSeeInvisiblePlayers(boolean value) {
+        this.setFriendlyFlagBit(SEE_INVISIBLE_PLAYERS_BIT, value);
+    }
+
+    public void updateSeeInvisiblePlayers(boolean value) {
+        this.setSeeInvisiblePlayers(value);
+        this.sendUpdatePacket();
+    }
+
+    public boolean isSeeInvisiblePlayers() {
+        return this.getFriendlyFlagBit(SEE_INVISIBLE_PLAYERS_BIT);
     }
 
     /**

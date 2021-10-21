@@ -10,16 +10,16 @@ import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.CachedPacket;
-import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
 
-    private volatile long lastChangeTime;
+    private long lastChange;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
@@ -49,7 +49,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        this.lastChangeTime = System.currentTimeMillis();
+        this.lastChange = System.currentTimeMillis();
+        this.chunkCache.invalidate();
+        this.lightCache.invalidate();
         // Update pathfinder
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
@@ -118,35 +120,22 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public long getLastChangeTime() {
-        return lastChangeTime;
+        return lastChange;
     }
 
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        final PlayerConnection connection = player.getPlayerConnection();
-        final long lastChange = getLastChangeTime();
-        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
-        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
-        if (connection instanceof PlayerSocketConnection) {
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.sendFramedPacket(lightPacket);
-            socketConnection.sendFramedPacket(chunkPacket);
-        } else {
-            connection.sendPacket(lightPacket.packet());
-            connection.sendPacket(chunkPacket.packet());
-        }
+        player.sendPacket(lightCache.retrieve());
+        player.sendPacket(chunkCache.retrieve());
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        final long lastChange = getLastChangeTime();
-        final FramedPacket lightPacket = lightCache.retrieveFramedPacket(lastChange);
-        final FramedPacket chunkPacket = chunkCache.retrieveFramedPacket(lastChange);
-        sendPacketToViewers(lightPacket.packet());
-        sendPacketToViewers(chunkPacket.packet());
+        sendPacketToViewers(lightCache.retrieve());
+        sendPacketToViewers(chunkCache.retrieve());
     }
 
     @NotNull
@@ -173,6 +162,23 @@ public class DynamicChunk extends Chunk {
         packet.chunkZ = chunkZ;
         packet.sections = sectionMap.clone(); // TODO deep clone
         packet.entries = entries.clone();
+
+        // TODO: don't hardcode heightmaps
+        // Heightmap
+        int dimensionHeight = getInstance().getDimensionType().getHeight();
+        int[] motionBlocking = new int[16 * 16];
+        int[] worldSurface = new int[16 * 16];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                motionBlocking[x + z * 16] = 0;
+                worldSurface[x + z * 16] = dimensionHeight - 1;
+            }
+        }
+        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
+        packet.heightmapsNBT = new NBTCompound()
+                .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
+                .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+
         return packet;
     }
 

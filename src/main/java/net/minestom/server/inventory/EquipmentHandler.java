@@ -8,9 +8,6 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots.
  */
@@ -186,24 +183,17 @@ public interface EquipmentHandler {
      */
     default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
-
-        final Entity entity = (Entity) this;
-
         final EquipmentSlot[] slots = EquipmentSlot.values();
-
-        List<ItemStack> itemStacks = new ArrayList<>(slots.length);
-
-        // Fill items
-        for (EquipmentSlot slot : slots) {
-            final ItemStack equipment = getEquipment(slot);
-            itemStacks.add(equipment);
+        ItemStack[] equipments = new ItemStack[slots.length];
+        for (int i = 0; i < equipments.length; i++) {
+            final EquipmentSlot slot = slots[i];
+            equipments[i] = getEquipment(slot);
         }
-
         // Create equipment packet
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = entity.getEntityId();
+        equipmentPacket.entityId = ((Entity) this).getEntityId();
         equipmentPacket.slots = slots;
-        equipmentPacket.itemStacks = itemStacks.toArray(new ItemStack[0]);
+        equipmentPacket.itemStacks = equipments;
         return equipmentPacket;
     }
 

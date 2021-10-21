@@ -103,7 +103,7 @@ public abstract class PlayerConnection {
     public abstract void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating);
 
     @ApiStatus.Experimental
-    public void sendFramedPacket(@NotNull FramedPacket framedPacket) {
+    public void sendPacket(@NotNull FramedPacket framedPacket) {
         this.sendPacket(framedPacket.packet());
     }
 

@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
@@ -51,6 +52,7 @@ import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -98,6 +100,8 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+
+    private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -274,7 +278,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Recipes end
 
         // Tags
-        this.playerConnection.sendFramedPacket(TagsPacket.DEFAULT_TAGS);
+        this.playerConnection.sendPacket(TagsPacket.DEFAULT_TAGS);
 
         // Some client updates
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
@@ -447,9 +451,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(new PlayerDisconnectEvent(this));
         super.remove();
         this.packets.clear();
-        if (getOpenInventory() != null) {
-            getOpenInventory().removeViewer(this);
-        }
+        final Inventory currentInventory = getOpenInventory();
+        if (currentInventory != null) currentInventory.removeViewer(this);
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
         // Advancement tabs cache
         {
@@ -466,6 +469,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
         // Remove from the tab-list
         PacketUtils.broadcastPacket(getRemovePlayerToList());
+
+        // Prevent the player from being stuck in loading screen, or just unable to interact with the server
+        // This should be considered as a bug, since the player will ultimately time out anyway.
+        if (playerConnection.isOnline()) kick(REMOVE_MESSAGE);
     }
 
     @Override
@@ -484,6 +491,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         this.playerConnection.sendPacket(packet);
         super.sendPacketToViewersAndSelf(packet);
+    }
+
+    @Override
+    public void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
+        this.playerConnection.sendPacket(framedPacket);
+        super.sendPacketToViewersAndSelf(framedPacket);
     }
 
     /**
@@ -1269,6 +1282,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Experimental
     public void sendPacket(@NotNull ServerPacket packet) {
         this.playerConnection.sendPacket(packet);
+    }
+
+    @ApiStatus.Experimental
+    public void sendPacket(@NotNull FramedPacket framedPacket) {
+        this.playerConnection.sendPacket(framedPacket);
     }
 
     /**

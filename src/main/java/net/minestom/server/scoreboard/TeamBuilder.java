@@ -128,7 +128,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder updateAllowFriendlyFire() {
-        return this.updateFriendlyFlags((byte) 0x01);
+        this.team.updateAllowFriendlyFire(true);
+        return this;
     }
 
     /**
@@ -137,7 +138,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder updateSeeInvisiblePlayers() {
-        return this.updateFriendlyFlags((byte) 0x01);
+        this.team.updateSeeInvisiblePlayers(true);
+        return this;
     }
 
     /**
@@ -239,7 +241,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder allowFriendlyFire() {
-        return this.friendlyFlags((byte) 0x01);
+        this.team.setAllowFriendlyFire(true);
+        return this;
     }
 
     /**
@@ -250,7 +253,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder seeInvisiblePlayers() {
-        return this.friendlyFlags((byte) 0x01);
+        this.team.setSeeInvisiblePlayers(true);
+        return this;
     }
 
     /**

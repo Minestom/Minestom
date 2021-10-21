@@ -1,19 +1,20 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, CancellableEvent {
+public class PlayerBlockInteractEvent implements PlayerEvent, EntityInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final Player.Hand hand;

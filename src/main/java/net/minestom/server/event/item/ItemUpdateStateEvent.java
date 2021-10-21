@@ -1,12 +1,13 @@
 package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemUpdateStateEvent implements PlayerEvent, ItemEvent {
+public class ItemUpdateStateEvent implements PlayerEvent, EntityInstanceEvent, ItemEvent {
 
     private final Player player;
     private final Player.Hand hand;

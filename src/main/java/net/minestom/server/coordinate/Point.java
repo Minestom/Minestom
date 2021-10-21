@@ -246,4 +246,17 @@ public sealed interface Point permits Vec, Pos {
     default boolean sameChunk(@NotNull Point point) {
         return chunkX() == point.chunkX() && chunkZ() == point.chunkZ();
     }
+
+    /**
+     * Gets if two points are in the same chunk.
+     *
+     * @param point the point to compare two
+     * @return true if 'this' is in the same chunk as {@code point}
+     */
+    @ApiStatus.Experimental
+    default boolean sameBlock(@NotNull Point point) {
+        return blockX() == point.blockX() &&
+                blockY() == point.blockY() &&
+                blockZ() == point.blockZ();
+    }
 }

@@ -60,8 +60,7 @@ public class FollowTargetGoal extends GoalSelector {
             navigator.setPathTo(null);
             return;
         }
-        if (navigator.getPathPosition() == null ||
-                (!navigator.getPathPosition().samePoint(lastTargetPos))) {
+        if (navigator.getPathPosition() == null || !navigator.getPathPosition().samePoint(lastTargetPos)) {
             navigator.setPathTo(lastTargetPos);
         } else {
             forceEnd = true;
