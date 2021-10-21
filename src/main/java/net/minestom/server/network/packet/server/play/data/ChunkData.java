@@ -10,28 +10,27 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Objects;
 
 public final class ChunkData implements Writeable {
     private final NBTCompound heightmaps;
-    private final ByteBuffer data;
+    private final byte[] data;
     private final Map<Integer, Block> blockEntities;
 
-    public ChunkData(NBTCompound heightmaps, ByteBuffer data, Map<Integer, Block> blockEntities) {
+    public ChunkData(NBTCompound heightmaps, byte[] data, Map<Integer, Block> blockEntities) {
         this.heightmaps = heightmaps.deepClone();
-        this.data = data.asReadOnlyBuffer();
+        this.data = data.clone();
         this.blockEntities = Map.copyOf(blockEntities);
     }
 
     @Override
-    public synchronized void write(@NotNull BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         // Heightmaps
         writer.writeNBT("", this.heightmaps);
         // Data
-        writer.writeVarInt(data.position(0).remaining());
-        writer.write(data);
+        writer.writeVarInt(data.length);
+        writer.writeBytes(data);
         // Block entities
         writer.writeVarInt(blockEntities.size());
         for (var entry : blockEntities.entrySet()) {
