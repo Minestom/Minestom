@@ -82,9 +82,6 @@ public interface BlockHandler {
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
-     * <p>
-     * Will in the future rely on sealed classes (https://openjdk.java.net/jeps/409)
-     * and record pattern for the implementations (https://openjdk.java.net/jeps/405).
      */
     sealed class Placement permits PlayerPlacement {
         private final Block block;
