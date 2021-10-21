@@ -1,12 +1,12 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -27,7 +27,7 @@ public class BlockEntityDataPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeBlockPosition(blockPosition);
-        writer.writeByte(action);
+        writer.writeVarInt(action);
         if (nbtCompound != null) {
             writer.writeNBT("", nbtCompound);
         } else {
