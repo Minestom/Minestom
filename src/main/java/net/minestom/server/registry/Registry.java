@@ -159,6 +159,7 @@ public final class Registry {
         private final boolean solid;
         private final boolean liquid;
         private final String blockEntity;
+        private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
 
         private BlockEntry(String namespace, JsonObject main, JsonObject override) {
@@ -175,7 +176,19 @@ public final class Registry {
             this.air = getBoolean("air", false);
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid", false);
-            this.blockEntity = getString("blockEntity", null);
+
+            // Block entity
+            {
+                final JsonElement entityElement = element("blockEntity");
+                if (entityElement instanceof JsonObject) {
+                    JsonObject entityObject = (JsonObject) entityElement;
+                    this.blockEntity = entityObject.get("namespace").getAsString();
+                    this.blockEntityId = entityObject.get("id").getAsInt();
+                } else {
+                    this.blockEntity = null;
+                    this.blockEntityId = 0;
+                }
+            }
             {
                 final String materialNamespace = getString("correspondingItem", null);
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
@@ -236,6 +249,10 @@ public final class Registry {
 
         public @Nullable String blockEntity() {
             return blockEntity;
+        }
+
+        public int blockEntityId() {
+            return blockEntityId;
         }
 
         public @Nullable Material material() {
