@@ -2,16 +2,16 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.network.packet.server.play.data.ChunkPacketData;
-import net.minestom.server.network.packet.server.play.data.LightPacketData;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class ChunkDataPacket implements ServerPacket {
     public int chunkX, chunkZ;
-    public ChunkPacketData chunkData;
-    public LightPacketData lightData;
+    public ChunkData chunkData;
+    public LightData lightData;
 
     public ChunkDataPacket() {
     }

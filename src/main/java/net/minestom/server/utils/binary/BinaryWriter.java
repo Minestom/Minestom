@@ -312,8 +312,8 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void write(@NotNull ByteBuffer buffer) {
-        ensureSize(buffer.position());
-        this.buffer.put(buffer.flip());
+        ensureSize(buffer.remaining());
+        this.buffer.put(buffer);
     }
 
     public void write(@NotNull BinaryWriter writer) {

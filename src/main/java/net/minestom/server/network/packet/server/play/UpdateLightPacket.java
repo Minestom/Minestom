@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.network.packet.server.play.data.LightPacketData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +11,7 @@ public class UpdateLightPacket implements ServerPacket {
 
     public int chunkX;
     public int chunkZ;
-    public LightPacketData lightData;
+    public LightData lightData;
 
     /**
      * Default constructor, required for reflection operations.
