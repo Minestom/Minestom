@@ -15,8 +15,7 @@ import java.util.function.DoubleUnaryOperator;
  * Can either be a {@link Pos} or {@link Vec}.
  * Interface will become {@code sealed} in the future.
  */
-@ApiStatus.NonExtendable
-public interface Point {
+public sealed interface Point permits Vec, Pos {
 
     /**
      * Gets the X coordinate.
@@ -176,22 +175,14 @@ public interface Point {
 
     @Contract(pure = true)
     default @NotNull Point relative(@NotNull BlockFace face) {
-        switch (face) {
-            case BOTTOM:
-                return sub(0, 1, 0);
-            case TOP:
-                return add(0, 1, 0);
-            case NORTH:
-                return sub(0, 0, 1);
-            case SOUTH:
-                return add(0, 0, 1);
-            case WEST:
-                return sub(1, 0, 0);
-            case EAST:
-                return add(1, 0, 0);
-            default: // should never be called
-                return this;
-        }
+        return switch (face) {
+            case BOTTOM -> sub(0, 1, 0);
+            case TOP -> add(0, 1, 0);
+            case NORTH -> sub(0, 0, 1);
+            case SOUTH -> add(0, 0, 1);
+            case WEST -> sub(1, 0, 0);
+            case EAST -> add(1, 0, 0);
+        };
     }
 
     /**
