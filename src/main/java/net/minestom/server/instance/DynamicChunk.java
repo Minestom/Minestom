@@ -8,14 +8,16 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.packet.server.play.data.ChunkPacketData;
-import net.minestom.server.network.packet.server.play.data.LightPacketData;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -170,12 +172,20 @@ public class DynamicChunk extends Chunk {
                     .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
                     .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
         }
+        // Data
+        final BinaryWriter writer = new BinaryWriter();
+        for (int i = 0; i < 16; i++) { // TODO: variable section count
+            final Section section = Objects.requireNonNullElseGet(sectionMap.get(i), Section::new);
+            final Palette blockPalette = section.getPalette();
+            writer.writeShort(blockPalette.getBlockCount());
+            blockPalette.write(writer); // Blocks
+            new Palette(2, 2).write(writer);  // Biomes
+        }
 
         ChunkDataPacket packet = new ChunkDataPacket();
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
-        // TODO deep clone sections
-        packet.chunkData = new ChunkPacketData(heightmapsNBT, sectionMap, entries);
+        packet.chunkData = new ChunkData(heightmapsNBT, writer.getBuffer().flip(), entries);
         packet.lightData = createLightData();
         return packet;
     }
@@ -188,7 +198,7 @@ public class DynamicChunk extends Chunk {
         return updateLightPacket;
     }
 
-    private LightPacketData createLightData() {
+    private LightData createLightData() {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();
@@ -213,7 +223,7 @@ public class DynamicChunk extends Chunk {
                 blockMask.set(index);
             }
         }
-        return new LightPacketData(true,
+        return new LightData(true,
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights);
