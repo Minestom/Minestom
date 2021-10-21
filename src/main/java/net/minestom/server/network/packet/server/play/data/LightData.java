@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.BitSet;
 import java.util.List;
 
-public final class LightPacketData implements Writeable {
+public final class LightData implements Writeable {
     private final boolean trustEdges;
     private final BitSet skyMask;
     private final BitSet blockMask;
@@ -16,10 +16,10 @@ public final class LightPacketData implements Writeable {
     private final List<byte[]> skyLight;
     private final List<byte[]> blockLight;
 
-    public LightPacketData(boolean trustEdges,
-                           BitSet skyMask, BitSet blockMask,
-                           BitSet emptySkyMask, BitSet emptyBlockMask,
-                           List<byte[]> skyLight, List<byte[]> blockLight) {
+    public LightData(boolean trustEdges,
+                     BitSet skyMask, BitSet blockMask,
+                     BitSet emptySkyMask, BitSet emptyBlockMask,
+                     List<byte[]> skyLight, List<byte[]> blockLight) {
         this.trustEdges = trustEdges;
         this.skyMask = skyMask;
         this.blockMask = blockMask;
