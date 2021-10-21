@@ -41,8 +41,10 @@ public final class BinaryBuffer {
     }
 
     public void write(ByteBuffer buffer) {
-        final int size = buffer.remaining();
-        this.nioBuffer.put(writerOffset, buffer, 0, size);
+        final int start = buffer.position();
+        final int end = buffer.limit();
+        final int size = end - start;
+        this.nioBuffer.put(writerOffset, buffer, start, size);
         this.writerOffset += size;
     }
 
@@ -106,13 +108,13 @@ public final class BinaryBuffer {
     }
 
     public void writeBytes(byte[] bytes) {
-        this.nioBuffer.position(writerOffset).put(bytes);
+        this.nioBuffer.put(writerOffset, bytes);
         this.writerOffset += bytes.length;
     }
 
     public byte[] readBytes(int length) {
         byte[] bytes = new byte[length];
-        this.nioBuffer.position(readerOffset).get(bytes, 0, length);
+        this.nioBuffer.get(readerOffset, bytes);
         this.readerOffset += length;
         return bytes;
     }
@@ -129,7 +131,7 @@ public final class BinaryBuffer {
     }
 
     public ByteBuffer asByteBuffer(int reader, int writer) {
-        return nioBuffer.position(reader).slice().limit(writer);
+        return nioBuffer.slice(reader, writer);
     }
 
     @ApiStatus.Internal
@@ -138,7 +140,7 @@ public final class BinaryBuffer {
     }
 
     public boolean writeChannel(WritableByteChannel channel) throws IOException {
-        var writeBuffer = asByteBuffer(readerOffset, writerOffset - readerOffset);
+        var writeBuffer = nioBuffer.slice(readerOffset, writerOffset - readerOffset);
         final int count = channel.write(writeBuffer);
         if (count == -1) {
             // EOS
@@ -149,7 +151,7 @@ public final class BinaryBuffer {
     }
 
     public void readChannel(ReadableByteChannel channel) throws IOException {
-        final int count = channel.read(nioBuffer.position(readerOffset));
+        final int count = channel.read(nioBuffer.slice(readerOffset, capacity - readerOffset));
         if (count == -1) {
             // EOS
             throw new IOException("Disconnected");
