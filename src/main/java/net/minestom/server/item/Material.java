@@ -4,15 +4,13 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@ApiStatus.NonExtendable
-public interface Material extends ProtocolObject, Materials {
+public sealed interface Material extends ProtocolObject, Materials permits MaterialImpl {
 
     /**
      * Returns the material registry.

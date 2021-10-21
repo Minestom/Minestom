@@ -7,7 +7,7 @@ plugins {
 group 'net.minestom.server'
 version '1.0'
 
-sourceCompatibility = 1.11
+sourceCompatibility = 17
 
 application {
     mainClass.set("net.minestom.codegen.Generators")

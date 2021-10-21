@@ -3,15 +3,13 @@ package net.minestom.server.potion;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@ApiStatus.NonExtendable
-public interface PotionEffect extends ProtocolObject, PotionEffects {
+public sealed interface PotionEffect extends ProtocolObject, PotionEffects permits PotionEffectImpl {
 
     @Contract(pure = true)
     @NotNull Registry.PotionEffectEntry registry();

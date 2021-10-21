@@ -23,8 +23,7 @@ import java.util.function.Predicate;
  *
  * @param <T> The event type accepted by this node
  */
-@ApiStatus.NonExtendable
-public interface EventNode<T extends Event> {
+public sealed interface EventNode<T extends Event> permits EventNodeImpl {
 
     /**
      * Creates an event node which accepts any event type with no filtering.
