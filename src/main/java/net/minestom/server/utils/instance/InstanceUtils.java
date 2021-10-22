@@ -26,10 +26,7 @@ public final class InstanceUtils {
         }
 
         // InstanceContainer check (copied from)
-        if (instance1 instanceof InstanceContainer && instance2 instanceof InstanceContainer) {
-            final InstanceContainer container1 = (InstanceContainer) instance1;
-            final InstanceContainer container2 = (InstanceContainer) instance2;
-
+        if (instance1 instanceof InstanceContainer container1 && instance2 instanceof InstanceContainer container2) {
             if (container1.getSrcInstance() != null) {
                 return container1.getSrcInstance().equals(container2)
                         && container1.getLastBlockChangeTime() == container2.getLastBlockChangeTime();
@@ -38,8 +35,6 @@ public final class InstanceUtils {
                         && container2.getLastBlockChangeTime() == container1.getLastBlockChangeTime();
             }
         }
-
-
         return false;
     }
 

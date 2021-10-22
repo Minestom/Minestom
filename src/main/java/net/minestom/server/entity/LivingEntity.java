@@ -354,8 +354,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
 
             // Additional hearts support
-            if (this instanceof Player) {
-                final Player player = (Player) this;
+            if (this instanceof Player player) {
                 final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
                     if (remainingDamage > additionalHearts) {
@@ -476,8 +475,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
         if (attributeInstance.getAttribute().isShared()) {
             boolean self = false;
-            if (this instanceof Player) {
-                Player player = (Player) this;
+            if (this instanceof Player player) {
                 PlayerConnection playerConnection = player.playerConnection;
                 // connection null during Player initialization (due to #super call)
                 self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
@@ -681,20 +679,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setTeam(Team team) {
         if (this.team == team) return;
-
-        String member;
-
-        if (this instanceof Player) {
-            Player player = (Player) this;
-            member = player.getUsername();
-        } else {
-            member = this.uuid.toString();
-        }
-
+        String member = this instanceof Player player ? player.getUsername() : uuid.toString();
         if (this.team != null) {
             this.team.removeMember(member);
         }
-
         this.team = team;
         if (team != null) {
             team.addMember(member);

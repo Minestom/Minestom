@@ -1,12 +1,12 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.other.BoatMeta;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
-import net.minestom.server.coordinate.Pos;
 
 public class PlayerVehicleListener {
 
@@ -38,10 +38,7 @@ public class PlayerVehicleListener {
 
     public static void boatSteerListener(ClientSteerBoatPacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
-        if (!(vehicle.getEntityMeta() instanceof BoatMeta))
-            return;
-
-        BoatMeta boat = (BoatMeta) vehicle.getEntityMeta();
+        if (!(vehicle.getEntityMeta() instanceof BoatMeta boat)) return;
         boat.setLeftPaddleTurning(packet.leftPaddleTurning);
         boat.setRightPaddleTurning(packet.rightPaddleTurning);
     }
