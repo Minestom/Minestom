@@ -220,22 +220,16 @@ public class EntityFinder {
         // Sort & limit
         if (entitySort != EntitySort.ARBITRARY || limit != null) {
             result = result.stream()
-                    .sorted((ent1, ent2) -> {
-                        switch (entitySort) {
-                            case ARBITRARY:
-                            case RANDOM:
+                    .sorted((ent1, ent2) -> switch (entitySort) {
+                        case ARBITRARY, RANDOM ->
                                 // RANDOM is handled below
-                                return 1;
-                            case FURTHEST:
-                                return pos.distance(ent1.getPosition()) >
-                                        pos.distance(ent2.getPosition()) ?
-                                        1 : 0;
-                            case NEAREST:
-                                return pos.distance(ent1.getPosition()) <
-                                        pos.distance(ent2.getPosition()) ?
-                                        1 : 0;
-                        }
-                        return 1;
+                                1;
+                        case FURTHEST -> pos.distance(ent1.getPosition()) >
+                                pos.distance(ent2.getPosition()) ?
+                                1 : 0;
+                        case NEAREST -> pos.distance(ent1.getPosition()) <
+                                pos.distance(ent2.getPosition()) ?
+                                1 : 0;
                     })
                     .limit(limit != null ? limit : Integer.MAX_VALUE)
                     .collect(Collectors.toList());

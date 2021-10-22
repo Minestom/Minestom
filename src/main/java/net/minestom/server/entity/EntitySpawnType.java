@@ -79,18 +79,10 @@ public enum EntitySpawnType {
                         0
                 );
                 switch (paintingMeta.getDirection()) {
-                    case SOUTH:
-                        packet.direction = 0;
-                        break;
-                    case WEST:
-                        packet.direction = 1;
-                        break;
-                    case NORTH:
-                        packet.direction = 2;
-                        break;
-                    case EAST:
-                        packet.direction = 3;
-                        break;
+                    case SOUTH -> packet.direction = 0;
+                    case WEST -> packet.direction = 1;
+                    case NORTH -> packet.direction = 2;
+                    case EAST -> packet.direction = 3;
                 }
             } else {
                 packet.position = Vec.ZERO;
