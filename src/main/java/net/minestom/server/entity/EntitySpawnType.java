@@ -16,8 +16,7 @@ public enum EntitySpawnType {
             packet.uuid = entity.getUuid();
             packet.type = entity.getEntityType().id();
             packet.position = entity.getPosition();
-            if (entity.getEntityMeta() instanceof ObjectDataProvider) {
-                ObjectDataProvider objectDataProvider = (ObjectDataProvider) entity.getEntityMeta();
+            if (entity.getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
                 packet.data = objectDataProvider.getObjectData();
                 if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
                     final var velocity = entity.getVelocityForPacket();
@@ -57,8 +56,7 @@ public enum EntitySpawnType {
             SpawnExperienceOrbPacket packet = new SpawnExperienceOrbPacket();
             packet.entityId = entity.getEntityId();
             packet.position = entity.getPosition();
-            if (entity.getEntityMeta() instanceof ExperienceOrbMeta) {
-                ExperienceOrbMeta experienceOrbMeta = (ExperienceOrbMeta) entity.getEntityMeta();
+            if (entity.getEntityMeta() instanceof ExperienceOrbMeta experienceOrbMeta) {
                 packet.expCount = (short) experienceOrbMeta.getCount();
             }
             return packet;
@@ -70,8 +68,7 @@ public enum EntitySpawnType {
             SpawnPaintingPacket packet = new SpawnPaintingPacket();
             packet.entityId = entity.getEntityId();
             packet.entityUuid = entity.getUuid();
-            if (entity.getEntityMeta() instanceof PaintingMeta) {
-                PaintingMeta paintingMeta = (PaintingMeta) entity.getEntityMeta();
+            if (entity.getEntityMeta() instanceof PaintingMeta paintingMeta) {
                 packet.motive = paintingMeta.getMotive().ordinal();
                 packet.position = new Vec(
                         Math.max(0, (paintingMeta.getMotive().getWidth() >> 1) - 1),

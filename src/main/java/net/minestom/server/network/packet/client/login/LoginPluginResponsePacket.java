@@ -31,10 +31,8 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
         // Proxy support
-        if (connection instanceof PlayerSocketConnection) {
-            final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+        if (connection instanceof PlayerSocketConnection socketConnection) {
             final String channel = socketConnection.getPluginRequestChannel(messageId);
-
             if (channel != null) {
                 boolean success = false;
 

@@ -367,10 +367,8 @@ public class Command {
 
                         node = findNode.apply(node, Collections.singleton(literal));
                         continue;
-                    } else if (argument instanceof ArgumentWord) {
-                        ArgumentWord argumentWord = (ArgumentWord) argument;
+                    } else if (argument instanceof ArgumentWord argumentWord) {
                         if (argumentWord.hasRestrictions()) {
-
                             addArguments.accept(node, arguments);
                             arguments = new ArrayList<>();
 

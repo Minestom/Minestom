@@ -39,10 +39,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
         // Encryption is only support for socket connection
-        if (!(connection instanceof PlayerSocketConnection)) {
-            return;
-        }
-        final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+        if (!(connection instanceof PlayerSocketConnection socketConnection)) return;
         AsyncUtils.runAsync(() -> {
             final String loginUsername = socketConnection.getLoginUsername();
             if (loginUsername == null || loginUsername.isEmpty()) {

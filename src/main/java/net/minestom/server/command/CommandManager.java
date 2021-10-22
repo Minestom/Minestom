@@ -100,8 +100,7 @@ public final class CommandManager {
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
         // Command event
-        if (sender instanceof Player) {
-            final Player player = (Player) sender;
+        if (sender instanceof Player player) {
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
             EventDispatcher.call(playerCommandEvent);
             if (playerCommandEvent.isCancelled())
