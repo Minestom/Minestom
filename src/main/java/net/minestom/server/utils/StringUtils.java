@@ -115,32 +115,17 @@ public class StringUtils {
                     continue;
                 }
                 switch (nextChar) {
-                    case '\\':
-                        ch = '\\';
-                        break;
-                    case 'b':
-                        ch = '\b';
-                        break;
-                    case 'f':
-                        ch = '\f';
-                        break;
-                    case 'n':
-                        ch = '\n';
-                        break;
-                    case 'r':
-                        ch = '\r';
-                        break;
-                    case 't':
-                        ch = '\t';
-                        break;
-                    case '\"':
-                        ch = '\"';
-                        break;
-                    case '\'':
-                        ch = '\'';
-                        break;
+                    case '\\' -> ch = '\\';
+                    case 'b' -> ch = '\b';
+                    case 'f' -> ch = '\f';
+                    case 'n' -> ch = '\n';
+                    case 'r' -> ch = '\r';
+                    case 't' -> ch = '\t';
+                    case '\"' -> ch = '\"';
+                    case '\'' -> ch = '\'';
+
                     // Hex Unicode: u????
-                    case 'u':
+                    case 'u' -> {
                         if (i >= st.length() - 5) {
                             ch = 'u';
                             break;
@@ -151,6 +136,7 @@ public class StringUtils {
                         sb.append(Character.toChars(code));
                         i += 5;
                         continue;
+                    }
                 }
                 i++;
             }

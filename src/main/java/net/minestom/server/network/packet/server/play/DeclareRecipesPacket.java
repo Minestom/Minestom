@@ -36,40 +36,15 @@ public class DeclareRecipesPacket implements ServerPacket {
             String id = reader.readSizedString();
 
             switch (type) {
-                case "crafting_shapeless":
-                    recipes[i] = new DeclaredShapelessCraftingRecipe(id, reader);
-                    break;
-
-                case "crafting_shaped":
-                    recipes[i] = new DeclaredShapedCraftingRecipe(id, reader);
-                    break;
-
-                case "smelting":
-                    recipes[i] = new DeclaredSmeltingRecipe(id, reader);
-                    break;
-
-                case "blasting":
-                    recipes[i] = new DeclaredBlastingRecipe(id, reader);
-                    break;
-
-                case "smoking":
-                    recipes[i] = new DeclaredSmokingRecipe(id, reader);
-                    break;
-
-                case "campfire_cooking":
-                    recipes[i] = new DeclaredCampfireCookingRecipe(id, reader);
-                    break;
-
-                case "stonecutter":
-                    recipes[i] = new DeclaredStonecutterRecipe(id, reader);
-                    break;
-
-                case "smithing":
-                    recipes[i] = new DeclaredSmithingRecipe(id, reader);
-                    break;
-
-                default:
-                    throw new UnsupportedOperationException("Unrecognized type: " + type + " (id is " + id + ")");
+                case "crafting_shapeless" -> recipes[i] = new DeclaredShapelessCraftingRecipe(id, reader);
+                case "crafting_shaped" -> recipes[i] = new DeclaredShapedCraftingRecipe(id, reader);
+                case "smelting" -> recipes[i] = new DeclaredSmeltingRecipe(id, reader);
+                case "blasting" -> recipes[i] = new DeclaredBlastingRecipe(id, reader);
+                case "smoking" -> recipes[i] = new DeclaredSmokingRecipe(id, reader);
+                case "campfire_cooking" -> recipes[i] = new DeclaredCampfireCookingRecipe(id, reader);
+                case "stonecutter" -> recipes[i] = new DeclaredStonecutterRecipe(id, reader);
+                case "smithing" -> recipes[i] = new DeclaredSmithingRecipe(id, reader);
+                default -> throw new UnsupportedOperationException("Unrecognized type: " + type + " (id is " + id + ")");
             }
         }
     }
