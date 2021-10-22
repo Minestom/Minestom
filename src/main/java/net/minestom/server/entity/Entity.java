@@ -808,8 +808,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
             refreshCurrentChunk(chunk);
-            if (this instanceof Player) {
-                final Player player = (Player) this;
+            if (this instanceof Player player) {
                 instance.getWorldBorder().init(player);
                 player.sendPacket(instance.createTimePacket());
             }
