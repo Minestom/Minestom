@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Holder of custom audiences.
@@ -97,7 +96,7 @@ public class AudienceRegistry {
         if (this.isEmpty()) {
             return Collections.emptyList();
         } else {
-            return this.registry.values().stream().flatMap(Collection::stream).collect(Collectors.toUnmodifiableList());
+            return this.registry.values().stream().flatMap(Collection::stream).toList();
         }
     }
 
@@ -128,6 +127,6 @@ public class AudienceRegistry {
      * @return the matching audience members
      */
     public @NotNull Iterable<? extends Audience> of(@NotNull Predicate<Audience> filter) {
-        return this.registry.values().stream().flatMap(Collection::stream).filter(filter).collect(Collectors.toUnmodifiableList());
+        return this.registry.values().stream().flatMap(Collection::stream).filter(filter).toList();
     }
 }
