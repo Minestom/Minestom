@@ -4,7 +4,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.5.31'
-    id 'checkstyle'
+    //id 'checkstyle'
 }
 
 group 'net.minestom.server'
@@ -55,10 +55,10 @@ allprojects {
         }
     }
 
-    checkstyle {
-        toolVersion "8.42"
-        configFile file("${projectDir}/minestom_checks.xml")
-    }
+    //checkstyle {
+    //    toolVersion "8.42"
+    //    configFile file("${projectDir}/minestom_checks.xml")
+    //}
 }
 
 sourceSets {
