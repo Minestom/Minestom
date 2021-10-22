@@ -57,7 +57,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 /**
  * Could be a player, a monster, or an object.
@@ -1571,8 +1570,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Vec end = start.add(position.direction().mul(range));
 
         List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e))
-                .collect(Collectors.toList());
+                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e)).toList();
         if (nearby.isEmpty()) {
             return null;
         }

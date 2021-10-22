@@ -147,7 +147,7 @@ public class BossBarManager {
         if (holders == null) {
             return Collections.emptyList();
         } else {
-            return holders.stream().map(holder -> holder.bar).collect(Collectors.toUnmodifiableList());
+            return holders.stream().map(holder -> holder.bar).toList();
         }
     }
 
