@@ -1,7 +1,5 @@
 package net.minestom.server.adventure.provider;
 
-import java.util.UUID;
-
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
@@ -17,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.UUID;
 
 final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer {
     static final NBTLegacyHoverEventSerializer INSTANCE = new NBTLegacyHoverEventSerializer();
@@ -33,8 +32,8 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
         try {
             // attempt the parse
             final NBT nbt = MinestomAdventure.NBT_CODEC.decode(raw);
-            if (!(nbt instanceof NBTCompound)) throw new IOException("contents were not a compound");
-            final NBTCompound contents = (NBTCompound) nbt, tag = contents.getCompound(ITEM_TAG);
+            if (!(nbt instanceof NBTCompound contents)) throw new IOException("contents were not a compound");
+            final NBTCompound tag = contents.getCompound(ITEM_TAG);
 
             // create the event
             return HoverEvent.ShowItem.of(
@@ -53,9 +52,7 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
 
         try {
             final NBT nbt = MinestomAdventure.NBT_CODEC.decode(raw);
-            if (!(nbt instanceof NBTCompound)) throw new IOException("contents were not a compound");
-
-            final NBTCompound contents = (NBTCompound) nbt;
+            if (!(nbt instanceof NBTCompound contents)) throw new IOException("contents were not a compound");
 
             return HoverEvent.ShowEntity.of(
                     Key.key(Objects.requireNonNullElse(contents.getString(ENTITY_TYPE), "")),

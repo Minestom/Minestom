@@ -141,10 +141,9 @@ public class AdventurePacketConvertor {
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
         if (emitter == Sound.Emitter.self())
             throw new IllegalArgumentException("you must replace instances of Emitter.self() before calling this method");
-        if (!(emitter instanceof Entity))
+        if (!(emitter instanceof Entity entity))
             throw new IllegalArgumentException("you can only call this method with entities");
 
-        final Entity entity = (Entity) emitter;
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
 
         if (minestomSound != null) {

@@ -22,20 +22,15 @@ public class LastEntityDamagerTarget extends TargetSelector {
     @Override
     public Entity findTarget() {
         final DamageType damageType = entityCreature.getLastDamageSource();
-
-        if (!(damageType instanceof EntityDamage)) {
+        if (!(damageType instanceof EntityDamage entityDamage)) {
             // No damager recorded, return null
             return null;
         }
-
-        final EntityDamage entityDamage = (EntityDamage) damageType;
         final Entity entity = entityDamage.getSource();
-
         if (entity.isRemoved()) {
             // Entity not valid
             return null;
         }
-
         // Check range
         return entityCreature.getDistance(entity) < range ? entity : null;
     }
