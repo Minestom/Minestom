@@ -143,14 +143,15 @@ public final class ViewEngine {
 
         @Override
         public boolean contains(Object o) {
+            if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
                 if (setContain(ViewEngine.this.manualViewers, o)) return true;
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
                     for (List<Player> players : auto) {
-                        if (players.isEmpty()) continue;
-                        return players.contains(o) && isAutoValid((Player) o);
+                        if (!players.isEmpty() && players.contains(player))
+                            return isAutoValid(player);
                     }
                 }
             }

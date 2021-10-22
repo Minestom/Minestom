@@ -202,7 +202,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             itemPickupCooldown.refreshLastUpdate(time);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.getWidth(), EntityTracker.Target.ITEMS,
                     itemEntity -> {
-                        if (this instanceof Player && !itemEntity.isViewer((Player) this)) return;
+                        if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
                         final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                         if (expandedBoundingBox.intersect(itemBoundingBox)) {
