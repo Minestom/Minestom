@@ -1,11 +1,11 @@
 package net.minestom.server.network.packet.client.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
@@ -90,32 +90,22 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
     }
 
     private int toRestrictedRotation(Rotation rotation) {
-        switch (rotation) {
-            case NONE:
-                return 0;
-            case CLOCKWISE:
-                return 1;
-            case FLIPPED:
-                return 2;
-            case COUNTER_CLOCKWISE:
-                return 3;
-            default:
-                throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
-        }
+        return switch (rotation) {
+            case NONE -> 0;
+            case CLOCKWISE -> 1;
+            case FLIPPED -> 2;
+            case COUNTER_CLOCKWISE -> 3;
+            default -> throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
+        };
     }
 
     private Rotation fromRestrictedRotation(int rotation) {
-        switch (rotation) {
-            case 0:
-                return Rotation.NONE;
-            case 1:
-                return Rotation.CLOCKWISE;
-            case 2:
-                return Rotation.FLIPPED;
-            case 3:
-                return Rotation.COUNTER_CLOCKWISE;
-            default:
-                throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
-        }
+        return switch (rotation) {
+            case 0 -> Rotation.NONE;
+            case 1 -> Rotation.CLOCKWISE;
+            case 2 -> Rotation.FLIPPED;
+            case 3 -> Rotation.COUNTER_CLOCKWISE;
+            default -> throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
+        };
     }
 }

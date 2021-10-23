@@ -40,15 +40,9 @@ public class EnchantmentTableInventory extends Inventory {
      */
     public void setLevelRequirement(EnchantmentSlot enchantmentSlot, short level) {
         switch (enchantmentSlot) {
-            case TOP:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_LEVEL_REQUIREMENT_TOP, level);
-                break;
-            case MIDDLE:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_LEVEL_REQUIREMENT_MIDDLE, level);
-                break;
-            case BOTTOM:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_LEVEL_REQUIREMENT_BOTTOM, level);
-                break;
+            case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_LEVEL_REQUIREMENT_TOP, level);
+            case MIDDLE -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_LEVEL_REQUIREMENT_MIDDLE, level);
+            case BOTTOM -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_LEVEL_REQUIREMENT_BOTTOM, level);
         }
         this.levelRequirements[enchantmentSlot.ordinal()] = level;
     }
@@ -96,15 +90,9 @@ public class EnchantmentTableInventory extends Inventory {
     public void setEnchantmentShown(EnchantmentSlot enchantmentSlot, Enchantment enchantment) {
         final short id = enchantment == null ? -1 : (short) enchantment.id();
         switch (enchantmentSlot) {
-            case TOP:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);
-                break;
-            case MIDDLE:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_MIDDLE, id);
-                break;
-            case BOTTOM:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_BOTTOM, id);
-                break;
+            case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);
+            case MIDDLE -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_MIDDLE, id);
+            case BOTTOM -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_BOTTOM, id);
         }
         this.enchantmentShown[enchantmentSlot.ordinal()] = id;
     }
@@ -129,15 +117,9 @@ public class EnchantmentTableInventory extends Inventory {
      */
     public void setEnchantmentLevel(EnchantmentSlot enchantmentSlot, short level) {
         switch (enchantmentSlot) {
-            case TOP:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_LEVEL_TOP, level);
-                break;
-            case MIDDLE:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_LEVEL_MIDDLE, level);
-                break;
-            case BOTTOM:
-                sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_LEVEL_BOTTOM, level);
-                break;
+            case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_LEVEL_TOP, level);
+            case MIDDLE -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_LEVEL_MIDDLE, level);
+            case BOTTOM -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_LEVEL_BOTTOM, level);
         }
         this.enchantmentLevel[enchantmentSlot.ordinal()] = level;
     }

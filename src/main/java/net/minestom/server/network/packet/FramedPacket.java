@@ -11,26 +11,7 @@ import java.nio.ByteBuffer;
  * Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.
  */
 @ApiStatus.Internal
-public final class FramedPacket {
-    private final int packetId;
-    private final ByteBuffer body;
-    private final ServerPacket packet;
-
-    public FramedPacket(int packetId, @NotNull ByteBuffer body, @NotNull ServerPacket packet) {
-        this.packetId = packetId;
-        this.body = body;
-        this.packet = packet;
-    }
-
-    public int packetId() {
-        return packetId;
-    }
-
-    public @NotNull ByteBuffer body() {
-        return body;
-    }
-
-    public @NotNull ServerPacket packet() {
-        return packet;
-    }
+public record FramedPacket(int packetId,
+                           @NotNull ByteBuffer body,
+                           @NotNull ServerPacket packet) {
 }

@@ -4,14 +4,12 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@ApiStatus.NonExtendable
-public interface SoundEvent extends ProtocolObject, Sound.Type, SoundEvents {
+public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEvents permits SoundEventImpl {
 
     static @NotNull Collection<@NotNull SoundEvent> values() {
         return SoundEventImpl.values();

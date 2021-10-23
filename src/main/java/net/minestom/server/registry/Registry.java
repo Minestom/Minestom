@@ -288,21 +288,11 @@ public final class Registry {
                 if (armorProperties != null) {
                     final String slot = armorProperties.getAsJsonObject().get("slot").getAsString();
                     switch (slot) {
-                        case "feet":
-                            this.equipmentSlot = EquipmentSlot.BOOTS;
-                            break;
-                        case "legs":
-                            this.equipmentSlot = EquipmentSlot.LEGGINGS;
-                            break;
-                        case "chest":
-                            this.equipmentSlot = EquipmentSlot.CHESTPLATE;
-                            break;
-                        case "head":
-                            this.equipmentSlot = EquipmentSlot.HELMET;
-                            break;
-                        default:
-                            this.equipmentSlot = null;
-                            break;
+                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
+                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
+                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
+                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
+                        default -> this.equipmentSlot = null;
                     }
                 } else {
                     this.equipmentSlot = null;

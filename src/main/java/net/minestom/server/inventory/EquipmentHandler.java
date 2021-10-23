@@ -48,13 +48,10 @@ public interface EquipmentHandler {
      * @return the {@link ItemStack} in {@code hand}
      */
     default @NotNull ItemStack getItemInHand(@NotNull Player.Hand hand) {
-        switch (hand) {
-            case MAIN:
-                return getItemInMainHand();
-            case OFF:
-                return getItemInOffHand();
-        }
-        throw new IllegalStateException("Something weird happened");
+        return switch (hand) {
+            case MAIN -> getItemInMainHand();
+            case OFF -> getItemInOffHand();
+        };
     }
 
     /**
@@ -65,13 +62,8 @@ public interface EquipmentHandler {
      */
     default void setItemInHand(@NotNull Player.Hand hand, @NotNull ItemStack stack) {
         switch (hand) {
-            case MAIN:
-                setItemInMainHand(stack);
-                break;
-
-            case OFF:
-                setItemInOffHand(stack);
-                break;
+            case MAIN -> setItemInMainHand(stack);
+            case OFF -> setItemInOffHand(stack);
         }
     }
 
@@ -138,45 +130,24 @@ public interface EquipmentHandler {
      * @return the equipment {@link ItemStack}
      */
     default @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
-        switch (slot) {
-            case MAIN_HAND:
-                return getItemInMainHand();
-            case OFF_HAND:
-                return getItemInOffHand();
-            case HELMET:
-                return getHelmet();
-            case CHESTPLATE:
-                return getChestplate();
-            case LEGGINGS:
-                return getLeggings();
-            case BOOTS:
-                return getBoots();
-        }
-        throw new IllegalStateException("Something weird happened");
+        return switch (slot) {
+            case MAIN_HAND -> getItemInMainHand();
+            case OFF_HAND -> getItemInOffHand();
+            case HELMET -> getHelmet();
+            case CHESTPLATE -> getChestplate();
+            case LEGGINGS -> getLeggings();
+            case BOOTS -> getBoots();
+        };
     }
 
     default void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
         switch (slot) {
-            case MAIN_HAND:
-                setItemInMainHand(itemStack);
-                break;
-            case OFF_HAND:
-                setItemInOffHand(itemStack);
-                break;
-            case HELMET:
-                setHelmet(itemStack);
-                break;
-            case CHESTPLATE:
-                setChestplate(itemStack);
-                break;
-            case LEGGINGS:
-                setLeggings(itemStack);
-                break;
-            case BOOTS:
-                setBoots(itemStack);
-                break;
-            default:
-                throw new IllegalStateException("Something weird happened");
+            case MAIN_HAND -> setItemInMainHand(itemStack);
+            case OFF_HAND -> setItemInOffHand(itemStack);
+            case HELMET -> setHelmet(itemStack);
+            case CHESTPLATE -> setChestplate(itemStack);
+            case LEGGINGS -> setLeggings(itemStack);
+            case BOOTS -> setBoots(itemStack);
         }
     }
 

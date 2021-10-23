@@ -42,7 +42,7 @@ public class RecipeManager {
         List<DeclareRecipesPacket.DeclaredRecipe> recipesCache = new ArrayList<>();
         for (Recipe recipe : recipes) {
             switch (recipe.recipeType) {
-                case SHAPELESS: {
+                case SHAPELESS -> {
                     ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
@@ -52,9 +52,8 @@ public class RecipeManager {
                                     shapelessRecipe.getResult()
                             )
                     );
-                    break;
                 }
-                case SHAPED: {
+                case SHAPED -> {
                     ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
@@ -66,9 +65,8 @@ public class RecipeManager {
                                     shapedRecipe.getResult()
                             )
                     );
-                    break;
                 }
-                case SMELTING: {
+                case SMELTING -> {
                     SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredSmeltingRecipe(
@@ -80,9 +78,8 @@ public class RecipeManager {
                                     smeltingRecipe.getCookingTime()
                             )
                     );
-                    break;
                 }
-                case BLASTING: {
+                case BLASTING -> {
                     BlastingRecipe blastingRecipe = (BlastingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredBlastingRecipe(
@@ -94,9 +91,8 @@ public class RecipeManager {
                                     blastingRecipe.getCookingTime()
                             )
                     );
-                    break;
                 }
-                case SMOKING: {
+                case SMOKING -> {
                     SmokingRecipe smokingRecipe = (SmokingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredSmokingRecipe(
@@ -108,9 +104,8 @@ public class RecipeManager {
                                     smokingRecipe.getCookingTime()
                             )
                     );
-                    break;
                 }
-                case CAMPFIRE_COOKING: {
+                case CAMPFIRE_COOKING -> {
                     CampfireCookingRecipe campfireCookingRecipe = (CampfireCookingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredCampfireCookingRecipe(
@@ -122,9 +117,8 @@ public class RecipeManager {
                                     campfireCookingRecipe.getCookingTime()
                             )
                     );
-                    break;
                 }
-                case STONECUTTING: {
+                case STONECUTTING -> {
                     StonecutterRecipe stonecuttingRecipe = (StonecutterRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredStonecutterRecipe(
@@ -134,9 +128,8 @@ public class RecipeManager {
                                     stonecuttingRecipe.getResult()
                             )
                     );
-                    break;
                 }
-                case SMITHING: {
+                case SMITHING -> {
                     SmithingRecipe smithingRecipe = (SmithingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredSmithingRecipe(
@@ -146,7 +139,6 @@ public class RecipeManager {
                                     smithingRecipe.getResult()
                             )
                     );
-                    break;
                 }
             }
         }

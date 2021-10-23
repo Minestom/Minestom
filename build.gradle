@@ -3,14 +3,14 @@ import org.gradle.internal.os.OperatingSystem
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
-    id 'checkstyle'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
+    //id 'checkstyle'
 }
 
 group 'net.minestom.server'
 version '1.0'
 
-sourceCompatibility = 11
+sourceCompatibility = 17
 project.ext.lwjglVersion = "3.2.3"
 
 switch (OperatingSystem.current()) {
@@ -55,10 +55,10 @@ allprojects {
         }
     }
 
-    checkstyle {
-        toolVersion "8.42"
-        configFile file("${projectDir}/minestom_checks.xml")
-    }
+    //checkstyle {
+    //    toolVersion "8.42"
+    //    configFile file("${projectDir}/minestom_checks.xml")
+    //}
 }
 
 sourceSets {

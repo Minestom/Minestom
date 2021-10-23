@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * An object which manages all the {@link Task}'s.
@@ -151,10 +150,10 @@ public final class SchedulerManager implements IExtensionObserver {
     public ObjectCollection<Task> getTasks() {
         return tasks.values();
     }
-    
+
     /**
      * Returns the task associated with this task id
-     * 
+     *
      * @param id the id of the task
      * @return task the task itself
      */
@@ -171,10 +170,10 @@ public final class SchedulerManager implements IExtensionObserver {
     public ObjectCollection<Task> getShutdownTasks() {
         return shutdownTasks.values();
     }
-    
+
     /**
      * Returns the shutdown task associated with this task id
-     * 
+     *
      * @param id the id of the task
      * @return task the shutdown task itself
      */
@@ -204,8 +203,9 @@ public final class SchedulerManager implements IExtensionObserver {
 
     /**
      * Called when a Task from an extension is scheduled.
+     *
      * @param owningExtension the name of the extension which scheduled the task
-     * @param task the task that has been scheduled
+     * @param task            the task that has been scheduled
      */
     void onScheduleFromExtension(String owningExtension, Task task) {
         List<Task> scheduledForThisExtension = extensionTasks.computeIfAbsent(owningExtension, s -> new CopyOnWriteArrayList<>());
@@ -217,8 +217,9 @@ public final class SchedulerManager implements IExtensionObserver {
 
     /**
      * Called when a Task from an extension is scheduled for server shutdown.
+     *
      * @param owningExtension the name of the extension which scheduled the task
-     * @param task the task that has been scheduled
+     * @param task            the task that has been scheduled
      */
     void onScheduleShutdownFromExtension(String owningExtension, Task task) {
         List<Task> scheduledForThisExtension = extensionShutdownTasks.computeIfAbsent(owningExtension, s -> new CopyOnWriteArrayList<>());
@@ -230,25 +231,24 @@ public final class SchedulerManager implements IExtensionObserver {
 
     /**
      * Unschedules all non-transient tasks ({@link Task#isTransient()}) from this scheduler. Tasks are allowed to complete
+     *
      * @param extension the name of the extension to unschedule tasks from
      * @see Task#isTransient()
      */
     public void removeExtensionTasksOnUnload(String extension) {
         List<Task> scheduledForThisExtension = extensionTasks.get(extension);
-        if(scheduledForThisExtension != null) {
+        if (scheduledForThisExtension != null) {
             List<Task> toCancel = scheduledForThisExtension.stream()
-                    .filter(t -> !t.isTransient())
-                    .collect(Collectors.toList());
+                    .filter(t -> !t.isTransient()).toList();
             toCancel.forEach(Task::cancel);
             scheduledForThisExtension.removeAll(toCancel);
         }
 
 
         List<Task> shutdownScheduledForThisExtension = extensionShutdownTasks.get(extension);
-        if(shutdownScheduledForThisExtension != null) {
+        if (shutdownScheduledForThisExtension != null) {
             List<Task> toCancel = shutdownScheduledForThisExtension.stream()
-                    .filter(t -> !t.isTransient())
-                    .collect(Collectors.toList());
+                    .filter(t -> !t.isTransient()).toList();
             toCancel.forEach(Task::cancel);
             shutdownScheduledForThisExtension.removeAll(toCancel);
             shutdownTasks.values().removeAll(toCancel);
