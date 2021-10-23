@@ -32,7 +32,7 @@ public class Color implements RGBLike {
      * @param rgbLike the color
      */
     public Color(RGBLike rgbLike) {
-        this(rgbLike.red(), rgbLike.blue(), rgbLike.green());
+        this(rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
     /**
