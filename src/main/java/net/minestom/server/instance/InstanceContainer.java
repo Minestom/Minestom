@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
@@ -219,9 +220,7 @@ public class InstanceContainer extends Instance {
 
         EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunk));
         // Remove all entities in chunk
-        getChunkEntities(chunk).forEach(entity -> {
-            if (!(entity instanceof Player)) entity.remove();
-        });
+        getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES, Entity::remove);
         // Clear cache
         synchronized (chunks) {
             this.chunks.remove(index);

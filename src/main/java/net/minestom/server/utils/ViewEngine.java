@@ -81,12 +81,12 @@ public final class ViewEngine {
     }
 
     public boolean ensureAutoViewer(@NotNull Entity entity) {
-        if (!(entity instanceof Player)) return true;
+        if (!(entity instanceof Player player)) return true;
         // Ensure that an entity can be auto-viewed
         // In this case, it should be neither in the manual nor exception map
         synchronized (mutex) {
-            if (setContain(manualViewers, entity)) return false;
-            return isAutoValid((Player) entity);
+            if (setContain(manualViewers, player)) return false;
+            return isAutoValid(player);
         }
     }
 
@@ -145,7 +145,7 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                if (setContain(ViewEngine.this.manualViewers, o)) return true;
+                if (setContain(ViewEngine.this.manualViewers, player)) return true;
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewable;
                 if (auto != null) {
@@ -226,7 +226,7 @@ public final class ViewEngine {
         }
     }
 
-    private static boolean setContain(Set<?> set, Object object) {
-        return !set.isEmpty() && set.contains(object);
+    private static boolean setContain(Set<?> set, Player player) {
+        return !set.isEmpty() && set.contains(player);
     }
 }

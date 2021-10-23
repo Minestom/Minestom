@@ -1322,8 +1322,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player) { // Update visible chunks
-                final Player player = (Player) this;
+            if (this instanceof Player player) { // Update visible chunks
                 player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
                 ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
                         MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
