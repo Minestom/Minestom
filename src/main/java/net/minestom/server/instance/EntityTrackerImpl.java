@@ -111,8 +111,8 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public <T extends Entity> void visibleEntities(@NotNull Point point, @NotNull Target<T> target, @NotNull Query<T> query) {
-        for (List<T> entities : references(point, target)) {
+    public <T extends Entity> void visibleEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
+        for (List<T> entities : references(chunkX, chunkZ, target)) {
             if (entities.isEmpty()) continue;
             for (Entity entity : entities) query.consume((T) entity);
         }

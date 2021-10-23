@@ -110,7 +110,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     // General entities should only be aware of surrounding players to update their viewing list
     private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
             EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
-    private final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
+    protected final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
         @Override
         public void add(@NotNull Entity entity) {
             if (Entity.this == entity) return;

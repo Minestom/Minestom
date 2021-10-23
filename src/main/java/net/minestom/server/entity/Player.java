@@ -478,11 +478,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
             }
         }
+        final Pos position = this.position;
+        final int chunkX = position.chunkX();
+        final int chunkZ = position.chunkZ();
         // Clear all viewable entities
-        this.instance.getEntityTracker().visibleEntities(position, EntityTracker.Target.ENTITIES,
-                entity -> entity.removeViewer(this));
+        this.instance.getEntityTracker().visibleEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES,
+                trackingUpdate::remove);
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(position, MinecraftServer.getChunkViewDistance(), chunkRemover);
+        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketUtils.broadcastPacket(getRemovePlayerToList());
 
@@ -592,7 +595,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             //and, potentially, this could also be rewritten to send only a single DestroyEntitiesPacket
             //with the list of all destroyed entities
             this.instance.getEntityTracker().visibleEntities(position, EntityTracker.Target.ENTITIES,
-                    entity -> entity.removeViewer(this));
+                    trackingUpdate::remove);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType());

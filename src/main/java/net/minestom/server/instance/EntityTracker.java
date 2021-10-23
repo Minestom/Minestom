@@ -69,8 +69,13 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      * <p>
      * This is used for auto-viewable features.
      */
-    <T extends Entity> void visibleEntities(@NotNull Point point,
+    <T extends Entity> void visibleEntities(int chunkX, int chunkZ,
                                             @NotNull Target<T> target, @NotNull Query<T> query);
+
+    default <T extends Entity> void visibleEntities(@NotNull Point point,
+                                                    @NotNull Target<T> target, @NotNull Query<T> query) {
+        visibleEntities(point.chunkX(), point.chunkZ(), target, query);
+    }
 
     /**
      * Gets a list containing references to all the entity lists visible from a chunk
