@@ -2,21 +2,17 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record UpdateLightPacket(int chunkX, int chunkZ, LightData lightData)
-        implements ServerPacket {
+public record UpdateSimulationDistancePacket(int simulationDistance) implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(chunkX);
-        writer.writeVarInt(chunkZ);
-        this.lightData.write(writer);
+        writer.writeVarInt(simulationDistance);
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.UPDATE_LIGHT;
+        return ServerPacketIdentifier.SET_SIMULATION_DISTANCE;
     }
 }

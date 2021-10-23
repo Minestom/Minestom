@@ -181,21 +181,13 @@ public class DynamicChunk extends Chunk {
             blockPalette.write(writer); // Blocks
             new Palette(2, 2).write(writer);  // Biomes
         }
-
-        ChunkDataPacket packet = new ChunkDataPacket();
-        packet.chunkX = chunkX;
-        packet.chunkZ = chunkZ;
-        packet.chunkData = new ChunkData(heightmapsNBT, writer.toByteArray(), entries);
-        packet.lightData = createLightData();
-        return packet;
+        return new ChunkDataPacket(chunkX, chunkZ,
+                new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
+                createLightData());
     }
 
     private synchronized @NotNull UpdateLightPacket createLightPacket() {
-        UpdateLightPacket updateLightPacket = new UpdateLightPacket();
-        updateLightPacket.chunkX = getChunkX();
-        updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.lightData = createLightData();
-        return updateLightPacket;
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
     }
 
     private LightData createLightData() {

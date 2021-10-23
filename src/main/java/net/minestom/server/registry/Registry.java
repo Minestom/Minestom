@@ -178,8 +178,7 @@ public final class Registry {
             // Block entity
             {
                 final JsonElement entityElement = element("blockEntity");
-                if (entityElement instanceof JsonObject) {
-                    JsonObject entityObject = (JsonObject) entityElement;
+                if (entityElement instanceof JsonObject entityObject) {
                     this.blockEntity = entityObject.get("namespace").getAsString();
                     this.blockEntityId = entityObject.get("id").getAsInt();
                 } else {
