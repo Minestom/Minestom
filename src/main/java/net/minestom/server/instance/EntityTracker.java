@@ -19,7 +19,7 @@ import java.util.Set;
  * Implementations are expected to be thread-safe.
  */
 @ApiStatus.Experimental
-public interface EntityTracker {
+public sealed interface EntityTracker permits EntityTrackerImpl {
 
     /**
      * Register an entity to be tracked.
