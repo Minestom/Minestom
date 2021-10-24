@@ -48,7 +48,8 @@ public final class ViewEngine {
         this.autoViewPredicate = player ->
                 player != entity &&
                         player.isAutoViewable() &&
-                        !setContain(exceptionViewersMap, player);
+                        !setContain(exceptionViewersMap, player) &&
+                        !setContain(manualViewers, player);
     }
 
     public void updateReferences(@Nullable List<List<Player>> references) {
@@ -81,7 +82,6 @@ public final class ViewEngine {
     }
 
     public void computeValidAutoViewer(@NotNull Entity entity, Runnable runnable) {
-        if (!entity.isAutoViewable()) return;
         // Ensure that an entity can be auto-viewed
         // In this case, it should be neither in the manual nor exception map
         synchronized (mutex) {
@@ -89,7 +89,6 @@ public final class ViewEngine {
                 runnable.run();
                 return;
             }
-            if (setContain(manualViewers, player)) return;
             if (autoViewPredicate.test(player)) runnable.run();
         }
     }
@@ -100,7 +99,8 @@ public final class ViewEngine {
             for (List<Player> players : autoViewable) {
                 if (players.isEmpty()) continue;
                 for (Player player : players) {
-                    computeValidAutoViewer(player, () -> consumer.accept(player));
+                    if (autoViewPredicate.test(player))
+                        consumer.accept(player);
                 }
             }
         }
