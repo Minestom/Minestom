@@ -103,7 +103,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
-    private AtomicBoolean autoViewable = new AtomicBoolean(true);
+    private final AtomicBoolean autoViewable = new AtomicBoolean(true);
     private final int id;
     private final ViewEngine viewEngine = new ViewEngine(this);
     protected final Set<Player> viewers = viewEngine.asSet();
