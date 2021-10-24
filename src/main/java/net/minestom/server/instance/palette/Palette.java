@@ -248,6 +248,7 @@ public final class Palette implements PublicCloneable<Palette> {
         if (lastPaletteIndex >= paletteBlockArray.length) {
             // Palette is full, must resize
             resize(bitsPerEntry + bitsIncrement);
+            if (!hasPalette) return blockId;
         }
         final short paletteIndex = (short) lastPaletteIndex++;
         this.paletteBlockArray[paletteIndex] = blockId;
