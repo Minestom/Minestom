@@ -45,10 +45,10 @@ public final class ViewEngine {
 
     public ViewEngine(@Nullable Entity entity) {
         this.entity = entity;
-        this.autoViewPredicate = player -> {
-            if (player == entity) return false;
-            return !setContain(exceptionViewersMap, player);
-        };
+        this.autoViewPredicate = player ->
+                player != entity &&
+                        player.isAutoViewable() &&
+                        !setContain(exceptionViewersMap, player);
     }
 
     public void updateReferences(@Nullable List<List<Player>> references) {
@@ -80,23 +80,34 @@ public final class ViewEngine {
         }
     }
 
-    public boolean ensureAutoViewer(@NotNull Entity entity) {
-        if (!(entity instanceof Player player)) return true;
+    public void computeValidAutoViewer(@NotNull Entity entity, Runnable runnable) {
+        if (!entity.isAutoViewable()) return;
         // Ensure that an entity can be auto-viewed
         // In this case, it should be neither in the manual nor exception map
         synchronized (mutex) {
-            if (setContain(manualViewers, player)) return false;
-            return isAutoValid(player);
+            if (!(entity instanceof Player player)) {
+                runnable.run();
+                return;
+            }
+            if (setContain(manualViewers, player)) return;
+            if (autoViewPredicate.test(player)) runnable.run();
+        }
+    }
+
+    public void forAutoViewers(Consumer<Player> consumer) {
+        synchronized (mutex) {
+            if (autoViewable == null) return;
+            for (List<Player> players : autoViewable) {
+                if (players.isEmpty()) continue;
+                for (Player player : players) {
+                    computeValidAutoViewer(player, () -> consumer.accept(player));
+                }
+            }
         }
     }
 
     public Set<Player> asSet() {
         return set;
-    }
-
-    private boolean isAutoValid(Player player) {
-        // Gets if the given auto-viewable player is actually viewed.
-        return player != entity && autoViewPredicate.test(player);
     }
 
     final class SetImpl extends AbstractSet<Player> {
@@ -116,7 +127,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isAutoValid(player)) size++;
+                            if (autoViewPredicate.test(player)) size++;
                         }
                     }
                 }
@@ -133,7 +144,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isAutoValid(player)) return false;
+                            if (autoViewPredicate.test(player)) return false;
                         }
                     }
                 }
@@ -151,7 +162,7 @@ public final class ViewEngine {
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (!players.isEmpty() && players.contains(player))
-                            return isAutoValid(player);
+                            return autoViewPredicate.test(player);
                     }
                 }
             }
@@ -169,7 +180,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isAutoValid(player)) action.accept(player);
+                            if (autoViewPredicate.test(player)) action.accept(player);
                         }
                     }
                 }
@@ -219,7 +230,7 @@ public final class ViewEngine {
             private Player nextValidEntry(Iterator<Player> iterator) {
                 while (iterator.hasNext()) {
                     final Player player = iterator.next();
-                    if (autoIterator ? isAutoValid(player) : player != entity) return player;
+                    if (autoIterator ? autoViewPredicate.test(player) : player != entity) return player;
                 }
                 return null;
             }

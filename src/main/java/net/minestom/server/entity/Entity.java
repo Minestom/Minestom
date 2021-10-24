@@ -57,6 +57,7 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -102,7 +103,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
-    private boolean autoViewable;
+    private AtomicBoolean autoViewable = new AtomicBoolean(true);
     private final int id;
     private final ViewEngine viewEngine = new ViewEngine(this);
     protected final Set<Player> viewers = viewEngine.asSet();
@@ -114,26 +115,22 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         @Override
         public void add(@NotNull Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player && isAutoViewable() &&
-                    entity.viewEngine.ensureAutoViewer(Entity.this)) {
-                updateNewViewer((Player) entity);
+            if (entity instanceof Player player) {
+                entity.viewEngine.computeValidAutoViewer(Entity.this, () -> updateNewViewer(player));
             }
-            if (Entity.this instanceof Player && entity.isAutoViewable() &&
-                    viewEngine.ensureAutoViewer(entity)) {
-                entity.updateNewViewer((Player) Entity.this);
+            if (Entity.this instanceof Player thisPlayer) {
+                viewEngine.computeValidAutoViewer(entity, () -> entity.updateNewViewer(thisPlayer));
             }
         }
 
         @Override
         public void remove(@NotNull Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player && isAutoViewable() &&
-                    entity.viewEngine.ensureAutoViewer(Entity.this)) {
-                updateOldViewer((Player) entity);
+            if (entity instanceof Player player) {
+                entity.viewEngine.computeValidAutoViewer(Entity.this, () -> updateOldViewer(player));
             }
-            if (Entity.this instanceof Player && entity.isAutoViewable() &&
-                    viewEngine.ensureAutoViewer(entity)) {
-                entity.updateOldViewer((Player) Entity.this);
+            if (Entity.this instanceof Player thisPlayer) {
+                viewEngine.computeValidAutoViewer(entity, () -> entity.updateOldViewer(thisPlayer));
             }
         }
 
@@ -183,8 +180,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         setBoundingBox(entityType.width(), entityType.height(), entityType.width());
 
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
-
-        setAutoViewable(true);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
@@ -355,17 +350,25 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
     public boolean isAutoViewable() {
-        return autoViewable;
+        return autoViewable.get();
     }
 
     /**
-     * Makes the entity auto viewable or only manually.
+     * Decides if this entity should be auto-viewable by nearby entities.
      *
      * @param autoViewable should the entity be automatically viewable for close players
      * @see #isAutoViewable()
      */
     public void setAutoViewable(boolean autoViewable) {
-        this.autoViewable = autoViewable;
+        final boolean previous = this.autoViewable.getAndSet(autoViewable);
+        if (previous != autoViewable && this instanceof Player player) {
+            // View state changed, either add or remove all auto-viewers
+            if (autoViewable) {
+                this.viewEngine.forAutoViewers(p -> p.updateNewViewer(player));
+            } else {
+                this.viewEngine.forAutoViewers(p -> p.updateOldViewer(player));
+            }
+        }
     }
 
     @Override
@@ -394,7 +397,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return true;
     }
 
-    private void updateNewViewer(@NotNull Player player) {
+    void updateNewViewer(@NotNull Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
@@ -415,7 +418,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
-    private void updateOldViewer(@NotNull Player player) {
+    void updateOldViewer(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
     }
 
