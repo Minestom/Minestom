@@ -5,6 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
 @ApiStatus.Internal
-public final class Worker extends Thread {
+public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
     final Selector selector = Selector.open();
@@ -29,7 +30,7 @@ public final class Worker extends Thread {
     private final PacketProcessor packetProcessor;
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
-        super(null, null, "Ms-worker-" + COUNTER.getAndIncrement());
+        super("Ms-worker-" + COUNTER.getAndIncrement());
         this.server = server;
         this.packetProcessor = packetProcessor;
     }
