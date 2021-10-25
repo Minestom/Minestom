@@ -57,7 +57,6 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -103,7 +102,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
-    private final AtomicBoolean autoViewable = new AtomicBoolean(true);
     private final int id;
     // Players must be aware of all surrounding entities
     // General entities should only be aware of surrounding players to update their viewing list
@@ -352,7 +350,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
     public boolean isAutoViewable() {
-        return autoViewable.get();
+        return viewEngine.isAutoViewable();
     }
 
     /**
@@ -362,15 +360,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @see #isAutoViewable()
      */
     public void setAutoViewable(boolean autoViewable) {
-        final boolean previous = this.autoViewable.getAndSet(autoViewable);
-        if (previous != autoViewable && this instanceof Player player) {
-            // View state changed, either add or remove all auto-viewers
-            if (autoViewable) {
-                this.viewEngine.forAutoViewers(p -> p.updateNewViewer(player));
-            } else {
-                this.viewEngine.forAutoViewers(p -> p.updateOldViewer(player));
-            }
-        }
+        this.viewEngine.setAutoViewable(autoViewable);
     }
 
     @ApiStatus.Experimental
@@ -404,7 +394,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return true;
     }
 
-    void updateNewViewer(@NotNull Player player) {
+    /**
+     * Called when a new viewer must be shown.
+     * Method can be subject to deadlocking if the target's viewers are also accessed.
+     *
+     * @param player the player to send the packets to
+     */
+    @ApiStatus.Internal
+    public void updateNewViewer(@NotNull Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
@@ -425,7 +422,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
-    void updateOldViewer(@NotNull Player player) {
+    /**
+     * Called when a viewer must be destroyed.
+     * Method can be subject to deadlocking if the target's viewers are also accessed.
+     *
+     * @param player the player to send the packets to
+     */
+    @ApiStatus.Internal
+    public void updateOldViewer(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
     }
 

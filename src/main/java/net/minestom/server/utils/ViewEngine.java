@@ -32,11 +32,12 @@ public final class ViewEngine {
      * Used as an efficient way to represent visible entities
      * without continuously updating an internal collection.
      */
-    private List<List<Player>> autoViewable;
+    private List<List<Player>> autoViewableReferences;
 
     private final Consumer<Entity> addition;
     private final Consumer<Entity> removal;
     private Predicate<Player> autoPredicate = p -> true;
+    private boolean autoViewable = true;
 
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
@@ -53,7 +54,7 @@ public final class ViewEngine {
 
     public void updateReferences(@Nullable List<List<Player>> references) {
         synchronized (mutex) {
-            this.autoViewable = references;
+            this.autoViewableReferences = references;
         }
     }
 
@@ -93,8 +94,8 @@ public final class ViewEngine {
         if (removal == null && addition == null)
             throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
         synchronized (mutex) {
-            if (autoViewable == null) return;
-            for (List<Player> players : autoViewable) {
+            if (autoViewableReferences == null) return;
+            for (List<Player> players : autoViewableReferences) {
                 if (players.isEmpty()) continue;
                 for (Player player : players) {
                     if (!isPotentialAutoViewable(player)) continue;
@@ -109,10 +110,31 @@ public final class ViewEngine {
         }
     }
 
+    public boolean isAutoViewable() {
+        synchronized (mutex) {
+            return autoViewable;
+        }
+    }
+
+    public void setAutoViewable(boolean autoViewable) {
+        synchronized (mutex) {
+            final boolean prev = this.autoViewable;
+            this.autoViewable = autoViewable;
+            if (prev != autoViewable && entity instanceof Player player) {
+                // View state changed, either add or remove all auto-viewers
+                if (autoViewable) {
+                    forAutoViewers(p -> p.updateNewViewer(player));
+                } else {
+                    forAutoViewers(p -> p.updateOldViewer(player));
+                }
+            }
+        }
+    }
+
     public void forAutoViewers(Consumer<Player> consumer) {
         synchronized (mutex) {
-            if (autoViewable == null) return;
-            for (List<Player> players : autoViewable) {
+            if (autoViewableReferences == null) return;
+            for (List<Player> players : autoViewableReferences) {
                 if (players.isEmpty()) continue;
                 for (Player player : players) {
                     if (isAutoViewable(player)) consumer.accept(player);
@@ -148,7 +170,7 @@ public final class ViewEngine {
         public int size() {
             synchronized (mutex) {
                 int size = ViewEngine.this.manualViewers.size();
-                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
@@ -165,7 +187,7 @@ public final class ViewEngine {
         public boolean isEmpty() {
             synchronized (mutex) {
                 if (!ViewEngine.this.manualViewers.isEmpty()) return false;
-                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
@@ -184,7 +206,7 @@ public final class ViewEngine {
             synchronized (mutex) {
                 if (setContain(ViewEngine.this.manualViewers, player)) return true;
                 // Auto
-                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (!players.isEmpty() && players.contains(player))
@@ -201,7 +223,7 @@ public final class ViewEngine {
                 // Manual viewers
                 ViewEngine.this.manualViewers.forEach(action);
                 // Auto
-                final List<List<Player>> auto = ViewEngine.this.autoViewable;
+                final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
@@ -240,9 +262,9 @@ public final class ViewEngine {
                 Player result;
                 if ((result = nextValidEntry(current)) != null) return result;
                 this.autoIterator = true;
-                if (autoViewable == null) return null;
-                for (int i = index + 1; i < autoViewable.size(); i++) {
-                    final List<Player> players = autoViewable.get(i);
+                if (autoViewableReferences == null) return null;
+                for (int i = index + 1; i < autoViewableReferences.size(); i++) {
+                    final List<Player> players = autoViewableReferences.get(i);
                     Iterator<Player> iterator = players.iterator();
                     if ((result = nextValidEntry(iterator)) != null) {
                         this.current = iterator;
