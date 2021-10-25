@@ -79,10 +79,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public record </span><span class="element-name type-name-label">FramedPacket</span>(int&nbsp;packetId, @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body, @NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)
+</span><span class="modifiers">public record </span><span class="element-name type-name-label">FramedPacket</span>(@NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet, @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">Represents a packet which is already framed. (packet id+payload) + optional compression
- Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.</div>
+ Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.
+ <p>
+ The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link"><code>ByteBuffer</code></a> will ultimately become a MemorySegment once out of incubation.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -94,9 +96,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">FramedPacket</a><wbr>(int&nbsp;packetId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body,
- @NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.ServerPacket,java.nio.ByteBuffer)" class="member-name-link">FramedPacket</a><wbr>(@NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>FramedPacket</code> record class.</div>
 </div>
@@ -134,14 +135,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>packet</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#packetId()" class="member-name-link">packetId</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>packetId</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
@@ -162,19 +158,17 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(int,java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.packet.server.ServerPacket,java.nio.ByteBuffer)">
 <h3>FramedPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">FramedPacket</span><wbr><span class="parameters">(int&nbsp;packetId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">FramedPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body,
- @NotNull
- @NotNull <a href="server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)</span></div>
 <div class="block">Creates an instance of a <code>FramedPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>packetId</code> - the value for the <code>packetId</code> record component</dd>
-<dd><code>body</code> - the value for the <code>body</code> record component</dd>
 <dd><code>packet</code> - the value for the <code>packet</code> record component</dd>
+<dd><code>body</code> - the value for the <code>body</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -216,7 +210,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -224,29 +218,6 @@ loadScripts(document, 'script');</script>
 <dd><code>o</code> - the object with which to compare</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="packetId()">
-<h3>packetId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">packetId</span>()</div>
-<div class="block">Returns the value of the <code>packetId</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>packetId</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="body()">
-<h3>body</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></span>&nbsp;<span class="element-name">body</span>()</div>
-<div class="block">Returns the value of the <code>body</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>body</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -259,6 +230,18 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>packet</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="body()">
+<h3>body</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></span>&nbsp;<span class="element-name">body</span>()</div>
+<div class="block">Returns the value of the <code>body</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>body</code> record component</dd>
 </dl>
 </section>
 </li>
