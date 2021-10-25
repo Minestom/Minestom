@@ -119,8 +119,7 @@ public final class PacketUtils {
             // Send grouped packet...
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
-            final ByteBuffer finalBuffer = createFramedPacket(packet).flip();
-            final FramedPacket framedPacket = new FramedPacket(packet, finalBuffer);
+            final FramedPacket framedPacket = new FramedPacket(packet, createFramedPacket(packet));
             // Send packet to all players
             for (Player player : players) {
                 if (!player.isOnline() || !playerValidator.isValid(player))
@@ -222,7 +221,7 @@ public final class PacketUtils {
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
         ByteBuffer buffer = PACKET_BUFFER.get().clear();
         writeFramedPacket(buffer, packet, compression);
-        return buffer;
+        return buffer.flip();
     }
 
     @ApiStatus.Internal
@@ -232,9 +231,9 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
-        final ByteBuffer temp = PacketUtils.createFramedPacket(packet).flip();
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining())
-                .put(temp).flip();
+        final ByteBuffer temp = PacketUtils.createFramedPacket(packet);
+        final int size = temp.remaining();
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
         return new FramedPacket(packet, buffer);
     }
 
@@ -248,7 +247,7 @@ public final class PacketUtils {
         }
 
         private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
-            final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
+            final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
                 process(viewable);
