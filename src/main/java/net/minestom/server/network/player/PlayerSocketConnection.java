@@ -235,7 +235,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             if (encrypted) { // Encryption support
                 ByteBuffer output = PacketUtils.localBuffer();
                 try {
-                    this.encryptCipher.update(buffer, output);
+                    this.encryptCipher.update(buffer.duplicate(), output);
                     buffer = output.flip();
                 } catch (ShortBufferException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
