@@ -226,7 +226,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull FramedPacket framedPacket) {
-        write(framedPacket.body().duplicate().position(0));
+        write(framedPacket.body());
     }
 
     @ApiStatus.Internal
@@ -235,7 +235,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             if (encrypted) { // Encryption support
                 ByteBuffer output = PacketUtils.localBuffer();
                 try {
-                    this.encryptCipher.update(buffer, output);
+                    this.encryptCipher.update(buffer.duplicate(), output);
                     buffer = output.flip();
                 } catch (ShortBufferException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
@@ -262,7 +262,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     private void writePacket(@NotNull ServerPacket packet) {
-        write(PacketUtils.createFramedPacket(packet, compressed).flip());
+        write(PacketUtils.createFramedPacket(packet, compressed));
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
