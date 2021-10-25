@@ -89,7 +89,7 @@ public final class ViewEngine {
         }
     }
 
-    public void updateRule(Predicate<Player> predicate) {
+    public void updateRule(@Nullable Predicate<Player> predicate) {
         if (removal == null && addition == null)
             throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
         synchronized (mutex) {
@@ -98,11 +98,13 @@ public final class ViewEngine {
             for (List<Player> players : autoViewable) {
                 if (players.isEmpty()) continue;
                 for (Player player : players) {
-                    if (!isAutoViewable(player)) continue;
+                    if (!isPotentialAutoViewable(player)) continue;
                     final boolean prev = previousPredicate == null || previousPredicate.test(player);
-                    final boolean upd = predicate.test(player);
-                    if (!prev && upd && addition != null) addition.accept(player);
-                    if (prev && !upd && removal != null) removal.accept(player);
+                    final boolean upd = predicate == null || predicate.test(player);
+                    if (prev != upd) {
+                        if (upd && addition != null) addition.accept(player);
+                        if (!upd && removal != null) removal.accept(player);
+                    }
                 }
             }
             this.autoPredicate = predicate;
@@ -121,10 +123,14 @@ public final class ViewEngine {
         }
     }
 
+    private boolean isPotentialAutoViewable(Player player) {
+        return player != entity && player.isAutoViewable() &&
+                !setContain(exceptionViewersMap, player) &&
+                !setContain(manualViewers, player);
+    }
+
     private boolean isAutoViewable(Player player) {
-        if (player == entity || !player.isAutoViewable() ||
-                setContain(exceptionViewersMap, player) ||
-                setContain(manualViewers, player)) return false;
+        if (!isPotentialAutoViewable(player)) return false;
         return autoPredicate == null || autoPredicate.test(player);
     }
 

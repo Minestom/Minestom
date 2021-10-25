@@ -30,5 +30,12 @@ public class AutoViewCommand extends Command {
             player.updateViewingRule(entities::contains);
             player.sendMessage("Rule updated to see " + entities.size() + " players");
         }, Literal("rule"), Entity("targets").onlyPlayers(true));
+
+        // Remove viewing rule
+        addSyntax((sender, context) -> {
+            if (!(sender instanceof Player player)) return;
+            player.updateViewingRule(null);
+            player.sendMessage("Rule removed");
+        }, Literal("remove-rule"));
     }
 }

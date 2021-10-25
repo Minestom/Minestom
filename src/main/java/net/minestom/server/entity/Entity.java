@@ -137,7 +137,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             viewEngine.updateReferences(players);
         }
     };
-    private final ViewEngine viewEngine = new ViewEngine(this, trackingUpdate::add, trackingUpdate::remove);
+    private final ViewEngine viewEngine = new ViewEngine(this,
+            this instanceof Player ? entity -> entity.updateNewViewer((Player) this) : null,
+            this instanceof Player ? entity -> entity.updateOldViewer((Player) this) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
@@ -372,7 +374,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     @ApiStatus.Experimental
-    public void updateViewingRule(@NotNull Predicate<Player> predicate) {
+    public void updateViewingRule(@Nullable Predicate<Player> predicate) {
         this.viewEngine.updateRule(predicate);
     }
 
