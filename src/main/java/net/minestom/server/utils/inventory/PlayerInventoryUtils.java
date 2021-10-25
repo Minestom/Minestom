@@ -29,28 +29,19 @@ public final class PlayerInventoryUtils {
      * @return a packet which can be use internally with Minestom
      */
     public static int convertPlayerInventorySlot(int slot, int offset) {
-        switch (slot) {
-            case 0:
-                return CRAFT_RESULT;
-            case 1:
-                return CRAFT_SLOT_1;
-            case 2:
-                return CRAFT_SLOT_2;
-            case 3:
-                return CRAFT_SLOT_3;
-            case 4:
-                return CRAFT_SLOT_4;
-            case 5:
-                return HELMET_SLOT;
-            case 6:
-                return CHESTPLATE_SLOT;
-            case 7:
-                return LEGGINGS_SLOT;
-            case 8:
-                return BOOTS_SLOT;
-        }
+        return switch (slot) {
+            case 0 -> CRAFT_RESULT;
+            case 1 -> CRAFT_SLOT_1;
+            case 2 -> CRAFT_SLOT_2;
+            case 3 -> CRAFT_SLOT_3;
+            case 4 -> CRAFT_SLOT_4;
+            case 5 -> HELMET_SLOT;
+            case 6 -> CHESTPLATE_SLOT;
+            case 7 -> LEGGINGS_SLOT;
+            case 8 -> BOOTS_SLOT;
+            default -> convertSlot(slot, offset);
+        };
 
-        return convertSlot(slot, offset);
     }
 
     public static int convertSlot(int slot, int offset) {

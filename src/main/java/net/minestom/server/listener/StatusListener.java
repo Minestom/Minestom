@@ -13,13 +13,10 @@ public class StatusListener {
 
     public static void listener(ClientStatusPacket packet, Player player) {
         switch (packet.action) {
-            case PERFORM_RESPAWN:
-                player.respawn();
-                break;
-            case REQUEST_STATS:
+            case PERFORM_RESPAWN -> player.respawn();
+            case REQUEST_STATS -> {
                 List<StatisticsPacket.Statistic> statisticList = new ArrayList<>();
                 StatisticsPacket statisticsPacket = new StatisticsPacket();
-
                 final Map<PlayerStatistic, Integer> playerStatisticValueMap = player.getStatisticValueMap();
                 for (var entry : playerStatisticValueMap.entrySet()) {
                     final PlayerStatistic playerStatistic = entry.getKey();
@@ -32,11 +29,9 @@ public class StatusListener {
 
                     statisticList.add(statistic);
                 }
-
                 statisticsPacket.statistics = statisticList.toArray(new StatisticsPacket.Statistic[0]);
-
                 player.getPlayerConnection().sendPacket(statisticsPacket);
-                break;
+            }
         }
     }
 

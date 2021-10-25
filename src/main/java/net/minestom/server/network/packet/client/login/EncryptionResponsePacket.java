@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class EncryptionResponsePacket implements ClientPreplayPacket {
+    private static final String MOJANG_AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined").concat("?username=%s&serverId=%s");
     private static final Gson GSON = new Gson();
     private byte[] sharedSecret;
     private byte[] verifyToken;
@@ -38,10 +39,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
         // Encryption is only support for socket connection
-        if (!(connection instanceof PlayerSocketConnection)) {
-            return;
-        }
-        final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+        if (!(connection instanceof PlayerSocketConnection socketConnection)) return;
         AsyncUtils.runAsync(() -> {
             final String loginUsername = socketConnection.getLoginUsername();
             if (loginUsername == null || loginUsername.isEmpty()) {
@@ -64,9 +62,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
             final String serverId = new BigInteger(digestedData).toString(16);
             final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
 
-            final String url = "https://sessionserver.mojang.com/session/minecraft/hasJoined?"
-                    + "username=" + username + "&"
-                    + "serverId=" + serverId;
+            final String url = String.format(MOJANG_AUTH_URL, username, serverId);
             // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
 
             final HttpClient client = HttpClient.newHttpClient();

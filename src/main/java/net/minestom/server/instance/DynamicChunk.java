@@ -39,6 +39,7 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
 
+    private long lastChange;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
@@ -48,8 +49,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        this.chunkCache.updateTimestamp();
-        this.lightCache.updateTimestamp();
+        this.lastChange = System.currentTimeMillis();
+        this.chunkCache.invalidate();
+        this.lightCache.invalidate();
         // Update pathfinder
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
@@ -118,7 +120,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public long getLastChangeTime() {
-        return chunkCache.lastChange();
+        return lastChange;
     }
 
     @Override

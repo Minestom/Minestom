@@ -100,42 +100,30 @@ public class DeclareCommandsPacket implements ServerPacket {
         }
 
         private byte[] getProperties(BinaryReader reader, String parser) {
-            switch (parser) {
-                case "brigadier:double":
-                    return reader.extractBytes(() -> {
-                        byte flags = reader.readByte();
-                        if ((flags & 0x01) == 0x01) {
-                            reader.readDouble(); // min
-                        }
-                        if ((flags & 0x02) == 0x02) {
-                            reader.readDouble(); // max
-                        }
-                    });
-
-                case "brigadier:integer":
-                    return reader.extractBytes(() -> {
-                        byte flags = reader.readByte();
-                        if ((flags & 0x01) == 0x01) {
-                            reader.readInt(); // min
-                        }
-                        if ((flags & 0x02) == 0x02) {
-                            reader.readInt(); // max
-                        }
-                    });
-
-                case "brigadier:string":
-                    return reader.extractBytes(reader::readVarInt);
-
-                case "brigadier:entity":
-                case "brigadier:score_holder":
-                    return reader.extractBytes(reader::readByte);
-
-                case "brigadier:range":
-                    return reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
-
-                default:
-                    return new byte[0]; // unknown
-            }
+            return switch (parser) {
+                case "brigadier:double" -> reader.extractBytes(() -> {
+                    byte flags = reader.readByte();
+                    if ((flags & 0x01) == 0x01) {
+                        reader.readDouble(); // min
+                    }
+                    if ((flags & 0x02) == 0x02) {
+                        reader.readDouble(); // max
+                    }
+                });
+                case "brigadier:integer" -> reader.extractBytes(() -> {
+                    byte flags = reader.readByte();
+                    if ((flags & 0x01) == 0x01) {
+                        reader.readInt(); // min
+                    }
+                    if ((flags & 0x02) == 0x02) {
+                        reader.readInt(); // max
+                    }
+                });
+                case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
+                case "brigadier:entity", "brigadier:score_holder" -> reader.extractBytes(reader::readByte);
+                case "brigadier:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+                default -> new byte[0]; // unknown
+            };
         }
 
         private boolean isLiteral() {

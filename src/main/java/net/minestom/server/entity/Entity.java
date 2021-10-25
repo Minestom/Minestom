@@ -40,6 +40,7 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
+import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -56,7 +57,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 /**
  * Could be a player, a monster, or an object.
@@ -278,6 +278,29 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.position = position.withView(yaw, pitch);
         sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), yaw));
         sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), yaw, pitch, onGround));
+    }
+
+    /**
+     * Changes the view of the entity so that it looks in a direction to the given position.
+     *
+     * @param position the position to look at.
+     */
+    public void lookAt(@NotNull Pos position) {
+        Vec delta = position.sub(getPosition()).asVec().normalize();
+        setView(
+                PositionUtils.getLookYaw(delta.x(), delta.z()),
+                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
+        );
+    }
+
+    /**
+     * Changes the view of the entity so that it looks in a direction to the given entity.
+     *
+     * @param entity the entity to look at.
+     */
+    public void lookAt(@NotNull Entity entity) {
+        Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
+        lookAt(entity.position);
     }
 
     /**
@@ -1152,20 +1175,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
-        final Player player = this instanceof Player ? (Player) this : null;
         final Chunk chunk = getChunk();
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
         } else if (positionChange && viewChange) {
             PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, isOnGround()), player);
+                    lastSyncedPosition, isOnGround()), this);
             // Fix head rotation
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), player);
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), this);
         } else if (viewChange) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
-            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
         }
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
@@ -1193,8 +1215,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
      * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     *
      * @param newPosition The X,Y,Z position of this vehicle
-     * @param passenger The passenger to be moved
+     * @param passenger   The passenger to be moved
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
@@ -1233,9 +1256,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
                 instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
-                if (this instanceof Player) {
+                if (this instanceof Player player) {
                     // Refresh player view
-                    final Player player = (Player) this;
                     player.refreshVisibleChunks(newChunk);
                     player.refreshVisibleEntities(newChunk);
                 }
@@ -1410,7 +1432,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected void synchronizePosition(boolean includeSelf) {
         final Pos posCache = this.position;
         final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
-        PacketUtils.prepareViewablePacket(currentChunk, packet, this instanceof Player ? (Player) this : null);
+        PacketUtils.prepareViewablePacket(currentChunk, packet, this);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = posCache;
     }
@@ -1548,8 +1570,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Vec end = start.add(position.direction().mul(range));
 
         List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e))
-                .collect(Collectors.toList());
+                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e)).toList();
         if (nearby.isEmpty()) {
             return null;
         }

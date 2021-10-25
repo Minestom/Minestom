@@ -5,7 +5,10 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
@@ -19,8 +22,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-@ApiStatus.NonExtendable
-public interface Block extends ProtocolObject, TagReadable, Blocks {
+public sealed interface Block extends ProtocolObject, TagReadable, Blocks permits BlockImpl {
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
