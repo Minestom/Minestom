@@ -276,7 +276,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     public void flush() {
         try {
             synchronized (bufferLock) {
-                updateLocalBuffer();
+                try {
+                    updateLocalBuffer();
+                } catch (OutOfMemoryError e) {
+                    this.waitingBuffers.clear();
+                    System.gc(); // Explicit gc forcing buffers to be collected
+                    throw new ClosedChannelException();
+                }
             }
             synchronized (flushLock) {
                 try {
@@ -290,10 +296,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                     }
                 } catch (IOException e) { // Couldn't write to the socket
                     MinecraftServer.getExceptionManager().handleException(e);
-                    throw new ClosedChannelException();
-                } catch (OutOfMemoryError e) { // Couldn't allocate a pooled buffer
-                    this.waitingBuffers.clear();
-                    System.gc(); // Explicit gc forcing buffers to be collected
                     throw new ClosedChannelException();
                 }
             }
