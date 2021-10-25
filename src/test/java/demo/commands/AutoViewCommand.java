@@ -34,7 +34,7 @@ public class AutoViewCommand extends Command {
         // Remove viewing rule
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
-            player.updateViewingRule(null);
+            player.updateViewingRule(p -> true);
             player.sendMessage("Rule removed");
         }, Literal("remove-rule"));
     }

@@ -36,7 +36,7 @@ public final class ViewEngine {
 
     private final Consumer<Entity> addition;
     private final Consumer<Entity> removal;
-    private Predicate<Player> autoPredicate;
+    private Predicate<Player> autoPredicate = p -> true;
 
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
@@ -89,19 +89,17 @@ public final class ViewEngine {
         }
     }
 
-    public void updateRule(@Nullable Predicate<Player> predicate) {
+    public void updateRule(@NotNull Predicate<Player> predicate) {
         if (removal == null && addition == null)
             throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
         synchronized (mutex) {
-            Predicate<Player> previousPredicate = this.autoPredicate;
             if (autoViewable == null) return;
             for (List<Player> players : autoViewable) {
                 if (players.isEmpty()) continue;
                 for (Player player : players) {
                     if (!isPotentialAutoViewable(player)) continue;
-                    final boolean prev = previousPredicate == null || previousPredicate.test(player);
-                    final boolean upd = predicate == null || predicate.test(player);
-                    if (prev != upd) {
+                    final boolean upd = predicate.test(player);
+                    if (autoPredicate.test(player) != upd) {
                         if (upd && addition != null) addition.accept(player);
                         if (!upd && removal != null) removal.accept(player);
                     }

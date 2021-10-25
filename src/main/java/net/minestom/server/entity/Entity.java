@@ -374,7 +374,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     @ApiStatus.Experimental
-    public void updateViewingRule(@Nullable Predicate<Player> predicate) {
+    public void updateViewingRule(@NotNull Predicate<Player> predicate) {
         this.viewEngine.updateRule(predicate);
     }
 
