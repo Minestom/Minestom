@@ -120,7 +120,7 @@ public final class PacketUtils {
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
             final ByteBuffer finalBuffer = createFramedPacket(packet).flip();
-            final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer, packet);
+            final FramedPacket framedPacket = new FramedPacket(packet, finalBuffer);
             // Send packet to all players
             for (Player player : players) {
                 if (!player.isOnline() || !playerValidator.isValid(player))
@@ -234,8 +234,8 @@ public final class PacketUtils {
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final ByteBuffer temp = PacketUtils.createFramedPacket(packet).flip();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining())
-                .put(temp).flip().asReadOnlyBuffer();
-        return new FramedPacket(packet.getId(), buffer, packet);
+                .put(temp).flip();
+        return new FramedPacket(packet, buffer);
     }
 
     private static final class ViewableStorage {
