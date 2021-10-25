@@ -226,7 +226,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull FramedPacket framedPacket) {
-        write(framedPacket.body().duplicate().position(0));
+        write(framedPacket.body());
     }
 
     @ApiStatus.Internal
