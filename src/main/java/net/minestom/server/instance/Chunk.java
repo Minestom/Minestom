@@ -54,7 +54,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    private final ViewEngine viewers = new ViewEngine(null);
+    private final ViewEngine viewers = new ViewEngine();
 
     // Path finding
     protected PFColumnarSpace columnarSpace;

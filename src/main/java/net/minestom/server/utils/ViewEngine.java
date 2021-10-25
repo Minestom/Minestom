@@ -27,12 +27,6 @@ public final class ViewEngine {
      */
     private final Set<Player> exceptionViewersMap = new HashSet<>();
     /**
-     * Predicate used to define if a player should be auto-viewable.
-     * <p>
-     * Useful if you want to filter based on rank.
-     */
-    private final Predicate<Player> autoViewPredicate;
-    /**
      * References of all the player lists surrounding the entity.
      * <p>
      * Used as an efficient way to represent visible entities
@@ -40,16 +34,21 @@ public final class ViewEngine {
      */
     private List<List<Player>> autoViewable;
 
+    private final Consumer<Entity> addition;
+    private final Consumer<Entity> removal;
+    private Predicate<Player> autoPredicate;
+
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
-    public ViewEngine(@Nullable Entity entity) {
+    public ViewEngine(@Nullable Entity entity, Consumer<Entity> addition, Consumer<Entity> removal) {
         this.entity = entity;
-        this.autoViewPredicate = player ->
-                player != entity &&
-                        player.isAutoViewable() &&
-                        !setContain(exceptionViewersMap, player) &&
-                        !setContain(manualViewers, player);
+        this.addition = addition;
+        this.removal = removal;
+    }
+
+    public ViewEngine() {
+        this(null, null, null);
     }
 
     public void updateReferences(@Nullable List<List<Player>> references) {
@@ -83,13 +82,30 @@ public final class ViewEngine {
 
     public void computeValidAutoViewer(@NotNull Entity entity, Runnable runnable) {
         // Ensure that an entity can be auto-viewed
-        // In this case, it should be neither in the manual nor exception map
         synchronized (mutex) {
-            if (!(entity instanceof Player player)) {
+            if (!(entity instanceof Player player) || isAutoViewable(player)) {
                 runnable.run();
-                return;
             }
-            if (autoViewPredicate.test(player)) runnable.run();
+        }
+    }
+
+    public void updateRule(Predicate<Player> predicate) {
+        if (removal == null && addition == null)
+            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
+        synchronized (mutex) {
+            Predicate<Player> previousPredicate = this.autoPredicate;
+            if (autoViewable == null) return;
+            for (List<Player> players : autoViewable) {
+                if (players.isEmpty()) continue;
+                for (Player player : players) {
+                    if (!isAutoViewable(player)) continue;
+                    final boolean prev = previousPredicate == null || previousPredicate.test(player);
+                    final boolean upd = predicate.test(player);
+                    if (!prev && upd && addition != null) addition.accept(player);
+                    if (prev && !upd && removal != null) removal.accept(player);
+                }
+            }
+            this.autoPredicate = predicate;
         }
     }
 
@@ -99,11 +115,17 @@ public final class ViewEngine {
             for (List<Player> players : autoViewable) {
                 if (players.isEmpty()) continue;
                 for (Player player : players) {
-                    if (autoViewPredicate.test(player))
-                        consumer.accept(player);
+                    if (isAutoViewable(player)) consumer.accept(player);
                 }
             }
         }
+    }
+
+    private boolean isAutoViewable(Player player) {
+        if (player == entity || !player.isAutoViewable() ||
+                setContain(exceptionViewersMap, player) ||
+                setContain(manualViewers, player)) return false;
+        return autoPredicate == null || autoPredicate.test(player);
     }
 
     public Set<Player> asSet() {
@@ -127,7 +149,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (autoViewPredicate.test(player)) size++;
+                            if (isAutoViewable(player)) size++;
                         }
                     }
                 }
@@ -144,7 +166,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (autoViewPredicate.test(player)) return false;
+                            if (isAutoViewable(player)) return false;
                         }
                     }
                 }
@@ -162,7 +184,7 @@ public final class ViewEngine {
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (!players.isEmpty() && players.contains(player))
-                            return autoViewPredicate.test(player);
+                            return isAutoViewable(player);
                     }
                 }
             }
@@ -180,7 +202,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (autoViewPredicate.test(player)) action.accept(player);
+                            if (isAutoViewable(player)) action.accept(player);
                         }
                     }
                 }
@@ -230,7 +252,7 @@ public final class ViewEngine {
             private Player nextValidEntry(Iterator<Player> iterator) {
                 while (iterator.hasNext()) {
                     final Player player = iterator.next();
-                    if (autoIterator ? autoViewPredicate.test(player) : player != entity) return player;
+                    if (autoIterator ? isAutoViewable(player) : player != entity) return player;
                 }
                 return null;
             }

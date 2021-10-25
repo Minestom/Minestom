@@ -105,8 +105,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private final AtomicBoolean autoViewable = new AtomicBoolean(true);
     private final int id;
-    private final ViewEngine viewEngine = new ViewEngine(this);
-    protected final Set<Player> viewers = viewEngine.asSet();
     // Players must be aware of all surrounding entities
     // General entities should only be aware of surrounding players to update their viewing list
     private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
@@ -139,6 +137,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             viewEngine.updateReferences(players);
         }
     };
+    private final ViewEngine viewEngine = new ViewEngine(this, trackingUpdate::add, trackingUpdate::remove);
+    protected final Set<Player> viewers = viewEngine.asSet();
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
@@ -369,6 +369,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 this.viewEngine.forAutoViewers(p -> p.updateOldViewer(player));
             }
         }
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewingRule(@NotNull Predicate<Player> predicate) {
+        this.viewEngine.updateRule(predicate);
     }
 
     @Override
