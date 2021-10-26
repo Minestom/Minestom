@@ -151,7 +151,7 @@ public final class ViewEngine {
 
     private boolean isAutoViewable(Player player) {
         if (!isPotentialAutoViewable(player)) return false;
-        return autoPredicate == null || autoPredicate.test(player);
+        return autoPredicate.test(player);
     }
 
     public Set<Player> asSet() {
