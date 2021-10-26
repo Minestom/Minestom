@@ -75,7 +75,7 @@ public final class ViewEngine {
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return entity != null && entity.isAutoViewable() &&
+            return entity != null && autoViewable &&
                     manualViewers.isEmpty() &&
                     exceptionViewersMap.isEmpty();
         }
