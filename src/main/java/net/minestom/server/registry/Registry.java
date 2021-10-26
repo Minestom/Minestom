@@ -54,7 +54,7 @@ public final class Registry {
 
     @ApiStatus.Internal
     public static JsonObject load(Resource resource) {
-        final var resourceStream = ClassLoader.getSystemResourceAsStream(resource.name);
+        final var resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
         Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
         final var reader = new JsonReader(new InputStreamReader(resourceStream));
         try {
