@@ -221,7 +221,8 @@ public final class ViewEngine {
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 // Manual viewers
-                ViewEngine.this.manualViewers.forEach(action);
+                final Set<Player> manual = ViewEngine.this.manualViewers;
+                if (!manual.isEmpty()) manual.forEach(action);
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
