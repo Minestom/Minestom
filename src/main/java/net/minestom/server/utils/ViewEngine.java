@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -37,7 +38,7 @@ public final class ViewEngine {
     private final Consumer<Entity> addition;
     private final Consumer<Entity> removal;
     private Predicate<Player> autoPredicate = p -> true;
-    private boolean autoViewable = true;
+    private final AtomicBoolean autoViewable = new AtomicBoolean(true);
 
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
@@ -75,7 +76,7 @@ public final class ViewEngine {
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return entity != null && autoViewable &&
+            return entity != null && autoViewable.get() &&
                     manualViewers.isEmpty() &&
                     exceptionViewersMap.isEmpty();
         }
@@ -111,22 +112,17 @@ public final class ViewEngine {
     }
 
     public boolean isAutoViewable() {
-        synchronized (mutex) {
-            return autoViewable;
-        }
+        return autoViewable.get();
     }
 
     public void setAutoViewable(boolean autoViewable) {
-        synchronized (mutex) {
-            final boolean prev = this.autoViewable;
-            this.autoViewable = autoViewable;
-            if (prev != autoViewable && entity instanceof Player player) {
-                // View state changed, either add or remove all auto-viewers
-                if (autoViewable) {
-                    forAutoViewers(p -> p.updateNewViewer(player));
-                } else {
-                    forAutoViewers(p -> p.updateOldViewer(player));
-                }
+        final boolean previous = this.autoViewable.getAndSet(autoViewable);
+        if (previous != autoViewable && entity instanceof Player player) {
+            // View state changed, either add or remove all auto-viewers
+            if (autoViewable) {
+                forAutoViewers(p -> p.updateNewViewer(player));
+            } else {
+                forAutoViewers(p -> p.updateOldViewer(player));
             }
         }
     }
