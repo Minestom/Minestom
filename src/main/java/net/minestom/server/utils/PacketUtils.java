@@ -121,18 +121,18 @@ public final class PacketUtils {
                 return;
             final FramedPacket framedPacket = new FramedPacket(packet, createFramedPacket(packet));
             // Send packet to all players
-            for (Player player : players) {
+            players.forEach(player -> {
                 if (!player.isOnline() || !playerValidator.isValid(player))
-                    continue;
+                    return;
                 player.sendPacket(framedPacket);
-            }
+            });
         } else {
             // Write the same packet for each individual players
-            for (Player player : players) {
+            players.forEach(player -> {
                 if (!player.isOnline() || !playerValidator.isValid(player))
-                    continue;
+                    return;
                 player.getPlayerConnection().sendPacket(packet, false);
-            }
+            });
         }
     }
 
@@ -270,28 +270,30 @@ public final class PacketUtils {
         }
 
         private synchronized void process(Viewable viewable) {
-            final int size = buffer.writerOffset();
-            if (size == 0) return;
-            for (Player player : viewable.getViewers()) {
-                final PlayerConnection connection = player.getPlayerConnection();
-                final LongList pairs = entityIdMap.get(player.getEntityId());
-                if (pairs != null) {
-                    // Ensure that we skip the specified parts of the buffer
-                    int lastWrite = 0;
-                    for (LongIterator it = pairs.iterator(); it.hasNext(); ) {
-                        final long offsets = it.nextLong();
-                        final int start = (int) (offsets >> 32);
-                        if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
-                        lastWrite = (int) offsets; // End = last 32 bits
-                    }
-                    if (size != lastWrite) writeTo(connection, buffer.view(lastWrite, size));
-                } else {
-                    // Write all
-                    writeTo(connection, buffer.view(0, size));
-                }
-            }
+            if (buffer.writerOffset() == 0) return;
+            viewable.getViewers().forEach(this::processPlayer);
             this.buffer.clear();
             this.entityIdMap.clear();
+        }
+
+        private void processPlayer(Player player) {
+            final int size = buffer.writerOffset();
+            final PlayerConnection connection = player.getPlayerConnection();
+            final LongList pairs = entityIdMap.get(player.getEntityId());
+            if (pairs != null) {
+                // Ensure that we skip the specified parts of the buffer
+                int lastWrite = 0;
+                for (LongIterator it = pairs.iterator(); it.hasNext(); ) {
+                    final long offsets = it.nextLong();
+                    final int start = (int) (offsets >> 32);
+                    if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
+                    lastWrite = (int) offsets; // End = last 32 bits
+                }
+                if (size != lastWrite) writeTo(connection, buffer.view(lastWrite, size));
+            } else {
+                // Write all
+                writeTo(connection, buffer.view(0, size));
+            }
         }
 
         private static void writeTo(PlayerConnection connection, ByteBuffer buffer) {
