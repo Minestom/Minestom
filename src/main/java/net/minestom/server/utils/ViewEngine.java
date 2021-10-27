@@ -194,12 +194,12 @@ public final class ViewEngine {
     private boolean isVisibleBy(Player player) {
         // Check if the player is currently visible by this
         if (!isPotentialAutoViewable(player)) return false;
-        return player.isAutoViewer() && autoViewablePredicate.test(player);
+        return autoViewablePredicate.test(player);
     }
 
     private boolean canSee(Entity entity) {
-        if (entity == this.entity ||
-                entity instanceof Player player && setContain(manualViewers, player)) return false;
+        // Check if this is able to see the entity
+        if (!isPotentialAutoViewer(entity)) return false;
         return autoViewerPredicate.test(entity);
     }
 
