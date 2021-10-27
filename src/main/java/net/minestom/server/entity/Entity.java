@@ -1266,6 +1266,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Chunk chunk = getChunk();
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
             PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
+            this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         } else if (positionChange && viewChange) {
             PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, isOnGround()), this);
@@ -1277,7 +1278,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
             PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
         }
-        this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
     }
 
