@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -19,14 +21,11 @@ import java.util.function.Predicate;
 public final class ViewEngine {
     private final Entity entity;
     /**
-     * Represents viewers that have been added manually using {@link Viewable#addViewer(Player)}.
+     * Represents manual viewers.
+     * `True` means that the player shall always be seen (put using {@link Viewable#addViewer(Player)}).
+     * `False` means that the player shall never be viewed (put using {@link Viewable#removeViewer(Player)}).
      */
-    private final Set<Player> manualViewers = new HashSet<>();
-    /**
-     * Represents viewers that should normally be auto-visible
-     * but have been manually removed using {@link Viewable#removeViewer(Player)}.
-     */
-    private final Set<Player> exceptionViewersMap = new HashSet<>();
+    private final Object2BooleanOpenHashMap<Player> manualMap = new Object2BooleanOpenHashMap<>();
 
     // Decide if this entity should be viewable to X players
     private final AtomicBoolean autoViewable = new AtomicBoolean(true);
@@ -67,24 +66,26 @@ public final class ViewEngine {
     public boolean manualAdd(@NotNull Player player) {
         // Manual viewer addition into the manual set
         synchronized (mutex) {
-            this.exceptionViewersMap.remove(player);
-            return manualViewers.add(player);
+            return !manualMap.put(player, true);
         }
     }
 
     public boolean manualRemove(@NotNull Player player) {
         synchronized (mutex) {
-            if (!manualViewers.isEmpty() && manualViewers.remove(player)) return true;
-            return exceptionViewersMap.add(player);
+            // Add exception
+            if (!manualMap.containsKey(player)) {
+                manualMap.put(player, false);
+                return true;
+            }
+            // Remove from manual view
+            return !manualMap.put(player, true);
         }
     }
 
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return entity != null && isAutoViewable() &&
-                    manualViewers.isEmpty() &&
-                    exceptionViewersMap.isEmpty();
+            return entity != null && isAutoViewable() && manualMap.isEmpty();
         }
     }
 
@@ -199,7 +200,7 @@ public final class ViewEngine {
 
     private boolean ensureAuto(Entity entity) {
         return entity != this.entity && (!(entity instanceof Player player) ||
-                !setContain(exceptionViewersMap, player) && !setContain(manualViewers, player));
+                !manualMap.getBoolean(player));
     }
 
     public Set<Player> asSet() {
@@ -217,7 +218,12 @@ public final class ViewEngine {
         @Override
         public int size() {
             synchronized (mutex) {
-                int size = ViewEngine.this.manualViewers.size();
+                int size = 0;
+                // Manual size
+                for (boolean isManualViewer : manualMap.values()) {
+                    if (isManualViewer) size++;
+                }
+                // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
                     for (List<Player> players : auto) {
@@ -234,7 +240,7 @@ public final class ViewEngine {
         @Override
         public boolean isEmpty() {
             synchronized (mutex) {
-                if (!ViewEngine.this.manualViewers.isEmpty()) return false;
+                if (ViewEngine.this.manualMap.containsValue(true)) return false;
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
                     for (List<Player> players : auto) {
@@ -252,7 +258,7 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                if (setContain(ViewEngine.this.manualViewers, player)) return true;
+                if (ViewEngine.this.manualMap.getBoolean(player)) return true;
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
@@ -269,8 +275,11 @@ public final class ViewEngine {
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 // Manual viewers
-                final Set<Player> manual = ViewEngine.this.manualViewers;
-                if (!manual.isEmpty()) manual.forEach(action);
+                if (!manualMap.isEmpty()) {
+                    for (var entry : manualMap.object2BooleanEntrySet()) {
+                        if (entry.getBooleanValue()) action.accept(entry.getKey());
+                    }
+                }
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null) {
@@ -285,7 +294,8 @@ public final class ViewEngine {
         }
 
         final class It implements Iterator<Player> {
-            private Iterator<Player> current = ViewEngine.this.manualViewers.iterator();
+            private Iterator<Player> current = ViewEngine.this.manualMap.object2BooleanEntrySet().stream()
+                    .filter(Object2BooleanMap.Entry::getBooleanValue).map(Map.Entry::getKey).iterator();
             private boolean autoIterator = false; // True if the current iterator comes from the auto-viewable references
             private int index;
             private Player next;
@@ -332,9 +342,5 @@ public final class ViewEngine {
                 return null;
             }
         }
-    }
-
-    private static boolean setContain(Set<?> set, Player player) {
-        return !set.isEmpty() && set.contains(player);
     }
 }
