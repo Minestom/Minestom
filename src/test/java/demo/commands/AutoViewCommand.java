@@ -35,7 +35,7 @@ public class AutoViewCommand extends Command {
             if (!(sender instanceof Player player)) return;
             EntityFinder finder = context.get("targets");
             final List<Entity> entities = finder.find(sender);
-            player.updateViewingRule(entities::contains);
+            player.updateViewableRule(entities::contains);
             player.sendMessage("Viewable rule updated to see " + entities.size() + " players");
         }, Literal("rule-viewable"), Entity("targets").onlyPlayers(true));
 
@@ -51,7 +51,7 @@ public class AutoViewCommand extends Command {
         // Remove viewable rule
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
-            player.updateViewingRule(p -> true);
+            player.updateViewableRule(p -> true);
             player.sendMessage("Viewable rule removed");
         }, Literal("remove-rule-viewable"));
 
