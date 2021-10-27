@@ -109,13 +109,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
         @Override
         public void add(@NotNull Entity entity) {
-            if (Entity.this == entity) return;
             viewEngine.handleAutoViewAddition(entity);
         }
 
         @Override
         public void remove(@NotNull Entity entity) {
-            if (Entity.this == entity) return;
             viewEngine.handleAutoViewRemoval(entity);
         }
 

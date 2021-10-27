@@ -96,6 +96,8 @@ public final class ViewEngine {
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
+        if (this.entity == entity)
+            return; // Ensure that self isn't added or removed as viewer
         if (entity.getVehicle() != null)
             return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && isAutoViewer()) {
@@ -160,8 +162,8 @@ public final class ViewEngine {
     }
 
     private boolean ensureAuto(Entity entity) {
-        return entity != this.entity && (!(entity instanceof Player player) ||
-                !manualMap.getBoolean(player));
+        return entity != this.entity &&
+                (!(entity instanceof Player player) || !manualMap.getBoolean(player));
     }
 
     public Set<Player> asSet() {
