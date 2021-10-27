@@ -1982,11 +1982,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Skin support
         if (skin != null) {
-            final String textures = skin.getTextures();
-            final String signature = skin.getSignature();
-
             PlayerInfoPacket.AddPlayer.Property prop =
-                    new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                    new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature());
             addPlayer.properties.add(prop);
         }
 
