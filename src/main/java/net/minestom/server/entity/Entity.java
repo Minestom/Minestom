@@ -413,8 +413,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     public void updateNewViewer(@NotNull Player player) {
-        //System.out.println("send to " + player.getUsername());
-        //DebugUtils.printStackTrace();
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
