@@ -331,13 +331,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
-     * When set to true, the entity will automatically get new viewers when they come too close.
-     * This can be use to have complete control over which player can see it, without having to deal with
-     * raw packets.
-     * <p>
-     * True by default for all entities.
-     * When set to false, it is important to mention that the players will not be removed automatically from its viewers
-     * list, you would have to do that manually using {@link #addViewer(Player)} and {@link #removeViewer(Player)}..
+     * Gets if this entity is automatically sent to surrounding players.
+     * True by default.
      *
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
@@ -346,19 +341,30 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
-     * Decides if this entity should be auto-viewable by nearby entities.
+     * Decides if this entity should be auto-viewable by nearby players.
      *
-     * @param autoViewable should the entity be automatically viewable for close players
+     * @param autoViewable true to add surrounding players, false to remove
      * @see #isAutoViewable()
      */
     public void setAutoViewable(boolean autoViewable) {
         this.viewEngine.setAutoViewable(autoViewable);
     }
 
+    /**
+     * Gets if surrounding entities are automatically visible by this.
+     * True by default.
+     *
+     * @return true if surrounding entities are visible by this
+     */
     public boolean isAutoViewer() {
         return viewEngine.isAutoViewer();
     }
 
+    /**
+     * Decides if surrounding entities must be visible.
+     *
+     * @param autoViewer true to add view surrounding entities, false to remove
+     */
     public void setAutoViewer(boolean autoViewer) {
         this.viewEngine.setAutoViewer(autoViewer);
     }
