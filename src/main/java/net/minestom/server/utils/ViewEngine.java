@@ -109,79 +109,79 @@ public final class ViewEngine {
         return autoViewable.get();
     }
 
+    public boolean isAutoViewer() {
+        return autoViewer.get();
+    }
+
     public void setAutoViewable(boolean autoViewable) {
         final boolean previous = this.autoViewable.getAndSet(autoViewable);
         if (previous != autoViewable) {
-            // View state changed, either add or remove itself from all auto-viewers
-            updateReferences(autoViewableReferences, autoViewable,
+            // View state changed, either add or remove itself from surrounding players
+            updateReferences(autoViewableReferences, autoViewable, Entity::isAutoViewer,
                     autoViewableAddition, autoViewableRemoval);
         }
-    }
-
-    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
-        if (autoViewableRemoval == null && autoViewableAddition == null)
-            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
-        synchronized (mutex) {
-            updateReferencesRule(autoViewableReferences, this::isPotentialAutoViewable,
-                    autoViewablePredicate, predicate,
-                    autoViewableAddition, autoViewableRemoval);
-            this.autoViewablePredicate = predicate;
-        }
-    }
-
-    public boolean isAutoViewer() {
-        return autoViewer.get();
     }
 
     public void setAutoViewer(boolean autoViewer) {
         final boolean previous = this.autoViewer.getAndSet(autoViewer);
         if (previous != autoViewer) {
-            // View state changed, either add or remove all auto-viewers
-            updateReferences(autoViewerReferences, autoViewer,
+            // View state changed, either add or remove all surrounding entities
+            updateReferences(autoViewerReferences, autoViewer, Entity::isAutoViewable,
                     autoViewerAddition, autoViewerRemoval);
         }
     }
 
-    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
-        if (autoViewableRemoval == null && autoViewableAddition == null)
-            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
-        synchronized (mutex) {
-            updateReferencesRule(autoViewerReferences, this::isPotentialAutoViewer,
-                    autoViewerPredicate, predicate,
-                    autoViewerAddition, autoViewerRemoval);
-            this.autoViewerPredicate = predicate;
-        }
-    }
-
-    private <T extends Entity> void updateReferences(List<List<T>> references,
-                                                     boolean newValue,
+    private <T extends Entity> void updateReferences(List<List<T>> references, boolean newValue,
+                                                     Predicate<T> visibilityPredicate,
                                                      Consumer<T> addition, Consumer<T> removal) {
         synchronized (mutex) {
             if (references == null) return;
             for (List<T> entities : references) {
                 if (entities.isEmpty()) continue;
                 for (T entity : entities) {
-                    if (canSee(entity)) {
-                        if (newValue) {
-                            addition.accept(entity);
-                        } else {
-                            removal.accept(entity);
-                        }
+                    if (!ensureAuto(entity) || !visibilityPredicate.test(entity)) continue;
+                    if (newValue) {
+                        addition.accept(entity);
+                    } else {
+                        removal.accept(entity);
                     }
                 }
             }
         }
     }
 
-    private <T extends Entity> void updateReferencesRule(List<List<T>> references,
-                                                         Predicate<T> preliminaryTest,
+    @ApiStatus.Experimental
+    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
+        if (autoViewableRemoval == null && autoViewableAddition == null)
+            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
+        synchronized (mutex) {
+            updateReferencesRule(autoViewableReferences, Entity::isAutoViewer,
+                    autoViewablePredicate, predicate,
+                    autoViewableAddition, autoViewableRemoval);
+            this.autoViewablePredicate = predicate;
+        }
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
+        if (autoViewableRemoval == null && autoViewableAddition == null)
+            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
+        synchronized (mutex) {
+            updateReferencesRule(autoViewerReferences, Entity::isAutoViewable,
+                    autoViewerPredicate, predicate,
+                    autoViewerAddition, autoViewerRemoval);
+            this.autoViewerPredicate = predicate;
+        }
+    }
+
+    private <T extends Entity> void updateReferencesRule(List<List<T>> references, Predicate<T> preliminaryTest,
                                                          Predicate<T> oldPredicate, Predicate<T> newPredicate,
                                                          Consumer<T> addition, Consumer<T> removal) {
         if (references == null) return;
         for (List<T> entities : references) {
             if (entities.isEmpty()) continue;
             for (T entity : entities) {
-                if (!preliminaryTest.test(entity)) continue;
+                if (!ensureAuto(entity) || !preliminaryTest.test(entity)) continue;
                 final boolean upd = newPredicate.test(entity);
                 if (oldPredicate.test(entity) != upd) {
                     if (upd && addition != null) addition.accept(entity);
@@ -191,29 +191,15 @@ public final class ViewEngine {
         }
     }
 
-    private boolean isVisibleBy(Player player) {
-        // Check if the player is currently visible by this
-        if (!isPotentialAutoViewable(player)) return false;
-        return autoViewablePredicate.test(player);
+    private boolean isVisibleByAuto(Player player) {
+        // Check if the close player is currently visible by this
+        if (!ensureAuto(player)) return false;
+        return player.isAutoViewer() && autoViewablePredicate.test(player);
     }
 
-    private boolean canSee(Entity entity) {
-        // Check if this is able to see the entity
-        if (!isPotentialAutoViewer(entity)) return false;
-        return autoViewerPredicate.test(entity);
-    }
-
-    private boolean isPotentialAutoViewable(Player player) {
-        return player != entity && player.isAutoViewer() &&
-                !setContain(exceptionViewersMap, player) &&
-                !setContain(manualViewers, player);
-    }
-
-    private boolean isPotentialAutoViewer(Entity entity) {
-        return entity != this.entity && entity.isAutoViewable() &&
-                (!(entity instanceof Player player) ||
-                        !setContain(exceptionViewersMap, player) &&
-                                !setContain(manualViewers, player));
+    private boolean ensureAuto(Entity entity) {
+        return entity != this.entity && (!(entity instanceof Player player) ||
+                !setContain(exceptionViewersMap, player) && !setContain(manualViewers, player));
     }
 
     public Set<Player> asSet() {
@@ -237,7 +223,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isVisibleBy(player)) size++;
+                            if (isVisibleByAuto(player)) size++;
                         }
                     }
                 }
@@ -254,7 +240,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isVisibleBy(player)) return false;
+                            if (isVisibleByAuto(player)) return false;
                         }
                     }
                 }
@@ -272,7 +258,7 @@ public final class ViewEngine {
                 if (auto != null) {
                     for (List<Player> players : auto) {
                         if (!players.isEmpty() && players.contains(player))
-                            return isVisibleBy(player);
+                            return isVisibleByAuto(player);
                     }
                 }
             }
@@ -291,7 +277,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isVisibleBy(player)) action.accept(player);
+                            if (isVisibleByAuto(player)) action.accept(player);
                         }
                     }
                 }
@@ -341,7 +327,7 @@ public final class ViewEngine {
             private Player nextValidEntry(Iterator<Player> iterator) {
                 while (iterator.hasNext()) {
                     final Player player = iterator.next();
-                    if (autoIterator ? isVisibleBy(player) : player != entity) return player;
+                    if (autoIterator ? isVisibleByAuto(player) : player != entity) return player;
                 }
                 return null;
             }
