@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -76,8 +75,9 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
             this.biomes = new Biome[biomeCount];
         }
 
-        final List<List<Player>> references = instance.getEntityTracker().references(chunkX, chunkZ, EntityTracker.Target.PLAYERS);
-        this.viewers.updateReferences(references);
+        final EntityTracker tracker = instance.getEntityTracker();
+        this.viewers.updateReferences(tracker.references(chunkX, chunkZ, EntityTracker.Target.ENTITIES),
+                tracker.references(chunkX, chunkZ, EntityTracker.Target.PLAYERS));
     }
 
     /**

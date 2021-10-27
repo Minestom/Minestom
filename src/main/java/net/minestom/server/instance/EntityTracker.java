@@ -145,7 +145,8 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
 
         void remove(@NotNull E entity);
 
-        void viewerReferences(@Nullable List<List<Player>> players);
+        void viewerReferences(@Nullable List<List<Entity>> entities,
+                              @Nullable List<List<Player>> players);
     }
 
     /**

@@ -111,31 +111,23 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         @Override
         public void add(@NotNull Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player player) {
-                entity.viewEngine.computeValidAutoViewer(Entity.this, () -> updateNewViewer(player));
-            }
-            if (Entity.this instanceof Player thisPlayer) {
-                viewEngine.computeValidAutoViewer(entity, () -> entity.updateNewViewer(thisPlayer));
-            }
+            viewEngine.handleAutoViewAddition(entity);
         }
 
         @Override
         public void remove(@NotNull Entity entity) {
             if (Entity.this == entity) return;
-            if (entity instanceof Player player) {
-                entity.viewEngine.computeValidAutoViewer(Entity.this, () -> updateOldViewer(player));
-            }
-            if (Entity.this instanceof Player thisPlayer) {
-                viewEngine.computeValidAutoViewer(entity, () -> entity.updateOldViewer(thisPlayer));
-            }
+            viewEngine.handleAutoViewRemoval(entity);
         }
 
         @Override
-        public void viewerReferences(@Nullable List<List<Player>> players) {
-            viewEngine.updateReferences(players);
+        public void viewerReferences(@Nullable List<List<Entity>> entities,
+                                     @Nullable List<List<Player>> players) {
+            viewEngine.updateReferences(entities, players);
         }
     };
     private final ViewEngine viewEngine = new ViewEngine(this,
+            this::updateNewViewer, this::updateOldViewer,
             this instanceof Player ? entity -> entity.updateNewViewer((Player) this) : null,
             this instanceof Player ? entity -> entity.updateOldViewer((Player) this) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
@@ -363,9 +355,22 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.viewEngine.setAutoViewable(autoViewable);
     }
 
+    public boolean isAutoViewer() {
+        return viewEngine.isAutoViewer();
+    }
+
+    public void setAutoViewer(boolean autoViewer) {
+        this.viewEngine.setAutoViewer(autoViewer);
+    }
+
     @ApiStatus.Experimental
     public void updateViewingRule(@NotNull Predicate<Player> predicate) {
-        this.viewEngine.updateRule(predicate);
+        this.viewEngine.updateViewableRule(predicate);
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
+        this.viewEngine.updateViewerRule(predicate);
     }
 
     @Override
@@ -402,6 +407,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     public void updateNewViewer(@NotNull Player player) {
+        //System.out.println("send to " + player.getUsername());
+        //DebugUtils.printStackTrace();
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
