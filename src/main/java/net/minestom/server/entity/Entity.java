@@ -29,7 +29,6 @@ import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
@@ -369,16 +368,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.viewEngine.setAutoViewer(autoViewer);
     }
 
-    @ApiStatus.Experimental
-    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
-        this.viewEngine.updateViewableRule(predicate);
-    }
-
-    @ApiStatus.Experimental
-    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
-        this.viewEngine.updateViewerRule(predicate);
-    }
-
     @Override
     public final boolean addViewer(@NotNull Player player) {
         if (player == this) return false;
@@ -413,24 +402,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     public void updateNewViewer(@NotNull Player player) {
-        PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
-        if (hasVelocity()) {
-            playerConnection.sendPacket(getVelocityPacket());
-        }
-        playerConnection.sendPacket(getMetadataPacket());
-        // Passenger
+        player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        if (hasVelocity()) player.sendPacket(getVelocityPacket());
+        player.sendPacket(getMetadataPacket());
+        // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player) {
-                    passenger.addViewer0(player);
-                }
+                if (passenger != player) passenger.updateNewViewer(player);
             }
-            playerConnection.sendPacket(getPassengersPacket());
+            player.sendPacket(getPassengersPacket());
         }
         // Head position
-        playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
     /**
@@ -441,7 +425,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     public void updateOldViewer(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
+        final Set<Entity> passengers = this.passengers;
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                if (passenger == player) continue;
+                passenger.updateOldViewer(player);
+            }
+        }
+        player.sendPacket(new DestroyEntitiesPacket(getEntityId()));
     }
 
     @Override

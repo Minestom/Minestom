@@ -31,12 +31,10 @@ public final class ViewEngine {
     private final AtomicBoolean autoViewable = new AtomicBoolean(true);
     private List<List<Player>> autoViewableReferences;
     private final Consumer<Player> autoViewableAddition, autoViewableRemoval;
-    private Predicate<Player> autoViewablePredicate = p -> true;
     // Decide if this entity should view X entities
     private final AtomicBoolean autoViewer = new AtomicBoolean(true);
     private List<List<Entity>> autoViewerReferences;
     private final Consumer<Entity> autoViewerAddition, autoViewerRemoval;
-    private Predicate<Entity> autoViewerPredicate = p -> true;
 
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
@@ -98,6 +96,8 @@ public final class ViewEngine {
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
+        if (entity.getVehicle() != null)
+            return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && isAutoViewer()) {
             viewer.accept(entity); // Send packet to this player
         }
@@ -140,7 +140,9 @@ public final class ViewEngine {
             for (List<T> entities : references) {
                 if (entities.isEmpty()) continue;
                 for (T entity : entities) {
-                    if (!ensureAuto(entity) || !visibilityPredicate.test(entity)) continue;
+                    if (entity.getVehicle() != null ||
+                            !ensureAuto(entity) ||
+                            !visibilityPredicate.test(entity)) continue;
                     if (newValue) {
                         addition.accept(entity);
                     } else {
@@ -151,51 +153,10 @@ public final class ViewEngine {
         }
     }
 
-    @ApiStatus.Experimental
-    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
-        if (autoViewableRemoval == null && autoViewableAddition == null)
-            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
-        synchronized (mutex) {
-            updateReferencesRule(autoViewableReferences, Entity::isAutoViewer,
-                    autoViewablePredicate, predicate,
-                    autoViewableAddition, autoViewableRemoval);
-            this.autoViewablePredicate = predicate;
-        }
-    }
-
-    @ApiStatus.Experimental
-    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
-        if (autoViewableRemoval == null && autoViewableAddition == null)
-            throw new IllegalArgumentException("This viewable element does not support auto addition/removal");
-        synchronized (mutex) {
-            updateReferencesRule(autoViewerReferences, Entity::isAutoViewable,
-                    autoViewerPredicate, predicate,
-                    autoViewerAddition, autoViewerRemoval);
-            this.autoViewerPredicate = predicate;
-        }
-    }
-
-    private <T extends Entity> void updateReferencesRule(List<List<T>> references, Predicate<T> preliminaryTest,
-                                                         Predicate<T> oldPredicate, Predicate<T> newPredicate,
-                                                         Consumer<T> addition, Consumer<T> removal) {
-        if (references == null) return;
-        for (List<T> entities : references) {
-            if (entities.isEmpty()) continue;
-            for (T entity : entities) {
-                if (!ensureAuto(entity) || !preliminaryTest.test(entity)) continue;
-                final boolean upd = newPredicate.test(entity);
-                if (oldPredicate.test(entity) != upd) {
-                    if (upd && addition != null) addition.accept(entity);
-                    if (!upd && removal != null) removal.accept(entity);
-                }
-            }
-        }
-    }
-
     private boolean isVisibleByAuto(Player player) {
         // Check if the close player is currently visible by this
         if (!ensureAuto(player)) return false;
-        return player.isAutoViewer() && autoViewablePredicate.test(player);
+        return player.isAutoViewer();
     }
 
     private boolean ensureAuto(Entity entity) {
