@@ -819,15 +819,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.previousPosition = spawnPosition;
         this.instance = instance;
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
-            Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
-            refreshCurrentChunk(chunk);
-            if (this instanceof Player player) {
-                instance.getWorldBorder().init(player);
-                player.sendPacket(instance.createTimePacket());
+            try {
+                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+                refreshCurrentChunk(chunk);
+                if (this instanceof Player player) {
+                    instance.getWorldBorder().init(player);
+                    player.sendPacket(instance.createTimePacket());
+                }
+                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                spawn();
+                EventDispatcher.call(new EntitySpawnEvent(this, instance));
+            }catch (Exception e){
+             MinecraftServer.getExceptionManager().handleException(e);
             }
-            instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
-            spawn();
-            EventDispatcher.call(new EntitySpawnEvent(this, instance));
         });
     }
 
