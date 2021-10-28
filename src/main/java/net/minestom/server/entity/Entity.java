@@ -829,8 +829,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
-            }catch (Exception e){
-             MinecraftServer.getExceptionManager().handleException(e);
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         });
     }
