@@ -88,7 +88,7 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
      *
      * @return true if the animation should be played
      */
-    public boolean isAnimation() {
+    public boolean shouldAnimate() {
         return animation;
     }
 

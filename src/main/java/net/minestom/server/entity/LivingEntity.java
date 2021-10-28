@@ -351,7 +351,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             float remainingDamage = entityDamageEvent.getDamage();
 
-            if (entityDamageEvent.isAnimation()) {
+            if (entityDamageEvent.shouldAnimate()) {
                 sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
             }
 
