@@ -462,8 +462,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
         Set<Player> viewers = new HashSet<>(getViewers());
-        getViewers().forEach(this::removeViewer0);
-        viewers.forEach(this::addViewer0);
+        getViewers().forEach(this::updateOldViewer);
+        viewers.forEach(this::updateNewViewer);
     }
 
     @NotNull

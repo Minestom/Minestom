@@ -517,17 +517,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        if (!super.addViewer0(player)) {
-            return false;
-        }
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEquipmentsPacket());
-        playerConnection.sendPacket(getPropertiesPacket());
-        if (getTeam() != null) {
-            playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
-        }
-        return true;
+    public void updateNewViewer(@NotNull Player player) {
+        super.updateNewViewer(player);
+        player.sendPacket(getEquipmentsPacket());
+        player.sendPacket(getPropertiesPacket());
+        if (getTeam() != null) player.sendPacket(getTeam().createTeamsCreationPacket());
     }
 
     @Override

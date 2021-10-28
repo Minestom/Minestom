@@ -129,14 +129,10 @@ public class FakePlayer extends Player implements NavigableEntity {
     }
 
     @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        if (viewers.contains(player)) {
-            return false;
-        }
-        
+    public void updateNewViewer(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(getAddPlayerToList());
         handleTabList(player.getPlayerConnection());
-        return super.addViewer0(player);
+        super.updateNewViewer(player);
     }
 
     /**
@@ -157,7 +153,8 @@ public class FakePlayer extends Player implements NavigableEntity {
     private void handleTabList(PlayerConnection connection) {
         if (!option.isInTabList()) {
             // Remove from tab-list
-            MinecraftServer.getSchedulerManager().buildTask(() -> connection.sendPacket(getRemovePlayerToList())).delay(20, TimeUnit.SERVER_TICK).schedule();
+            MinecraftServer.getSchedulerManager().buildTask(() ->
+                    connection.sendPacket(getRemovePlayerToList())).delay(20, TimeUnit.SERVER_TICK).schedule();
         }
     }
 }

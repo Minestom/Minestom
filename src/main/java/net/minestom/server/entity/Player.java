@@ -495,15 +495,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    protected boolean removeViewer0(@NotNull Player player) {
-        if (player == this || !super.removeViewer0(player)) {
-            return false;
-        }
+    public void updateOldViewer(@NotNull Player player) {
+        super.updateOldViewer(player);
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            player.getPlayerConnection().sendPacket(this.getTeam().createTeamDestructionPacket());
+            player.sendPacket(this.getTeam().createTeamDestructionPacket());
         }
-        return true;
     }
 
     @Override
