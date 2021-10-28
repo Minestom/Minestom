@@ -52,8 +52,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
-    private boolean encrypted = false;
-    private boolean compressed = false;
+    private volatile boolean encrypted = false;
+    private volatile boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
     private byte[] nonce = new byte[4];
@@ -74,7 +74,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final Object bufferLock = new Object();
     private final Object flushLock = new Object();
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(PooledBuffers.get());
@@ -176,11 +175,9 @@ public class PlayerSocketConnection extends PlayerConnection {
      */
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
-        synchronized (bufferLock) {
-            this.decryptCipher = MojangCrypt.getCipher(2, secretKey);
-            this.encryptCipher = MojangCrypt.getCipher(1, secretKey);
-            this.encrypted = true;
-        }
+        this.decryptCipher = MojangCrypt.getCipher(2, secretKey);
+        this.encryptCipher = MojangCrypt.getCipher(1, secretKey);
+        this.encrypted = true;
     }
 
     /**
@@ -193,9 +190,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
         writeAndFlush(new SetCompressionPacket(threshold));
-        synchronized (bufferLock) {
-            this.compressed = true;
-        }
+        this.compressed = true;
     }
 
     /**
@@ -231,33 +226,31 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer) {
-        synchronized (bufferLock) {
-            if (encrypted) { // Encryption support
-                ByteBuffer output = PacketUtils.localBuffer();
-                try {
-                    this.encryptCipher.update(buffer.duplicate(), output);
-                    buffer = output.flip();
-                } catch (ShortBufferException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    return;
-                }
+        if (encrypted) { // Encryption support
+            ByteBuffer output = PacketUtils.localBuffer();
+            try {
+                this.encryptCipher.update(buffer.duplicate(), output);
+                buffer = output.flip();
+            } catch (ShortBufferException e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+                return;
             }
+        }
 
-            BinaryBuffer localBuffer = tickBuffer.getPlain();
-            final int capacity = localBuffer.capacity();
-            final int size = buffer.remaining();
-            if (size <= capacity) {
-                if (!localBuffer.canWrite(size)) localBuffer = updateLocalBuffer();
-                localBuffer.write(buffer);
-            } else {
-                final int bufferCount = size / capacity + 1;
-                for (int i = 0; i < bufferCount; i++) {
-                    buffer.position(i * capacity);
-                    buffer.limit(Math.min(size, buffer.position() + capacity));
-                    if (!localBuffer.canWrite(buffer.remaining())) localBuffer = updateLocalBuffer();
-                    localBuffer.write(buffer);
+        final int size = buffer.remaining();
+        final int capacity = PooledBuffers.bufferSize();
+        while (true) {
+            BinaryBuffer localBuffer = tickBuffer.get();
+            final int offset = BinaryBuffer.TEST.addAndGet(localBuffer, size);
+            if (offset >= capacity) {
+                synchronized (flushLock) {
+                    BinaryBuffer.TEST.set(localBuffer, offset - size);
+                    updateLocalBuffer();
                 }
+                continue;
             }
+            localBuffer.write(offset - size, buffer);
+            return;
         }
     }
 
@@ -266,16 +259,14 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
-        synchronized (bufferLock) {
-            writePacket(packet);
-            flush();
-        }
+        writePacket(packet);
+        flush();
     }
 
     @Override
     public void flush() {
         try {
-            synchronized (bufferLock) {
+            synchronized (flushLock) {
                 try {
                     updateLocalBuffer();
                 } catch (OutOfMemoryError e) {
@@ -283,8 +274,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                     System.gc(); // Explicit gc forcing buffers to be collected
                     throw new ClosedChannelException();
                 }
-            }
-            synchronized (flushLock) {
                 try {
                     // Write as much as possible from the waiting list
                     Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
@@ -304,13 +293,8 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    private BinaryBuffer updateLocalBuffer() {
-        synchronized (flushLock) {
-            BinaryBuffer newBuffer = PooledBuffers.get();
-            this.waitingBuffers.add(tickBuffer.getPlain());
-            this.tickBuffer.setPlain(newBuffer);
-            return newBuffer;
-        }
+    private void updateLocalBuffer() {
+        this.waitingBuffers.add(tickBuffer.getAndSet(PooledBuffers.get()));
     }
 
     @Override

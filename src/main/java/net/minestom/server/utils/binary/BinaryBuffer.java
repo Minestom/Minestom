@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 /**
  * Manages off-heap memory.
@@ -16,12 +17,13 @@ import java.nio.channels.WritableByteChannel;
  */
 @ApiStatus.Internal
 public final class BinaryBuffer {
+    public static final AtomicIntegerFieldUpdater<BinaryBuffer> TEST = AtomicIntegerFieldUpdater.newUpdater(BinaryBuffer.class, "writerOffset");
     private ByteBuffer nioBuffer; // To become a `MemorySegment` once released
     private NBTReader nbtReader;
     private NBTWriter nbtWriter;
 
     private final int capacity;
-    private int readerOffset, writerOffset;
+    private volatile int readerOffset, writerOffset;
 
     private BinaryBuffer(ByteBuffer buffer) {
         this.nioBuffer = buffer;
@@ -38,6 +40,13 @@ public final class BinaryBuffer {
         final var temp = ByteBuffer.allocateDirect(size)
                 .put(buffer.asByteBuffer(0, size));
         return new BinaryBuffer(temp);
+    }
+
+    public void write(int index, ByteBuffer buffer) {
+        final int start = buffer.position();
+        final int end = buffer.limit();
+        final int size = end - start;
+        this.nioBuffer.put(index, buffer, start, size);
     }
 
     public void write(ByteBuffer buffer) {
