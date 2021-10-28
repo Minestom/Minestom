@@ -82,9 +82,9 @@ public final class ViewEngine {
 
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
-        synchronized (mutex) {
-            return entity != null && isAutoViewable() && manualMap.isEmpty();
-        }
+        // This method should be considered as a hint instead of the objective truth
+        // as the manual map is not iterated.
+        return entity != null && isAutoViewable() && manualMap.isEmpty();
     }
 
     public void handleAutoViewAddition(Entity entity) {
