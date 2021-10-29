@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import com.google.common.collect.MapMaker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -31,9 +32,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.zip.Deflater;
 
 /**
@@ -53,7 +53,7 @@ public final class PacketUtils {
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
-    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
+    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new MapMaker().weakKeys().makeMap();
 
     private PacketUtils() {
     }
@@ -158,11 +158,12 @@ public final class PacketUtils {
             entity.sendPacketToViewers(serverPacket);
             return;
         }
-        ViewableStorage viewableStorage;
-        synchronized (VIEWABLE_STORAGE_MAP) {
-            viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, v -> new ViewableStorage());
-        }
-        viewableStorage.append(viewable, serverPacket, entity instanceof Player ? (Player) entity : null);
+        final Player exception = entity instanceof Player ? (Player) entity : null;
+        VIEWABLE_STORAGE_MAP.compute(viewable, ((v, storage) -> {
+            storage = Objects.requireNonNullElseGet(storage, ViewableStorage::new);
+            storage.append(v, serverPacket, exception);
+            return storage;
+        }));
     }
 
     @ApiStatus.Experimental
@@ -172,10 +173,8 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        synchronized (VIEWABLE_STORAGE_MAP) {
-            VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
-                    entry.getValue().process(entry.getKey()));
-        }
+        VIEWABLE_STORAGE_MAP.entrySet().parallelStream()
+                .forEach(entry -> entry.getValue().process(entry.getKey()));
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
@@ -246,7 +245,7 @@ public final class PacketUtils {
             PooledBuffers.registerBuffer(this, buffer);
         }
 
-        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+        private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
@@ -269,7 +268,7 @@ public final class PacketUtils {
             }
         }
 
-        private synchronized void process(Viewable viewable) {
+        private void process(Viewable viewable) {
             if (buffer.writerOffset() == 0) return;
             viewable.getViewers().forEach(this::processPlayer);
             this.buffer.clear();
