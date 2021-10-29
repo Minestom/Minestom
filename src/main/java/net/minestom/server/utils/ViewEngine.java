@@ -162,8 +162,9 @@ public final class ViewEngine {
     }
 
     private boolean ensureAuto(Entity entity) {
-        return entity != this.entity &&
-                (!(entity instanceof Player player) || !manualMap.getBoolean(player));
+        if (entity == this.entity) return false;
+        if (!(entity instanceof Player player)) return true;
+        return manualMap.isEmpty() || !manualMap.getBoolean(player);
     }
 
     public Set<Player> asSet() {
