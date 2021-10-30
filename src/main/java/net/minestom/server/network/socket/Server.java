@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.UnixDomainSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -30,6 +31,8 @@ public final class Server {
     private int index;
 
     private ServerSocketChannel serverSocket;
+
+    private SocketAddress socketAddress;
     private String address;
     private int port;
 
@@ -44,10 +47,14 @@ public final class Server {
 
     @ApiStatus.Internal
     public void init(SocketAddress address) throws IOException {
+        this.socketAddress = address;
         if (address instanceof InetSocketAddress inetSocketAddress) {
             this.address = inetSocketAddress.getHostString();
             this.port = inetSocketAddress.getPort();
-        } // TODO unix domain support
+        } else if (address instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
+            this.address = unixDomainSocketAddress.getPath().toString();
+            this.port = 0;
+        }
 
         ServerSocketChannel server = ServerSocketChannel.open();
         server.bind(address);
@@ -90,10 +97,22 @@ public final class Server {
         this.workers.forEach(worker -> worker.selector.wakeup());
     }
 
+    public SocketAddress socketAddress() {
+        return socketAddress;
+    }
+
+    /**
+     * @deprecated use {@link #socketAddress()}
+     */
+    @Deprecated
     public String getAddress() {
         return address;
     }
 
+    /**
+     * @deprecated use {@link #socketAddress()}
+     */
+    @Deprecated
     public int getPort() {
         return port;
     }

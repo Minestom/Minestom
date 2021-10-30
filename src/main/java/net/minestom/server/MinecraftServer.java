@@ -25,7 +25,6 @@ import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.network.socket.Server;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
@@ -46,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -125,7 +125,6 @@ public final class MinecraftServer {
     private static int compressionThreshold = 256;
     private static boolean groupedPacket = true;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
-    private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
     private static TagManager tagManager;
@@ -503,7 +502,7 @@ public final class MinecraftServer {
     /**
      * Changes the compression threshold of the server.
      * <p>
-     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
+     * WARNING: this need to be called before {@link #start(SocketAddress)}.
      *
      * @param compressionThreshold the new compression threshold, 0 to disable compression
      * @throws IllegalStateException if this is called after the server started
@@ -558,18 +557,6 @@ public final class MinecraftServer {
     public static void setTerminalEnabled(boolean enabled) {
         Check.stateCondition(started, "Terminal settings may not be changed after starting the server.");
         MinecraftServer.terminalEnabled = enabled;
-    }
-
-    /**
-     * Gets the consumer executed to show server-list data.
-     *
-     * @return the response data consumer
-     * @deprecated listen to the {@link net.minestom.server.event.server.ServerListPingEvent} instead
-     */
-    @Deprecated
-    public static ResponseDataConsumer getResponseDataConsumer() {
-        checkInitStatus(responseDataConsumer);
-        return responseDataConsumer;
     }
 
     /**
@@ -638,20 +625,13 @@ public final class MinecraftServer {
     }
 
     /**
-     * Starts the server.
-     * <p>
-     * It should be called after {@link #init()} and probably your own initialization code.
+     * Starts the server using {@link InetSocketAddress}
      *
-     * @param address              the server address
-     * @param port                 the server port
-     * @param responseDataConsumer the response data consumer, can be null
-     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
-     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.ServerListPingEvent} event instead of ResponseDataConsumer
+     * @param address the host name
+     * @param port    the port
      */
-    @Deprecated
-    public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
-        MinecraftServer.responseDataConsumer = responseDataConsumer;
-        start(address, port);
+    public void start(@NotNull String address, int port) {
+        start(new InetSocketAddress(address, port));
     }
 
     /**
@@ -659,11 +639,10 @@ public final class MinecraftServer {
      * <p>
      * It should be called after {@link #init()} and probably your own initialization code.
      *
-     * @param address the server address
-     * @param port    the server port
+     * @param socketAddress the socket address used to open the server
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
-    public void start(@NotNull String address, int port) {
+    public void start(@NotNull SocketAddress socketAddress) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
@@ -675,7 +654,7 @@ public final class MinecraftServer {
 
         // Init server
         try {
-            server.init(new InetSocketAddress(address, port));
+            server.init(socketAddress);
         } catch (IOException e) {
             e.printStackTrace();
         }
