@@ -22,7 +22,7 @@ public class AutoViewCommand extends Command {
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
             final boolean autoView = context.get("value");
-            player.setAutoViewer(autoView);
+            player.setAutoViewEntities(autoView);
             player.sendMessage("Auto-viewer set to " + autoView);
         }, Literal("viewer"), Boolean("value"));
     }

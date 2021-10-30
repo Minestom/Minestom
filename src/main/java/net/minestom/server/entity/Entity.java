@@ -354,7 +354,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return true if surrounding entities are visible by this
      */
     @ApiStatus.Experimental
-    public boolean isAutoViewer() {
+    public boolean autoViewEntities() {
         return viewEngine.isAutoViewer();
     }
 
@@ -364,31 +364,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param autoViewer true to add view surrounding entities, false to remove
      */
     @ApiStatus.Experimental
-    public void setAutoViewer(boolean autoViewer) {
+    public void setAutoViewEntities(boolean autoViewer) {
         this.viewEngine.setAutoViewer(autoViewer);
     }
 
     @Override
     public final boolean addViewer(@NotNull Player player) {
-        if (player == this) return false;
-        return addViewer0(player);
-    }
-
-    @Override
-    public final boolean removeViewer(@NotNull Player player) {
-        if (player == this) return false;
-        return removeViewer0(player);
-    }
-
-    @ApiStatus.Internal
-    protected boolean addViewer0(@NotNull Player player) {
         if (!viewEngine.manualAdd(player)) return false;
         updateNewViewer(player);
         return true;
     }
 
-    @ApiStatus.Internal
-    protected boolean removeViewer0(@NotNull Player player) {
+    @Override
+    public final boolean removeViewer(@NotNull Player player) {
         if (!viewEngine.manualRemove(player)) return false;
         updateOldViewer(player);
         return true;

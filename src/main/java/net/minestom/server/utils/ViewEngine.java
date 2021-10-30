@@ -62,6 +62,7 @@ public final class ViewEngine {
     }
 
     public boolean manualAdd(@NotNull Player player) {
+        if (player == this.entity) return false;
         // Manual viewer addition into the manual set
         synchronized (mutex) {
             return !manualMap.put(player, true);
@@ -69,6 +70,7 @@ public final class ViewEngine {
     }
 
     public boolean manualRemove(@NotNull Player player) {
+        if (player == this.entity) return false;
         synchronized (mutex) {
             // Add exception
             if (!manualMap.containsKey(player)) {
@@ -106,7 +108,7 @@ public final class ViewEngine {
         if (this.entity instanceof Player && isAutoViewer()) {
             viewer.accept(entity); // Send packet to this player
         }
-        if (entity instanceof Player player && player.isAutoViewer()) {
+        if (entity instanceof Player player && player.autoViewEntities()) {
             viewable.accept(player); // Send packet to the range-visible player
         }
     }
@@ -124,7 +126,7 @@ public final class ViewEngine {
         if (previous != autoViewable) {
             // View state changed, either add or remove itself from surrounding players
             synchronized (mutex) {
-                updateReferences(autoViewableReferences, Entity::isAutoViewer,
+                updateReferences(autoViewableReferences, Entity::autoViewEntities,
                         autoViewable ? autoViewableAddition : autoViewableRemoval);
             }
         }
@@ -187,7 +189,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (visibilityTest(player, Entity::isAutoViewer)) size++;
+                            if (visibilityTest(player, Entity::autoViewEntities)) size++;
                         }
                     }
                 }
@@ -204,7 +206,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (visibilityTest(player, Entity::isAutoViewer)) return false;
+                            if (visibilityTest(player, Entity::autoViewEntities)) return false;
                         }
                     }
                 }
@@ -222,7 +224,7 @@ public final class ViewEngine {
                 if (auto != null && isAutoViewable()) {
                     for (List<Player> players : auto) {
                         if (!players.isEmpty() && players.contains(player))
-                            return visibilityTest(player, Entity::isAutoViewer);
+                            return visibilityTest(player, Entity::autoViewEntities);
                     }
                 }
             }
@@ -244,7 +246,7 @@ public final class ViewEngine {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (visibilityTest(player, Entity::isAutoViewer)) action.accept(player);
+                            if (visibilityTest(player, Entity::autoViewEntities)) action.accept(player);
                         }
                     }
                 }
@@ -295,7 +297,8 @@ public final class ViewEngine {
             private Player nextValidEntry(Iterator<Player> iterator) {
                 while (iterator.hasNext()) {
                     final Player player = iterator.next();
-                    if (autoIterator ? visibilityTest(player, Entity::isAutoViewer) : player != entity) return player;
+                    if (autoIterator ? visibilityTest(player, Entity::autoViewEntities) : player != entity)
+                        return player;
                 }
                 return null;
             }
