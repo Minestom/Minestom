@@ -52,7 +52,7 @@ public final class Server {
             this.address = inetSocketAddress.getHostString();
             this.port = inetSocketAddress.getPort();
         } else if (address instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
-            this.address = unixDomainSocketAddress.getPath().toString();
+            this.address = "unix://" + unixDomainSocketAddress.getPath();
             this.port = 0;
         }
 
@@ -101,18 +101,10 @@ public final class Server {
         return socketAddress;
     }
 
-    /**
-     * @deprecated use {@link #socketAddress()}
-     */
-    @Deprecated
     public String getAddress() {
         return address;
     }
 
-    /**
-     * @deprecated use {@link #socketAddress()}
-     */
-    @Deprecated
     public int getPort() {
         return port;
     }

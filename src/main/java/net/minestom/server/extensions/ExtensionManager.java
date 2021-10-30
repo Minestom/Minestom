@@ -9,7 +9,6 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +61,7 @@ public class ExtensionManager {
      * <p>
      * Default value is 'true'.
      *
-     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
+     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(java.net.SocketAddress)}
      */
     public boolean shouldLoadOnStartup() {
         return loadOnStartup;
