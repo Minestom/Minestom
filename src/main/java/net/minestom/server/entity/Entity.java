@@ -353,6 +353,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return true if surrounding entities are visible by this
      */
+    @ApiStatus.Experimental
     public boolean isAutoViewer() {
         return viewEngine.isAutoViewer();
     }
@@ -362,6 +363,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @param autoViewer true to add view surrounding entities, false to remove
      */
+    @ApiStatus.Experimental
     public void setAutoViewer(boolean autoViewer) {
         this.viewEngine.setAutoViewer(autoViewer);
     }
