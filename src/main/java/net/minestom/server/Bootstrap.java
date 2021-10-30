@@ -4,11 +4,14 @@ import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.extras.selfmodification.mixins.MixinCodeModifier;
 import net.minestom.server.extras.selfmodification.mixins.MixinServiceMinestom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.launch.platform.CommandLineOptions;
 import org.spongepowered.asm.mixin.Mixins;
 import org.spongepowered.asm.service.ServiceNotAvailableError;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -18,6 +21,8 @@ import java.util.Arrays;
  */
 public final class Bootstrap {
 
+    private final static Logger logger = LoggerFactory.getLogger(Bootstrap.class);
+
     public static void bootstrap(String mainClassFullName, String[] args) {
         try {
             ClassLoader classLoader = MinestomRootClassLoader.getInstance();
@@ -25,11 +30,14 @@ public final class Bootstrap {
             try {
                 MinestomRootClassLoader.getInstance().addCodeModifier(new MixinCodeModifier());
             } catch (RuntimeException e) {
-                e.printStackTrace();
-                System.err.println("Failed to add MixinCodeModifier, mixins will not be injected. Check the log entries above to debug.");
+                logger.error("Failed to add MixinCodeModifier, mixins will not be injected: ", e);
             }
 
-            ExtensionManager.loadCodeModifiersEarly();
+            try {
+                ExtensionManager.loadCodeModifiersEarly();
+            } catch (IOException ioException) {
+                logger.error("Could not load code modifiers: ", ioException);
+            }
 
             MixinServiceMinestom.gotoPreinitPhase();
             // ensure extensions are loaded when starting the server
@@ -58,9 +66,8 @@ public final class Bootstrap {
                 return;
             }
         } catch (ServiceNotAvailableError e) {
-            e.printStackTrace();
-            System.err.println("Failed to load Mixin, see error above.");
-            System.err.println("It is possible you simply have two files with identical names inside your server jar. " +
+            logger.error("Failed to load Mixin: ", e);
+            logger.error("It is possible you simply have two files with identical names inside your server jar. " +
                     "Check your META-INF/services directory inside your Minestom implementation and merge files with identical names inside META-INF/services.");
 
             return;
