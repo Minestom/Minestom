@@ -810,8 +810,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (event.isCancelled()) return null; // TODO what to return?
 
         if (previousInstance != null) {
-            // Must remove from previous instance before updating
-            removeFromInstance(previousInstance);
+            EventDispatcher.call(new RemoveEntityFromInstanceEvent(previousInstance, this));
         } else {
             this.isActive = true;
         }
@@ -850,12 +849,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
         return setInstance(instance, this.position);
-    }
-
-    private void removeFromInstance(Instance instance) {
-        RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(instance, this);
-        EventDispatcher.callCancellable(event, () ->
-                instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate));
     }
 
     /**
@@ -1436,7 +1429,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Entity.ENTITY_BY_UUID.remove(uuid);
         Instance currentInstance = this.instance;
         if (currentInstance != null) {
-            removeFromInstance(currentInstance);
+            EventDispatcher.call(new RemoveEntityFromInstanceEvent(currentInstance, this));
         }
     }
 
