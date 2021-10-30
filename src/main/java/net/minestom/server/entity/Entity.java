@@ -439,7 +439,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
-     * Gets if this entity's viewers can be predicted from surrounding chunks.
+     * Gets if this entity's viewers (surrounding players) can be predicted from surrounding chunks.
      */
     public boolean hasPredictableViewers() {
         return viewEngine.hasPredictableViewers();

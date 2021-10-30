@@ -84,7 +84,9 @@ public final class ViewEngine {
         // Verify if this entity's viewers can be predicted from surrounding entities
         // This method should be considered as a hint instead of the objective truth
         // as the manual map is not iterated.
-        return entity != null && isAutoViewable() && manualMap.isEmpty();
+        synchronized (mutex) {
+            return isAutoViewable() && manualMap.isEmpty();
+        }
     }
 
     public void handleAutoViewAddition(Entity entity) {
@@ -98,12 +100,13 @@ public final class ViewEngine {
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
         if (this.entity == entity)
             return; // Ensure that self isn't added or removed as viewer
+        if (!entity.isAutoViewable()) return;
         if (entity.getVehicle() != null)
             return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && isAutoViewer()) {
             viewer.accept(entity); // Send packet to this player
         }
-        if (entity instanceof Player player && isAutoViewable()) {
+        if (entity instanceof Player player && player.isAutoViewer()) {
             viewable.accept(player); // Send packet to the range-visible player
         }
     }
@@ -120,8 +123,10 @@ public final class ViewEngine {
         final boolean previous = this.autoViewable.getAndSet(autoViewable);
         if (previous != autoViewable) {
             // View state changed, either add or remove itself from surrounding players
-            updateReferences(autoViewableReferences, autoViewable, Entity::isAutoViewer,
-                    autoViewableAddition, autoViewableRemoval);
+            synchronized (mutex) {
+                updateReferences(autoViewableReferences, Entity::isAutoViewer,
+                        autoViewable ? autoViewableAddition : autoViewableRemoval);
+            }
         }
     }
 
@@ -129,42 +134,31 @@ public final class ViewEngine {
         final boolean previous = this.autoViewer.getAndSet(autoViewer);
         if (previous != autoViewer) {
             // View state changed, either add or remove all surrounding entities
-            updateReferences(autoViewerReferences, autoViewer, Entity::isAutoViewable,
-                    autoViewerAddition, autoViewerRemoval);
-        }
-    }
-
-    private <T extends Entity> void updateReferences(List<List<T>> references, boolean newValue,
-                                                     Predicate<T> visibilityPredicate,
-                                                     Consumer<T> addition, Consumer<T> removal) {
-        synchronized (mutex) {
-            if (references == null) return;
-            for (List<T> entities : references) {
-                if (entities.isEmpty()) continue;
-                for (T entity : entities) {
-                    if (entity.getVehicle() != null ||
-                            !ensureAuto(entity) ||
-                            !visibilityPredicate.test(entity)) continue;
-                    if (newValue) {
-                        addition.accept(entity);
-                    } else {
-                        removal.accept(entity);
-                    }
-                }
+            synchronized (mutex) {
+                updateReferences(autoViewerReferences, Entity::isAutoViewable,
+                        autoViewer ? autoViewerAddition : autoViewerRemoval);
             }
         }
     }
 
-    private boolean isVisibleByAuto(Player player) {
-        // Check if the close player is currently visible by this
-        if (!ensureAuto(player)) return false;
-        return player.isAutoViewer();
+    private <T extends Entity> void updateReferences(List<List<T>> references,
+                                                     Predicate<T> visibilityPredicate, Consumer<T> action) {
+        if (references == null) return;
+        for (List<T> entities : references) {
+            if (entities.isEmpty()) continue;
+            for (T entity : entities) {
+                if (entity.getVehicle() != null || !visibilityTest(entity, visibilityPredicate)) continue;
+                action.accept(entity);
+            }
+        }
     }
 
-    private boolean ensureAuto(Entity entity) {
+    private <T extends Entity> boolean visibilityTest(T entity, Predicate<T> predicate) {
+        // Check if the close player is currently visible by this
         if (entity == this.entity) return false;
         if (!(entity instanceof Player player)) return true;
-        return manualMap.isEmpty() || !manualMap.getBoolean(player);
+        if (!predicate.test(entity)) return false;
+        return manualMap.isEmpty() || !manualMap.containsKey(player);
     }
 
     public Set<Player> asSet() {
@@ -189,11 +183,11 @@ public final class ViewEngine {
                 }
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
-                if (auto != null) {
+                if (auto != null && isAutoViewable()) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isVisibleByAuto(player)) size++;
+                            if (visibilityTest(player, Entity::isAutoViewer)) size++;
                         }
                     }
                 }
@@ -206,11 +200,11 @@ public final class ViewEngine {
             synchronized (mutex) {
                 if (ViewEngine.this.manualMap.containsValue(true)) return false;
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
-                if (auto != null) {
+                if (auto != null && isAutoViewable()) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isVisibleByAuto(player)) return false;
+                            if (visibilityTest(player, Entity::isAutoViewer)) return false;
                         }
                     }
                 }
@@ -222,13 +216,13 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                if (ViewEngine.this.manualMap.getBoolean(player)) return true;
+                if (!manualMap.isEmpty() && manualMap.getBoolean(player)) return true;
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
-                if (auto != null) {
+                if (auto != null && isAutoViewable()) {
                     for (List<Player> players : auto) {
                         if (!players.isEmpty() && players.contains(player))
-                            return isVisibleByAuto(player);
+                            return visibilityTest(player, Entity::isAutoViewer);
                     }
                 }
             }
@@ -246,11 +240,11 @@ public final class ViewEngine {
                 }
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
-                if (auto != null) {
+                if (auto != null && isAutoViewable()) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
-                            if (isVisibleByAuto(player)) action.accept(player);
+                            if (visibilityTest(player, Entity::isAutoViewer)) action.accept(player);
                         }
                     }
                 }
@@ -285,7 +279,7 @@ public final class ViewEngine {
                 Player result;
                 if ((result = nextValidEntry(current)) != null) return result;
                 this.autoIterator = true;
-                if (autoViewableReferences == null) return null;
+                if (autoViewableReferences == null || !isAutoViewable()) return null;
                 for (int i = index + 1; i < autoViewableReferences.size(); i++) {
                     final List<Player> players = autoViewableReferences.get(i);
                     Iterator<Player> iterator = players.iterator();
@@ -301,7 +295,7 @@ public final class ViewEngine {
             private Player nextValidEntry(Iterator<Player> iterator) {
                 while (iterator.hasNext()) {
                     final Player player = iterator.next();
-                    if (autoIterator ? isVisibleByAuto(player) : player != entity) return player;
+                    if (autoIterator ? visibilityTest(player, Entity::isAutoViewer) : player != entity) return player;
                 }
                 return null;
             }
