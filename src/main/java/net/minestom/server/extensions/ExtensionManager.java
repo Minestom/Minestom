@@ -26,9 +26,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -46,9 +50,8 @@ public class ExtensionManager {
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
     private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
 
-    private final File extensionFolder = new File("extensions");
-    private final File dependenciesFolder = new File(extensionFolder, ".libs");
-    private Path extensionDataRoot = extensionFolder.toPath();
+    private final Path extensionFolder = Path.of("extensions");
+    private final Path dependenciesFolder = extensionFolder.resolve(".libs");
     private boolean loaded;
 
     // Option
@@ -121,26 +124,26 @@ public class ExtensionManager {
      * <p>
      * And finally make a scheduler to clean observers per extension.
      */
-    public void loadExtensions() {
+    public void loadExtensions() throws IOException {
         Check.stateCondition(loaded, "Extensions are already loaded!");
         this.loaded = true;
 
         // Initialize folders
         {
             // Make extensions folder if necessary
-            if (!extensionFolder.exists()) {
-                if (!extensionFolder.mkdirs()) {
-                    LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
-                    return;
-                }
+            try {
+                Files.createDirectories(extensionFolder);
+            } catch (IOException exception) {
+                LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
+                return;
             }
 
             // Make dependencies folder if necessary
-            if (!dependenciesFolder.exists()) {
-                if (!dependenciesFolder.mkdirs()) {
-                    LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
-                    return;
-                }
+            try {
+                Files.createDirectories(dependenciesFolder);
+            } catch (IOException exception) {
+                LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
+                return;
             }
         }
 
@@ -321,31 +324,30 @@ public class ExtensionManager {
      *
      * @return A list of discovered extensions from this folder.
      */
-    private @NotNull List<DiscoveredExtension> discoverExtensions() {
+    private @NotNull List<DiscoveredExtension> discoverExtensions() throws IOException {
         List<DiscoveredExtension> extensions = new LinkedList<>();
 
-        File[] fileList = extensionFolder.listFiles();
+        Stream<Path> fileList = Files.list(extensionFolder);
 
-        if (fileList != null) {
-            // Loop through all files in extension folder
-            for (File file : fileList) {
+        // Loop through all files in extension folder
+        for (Path file : fileList.collect(Collectors.toList())) {
 
-                // Ignore folders
-                if (file.isDirectory()) {
-                    continue;
-                }
+            // Ignore folders
+            if (Files.isDirectory(file)) {
+                continue;
+            }
 
-                // Ignore non .jar files
-                if (!file.getName().endsWith(".jar")) {
-                    continue;
-                }
+            // Ignore non .jar files
+            if (!file.getFileName().endsWith(".jar")) {
+                continue;
+            }
 
-                DiscoveredExtension extension = discoverFromJar(file);
-                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                    extensions.add(extension);
-                }
+            DiscoveredExtension extension = discoverFromJar(file);
+            if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                extensions.add(extension);
             }
         }
+
 
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
         if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
@@ -356,7 +358,7 @@ public class ExtensionManager {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
                 extension.files.add(new File(extensionClasses).toURI().toURL());
                 extension.files.add(new File(extensionResources).toURI().toURL());
-                extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
+                extension.setDataDirectory(getExtensionFolder().resolve(extension.getName()));
 
                 // Verify integrity and ensure defaults
                 DiscoveredExtension.verifyIntegrity(extension);
@@ -377,21 +379,25 @@ public class ExtensionManager {
      * @param file The jar to grab it from (a .jar is a formatted .zip file)
      * @return The created DiscoveredExtension.
      */
-    private @Nullable DiscoveredExtension discoverFromJar(@NotNull File file) {
-        try (ZipFile f = new ZipFile(file)) {
+    private @Nullable DiscoveredExtension discoverFromJar(@NotNull Path file) {
 
-            ZipEntry entry = f.getEntry("extension.json");
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("create", "true");
 
-            if (entry == null)
-                throw new IllegalStateException("Missing extension.json in extension " + file.getName() + ".");
+        try (FileSystem fileSystem = FileSystems.newFileSystem(file, attributes)) {
 
-            InputStreamReader reader = new InputStreamReader(f.getInputStream(entry));
+            Path path = fileSystem.getPath("extension.json");
+
+            if (Files.exists(path))
+                throw new IllegalStateException("Missing extension.json in extension " + file.getFileName() + ".");
+
+            InputStreamReader reader = new InputStreamReader(Files.newInputStream(path));
 
             // Initialize DiscoveredExtension from GSON.
             DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
             extension.setOriginalJar(file);
-            extension.files.add(file.toURI().toURL());
-            extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
+            extension.files.add(file.toUri().toURL());
+            extension.setDataDirectory(getExtensionFolder().resolve(extension.getName()));
 
             // Verify integrity and ensure defaults
             DiscoveredExtension.verifyIntegrity(extension);
@@ -590,16 +596,8 @@ public class ExtensionManager {
     }
 
     @NotNull
-    public File getExtensionFolder() {
+    public Path getExtensionFolder() {
         return extensionFolder;
-    }
-
-    public @NotNull Path getExtensionDataRoot() {
-        return extensionDataRoot;
-    }
-
-    public void setExtensionDataRoot(@NotNull Path dataRoot) {
-        this.extensionDataRoot = dataRoot;
     }
 
     @NotNull
@@ -713,19 +711,19 @@ public class ExtensionManager {
             throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
         }
 
-        File originalJar = ext.getOrigin().getOriginalJar();
+        Path originalJar = ext.getOrigin().getOriginalJar();
         if (originalJar == null) {
             LOGGER.error("Cannot reload extension {} that is not from a .jar file!", extensionName);
             return false;
         }
 
-        LOGGER.info("Reload extension {} from jar file {}", extensionName, originalJar.getAbsolutePath());
+        LOGGER.info("Reload extension {} from jar file {}", extensionName, originalJar.toAbsolutePath());
         List<String> dependents = new LinkedList<>(ext.getDependents()); // copy dependents list
-        List<File> originalJarsOfDependents = new LinkedList<>();
+        List<Path> originalJarsOfDependents = new LinkedList<>();
 
         for (String dependentID : dependents) {
             Extension dependentExt = extensions.get(dependentID.toLowerCase());
-            File dependentOriginalJar = dependentExt.getOrigin().getOriginalJar();
+            Path dependentOriginalJar = dependentExt.getOrigin().getOriginalJar();
             originalJarsOfDependents.add(dependentOriginalJar);
             if (dependentOriginalJar == null) {
                 LOGGER.error("Cannot reload extension {} that is not from a .jar file!", dependentID);
@@ -745,13 +743,13 @@ public class ExtensionManager {
 
         // rediscover extension to reload. We allow dependency changes, so we need to fully reload it
         List<DiscoveredExtension> extensionsToReload = new LinkedList<>();
-        LOGGER.info("Rediscover extension {} from jar {}", extensionName, originalJar.getAbsolutePath());
+        LOGGER.info("Rediscover extension {} from jar {}", extensionName, originalJar.toAbsolutePath());
         DiscoveredExtension rediscoveredExtension = discoverFromJar(originalJar);
         extensionsToReload.add(rediscoveredExtension);
 
-        for (File dependentJar : originalJarsOfDependents) {
+        for (Path dependentJar : originalJarsOfDependents) {
             // rediscover dependent extension to reload
-            LOGGER.info("Rediscover dependent extension (depends on {}) from jar {}", extensionName, dependentJar.getAbsolutePath());
+            LOGGER.info("Rediscover dependent extension (depends on {}) from jar {}", extensionName, dependentJar.toAbsolutePath());
             extensionsToReload.add(discoverFromJar(dependentJar));
         }
 
@@ -761,12 +759,12 @@ public class ExtensionManager {
         return true;
     }
 
-    public boolean loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
-        if (!jarFile.exists()) {
-            throw new FileNotFoundException("File '" + jarFile.getAbsolutePath() + "' does not exists. Cannot load extension.");
+    public boolean loadDynamicExtension(@NotNull Path jarFile) throws FileNotFoundException {
+        if (!Files.exists(jarFile)) {
+            throw new FileNotFoundException("File '" + jarFile.toAbsolutePath() + "' does not exists. Cannot load extension.");
         }
 
-        LOGGER.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
+        LOGGER.info("Discover dynamic extension from jar {}", jarFile.toAbsolutePath());
         DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
         List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
         return loadExtensionList(extensionsToLoad);
@@ -845,7 +843,7 @@ public class ExtensionManager {
     /**
      * Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.
      */
-    public static void loadCodeModifiersEarly() {
+    public static void loadCodeModifiersEarly() throws IOException {
         // allow users to disable early code modifier load
         if ("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
             return;

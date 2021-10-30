@@ -74,7 +74,7 @@ public final class DiscoveredExtension {
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
 
     /** The original jar this is from. */
-    transient private File originalJar;
+    transient private Path originalJar;
 
     transient private Path dataDirectory;
 
@@ -124,12 +124,12 @@ public final class DiscoveredExtension {
         return externalDependencies;
     }
 
-    public void setOriginalJar(@Nullable File file) {
+    public void setOriginalJar(@Nullable Path file) {
         originalJar = file;
     }
 
     @Nullable
-    public File getOriginalJar() {
+    public Path getOriginalJar() {
         return originalJar;
     }
 
