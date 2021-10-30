@@ -330,23 +330,23 @@ public class ExtensionManager {
         Stream<Path> fileList = Files.list(extensionFolder);
 
         // Loop through all files in extension folder
-        for (Path file : fileList.collect(Collectors.toList())) {
+        fileList.forEach(file -> {
 
             // Ignore folders
             if (Files.isDirectory(file)) {
-                continue;
+                return;
             }
 
             // Ignore non .jar files
             if (!file.getFileName().endsWith(".jar")) {
-                continue;
+                return;
             }
 
             DiscoveredExtension extension = discoverFromJar(file);
             if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
                 extensions.add(extension);
             }
-        }
+        });
 
 
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
