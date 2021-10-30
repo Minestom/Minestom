@@ -354,10 +354,10 @@ public class ExtensionManager {
             LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
             final String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
             final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
+            try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(Path.of(extensionResources, "extension.json")))) {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files.add(new File(extensionClasses).toURI().toURL());
-                extension.files.add(new File(extensionResources).toURI().toURL());
+                extension.files.add(Path.of(extensionClasses).toUri().toURL());
+                extension.files.add(Path.of(extensionResources).toUri().toURL());
                 extension.setDataDirectory(getExtensionFolder().resolve(extension.getName()));
 
                 // Verify integrity and ensure defaults
