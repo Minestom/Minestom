@@ -529,29 +529,37 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         final Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
-        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (e.g. SharedInstance)
-        if (!InstanceUtils.areLinked(currentInstance, instance) || !spawnPosition.sameChunk(this.position)) {
-            final boolean firstSpawn = currentInstance == null;
-            final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
-            final Thread runThread = Thread.currentThread();
-            final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition, firstSpawn, dimensionChange, true);
-            // Wait for all surrounding chunks to load
-            List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-            ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(),
-                    (chunkX, chunkZ) -> futures.add(instance.loadOptionalChunk(chunkX, chunkZ)));
-            return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).thenRun(() -> {
-                if (runThread == Thread.currentThread()) {
-                    runnable.accept(instance);
-                } else {
-                    instance.scheduleNextTick(runnable);
-                }
-            });
-        } else {
+        if (InstanceUtils.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
+            spawnPlayer(instance, spawnPosition, null, false, false, false);
             return AsyncUtils.VOID_FUTURE;
         }
+        // Must update the player chunks
+        final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
+        final Thread runThread = Thread.currentThread();
+        final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
+                currentInstance,
+                currentInstance == null, dimensionChange, true);
+        // Wait for all surrounding chunks to load
+        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
+        ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(),
+                (chunkX, chunkZ) -> futures.add(instance.loadOptionalChunk(chunkX, chunkZ)));
+        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+                .thenCompose(unused -> {
+                    if (runThread == Thread.currentThread()) {
+                        runnable.accept(instance);
+                        return AsyncUtils.VOID_FUTURE;
+                    } else {
+                        // Complete the future during the next instance tick
+                        CompletableFuture<Void> future = new CompletableFuture<>();
+                        instance.scheduleNextTick(i -> {
+                            runnable.accept(i);
+                            future.complete(null);
+                        });
+                        return future;
+                    }
+                });
     }
 
     /**
@@ -575,24 +583,24 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * UNSAFE: only called with {@link #setInstance(Instance, Pos)}.
      *
-     * @param spawnPosition the position to teleport the player
-     * @param firstSpawn    true if this is the player first spawn
-     * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
-     *                      chunks
+     * @param spawnPosition    the position to teleport the player
+     * @param previousInstance the previous player instance, null if first spawn
+     * @param firstSpawn       true if this is the player first spawn
+     * @param updateChunks     true if chunks should be refreshed, false if the new instance shares the same
+     *                         chunks
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
+                             @Nullable Instance previousInstance,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
                 ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkRemover);
 
-            //TODO: entity#removeViewer sends a packet for each removed entity
-            //Sending destroy entity packets is not necessary when the dimension changes
-            //and, potentially, this could also be rewritten to send only a single DestroyEntitiesPacket
-            //with the list of all destroyed entities
-            this.instance.getEntityTracker().visibleEntities(position, EntityTracker.Target.ENTITIES,
-                    trackingUpdate::remove);
+        }
+        if (previousInstance != null) {
+            previousInstance.getEntityTracker().visibleEntities(position,
+                    EntityTracker.Target.ENTITIES, trackingUpdate::remove);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType());
