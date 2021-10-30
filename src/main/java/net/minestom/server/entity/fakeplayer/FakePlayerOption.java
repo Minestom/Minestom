@@ -25,9 +25,11 @@ public class FakePlayerOption {
      * WARNING: this can't be changed halfway.
      *
      * @param registered should the fake player be registered internally
+     * @return this instance, allowing for chained method calls
      */
-    public void setRegistered(boolean registered) {
+    public FakePlayerOption setRegistered(boolean registered) {
         this.registered = registered;
+        return this;
     }
 
     /**
@@ -45,8 +47,10 @@ public class FakePlayerOption {
      * WARNING: this can't be changed halfway.
      *
      * @param inTabList should the player be in the tab-list
+     * @return this instance, allowing for chained method calls
      */
-    public void setInTabList(boolean inTabList) {
+    public FakePlayerOption setInTabList(boolean inTabList) {
         this.inTabList = inTabList;
+        return this;
     }
 }
