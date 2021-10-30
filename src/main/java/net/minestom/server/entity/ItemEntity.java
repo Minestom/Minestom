@@ -70,8 +70,8 @@ public class ItemEntity extends Entity {
                 (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
-            this.instance.getEntityTracker().nearbyEntities(position, mergeRange, EntityTracker.Target.ITEMS,
-                    itemEntity -> {
+            this.instance.getEntityTracker().nearbyEntities(position, mergeRange,
+                    EntityTracker.Target.ITEMS, itemEntity -> {
                         if (itemEntity == this) return;
                         if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
                         if (getDistance(itemEntity) > mergeRange) return;
