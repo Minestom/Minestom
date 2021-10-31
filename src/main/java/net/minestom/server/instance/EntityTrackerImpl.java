@@ -43,7 +43,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             visibleEntities(point, target, update::add);
-            update.viewerReferences(references(point, Target.ENTITIES), references(point, Target.PLAYERS));
+            update.updateTracker(point, this);
         }
     }
 
@@ -59,7 +59,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             visibleEntities(point, target, update::remove);
-            update.viewerReferences(null, null);
+            update.updateTracker(point, null);
         }
     }
 
@@ -79,7 +79,7 @@ final class EntityTrackerImpl implements EntityTracker {
             }
             if (update != null) {
                 difference(oldPoint, newPoint, target, update);
-                update.viewerReferences(references(newPoint, Target.ENTITIES), references(newPoint, Target.PLAYERS));
+                update.updateTracker(newPoint, this);
             }
         }
     }
@@ -149,6 +149,11 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
         return (Set<T>) entries[target.ordinal()].entitiesView;
+    }
+
+    @Override
+    public synchronized void synchronize(@NotNull Runnable runnable) {
+        runnable.run();
     }
 
     private static final class TargetEntry<T extends Entity> {

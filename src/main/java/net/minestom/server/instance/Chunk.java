@@ -76,8 +76,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         }
 
         final EntityTracker tracker = instance.getEntityTracker();
-        this.viewers.updateReferences(tracker.references(chunkX, chunkZ, EntityTracker.Target.ENTITIES),
-                tracker.references(chunkX, chunkZ, EntityTracker.Target.PLAYERS));
+        this.viewers.updateTracker(toPosition(), tracker);
     }
 
     /**

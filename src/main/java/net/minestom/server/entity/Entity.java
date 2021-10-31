@@ -118,15 +118,35 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
 
         @Override
-        public void viewerReferences(@Nullable List<List<Entity>> entities,
-                                     @Nullable List<List<Player>> players) {
-            viewEngine.updateReferences(entities, players);
+        public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
+            viewEngine.updateTracker(point, tracker);
         }
     };
-    private final ViewEngine viewEngine = new ViewEngine(this,
-            this::updateNewViewer, this::updateOldViewer,
-            this instanceof Player ? entity -> entity.updateNewViewer((Player) this) : null,
-            this instanceof Player ? entity -> entity.updateOldViewer((Player) this) : null);
+    protected final ViewEngine viewEngine = new ViewEngine(this,
+            player -> {
+                // Add viewable
+                Entity.this.viewEngine.registerViewable(player);
+                player.viewEngine.registerViewer(this);
+                updateNewViewer(player);
+            },
+            player -> {
+                // Remove viewable
+                Entity.this.viewEngine.unregisterViewable(player);
+                player.viewEngine.unregisterViewer(this);
+                updateOldViewer(player);
+            },
+            this instanceof Player player ? entity -> {
+                // Add viewer
+                Entity.this.viewEngine.registerViewer(entity);
+                entity.viewEngine.registerViewable(player);
+                entity.updateNewViewer(player);
+            } : null,
+            this instanceof Player player ? entity -> {
+                // Remove viewer
+                Entity.this.viewEngine.unregisterViewer(entity);
+                entity.viewEngine.unregisterViewable(player);
+                entity.updateOldViewer(player);
+            } : null);
     protected final Set<Player> viewers = viewEngine.asSet();
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();

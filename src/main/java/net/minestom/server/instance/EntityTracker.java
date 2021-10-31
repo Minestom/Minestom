@@ -104,6 +104,11 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     }
 
     /**
+     * Run {@code runnable} and ensure that the tracking state is locked during execution.
+     */
+    void synchronize(@NotNull Runnable runnable);
+
+    /**
      * Represents the type of entity you want to retrieve.
      *
      * @param <E> the entity type
@@ -145,8 +150,7 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
 
         void remove(@NotNull E entity);
 
-        void viewerReferences(@Nullable List<List<Entity>> entities,
-                              @Nullable List<List<Player>> players);
+        void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker);
     }
 
     /**
