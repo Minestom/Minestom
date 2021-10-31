@@ -1,9 +1,7 @@
 package net.minestom.server.utils;
 
 import com.zaxxer.sparsebits.SparseBitSet;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import net.minestom.server.Viewable;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -12,7 +10,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -23,12 +24,7 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
-    /**
-     * Represents manual viewers.
-     * `True` means that the player shall always be seen (put using {@link Viewable#addViewer(Player)}).
-     * `False` means that the player shall never be viewed (put using {@link Viewable#removeViewer(Player)}).
-     */
-    private final Object2BooleanOpenHashMap<Player> manualMap = new Object2BooleanOpenHashMap<>();
+    private final ObjectArraySet<Player> manualViewers = new ObjectArraySet<>();
 
     private EntityTracker tracker;
 
@@ -75,31 +71,22 @@ public final class ViewEngine {
 
     public boolean manualAdd(@NotNull Player player) {
         if (player == this.entity) return false;
-        // Manual viewer addition into the manual set
         synchronized (mutex) {
-            return !manualMap.put(player, true);
+            return !manualViewers.add(player);
         }
     }
 
     public boolean manualRemove(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            // Add exception
-            if (!manualMap.containsKey(player)) {
-                manualMap.put(player, false);
-                return true;
-            }
-            // Remove from manual view
-            return !manualMap.put(player, true);
+            return !manualViewers.remove(player);
         }
     }
 
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
-        // This method should be considered as a hint instead of the objective truth
-        // as the manual map is not iterated.
         synchronized (mutex) {
-            return isAutoViewable() && manualMap.isEmpty();
+            return isAutoViewable() && manualViewers.isEmpty();
         }
     }
 
@@ -196,8 +183,7 @@ public final class ViewEngine {
             if (entities.isEmpty()) continue;
             for (T entity : entities) {
                 if (entity == this.entity || !visibilityPredicate.test(entity)) continue;
-                if (!manualMap.isEmpty() && entity instanceof Player player &&
-                        manualMap.containsKey(player)) continue;
+                if (entity instanceof Player player && manualViewers.contains(player)) continue;
                 if (entity.getVehicle() != null) continue;
                 action.accept(entity);
             }
@@ -223,19 +209,14 @@ public final class ViewEngine {
         @Override
         public int size() {
             synchronized (mutex) {
-                int size = 0;
-                for (boolean isManualViewer : manualMap.values()) {
-                    if (isManualViewer) size++;
-                }
-                return size + autoViewableBitSet.size();
+                return manualViewers.size() + autoViewableBitSet.size();
             }
         }
 
         @Override
         public boolean isEmpty() {
             synchronized (mutex) {
-                if (ViewEngine.this.manualMap.containsValue(true)) return false;
-                return autoViewableBitSet.isEmpty();
+                return manualViewers.isEmpty() && autoViewableBitSet.isEmpty();
             }
         }
 
@@ -243,8 +224,7 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                if (!manualMap.isEmpty() && manualMap.getBoolean(player)) return true;
-                return autoViewableBitSet.get(player.getEntityId());
+                return manualViewers.contains(player) || autoViewableBitSet.get(player.getEntityId());
             }
         }
 
@@ -252,11 +232,7 @@ public final class ViewEngine {
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 // Manual viewers
-                if (!manualMap.isEmpty()) {
-                    for (var entry : manualMap.object2BooleanEntrySet()) {
-                        if (entry.getBooleanValue()) action.accept(entry.getKey());
-                    }
-                }
+                if (!manualViewers.isEmpty()) manualViewers.forEach(action);
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
                 if (auto != null && isAutoViewable()) {
@@ -271,8 +247,7 @@ public final class ViewEngine {
         }
 
         final class It implements Iterator<Player> {
-            private Iterator<Player> current = ViewEngine.this.manualMap.object2BooleanEntrySet().stream()
-                    .filter(Object2BooleanMap.Entry::getBooleanValue).map(Map.Entry::getKey).iterator();
+            private Iterator<Player> current = ViewEngine.this.manualViewers.iterator();
             private boolean autoIterator = false; // True if the current iterator comes from the auto-viewable references
             private int index;
             private Player next;
