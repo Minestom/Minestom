@@ -64,10 +64,11 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized <T extends Entity> void move(@NotNull Entity entity,
-                                                     @NotNull Point oldPoint, @NotNull Point newPoint,
-                                                     @NotNull Target<T> target, @Nullable Update<T> update) {
-        if (!oldPoint.sameChunk(newPoint)) {
+    public <T extends Entity> void move(@NotNull Entity entity,
+                                        @NotNull Point oldPoint, @NotNull Point newPoint,
+                                        @NotNull Target<T> target, @Nullable Update<T> update) {
+        if (oldPoint.sameChunk(newPoint)) return;
+        synchronized (this) {
             final long oldIndex = getChunkIndex(oldPoint);
             final long newIndex = getChunkIndex(newPoint);
             for (TargetEntry<Entity> entry : entries) {
