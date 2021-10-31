@@ -52,6 +52,14 @@ public final class ViewEngine {
         this.autoViewerRemoval = autoViewerRemoval;
     }
 
+    public Consumer<Player> autoViewableAddition() {
+        return autoViewableAddition;
+    }
+
+    public Consumer<Player> autoViewableRemoval() {
+        return autoViewableRemoval;
+    }
+
     public ViewEngine() {
         this(null, null, null, null, null);
     }

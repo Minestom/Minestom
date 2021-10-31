@@ -417,7 +417,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player) passenger.updateNewViewer(player);
+                if (passenger != player) passenger.viewEngine.autoViewableAddition().accept(player);
             }
             player.sendPacket(getPassengersPacket());
         }
@@ -436,8 +436,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger == player) continue;
-                passenger.updateOldViewer(player);
+                if (passenger != player) passenger.viewEngine.autoViewableRemoval().accept(player);
             }
         }
         player.sendPacket(new DestroyEntitiesPacket(getEntityId()));
