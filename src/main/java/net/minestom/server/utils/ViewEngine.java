@@ -140,18 +140,10 @@ public final class ViewEngine {
         if (previous != autoViewable) {
             // View state changed, either add or remove itself from surrounding players
             synchronized (mutex) {
-                if (tracker == null) return;
-                this.tracker.synchronize(() -> {
-                    if (autoViewable) {
-                        // Add all surrounding players
-                        updateReferences(autoViewableReferences, Entity::autoViewEntities,
-                                autoViewableAddition);
-                    } else {
-                        // Remove all surrounding players
-                        updateReferences(autoViewableReferences,
-                                player -> autoViewableBitSet.get(player.getEntityId()), autoViewableRemoval);
-                    }
-                });
+                if (tracker == null || autoViewableReferences == null) return;
+                Predicate<Player> predicate = autoViewable ? Entity::autoViewEntities : player -> autoViewableBitSet.get(player.getEntityId());
+                Consumer<Player> action = autoViewable ? autoViewableAddition : autoViewableRemoval;
+                update(autoViewableReferences, predicate, action);
             }
         }
     }
@@ -161,33 +153,28 @@ public final class ViewEngine {
         if (previous != autoViewer) {
             // View state changed, either add or remove all surrounding entities
             synchronized (mutex) {
-                if (tracker == null) return;
-                this.tracker.synchronize(() -> {
-                    if (autoViewer) {
-                        // Add all surrounding entities
-                        updateReferences(autoViewerReferences, Entity::isAutoViewable, autoViewerAddition);
-                    } else {
-                        // Remove all surrounding entities
-                        updateReferences(autoViewerReferences,
-                                ent -> autoViewerBitSet.get(ent.getEntityId()), autoViewerRemoval);
-                    }
-                });
+                if (tracker == null || autoViewerReferences == null) return;
+                Predicate<Entity> predicate = autoViewer ? Entity::isAutoViewable : ent -> autoViewerBitSet.get(ent.getEntityId());
+                Consumer<Entity> action = autoViewer ? autoViewerAddition : autoViewerRemoval;
+                update(autoViewerReferences, predicate, action);
             }
         }
     }
 
-    private <T extends Entity> void updateReferences(List<List<T>> references,
-                                                     Predicate<T> visibilityPredicate, Consumer<T> action) {
-        if (references == null) return;
-        for (List<T> entities : references) {
-            if (entities.isEmpty()) continue;
-            for (T entity : entities) {
-                if (entity == this.entity || !visibilityPredicate.test(entity)) continue;
-                if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                if (entity.getVehicle() != null) continue;
-                action.accept(entity);
+    private <T extends Entity> void update(List<List<T>> references,
+                                           Predicate<T> visibilityPredicate,
+                                           Consumer<T> action) {
+        this.tracker.synchronize(() -> {
+            for (List<T> entities : references) {
+                if (entities.isEmpty()) continue;
+                for (T entity : entities) {
+                    if (entity == this.entity || !visibilityPredicate.test(entity)) continue;
+                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
+                    if (entity.getVehicle() != null) continue;
+                    action.accept(entity);
+                }
             }
-        }
+        });
     }
 
     private boolean validAutoViewer(Player player) {
