@@ -15,6 +15,7 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.adventure.AdventurePacketConvertor;
@@ -643,14 +644,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPluginMessage(channel, message.getBytes(StandardCharsets.UTF_8));
     }
 
-    /**
-     * @deprecated Use {@link #sendMessage(Component)}
-     */
-    @Deprecated
-    public void sendJsonMessage(@NotNull String json) {
-        this.sendMessage(GsonComponentSerializer.gson().deserialize(json));
-    }
-
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
@@ -720,35 +713,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void showTitle(@NotNull Title title) {
-        playerConnection.sendPacket(new SetTitleTextPacket(title.title()));
-        playerConnection.sendPacket(new SetTitleSubTitlePacket(title.subtitle()));
-        final var times = title.times();
-        if (times != null) {
-            playerConnection.sendPacket(new SetTitleTimePacket(
-                    TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
-                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
-                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS)));
-        }
+    public <T> void sendTitlePart(@NotNull TitlePart<T> part, @NotNull T value) {
+        playerConnection.sendPacket(AdventurePacketConvertor.createTitlePartPacket(part, value));
     }
 
     @Override
     public void sendActionBar(@NotNull Component message) {
         playerConnection.sendPacket(new ActionBarPacket(message));
-    }
-
-    /**
-     * Specifies the display time of a title.
-     *
-     * @param fadeIn  ticks to spend fading in
-     * @param stay    ticks to keep the title displayed
-     * @param fadeOut ticks to spend out, not when to start fading out
-     * @deprecated Use {@link #showTitle(Title)}. Note that this will overwrite the
-     * existing title. This is expected behavior and will be the case in 1.17.
-     */
-    @Deprecated
-    public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
-        playerConnection.sendPacket(new SetTitleTimePacket(fadeIn, stay, fadeOut));
     }
 
     @Override

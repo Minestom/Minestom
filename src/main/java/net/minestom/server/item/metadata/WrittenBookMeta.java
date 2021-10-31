@@ -3,8 +3,9 @@ package net.minestom.server.item.metadata;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.AdventureSerializer;
+import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.adventure.Localizable;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -70,8 +71,8 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         return new Builder()
                 .resolved(false)
                 .generation(WrittenBookGeneration.ORIGINAL)
-                .author(AdventureSerializer.translateAndSerialize(book.author(), localizable))
-                .title(AdventureSerializer.translateAndSerialize(book.title(), localizable))
+                .author(GsonComponentSerializer.gson().serialize(GlobalTranslator.render(book.author(), Objects.requireNonNullElse(localizable.getLocale(), MinestomAdventure.getDefaultLocale()))))
+                .title(GsonComponentSerializer.gson().serialize(GlobalTranslator.render(book.title(), Objects.requireNonNullElse(localizable.getLocale(), MinestomAdventure.getDefaultLocale()))))
                 .pages(book.pages())
                 .build();
     }
