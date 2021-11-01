@@ -372,10 +372,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
+    @ApiStatus.Experimental
     public void updateViewableRule(@NotNull Predicate<Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
+    @ApiStatus.Experimental
     public void updateViewableRule() {
         this.viewEngine.viewableOption.updateRule();
     }
@@ -401,10 +403,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
+    @ApiStatus.Experimental
     public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
+    @ApiStatus.Experimental
     public void updateViewerRule() {
         this.viewEngine.viewerOption.updateRule();
     }
