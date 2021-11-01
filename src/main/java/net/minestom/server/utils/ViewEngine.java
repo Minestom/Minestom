@@ -169,6 +169,12 @@ public final class ViewEngine {
         public void updateRule(Predicate<T> predicate) {
             synchronized (mutex) {
                 this.predicate = predicate;
+                updateRule();
+            }
+        }
+
+        public void updateRule() {
+            synchronized (mutex) {
                 update(references, loopPredicate, entity -> {
                     final boolean result = predicate.test(entity);
                     final boolean contains = isRegistered(entity);
@@ -179,10 +185,6 @@ public final class ViewEngine {
                     }
                 });
             }
-        }
-
-        public void updateRule() {
-            updateRule(predicate);
         }
 
         private void update(List<List<T>> references,
