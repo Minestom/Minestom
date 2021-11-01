@@ -122,9 +122,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             viewEngine.updateTracker(point, tracker);
         }
     };
+
     protected final ViewEngine viewEngine = new ViewEngine(this,
             player -> {
                 // Add viewable
+                if (!Entity.this.viewEngine.autoViewablePredicate.test(player) || !player.viewEngine.autoViewerPredicate.test(this))
+                    return;
                 Entity.this.viewEngine.registerViewable(player);
                 player.viewEngine.registerViewer(this);
                 updateNewViewer(player);
@@ -137,6 +140,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             },
             this instanceof Player player ? entity -> {
                 // Add viewer
+                if (!Entity.this.viewEngine.autoViewerPredicate.test(entity) || !entity.viewEngine.autoViewablePredicate.test(player))
+                    return;
                 Entity.this.viewEngine.registerViewer(entity);
                 entity.viewEngine.registerViewable(player);
                 entity.updateNewViewer(player);
@@ -367,6 +372,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.viewEngine.setAutoViewable(autoViewable);
     }
 
+    public void updateViewableRule(Predicate<Player> predicate) {
+        this.viewEngine.updateViewableRule(predicate);
+    }
+
     /**
      * Gets if surrounding entities are automatically visible by this.
      * True by default.
@@ -386,6 +395,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @ApiStatus.Experimental
     public void setAutoViewEntities(boolean autoViewer) {
         this.viewEngine.setAutoViewer(autoViewer);
+    }
+
+    public void updateViewerRule(Predicate<Entity> predicate) {
+        this.viewEngine.updateViewerRule(predicate);
     }
 
     @Override

@@ -42,6 +42,9 @@ public final class ViewEngine {
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
+    public Predicate<Player> autoViewablePredicate = player -> true;
+    public Predicate<Entity> autoViewerPredicate = entity -> true;
+
     public ViewEngine(@Nullable Entity entity,
                       Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
                       Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
@@ -148,7 +151,6 @@ public final class ViewEngine {
         if (previous != autoViewable) {
             // View state changed, either add or remove itself from surrounding players
             synchronized (mutex) {
-                if (tracker == null || autoViewableReferences == null) return;
                 Predicate<Player> predicate = autoViewable ? Entity::autoViewEntities : player -> autoViewableBitSet.get(player.getEntityId());
                 Consumer<Player> action = autoViewable ? autoViewableAddition : autoViewableRemoval;
                 update(autoViewableReferences, predicate, action);
@@ -161,7 +163,6 @@ public final class ViewEngine {
         if (previous != autoViewer) {
             // View state changed, either add or remove all surrounding entities
             synchronized (mutex) {
-                if (tracker == null || autoViewerReferences == null) return;
                 Predicate<Entity> predicate = autoViewer ? Entity::isAutoViewable : ent -> autoViewerBitSet.get(ent.getEntityId());
                 Consumer<Entity> action = autoViewer ? autoViewerAddition : autoViewerRemoval;
                 update(autoViewerReferences, predicate, action);
@@ -169,9 +170,42 @@ public final class ViewEngine {
         }
     }
 
+    public void updateViewableRule(Predicate<Player> predicate) {
+        synchronized (mutex) {
+            this.autoViewablePredicate = predicate;
+            updateRule(autoViewableReferences, autoViewableBitSet, predicate,
+                    autoViewableAddition, autoViewableRemoval);
+        }
+    }
+
+    public void updateViewerRule(Predicate<Entity> predicate) {
+        synchronized (mutex) {
+            this.autoViewerPredicate = predicate;
+            updateRule(autoViewerReferences, autoViewerBitSet, predicate,
+                    autoViewerAddition, autoViewerRemoval);
+        }
+    }
+
+    private <T extends Entity> void updateRule(List<List<T>> references,
+                                               SparseBitSet bitSet,
+                                               Predicate<T> predicate,
+                                               Consumer<T> addition,
+                                               Consumer<T> removal) {
+        update(references, Entity::isAutoViewable, entity -> {
+            boolean result = predicate.test(entity);
+            boolean contains = bitSet.get(entity.getEntityId());
+            if (result && !contains) {
+                addition.accept(entity);
+            } else if (!result && contains) {
+                removal.accept(entity);
+            }
+        });
+    }
+
     private <T extends Entity> void update(List<List<T>> references,
                                            Predicate<T> visibilityPredicate,
                                            Consumer<T> action) {
+        if (tracker == null || references == null) return;
         this.tracker.synchronize(() -> {
             for (List<T> entities : references) {
                 if (entities.isEmpty()) continue;
