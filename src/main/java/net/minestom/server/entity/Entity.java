@@ -128,28 +128,28 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 // Add viewable
                 if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
                         !player.viewEngine.viewerOption.predicate(this)) return;
-                Entity.this.viewEngine.registerViewable(player);
-                player.viewEngine.registerViewer(this);
+                Entity.this.viewEngine.viewableOption.register(player);
+                player.viewEngine.viewerOption.register(this);
                 updateNewViewer(player);
             },
             player -> {
                 // Remove viewable
-                Entity.this.viewEngine.unregisterViewable(player);
-                player.viewEngine.unregisterViewer(this);
+                Entity.this.viewEngine.viewableOption.unregister(player);
+                player.viewEngine.viewerOption.unregister(this);
                 updateOldViewer(player);
             },
             this instanceof Player player ? entity -> {
                 // Add viewer
                 if (!Entity.this.viewEngine.viewerOption.predicate(entity) ||
                         !entity.viewEngine.viewableOption.predicate(player)) return;
-                Entity.this.viewEngine.registerViewer(entity);
-                entity.viewEngine.registerViewable(player);
+                Entity.this.viewEngine.viewerOption.register(entity);
+                entity.viewEngine.viewableOption.register(player);
                 entity.updateNewViewer(player);
             } : null,
             this instanceof Player player ? entity -> {
                 // Remove viewer
-                Entity.this.viewEngine.unregisterViewer(entity);
-                entity.viewEngine.unregisterViewable(player);
+                Entity.this.viewEngine.viewerOption.unregister(entity);
+                entity.viewEngine.viewableOption.unregister(player);
                 entity.updateOldViewer(player);
             } : null);
     protected final Set<Player> viewers = viewEngine.asSet();

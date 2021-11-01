@@ -82,22 +82,6 @@ public final class ViewEngine {
         }
     }
 
-    public void registerViewable(Player player) {
-        this.viewableOption.bitSet.set(player.getEntityId());
-    }
-
-    public void unregisterViewable(Player player) {
-        this.viewableOption.bitSet.clear(player.getEntityId());
-    }
-
-    public void registerViewer(Entity entity) {
-        this.viewerOption.bitSet.set(entity.getEntityId());
-    }
-
-    public void unregisterViewer(Entity entity) {
-        this.viewerOption.bitSet.clear(entity.getEntityId());
-    }
-
     public void handleAutoViewAddition(Entity entity) {
         handleAutoView(entity, viewerOption.addition, viewableOption.addition);
     }
@@ -120,7 +104,7 @@ public final class ViewEngine {
     }
 
     private boolean validAutoViewer(Player player) {
-        return entity == null || viewableOption.bitSet.get(player.getEntityId());
+        return entity == null || viewableOption.isRegistered(player);
     }
 
     public Set<Player> asSet() {
@@ -130,7 +114,7 @@ public final class ViewEngine {
     public final class Option<T extends Entity> {
         private final Predicate<T> loopPredicate;
         private final AtomicBoolean auto = new AtomicBoolean(true);
-        private final SparseBitSet bitSet = new SparseBitSet();
+        public final SparseBitSet bitSet = new SparseBitSet();
         private List<List<T>> references;
         public final Consumer<T> addition, removal;
         private Predicate<T> predicate = entity -> true;
@@ -150,12 +134,24 @@ public final class ViewEngine {
             return predicate.test(entity);
         }
 
+        public boolean isRegistered(T entity) {
+            return bitSet.get(entity.getEntityId());
+        }
+
+        public void register(T entity) {
+            this.bitSet.set(entity.getEntityId());
+        }
+
+        public void unregister(T entity) {
+            this.bitSet.clear(entity.getEntityId());
+        }
+
         public void updateAuto(boolean autoViewable) {
             final boolean previous = auto.getAndSet(autoViewable);
             if (previous != autoViewable) {
                 // View state changed, either add or remove itself from surrounding players
                 synchronized (mutex) {
-                    Predicate<T> predicate = autoViewable ? loopPredicate : player -> bitSet.get(player.getEntityId());
+                    Predicate<T> predicate = autoViewable ? loopPredicate : this::isRegistered;
                     Consumer<T> action = autoViewable ? addition : removal;
                     update(references, predicate, action);
                 }
@@ -166,8 +162,8 @@ public final class ViewEngine {
             synchronized (mutex) {
                 this.predicate = predicate;
                 update(references, loopPredicate, entity -> {
-                    boolean result = predicate.test(entity);
-                    boolean contains = bitSet.get(entity.getEntityId());
+                    final boolean result = predicate.test(entity);
+                    final boolean contains = isRegistered(entity);
                     if (result && !contains) {
                         addition.accept(entity);
                     } else if (!result && contains) {
@@ -178,7 +174,7 @@ public final class ViewEngine {
         }
 
         public void updateRule() {
-            updateRule((predicate));
+            updateRule(predicate);
         }
 
         private void update(List<List<T>> references,
@@ -225,7 +221,7 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                return manualViewers.contains(player) || viewableOption.bitSet.get(player.getEntityId());
+                return manualViewers.contains(player) || viewableOption.isRegistered(player);
             }
         }
 
