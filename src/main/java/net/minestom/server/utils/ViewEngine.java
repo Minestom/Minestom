@@ -157,11 +157,9 @@ public final class ViewEngine {
         public void updateAuto(boolean autoViewable) {
             final boolean previous = UPDATER.getAndSet(this, autoViewable ? 1 : 0) == 1;
             if (previous != autoViewable) {
-                // View state changed, either add or remove itself from surrounding players
                 synchronized (mutex) {
-                    Predicate<T> predicate = autoViewable ? loopPredicate : this::isRegistered;
-                    Consumer<T> action = autoViewable ? addition : removal;
-                    update(references, predicate, action);
+                    if (autoViewable) update(references, loopPredicate, addition);
+                    else update(references, this::isRegistered, removal);
                 }
             }
         }
