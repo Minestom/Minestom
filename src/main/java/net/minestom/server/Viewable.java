@@ -37,8 +37,7 @@ public interface Viewable {
      *
      * @return A Set containing all the element's viewers
      */
-    @NotNull
-    Set<Player> getViewers();
+    @NotNull Set<@NotNull Player> getViewers();
 
     /**
      * Gets if a player is seeing this viewable object.

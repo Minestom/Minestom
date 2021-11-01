@@ -9,6 +9,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
@@ -17,6 +18,7 @@ import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.TickUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -69,9 +71,8 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     }
 
     @Override
-    default void showTitle(@NotNull Title title) {
-        sendGroupedPacket(new SetTitleTextPacket(title.title()));
-        sendGroupedPacket(new SetTitleSubTitlePacket(title.subtitle()));
+    default <T> void sendTitlePart(@NotNull TitlePart<T> part, @NotNull T value) {
+        sendGroupedPacket(AdventurePacketConvertor.createTitlePartPacket(part, value));
     }
 
     @Override

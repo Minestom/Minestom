@@ -470,21 +470,6 @@ public record Vec(double x, double y, double z) implements Point {
         return lerp(target, interpolation.apply(alpha));
     }
 
-    @Override
-    public double x() {
-        return x;
-    }
-
-    @Override
-    public double y() {
-        return y;
-    }
-
-    @Override
-    public double z() {
-        return z;
-    }
-
     @FunctionalInterface
     public interface Operator {
         /**
