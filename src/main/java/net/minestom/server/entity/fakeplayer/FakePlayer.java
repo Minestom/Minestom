@@ -129,14 +129,10 @@ public class FakePlayer extends Player implements NavigableEntity {
     }
 
     @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        if (viewers.contains(player)) {
-            return false;
-        }
-        
+    public void updateNewViewer(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(getAddPlayerToList());
         handleTabList(player.getPlayerConnection());
-        return super.addViewer0(player);
+        super.updateNewViewer(player);
     }
 
     /**
