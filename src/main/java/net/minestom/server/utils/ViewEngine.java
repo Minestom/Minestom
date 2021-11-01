@@ -14,7 +14,7 @@ import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -112,11 +112,19 @@ public final class ViewEngine {
     }
 
     public final class Option<T extends Entity> {
+        @SuppressWarnings("rawtypes")
+        private static final AtomicIntegerFieldUpdater<Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(Option.class, "auto");
+        // The condition that must be met for this option to be considered auto.
         private final Predicate<T> loopPredicate;
-        private final AtomicBoolean auto = new AtomicBoolean(true);
-        public final SparseBitSet bitSet = new SparseBitSet();
-        private List<List<T>> references;
+        // The consumers to be called when an entity is added/removed.
         public final Consumer<T> addition, removal;
+        // Contains all the entity ids that are viewable by this option.
+        public final SparseBitSet bitSet = new SparseBitSet();
+        // 1 if auto, 0 if manual
+        private volatile int auto = 1;
+        // References from the entity trackers.
+        private List<List<T>> references;
+        // The custom rule used to determine if an entity is viewable.
         private Predicate<T> predicate = entity -> true;
 
         public Option(Predicate<T> loopPredicate,
@@ -127,7 +135,7 @@ public final class ViewEngine {
         }
 
         public boolean isAuto() {
-            return auto.get();
+            return auto == 1;
         }
 
         public boolean predicate(T entity) {
@@ -147,7 +155,7 @@ public final class ViewEngine {
         }
 
         public void updateAuto(boolean autoViewable) {
-            final boolean previous = auto.getAndSet(autoViewable);
+            final boolean previous = UPDATER.getAndSet(this, autoViewable ? 1 : 0) == 1;
             if (previous != autoViewable) {
                 // View state changed, either add or remove itself from surrounding players
                 synchronized (mutex) {
