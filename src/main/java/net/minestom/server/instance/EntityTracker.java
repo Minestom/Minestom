@@ -106,7 +106,7 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     /**
      * Run {@code runnable} and ensure that the tracking state is locked during execution.
      */
-    void synchronize(@NotNull Runnable runnable);
+    void synchronize(@NotNull Point point, @NotNull Runnable runnable);
 
     /**
      * Represents the type of entity you want to retrieve.

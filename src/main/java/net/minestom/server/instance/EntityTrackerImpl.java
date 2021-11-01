@@ -152,7 +152,7 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized void synchronize(@NotNull Runnable runnable) {
+    public synchronized void synchronize(@NotNull Point point, @NotNull Runnable runnable) {
         runnable.run();
     }
 

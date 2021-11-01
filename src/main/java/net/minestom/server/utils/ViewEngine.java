@@ -27,6 +27,7 @@ public final class ViewEngine {
     private final ObjectArraySet<Player> manualViewers = new ObjectArraySet<>();
 
     private EntityTracker tracker;
+    private Point lastTrackingPoint;
 
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
@@ -51,6 +52,7 @@ public final class ViewEngine {
     public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
         synchronized (mutex) {
             this.tracker = tracker;
+            this.lastTrackingPoint = point;
             if (tracker != null) {
                 this.viewableOption.references = tracker.references(point, EntityTracker.Target.PLAYERS);
                 this.viewerOption.references = tracker.references(point, EntityTracker.Target.ENTITIES);
@@ -187,7 +189,7 @@ public final class ViewEngine {
                             Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             if (tracker == null || references == null) return;
-            tracker.synchronize(() -> {
+            tracker.synchronize(lastTrackingPoint, () -> {
                 for (List<T> entities : references) {
                     if (entities.isEmpty()) continue;
                     for (T entity : entities) {
