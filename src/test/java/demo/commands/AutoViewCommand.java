@@ -61,5 +61,19 @@ public class AutoViewCommand extends Command {
             player.updateViewerRule(p -> true);
             player.sendMessage("Viewer rule removed");
         }, Literal("remove-rule-viewer"));
+
+        // Update viewable rule
+        addSyntax((sender, context) -> {
+            if (!(sender instanceof Player player)) return;
+            player.updateViewableRule();
+            player.sendMessage("Viewable rule updated");
+        }, Literal("update-rule-viewable"));
+
+        // Update viewer rule
+        addSyntax((sender, context) -> {
+            if (!(sender instanceof Player player)) return;
+            player.updateViewerRule();
+            player.sendMessage("Viewer rule updated");
+        }, Literal("update-rule-viewer"));
     }
 }

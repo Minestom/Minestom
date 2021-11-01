@@ -376,6 +376,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
+    public void updateViewableRule() {
+        this.viewEngine.viewableOption.updateRule();
+    }
+
     /**
      * Gets if surrounding entities are automatically visible by this.
      * True by default.
@@ -399,6 +403,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
+    }
+
+    public void updateViewerRule() {
+        this.viewEngine.viewerOption.updateRule();
     }
 
     @Override

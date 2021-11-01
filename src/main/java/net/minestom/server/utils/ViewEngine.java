@@ -177,6 +177,10 @@ public final class ViewEngine {
             }
         }
 
+        public void updateRule() {
+            updateRule((predicate));
+        }
+
         private void update(List<List<T>> references,
                             Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
