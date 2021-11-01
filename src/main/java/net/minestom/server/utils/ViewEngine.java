@@ -177,11 +177,9 @@ public final class ViewEngine {
             synchronized (mutex) {
                 update(references, loopPredicate, entity -> {
                     final boolean result = predicate.test(entity);
-                    final boolean contains = isRegistered(entity);
-                    if (result && !contains) {
-                        addition.accept(entity);
-                    } else if (!result && contains) {
-                        removal.accept(entity);
+                    if (result != isRegistered(entity)) {
+                        if (result) addition.accept(entity);
+                        else removal.accept(entity);
                     }
                 });
             }
