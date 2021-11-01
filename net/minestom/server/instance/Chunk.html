@@ -144,9 +144,6 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="col-first even-row-color"><code>protected boolean</code></div>
 <div class="col-second even-row-color"><code><a href="#loaded" class="member-name-link">loaded</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#viewers" class="member-name-link">viewers</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -181,8 +178,7 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addViewer(net.minestom.server.entity.Player)" class="member-name-link">addViewer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sends the chunk to <code>player</code> and add it to the player viewing chunks collection
- and send a <a href="../event/player/PlayerChunkLoadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkLoadEvent</code></a>.</div>
+<div class="block">Adds the player to the viewing collection.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copy(net.minestom.server.instance.Instance,int,int)" class="member-name-link">copy</a><wbr>(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
@@ -248,8 +244,7 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeViewer(net.minestom.server.entity.Player)" class="member-name-link">removeViewer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Removes the chunk to the player viewing chunks collection
- and send a <a href="../event/player/PlayerChunkUnloadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkUnloadEvent</code></a>.</div>
+<div class="block">Removes the player from the viewing collection.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#reset()" class="member-name-link">reset</a>()</code></div>
@@ -414,12 +409,6 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <section class="detail" id="loaded">
 <h3>loaded</h3>
 <div class="member-signature"><span class="modifiers">protected volatile</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">loaded</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="viewers">
-<h3>viewers</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</span>&nbsp;<span class="element-name">viewers</span></div>
 </section>
 </li>
 <li>
@@ -718,8 +707,7 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <h3>addViewer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">addViewer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
-<div class="block">Sends the chunk to <code>player</code> and add it to the player viewing chunks collection
- and send a <a href="../event/player/PlayerChunkLoadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkLoadEvent</code></a>.</div>
+<div class="block">Adds the player to the viewing collection. Chunk packet must be sent manually.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">addViewer</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
@@ -735,8 +723,7 @@ implements <a href="block/BlockGetter.html" title="interface in net.minestom.ser
 <h3>removeViewer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeViewer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
-<div class="block">Removes the chunk to the player viewing chunks collection
- and send a <a href="../event/player/PlayerChunkUnloadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkUnloadEvent</code></a>.</div>
+<div class="block">Removes the player from the viewing collection. Chunk packet must be sent manually.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>

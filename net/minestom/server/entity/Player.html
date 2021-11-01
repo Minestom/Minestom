@@ -147,19 +147,13 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="col-first even-row-color"><code>protected final <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></div>
 <div class="col-second even-row-color"><code><a href="#playerConnection" class="member-name-link">playerConnection</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#viewableChunks" class="member-name-link">viewableChunks</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#viewableEntities" class="member-name-link">viewableEntities</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.entity.LivingEntity">Fields inherited from class&nbsp;net.minestom.server.entity.<a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></h3>
 <code><a href="LivingEntity.html#canPickupItem">canPickupItem</a>, <a href="LivingEntity.html#expandedBoundingBox">expandedBoundingBox</a>, <a href="LivingEntity.html#invulnerable">invulnerable</a>, <a href="LivingEntity.html#isDead">isDead</a>, <a href="LivingEntity.html#itemPickupCooldown">itemPickupCooldown</a>, <a href="LivingEntity.html#lastDamageSource">lastDamageSource</a></code></div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.entity.Entity">Fields inherited from class&nbsp;net.minestom.server.entity.<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></h3>
-<code><a href="Entity.html#currentChunk">currentChunk</a>, <a href="Entity.html#entityMeta">entityMeta</a>, <a href="Entity.html#entityType">entityType</a>, <a href="Entity.html#gravityAcceleration">gravityAcceleration</a>, <a href="Entity.html#gravityDragPerTick">gravityDragPerTick</a>, <a href="Entity.html#gravityTickCount">gravityTickCount</a>, <a href="Entity.html#hasPhysics">hasPhysics</a>, <a href="Entity.html#instance">instance</a>, <a href="Entity.html#lastSyncedPosition">lastSyncedPosition</a>, <a href="Entity.html#metadata">metadata</a>, <a href="Entity.html#nextTick">nextTick</a>, <a href="Entity.html#onGround">onGround</a>, <a href="Entity.html#position">position</a>, <a href="Entity.html#previousPosition">previousPosition</a>, <a href="Entity.html#uuid">uuid</a>, <a href="Entity.html#vehicle">vehicle</a>, <a href="Entity.html#velocity">velocity</a>, <a href="Entity.html#viewers">viewers</a></code></div>
+<code><a href="Entity.html#currentChunk">currentChunk</a>, <a href="Entity.html#entityMeta">entityMeta</a>, <a href="Entity.html#entityType">entityType</a>, <a href="Entity.html#gravityAcceleration">gravityAcceleration</a>, <a href="Entity.html#gravityDragPerTick">gravityDragPerTick</a>, <a href="Entity.html#gravityTickCount">gravityTickCount</a>, <a href="Entity.html#hasPhysics">hasPhysics</a>, <a href="Entity.html#instance">instance</a>, <a href="Entity.html#lastSyncedPosition">lastSyncedPosition</a>, <a href="Entity.html#metadata">metadata</a>, <a href="Entity.html#nextTick">nextTick</a>, <a href="Entity.html#onGround">onGround</a>, <a href="Entity.html#position">position</a>, <a href="Entity.html#previousPosition">previousPosition</a>, <a href="Entity.html#trackingUpdate">trackingUpdate</a>, <a href="Entity.html#uuid">uuid</a>, <a href="Entity.html#vehicle">vehicle</a>, <a href="Entity.html#velocity">velocity</a>, <a href="Entity.html#viewEngine">viewEngine</a>, <a href="Entity.html#viewers">viewers</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -276,177 +270,169 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the chestplate.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkRange()" class="member-name-link">getChunkRange</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDefaultEatingTime()" class="member-name-link">getDefaultEatingTime</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDefaultEatingTime()" class="member-name-link">getDefaultEatingTime</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player default eating time.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDimensionType()" class="member-name-link">getDimensionType</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDimensionType()" class="member-name-link">getDimensionType</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player dimension.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDisplayName()" class="member-name-link">getDisplayName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDisplayName()" class="member-name-link">getDisplayName</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player display name in the tab-list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEatingHand()" class="member-name-link">getEatingHand</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEatingHand()" class="member-name-link">getEatingHand</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the hand which the player is eating from.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="metadata/PlayerMeta.html" title="class in net.minestom.server.entity.metadata">PlayerMeta</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEntityMeta()" class="member-name-link">getEntityMeta</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="metadata/PlayerMeta.html" title="class in net.minestom.server.entity.metadata">PlayerMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEntityMeta()" class="member-name-link">getEntityMeta</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets metadata of this entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getExp()" class="member-name-link">getExp</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getExp()" class="member-name-link">getExp</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the percentage displayed in the experience bar.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFieldViewModifier()" class="member-name-link">getFieldViewModifier</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFlyingSpeed()" class="member-name-link">getFlyingSpeed</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFieldViewModifier()" class="member-name-link">getFieldViewModifier</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFlyingSpeed()" class="member-name-link">getFlyingSpeed</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player flying speed.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFood()" class="member-name-link">getFood</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFood()" class="member-name-link">getFood</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player food.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFoodSaturation()" class="member-name-link">getFoodSaturation</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGameMode()" class="member-name-link">getGameMode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFoodSaturation()" class="member-name-link">getFoodSaturation</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGameMode()" class="member-name-link">getGameMode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player <a href="GameMode.html" title="enum class in net.minestom.server.entity"><code>GameMode</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeldSlot()" class="member-name-link">getHeldSlot</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeldSlot()" class="member-name-link">getHeldSlot</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player held slot (0-8).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHelmet()" class="member-name-link">getHelmet</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHelmet()" class="member-name-link">getHelmet</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the helmet.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInventory()" class="member-name-link">getInventory</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemInMainHand()" class="member-name-link">getItemInMainHand</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInventory()" class="member-name-link">getInventory</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemInMainHand()" class="member-name-link">getItemInMainHand</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in main hand.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemInOffHand()" class="member-name-link">getItemInOffHand</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemInOffHand()" class="member-name-link">getItemInOffHand</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in off hand.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastKeepAlive()" class="member-name-link">getLastKeepAlive</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastKeepAlive()" class="member-name-link">getLastKeepAlive</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the last sent keep alive id.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastReceivedTeleportId()" class="member-name-link">getLastReceivedTeleportId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastSentTeleportId()" class="member-name-link">getLastSentTeleportId</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastReceivedTeleportId()" class="member-name-link">getLastReceivedTeleportId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLatency()" class="member-name-link">getLatency</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastSentTeleportId()" class="member-name-link">getLastSentTeleportId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLatency()" class="member-name-link">getLatency</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to get the player latency,
  computed by seeing how long it takes the client to answer the <a href="../network/packet/server/play/KeepAlivePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>KeepAlivePacket</code></a> packet.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLeggings()" class="member-name-link">getLeggings</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLeggings()" class="member-name-link">getLeggings</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the leggings.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLevel()" class="member-name-link">getLevel</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLevel()" class="member-name-link">getLevel</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the level of the player displayed in the experience bar.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the locale.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player's name as a component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNextTeleportId()" class="member-name-link">getNextTeleportId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOpenInventory()" class="member-name-link">getOpenInventory</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNextTeleportId()" class="member-name-link">getNextTeleportId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOpenInventory()" class="member-name-link">getOpenInventory</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player open inventory.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPermissionLevel()" class="member-name-link">getPermissionLevel</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPermissionLevel()" class="member-name-link">getPermissionLevel</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player permission level.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayerConnection()" class="member-name-link">getPlayerConnection</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayerConnection()" class="member-name-link">getPlayerConnection</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player connection.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRemovePlayerToList()" class="member-name-link">getRemovePlayerToList</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRemovePlayerToList()" class="member-name-link">getRemovePlayerToList</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the packet to remove the player from the tab-list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRespawnPoint()" class="member-name-link">getRespawnPoint</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRespawnPoint()" class="member-name-link">getRespawnPoint</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to retrieve the default spawn point.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Player.PlayerSettings.html" title="class in net.minestom.server.entity">Player.PlayerSettings</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSettings()" class="member-name-link">getSettings</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Player.PlayerSettings.html" title="class in net.minestom.server.entity">Player.PlayerSettings</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSettings()" class="member-name-link">getSettings</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player settings.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSkin()" class="member-name-link">getSkin</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSkin()" class="member-name-link">getSkin</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player skin.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../statistic/PlayerStatistic.html" title="class in net.minestom.server.statistic">PlayerStatistic</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatisticValueMap()" class="member-name-link">getStatisticValueMap</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../statistic/PlayerStatistic.html" title="class in net.minestom.server.statistic">PlayerStatistic</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatisticValueMap()" class="member-name-link">getStatisticValueMap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This is the map used to send the statistic packet.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUsername()" class="member-name-link">getUsername</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUsername()" class="member-name-link">getUsername</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player's username.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="vehicle/PlayerVehicleInformation.html" title="class in net.minestom.server.entity.vehicle">PlayerVehicleInformation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVehicleInformation()" class="member-name-link">getVehicleInformation</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the player vehicle information.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getViewableChunks()" class="member-name-link">getViewableChunks</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="vehicle/PlayerVehicleInformation.html" title="class in net.minestom.server.entity.vehicle">PlayerVehicleInformation</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVehicleInformation()" class="member-name-link">getVehicleInformation</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the player viewable chunks.</div>
+<div class="block">Gets the player vehicle information.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasReducedDebugScreenInformation()" class="member-name-link">hasReducedDebugScreenInformation</a>()</code></div>
@@ -629,27 +615,10 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  boolean&nbsp;unmount)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshVisibleChunks()" class="member-name-link">refreshVisibleChunks</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshVisibleChunks(net.minestom.server.instance.Chunk)" class="member-name-link">refreshVisibleChunks</a><wbr>(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Called when the player changes chunk (move from one to another).</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshVisibleEntities(net.minestom.server.instance.Chunk)" class="member-name-link">refreshVisibleEntities</a><wbr>(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove()" class="member-name-link">remove</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Refreshes the list of entities that the player should be able to see based
- on <a href="../MinecraftServer.html#getEntityViewDistance()"><code>MinecraftServer.getEntityViewDistance()</code></a> and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove()" class="member-name-link">remove</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes the entity from the server immediately.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeViewer0(net.minestom.server.entity.Player)" class="member-name-link">removeViewer0</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetTitle()" class="member-name-link">resetTitle</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -937,20 +906,19 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Called each tick.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewPosition(int,int)" class="member-name-link">updateViewPosition</a><wbr>(int&nbsp;chunkX,
- int&nbsp;chunkZ)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateOldViewer(net.minestom.server.entity.Player)" class="member-name-link">updateOldViewer</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sends a <a href="../network/packet/server/play/UpdateViewPositionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateViewPositionPacket</code></a>  to the player.</div>
+<div class="block">Called when a viewer must be destroyed.</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.entity.LivingEntity">Methods inherited from class&nbsp;net.minestom.server.entity.<a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></h3>
-<code><a href="LivingEntity.html#addViewer0(net.minestom.server.entity.Player)">addViewer0</a>, <a href="LivingEntity.html#canPickupItem()">canPickupItem</a>, <a href="LivingEntity.html#damage(net.minestom.server.entity.damage.DamageType,float)">damage</a>, <a href="LivingEntity.html#getArrowCount()">getArrowCount</a>, <a href="LivingEntity.html#getAttribute(net.minestom.server.attribute.Attribute)">getAttribute</a>, <a href="LivingEntity.html#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a>, <a href="LivingEntity.html#getFireDamagePeriod()">getFireDamagePeriod</a>, <a href="LivingEntity.html#getHealth()">getHealth</a>, <a href="LivingEntity.html#getLastDamageSource()">getLastDamageSource</a>, <a href="LivingEntity.html#getLivingEntityMeta()">getLivingEntityMeta</a>, <a href="LivingEntity.html#getMaxHealth()">getMaxHealth</a>, <a href="LivingEntity.html#getPropertiesPacket()">getPropertiesPacket</a>, <a href="LivingEntity.html#getPropertiesPacket(java.util.Collection)">getPropertiesPacket</a>, <a href="LivingEntity.html#getTargetBlockPosition(int)">getTargetBlockPosition</a>, <a href="LivingEntity.html#getTeam()">getTeam</a>, <a href="LivingEntity.html#handleVoid()">handleVoid</a>, <a href="LivingEntity.html#heal()">heal</a>, <a href="LivingEntity.html#isDead()">isDead</a>, <a href="LivingEntity.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="LivingEntity.html#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a>, <a href="LivingEntity.html#refreshActiveHand(boolean,boolean,boolean)">refreshActiveHand</a>, <a href="LivingEntity.html#refreshIsDead(boolean)">refreshIsDead</a>, <a href="LivingEntity.html#setArrowCount(int)">setArrowCount</a>, <a href="LivingEntity.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="LivingEntity.html#setCanPickupItem(boolean)">setCanPickupItem</a>, <a href="LivingEntity.html#setFireDamagePeriod(long,java.time.temporal.TemporalUnit)">setFireDamagePeriod</a>, <a href="LivingEntity.html#setFireDamagePeriod(java.time.Duration)">setFireDamagePeriod</a>, <a href="LivingEntity.html#setFireForDuration(int)">setFireForDuration</a>, <a href="LivingEntity.html#setFireForDuration(int,java.time.temporal.TemporalUnit)">setFireForDuration</a>, <a href="LivingEntity.html#setFireForDuration(java.time.Duration)">setFireForDuration</a>, <a href="LivingEntity.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="LivingEntity.html#swingMainHand()">swingMainHand</a>, <a href="LivingEntity.html#swingOffHand()">swingOffHand</a>, <a href="LivingEntity.html#takeKnockback(float,double,double)">takeKnockback</a></code></div>
+<code><a href="LivingEntity.html#canPickupItem()">canPickupItem</a>, <a href="LivingEntity.html#damage(net.minestom.server.entity.damage.DamageType,float)">damage</a>, <a href="LivingEntity.html#getArrowCount()">getArrowCount</a>, <a href="LivingEntity.html#getAttribute(net.minestom.server.attribute.Attribute)">getAttribute</a>, <a href="LivingEntity.html#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a>, <a href="LivingEntity.html#getFireDamagePeriod()">getFireDamagePeriod</a>, <a href="LivingEntity.html#getHealth()">getHealth</a>, <a href="LivingEntity.html#getLastDamageSource()">getLastDamageSource</a>, <a href="LivingEntity.html#getLivingEntityMeta()">getLivingEntityMeta</a>, <a href="LivingEntity.html#getMaxHealth()">getMaxHealth</a>, <a href="LivingEntity.html#getPropertiesPacket()">getPropertiesPacket</a>, <a href="LivingEntity.html#getPropertiesPacket(java.util.Collection)">getPropertiesPacket</a>, <a href="LivingEntity.html#getTargetBlockPosition(int)">getTargetBlockPosition</a>, <a href="LivingEntity.html#getTeam()">getTeam</a>, <a href="LivingEntity.html#handleVoid()">handleVoid</a>, <a href="LivingEntity.html#heal()">heal</a>, <a href="LivingEntity.html#isDead()">isDead</a>, <a href="LivingEntity.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="LivingEntity.html#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a>, <a href="LivingEntity.html#refreshActiveHand(boolean,boolean,boolean)">refreshActiveHand</a>, <a href="LivingEntity.html#refreshIsDead(boolean)">refreshIsDead</a>, <a href="LivingEntity.html#setArrowCount(int)">setArrowCount</a>, <a href="LivingEntity.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="LivingEntity.html#setCanPickupItem(boolean)">setCanPickupItem</a>, <a href="LivingEntity.html#setFireDamagePeriod(long,java.time.temporal.TemporalUnit)">setFireDamagePeriod</a>, <a href="LivingEntity.html#setFireDamagePeriod(java.time.Duration)">setFireDamagePeriod</a>, <a href="LivingEntity.html#setFireForDuration(int)">setFireForDuration</a>, <a href="LivingEntity.html#setFireForDuration(int,java.time.temporal.TemporalUnit)">setFireForDuration</a>, <a href="LivingEntity.html#setFireForDuration(java.time.Duration)">setFireForDuration</a>, <a href="LivingEntity.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="LivingEntity.html#swingMainHand()">swingMainHand</a>, <a href="LivingEntity.html#swingOffHand()">swingOffHand</a>, <a href="LivingEntity.html#takeKnockback(float,double,double)">takeKnockback</a>, <a href="LivingEntity.html#updateNewViewer(net.minestom.server.entity.Player)">updateNewViewer</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.entity.Entity">Methods inherited from class&nbsp;net.minestom.server.entity.<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></h3>
-<code><a href="Entity.html#addEffect(net.minestom.server.potion.Potion)">addEffect</a>, <a href="Entity.html#addPassenger(net.minestom.server.entity.Entity)">addPassenger</a>, <a href="Entity.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Entity.html#askSynchronization()">askSynchronization</a>, <a href="Entity.html#clearEffects()">clearEffects</a>, <a href="Entity.html#generateId()">generateId</a>, <a href="Entity.html#getAcquirable()">getAcquirable</a>, <a href="Entity.html#getAcquirable(java.lang.Class)">getAcquirable</a>, <a href="Entity.html#getActiveEffects()">getActiveEffects</a>, <a href="Entity.html#getAliveTicks()">getAliveTicks</a>, <a href="Entity.html#getAllPermissions()">getAllPermissions</a>, <a href="Entity.html#getBoundingBox()">getBoundingBox</a>, <a href="Entity.html#getChunk()">getChunk</a>, <a href="Entity.html#getCustomName()">getCustomName</a>, <a href="Entity.html#getDistance(net.minestom.server.coordinate.Point)">getDistance</a>, <a href="Entity.html#getDistance(net.minestom.server.entity.Entity)">getDistance</a>, <a href="Entity.html#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a>, <a href="Entity.html#getEntity(int)">getEntity</a>, <a href="Entity.html#getEntity(java.util.UUID)">getEntity</a>, <a href="Entity.html#getEntityId()">getEntityId</a>, <a href="Entity.html#getEntityType()">getEntityType</a>, <a href="Entity.html#getEyeHeight()">getEyeHeight</a>, <a href="Entity.html#getGravityAcceleration()">getGravityAcceleration</a>, <a href="Entity.html#getGravityDragPerTick()">getGravityDragPerTick</a>, <a href="Entity.html#getGravityTickCount()">getGravityTickCount</a>, <a href="Entity.html#getInstance()">getInstance</a>, <a href="Entity.html#getLineOfSight(int)">getLineOfSight</a>, <a href="Entity.html#getLineOfSightEntity(double,java.util.function.Predicate)">getLineOfSightEntity</a>, <a href="Entity.html#getMetadataPacket()">getMetadataPacket</a>, <a href="Entity.html#getPassengers()">getPassengers</a>, <a href="Entity.html#getPassengersPacket()">getPassengersPacket</a>, <a href="Entity.html#getPose()">getPose</a>, <a href="Entity.html#getPosition()">getPosition</a>, <a href="Entity.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="Entity.html#getUuid()">getUuid</a>, <a href="Entity.html#getVehicle()">getVehicle</a>, <a href="Entity.html#getVelocity()">getVelocity</a>, <a href="Entity.html#getVelocityForPacket()">getVelocityForPacket</a>, <a href="Entity.html#getVelocityPacket()">getVelocityPacket</a>, <a href="Entity.html#getViewers()">getViewers</a>, <a href="Entity.html#hasLineOfSight(net.minestom.server.entity.Entity)">hasLineOfSight</a>, <a href="Entity.html#hasNoGravity()">hasNoGravity</a>, <a href="Entity.html#hasPassenger()">hasPassenger</a>, <a href="Entity.html#hasVelocity()">hasVelocity</a>, <a href="Entity.html#isActive()">isActive</a>, <a href="Entity.html#isAutoViewable()">isAutoViewable</a>, <a href="Entity.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="Entity.html#isGlowing()">isGlowing</a>, <a href="Entity.html#isInvisible()">isInvisible</a>, <a href="Entity.html#isOnFire()">isOnFire</a>, <a href="Entity.html#isRemoved()">isRemoved</a>, <a href="Entity.html#isRemoveScheduled()">isRemoveScheduled</a>, <a href="Entity.html#isSilent()">isSilent</a>, <a href="Entity.html#isSneaking()">isSneaking</a>, <a href="Entity.html#isSprinting()">isSprinting</a>, <a href="Entity.html#lookAt(net.minestom.server.coordinate.Pos)">lookAt</a>, <a href="Entity.html#lookAt(net.minestom.server.entity.Entity)">lookAt</a>, <a href="Entity.html#refreshCurrentChunk(net.minestom.server.instance.Chunk)">refreshCurrentChunk</a>, <a href="Entity.html#refreshPosition(net.minestom.server.coordinate.Pos)">refreshPosition</a>, <a href="Entity.html#refreshPosition(net.minestom.server.coordinate.Pos,boolean)">refreshPosition</a>, <a href="Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a>, <a href="Entity.html#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a>, <a href="Entity.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Entity.html#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a>, <a href="Entity.html#scheduleRemove(long,java.time.temporal.TemporalUnit)">scheduleRemove</a>, <a href="Entity.html#scheduleRemove(java.time.Duration)">scheduleRemove</a>, <a href="Entity.html#setAutoViewable(boolean)">setAutoViewable</a>, <a href="Entity.html#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a>, <a href="Entity.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="Entity.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="Entity.html#setCustomSynchronizationCooldown(java.time.Duration)">setCustomSynchronizationCooldown</a>, <a href="Entity.html#setGlowing(boolean)">setGlowing</a>, <a href="Entity.html#setGravity(double,double)">setGravity</a>, <a href="Entity.html#setInstance(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point)">setInstance</a>, <a href="Entity.html#setInvisible(boolean)">setInvisible</a>, <a href="Entity.html#setNoGravity(boolean)">setNoGravity</a>, <a href="Entity.html#setOnFire(boolean)">setOnFire</a>, <a href="Entity.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="Entity.html#setSilent(boolean)">setSilent</a>, <a href="Entity.html#setSprinting(boolean)">setSprinting</a>, <a href="Entity.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="Entity.html#setVelocity(net.minestom.server.coordinate.Vec)">setVelocity</a>, <a href="Entity.html#setView(float,float)">setView</a>, <a href="Entity.html#shouldRemove()">shouldRemove</a>, <a href="Entity.html#spawn()">spawn</a>, <a href="Entity.html#switchEntityType(net.minestom.server.entity.EntityType)">switchEntityType</a>, <a href="Entity.html#teleport(net.minestom.server.coordinate.Pos)">teleport</a>, <a href="Entity.html#teleport(net.minestom.server.coordinate.Pos,long%5B%5D)">teleport</a>, <a href="Entity.html#tick(long)">tick</a>, <a href="Entity.html#triggerStatus(byte)">triggerStatus</a></code></div>
+<code><a href="Entity.html#addEffect(net.minestom.server.potion.Potion)">addEffect</a>, <a href="Entity.html#addPassenger(net.minestom.server.entity.Entity)">addPassenger</a>, <a href="Entity.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Entity.html#askSynchronization()">askSynchronization</a>, <a href="Entity.html#autoViewEntities()">autoViewEntities</a>, <a href="Entity.html#clearEffects()">clearEffects</a>, <a href="Entity.html#generateId()">generateId</a>, <a href="Entity.html#getAcquirable()">getAcquirable</a>, <a href="Entity.html#getAcquirable(java.lang.Class)">getAcquirable</a>, <a href="Entity.html#getActiveEffects()">getActiveEffects</a>, <a href="Entity.html#getAliveTicks()">getAliveTicks</a>, <a href="Entity.html#getAllPermissions()">getAllPermissions</a>, <a href="Entity.html#getBoundingBox()">getBoundingBox</a>, <a href="Entity.html#getChunk()">getChunk</a>, <a href="Entity.html#getCustomName()">getCustomName</a>, <a href="Entity.html#getDistance(net.minestom.server.coordinate.Point)">getDistance</a>, <a href="Entity.html#getDistance(net.minestom.server.entity.Entity)">getDistance</a>, <a href="Entity.html#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a>, <a href="Entity.html#getEntity(int)">getEntity</a>, <a href="Entity.html#getEntity(java.util.UUID)">getEntity</a>, <a href="Entity.html#getEntityId()">getEntityId</a>, <a href="Entity.html#getEntityType()">getEntityType</a>, <a href="Entity.html#getEyeHeight()">getEyeHeight</a>, <a href="Entity.html#getGravityAcceleration()">getGravityAcceleration</a>, <a href="Entity.html#getGravityDragPerTick()">getGravityDragPerTick</a>, <a href="Entity.html#getGravityTickCount()">getGravityTickCount</a>, <a href="Entity.html#getInstance()">getInstance</a>, <a href="Entity.html#getLineOfSight(int)">getLineOfSight</a>, <a href="Entity.html#getLineOfSightEntity(double,java.util.function.Predicate)">getLineOfSightEntity</a>, <a href="Entity.html#getMetadataPacket()">getMetadataPacket</a>, <a href="Entity.html#getPassengers()">getPassengers</a>, <a href="Entity.html#getPassengersPacket()">getPassengersPacket</a>, <a href="Entity.html#getPose()">getPose</a>, <a href="Entity.html#getPosition()">getPosition</a>, <a href="Entity.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="Entity.html#getUuid()">getUuid</a>, <a href="Entity.html#getVehicle()">getVehicle</a>, <a href="Entity.html#getVelocity()">getVelocity</a>, <a href="Entity.html#getVelocityForPacket()">getVelocityForPacket</a>, <a href="Entity.html#getVelocityPacket()">getVelocityPacket</a>, <a href="Entity.html#getViewers()">getViewers</a>, <a href="Entity.html#hasLineOfSight(net.minestom.server.entity.Entity)">hasLineOfSight</a>, <a href="Entity.html#hasNoGravity()">hasNoGravity</a>, <a href="Entity.html#hasPassenger()">hasPassenger</a>, <a href="Entity.html#hasPredictableViewers()">hasPredictableViewers</a>, <a href="Entity.html#hasVelocity()">hasVelocity</a>, <a href="Entity.html#isActive()">isActive</a>, <a href="Entity.html#isAutoViewable()">isAutoViewable</a>, <a href="Entity.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="Entity.html#isGlowing()">isGlowing</a>, <a href="Entity.html#isInvisible()">isInvisible</a>, <a href="Entity.html#isOnFire()">isOnFire</a>, <a href="Entity.html#isRemoved()">isRemoved</a>, <a href="Entity.html#isRemoveScheduled()">isRemoveScheduled</a>, <a href="Entity.html#isSilent()">isSilent</a>, <a href="Entity.html#isSneaking()">isSneaking</a>, <a href="Entity.html#isSprinting()">isSprinting</a>, <a href="Entity.html#lookAt(net.minestom.server.coordinate.Pos)">lookAt</a>, <a href="Entity.html#lookAt(net.minestom.server.entity.Entity)">lookAt</a>, <a href="Entity.html#refreshCurrentChunk(net.minestom.server.instance.Chunk)">refreshCurrentChunk</a>, <a href="Entity.html#refreshPosition(net.minestom.server.coordinate.Pos)">refreshPosition</a>, <a href="Entity.html#refreshPosition(net.minestom.server.coordinate.Pos,boolean)">refreshPosition</a>, <a href="Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a>, <a href="Entity.html#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a>, <a href="Entity.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Entity.html#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a>, <a href="Entity.html#scheduleRemove(long,java.time.temporal.TemporalUnit)">scheduleRemove</a>, <a href="Entity.html#scheduleRemove(java.time.Duration)">scheduleRemove</a>, <a href="Entity.html#setAutoViewable(boolean)">setAutoViewable</a>, <a href="Entity.html#setAutoViewEntities(boolean)">setAutoViewEntities</a>, <a href="Entity.html#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a>, <a href="Entity.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="Entity.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="Entity.html#setCustomSynchronizationCooldown(java.time.Duration)">setCustomSynchronizationCooldown</a>, <a href="Entity.html#setGlowing(boolean)">setGlowing</a>, <a href="Entity.html#setGravity(double,double)">setGravity</a>, <a href="Entity.html#setInstance(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point)">setInstance</a>, <a href="Entity.html#setInvisible(boolean)">setInvisible</a>, <a href="Entity.html#setNoGravity(boolean)">setNoGravity</a>, <a href="Entity.html#setOnFire(boolean)">setOnFire</a>, <a href="Entity.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="Entity.html#setSilent(boolean)">setSilent</a>, <a href="Entity.html#setSprinting(boolean)">setSprinting</a>, <a href="Entity.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="Entity.html#setVelocity(net.minestom.server.coordinate.Vec)">setVelocity</a>, <a href="Entity.html#setView(float,float)">setView</a>, <a href="Entity.html#shouldRemove()">shouldRemove</a>, <a href="Entity.html#spawn()">spawn</a>, <a href="Entity.html#switchEntityType(net.minestom.server.entity.EntityType)">switchEntityType</a>, <a href="Entity.html#teleport(net.minestom.server.coordinate.Pos)">teleport</a>, <a href="Entity.html#teleport(net.minestom.server.coordinate.Pos,long%5B%5D)">teleport</a>, <a href="Entity.html#tick(long)">tick</a>, <a href="Entity.html#triggerStatus(byte)">triggerStatus</a>, <a href="Entity.html#updateViewableRule()">updateViewableRule</a>, <a href="Entity.html#updateViewableRule(java.util.function.Predicate)">updateViewableRule</a>, <a href="Entity.html#updateViewerRule()">updateViewerRule</a>, <a href="Entity.html#updateViewerRule(java.util.function.Predicate)">updateViewerRule</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -999,18 +967,6 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <section class="detail" id="playerConnection">
 <h3>playerConnection</h3>
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></span>&nbsp;<span class="element-name">playerConnection</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="viewableEntities">
-<h3>viewableEntities</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="element-name">viewableEntities</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="viewableChunks">
-<h3>viewableChunks</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</span>&nbsp;<span class="element-name">viewableChunks</span></div>
 </section>
 </li>
 <li>
@@ -1143,13 +1099,18 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </section>
 </li>
 <li>
-<section class="detail" id="removeViewer0(net.minestom.server.entity.Player)">
-<h3>removeViewer0</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeViewer0</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="updateOldViewer(net.minestom.server.entity.Player)">
+<h3>updateOldViewer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateOldViewer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Entity.html#updateOldViewer(net.minestom.server.entity.Player)">Entity</a></code></span></div>
+<div class="block">Called when a viewer must be destroyed.
+ Method can be subject to deadlocking if the target's viewers are also accessed.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="Entity.html#removeViewer0(net.minestom.server.entity.Player)">removeViewer0</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+<dd><code><a href="Entity.html#updateOldViewer(net.minestom.server.entity.Player)">updateOldViewer</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>player</code> - the player to send the packets to</dd>
 </dl>
 </section>
 </li>
@@ -1891,41 +1852,6 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </section>
 </li>
 <li>
-<section class="detail" id="refreshVisibleChunks(net.minestom.server.instance.Chunk)">
-<h3>refreshVisibleChunks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">refreshVisibleChunks</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</span></div>
-<div class="block">Called when the player changes chunk (move from one to another).
- Can also be used to refresh the list of chunks that the client should see based on <a href="#getChunkRange()"><code>getChunkRange()</code></a>.
- <p>
- It does remove and add the player from the chunks viewers list when removed or added.
- It also calls the events <a href="../event/player/PlayerChunkUnloadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkUnloadEvent</code></a> and <a href="../event/player/PlayerChunkLoadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkLoadEvent</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>newChunk</code> - the current/new player chunk (can be the current one)</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="refreshVisibleChunks()">
-<h3>refreshVisibleChunks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">refreshVisibleChunks</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="refreshVisibleEntities(net.minestom.server.instance.Chunk)">
-<h3>refreshVisibleEntities</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">refreshVisibleEntities</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</span></div>
-<div class="block">Refreshes the list of entities that the player should be able to see based
- on <a href="../MinecraftServer.html#getEntityViewDistance()"><code>MinecraftServer.getEntityViewDistance()</code></a> and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>newChunk</code> - the new chunk of the player (can be the current one)</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="getPlayerConnection()">
 <h3>getPlayerConnection</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -2191,33 +2117,6 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>didCloseInventory</code> - the new didCloseInventory field</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getViewableChunks()">
-<h3>getViewableChunks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</span>&nbsp;<span class="element-name">getViewableChunks</span>()</div>
-<div class="block">Gets the player viewable chunks.
- <p>
- WARNING: adding or removing a chunk there will not load/unload it,
- use <a href="../instance/Chunk.html#addViewer(net.minestom.server.entity.Player)"><code>Chunk.addViewer(Player)</code></a> or <a href="../instance/Chunk.html#removeViewer(net.minestom.server.entity.Player)"><code>Chunk.removeViewer(Player)</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link"><code>Set</code></a> containing all the chunks that the player sees</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="updateViewPosition(int,int)">
-<h3>updateViewPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateViewPosition</span><wbr><span class="parameters">(int&nbsp;chunkX,
- int&nbsp;chunkZ)</span></div>
-<div class="block">Sends a <a href="../network/packet/server/play/UpdateViewPositionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateViewPositionPacket</code></a>  to the player.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
 </dl>
 </section>
 </li>
@@ -2641,18 +2540,6 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  float&nbsp;forward,
  boolean&nbsp;jump,
  boolean&nbsp;unmount)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="getChunkRange()">
-<h3>getChunkRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getChunkRange</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the chunk range of the viewers,
- which is <a href="../MinecraftServer.html#getChunkViewDistance()"><code>MinecraftServer.getChunkViewDistance()</code></a> or <a href="Player.PlayerSettings.html#getViewDistance()"><code>Player.PlayerSettings.getViewDistance()</code></a>
- based on which one is the lowest</dd>
-</dl>
 </section>
 </li>
 <li>

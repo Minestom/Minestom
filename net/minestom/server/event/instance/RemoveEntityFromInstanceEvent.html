@@ -77,12 +77,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/InstanceEvent.html" title="interface in net.minestom.server.event.trait">InstanceEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/EntityInstanceEvent.html" title="interface in net.minestom.server.event.trait">EntityInstanceEvent</a></code>, <code><a href="../trait/InstanceEvent.html" title="interface in net.minestom.server.event.trait">InstanceEvent</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RemoveEntityFromInstanceEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="../trait/InstanceEvent.html" title="interface in net.minestom.server.event.trait">InstanceEvent</a>, <a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></span></div>
+implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.minestom.server.event.trait">EntityInstanceEvent</a></span></div>
 <div class="block">Called by an Instance when an entity is removed from it.</div>
 </section>
 <section class="summary">
@@ -121,16 +121,6 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInstance()" class="member-name-link">getInstance</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the instance.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCancelled(boolean)" class="member-name-link">setCancelled</a><wbr>(boolean&nbsp;cancel)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </div>
 </div>
 </div>
@@ -175,6 +165,8 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <div class="block">Gets the instance.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
+<dd><code><a href="../trait/EntityInstanceEvent.html#getInstance()">getInstance</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/EntityInstanceEvent.html" title="interface in net.minestom.server.event.trait">EntityInstanceEvent</a></code></dd>
+<dt>Specified by:</dt>
 <dd><code><a href="../trait/InstanceEvent.html#getInstance()">getInstance</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/InstanceEvent.html" title="interface in net.minestom.server.event.trait">InstanceEvent</a></code></dd>
 <dt>Returns:</dt>
 <dd>instance</dd>
@@ -192,34 +184,6 @@ implements <a href="../trait/InstanceEvent.html" title="interface in net.minesto
 <dd><code><a href="../trait/EntityEvent.html#getEntity()">getEntity</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code></dd>
 <dt>Returns:</dt>
 <dd>entity being removed</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isCancelled()">
-<h3>isCancelled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isCancelled</span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
-<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../trait/CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
-<dt>Returns:</dt>
-<dd>true if the event should be cancelled</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setCancelled(boolean)">
-<h3>setCancelled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCancelled</span><wbr><span class="parameters">(boolean&nbsp;cancel)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
-<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
 </dl>
 </section>
 </li>

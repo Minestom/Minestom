@@ -138,6 +138,7 @@ net.minestom.server.utils.chunk
 net.minestom.server.utils.clone
 net.minestom.server.utils.debug
 net.minestom.server.utils.entity
+net.minestom.server.utils.function
 net.minestom.server.utils.identity
 net.minestom.server.utils.instance
 net.minestom.server.utils.inventory
