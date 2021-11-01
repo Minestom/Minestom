@@ -29,38 +29,19 @@ public final class ViewEngine {
     private EntityTracker tracker;
 
     // Decide if this entity should be viewable to X players
-    private final AtomicBoolean autoViewable = new AtomicBoolean(true);
-    private final SparseBitSet autoViewableBitSet = new SparseBitSet();
-    private List<List<Player>> autoViewableReferences;
-    private final Consumer<Player> autoViewableAddition, autoViewableRemoval;
+    public final Option<Player> viewableOption;
     // Decide if this entity should view X entities
-    private final AtomicBoolean autoViewer = new AtomicBoolean(true);
-    private final SparseBitSet autoViewerBitSet = new SparseBitSet();
-    private List<List<Entity>> autoViewerReferences;
-    private final Consumer<Entity> autoViewerAddition, autoViewerRemoval;
+    public final Option<Entity> viewerOption;
 
     private final Set<Player> set = new SetImpl();
     private final Object mutex = this;
-
-    public Predicate<Player> autoViewablePredicate = player -> true;
-    public Predicate<Entity> autoViewerPredicate = entity -> true;
 
     public ViewEngine(@Nullable Entity entity,
                       Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
                       Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
         this.entity = entity;
-        this.autoViewableAddition = autoViewableAddition;
-        this.autoViewableRemoval = autoViewableRemoval;
-        this.autoViewerAddition = autoViewerAddition;
-        this.autoViewerRemoval = autoViewerRemoval;
-    }
-
-    public Consumer<Player> autoViewableAddition() {
-        return autoViewableAddition;
-    }
-
-    public Consumer<Player> autoViewableRemoval() {
-        return autoViewableRemoval;
+        this.viewableOption = new Option<>(Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
+        this.viewerOption = new Option<>(Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
     }
 
     public ViewEngine() {
@@ -71,11 +52,11 @@ public final class ViewEngine {
         synchronized (mutex) {
             this.tracker = tracker;
             if (tracker != null) {
-                this.autoViewableReferences = tracker.references(point, EntityTracker.Target.PLAYERS);
-                this.autoViewerReferences = tracker.references(point, EntityTracker.Target.ENTITIES);
+                this.viewableOption.references = tracker.references(point, EntityTracker.Target.PLAYERS);
+                this.viewerOption.references = tracker.references(point, EntityTracker.Target.ENTITIES);
             } else {
-                this.autoViewableReferences = null;
-                this.autoViewerReferences = null;
+                this.viewableOption.references = null;
+                this.viewerOption.references = null;
             }
         }
     }
@@ -97,32 +78,32 @@ public final class ViewEngine {
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return isAutoViewable() && manualViewers.isEmpty();
+            return viewableOption.isAuto() && manualViewers.isEmpty();
         }
     }
 
     public void registerViewable(Player player) {
-        this.autoViewableBitSet.set(player.getEntityId());
+        this.viewableOption.bitSet.set(player.getEntityId());
     }
 
     public void unregisterViewable(Player player) {
-        this.autoViewableBitSet.clear(player.getEntityId());
+        this.viewableOption.bitSet.clear(player.getEntityId());
     }
 
     public void registerViewer(Entity entity) {
-        this.autoViewerBitSet.set(entity.getEntityId());
+        this.viewerOption.bitSet.set(entity.getEntityId());
     }
 
     public void unregisterViewer(Entity entity) {
-        this.autoViewerBitSet.clear(entity.getEntityId());
+        this.viewerOption.bitSet.clear(entity.getEntityId());
     }
 
     public void handleAutoViewAddition(Entity entity) {
-        handleAutoView(entity, autoViewerAddition, autoViewableAddition);
+        handleAutoView(entity, viewerOption.addition, viewableOption.addition);
     }
 
     public void handleAutoViewRemoval(Entity entity) {
-        handleAutoView(entity, autoViewerRemoval, autoViewableRemoval);
+        handleAutoView(entity, viewerOption.removal, viewableOption.removal);
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
@@ -130,101 +111,88 @@ public final class ViewEngine {
             return; // Ensure that self isn't added or removed as viewer
         if (entity.getVehicle() != null)
             return; // Passengers are handled by the vehicle, inheriting its viewing settings
-        if (this.entity instanceof Player && isAutoViewer() && entity.isAutoViewable()) {
+        if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
             viewer.accept(entity); // Send packet to this player
         }
-        if (entity instanceof Player player && player.autoViewEntities() && isAutoViewable()) {
+        if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
             viewable.accept(player); // Send packet to the range-visible player
         }
     }
 
-    public boolean isAutoViewable() {
-        return autoViewable.get();
-    }
-
-    public boolean isAutoViewer() {
-        return autoViewer.get();
-    }
-
-    public void setAutoViewable(boolean autoViewable) {
-        final boolean previous = this.autoViewable.getAndSet(autoViewable);
-        if (previous != autoViewable) {
-            // View state changed, either add or remove itself from surrounding players
-            synchronized (mutex) {
-                Predicate<Player> predicate = autoViewable ? Entity::autoViewEntities : player -> autoViewableBitSet.get(player.getEntityId());
-                Consumer<Player> action = autoViewable ? autoViewableAddition : autoViewableRemoval;
-                update(autoViewableReferences, predicate, action);
-            }
-        }
-    }
-
-    public void setAutoViewer(boolean autoViewer) {
-        final boolean previous = this.autoViewer.getAndSet(autoViewer);
-        if (previous != autoViewer) {
-            // View state changed, either add or remove all surrounding entities
-            synchronized (mutex) {
-                Predicate<Entity> predicate = autoViewer ? Entity::isAutoViewable : ent -> autoViewerBitSet.get(ent.getEntityId());
-                Consumer<Entity> action = autoViewer ? autoViewerAddition : autoViewerRemoval;
-                update(autoViewerReferences, predicate, action);
-            }
-        }
-    }
-
-    public void updateViewableRule(Predicate<Player> predicate) {
-        synchronized (mutex) {
-            this.autoViewablePredicate = predicate;
-            updateRule(autoViewableReferences, autoViewableBitSet, predicate,
-                    autoViewableAddition, autoViewableRemoval);
-        }
-    }
-
-    public void updateViewerRule(Predicate<Entity> predicate) {
-        synchronized (mutex) {
-            this.autoViewerPredicate = predicate;
-            updateRule(autoViewerReferences, autoViewerBitSet, predicate,
-                    autoViewerAddition, autoViewerRemoval);
-        }
-    }
-
-    private <T extends Entity> void updateRule(List<List<T>> references,
-                                               SparseBitSet bitSet,
-                                               Predicate<T> predicate,
-                                               Consumer<T> addition,
-                                               Consumer<T> removal) {
-        update(references, Entity::isAutoViewable, entity -> {
-            boolean result = predicate.test(entity);
-            boolean contains = bitSet.get(entity.getEntityId());
-            if (result && !contains) {
-                addition.accept(entity);
-            } else if (!result && contains) {
-                removal.accept(entity);
-            }
-        });
-    }
-
-    private <T extends Entity> void update(List<List<T>> references,
-                                           Predicate<T> visibilityPredicate,
-                                           Consumer<T> action) {
-        if (tracker == null || references == null) return;
-        this.tracker.synchronize(() -> {
-            for (List<T> entities : references) {
-                if (entities.isEmpty()) continue;
-                for (T entity : entities) {
-                    if (entity == this.entity || !visibilityPredicate.test(entity)) continue;
-                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                    if (entity.getVehicle() != null) continue;
-                    action.accept(entity);
-                }
-            }
-        });
-    }
-
     private boolean validAutoViewer(Player player) {
-        return entity == null || autoViewableBitSet.get(player.getEntityId());
+        return entity == null || viewableOption.bitSet.get(player.getEntityId());
     }
 
     public Set<Player> asSet() {
         return set;
+    }
+
+    public final class Option<T extends Entity> {
+        private final Predicate<T> loopPredicate;
+        private final AtomicBoolean auto = new AtomicBoolean(true);
+        private final SparseBitSet bitSet = new SparseBitSet();
+        private List<List<T>> references;
+        public final Consumer<T> addition, removal;
+        private Predicate<T> predicate = entity -> true;
+
+        public Option(Predicate<T> loopPredicate,
+                      Consumer<T> addition, Consumer<T> removal) {
+            this.loopPredicate = loopPredicate;
+            this.addition = addition;
+            this.removal = removal;
+        }
+
+        public boolean isAuto() {
+            return auto.get();
+        }
+
+        public boolean predicate(T entity) {
+            return predicate.test(entity);
+        }
+
+        public void updateAuto(boolean autoViewable) {
+            final boolean previous = auto.getAndSet(autoViewable);
+            if (previous != autoViewable) {
+                // View state changed, either add or remove itself from surrounding players
+                synchronized (mutex) {
+                    Predicate<T> predicate = autoViewable ? loopPredicate : player -> bitSet.get(player.getEntityId());
+                    Consumer<T> action = autoViewable ? addition : removal;
+                    update(references, predicate, action);
+                }
+            }
+        }
+
+        public void updateRule(Predicate<T> predicate) {
+            synchronized (mutex) {
+                this.predicate = predicate;
+                update(references, loopPredicate, entity -> {
+                    boolean result = predicate.test(entity);
+                    boolean contains = bitSet.get(entity.getEntityId());
+                    if (result && !contains) {
+                        addition.accept(entity);
+                    } else if (!result && contains) {
+                        removal.accept(entity);
+                    }
+                });
+            }
+        }
+
+        private void update(List<List<T>> references,
+                            Predicate<T> visibilityPredicate,
+                            Consumer<T> action) {
+            if (tracker == null || references == null) return;
+            tracker.synchronize(() -> {
+                for (List<T> entities : references) {
+                    if (entities.isEmpty()) continue;
+                    for (T entity : entities) {
+                        if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
+                        if (entity instanceof Player player && manualViewers.contains(player)) continue;
+                        if (entity.getVehicle() != null) continue;
+                        action.accept(entity);
+                    }
+                }
+            });
+        }
     }
 
     final class SetImpl extends AbstractSet<Player> {
@@ -238,14 +206,14 @@ public final class ViewEngine {
         @Override
         public int size() {
             synchronized (mutex) {
-                return manualViewers.size() + autoViewableBitSet.size();
+                return manualViewers.size() + viewableOption.bitSet.size();
             }
         }
 
         @Override
         public boolean isEmpty() {
             synchronized (mutex) {
-                return manualViewers.isEmpty() && autoViewableBitSet.isEmpty();
+                return manualViewers.isEmpty() && viewableOption.bitSet.isEmpty();
             }
         }
 
@@ -253,7 +221,7 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                return manualViewers.contains(player) || autoViewableBitSet.get(player.getEntityId());
+                return manualViewers.contains(player) || viewableOption.bitSet.get(player.getEntityId());
             }
         }
 
@@ -263,8 +231,8 @@ public final class ViewEngine {
                 // Manual viewers
                 if (!manualViewers.isEmpty()) manualViewers.forEach(action);
                 // Auto
-                final List<List<Player>> auto = ViewEngine.this.autoViewableReferences;
-                if (auto != null && isAutoViewable()) {
+                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
+                if (auto != null && viewableOption.isAuto()) {
                     for (List<Player> players : auto) {
                         if (players.isEmpty()) continue;
                         for (Player player : players) {
@@ -302,9 +270,10 @@ public final class ViewEngine {
                 Player result;
                 if ((result = nextValidEntry(current)) != null) return result;
                 this.autoIterator = true;
-                if (autoViewableReferences == null || !isAutoViewable()) return null;
-                for (int i = index + 1; i < autoViewableReferences.size(); i++) {
-                    final List<Player> players = autoViewableReferences.get(i);
+                final var references = viewableOption.references;
+                if (references == null || !viewableOption.isAuto()) return null;
+                for (int i = index + 1; i < references.size(); i++) {
+                    final List<Player> players = references.get(i);
                     Iterator<Player> iterator = players.iterator();
                     if ((result = nextValidEntry(iterator)) != null) {
                         this.current = iterator;

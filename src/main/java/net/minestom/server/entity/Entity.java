@@ -126,8 +126,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected final ViewEngine viewEngine = new ViewEngine(this,
             player -> {
                 // Add viewable
-                if (!Entity.this.viewEngine.autoViewablePredicate.test(player) || !player.viewEngine.autoViewerPredicate.test(this))
-                    return;
+                if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
+                        !player.viewEngine.viewerOption.predicate(this)) return;
                 Entity.this.viewEngine.registerViewable(player);
                 player.viewEngine.registerViewer(this);
                 updateNewViewer(player);
@@ -140,8 +140,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             },
             this instanceof Player player ? entity -> {
                 // Add viewer
-                if (!Entity.this.viewEngine.autoViewerPredicate.test(entity) || !entity.viewEngine.autoViewablePredicate.test(player))
-                    return;
+                if (!Entity.this.viewEngine.viewerOption.predicate(entity) ||
+                        !entity.viewEngine.viewableOption.predicate(player)) return;
                 Entity.this.viewEngine.registerViewer(entity);
                 entity.viewEngine.registerViewable(player);
                 entity.updateNewViewer(player);
@@ -359,7 +359,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
     public boolean isAutoViewable() {
-        return viewEngine.isAutoViewable();
+        return viewEngine.viewableOption.isAuto();
     }
 
     /**
@@ -369,11 +369,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @see #isAutoViewable()
      */
     public void setAutoViewable(boolean autoViewable) {
-        this.viewEngine.setAutoViewable(autoViewable);
+        this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
-    public void updateViewableRule(Predicate<Player> predicate) {
-        this.viewEngine.updateViewableRule(predicate);
+    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
+        this.viewEngine.viewableOption.updateRule(predicate);
     }
 
     /**
@@ -384,7 +384,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Experimental
     public boolean autoViewEntities() {
-        return viewEngine.isAutoViewer();
+        return viewEngine.viewerOption.isAuto();
     }
 
     /**
@@ -394,11 +394,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Experimental
     public void setAutoViewEntities(boolean autoViewer) {
-        this.viewEngine.setAutoViewer(autoViewer);
+        this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
-    public void updateViewerRule(Predicate<Entity> predicate) {
-        this.viewEngine.updateViewerRule(predicate);
+    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
+        this.viewEngine.viewerOption.updateRule(predicate);
     }
 
     @Override
@@ -430,7 +430,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player) passenger.viewEngine.autoViewableAddition().accept(player);
+                if (passenger != player) passenger.viewEngine.viewableOption.addition.accept(player);
             }
             player.sendPacket(getPassengersPacket());
         }
@@ -449,7 +449,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player) passenger.viewEngine.autoViewableRemoval().accept(player);
+                if (passenger != player) passenger.viewEngine.viewableOption.removal.accept(player);
             }
         }
         player.sendPacket(new DestroyEntitiesPacket(getEntityId()));
