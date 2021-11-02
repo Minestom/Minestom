@@ -248,7 +248,7 @@ public final class PacketUtils {
                 process(viewable);
                 for (Player viewer : viewable.getViewers()) {
                     if (!Objects.equals(player, viewer)) {
-                        writeTo(viewer.getPlayerConnection(), framedPacket.position(0));
+                        writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
                     }
                 }
                 return;
@@ -282,19 +282,23 @@ public final class PacketUtils {
                 for (int i = 0; i < pairs.size(); ++i) {
                     final long offsets = elements[i];
                     final int start = (int) (offsets >> 32);
-                    if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
+                    if (start != lastWrite) writeTo(connection, lastWrite, start - lastWrite);
                     lastWrite = (int) offsets; // End = last 32 bits
                 }
-                if (size != lastWrite) writeTo(connection, buffer.view(lastWrite, size));
+                if (size != lastWrite) writeTo(connection, lastWrite, size - lastWrite);
             } else {
                 // Write all
-                writeTo(connection, buffer.view(0, size));
+                writeTo(connection, 0, size);
             }
         }
 
-        private static void writeTo(PlayerConnection connection, ByteBuffer buffer) {
-            if (connection instanceof PlayerSocketConnection) {
-                ((PlayerSocketConnection) connection).write(buffer);
+        private void writeTo(PlayerConnection connection, int offset, int length) {
+            writeTo(connection, buffer.asByteBuffer(), offset, length);
+        }
+
+        private static void writeTo(PlayerConnection connection, ByteBuffer buffer, int offset, int length) {
+            if (connection instanceof PlayerSocketConnection socketConnection) {
+                socketConnection.write(buffer, offset, length);
                 return;
             }
             // TODO for non-socket connection
