@@ -528,7 +528,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
 
         // scheduled tasks
-        if (!nextTick.isEmpty()) {
+        {
             Consumer<Entity> callback;
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);
