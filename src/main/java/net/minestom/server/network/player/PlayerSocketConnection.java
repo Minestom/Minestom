@@ -230,13 +230,14 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @ApiStatus.Internal
-    public void write(@NotNull ByteBuffer buffer) {
+    public void write(@NotNull ByteBuffer buffer, int index, int length) {
         synchronized (bufferLock) {
             if (encrypted) { // Encryption support
                 ByteBuffer output = PacketUtils.localBuffer();
                 try {
-                    this.encryptCipher.update(buffer.duplicate(), output);
+                    this.encryptCipher.update(buffer.slice(index,length), output);
                     buffer = output.flip();
+                    index = 0;
                 } catch (ShortBufferException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
@@ -245,20 +246,24 @@ public class PlayerSocketConnection extends PlayerConnection {
 
             BinaryBuffer localBuffer = tickBuffer.getPlain();
             final int capacity = localBuffer.capacity();
-            final int size = buffer.remaining();
-            if (size <= capacity) {
-                if (!localBuffer.canWrite(size)) localBuffer = updateLocalBuffer();
-                localBuffer.write(buffer);
+            if (length <= capacity) {
+                if (!localBuffer.canWrite(length)) localBuffer = updateLocalBuffer();
+                localBuffer.write(buffer, index, length);
             } else {
-                final int bufferCount = size / capacity + 1;
+                final int bufferCount = length / capacity + 1;
                 for (int i = 0; i < bufferCount; i++) {
-                    buffer.position(i * capacity);
-                    buffer.limit(Math.min(size, buffer.position() + capacity));
-                    if (!localBuffer.canWrite(buffer.remaining())) localBuffer = updateLocalBuffer();
-                    localBuffer.write(buffer);
+                    final int sliceStart = i * capacity;
+                    final int sliceLength = Math.min(length, sliceStart + capacity) - sliceStart;
+                    if (!localBuffer.canWrite(sliceLength)) localBuffer = updateLocalBuffer();
+                    localBuffer.write(buffer, sliceStart, sliceLength);
                 }
             }
         }
+    }
+
+    @ApiStatus.Internal
+    public void write(@NotNull ByteBuffer buffer) {
+        write(buffer, buffer.position(), buffer.remaining());
     }
 
     private void writePacket(@NotNull ServerPacket packet) {
