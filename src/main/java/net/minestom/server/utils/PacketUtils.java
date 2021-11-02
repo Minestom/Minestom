@@ -4,7 +4,6 @@ import com.google.common.collect.MapMaker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -235,7 +234,7 @@ public final class PacketUtils {
 
     private static final class ViewableStorage {
         // Player id -> list of offsets to ignore (32:32 bits)
-        private final Int2ObjectMap<LongList> entityIdMap = new Int2ObjectOpenHashMap<>();
+        private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
         private final BinaryBuffer buffer = PooledBuffers.get();
 
         {
@@ -275,12 +274,13 @@ public final class PacketUtils {
         private synchronized void processPlayer(Player player) {
             final int size = buffer.writerOffset();
             final PlayerConnection connection = player.getPlayerConnection();
-            final LongList pairs = entityIdMap.get(player.getEntityId());
+            final LongArrayList pairs = entityIdMap.get(player.getEntityId());
             if (pairs != null) {
                 // Ensure that we skip the specified parts of the buffer
                 int lastWrite = 0;
-                for (LongIterator it = pairs.iterator(); it.hasNext(); ) {
-                    final long offsets = it.nextLong();
+                final long[] elements = pairs.elements();
+                for (int i = 0; i < pairs.size(); ++i) {
+                    final long offsets = elements[i];
                     final int start = (int) (offsets >> 32);
                     if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
                     lastWrite = (int) offsets; // End = last 32 bits
