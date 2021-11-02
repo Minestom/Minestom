@@ -13,8 +13,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
@@ -70,7 +68,6 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
@@ -137,7 +134,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk != null) {
             sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-            EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
+            GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
         }
     };
 
