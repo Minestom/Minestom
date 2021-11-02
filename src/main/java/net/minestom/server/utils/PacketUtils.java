@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import com.google.common.collect.MapMaker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -31,9 +32,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.zip.Deflater;
 
 /**
@@ -53,7 +53,7 @@ public final class PacketUtils {
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
-    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
+    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new MapMaker().weakKeys().makeMap();
 
     private PacketUtils() {
     }
@@ -159,13 +159,8 @@ public final class PacketUtils {
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;
-        synchronized (VIEWABLE_STORAGE_MAP) {
-            VIEWABLE_STORAGE_MAP.compute(viewable, ((v, storage) -> {
-                storage = Objects.requireNonNullElseGet(storage, ViewableStorage::new);
-                storage.append(v, serverPacket, exception);
-                return storage;
-            }));
-        }
+        ViewableStorage storage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, v -> new ViewableStorage());
+        storage.append(viewable, serverPacket, exception);
     }
 
     @ApiStatus.Experimental
@@ -175,10 +170,8 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        synchronized (VIEWABLE_STORAGE_MAP) {
-            VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
-                    entry.getValue().process(entry.getKey()));
-        }
+        VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
+                entry.getValue().process(entry.getKey()));
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,

@@ -138,20 +138,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 player.viewEngine.viewerOption.unregister(this);
                 updateOldViewer(player);
             },
-            this instanceof Player player ? entity -> {
-                // Add viewer
-                if (!Entity.this.viewEngine.viewerOption.predicate(entity) ||
-                        !entity.viewEngine.viewableOption.predicate(player)) return;
-                Entity.this.viewEngine.viewerOption.register(entity);
-                entity.viewEngine.viewableOption.register(player);
-                entity.updateNewViewer(player);
-            } : null,
-            this instanceof Player player ? entity -> {
-                // Remove viewer
-                Entity.this.viewEngine.viewerOption.unregister(entity);
-                entity.viewEngine.viewableOption.unregister(player);
-                entity.updateOldViewer(player);
-            } : null);
+            this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
+            this instanceof Player player ? entity -> entity.viewEngine.viewableOption.removal.accept(player) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
@@ -540,7 +528,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
 
         // scheduled tasks
-        if (!nextTick.isEmpty()) {
+        {
             Consumer<Entity> callback;
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);

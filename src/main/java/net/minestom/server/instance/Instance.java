@@ -571,7 +571,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     @Override
     public void tick(long time) {
         // Scheduled tasks
-        if (!nextTick.isEmpty()) {
+        {
             Consumer<Instance> callback;
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);
