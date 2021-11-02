@@ -1,6 +1,6 @@
 package net.minestom.server.utils;
 
-import com.google.common.collect.MapMaker;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -52,7 +52,7 @@ public final class PacketUtils {
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
-    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new MapMaker().weakKeys().makeMap();
+    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = ConcurrentMap.class.cast(Caffeine.newBuilder().weakKeys().build().asMap());
 
     private PacketUtils() {
     }
@@ -158,8 +158,11 @@ public final class PacketUtils {
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;
-        ViewableStorage storage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, v -> new ViewableStorage());
-        storage.append(viewable, serverPacket, exception);
+        VIEWABLE_STORAGE_MAP.compute(viewable, (v, storage) -> {
+            if (storage == null) storage = new ViewableStorage();
+            storage.append(v, serverPacket, exception);
+            return storage;
+        });
     }
 
     @ApiStatus.Experimental
@@ -241,7 +244,7 @@ public final class PacketUtils {
             PooledBuffers.registerBuffer(this, buffer);
         }
 
-        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+        private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
@@ -271,7 +274,7 @@ public final class PacketUtils {
             this.entityIdMap.clear();
         }
 
-        private synchronized void processPlayer(Player player) {
+        private void processPlayer(Player player) {
             final int size = buffer.writerOffset();
             final PlayerConnection connection = player.getPlayerConnection();
             final LongArrayList pairs = entityIdMap.get(player.getEntityId());
