@@ -36,6 +36,7 @@ import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -47,18 +48,18 @@ import java.util.zip.Inflater;
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
+    private static final AtomicReferenceFieldUpdater<PlayerSocketConnection, EncryptionInfo> ENCRYPTION_UPDATER =
+            AtomicReferenceFieldUpdater.newUpdater(PlayerSocketConnection.class, EncryptionInfo.class, "encryptionInfo");
 
     private final Worker worker;
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
-    private boolean encrypted = false;
+    private volatile EncryptionInfo encryptionInfo;
     private boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
     private byte[] nonce = new byte[4];
-    private Cipher decryptCipher;
-    private Cipher encryptCipher;
 
     // Data from client packets
     private String loginUsername;
@@ -92,11 +93,11 @@ public class PlayerSocketConnection extends PlayerConnection {
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
         final BinaryBuffer readBuffer = workerContext.readBuffer;
         // Decrypt data
-        if (encrypted) {
-            final Cipher cipher = decryptCipher;
+        EncryptionInfo encryptionInfo = this.encryptionInfo;
+        if (encryptionInfo != null) {
             ByteBuffer input = readBuffer.asByteBuffer(0, readBuffer.writerOffset());
             try {
-                cipher.update(input, input.duplicate());
+                encryptionInfo.decryptCipher().update(input, input.duplicate());
             } catch (ShortBufferException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
                 return;
@@ -175,12 +176,10 @@ public class PlayerSocketConnection extends PlayerConnection {
      * @throws IllegalStateException if encryption is already enabled for this connection
      */
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
-        Check.stateCondition(encrypted, "Encryption is already enabled!");
-        synchronized (bufferLock) {
-            this.decryptCipher = MojangCrypt.getCipher(2, secretKey);
-            this.encryptCipher = MojangCrypt.getCipher(1, secretKey);
-            this.encrypted = true;
-        }
+        final EncryptionInfo prev = ENCRYPTION_UPDATER.getAndSet(this,
+                new EncryptionInfo(MojangCrypt.getCipher(2, secretKey), MojangCrypt.getCipher(1, secretKey)));
+        if (prev != null)
+            throw new IllegalStateException("Encryption was already enabled for this connection");
     }
 
     /**
@@ -231,19 +230,20 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer, int index, int length) {
-        synchronized (bufferLock) {
-            if (encrypted) { // Encryption support
-                ByteBuffer output = PacketUtils.localBuffer();
-                try {
-                    this.encryptCipher.update(buffer.slice(index,length), output);
-                    buffer = output.flip();
-                    index = 0;
-                } catch (ShortBufferException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    return;
-                }
+        EncryptionInfo encryptionInfo = this.encryptionInfo;
+        if (encryptionInfo != null) {
+            ByteBuffer output = PacketUtils.localBuffer();
+            try {
+                encryptionInfo.encryptCipher().update(buffer.slice(index, length), output);
+                buffer = output.flip();
+                index = 0;
+            } catch (ShortBufferException e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+                return;
             }
+        }
 
+        synchronized (bufferLock) {
             BinaryBuffer localBuffer = tickBuffer.getPlain();
             final int capacity = localBuffer.capacity();
             if (length <= capacity) {
@@ -471,5 +471,8 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void setNonce(byte[] nonce) {
         this.nonce = nonce;
+    }
+
+    public record EncryptionInfo(Cipher decryptCipher, Cipher encryptCipher) {
     }
 }
