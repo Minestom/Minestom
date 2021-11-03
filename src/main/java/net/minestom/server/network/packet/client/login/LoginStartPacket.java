@@ -69,7 +69,8 @@ public class LoginStartPacket implements ClientPreplayPacket {
             }
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.setConnectionState(ConnectionState.LOGIN);
-            socketConnection.sendPacket(new EncryptionRequestPacket(socketConnection));
+            EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(socketConnection);
+            socketConnection.sendPacket(encryptionRequestPacket);
         } else {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
