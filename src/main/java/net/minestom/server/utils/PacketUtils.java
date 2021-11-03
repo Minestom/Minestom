@@ -199,15 +199,12 @@ public final class PacketUtils {
         final int packetSize = buffer.position() - contentStart;
         final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
         if (compressed) {
-            // Packet large enough, compress
-            buffer.position(contentStart);
-            final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
-            final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
-
+            // Packet large enough, compress it
+            final ByteBuffer input = localBuffer().put(0, buffer, contentStart, packetSize);
             Deflater deflater = LOCAL_DEFLATER.get();
-            deflater.setInput(uncompressedCopy);
+            deflater.setInput(input.limit(packetSize));
             deflater.finish();
-            deflater.deflate(buffer);
+            deflater.deflate(buffer.position(contentStart));
             deflater.reset();
         }
         // Packet header (Packet + Data Length)
