@@ -247,7 +247,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
                 continue;
             }
-            localBuffer.write(offset - length, buffer);
+            localBuffer.write(offset - length, buffer, index, length);
             return;
         }
     }
