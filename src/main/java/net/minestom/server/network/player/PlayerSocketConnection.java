@@ -225,7 +225,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @ApiStatus.Internal
-    public void write(@NotNull ByteBuffer buffer) {
+    public void write(@NotNull ByteBuffer buffer, int index, int length) {
         if (encrypted) { // Encryption support
             ByteBuffer output = PacketUtils.localBuffer();
             try {
@@ -236,22 +236,25 @@ public class PlayerSocketConnection extends PlayerConnection {
                 return;
             }
         }
-
-        final int size = buffer.remaining();
         final int capacity = PooledBuffers.bufferSize();
         while (true) {
             BinaryBuffer localBuffer = tickBuffer.get();
-            final int offset = BinaryBuffer.TEST.addAndGet(localBuffer, size);
+            final int offset = BinaryBuffer.TEST.addAndGet(localBuffer, length);
             if (offset >= capacity) {
                 synchronized (flushLock) {
-                    BinaryBuffer.TEST.set(localBuffer, offset - size);
+                    BinaryBuffer.TEST.set(localBuffer, offset - length);
                     updateLocalBuffer();
                 }
                 continue;
             }
-            localBuffer.write(offset - size, buffer);
+            localBuffer.write(offset - length, buffer);
             return;
         }
+    }
+
+    @ApiStatus.Internal
+    public void write(@NotNull ByteBuffer buffer) {
+        write(buffer, buffer.position(), buffer.remaining());
     }
 
     private void writePacket(@NotNull ServerPacket packet) {

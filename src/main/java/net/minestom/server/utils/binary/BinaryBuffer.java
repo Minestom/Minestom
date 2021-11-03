@@ -42,19 +42,17 @@ public final class BinaryBuffer {
         return new BinaryBuffer(temp);
     }
 
-    public void write(int index, ByteBuffer buffer) {
-        final int start = buffer.position();
-        final int end = buffer.limit();
-        final int size = end - start;
-        this.nioBuffer.put(index, buffer, start, size);
+    public void write(int index, ByteBuffer src, int srcIndex, int length) {
+        this.nioBuffer.put(index, src, srcIndex, length);
+    }
+
+    public void write(ByteBuffer buffer, int index, int length) {
+        write(writerOffset, buffer, index, length);
+        this.writerOffset += length;
     }
 
     public void write(ByteBuffer buffer) {
-        final int start = buffer.position();
-        final int end = buffer.limit();
-        final int size = end - start;
-        this.nioBuffer.put(writerOffset, buffer, start, size);
-        this.writerOffset += size;
+        write(buffer, buffer.position(), buffer.remaining());
     }
 
     public void write(BinaryBuffer buffer) {
@@ -144,8 +142,8 @@ public final class BinaryBuffer {
     }
 
     @ApiStatus.Internal
-    public ByteBuffer view(int position, int limit) {
-        return nioBuffer.limit(limit).position(position);
+    public ByteBuffer asByteBuffer() {
+        return nioBuffer;
     }
 
     public boolean writeChannel(WritableByteChannel channel) throws IOException {

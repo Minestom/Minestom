@@ -128,6 +128,9 @@ dependencies {
 
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
 
+    // https://mvnrepository.com/artifact/com.zaxxer/SparseBitSet
+    implementation group: 'com.zaxxer', name: 'SparseBitSet', version: '1.2'
+
     // Guava 21.0+ required for Mixin
     api 'com.google.guava:guava:31.0.1-jre'
 
