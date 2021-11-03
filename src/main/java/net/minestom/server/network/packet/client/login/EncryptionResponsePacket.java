@@ -22,6 +22,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -50,8 +51,9 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                 MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
                 return;
             }
-
-            final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
+            final KeyPair keyPair = MojangAuth.getKeyPair();
+            final SecretKey secretKey = MojangCrypt.decryptByteToSecretKey(keyPair.getPrivate(), sharedSecret);
+            final byte[] digestedData = MojangCrypt.digestData("", keyPair.getPublic(), secretKey);
             if (digestedData == null) {
                 // Incorrect key, probably because of the client
                 MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", socketConnection.getRemoteAddress());
@@ -78,7 +80,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                         // Invalid response
                         return;
                     }
-                    socketConnection.setEncryptionKey(getSecretKey());
+                    socketConnection.setEncryptionKey(secretKey);
                     UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString()
                             .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
                     final String profileName = gameProfile.get("name").getAsString();
@@ -102,10 +104,6 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     public void write(@NotNull BinaryWriter writer) {
         ByteArrayData.encodeByteArray(writer, sharedSecret);
         ByteArrayData.encodeByteArray(writer, verifyToken);
-    }
-
-    private SecretKey getSecretKey() {
-        return MojangCrypt.decryptByteToSecretKey(MojangAuth.getKeyPair().getPrivate(), sharedSecret);
     }
 
     private byte[] getNonce() {
