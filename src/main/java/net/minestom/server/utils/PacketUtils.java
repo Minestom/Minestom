@@ -1,10 +1,9 @@
 package net.minestom.server.utils;
 
-import com.google.common.collect.MapMaker;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -53,7 +52,7 @@ public final class PacketUtils {
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
-    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new MapMaker().weakKeys().makeMap();
+    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = ConcurrentMap.class.cast(Caffeine.newBuilder().weakKeys().build().asMap());
 
     private PacketUtils() {
     }
@@ -159,8 +158,11 @@ public final class PacketUtils {
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;
-        ViewableStorage storage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, v -> new ViewableStorage());
-        storage.append(viewable, serverPacket, exception);
+        VIEWABLE_STORAGE_MAP.compute(viewable, (v, storage) -> {
+            if (storage == null) storage = new ViewableStorage();
+            storage.append(v, serverPacket, exception);
+            return storage;
+        });
     }
 
     @ApiStatus.Experimental
@@ -197,15 +199,12 @@ public final class PacketUtils {
         final int packetSize = buffer.position() - contentStart;
         final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
         if (compressed) {
-            // Packet large enough, compress
-            buffer.position(contentStart);
-            final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
-            final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
-
+            // Packet large enough, compress it
+            final ByteBuffer input = localBuffer().put(0, buffer, contentStart, packetSize);
             Deflater deflater = LOCAL_DEFLATER.get();
-            deflater.setInput(uncompressedCopy);
+            deflater.setInput(input.limit(packetSize));
             deflater.finish();
-            deflater.deflate(buffer);
+            deflater.deflate(buffer.position(contentStart));
             deflater.reset();
         }
         // Packet header (Packet + Data Length)
@@ -235,21 +234,21 @@ public final class PacketUtils {
 
     private static final class ViewableStorage {
         // Player id -> list of offsets to ignore (32:32 bits)
-        private final Int2ObjectMap<LongList> entityIdMap = new Int2ObjectOpenHashMap<>();
+        private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
         private final BinaryBuffer buffer = PooledBuffers.get();
 
         {
             PooledBuffers.registerBuffer(this, buffer);
         }
 
-        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+        private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
                 process(viewable);
                 for (Player viewer : viewable.getViewers()) {
                     if (!Objects.equals(player, viewer)) {
-                        writeTo(viewer.getPlayerConnection(), framedPacket.position(0));
+                        writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
                     }
                 }
                 return;
@@ -272,29 +271,34 @@ public final class PacketUtils {
             this.entityIdMap.clear();
         }
 
-        private synchronized void processPlayer(Player player) {
+        private void processPlayer(Player player) {
             final int size = buffer.writerOffset();
             final PlayerConnection connection = player.getPlayerConnection();
-            final LongList pairs = entityIdMap.get(player.getEntityId());
+            final LongArrayList pairs = entityIdMap.get(player.getEntityId());
             if (pairs != null) {
                 // Ensure that we skip the specified parts of the buffer
                 int lastWrite = 0;
-                for (LongIterator it = pairs.iterator(); it.hasNext(); ) {
-                    final long offsets = it.nextLong();
+                final long[] elements = pairs.elements();
+                for (int i = 0; i < pairs.size(); ++i) {
+                    final long offsets = elements[i];
                     final int start = (int) (offsets >> 32);
-                    if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
+                    if (start != lastWrite) writeTo(connection, lastWrite, start - lastWrite);
                     lastWrite = (int) offsets; // End = last 32 bits
                 }
-                if (size != lastWrite) writeTo(connection, buffer.view(lastWrite, size));
+                if (size != lastWrite) writeTo(connection, lastWrite, size - lastWrite);
             } else {
                 // Write all
-                writeTo(connection, buffer.view(0, size));
+                writeTo(connection, 0, size);
             }
         }
 
-        private static void writeTo(PlayerConnection connection, ByteBuffer buffer) {
-            if (connection instanceof PlayerSocketConnection) {
-                ((PlayerSocketConnection) connection).write(buffer);
+        private void writeTo(PlayerConnection connection, int offset, int length) {
+            writeTo(connection, buffer.asByteBuffer(), offset, length);
+        }
+
+        private static void writeTo(PlayerConnection connection, ByteBuffer buffer, int offset, int length) {
+            if (connection instanceof PlayerSocketConnection socketConnection) {
+                socketConnection.write(buffer, offset, length);
                 return;
             }
             // TODO for non-socket connection

@@ -214,14 +214,38 @@ public final class ViewEngine {
         @Override
         public int size() {
             synchronized (mutex) {
-                return manualViewers.size() + viewableOption.bitSet.size();
+                int size = manualViewers.size();
+                if (entity != null) return size + viewableOption.bitSet.size();
+                // Non-entity fallback
+                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
+                if (auto != null) {
+                    for (List<Player> players : auto) {
+                        if (players.isEmpty()) continue;
+                        for (Player player : players) {
+                            if (validAutoViewer(player)) size++;
+                        }
+                    }
+                }
+                return size;
             }
         }
 
         @Override
         public boolean isEmpty() {
             synchronized (mutex) {
-                return manualViewers.isEmpty() && viewableOption.bitSet.isEmpty();
+                if (!manualViewers.isEmpty()) return false;
+                if (entity != null) return viewableOption.bitSet.isEmpty();
+                // Non-entity fallback
+                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
+                if (auto != null) {
+                    for (List<Player> players : auto) {
+                        if (players.isEmpty()) continue;
+                        for (Player player : players) {
+                            if (validAutoViewer(player)) return false;
+                        }
+                    }
+                }
+                return true;
             }
         }
 
@@ -229,14 +253,23 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                return manualViewers.contains(player) || viewableOption.isRegistered(player);
+                if (manualViewers.contains(player)) return true;
+                if (entity != null) return viewableOption.isRegistered(player);
+                // Non-entity fallback
+                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
+                if (auto != null) {
+                    for (List<Player> players : auto) {
+                        if (players.isEmpty()) continue;
+                        if (players.contains(player) && validAutoViewer(player)) return true;
+                    }
+                }
+                return false;
             }
         }
 
         @Override
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
-                // Manual viewers
                 if (!manualViewers.isEmpty()) manualViewers.forEach(action);
                 // Auto
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
