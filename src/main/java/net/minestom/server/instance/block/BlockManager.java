@@ -19,7 +19,7 @@ public class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
 
     // Allow option to disable dummy block handler warning
-    private final static boolean DUMMY_BLOCK_HANDLER_WARNING = Boolean.getBoolean("minestom.dummy-block-handler-warning");
+    private final static boolean DUMMY_BLOCK_HANDLER_WARNING = Boolean.parseBoolean(System.getProperty("minestom.dummy-block-handler-warning", "true"));
 
     // Namespace -> handler supplier
     private final Map<String, Supplier<BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
