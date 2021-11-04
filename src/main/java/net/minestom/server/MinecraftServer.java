@@ -6,14 +6,12 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -23,7 +21,6 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
-import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
@@ -120,8 +117,8 @@ public final class MinecraftServer {
     private static boolean started;
     private static volatile boolean stopping;
 
-    private static int chunkViewDistance = 8;
-    private static int entityViewDistance = 5;
+    private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
+    private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
     private static int compressionThreshold = 256;
     private static boolean groupedPacket = true;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
@@ -446,20 +443,14 @@ public final class MinecraftServer {
      *
      * @param chunkViewDistance the new chunk view distance
      * @throws IllegalArgumentException if {@code chunkViewDistance} is not between 2 and 32
+     * @deprecated should instead be defined with a java property
      */
+    @Deprecated
     public static void setChunkViewDistance(int chunkViewDistance) {
+        Check.stateCondition(started, "You cannot change the chunk view distance after the server has been started.");
         Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
-        if (started) {
-            for (final Player player : connectionManager.getOnlinePlayers()) {
-                final Chunk playerChunk = player.getChunk();
-                if (playerChunk != null) {
-                    player.getPlayerConnection().sendPacket(new UpdateViewDistancePacket(player.getChunkRange()));
-                    player.refreshVisibleChunks(playerChunk);
-                }
-            }
-        }
     }
 
     /**
@@ -476,19 +467,14 @@ public final class MinecraftServer {
      *
      * @param entityViewDistance the new entity view distance
      * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
+     * @deprecated should instead be defined with a java property
      */
+    @Deprecated
     public static void setEntityViewDistance(int entityViewDistance) {
+        Check.stateCondition(started, "You cannot change the entity view distance after the server has been started.");
         Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
-        if (started) {
-            for (final Player player : connectionManager.getOnlinePlayers()) {
-                final Chunk playerChunk = player.getChunk();
-                if (playerChunk != null) {
-                    player.refreshVisibleEntities(playerChunk);
-                }
-            }
-        }
     }
 
     /**

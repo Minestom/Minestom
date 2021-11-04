@@ -6,14 +6,15 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.EntitySoundEffectPacket;
-import net.minestom.server.network.packet.server.play.NamedSoundEffectPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
-import net.minestom.server.network.packet.server.play.StopSoundPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.TickUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -204,5 +205,29 @@ public class AdventurePacketConvertor {
         }
 
         return packet;
+    }
+
+    /**
+     * Creates one of the three title packets from a title part and a value.
+     *
+     * @param part the part
+     * @param value the value
+     * @param <T> the type of the part
+     * @return the title packet
+     */
+    public static <T> @NotNull ServerPacket createTitlePartPacket(@NotNull TitlePart<T> part, @NotNull T value) {
+        if (part == TitlePart.TITLE) {
+            return new SetTitleTextPacket((Component) value);
+        } else if (part == TitlePart.SUBTITLE) {
+            return new SetTitleSubTitlePacket((Component) value);
+        } else if (part == TitlePart.TIMES) {
+            Title.Times times = (Title.Times) value;
+            return new SetTitleTimePacket(
+                    TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS));
+        } else {
+            throw new IllegalArgumentException("Unknown TitlePart " + part);
+        }
     }
 }

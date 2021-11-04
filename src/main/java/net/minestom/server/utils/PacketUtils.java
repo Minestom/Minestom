@@ -1,9 +1,9 @@
 package net.minestom.server.utils;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -31,9 +31,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.zip.Deflater;
 
 /**
@@ -53,7 +52,7 @@ public final class PacketUtils {
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
 
     // Viewable packets
-    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new WeakHashMap<>();
+    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = ConcurrentMap.class.cast(Caffeine.newBuilder().weakKeys().build().asMap());
 
     private PacketUtils() {
     }
@@ -119,21 +118,20 @@ public final class PacketUtils {
             // Send grouped packet...
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
-            final ByteBuffer finalBuffer = createFramedPacket(packet).flip();
-            final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer, packet);
+            final FramedPacket framedPacket = new FramedPacket(packet, createFramedPacket(packet));
             // Send packet to all players
-            for (Player player : players) {
+            players.forEach(player -> {
                 if (!player.isOnline() || !playerValidator.isValid(player))
-                    continue;
+                    return;
                 player.sendPacket(framedPacket);
-            }
+            });
         } else {
             // Write the same packet for each individual players
-            for (Player player : players) {
+            players.forEach(player -> {
                 if (!player.isOnline() || !playerValidator.isValid(player))
-                    continue;
+                    return;
                 player.getPlayerConnection().sendPacket(packet, false);
-            }
+            });
         }
     }
 
@@ -154,16 +152,17 @@ public final class PacketUtils {
     @ApiStatus.Experimental
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
                                              @Nullable Entity entity) {
-        if (entity != null && !entity.isAutoViewable()) {
+        if (entity != null && !entity.hasPredictableViewers()) {
             // Operation cannot be optimized
             entity.sendPacketToViewers(serverPacket);
             return;
         }
-        ViewableStorage viewableStorage;
-        synchronized (VIEWABLE_STORAGE_MAP) {
-            viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, v -> new ViewableStorage());
-        }
-        viewableStorage.append(viewable, serverPacket, entity instanceof Player ? (Player) entity : null);
+        final Player exception = entity instanceof Player ? (Player) entity : null;
+        VIEWABLE_STORAGE_MAP.compute(viewable, (v, storage) -> {
+            if (storage == null) storage = new ViewableStorage();
+            storage.append(v, serverPacket, exception);
+            return storage;
+        });
     }
 
     @ApiStatus.Experimental
@@ -173,10 +172,8 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        synchronized (VIEWABLE_STORAGE_MAP) {
-            VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
-                    entry.getValue().process(entry.getKey()));
-        }
+        VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
+                entry.getValue().process(entry.getKey()));
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
@@ -202,15 +199,12 @@ public final class PacketUtils {
         final int packetSize = buffer.position() - contentStart;
         final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
         if (compressed) {
-            // Packet large enough, compress
-            buffer.position(contentStart);
-            final ByteBuffer uncompressedContent = buffer.slice().limit(packetSize);
-            final ByteBuffer uncompressedCopy = localBuffer().put(uncompressedContent).flip();
-
+            // Packet large enough, compress it
+            final ByteBuffer input = localBuffer().put(0, buffer, contentStart, packetSize);
             Deflater deflater = LOCAL_DEFLATER.get();
-            deflater.setInput(uncompressedCopy);
+            deflater.setInput(input.limit(packetSize));
             deflater.finish();
-            deflater.deflate(buffer);
+            deflater.deflate(buffer.position(contentStart));
             deflater.reset();
         }
         // Packet header (Packet + Data Length)
@@ -222,7 +216,7 @@ public final class PacketUtils {
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
         ByteBuffer buffer = PACKET_BUFFER.get().clear();
         writeFramedPacket(buffer, packet, compression);
-        return buffer;
+        return buffer.flip();
     }
 
     @ApiStatus.Internal
@@ -232,29 +226,29 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
-        final ByteBuffer temp = PacketUtils.createFramedPacket(packet).flip();
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(temp.remaining())
-                .put(temp).flip().asReadOnlyBuffer();
-        return new FramedPacket(packet.getId(), buffer, packet);
+        final ByteBuffer temp = PacketUtils.createFramedPacket(packet);
+        final int size = temp.remaining();
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
+        return new FramedPacket(packet, buffer);
     }
 
     private static final class ViewableStorage {
         // Player id -> list of offsets to ignore (32:32 bits)
-        private final Int2ObjectMap<LongList> entityIdMap = new Int2ObjectOpenHashMap<>();
+        private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
         private final BinaryBuffer buffer = PooledBuffers.get();
 
         {
             PooledBuffers.registerBuffer(this, buffer);
         }
 
-        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
-            final ByteBuffer framedPacket = createFramedPacket(serverPacket).flip();
+        private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+            final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
                 process(viewable);
                 for (Player viewer : viewable.getViewers()) {
                     if (!Objects.equals(player, viewer)) {
-                        writeTo(viewer.getPlayerConnection(), framedPacket.position(0));
+                        writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
                     }
                 }
                 return;
@@ -270,34 +264,41 @@ public final class PacketUtils {
             }
         }
 
-        private synchronized void process(Viewable viewable) {
-            final int size = buffer.writerOffset();
-            if (size == 0) return;
-            for (Player player : viewable.getViewers()) {
-                final PlayerConnection connection = player.getPlayerConnection();
-                final LongList pairs = entityIdMap.get(player.getEntityId());
-                if (pairs != null) {
-                    // Ensure that we skip the specified parts of the buffer
-                    int lastWrite = 0;
-                    for (LongIterator it = pairs.iterator(); it.hasNext(); ) {
-                        final long offsets = it.nextLong();
-                        final int start = (int) (offsets >> 32);
-                        if (start != lastWrite) writeTo(connection, buffer.view(lastWrite, start));
-                        lastWrite = (int) offsets; // End = last 32 bits
-                    }
-                    if (size != lastWrite) writeTo(connection, buffer.view(lastWrite, size));
-                } else {
-                    // Write all
-                    writeTo(connection, buffer.view(0, size));
-                }
-            }
+        private void process(Viewable viewable) {
+            if (buffer.writerOffset() == 0) return;
+            viewable.getViewers().forEach(this::processPlayer);
             this.buffer.clear();
             this.entityIdMap.clear();
         }
 
-        private static void writeTo(PlayerConnection connection, ByteBuffer buffer) {
-            if (connection instanceof PlayerSocketConnection) {
-                ((PlayerSocketConnection) connection).write(buffer);
+        private void processPlayer(Player player) {
+            final int size = buffer.writerOffset();
+            final PlayerConnection connection = player.getPlayerConnection();
+            final LongArrayList pairs = entityIdMap.get(player.getEntityId());
+            if (pairs != null) {
+                // Ensure that we skip the specified parts of the buffer
+                int lastWrite = 0;
+                final long[] elements = pairs.elements();
+                for (int i = 0; i < pairs.size(); ++i) {
+                    final long offsets = elements[i];
+                    final int start = (int) (offsets >> 32);
+                    if (start != lastWrite) writeTo(connection, lastWrite, start - lastWrite);
+                    lastWrite = (int) offsets; // End = last 32 bits
+                }
+                if (size != lastWrite) writeTo(connection, lastWrite, size - lastWrite);
+            } else {
+                // Write all
+                writeTo(connection, 0, size);
+            }
+        }
+
+        private void writeTo(PlayerConnection connection, int offset, int length) {
+            writeTo(connection, buffer.asByteBuffer(), offset, length);
+        }
+
+        private static void writeTo(PlayerConnection connection, ByteBuffer buffer, int offset, int length) {
+            if (connection instanceof PlayerSocketConnection socketConnection) {
+                socketConnection.write(buffer, offset, length);
                 return;
             }
             // TODO for non-socket connection

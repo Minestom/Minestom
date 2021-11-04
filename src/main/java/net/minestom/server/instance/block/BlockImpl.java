@@ -133,6 +133,11 @@ final class BlockImpl implements Block {
     }
 
     @Override
+    public @NotNull Collection<@NotNull Block> possibleStates() {
+        return propertyEntry.values();
+    }
+
+    @Override
     public @NotNull Registry.BlockEntry registry() {
         return registry;
     }

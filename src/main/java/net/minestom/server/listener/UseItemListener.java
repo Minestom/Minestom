@@ -34,8 +34,10 @@ public class UseItemListener {
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
         if (equipmentSlot != null) {
             final ItemStack currentlyEquipped = playerInventory.getEquipment(equipmentSlot);
-            playerInventory.setEquipment(equipmentSlot, itemStack);
-            playerInventory.setItemInHand(hand, currentlyEquipped);
+            if (currentlyEquipped.isAir()) {
+                playerInventory.setEquipment(equipmentSlot, itemStack);
+                playerInventory.setItemInHand(hand, currentlyEquipped);
+            }
         }
 
         PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;

@@ -9,9 +9,14 @@ import java.nio.ByteBuffer;
 /**
  * Represents a packet which is already framed. (packet id+payload) + optional compression
  * Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.
+ * <p>
+ * The {@link ByteBuffer} will ultimately become a MemorySegment once out of incubation.
  */
 @ApiStatus.Internal
-public record FramedPacket(int packetId,
-                           @NotNull ByteBuffer body,
-                           @NotNull ServerPacket packet) {
+public record FramedPacket(@NotNull ServerPacket packet,
+                           @NotNull ByteBuffer body) {
+
+    public FramedPacket {
+        body = body.position(0).asReadOnlyBuffer();
+    }
 }

@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -226,7 +227,8 @@ public class WorldBorder {
      *
      * @param player the player to send the packet to
      */
-    protected void init(@NotNull Player player) {
+    @ApiStatus.Internal
+    public void init(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(
                 InitializeWorldBorderPacket.of(centerX, centerZ, oldDiameter, newDiameter, speed,
                         portalTeleportBoundary, warningTime, warningBlocks));

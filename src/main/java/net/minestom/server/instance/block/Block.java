@@ -5,10 +5,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
@@ -121,6 +118,10 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
     default String getProperty(@NotNull String property) {
         return properties().get(property);
     }
+
+    @Contract(pure = true)
+    @ApiStatus.Experimental
+    @NotNull Collection<@NotNull Block> possibleStates();
 
     /**
      * Returns the block registry.

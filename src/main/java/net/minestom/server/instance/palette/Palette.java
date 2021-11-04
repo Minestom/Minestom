@@ -147,9 +147,6 @@ public final class Palette implements Writeable, PublicCloneable<Palette> {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
 
         Palette palette = new Palette(newBitsPerEntry, bitsIncrement);
-        palette.paletteBlockArray = paletteBlockArray;
-        palette.blockPaletteMap = blockPaletteMap;
-        palette.lastPaletteIndex = lastPaletteIndex;
 
         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
@@ -253,6 +250,7 @@ public final class Palette implements Writeable, PublicCloneable<Palette> {
         if (lastPaletteIndex >= paletteBlockArray.length) {
             // Palette is full, must resize
             resize(bitsPerEntry + bitsIncrement);
+            if (!hasPalette) return blockId;
         }
         final short paletteIndex = (short) lastPaletteIndex++;
         this.paletteBlockArray[paletteIndex] = blockId;
