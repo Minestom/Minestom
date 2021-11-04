@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'net.minestom.server'
-version '1.0-SOCKS'
+version '1.0'
 
 sourceCompatibility = 17
 project.ext.lwjglVersion = "3.2.3"
