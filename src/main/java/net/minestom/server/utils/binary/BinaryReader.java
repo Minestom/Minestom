@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  */
 public class BinaryReader extends InputStream {
     private final ByteBuffer buffer;
-    private final NBTReader nbtReader = new NBTReader(this, false);
+    private NBTReader nbtReader;
 
     public BinaryReader(@NotNull ByteBuffer buffer) {
         this.buffer = buffer;
@@ -235,7 +235,12 @@ public class BinaryReader extends InputStream {
     }
 
     public NBT readTag() throws IOException, NBTException {
-        return nbtReader.read();
+        NBTReader reader = this.nbtReader;
+        if (reader == null) {
+            reader = new NBTReader(this, false);
+            this.nbtReader = reader;
+        }
+        return reader.read();
     }
 
     /**
