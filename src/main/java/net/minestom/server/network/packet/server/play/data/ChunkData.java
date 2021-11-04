@@ -47,23 +47,26 @@ public final class ChunkData implements Writeable {
             writer.writeVarInt(registry.blockEntityId());
 
 
-            final NBTCompound resultNbt = new NBTCompound();
-            {
-                // Append handler tags
-                final BlockHandler handler = block.handler();
-                if (handler != null) {
-                    final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                    for (Tag<?> tag : handler.getBlockEntityTags()) {
-                        final var value = tag.read(blockNbt);
-                        if (value != null) {
-                            // Tag is present and valid
-                            tag.writeUnsafe(resultNbt, value);
-                        }
+            NBTCompound resultNbt;
+            // Append handler tags
+            final BlockHandler handler = block.handler();
+            if (handler != null) {
+                resultNbt = new NBTCompound();
+                final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                for (Tag<?> tag : handler.getBlockEntityTags()) {
+                    final var value = tag.read(blockNbt);
+                    if (value != null) {
+                        // Tag is present and valid
+                        tag.writeUnsafe(resultNbt, value);
                     }
                 }
+            } else {
+                // Complete nbt shall be sent if the block has no handler
+                // Necessary to support all vanilla blocks
+                final NBTCompound blockNbt = block.nbt();
+                resultNbt = blockNbt == null ? new NBTCompound() : blockNbt;
             }
-
-            writer.writeNBT("", resultNbt); // block nbt
+            if (resultNbt != null) writer.writeNBT("", resultNbt); // block nbt
         }
     }
 }
