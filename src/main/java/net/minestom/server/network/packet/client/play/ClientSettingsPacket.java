@@ -16,6 +16,7 @@ public class ClientSettingsPacket extends ClientPlayPacket {
     public byte displayedSkinParts;
     public Player.MainHand mainHand = Player.MainHand.RIGHT;
     public boolean disableTextFiltering;
+    public boolean allowsListing;
 
     @Override
     public void read(@NotNull BinaryReader reader) {
@@ -26,6 +27,7 @@ public class ClientSettingsPacket extends ClientPlayPacket {
         this.displayedSkinParts = reader.readByte();
         this.mainHand = Player.MainHand.values()[reader.readVarInt()];
         this.disableTextFiltering = reader.readBoolean();
+        this.allowsListing = reader.readBoolean();
     }
 
     @Override
@@ -39,5 +41,6 @@ public class ClientSettingsPacket extends ClientPlayPacket {
         writer.writeByte(displayedSkinParts);
         writer.writeVarInt(mainHand.ordinal());
         writer.writeBoolean(disableTextFiltering);
+        writer.writeBoolean(allowsListing);
     }
 }
