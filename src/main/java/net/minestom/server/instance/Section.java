@@ -1,34 +1,33 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
-public class Section implements PublicCloneable<Section> {
+public final class Section {
+    private Palette blockPalette;
+    private Palette biomePalette;
+    private byte[] skyLight;
+    private byte[] blockLight;
 
-    private final Palette palette;
-
-    private byte[] skyLight = new byte[0];
-    private byte[] blockLight = new byte[0];
-
-    private Section(Palette palette) {
-        this.palette = palette;
+    private Section(Palette blockPalette, Palette biomePalette,
+                    byte[] skyLight, byte[] blockLight) {
+        this.blockPalette = blockPalette;
+        this.biomePalette = biomePalette;
+        this.skyLight = skyLight;
+        this.blockLight = blockLight;
     }
 
     public Section() {
-        this(new Palette(8, 2));
+        this(Palette.blocks(), Palette.biomes(),
+                new byte[0], new byte[0]);
     }
 
-    public short getBlockAt(int x, int y, int z) {
-        x = toChunkRelativeCoordinate(x);
-        z = toChunkRelativeCoordinate(z);
-        return palette.getBlockAt(x, y, z);
+    public Palette blockPalette() {
+        return blockPalette;
     }
 
-    public void setBlockAt(int x, int y, int z, short blockId) {
-        x = toChunkRelativeCoordinate(x);
-        z = toChunkRelativeCoordinate(z);
-        palette.setBlockAt(x, y, z, blockId);
+    public Palette biomePalette() {
+        return biomePalette;
     }
 
     public byte[] getSkyLight() {
@@ -47,34 +46,16 @@ public class Section implements PublicCloneable<Section> {
         this.blockLight = blockLight;
     }
 
-    public void clean() {
-        palette.clean();
-    }
-
     public void clear() {
-        palette.clear();
-    }
-
-    public Palette getPalette() {
-        return palette;
+        this.blockPalette = Palette.blocks();
+        this.biomePalette = Palette.biomes();
+        this.skyLight = new byte[0];
+        this.blockLight = new byte[0];
     }
 
     @Override
     public @NotNull Section clone() {
-        return new Section(palette.clone());
-    }
-
-    /**
-     * Returns a coordinate that is relative to a chunk the provided coordinate is in.
-     *
-     * @param xz the world coordinate
-     * @return a coordinate relative to the closest chunk
-     */
-    private static int toChunkRelativeCoordinate(int xz) {
-        xz %= 16;
-        if (xz < 0) {
-            xz += Chunk.CHUNK_SECTION_SIZE;
-        }
-        return xz;
+        return new Section(blockPalette.clone(), biomePalette.clone(),
+                skyLight.clone(), blockLight.clone());
     }
 }

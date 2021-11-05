@@ -59,7 +59,7 @@ public class DynamicChunk extends Chunk {
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = getSection(ChunkUtils.getSectionAt(y));
-        section.setBlockAt(x, y, z, block.stateId());
+        section.blockPalette().set(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z), block.stateId());
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -113,9 +113,9 @@ public class DynamicChunk extends Chunk {
         // Retrieve the block from state id
         final Section section = getOptionalSection(y);
         if (section == null) return Block.AIR; // Section is unloaded
-        final short blockStateId = section.getBlockAt(x, y, z);
+        final int blockStateId = section.blockPalette().get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
         if (blockStateId == -1) return Block.AIR; // Section is empty
-        return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
+        return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
     @Override
@@ -176,10 +176,10 @@ public class DynamicChunk extends Chunk {
         final BinaryWriter writer = new BinaryWriter();
         for (int i = 0; i < 16; i++) { // TODO: variable section count
             final Section section = Objects.requireNonNullElseGet(sectionMap.get(i), Section::new);
-            final Palette blockPalette = section.getPalette();
-            writer.writeShort(blockPalette.getBlockCount());
+            final Palette blockPalette = section.blockPalette();
+            writer.writeShort((short) blockPalette.count());
             blockPalette.write(writer); // Blocks
-            new Palette(2, 2).write(writer);  // Biomes
+            section.biomePalette().write(writer); // Biomes
         }
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
@@ -219,6 +219,14 @@ public class DynamicChunk extends Chunk {
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights);
+    }
+
+    private static int toChunkRelativeCoordinate(int xz) {
+        xz %= 16;
+        if (xz < 0) {
+            xz += Chunk.CHUNK_SECTION_SIZE;
+        }
+        return xz;
     }
 
     private @Nullable Section getOptionalSection(int y) {
