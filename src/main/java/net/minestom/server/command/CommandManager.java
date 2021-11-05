@@ -19,6 +19,8 @@ import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
+    private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
 
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
@@ -353,6 +356,15 @@ public final class CommandManager {
                                 continue; // Retrieved argument has already been redirected
 
                             argChildren = new IntArrayList();
+                            if (storedNodes.size() <= (storedNodes.size() > index ? index : i)) {
+                                logger.error(
+                                        "Index {} out of bounds for length {}, arguments: {}, syntax: {}. " +
+                                                "Stopping command generation",
+                                        i, storedNodes.size(), parsedArguments, syntax.getSyntaxString()
+                                );
+                                return literalNode;
+                            }
+
                             lastNodes = storedNodes.get(storedNodes.size() > index ? index : i);
                             foundSharedPart = true;
                         }
