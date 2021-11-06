@@ -161,9 +161,9 @@ final class EntityTrackerImpl implements EntityTracker {
         private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
         private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
         // Chunk index -> entities inside it
-        private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>();
+        private final Long2ObjectMap<List<T>> chunkEntities = new Long2ObjectOpenHashMap<>(0);
         // Chunk index -> lists of visible entities (references to chunkEntities entries)
-        private final Long2ObjectMap<List<List<T>>> chunkRangeEntities = new Long2ObjectOpenHashMap<>();
+        private final Long2ObjectMap<List<List<T>>> chunkRangeEntities = new Long2ObjectOpenHashMap<>(0);
 
         TargetEntry(Target<T> target) {
             this.target = target;
