@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -76,7 +76,7 @@ public final class Registry {
         // namespace -> registry data
         private final Map<String, T> namespaceMap = new HashMap<>();
         // id -> registry data
-        private final Int2ObjectOpenHashMap<T> idMap = new Int2ObjectOpenHashMap<>();
+        private final ObjectArrayList<T> idMap = new ObjectArrayList<>();
         private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
 
         private final boolean initialized;
@@ -111,7 +111,7 @@ public final class Registry {
 
         public void register(@NotNull T value) {
             Check.stateCondition(initialized, "Registering is only available within the loader lambda.");
-            this.idMap.put(value.id(), value);
+            this.idMap.add(value.id(), value);
             this.namespaceMap.put(value.name(), value);
         }
 
