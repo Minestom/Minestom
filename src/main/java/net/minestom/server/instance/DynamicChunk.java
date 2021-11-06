@@ -35,8 +35,8 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Section> sectionMap = new Int2ObjectOpenHashMap<>();
 
     // Key = ChunkUtils#getBlockIndex
-    protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
-    protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
+    protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
     private long lastChange;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
