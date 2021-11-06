@@ -81,7 +81,7 @@ public final class CommandManager {
     }
 
     /**
-     * Gets if a command with the name {@code commandName} already exists or name.
+     * Gets if a command with the name {@code commandName} already exists or not.
      *
      * @param commandName the command name to check
      * @return true if the command does exist
@@ -118,8 +118,8 @@ public final class CommandManager {
     }
 
     /**
-     * Executes the command using a {@link ServerSender} to do not
-     * print the command messages, and rely instead on the command return data.
+     * Executes the command using a {@link ServerSender}. This can be used
+     * to run a silent command (nothing is printed to console).
      *
      * @see #execute(CommandSender, String)
      */
