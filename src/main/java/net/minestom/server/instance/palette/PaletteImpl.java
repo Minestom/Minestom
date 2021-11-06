@@ -1,6 +1,7 @@
 package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -31,9 +32,9 @@ final class PaletteImpl implements Palette {
 
     private long[] values = new long[0];
     // palette index = value
-    private int[] paletteToValueArray;
+    private IntArrayList paletteToValueList;
     // value = palette index
-    private Int2IntOpenHashMap valueToPaletteMap = new Int2IntOpenHashMap();
+    private Int2IntOpenHashMap valueToPaletteMap;
 
     PaletteImpl(int size, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
         this.size = size;
@@ -45,8 +46,10 @@ final class PaletteImpl implements Palette {
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= maxBitsPerEntry;
 
-        this.paletteToValueArray = new int[1 << bitsPerEntry];
-
+        final int initialCapacity = maxPaletteSize(bitsPerEntry) / 4;
+        this.paletteToValueList = new IntArrayList(initialCapacity);
+        this.paletteToValueList.add(0);
+        this.valueToPaletteMap = new Int2IntOpenHashMap(initialCapacity);
         this.valueToPaletteMap.put(0, 0);
     }
 
@@ -61,7 +64,7 @@ final class PaletteImpl implements Palette {
         final int bitIndex = sectionIdentifier % valuesPerLong * bitsPerEntry;
         final short value = (short) (values[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry]);
         // Change to palette value and return
-        return hasPalette ? paletteToValueArray[value] : value;
+        return hasPalette ? paletteToValueList.getInt(value) : value;
     }
 
     @Override
@@ -133,7 +136,7 @@ final class PaletteImpl implements Palette {
         try {
             PaletteImpl palette = (PaletteImpl) super.clone();
             palette.values = values.clone();
-            palette.paletteToValueArray = paletteToValueArray.clone();
+            palette.paletteToValueList = paletteToValueList.clone();
             palette.valueToPaletteMap = valueToPaletteMap.clone();
             palette.count = count;
             return palette;
@@ -149,10 +152,9 @@ final class PaletteImpl implements Palette {
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            final int paletteSize = lastPaletteIndex + 1;
-            writer.writeVarInt(paletteSize);
-            for (int i = 0; i < paletteSize; i++) {
-                writer.writeVarInt(paletteToValueArray[i]);
+            writer.writeVarInt(lastPaletteIndex);
+            for (int i = 0; i < lastPaletteIndex; i++) {
+                writer.writeVarInt(paletteToValueList.getInt(i));
             }
         }
         // Raw
@@ -177,7 +179,7 @@ final class PaletteImpl implements Palette {
             }
         }
 
-        this.paletteToValueArray = palette.paletteToValueArray;
+        this.paletteToValueList = palette.paletteToValueList;
         this.lastPaletteIndex = palette.lastPaletteIndex;
 
         this.bitsPerEntry = palette.bitsPerEntry;
@@ -194,13 +196,13 @@ final class PaletteImpl implements Palette {
         final int lookup = valueToPaletteMap.getOrDefault(value, (short) -1);
         if (lookup != -1) return lookup;
 
-        if (lastPaletteIndex >= paletteToValueArray.length) {
+        if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
             resize(bitsPerEntry + bitsIncrement);
             if (!hasPalette) return value;
         }
         final int paletteIndex = lastPaletteIndex++;
-        this.paletteToValueArray[paletteIndex] = value;
+        this.paletteToValueList.add(value);
         this.valueToPaletteMap.put(value, paletteIndex);
         return paletteIndex;
     }
@@ -208,5 +210,9 @@ final class PaletteImpl implements Palette {
     static int getSectionIndex(int x, int y, int z) {
         y = Math.floorMod(y, CHUNK_SECTION_SIZE);
         return y << 8 | z << 4 | x;
+    }
+
+    static int maxPaletteSize(int bitsPerEntry) {
+        return 1 << bitsPerEntry;
     }
 }
