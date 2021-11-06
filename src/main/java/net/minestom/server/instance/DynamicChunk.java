@@ -32,7 +32,8 @@ import java.util.*;
  */
 public class DynamicChunk extends Chunk {
 
-    protected final Int2ObjectOpenHashMap<Section> sectionMap = new Int2ObjectOpenHashMap<>();
+    private final int minSection, maxSection;
+    private final Section[] sections;
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -44,6 +45,9 @@ public class DynamicChunk extends Chunk {
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
+        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+        this.maxSection = instance.getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
+        this.sections = new Section[maxSection - minSection];
     }
 
     @Override
@@ -77,13 +81,11 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull Map<Integer, Section> getSections() {
-        return sectionMap;
-    }
-
-    @Override
     public @NotNull Section getSection(int section) {
-        return sectionMap.computeIfAbsent(section, key -> new Section());
+        final int index = section - minSection;
+        Section result = sections[index];
+        if (result == null) sections[index] = result = new Section();
+        return result;
     }
 
     @Override
@@ -110,7 +112,7 @@ public class DynamicChunk extends Chunk {
             }
         }
         // Retrieve the block from state id
-        final Section section = getOptionalSection(y);
+        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
         if (section == null) return Block.AIR; // Section is unloaded
         final int blockStateId = section.blockPalette().get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
         if (blockStateId == -1) return Block.AIR; // Section is empty
@@ -139,16 +141,19 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
-        for (var entry : sectionMap.int2ObjectEntrySet()) {
-            dynamicChunk.sectionMap.put(entry.getIntKey(), entry.getValue().clone());
-        }
+        Arrays.setAll(dynamicChunk.sections, value -> {
+            final Section s = sections[value];
+            return s != null ? s.clone() : null;
+        });
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
 
     @Override
     public void reset() {
-        this.sectionMap.values().forEach(Section::clear);
+        for (Section section : sections) {
+            if (section != null) section.clear();
+        }
         this.entries.clear();
     }
 
@@ -173,8 +178,7 @@ public class DynamicChunk extends Chunk {
         }
         // Data
         final BinaryWriter writer = new BinaryWriter();
-        for (int i = 0; i < 16; i++) { // TODO: variable section count
-            final Section section = sectionMap.get(i);
+        for (Section section : sections) {
             if (section != null) {
                 final Palette blockPalette = section.blockPalette();
                 writer.writeShort((short) blockPalette.size());
@@ -206,12 +210,12 @@ public class DynamicChunk extends Chunk {
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
-        for (int i = 0; i < 16; i++) { // TODO: variable section count
-            final Section section = sectionMap.get(i);
-            final int index = i+1;
-            if(section != null){
-                final var skyLight = section.getSkyLight();
-                final var blockLight = section.getBlockLight();
+        int index = 0;
+        for (Section section : sections) {
+            index++;
+            if (section != null) {
+                final byte[] skyLight = section.getSkyLight();
+                final byte[] blockLight = section.getBlockLight();
                 if (!ArrayUtils.empty(skyLight)) {
                     skyLights.add(skyLight);
                     skyMask.set(index);
@@ -220,7 +224,7 @@ public class DynamicChunk extends Chunk {
                     blockLights.add(blockLight);
                     blockMask.set(index);
                 }
-            }else{
+            } else {
                 emptyBlockMask.set(index);
                 emptySkyMask.set(index);
             }
@@ -237,10 +241,5 @@ public class DynamicChunk extends Chunk {
             xz += Chunk.CHUNK_SECTION_SIZE;
         }
         return xz;
-    }
-
-    private @Nullable Section getOptionalSection(int y) {
-        final int sectionIndex = ChunkUtils.getSectionAt(y);
-        return sectionMap.get(sectionIndex);
     }
 }
