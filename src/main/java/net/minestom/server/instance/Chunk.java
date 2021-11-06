@@ -14,7 +14,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -44,8 +43,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     private final UUID identifier;
 
     protected Instance instance;
-    @NotNull
-    protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
 
     // Options
@@ -61,19 +58,12 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     // Data
     private final NBTCompound nbt = new NBTCompound();
 
-    public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
+    public Chunk(@NotNull Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-
-        final int biomeCount = Biome.getBiomeCount(instance.getDimensionType());
-        if (biomes != null && biomes.length == biomeCount) {
-            this.biomes = biomes;
-        } else {
-            this.biomes = new Biome[biomeCount];
-        }
 
         final EntityTracker tracker = instance.getEntityTracker();
         this.viewers.updateTracker(toPosition(), tracker);
@@ -167,10 +157,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     public @NotNull Instance getInstance() {
         return instance;
-    }
-
-    public Biome[] getBiomes() {
-        return biomes;
     }
 
     /**

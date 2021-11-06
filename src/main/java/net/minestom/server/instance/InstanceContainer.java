@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -26,7 +25,6 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -284,13 +282,7 @@ public class InstanceContainer extends Instance {
 
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
         final ChunkGenerator generator = this.chunkGenerator;
-        Biome[] biomes = new Biome[Biome.getBiomeCount(getDimensionType())];
-        if (generator == null) {
-            Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
-        } else {
-            generator.fillBiomes(biomes, chunkX, chunkZ);
-        }
-        final Chunk chunk = chunkSupplier.createChunk(this, biomes, chunkX, chunkZ);
+        final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         if (generator != null && chunk.shouldGenerate()) {
             // Execute the chunk generator to populate the chunk
