@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
 final class PaletteImpl implements Palette {
-    // Magic values generated with "Integer.MAX_VALUE >> (31 - bitsPerIndex)" for bitsPerIndex between 4 and 15
+    // Magic values generated with "Integer.MAX_VALUE >> (31 - bitsPerIndex)" for bitsPerIndex between 1 and 16
     private static final int[] MAGIC_MASKS =
-            {0, 0, 0, 0,
+            {0, 1, 3, 7,
                     15, 31, 63, 127, 255,
                     511, 1023, 2047, 4095,
                     8191, 16383, 32767};
@@ -104,7 +104,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public int count() {
+    public int size() {
         return count;
     }
 
@@ -119,7 +119,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public int size() {
+    public int maxSize() {
         return size;
     }
 
