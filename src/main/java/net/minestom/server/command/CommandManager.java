@@ -81,7 +81,7 @@ public final class CommandManager {
     }
 
     /**
-     * Gets if a command with the name {@code commandName} already exists or name.
+     * Gets if a command with the name {@code commandName} already exists or not.
      *
      * @param commandName the command name to check
      * @return true if the command does exist
@@ -92,7 +92,7 @@ public final class CommandManager {
     }
 
     /**
-     * Executes a command for a {@link ConsoleSender}.
+     * Executes a command for a {@link CommandSender}.
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
@@ -118,8 +118,8 @@ public final class CommandManager {
     }
 
     /**
-     * Executes the command using a {@link ServerSender} to do not
-     * print the command messages, and rely instead on the command return data.
+     * Executes the command using a {@link ServerSender}. This can be used
+     * to run a silent command (nothing is printed to console).
      *
      * @see #execute(CommandSender, String)
      */
@@ -434,8 +434,7 @@ public final class CommandManager {
         return literalNode;
     }
 
-    @NotNull
-    private DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
+    private @NotNull DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
         literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, false, false);
         literalNode.name = name;
