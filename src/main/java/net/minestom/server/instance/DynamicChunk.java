@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
@@ -33,7 +32,7 @@ import java.util.*;
  */
 public class DynamicChunk extends Chunk {
 
-    protected final Int2ObjectAVLTreeMap<Section> sectionMap = new Int2ObjectAVLTreeMap<>();
+    protected final Int2ObjectOpenHashMap<Section> sectionMap = new Int2ObjectOpenHashMap<>();
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
@@ -175,11 +174,20 @@ public class DynamicChunk extends Chunk {
         // Data
         final BinaryWriter writer = new BinaryWriter();
         for (int i = 0; i < 16; i++) { // TODO: variable section count
-            final Section section = Objects.requireNonNullElseGet(sectionMap.get(i), Section::new);
-            final Palette blockPalette = section.blockPalette();
-            writer.writeShort((short) blockPalette.size());
-            blockPalette.write(writer); // Blocks
-            section.biomePalette().write(writer); // Biomes
+            final Section section = sectionMap.get(i);
+            if (section != null) {
+                final Palette blockPalette = section.blockPalette();
+                writer.writeShort((short) blockPalette.size());
+                blockPalette.write(writer); // Blocks
+                section.biomePalette().write(writer); // Biomes
+            } else {
+                // Hardcode empty section
+                writer.writeShort((short) 0); // Block count
+                writer.writeByte((byte) 15); // Block bpe
+                writer.writeVarInt(0); // Block data length
+                writer.writeByte((byte) 15); // Biome bpe
+                writer.writeVarInt(0); // Biome data length
+            }
         }
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
