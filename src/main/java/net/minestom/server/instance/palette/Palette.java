@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public sealed interface Palette extends Writeable permits PaletteImpl {
     static Palette blocks() {
-        return new PaletteImpl(16 * 16 * 16, 8, 8, 2);
+        return new PaletteImpl(16 * 16 * 16, 8, 6, 1);
     }
 
     static Palette biomes() {
