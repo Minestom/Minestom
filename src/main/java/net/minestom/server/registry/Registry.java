@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +76,7 @@ public final class Registry {
         // namespace -> registry data
         private final Map<String, T> namespaceMap = new HashMap<>();
         // id -> registry data
-        private final ObjectArrayList<T> idMap = new ObjectArrayList<>();
+        private final ObjectArray<T> ids = new ObjectArray<>();
         private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
 
         private final boolean initialized;
@@ -90,7 +90,7 @@ public final class Registry {
                 loader.accept(this, namespace, object);
             }
             this.initialized = true;
-            this.idMap.trim();
+            this.ids.trim();
         }
 
         public T get(@NotNull String namespace) {
@@ -102,7 +102,7 @@ public final class Registry {
         }
 
         public T getId(int id) {
-            return idMap.get(id);
+            return ids.get(id);
         }
 
         public Collection<T> values() {
@@ -111,7 +111,7 @@ public final class Registry {
 
         public void register(@NotNull T value) {
             Check.stateCondition(initialized, "Registering is only available within the loader lambda.");
-            this.idMap.add(value.id(), value);
+            this.ids.set(value.id(), value);
             this.namespaceMap.put(value.name(), value);
         }
 

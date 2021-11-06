@@ -3,9 +3,9 @@ package net.minestom.server.instance.block;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 final class BlockImpl implements Block {
     // Block state -> block object
-    private static final ObjectArrayList<Block> BLOCK_STATE_MAP = new ObjectArrayList<>();
+    private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
                 final JsonObject stateObject = object.remove("states").getAsJsonObject();
@@ -30,7 +30,7 @@ final class BlockImpl implements Block {
                     final var propertyMap = BlockUtils.parseProperties(query);
                     final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
                             unmodifiableEntries, propertyMap, null, null);
-                    BLOCK_STATE_MAP.add(block.stateId(), block);
+                    BLOCK_STATE_MAP.set(block.stateId(), block);
                     propertyEntry.put(propertyMap, block);
                 }
                 // Register default state
