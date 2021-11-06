@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -85,8 +84,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
-
-    public abstract @NotNull Map<Integer, Section> getSections();
 
     public abstract @NotNull Section getSection(int section);
 
