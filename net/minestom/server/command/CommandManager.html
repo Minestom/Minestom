@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#commandExists(java.lang.String)" class="member-name-link">commandExists</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandName)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets if a command with the name <code>commandName</code> already exists or name.</div>
+<div class="block">Gets if a command with the name <code>commandName</code> already exists or not.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/DeclareCommandsPacket.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createDeclareCommandsPacket(net.minestom.server.entity.Player)" class="member-name-link">createDeclareCommandsPacket</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
@@ -137,13 +137,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)" class="member-name-link">execute</a><wbr>(@NotNull <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;command)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Executes a command for a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
+<div class="block">Executes a command for a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="builder/CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#executeServerCommand(java.lang.String)" class="member-name-link">executeServerCommand</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;command)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Executes the command using a <a href="ServerSender.html" title="class in net.minestom.server.command"><code>ServerSender</code></a> to do not
- print the command messages, and rely instead on the command return data.</div>
+<div class="block">Executes the command using a <a href="ServerSender.html" title="class in net.minestom.server.command"><code>ServerSender</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCommand(java.lang.String)" class="member-name-link">getCommand</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandName)</code></div>
@@ -278,7 +277,7 @@ loadScripts(document, 'script');</script>
 <h3>commandExists</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">commandExists</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandName)</span></div>
-<div class="block">Gets if a command with the name <code>commandName</code> already exists or name.</div>
+<div class="block">Gets if a command with the name <code>commandName</code> already exists or not.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>commandName</code> - the command name to check</dd>
@@ -295,7 +294,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;command)</span></div>
-<div class="block">Executes a command for a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
+<div class="block">Executes a command for a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>sender</code> - the sender of the command</dd>
@@ -311,8 +310,8 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="builder/CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></span>&nbsp;<span class="element-name">executeServerCommand</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;command)</span></div>
-<div class="block">Executes the command using a <a href="ServerSender.html" title="class in net.minestom.server.command"><code>ServerSender</code></a> to do not
- print the command messages, and rely instead on the command return data.</div>
+<div class="block">Executes the command using a <a href="ServerSender.html" title="class in net.minestom.server.command"><code>ServerSender</code></a>. This can be used
+ to run a silent command (nothing is printed to console).</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
