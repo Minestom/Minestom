@@ -1,17 +1,15 @@
 package demo;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MainDemo {
@@ -49,11 +47,6 @@ public class MainDemo {
                         batch.setBlock(x, y, z, Block.STONE);
                     }
                 }
-        }
-
-        @Override
-        public void fillBiomes(@NotNull Biome[] biomes, int chunkX, int chunkZ) {
-            Arrays.fill(biomes, Biome.PLAINS);
         }
 
         @Override

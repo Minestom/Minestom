@@ -87,6 +87,8 @@ public class AnvilLoader implements IChunkLoader {
         if (fileChunk == null)
             return CompletableFuture.completedFuture(null);
 
+        Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
+        // TODO Biomes
         Biome[] biomes;
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
             int[] fileChunkBiomes = fileChunk.getBiomes();
@@ -99,7 +101,6 @@ public class AnvilLoader implements IChunkLoader {
             biomes = new Biome[1024]; // TODO don't hardcode
             Arrays.fill(biomes, BIOME);
         }
-        Chunk chunk = new DynamicChunk(instance, biomes, chunkX, chunkZ);
         // Blocks
         loadBlocks(chunk, fileChunk);
         loadTileEntities(chunk, fileChunk);
@@ -260,10 +261,10 @@ public class AnvilLoader implements IChunkLoader {
                     // Block
                     BlockState state = new BlockState(block.name(), block.properties());
                     chunkColumn.setBlockState(x, y, z, state);
-                    // Biome
-                    int index = ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3); // https://wiki.vg/Chunk_Format#Biomes
-                    Biome biome = chunk.getBiomes()[index];
-                    chunkColumn.setBiome(x, 0, z, biome.getId());
+                    // TODO Biome
+                    //int index = ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3); // https://wiki.vg/Chunk_Format#Biomes
+                    //Biome biome = chunk.getBiomes()[index];
+                    //chunkColumn.setBiome(x, 0, z, biome.getId());
 
                     // Tile entity
                     var nbt = block.nbt();
