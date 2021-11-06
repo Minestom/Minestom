@@ -177,7 +177,7 @@ public class DynamicChunk extends Chunk {
         for (int i = 0; i < 16; i++) { // TODO: variable section count
             final Section section = Objects.requireNonNullElseGet(sectionMap.get(i), Section::new);
             final Palette blockPalette = section.blockPalette();
-            writer.writeShort((short) blockPalette.count());
+            writer.writeShort((short) blockPalette.size());
             blockPalette.write(writer); // Blocks
             section.biomePalette().write(writer); // Biomes
         }

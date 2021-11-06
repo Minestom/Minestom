@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * 0 is the default value.
  */
-public interface Palette extends Writeable {
+public sealed interface Palette extends Writeable permits PaletteImpl {
     static Palette blocks() {
         return new PaletteImpl(16 * 16 * 16, 8, 8, 2);
     }
@@ -21,21 +21,31 @@ public interface Palette extends Writeable {
 
     void set(int x, int y, int z, int value);
 
-    int count();
+    /**
+     * Returns the number of entries in this palette.
+     */
+    int size();
 
     /**
      * Returns the number of bits used per entry.
      */
     int bitsPerEntry();
 
+    /**
+     * Returns the payload of this palette.
+     * <p>
+     * The size of each element is defined by {@link #bitsPerEntry()}.
+     *
+     * @return the palette payload
+     */
+    long[] data();
+
     int maxBitsPerEntry();
 
     /**
-     * Returns the number of entries in this palette.
+     * Returns the maximum number of entries in this palette.
      */
-    int size();
-
-    long[] data();
+    int maxSize();
 
     @NotNull Palette clone();
 }
