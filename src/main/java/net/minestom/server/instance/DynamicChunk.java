@@ -206,21 +206,23 @@ public class DynamicChunk extends Chunk {
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
-        final var sections = getSections();
-        for (var entry : sections.entrySet()) {
-            final int index = entry.getKey() + 1;
-            final Section section = entry.getValue();
-
-            final var skyLight = section.getSkyLight();
-            final var blockLight = section.getBlockLight();
-
-            if (!ArrayUtils.empty(skyLight)) {
-                skyLights.add(skyLight);
-                skyMask.set(index);
-            }
-            if (!ArrayUtils.empty(blockLight)) {
-                blockLights.add(blockLight);
-                blockMask.set(index);
+        for (int i = 0; i < 16; i++) { // TODO: variable section count
+            final Section section = sectionMap.get(i);
+            final int index = i+1;
+            if(section != null){
+                final var skyLight = section.getSkyLight();
+                final var blockLight = section.getBlockLight();
+                if (!ArrayUtils.empty(skyLight)) {
+                    skyLights.add(skyLight);
+                    skyMask.set(index);
+                }
+                if (!ArrayUtils.empty(blockLight)) {
+                    blockLights.add(blockLight);
+                    blockMask.set(index);
+                }
+            }else{
+                emptyBlockMask.set(index);
+                emptySkyMask.set(index);
             }
         }
         return new LightData(true,
