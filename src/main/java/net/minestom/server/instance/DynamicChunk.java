@@ -20,7 +20,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -44,8 +43,8 @@ public class DynamicChunk extends Chunk {
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
-    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        super(instance, biomes, chunkX, chunkZ, true);
+    public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+        super(instance, chunkX, chunkZ, true);
     }
 
     @Override
@@ -140,7 +139,7 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
+        DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
         for (var entry : sectionMap.int2ObjectEntrySet()) {
             dynamicChunk.sectionMap.put(entry.getIntKey(), entry.getValue().clone());
         }
