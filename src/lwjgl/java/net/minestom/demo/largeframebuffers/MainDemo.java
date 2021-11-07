@@ -10,10 +10,8 @@ import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MainDemo {
@@ -61,11 +59,6 @@ public class MainDemo {
                         batch.setBlock(x, y, z, Block.STONE);
                     }
                 }
-        }
-
-        @Override
-        public void fillBiomes(@NotNull Biome[] biomes, int chunkX, int chunkZ) {
-            Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         }
 
         @Override
