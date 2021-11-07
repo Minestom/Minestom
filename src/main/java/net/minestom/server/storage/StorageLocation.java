@@ -17,6 +17,7 @@ import java.util.Map;
  * Each {@link StorageLocation} has a {@link StorageSystem} associated to it
  * which is used to save and retrieve data from keys.
  */
+@Deprecated
 public class StorageLocation {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
