@@ -87,10 +87,9 @@ public final class Registry {
 
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
-            final Map<String, Map<String, Object>> objects = Registry.load(resource);
-            for (var entry : objects.entrySet()) {
+            for (var entry : Registry.load(resource).entrySet()) {
                 final String namespace = entry.getKey();
-                final var object = entry.getValue();
+                final Map<String, Object> object = entry.getValue();
                 loader.accept(this, namespace, object);
             }
             this.initialized = true;
