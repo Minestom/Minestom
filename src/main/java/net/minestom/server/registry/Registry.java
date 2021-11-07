@@ -1,6 +1,5 @@
 package net.minestom.server.registry;
 
-import com.google.gson.Gson;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -17,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Supplier;
@@ -26,8 +26,6 @@ import java.util.function.Supplier;
  * Use at your own risk.
  */
 public final class Registry {
-    private static final Gson GSON = new Gson();
-
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new BlockEntry(namespace, jsonObject, override);
@@ -53,54 +51,15 @@ public final class Registry {
         return new PotionEffectEntry(namespace, jsonObject, override);
     }
 
-    private static Map<String, Object> readMap(JsonReader reader) throws IOException {
-        Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            map.put(name.intern(), readObject(reader));
-        }
-        reader.endObject();
-        return new Object2ObjectArrayMap<>(map);
-    }
-
-    private static Object readObject(JsonReader reader) throws IOException {
-        return switch (reader.peek()) {
-            case BEGIN_ARRAY -> {
-                ObjectArrayList<Object> list = new ObjectArrayList<>();
-                reader.beginArray();
-                while (reader.hasNext()) {
-                    list.add(readObject(reader));
-                }
-                reader.endArray();
-                list.trim();
-                yield list;
-            }
-            case END_ARRAY -> throw new IllegalStateException("Invalid end array");
-            case BEGIN_OBJECT -> readMap(reader);
-            case END_OBJECT -> throw new IllegalStateException("Invalid end object");
-            case NAME -> throw new IllegalStateException("Invalid name");
-            case STRING -> reader.nextString().intern();
-            case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
-            case BOOLEAN -> reader.nextBoolean();
-            case NULL -> throw new IllegalStateException("Invalid null");
-            case END_DOCUMENT -> throw new IllegalStateException("Invalid end document");
-        };
-    }
-
     @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
-        final var resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
+        final InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
         Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
 
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
             reader.beginObject();
-            while (reader.hasNext()) {
-                final String name = reader.nextName();
-                final var content = readMap(reader);
-                map.put(name.intern(), content);
-            }
+            while (reader.hasNext()) map.put(reader.nextName().intern(), readMap(reader));
             reader.endObject();
         } catch (IOException e) {
             e.printStackTrace();
@@ -552,5 +511,31 @@ public final class Registry {
             }
             return main.get(name);
         }
+    }
+
+    private static Map<String, Object> readMap(JsonReader reader) throws IOException {
+        Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
+        reader.beginObject();
+        while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
+        reader.endObject();
+        return new Object2ObjectArrayMap<>(map);
+    }
+
+    private static Object readObject(JsonReader reader) throws IOException {
+        return switch (reader.peek()) {
+            case BEGIN_ARRAY -> {
+                ObjectArrayList<Object> list = new ObjectArrayList<>();
+                reader.beginArray();
+                while (reader.hasNext()) list.add(readObject(reader));
+                reader.endArray();
+                list.trim();
+                yield list;
+            }
+            case BEGIN_OBJECT -> readMap(reader);
+            case STRING -> reader.nextString().intern();
+            case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
+            case BOOLEAN -> reader.nextBoolean();
+            default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
+        };
     }
 }
