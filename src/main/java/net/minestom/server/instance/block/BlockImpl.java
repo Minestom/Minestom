@@ -2,7 +2,6 @@ package net.minestom.server.instance.block;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.google.gson.JsonObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.ObjectArray;
@@ -20,13 +19,13 @@ final class BlockImpl implements Block {
     private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
-                final JsonObject stateObject = object.remove("states").getAsJsonObject();
+                final var stateObject = (Map<String, Object>) object.get("states");
                 // Loop each state
                 var propertyEntry = new HashMap<Map<String, String>, Block>();
                 var unmodifiableEntries = Collections.unmodifiableMap(propertyEntry);
                 for (var stateEntry : stateObject.entrySet()) {
                     final String query = stateEntry.getKey();
-                    JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
+                    final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                     final var propertyMap = BlockUtils.parseProperties(query);
                     final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
                             unmodifiableEntries, propertyMap, null, null);
@@ -34,7 +33,7 @@ final class BlockImpl implements Block {
                     propertyEntry.put(propertyMap, block);
                 }
                 // Register default state
-                final int defaultState = object.get("defaultStateId").getAsInt();
+                final int defaultState = ((Double) object.get("defaultStateId")).intValue();
                 container.register(getState(defaultState));
             });
     private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()

@@ -1,9 +1,9 @@
 package net.minestom.server.registry;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -28,45 +28,89 @@ public final class Registry {
     private static final Gson GSON = new Gson();
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static BlockEntry block(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new BlockEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static MaterialEntry material(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static MaterialEntry material(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new MaterialEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static EntityEntry entity(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static EntityEntry entity(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new EntityEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static EnchantmentEntry enchantment(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new EnchantmentEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static PotionEffectEntry potionEffect(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new PotionEffectEntry(namespace, jsonObject, override);
     }
 
+    private static Map<String, Object> readMap(JsonReader reader) throws IOException {
+        Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
+        reader.beginObject();
+        while (reader.hasNext()) {
+            final String name = reader.nextName();
+            map.put(name.intern(), readObject(reader));
+        }
+        reader.endObject();
+        return new Object2ObjectArrayMap<>(map);
+    }
+
+    private static Object readObject(JsonReader reader) throws IOException {
+        return switch (reader.peek()) {
+            case BEGIN_ARRAY -> {
+                ObjectArrayList<Object> list = new ObjectArrayList<>();
+                reader.beginArray();
+                while (reader.hasNext()) {
+                    list.add(readObject(reader));
+                }
+                reader.endArray();
+                list.trim();
+                yield list;
+            }
+            case END_ARRAY -> throw new IllegalStateException("Invalid end array");
+            case BEGIN_OBJECT -> readMap(reader);
+            case END_OBJECT -> throw new IllegalStateException("Invalid end object");
+            case NAME -> throw new IllegalStateException("Invalid name");
+            case STRING -> reader.nextString().intern();
+            case NUMBER -> reader.nextDouble();
+            case BOOLEAN -> reader.nextBoolean();
+            case NULL -> throw new IllegalStateException("Invalid null");
+            case END_DOCUMENT -> throw new IllegalStateException("Invalid end document");
+        };
+    }
+
     @ApiStatus.Internal
-    public static JsonObject load(Resource resource) {
+    public static Map<String, Map<String, Object>> load(Resource resource) {
         final var resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
         Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-        final var reader = new JsonReader(new InputStreamReader(resourceStream));
-        try {
-            return GSON.fromJson(reader, JsonObject.class);
+
+        Map<String, Map<String, Object>> map = new HashMap<>();
+        try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
+            reader.beginObject();
+            while (reader.hasNext()) {
+                final String name = reader.nextName();
+                final var content = readMap(reader);
+                map.put(name.intern(), content);
+            }
+            reader.endObject();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             try {
                 resourceStream.close();
-                reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return map;
     }
 
     public static class Container<T extends ProtocolObject> {
@@ -83,10 +127,10 @@ public final class Registry {
 
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
-            final JsonObject objects = Registry.load(resource);
+            final Map<String, Map<String, Object>> objects = Registry.load(resource);
             for (var entry : objects.entrySet()) {
                 final String namespace = entry.getKey();
-                final JsonObject object = entry.getValue().getAsJsonObject();
+                final var object = entry.getValue();
                 loader.accept(this, namespace, object);
             }
             this.initialized = true;
@@ -116,7 +160,7 @@ public final class Registry {
         }
 
         public interface Loader<T extends ProtocolObject> {
-            void accept(Container<T> container, String namespace, JsonObject object);
+            void accept(Container<T> container, String namespace, Map<String, Object> object);
         }
     }
 
@@ -161,7 +205,7 @@ public final class Registry {
         private final String blockEntity;
         private final Supplier<Material> materialSupplier;
 
-        private BlockEntry(String namespace, JsonObject main, JsonObject override) {
+        private BlockEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -253,7 +297,7 @@ public final class Registry {
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
 
-        private MaterialEntry(String namespace, JsonObject main, JsonObject override) {
+        private MaterialEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -267,19 +311,20 @@ public final class Registry {
             }
 
             {
-                final var armorProperties = element("armorProperties");
-                if (armorProperties != null) {
-                    final String slot = armorProperties.getAsJsonObject().get("slot").getAsString();
-                    switch (slot) {
-                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
-                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
-                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
-                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
-                        default -> this.equipmentSlot = null;
-                    }
-                } else {
-                    this.equipmentSlot = null;
-                }
+                equipmentSlot = null;
+                //final var armorProperties = element("armorProperties");
+                //if (armorProperties != null) {
+                //    final String slot = armorProperties.getAsJsonObject().get("slot").getAsString();
+                //    switch (slot) {
+                //        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
+                //        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
+                //        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
+                //        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
+                //        default -> this.equipmentSlot = null;
+                //    }
+                //} else {
+                //    this.equipmentSlot = null;
+                //}
             }
         }
 
@@ -328,7 +373,7 @@ public final class Registry {
         private final double height;
         private final EntitySpawnType spawnType;
 
-        private EntityEntry(String namespace, JsonObject main, JsonObject override) {
+        private EntityEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -373,7 +418,7 @@ public final class Registry {
         private final boolean isTradeable;
         private final boolean isTreasureOnly;
 
-        private EnchantmentEntry(String namespace, JsonObject main, JsonObject override) {
+        private EnchantmentEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -425,7 +470,7 @@ public final class Registry {
         private final int color;
         private final boolean isInstantaneous;
 
-        private PotionEffectEntry(String namespace, JsonObject main, JsonObject override) {
+        private PotionEffectEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -456,52 +501,53 @@ public final class Registry {
     }
 
     public static class Entry {
-        private final JsonObject main, override;
+        private final Map<String, Object> main, override;
 
-        private Entry(JsonObject main, JsonObject override) {
+        private Entry(Map<String, Object> main, Map<String, Object> override) {
             this.main = main;
             this.override = override;
         }
 
         public String getString(String name, String defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsString() : defaultValue;
+            return element != null ? (String) element : defaultValue;
         }
 
         public String getString(String name) {
-            return element(name).getAsString();
+            return (String) element(name);
         }
 
         public double getDouble(String name, double defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsDouble() : defaultValue;
+            return element != null ? (double) element : defaultValue;
         }
 
         public double getDouble(String name) {
-            return element(name).getAsDouble();
+            return (double) element(name);
         }
 
         public int getInt(String name, int defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsInt() : defaultValue;
+            return element != null ? ((Double) element).intValue() : defaultValue;
         }
 
         public int getInt(String name) {
-            return element(name).getAsInt();
+            return ((Double) element(name)).intValue();
         }
 
         public boolean getBoolean(String name, boolean defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsBoolean() : defaultValue;
+            return element != null ? (boolean) element : defaultValue;
         }
 
         public boolean getBoolean(String name) {
-            return element(name).getAsBoolean();
+            return (boolean) element(name);
         }
 
-        protected JsonElement element(String name) {
-            if (override != null && override.has(name)) {
-                return override.get(name);
+        protected Object element(String name) {
+            Object result;
+            if (override != null && (result = override.get(name)) != null) {
+                return result;
             }
             return main.get(name);
         }
