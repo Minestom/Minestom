@@ -2,10 +2,9 @@ package net.minestom.server.instance.block;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,24 +16,24 @@ import java.util.function.Function;
 
 final class BlockImpl implements Block {
     // Block state -> block object
-    private static final Int2ObjectOpenHashMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
+    private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
-                final JsonObject stateObject = object.remove("states").getAsJsonObject();
+                final var stateObject = (Map<String, Object>) object.remove("states");
                 // Loop each state
                 var propertyEntry = new HashMap<Map<String, String>, Block>();
                 var unmodifiableEntries = Collections.unmodifiableMap(propertyEntry);
                 for (var stateEntry : stateObject.entrySet()) {
                     final String query = stateEntry.getKey();
-                    JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
+                    final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                     final var propertyMap = BlockUtils.parseProperties(query);
                     final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
                             unmodifiableEntries, propertyMap, null, null);
-                    BLOCK_STATE_MAP.put(block.stateId(), block);
+                    BLOCK_STATE_MAP.set(block.stateId(), block);
                     propertyEntry.put(propertyMap, block);
                 }
                 // Register default state
-                final int defaultState = object.get("defaultStateId").getAsInt();
+                final int defaultState = ((Number) object.get("defaultStateId")).intValue();
                 container.register(getState(defaultState));
             });
     private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
