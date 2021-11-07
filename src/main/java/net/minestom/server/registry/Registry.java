@@ -4,6 +4,7 @@ import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -53,22 +54,16 @@ public final class Registry {
 
     @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
-        final InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
-        Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-
         Map<String, Map<String, Object>> map = new HashMap<>();
-        try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
-            reader.beginObject();
-            while (reader.hasNext()) map.put(reader.nextName().intern(), readMap(reader));
-            reader.endObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                resourceStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
+            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
+                reader.beginObject();
+                while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));
+                reader.endObject();
             }
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         return map;
     }
@@ -511,14 +506,6 @@ public final class Registry {
         }
     }
 
-    private static Map<String, Object> readMap(JsonReader reader) throws IOException {
-        Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
-        reader.beginObject();
-        while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
-        reader.endObject();
-        return new Object2ObjectArrayMap<>(map);
-    }
-
     private static Object readObject(JsonReader reader) throws IOException {
         return switch (reader.peek()) {
             case BEGIN_ARRAY -> {
@@ -526,10 +513,15 @@ public final class Registry {
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
-                list.trim();
-                yield list;
+                yield new ObjectArrayList<>(list);
             }
-            case BEGIN_OBJECT -> readMap(reader);
+            case BEGIN_OBJECT -> {
+                Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
+                reader.beginObject();
+                while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
+                reader.endObject();
+                yield new Object2ObjectArrayMap<>(map);
+            }
             case STRING -> reader.nextString().intern();
             case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
             case BOOLEAN -> reader.nextBoolean();
