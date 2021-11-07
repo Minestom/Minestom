@@ -9,7 +9,7 @@ import java.util.Collection;
 final class SoundEventImpl implements SoundEvent {
     private static final Registry.Container<SoundEvent> CONTAINER = new Registry.Container<>(Registry.Resource.SOUNDS,
             (container, namespace, object) -> {
-                final int id = (int) object.get("id");
+                final int id = ((Number) object.get("id")).intValue();
                 container.register(new SoundEventImpl(NamespaceID.from(namespace), id));
             });
 
