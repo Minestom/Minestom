@@ -4,7 +4,7 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a palette used to store blocks & biomes.
+ * Represents a palette used to store blocks and biomes.
  * <p>
  * 0 is the default value.
  */
