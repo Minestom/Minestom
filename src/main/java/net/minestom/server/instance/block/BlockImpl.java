@@ -33,7 +33,7 @@ final class BlockImpl implements Block {
                     propertyEntry.put(propertyMap, block);
                 }
                 // Register default state
-                final int defaultState = ((Double) object.get("defaultStateId")).intValue();
+                final int defaultState = ((Number) object.get("defaultStateId")).intValue();
                 container.register(getState(defaultState));
             });
     private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()

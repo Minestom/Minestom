@@ -110,7 +110,7 @@ dependencies {
     api 'it.unimi.dsi:fastutil:8.5.6'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    api 'com.google.code.gson:gson:2.8.8'
+    api 'com.google.code.gson:gson:2.8.9'
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise

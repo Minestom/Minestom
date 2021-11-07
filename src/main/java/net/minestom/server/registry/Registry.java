@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import com.google.gson.Gson;
+import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -80,7 +81,7 @@ public final class Registry {
             case END_OBJECT -> throw new IllegalStateException("Invalid end object");
             case NAME -> throw new IllegalStateException("Invalid name");
             case STRING -> reader.nextString().intern();
-            case NUMBER -> reader.nextDouble();
+            case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
             case BOOLEAN -> reader.nextBoolean();
             case NULL -> throw new IllegalStateException("Invalid null");
             case END_DOCUMENT -> throw new IllegalStateException("Invalid end document");
@@ -519,7 +520,7 @@ public final class Registry {
 
         public double getDouble(String name, double defaultValue) {
             var element = element(name);
-            return element != null ? (double) element : defaultValue;
+            return element != null ? ((Number) element).doubleValue() : defaultValue;
         }
 
         public double getDouble(String name) {
@@ -528,11 +529,11 @@ public final class Registry {
 
         public int getInt(String name, int defaultValue) {
             var element = element(name);
-            return element != null ? ((Double) element).intValue() : defaultValue;
+            return element != null ? ((Number) element).intValue() : defaultValue;
         }
 
         public int getInt(String name) {
-            return ((Double) element(name)).intValue();
+            return ((Number) element(name)).intValue();
         }
 
         public boolean getBoolean(String name, boolean defaultValue) {
