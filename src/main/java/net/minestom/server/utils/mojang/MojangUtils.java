@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.url.URLUtils;
+import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +17,6 @@ import java.util.concurrent.TimeUnit;
  * Utils class using mojang API.
  */
 public final class MojangUtils {
-
     private static final Cache<String, JsonObject> UUID_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .softValues()
@@ -27,9 +27,8 @@ public final class MojangUtils {
             .softValues()
             .build();
 
-    @Nullable
-    public static JsonObject fromUuid(@NotNull String uuid) {
-
+    @Blocking
+    public static @Nullable JsonObject fromUuid(@NotNull String uuid) {
         // Check cache
         {
             final JsonObject jsonObject = UUID_CACHE.getIfPresent(uuid);
@@ -37,15 +36,13 @@ public final class MojangUtils {
                 return jsonObject;
             }
         }
-
         // Retrieve from the rate-limited Mojang API
         final String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false";
         return retrieve(url, uuid, UUID_CACHE);
     }
 
-    @Nullable
-    public static JsonObject fromUsername(@NotNull String username) {
-
+    @Blocking
+    public static @Nullable JsonObject fromUsername(@NotNull String username) {
         // Check cache
         {
             final JsonObject jsonObject = USERNAME_CACHE.getIfPresent(username);
@@ -53,7 +50,6 @@ public final class MojangUtils {
                 return jsonObject;
             }
         }
-
         // Retrieve from the rate-limited Mojang API
         final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
         return retrieve(url, username, USERNAME_CACHE);
@@ -72,5 +68,4 @@ public final class MojangUtils {
             return null;
         }
     }
-
 }
