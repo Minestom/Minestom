@@ -8,7 +8,6 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventurePacketConvertor;
@@ -16,9 +15,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.ActionBarPacket;
+import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
+import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.TickUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -49,6 +49,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     /**
      * Broadcast a ServerPacket to all players of this audience
+     *
      * @param packet the packet to broadcast
      */
     default void sendGroupedPacket(ServerPacket packet) {
@@ -116,8 +117,6 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     default void stopSound(@NotNull SoundStop stop) {
         sendGroupedPacket(AdventurePacketConvertor.createSoundStopPacket(stop));
     }
-
-
 
     @Override
     default @NotNull Iterable<? extends Audience> audiences() {
