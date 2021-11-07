@@ -51,6 +51,7 @@ public class Main {
         commandManager.register(new GiveCommand());
         commandManager.register(new SetBlockCommand());
         commandManager.register(new AutoViewCommand());
+        commandManager.register(new HologramCommand());
 
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
