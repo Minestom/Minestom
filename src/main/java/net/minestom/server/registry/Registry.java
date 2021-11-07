@@ -177,10 +177,10 @@ public final class Registry {
 
             // Block entity
             {
-                final JsonElement entityElement = element("blockEntity");
-                if (entityElement instanceof JsonObject entityObject) {
-                    this.blockEntity = entityObject.get("namespace").getAsString();
-                    this.blockEntityId = entityObject.get("id").getAsInt();
+                final Map<String, Object> blockEntityProperties = element("blockEntity");
+                if (blockEntityProperties != null) {
+                    this.blockEntity = (String) blockEntityProperties.get("namespace");
+                    this.blockEntityId = ((Number) blockEntityProperties.get("id")).intValue();
                 } else {
                     this.blockEntity = null;
                     this.blockEntityId = 0;
