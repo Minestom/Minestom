@@ -334,6 +334,7 @@ public final class MinecraftServer {
      *
      * @return the data manager
      */
+    @Deprecated
     public static DataManager getDataManager() {
         checkInitStatus(dataManager);
         return dataManager;

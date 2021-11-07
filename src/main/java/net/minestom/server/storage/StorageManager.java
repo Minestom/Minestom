@@ -16,6 +16,7 @@ import java.util.function.Supplier;
  * Manager used to retrieve {@link StorageLocation} with {@link #getLocation(String, StorageOptions, StorageSystem)}
  * and define the default {@link StorageSystem} with {@link #defineDefaultStorageSystem(Supplier)}.
  */
+@Deprecated
 public final class StorageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageManager.class);

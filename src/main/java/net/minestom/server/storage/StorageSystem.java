@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents a way of storing data by key/value.
  * The location does not have to be a file or folder path. It is the 'identifier' of the data location.
  */
+@Deprecated
 public interface StorageSystem {
 
     /**

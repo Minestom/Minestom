@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * See {@link SerializableDataImpl} for the default implementation.
  */
+@Deprecated
 public abstract class SerializableData extends Data {
 
     /**

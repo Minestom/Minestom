@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * {@link Data} implementation which uses a {@link ConcurrentHashMap}.
  */
+@Deprecated
 public class DataImpl extends Data {
 
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
