@@ -76,8 +76,10 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">StorageManager</span>
+<div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public final class </span><span class="element-name type-name-label">StorageManager</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Manager used to retrieve <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> with <a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)"><code>getLocation(String, StorageOptions, StorageSystem)</code></a>
  and define the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> with <a href="#defineDefaultStorageSystem(java.util.function.Supplier)"><code>defineDefaultStorageSystem(Supplier)</code></a>.</div>
 </section>
@@ -92,7 +94,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">StorageManager</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
+&nbsp;</div>
 </div>
 </section>
 </li>
@@ -101,55 +105,63 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defineDefaultStorageSystem(java.util.function.Supplier)" class="member-name-link">defineDefaultStorageSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#defineDefaultStorageSystem(java.util.function.Supplier)" class="member-name-link">defineDefaultStorageSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Defines the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> used for <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLoadedLocations()" class="member-name-link">getLoadedLocations</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getLoadedLocations()" class="member-name-link">getLoadedLocations</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Gets all the <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> which have been loaded by <a href="#getLocation(java.lang.String)"><code>getLocation(String)</code></a>
  or <a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)"><code>getLocation(String, StorageOptions, StorageSystem)</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocation(java.lang.String)" class="member-name-link">getLocation</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>@Nullable <a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getLocation(java.lang.String)" class="member-name-link">getLocation</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to get an access to the specified location.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions)" class="member-name-link">getLocation</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions)" class="member-name-link">getLocation</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
  @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to get an access to the specified location.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)" class="member-name-link">getLocation</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)" class="member-name-link">getLocation</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
  @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions,
  @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to get an access to the specified location.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDefaultStorageSystemDefined()" class="member-name-link">isDefaultStorageSystemDefined</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#isDefaultStorageSystemDefined()" class="member-name-link">isDefaultStorageSystemDefined</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Gets if the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> is set.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locationExists(java.lang.String)" class="member-name-link">locationExists</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#locationExists(java.lang.String)" class="member-name-link">locationExists</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Calls <a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)"><code>locationExists(String, StorageSystem)</code></a> with the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)" class="member-name-link">locationExists</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)" class="member-name-link">locationExists</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
  @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to know if the specified location already exist or not.</div>
 </div>
 </div>
@@ -173,6 +185,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>StorageManager</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StorageManager</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 </section>
 </li>
 </ul>
@@ -192,6 +205,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions,
  @NotNull
  @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to get an access to the specified location.
  WARNING: a <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> needs to be created with an unique <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> linked
  you cannot open the save location with two or more different <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> implementation.</div>
@@ -212,6 +226,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
  @NotNull
  @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to get an access to the specified location.
  The default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> provider will be used.</div>
 <dl class="notes">
@@ -231,6 +246,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></span>&nbsp;<span class="element-name">getLocation</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to get an access to the specified location.
  The default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> provider will be used.</div>
 <dl class="notes">
@@ -250,6 +266,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location,
  @NotNull
  @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Used to know if the specified location already exist or not.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -265,6 +282,7 @@ loadScripts(document, 'script');</script>
 <h3>locationExists</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">locationExists</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Calls <a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)"><code>locationExists(String, StorageSystem)</code></a> with the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -279,6 +297,7 @@ loadScripts(document, 'script');</script>
 <h3>getLoadedLocations</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;</span>&nbsp;<span class="element-name">getLoadedLocations</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Gets all the <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> which have been loaded by <a href="#getLocation(java.lang.String)"><code>getLocation(String)</code></a>
  or <a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)"><code>getLocation(String, StorageOptions, StorageSystem)</code></a>.</div>
 <dl class="notes">
@@ -292,6 +311,7 @@ loadScripts(document, 'script');</script>
 <h3>defineDefaultStorageSystem</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">defineDefaultStorageSystem</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Defines the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> used for <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -303,6 +323,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isDefaultStorageSystemDefined()">
 <h3>isDefaultStorageSystemDefined</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isDefaultStorageSystemDefined</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Gets if the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> is set.</div>
 <dl class="notes">
 <dt>Returns:</dt>
