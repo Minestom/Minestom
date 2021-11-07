@@ -27,6 +27,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
@@ -71,6 +72,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
+
+    private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
     protected Instance instance;
     protected Chunk currentChunk;
@@ -452,7 +455,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 if (passenger != player) passenger.viewEngine.viewableOption.removal.accept(player);
             }
         }
-        player.sendPacket(new DestroyEntitiesPacket(getEntityId()));
+        player.sendPacket(destroyPacketCache.retrieve());
     }
 
     @Override
