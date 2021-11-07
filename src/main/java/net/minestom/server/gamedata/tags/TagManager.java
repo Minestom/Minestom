@@ -1,6 +1,5 @@
 package net.minestom.server.gamedata.tags;
 
-import com.google.gson.JsonObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Nullable;
@@ -40,12 +39,11 @@ public final class TagManager {
         return Collections.unmodifiableMap(tagMap);
     }
 
-    private Set<NamespaceID> getValues(JsonObject main, String value) {
-        JsonObject tagObject = main.getAsJsonObject(value);
-        final var tagValues = tagObject.getAsJsonArray("values");
+    private Set<NamespaceID> getValues(Map<String, Map<String, Object>> main, String value) {
+        Map<String, Object> tagObject = main.get(value);
+        final List<String> tagValues = (List<String>) tagObject.get("values");
         Set<NamespaceID> result = new HashSet<>(tagValues.size());
-        tagValues.forEach(jsonElement -> {
-            final String tagString = jsonElement.getAsString();
+        tagValues.forEach(tagString -> {
             if (tagString.startsWith("#")) {
                 result.addAll(getValues(main, tagString.substring(1)));
             } else {
