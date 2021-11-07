@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @ApiStatus.Experimental
 public final class PooledBuffers {
     private final static Queue<SoftReference<BinaryBuffer>> POOLED_BUFFERS = new ConcurrentLinkedQueue<>();
-    private final static int BUFFER_SIZE = 262_143;
+    private final static int BUFFER_SIZE = Integer.getInteger("minestom.pooled-buffer-size", 262_143);
     private final static Cleaner CLEANER = Cleaner.create();
 
     public static BinaryBuffer get() {
