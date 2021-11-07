@@ -9,7 +9,7 @@ import java.util.Collection;
 final class PotionTypeImpl implements PotionType {
     private static final Registry.Container<PotionType> CONTAINER = new Registry.Container<>(Registry.Resource.POTION_TYPES,
             (loader, namespace, object) -> {
-                final int id = object.get("id").getAsInt();
+                final int id = ((Number) object.get("id")).intValue();
                 loader.register(new PotionTypeImpl(NamespaceID.from(namespace), id));
             });
 
