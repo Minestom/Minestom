@@ -271,20 +271,19 @@ public final class Registry {
             }
 
             {
-                equipmentSlot = null;
-                //final var armorProperties = element("armorProperties");
-                //if (armorProperties != null) {
-                //    final String slot = armorProperties.getAsJsonObject().get("slot").getAsString();
-                //    switch (slot) {
-                //        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
-                //        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
-                //        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
-                //        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
-                //        default -> this.equipmentSlot = null;
-                //    }
-                //} else {
-                //    this.equipmentSlot = null;
-                //}
+                final Map<String, Object> armorProperties = element("armorProperties");
+                if (armorProperties != null) {
+                    final String slot = (String) armorProperties.get("slot");
+                    switch (slot) {
+                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
+                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
+                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
+                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
+                        default -> this.equipmentSlot = null;
+                    }
+                } else {
+                    this.equipmentSlot = null;
+                }
             }
         }
 
@@ -474,7 +473,7 @@ public final class Registry {
         }
 
         public String getString(String name) {
-            return (String) element(name);
+            return element(name);
         }
 
         public double getDouble(String name, double defaultValue) {
@@ -483,7 +482,7 @@ public final class Registry {
         }
 
         public double getDouble(String name) {
-            return (double) element(name);
+            return ((Number) element(name)).doubleValue();
         }
 
         public int getInt(String name, int defaultValue) {
@@ -501,15 +500,15 @@ public final class Registry {
         }
 
         public boolean getBoolean(String name) {
-            return (boolean) element(name);
+            return element(name);
         }
 
-        protected Object element(String name) {
+        protected <T> T element(String name) {
             Object result;
             if (override != null && (result = override.get(name)) != null) {
-                return result;
+                return (T) result;
             }
-            return main.get(name);
+            return (T) main.get(name);
         }
     }
 
