@@ -19,8 +19,8 @@ public final class TagManager {
         for (var type : Tag.BasicType.values()) {
             final var json = Registry.load(type.getResource());
             final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
-            json.forEach((namespace, main) -> {
-                final var tag = new Tag(NamespaceID.from(namespace), getValues(main, namespace));
+            json.keySet().forEach(tagName -> {
+                final var tag = new Tag(NamespaceID.from(tagName), getValues(json, tagName));
                 tagIdentifierMap.add(tag);
             });
         }
@@ -39,19 +39,17 @@ public final class TagManager {
         return Collections.unmodifiableMap(tagMap);
     }
 
-    private Set<NamespaceID> getValues(Map<String, Object> main, String value) {
-        if (true) return new HashSet<>(); // TODO
-        Map<String, Object> tagObject = (Map<String, Object>) main.get(value);
-        final List<Object> tagValues = (List<Object>) tagObject.get("values");
+    private Set<NamespaceID> getValues(Map<String, Map<String, Object>> main, String value) {
+        Map<String, Object> tagObject = main.get(value);
+        final List<String> tagValues = (List<String>) tagObject.get("values");
         Set<NamespaceID> result = new HashSet<>(tagValues.size());
-        for (Object tagValue : tagValues) {
-            final String tagString = (String) tagValue;
+        tagValues.forEach(tagString -> {
             if (tagString.startsWith("#")) {
                 result.addAll(getValues(main, tagString.substring(1)));
             } else {
                 result.add(NamespaceID.from(tagString));
             }
-        }
+        });
         return result;
     }
 }
