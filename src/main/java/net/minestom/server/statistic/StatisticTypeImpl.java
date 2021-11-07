@@ -9,7 +9,7 @@ import java.util.Collection;
 final class StatisticTypeImpl implements StatisticType {
     private static final Registry.Container<StatisticType> CONTAINER = new Registry.Container<>(Registry.Resource.STATISTICS,
             (container, namespace, object) -> {
-                final int id = (int) object.get("id");
+                final int id = ((Number) object.get("id")).intValue();
                 container.register(new StatisticTypeImpl(NamespaceID.from(namespace), id));
             });
 
