@@ -100,15 +100,14 @@ public final class CollisionUtils {
             collision = true;
             final double newCoordinate = blockFunction.getDouble(newCorner) + (sign > 0 ? 0 : 1);
             final double distance = MathUtils.square(fieldFunction.getDouble(face) - newCoordinate);
-            smallestDisplacement = Math.min(smallestDisplacement, distance);
-            if (smallestDisplacement < EPSILON) break;
+            if (distance < smallestDisplacement) {
+                if (Math.abs(smallestDisplacement) < EPSILON) break;
+                smallestDisplacement = distance;
+            }
         }
-        if (collision) {
-            if (smallestDisplacement < EPSILON) return new StepResult(0, true);
-            return new StepResult(step * smallestDisplacement, true);
-        } else {
-            return new StepResult(step, false);
-        }
+        final double finalStep = step * (collision ? smallestDisplacement : 1);
+        if (Math.abs(finalStep) < EPSILON) return new StepResult(0, collision);
+        return new StepResult(finalStep, collision);
     }
 
     /**
