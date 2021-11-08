@@ -31,7 +31,7 @@ public interface TransactionType {
             if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
                 final int itemAmount = stackingRule.getAmount(inventoryItem);
                 final int maxSize = stackingRule.getMaxSize(inventoryItem);
-                if (itemAmount == maxSize) continue;
+                if (itemAmount >= maxSize) continue;
                 if (!slotPredicate.test(i, inventoryItem)) {
                     // Cancelled transaction
                     continue;
