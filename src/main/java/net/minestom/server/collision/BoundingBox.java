@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Supplier;
 
 /**
@@ -17,8 +17,6 @@ public class BoundingBox {
 
     private final Entity entity;
     private final double x, y, z;
-
-    private final AtomicBoolean updatedCache = new AtomicBoolean(false);
 
     private final CachedFace bottomFace = new CachedFace(() -> List.of(
             new Vec(getMinX(), getMinY(), getMinZ()),
@@ -280,7 +278,12 @@ public class BoundingBox {
     }
 
     public void invalidateCache() {
-        this.updatedCache.set(false);
+        this.bottomFace.invalidate();
+        this.topFace.invalidate();
+        this.leftFace.invalidate();
+        this.rightFace.invalidate();
+        this.frontFace.invalidate();
+        this.backFace.invalidate();
     }
 
     /**
@@ -407,21 +410,27 @@ public class BoundingBox {
         X, Y, Z
     }
 
-    private final class CachedFace {
+    private static final class CachedFace {
+        private static final AtomicIntegerFieldUpdater<CachedFace> UPDATER = AtomicIntegerFieldUpdater.newUpdater(CachedFace.class, "updated");
         private final Supplier<@NotNull List<Vec>> faceProducer;
+        private volatile int updated;
         private List<Vec> cachedPoints;
 
         private CachedFace(Supplier<@NotNull List<Vec>> faceProducer) {
             this.faceProducer = faceProducer;
         }
 
+        void invalidate() {
+            this.updated = 0;
+        }
+
         @NotNull List<Vec> get() {
             List<Vec> cache = this.cachedPoints;
-            final boolean updated = updatedCache.get();
-            if (!updated || cache == null) {
+            final boolean up = updated == 0;
+            if (up || cache == null) {
                 cache = faceProducer.get();
                 this.cachedPoints = cache;
-                if (!updated) updatedCache.compareAndSet(false, true);
+                if (up) UPDATER.compareAndSet(this, 0, 1);
             }
             return cache;
         }
