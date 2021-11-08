@@ -1262,6 +1262,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (position.equals(lastSyncedPosition)) return;
         this.position = position;
         this.previousPosition = previousPosition;
+        this.boundingBox.invalidateCache();
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
             // Update player velocity
