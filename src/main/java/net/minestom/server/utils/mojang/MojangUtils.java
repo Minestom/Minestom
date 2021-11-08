@@ -26,18 +26,16 @@ public final class MojangUtils {
 
     @Blocking
     public static @Nullable JsonObject fromUuid(@NotNull String uuid) {
-        final String url = String.format(FROM_UUID_URL, uuid);
-        return retrieve(url, uuid);
+        return retrieve(String.format(FROM_UUID_URL, uuid));
     }
 
     @Blocking
     public static @Nullable JsonObject fromUsername(@NotNull String username) {
-        final String url = String.format(FROM_USERNAME_URL, username);
-        return retrieve(url, username);
+        return retrieve(String.format(FROM_USERNAME_URL, username));
     }
 
-    private static @Nullable JsonObject retrieve(@NotNull String url, @NotNull String key) {
-        return URL_CACHE.get(key, s -> {
+    private static @Nullable JsonObject retrieve(@NotNull String url) {
+        return URL_CACHE.get(url, s -> {
             try {
                 // Retrieve from the rate-limited Mojang API
                 final String response = URLUtils.getText(url);
