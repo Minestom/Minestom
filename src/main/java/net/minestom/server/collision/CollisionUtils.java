@@ -89,7 +89,7 @@ public final class CollisionUtils {
         }
 
         boolean collision = false;
-        double smallestDisplacement = Double.POSITIVE_INFINITY;
+        double displacement = 1;
         for (Vec face : faces) {
             final Vec newCorner = updater.adder().update(face, step);
             final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
@@ -99,13 +99,10 @@ public final class CollisionUtils {
             if (block == null || !block.isSolid()) continue;
             collision = true;
             final double newCoordinate = updater.blockFunction().getDouble(newCorner) + (sign > 0 ? 0 : 1);
-            final double distance = MathUtils.square(updater.fieldFunction().getDouble(face) - newCoordinate);
-            if (distance < smallestDisplacement) {
-                if (Math.abs(smallestDisplacement) < EPSILON) break;
-                smallestDisplacement = distance;
-            }
+            displacement = MathUtils.square(updater.fieldFunction().getDouble(face) - newCoordinate);
+            break;
         }
-        delta += step * (collision ? smallestDisplacement : 1);
+        delta += step * displacement;
         if (Math.abs(delta) < EPSILON) return new StepResult(0, collision);
         return new StepResult(delta, collision);
     }
