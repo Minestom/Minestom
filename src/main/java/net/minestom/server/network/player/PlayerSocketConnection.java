@@ -235,7 +235,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             if (encrypted) { // Encryption support
                 ByteBuffer output = PacketUtils.localBuffer();
                 try {
-                    this.encryptCipher.update(buffer.slice(index,length), output);
+                    this.encryptCipher.update(buffer.slice(index, length), output);
                     buffer = output.flip();
                     index = 0;
                 } catch (ShortBufferException e) {
@@ -280,6 +280,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void flush() {
         try {
+            if (!channel.isConnected())
+                throw new ClosedChannelException();
             synchronized (bufferLock) {
                 try {
                     updateLocalBuffer();
