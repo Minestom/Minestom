@@ -536,6 +536,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);
             }
+            if (isRemoved()) return;
         }
 
         // Entity tick
