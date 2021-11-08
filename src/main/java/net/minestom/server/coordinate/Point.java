@@ -3,7 +3,6 @@ package net.minestom.server.coordinate;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,13 +70,11 @@ public sealed interface Point permits Vec, Pos {
         return (int) Math.floor(z());
     }
 
-    @ApiStatus.Experimental
     @Contract(pure = true)
     default int chunkX() {
         return ChunkUtils.getChunkCoordinate(x());
     }
 
-    @ApiStatus.Experimental
     @Contract(pure = true)
     default int chunkZ() {
         return ChunkUtils.getChunkCoordinate(z());
@@ -185,6 +182,27 @@ public sealed interface Point permits Vec, Pos {
         };
     }
 
+    @Contract(pure = true)
+    default double distanceSquared(double x, double y, double z) {
+        return MathUtils.square(x() - x) + MathUtils.square(y() - y) + MathUtils.square(z() - z);
+    }
+
+    /**
+     * Gets the squared distance between this point and another.
+     *
+     * @param point the other point
+     * @return the squared distance
+     */
+    @Contract(pure = true)
+    default double distanceSquared(@NotNull Point point) {
+        return distanceSquared(point.x(), point.y(), point.z());
+    }
+
+    @Contract(pure = true)
+    default double distance(double x, double y, double z) {
+        return Math.sqrt(distanceSquared(x, y, z));
+    }
+
     /**
      * Gets the distance between this point and another. The value of this
      * method is not cached and uses a costly square-root function, so do not
@@ -197,22 +215,11 @@ public sealed interface Point permits Vec, Pos {
      */
     @Contract(pure = true)
     default double distance(@NotNull Point point) {
-        return Math.sqrt(MathUtils.square(x() - point.x()) +
-                MathUtils.square(y() - point.y()) +
-                MathUtils.square(z() - point.z()));
+        return distance(point.x(), point.y(), point.z());
     }
 
-    /**
-     * Gets the squared distance between this point and another.
-     *
-     * @param point the other point
-     * @return the squared distance
-     */
-    @Contract(pure = true)
-    default double distanceSquared(@NotNull Point point) {
-        return MathUtils.square(x() - point.x()) +
-                MathUtils.square(y() - point.y()) +
-                MathUtils.square(z() - point.z());
+    default boolean samePoint(double x, double y, double z) {
+        return Double.compare(x, x()) == 0 && Double.compare(y, y()) == 0 && Double.compare(z, z()) == 0;
     }
 
     /**
@@ -222,9 +229,7 @@ public sealed interface Point permits Vec, Pos {
      * @return true if the two positions are similar
      */
     default boolean samePoint(@NotNull Point point) {
-        return Double.compare(point.x(), x()) == 0 &&
-                Double.compare(point.y(), y()) == 0 &&
-                Double.compare(point.z(), z()) == 0;
+        return samePoint(point.x(), point.y(), point.z());
     }
 
     /**
@@ -247,16 +252,17 @@ public sealed interface Point permits Vec, Pos {
         return chunkX() == point.chunkX() && chunkZ() == point.chunkZ();
     }
 
+    default boolean sameBlock(int blockX, int blockY, int blockZ) {
+        return blockX() == blockX && blockY() == blockY && blockZ() == blockZ;
+    }
+
     /**
      * Gets if two points are in the same chunk.
      *
      * @param point the point to compare two
      * @return true if 'this' is in the same chunk as {@code point}
      */
-    @ApiStatus.Experimental
     default boolean sameBlock(@NotNull Point point) {
-        return blockX() == point.blockX() &&
-                blockY() == point.blockY() &&
-                blockZ() == point.blockZ();
+        return sameBlock(point.blockX(), point.blockY(), point.blockZ());
     }
 }
