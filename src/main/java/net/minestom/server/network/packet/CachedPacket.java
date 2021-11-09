@@ -27,6 +27,10 @@ public final class CachedPacket {
     }
 
     public @NotNull FramedPacket retrieve() {
+        if (!PacketUtils.CACHED_PACKET) {
+            // TODO: Using a local buffer may be possible
+            return PacketUtils.allocateTrimmedPacket(supplier.get());
+        }
         SoftReference<FramedPacket> ref;
         FramedPacket cache;
         if (updated == 0 ||
