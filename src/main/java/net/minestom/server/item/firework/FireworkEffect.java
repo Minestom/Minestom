@@ -47,16 +47,16 @@ public class FireworkEffect {
         List<Color> secondaryColor = new ArrayList<>();
 
         if (compound.containsKey("Colors")) {
-            int[] color = compound.getIntArray("Colors");
-            for (int i = 0; i < color.length; i++) {
-                primaryColor.add(new Color(color[i]));
+            final int[] color = compound.getIntArray("Colors");
+            for (int j : color) {
+                primaryColor.add(new Color(j));
             }
         }
 
         if (compound.containsKey("FadeColors")) {
-            int[] fadeColor = compound.getIntArray("FadeColors");
-            for (int i = 0; i < fadeColor.length; i++) {
-                secondaryColor.add(new Color(fadeColor[i]));
+            final int[] fadeColor = compound.getIntArray("FadeColors");
+            for (int j : fadeColor) {
+                secondaryColor.add(new Color(j));
             }
         }
 

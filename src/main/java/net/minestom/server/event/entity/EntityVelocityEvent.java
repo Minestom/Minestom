@@ -1,15 +1,15 @@
 package net.minestom.server.event.entity;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a velocity is applied to an entity using {@link Entity#setVelocity(Vec)}.
  */
-public class EntityVelocityEvent implements EntityEvent, CancellableEvent {
+public class EntityVelocityEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
     private Vec velocity;

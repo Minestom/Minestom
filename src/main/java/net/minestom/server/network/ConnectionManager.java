@@ -23,7 +23,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -310,8 +309,8 @@ public final class ConnectionManager {
             }
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
-            if (playerConnection instanceof PlayerSocketConnection) {
-                ((PlayerSocketConnection) playerConnection).writeAndFlush(loginSuccessPacket);
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                socketConnection.writeAndFlush(loginSuccessPacket);
             } else {
                 playerConnection.sendPacket(loginSuccessPacket);
             }
@@ -346,15 +345,10 @@ public final class ConnectionManager {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
-            if (playerConnection instanceof PlayerSocketConnection) {
-                final PlayerSocketConnection socketConnection = (PlayerSocketConnection) playerConnection;
-                socketConnection.writeAndFlush(disconnectPacket);
-                try {
-                    socketConnection.getChannel().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            playerConnection.sendPacket(disconnectPacket);
+            playerConnection.flush();
+            player.remove();
+            playerConnection.disconnect();
         }
         this.players.clear();
         this.connectionPlayerMap.clear();

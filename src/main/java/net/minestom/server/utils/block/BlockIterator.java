@@ -1,10 +1,10 @@
 package net.minestom.server.utils.block;
 
-import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -268,7 +268,7 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
 
-    public BlockIterator(@NotNull LivingEntity entity, int maxDistance) {
+    public BlockIterator(@NotNull Entity entity, int maxDistance) {
         this(entity.getPosition(), entity.getEyeHeight(), maxDistance);
     }
 
@@ -280,7 +280,7 @@ public class BlockIterator implements Iterator<Point> {
      * @param entity Information from the entity is used to set up the trace
      */
 
-    public BlockIterator(@NotNull LivingEntity entity) {
+    public BlockIterator(@NotNull Entity entity) {
         this(entity, 0);
     }
 

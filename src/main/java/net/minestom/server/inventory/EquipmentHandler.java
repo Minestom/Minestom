@@ -8,9 +8,6 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots.
  */
@@ -51,13 +48,10 @@ public interface EquipmentHandler {
      * @return the {@link ItemStack} in {@code hand}
      */
     default @NotNull ItemStack getItemInHand(@NotNull Player.Hand hand) {
-        switch (hand) {
-            case MAIN:
-                return getItemInMainHand();
-            case OFF:
-                return getItemInOffHand();
-        }
-        throw new IllegalStateException("Something weird happened");
+        return switch (hand) {
+            case MAIN -> getItemInMainHand();
+            case OFF -> getItemInOffHand();
+        };
     }
 
     /**
@@ -68,13 +62,8 @@ public interface EquipmentHandler {
      */
     default void setItemInHand(@NotNull Player.Hand hand, @NotNull ItemStack stack) {
         switch (hand) {
-            case MAIN:
-                setItemInMainHand(stack);
-                break;
-
-            case OFF:
-                setItemInOffHand(stack);
-                break;
+            case MAIN -> setItemInMainHand(stack);
+            case OFF -> setItemInOffHand(stack);
         }
     }
 
@@ -141,46 +130,29 @@ public interface EquipmentHandler {
      * @return the equipment {@link ItemStack}
      */
     default @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
-        switch (slot) {
-            case MAIN_HAND:
-                return getItemInMainHand();
-            case OFF_HAND:
-                return getItemInOffHand();
-            case HELMET:
-                return getHelmet();
-            case CHESTPLATE:
-                return getChestplate();
-            case LEGGINGS:
-                return getLeggings();
-            case BOOTS:
-                return getBoots();
-        }
-        throw new IllegalStateException("Something weird happened");
+        return switch (slot) {
+            case MAIN_HAND -> getItemInMainHand();
+            case OFF_HAND -> getItemInOffHand();
+            case HELMET -> getHelmet();
+            case CHESTPLATE -> getChestplate();
+            case LEGGINGS -> getLeggings();
+            case BOOTS -> getBoots();
+        };
     }
 
     default void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
         switch (slot) {
-            case MAIN_HAND:
-                setItemInMainHand(itemStack);
-                break;
-            case OFF_HAND:
-                setItemInOffHand(itemStack);
-                break;
-            case HELMET:
-                setHelmet(itemStack);
-                break;
-            case CHESTPLATE:
-                setChestplate(itemStack);
-                break;
-            case LEGGINGS:
-                setLeggings(itemStack);
-                break;
-            case BOOTS:
-                setBoots(itemStack);
-                break;
-            default:
-                throw new IllegalStateException("Something weird happened");
+            case MAIN_HAND -> setItemInMainHand(itemStack);
+            case OFF_HAND -> setItemInOffHand(itemStack);
+            case HELMET -> setHelmet(itemStack);
+            case CHESTPLATE -> setChestplate(itemStack);
+            case LEGGINGS -> setLeggings(itemStack);
+            case BOOTS -> setBoots(itemStack);
         }
+    }
+
+    default boolean hasEquipment(@NotNull EquipmentSlot slot) {
+        return !getEquipment(slot).isAir();
     }
 
     /**
@@ -211,24 +183,17 @@ public interface EquipmentHandler {
      */
     default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
-
-        final Entity entity = (Entity) this;
-
         final EquipmentSlot[] slots = EquipmentSlot.values();
-
-        List<ItemStack> itemStacks = new ArrayList<>(slots.length);
-
-        // Fill items
-        for (EquipmentSlot slot : slots) {
-            final ItemStack equipment = getEquipment(slot);
-            itemStacks.add(equipment);
+        ItemStack[] equipments = new ItemStack[slots.length];
+        for (int i = 0; i < equipments.length; i++) {
+            final EquipmentSlot slot = slots[i];
+            equipments[i] = getEquipment(slot);
         }
-
         // Create equipment packet
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = entity.getEntityId();
+        equipmentPacket.entityId = ((Entity) this).getEntityId();
         equipmentPacket.slots = slots;
-        equipmentPacket.itemStacks = itemStacks.toArray(new ItemStack[0]);
+        equipmentPacket.itemStacks = equipments;
         return equipmentPacket;
     }
 

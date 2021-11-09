@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
@@ -29,32 +30,33 @@ public class BinaryWriter extends OutputStream {
     private ByteBuffer buffer;
     private NBTWriter nbtWriter; // Lazily initialized
 
-    /**
-     * Creates a {@link BinaryWriter} using a heap buffer with a custom initial capacity.
-     *
-     * @param initialCapacity the initial capacity of the binary writer
-     */
-    public BinaryWriter(int initialCapacity) {
-        this.buffer = ByteBuffer.allocate(initialCapacity);
+    private final boolean resizable;
+
+    private BinaryWriter(ByteBuffer buffer, boolean resizable) {
+        this.buffer = buffer;
+        this.resizable = resizable;
     }
 
-    /**
-     * Creates a {@link BinaryWriter} from multiple a single buffer.
-     *
-     * @param buffer the writer buffer
-     */
     public BinaryWriter(@NotNull ByteBuffer buffer) {
         this.buffer = buffer;
+        this.resizable = true;
     }
 
-    /**
-     * Creates a {@link BinaryWriter} with a "reasonably small initial capacity".
-     */
+    public BinaryWriter(int initialCapacity) {
+        this(ByteBuffer.allocate(initialCapacity));
+    }
+
     public BinaryWriter() {
         this(255);
     }
 
+    @ApiStatus.Experimental
+    public static BinaryWriter view(ByteBuffer buffer) {
+        return new BinaryWriter(buffer, false);
+    }
+
     protected void ensureSize(int length) {
+        if (!resizable) return;
         final int position = buffer.position();
         if (position + length >= buffer.limit()) {
             final int newLength = (position + length) * 4;
@@ -235,6 +237,7 @@ public class BinaryWriter extends OutputStream {
      * @param bytes the byte array to write
      */
     public void writeBytes(byte @NotNull [] bytes) {
+        if (bytes.length == 0) return;
         ensureSize(bytes.length);
         buffer.put(bytes);
     }

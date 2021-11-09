@@ -3,8 +3,10 @@ package net.minestom.server;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -35,8 +37,7 @@ public interface Viewable {
      *
      * @return A Set containing all the element's viewers
      */
-    @NotNull
-    Set<Player> getViewers();
+    @NotNull Set<@NotNull Player> getViewers();
 
     /**
      * Gets if a player is seeing this viewable object.
@@ -58,6 +59,13 @@ public interface Viewable {
      */
     default void sendPacketToViewers(@NotNull ServerPacket packet) {
         PacketUtils.sendGroupedPacket(getViewers(), packet);
+    }
+
+    @ApiStatus.Experimental
+    default void sendPacketToViewers(@NotNull FramedPacket framedPacket) {
+        for (Player viewer : getViewers()) {
+            viewer.sendPacket(framedPacket);
+        }
     }
 
     /**
@@ -83,6 +91,11 @@ public interface Viewable {
      */
     default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         sendPacketToViewers(packet);
+    }
+
+    @ApiStatus.Experimental
+    default void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
+        sendPacketToViewers(framedPacket);
     }
 
     /**

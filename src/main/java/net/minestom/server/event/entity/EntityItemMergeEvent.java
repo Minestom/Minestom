@@ -3,16 +3,16 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when two {@link ItemEntity} are merging their {@link ItemStack} together to form a sole entity.
  */
-public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
+public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEvent {
 
-    private Entity entity;
+    private final Entity entity;
     private final ItemEntity merged;
     private ItemStack result;
 
@@ -31,9 +31,8 @@ public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
      *
      * @return the source ItemEntity
      */
-    @NotNull
     @Override
-    public ItemEntity getEntity() {
+    public @NotNull ItemEntity getEntity() {
         return (ItemEntity) entity;
     }
 
@@ -44,8 +43,7 @@ public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
      *
      * @return the merged ItemEntity
      */
-    @NotNull
-    public ItemEntity getMerged() {
+    public @NotNull ItemEntity getMerged() {
         return merged;
     }
 
@@ -54,8 +52,7 @@ public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
      *
      * @return the item stack
      */
-    @NotNull
-    public ItemStack getResult() {
+    public @NotNull ItemStack getResult() {
         return result;
     }
 

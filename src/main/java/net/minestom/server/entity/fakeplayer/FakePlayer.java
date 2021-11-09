@@ -2,7 +2,6 @@ package net.minestom.server.entity.fakeplayer;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
@@ -118,9 +117,8 @@ public class FakePlayer extends Player implements NavigableEntity {
     @Override
     public void update(long time) {
         super.update(time);
-
         // Path finding
-        this.navigator.tick(getAttributeValue(Attribute.MOVEMENT_SPEED));
+        this.navigator.tick();
     }
 
     @Override
@@ -131,12 +129,10 @@ public class FakePlayer extends Player implements NavigableEntity {
     }
 
     @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        final boolean result = super.addViewer0(player);
-        if (result) {
-            handleTabList(player.getPlayerConnection());
-        }
-        return result;
+    public void updateNewViewer(@NotNull Player player) {
+        player.getPlayerConnection().sendPacket(getAddPlayerToList());
+        handleTabList(player.getPlayerConnection());
+        super.updateNewViewer(player);
     }
 
     /**

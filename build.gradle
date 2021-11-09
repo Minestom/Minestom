@@ -3,14 +3,14 @@ import org.gradle.internal.os.OperatingSystem
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
-    id 'checkstyle'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
+    //id 'checkstyle'
 }
 
 group 'net.minestom.server'
 version '1.0'
 
-sourceCompatibility = 11
+sourceCompatibility = 17
 project.ext.lwjglVersion = "3.2.3"
 
 switch (OperatingSystem.current()) {
@@ -55,10 +55,10 @@ allprojects {
         }
     }
 
-    checkstyle {
-        toolVersion "8.42"
-        configFile file("${projectDir}/minestom_checks.xml")
-    }
+    //checkstyle {
+    //    toolVersion "8.42"
+    //    configFile file("${projectDir}/minestom_checks.xml")
+    //}
 }
 
 sourceSets {
@@ -100,17 +100,17 @@ tasks.withType(Zip).configureEach {
 
 dependencies {
     // Junit Testing Framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.7.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.1')
 
     // Only here to ensure J9 module support for extensions and our classloaders
-    testCompileOnly 'org.mockito:mockito-core:3.11.1'
+    testCompileOnly 'org.mockito:mockito-core:4.0.0'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
-    api 'it.unimi.dsi:fastutil:8.5.4'
+    api 'it.unimi.dsi:fastutil:8.5.6'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    api 'com.google.code.gson:gson:2.8.7'
+    api 'com.google.code.gson:gson:2.8.9'
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
@@ -126,10 +126,13 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jline/jline-terminal-jansi
     implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.20.0'
 
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
+
+    // https://mvnrepository.com/artifact/com.zaxxer/SparseBitSet
+    implementation group: 'com.zaxxer', name: 'SparseBitSet', version: '1.2'
 
     // Guava 21.0+ required for Mixin
-    api 'com.google.guava:guava:30.1.1-jre'
+    api 'com.google.guava:guava:31.0.1-jre'
 
     // Code modification
     api "org.ow2.asm:asm:${asmVersion}"
@@ -172,7 +175,7 @@ dependencies {
     lwjglApi "org.lwjgl:lwjgl-opengles"
     lwjglApi "org.lwjgl:lwjgl-glfw"
     lwjglApi "org.lwjgl:lwjgl-glfw"
-    lwjglApi 'org.joml:joml:1.9.25'
+    lwjglApi 'org.joml:joml:1.10.2'
     lwjglRuntimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
     lwjglRuntimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     lwjglRuntimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"

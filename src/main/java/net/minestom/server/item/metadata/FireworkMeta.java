@@ -53,9 +53,8 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
 
         public Builder flightDuration(byte flightDuration) {
             this.flightDuration = flightDuration;
-            handleCompound("Fireworks", nbtCompound -> {
-                nbtCompound.setByte("Flight", this.flightDuration);
-            });
+            handleCompound("Fireworks", nbtCompound ->
+                    nbtCompound.setByte("Flight", this.flightDuration));
             return this;
         }
 

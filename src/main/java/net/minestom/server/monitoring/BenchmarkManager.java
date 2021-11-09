@@ -31,8 +31,7 @@ import static net.minestom.server.MinecraftServer.*;
  * Be aware that this is not the most accurate method, you should use a proper java profiler depending on your needs.
  */
 public final class BenchmarkManager {
-
-    public static final ThreadMXBean THREAD_MX_BEAN = ManagementFactory.getThreadMXBean();
+    private static final ThreadMXBean THREAD_MX_BEAN = ManagementFactory.getThreadMXBean();
     private static final List<String> THREADS = new ArrayList<>();
 
     static {
@@ -46,12 +45,10 @@ public final class BenchmarkManager {
     private final Long2LongMap lastUserTimeMap = new Long2LongOpenHashMap();
     private final Long2LongMap lastWaitedMap = new Long2LongOpenHashMap();
     private final Long2LongMap lastBlockedMap = new Long2LongOpenHashMap();
-
     private final Map<String, ThreadResult> resultMap = new ConcurrentHashMap<>();
 
     private boolean enabled = false;
     private volatile boolean stop = false;
-
     private long time;
 
     public void enable(@NotNull Duration duration) {
@@ -96,13 +93,11 @@ public final class BenchmarkManager {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
-    @NotNull
-    public Map<String, ThreadResult> getResultMap() {
+    public @NotNull Map<String, ThreadResult> getResultMap() {
         return Collections.unmodifiableMap(resultMap);
     }
 
-    @NotNull
-    public Component getCpuMonitoringMessage() {
+    public @NotNull Component getCpuMonitoringMessage() {
         Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
         TextComponent.Builder benchmarkMessage = Component.text();
         for (var resultEntry : resultMap.entrySet()) {
@@ -121,23 +116,15 @@ public final class BenchmarkManager {
             benchmarkMessage.append(Component.text("% WAITED ", NamedTextColor.GREEN));
             benchmarkMessage.append(Component.newline());
         }
-
         return benchmarkMessage.build();
     }
 
     private void refreshData() {
         ThreadInfo[] threadInfo = THREAD_MX_BEAN.getThreadInfo(THREAD_MX_BEAN.getAllThreadIds());
         for (ThreadInfo threadInfo2 : threadInfo) {
+            if (threadInfo2 == null) continue; // Can happen if the thread does not exist
             final String name = threadInfo2.getThreadName();
-            boolean shouldBenchmark = false;
-            for (String thread : THREADS) {
-                if (name.startsWith(thread)) {
-                    shouldBenchmark = true;
-                    break;
-                }
-            }
-            if (!shouldBenchmark)
-                continue;
+            if (THREADS.stream().noneMatch(name::startsWith)) continue;
 
             final long id = threadInfo2.getThreadId();
 

@@ -8,8 +8,8 @@ import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandl
 import net.minestom.server.network.packet.client.handler.ClientPlayPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.Readable;
 import org.jetbrains.annotations.NotNull;
@@ -59,23 +59,23 @@ public final class PacketProcessor {
             return;
         }
         switch (connectionState) {
-            case PLAY:
+            case PLAY -> {
                 final Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, playPacket, binaryReader);
                 assert player != null;
                 player.addPacketToQueue(playPacket);
-                break;
-            case LOGIN:
+            }
+            case LOGIN -> {
                 final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, loginPacket, binaryReader);
                 loginPacket.process(playerConnection);
-                break;
-            case STATUS:
+            }
+            case STATUS -> {
                 final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, statusPacket, binaryReader);
                 statusPacket.process(playerConnection);
-                break;
+            }
         }
     }
 

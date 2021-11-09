@@ -23,8 +23,7 @@ import java.util.function.Predicate;
  *
  * @param <T> The event type accepted by this node
  */
-@ApiStatus.NonExtendable
-public interface EventNode<T extends Event> {
+public sealed interface EventNode<T extends Event> permits EventNodeImpl {
 
     /**
      * Creates an event node which accepts any event type with no filtering.
@@ -182,15 +181,24 @@ public interface EventNode<T extends Event> {
     }
 
     /**
-     * Executes the given event on this node. The event must pass all conditions before
-     * it will be forwarded to the listeners.
-     * <p>
-     * Calling an event on a node will execute all child nodes, however, an event may be
-     * called anywhere on the event graph and it will propagate down from there only.
+     * Calls an event starting from this node.
      *
-     * @param event the event to execute
+     * @param event the event to call
      */
-    void call(@NotNull T event);
+    default void call(@NotNull T event) {
+        //noinspection unchecked
+        getHandle((Class<T>) event.getClass()).call(event);
+    }
+
+    /**
+     * Gets the handle of an event type.
+     *
+     * @param handleType the handle type
+     * @param <E>        the event type
+     * @return the handle linked to {@code handleType}
+     */
+    @ApiStatus.Experimental
+    <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
 
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.
@@ -287,7 +295,9 @@ public interface EventNode<T extends Event> {
      *
      * @param name The node name to filter for
      */
-    void removeChildren(@NotNull String name);
+    default void removeChildren(@NotNull String name) {
+        removeChildren(name, getEventType());
+    }
 
     /**
      * Directly adds a child node to this node.
@@ -318,9 +328,24 @@ public interface EventNode<T extends Event> {
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
 
+    /**
+     * Maps a specific object to a node.
+     * <p>
+     * Be aware that such structure have huge performance penalty as they will
+     * always require a map lookup. Use only at last resort.
+     *
+     * @param node  the node to map
+     * @param value the mapped value
+     */
     @ApiStatus.Experimental
     void map(@NotNull EventNode<? extends T> node, @NotNull Object value);
 
+    /**
+     * Undo {@link #map(EventNode, Object)}
+     *
+     * @param value the value to unmap
+     * @return true if the value has been unmapped, false if nothing happened
+     */
     @ApiStatus.Experimental
     boolean unmap(@NotNull Object value);
 

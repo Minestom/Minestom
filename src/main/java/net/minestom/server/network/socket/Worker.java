@@ -1,13 +1,16 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -17,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
 @ApiStatus.Internal
-public final class Worker extends Thread {
+public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
     final Selector selector = Selector.open();
@@ -27,7 +30,7 @@ public final class Worker extends Thread {
     private final PacketProcessor packetProcessor;
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
-        super(null, null, "Ms-worker-" + COUNTER.getAndIncrement());
+        super("Ms-worker-" + COUNTER.getAndIncrement());
         this.server = server;
         this.packetProcessor = packetProcessor;
     }
@@ -40,9 +43,9 @@ public final class Worker extends Thread {
                     final SocketChannel channel = (SocketChannel) key.channel();
                     if (!channel.isOpen()) return;
                     if (!key.isReadable()) return;
-                    var connection = connectionMap.get(channel);
+                    PlayerSocketConnection connection = connectionMap.get(channel);
                     try {
-                        var readBuffer = context.readBuffer;
+                        BinaryBuffer readBuffer = context.readBuffer.clear();
                         // Consume last incomplete packet
                         connection.consumeCache(readBuffer);
                         // Read & process
@@ -51,11 +54,12 @@ public final class Worker extends Thread {
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
-                    } finally {
-                        context.clearBuffers();
+                    } catch (IllegalArgumentException e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                        connection.disconnect();
                     }
                 });
-            } catch (IOException e) {
+            } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }
@@ -68,8 +72,8 @@ public final class Worker extends Thread {
             MinecraftServer.getConnectionManager().removePlayer(connection);
             connection.refreshOnline(false);
             Player player = connection.getPlayer();
-            if (player != null) {
-                player.remove();
+            if (player != null && !player.isRemoved()) {
+                player.scheduleNextTick(Entity::remove);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,10 +84,11 @@ public final class Worker extends Thread {
         this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
-        var socket = channel.socket();
-        socket.setSendBufferSize(Server.SOCKET_BUFFER_SIZE);
-        socket.setReceiveBufferSize(Server.SOCKET_BUFFER_SIZE);
+        Socket socket = channel.socket();
+        socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
+        socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
         socket.setTcpNoDelay(Server.NO_DELAY);
+        socket.setSoTimeout(30 * 1000); // 30 seconds
         this.selector.wakeup();
     }
 
@@ -91,13 +96,8 @@ public final class Worker extends Thread {
      * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
      */
     public static final class Context {
-        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
+        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final Inflater inflater = new Inflater();
-
-        void clearBuffers() {
-            this.readBuffer.clear();
-            this.contentBuffer.clear();
-        }
     }
 }

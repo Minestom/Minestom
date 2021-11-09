@@ -1,8 +1,8 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +60,7 @@ public interface IChunkLoader {
      */
     default @NotNull CompletableFuture<Void> saveChunks(@NotNull Collection<Chunk> chunks) {
         if (supportsParallelSaving()) {
-            ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
+            ExecutorService parallelSavingThreadPool = new MinestomThreadPool(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             chunks.forEach(c -> parallelSavingThreadPool.execute(() -> saveChunk(c)));
             try {
                 parallelSavingThreadPool.shutdown();

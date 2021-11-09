@@ -321,8 +321,7 @@ public class ExtensionManager {
      *
      * @return A list of discovered extensions from this folder.
      */
-    @NotNull
-    private List<DiscoveredExtension> discoverExtensions() {
+    private @NotNull List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
 
         File[] fileList = extensionFolder.listFiles();
@@ -378,9 +377,8 @@ public class ExtensionManager {
      * @param file The jar to grab it from (a .jar is a formatted .zip file)
      * @return The created DiscoveredExtension.
      */
-    @Nullable
-    private DiscoveredExtension discoverFromJar(@NotNull File file) {
-        try (ZipFile f = new ZipFile(file);) {
+    private @Nullable DiscoveredExtension discoverFromJar(@NotNull File file) {
+        try (ZipFile f = new ZipFile(file)) {
 
             ZipEntry entry = f.getEntry("extension.json");
 
@@ -623,13 +621,12 @@ public class ExtensionManager {
      */
     private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
         final ClassLoader cl = getClass().getClassLoader();
-        if (!(cl instanceof MinestomRootClassLoader)) {
+        if (!(cl instanceof MinestomRootClassLoader modifiableClassLoader)) {
             LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. " +
                     "This disables code modifiers (Mixin support is therefore disabled). " +
                     "This can be fixed by starting your server using Bootstrap#bootstrap (optional).", cl);
             return;
         }
-        MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
         setupCodeModifiers(extensions, modifiableClassLoader);
     }
 

@@ -2,10 +2,12 @@ package net.minestom.server.listener;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,9 +33,9 @@ public class PlayerPositionListener {
         player.refreshReceivedTeleportId(packet.teleportId);
     }
 
-    private static void processMovement(@NotNull Player player, @NotNull Pos newPosition, boolean onGround) {
+    private static void processMovement(@NotNull Player player, @NotNull Pos packetPosition, boolean onGround) {
         final var currentPosition = player.getPosition();
-        if (currentPosition.equals(newPosition)) {
+        if (currentPosition.equals(packetPosition)) {
             // For some reason, the position is the same
             return;
         }
@@ -47,21 +49,37 @@ public class PlayerPositionListener {
             return;
         }
         // Try to move in an unloaded chunk, prevent it
-        if (!currentPosition.sameChunk(newPosition) && !ChunkUtils.isLoaded(instance, newPosition)) {
+        if (!currentPosition.sameChunk(packetPosition) && !ChunkUtils.isLoaded(instance, packetPosition)) {
             player.teleport(currentPosition);
             return;
         }
 
-        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
-        EventDispatcher.call(playerMoveEvent);
-        // True if the event call changed the player position (possibly a teleport)
-        if (!playerMoveEvent.isCancelled() && currentPosition.equals(player.getPosition())) {
-            // Move the player
-            player.refreshPosition(playerMoveEvent.getNewPosition());
+        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, packetPosition);
+        GlobalHandles.PLAYER_MOVE.call(playerMoveEvent);
+        if (!currentPosition.equals(player.getPosition())) {
+            // Player has been teleported in the event
+            return;
+        }
+        if (playerMoveEvent.isCancelled()) {
+            // Teleport to previous position
+            PlayerConnection connection = player.getPlayerConnection();
+            connection.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId(), false));
+            return;
+        }
+        final Pos eventPosition = playerMoveEvent.getNewPosition();
+        if (packetPosition.equals(eventPosition)) {
+            // Event didn't change the position
+            player.refreshPosition(eventPosition);
             player.refreshOnGround(onGround);
         } else {
-            // Cancelled, teleport to previous position
-            player.teleport(player.getPosition());
+            // Position modified by the event
+            if (packetPosition.samePoint(eventPosition)) {
+                player.refreshPosition(eventPosition, true);
+                player.refreshOnGround(onGround);
+                player.setView(eventPosition.yaw(), eventPosition.pitch());
+            } else {
+                player.teleport(eventPosition);
+            }
         }
     }
 }

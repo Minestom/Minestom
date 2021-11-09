@@ -1,10 +1,11 @@
 package net.minestom.server.network.socket;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -14,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Server {
-    public static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
-            Runtime.getRuntime().availableProcessors());
-    public static final int SOCKET_BUFFER_SIZE = Integer.getInteger("minestom.buffer-size", 262_143);
-    public static final int MAX_PACKET_SIZE = 2_097_151; // 3 bytes var-int
+            Math.max(1, Runtime.getRuntime().availableProcessors() / 2));
+    public static final int MAX_PACKET_SIZE = Integer.getInteger("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
+    public static final int SOCKET_SEND_BUFFER_SIZE = Integer.getInteger("minestom.send-buffer-size", 262_143);
+    public static final int SOCKET_RECEIVE_BUFFER_SIZE = Integer.getInteger("minestom.receive-buffer-size", 32_767);
+
     public static final boolean NO_DELAY = true;
 
     private volatile boolean stop;
@@ -40,13 +42,22 @@ public final class Server {
         }
     }
 
-    public void start(SocketAddress address) throws IOException {
-        this.serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(address);
-        serverSocket.configureBlocking(false);
-        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-        serverSocket.socket().setReceiveBufferSize(SOCKET_BUFFER_SIZE);
-        LOGGER.info("Server starting, wait for connections");
+    @ApiStatus.Internal
+    public void init(SocketAddress address) throws IOException {
+        if (address instanceof InetSocketAddress inetSocketAddress) {
+            this.address = inetSocketAddress.getHostString();
+            this.port = inetSocketAddress.getPort();
+        } // TODO unix domain support
+
+        ServerSocketChannel server = ServerSocketChannel.open();
+        server.bind(address);
+        server.configureBlocking(false);
+        server.register(selector, SelectionKey.OP_ACCEPT);
+        this.serverSocket = server;
+    }
+
+    @ApiStatus.Internal
+    public void start() {
         new Thread(() -> {
             while (!stop) {
                 // Busy wait for connections
@@ -63,7 +74,7 @@ public final class Server {
                         }
                     });
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
         }, "Ms-entrypoint").start();

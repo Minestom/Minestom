@@ -55,11 +55,10 @@ public enum ChatPosition {
      * @return the position
      */
     public static @NotNull ChatPosition fromMessageType(@NotNull MessageType messageType) {
-        switch (messageType) {
-            case CHAT: return CHAT;
-            case SYSTEM: return SYSTEM_MESSAGE;
-        }
-        throw new IllegalArgumentException("Cannot get position from message type!");
+        return switch (messageType) {
+            case CHAT -> CHAT;
+            case SYSTEM -> SYSTEM_MESSAGE;
+        };
     }
 
     /**
@@ -69,11 +68,11 @@ public enum ChatPosition {
      * @return the chat position
      */
     public static @NotNull ChatPosition fromPacketID(byte id) {
-        switch (id) {
-            case 0: return CHAT;
-            case 1: return SYSTEM_MESSAGE;
-            case 2: return GAME_INFO;
-            default: throw new IllegalArgumentException("id must be between 0-2 (inclusive)");
-        }
+        return switch (id) {
+            case 0 -> CHAT;
+            case 1 -> SYSTEM_MESSAGE;
+            case 2 -> GAME_INFO;
+            default -> throw new IllegalArgumentException("id must be between 0-2 (inclusive)");
+        };
     }
 }

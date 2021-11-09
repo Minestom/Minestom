@@ -81,7 +81,7 @@ public final class CommandManager {
     }
 
     /**
-     * Gets if a command with the name {@code commandName} already exists or name.
+     * Gets if a command with the name {@code commandName} already exists or not.
      *
      * @param commandName the command name to check
      * @return true if the command does exist
@@ -92,29 +92,23 @@ public final class CommandManager {
     }
 
     /**
-     * Executes a command for a {@link ConsoleSender}.
+     * Executes a command for a {@link CommandSender}.
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
      * @return the execution result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
-
         // Command event
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
+        if (sender instanceof Player player) {
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
             EventDispatcher.call(playerCommandEvent);
-
             if (playerCommandEvent.isCancelled())
                 return CommandResult.of(CommandResult.Type.CANCELLED, command);
-
             command = playerCommandEvent.getCommand();
         }
-
         // Process the command
-        final var result = dispatcher.execute(sender, command);
+        final CommandResult result = dispatcher.execute(sender, command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
@@ -124,8 +118,8 @@ public final class CommandManager {
     }
 
     /**
-     * Executes the command using a {@link ServerSender} to do not
-     * print the command messages, and rely instead on the command return data.
+     * Executes the command using a {@link ServerSender}. This can be used
+     * to run a silent command (nothing is printed to console).
      *
      * @see #execute(CommandSender, String)
      */
@@ -440,8 +434,7 @@ public final class CommandManager {
         return literalNode;
     }
 
-    @NotNull
-    private DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
+    private @NotNull DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
         literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, false, false);
         literalNode.name = name;

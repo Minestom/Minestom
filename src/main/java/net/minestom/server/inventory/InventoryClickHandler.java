@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * See https://wiki.vg/Protocol#Click_Window for more information.
  */
-public interface InventoryClickHandler {
+public sealed interface InventoryClickHandler permits AbstractInventory {
 
     /**
      * Called when a {@link Player} left click in the inventory. Can also be to drop the cursor item
@@ -78,8 +78,6 @@ public interface InventoryClickHandler {
 
     default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
-        EventDispatcher.call(inventoryClickEvent);
+        EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }
-
 }

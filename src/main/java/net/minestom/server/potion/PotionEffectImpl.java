@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-final class PotionEffectImpl implements PotionEffect {
+record PotionEffectImpl(Registry.PotionEffectEntry registry) implements PotionEffect {
     private static final Registry.Container<PotionEffect> CONTAINER = new Registry.Container<>(Registry.Resource.POTION_EFFECTS,
             (container, namespace, object) -> container.register(new PotionEffectImpl(Registry.potionEffect(namespace, object, null))));
 
@@ -23,17 +23,6 @@ final class PotionEffectImpl implements PotionEffect {
 
     static Collection<PotionEffect> values() {
         return CONTAINER.values();
-    }
-
-    private final Registry.PotionEffectEntry registry;
-
-    PotionEffectImpl(Registry.PotionEffectEntry registry) {
-        this.registry = registry;
-    }
-
-    @Override
-    public @NotNull Registry.PotionEffectEntry registry() {
-        return registry;
     }
 
     @Override

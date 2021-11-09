@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,17 +85,17 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Contract(pure = true)
     public @NotNull List<@NotNull Component> getLore() {
-        return Collections.unmodifiableList(lore);
+        return lore;
     }
 
     @Contract(pure = true)
     public @NotNull Map<Enchantment, Short> getEnchantmentMap() {
-        return Collections.unmodifiableMap(enchantmentMap);
+        return enchantmentMap;
     }
 
     @Contract(pure = true)
     public @NotNull List<@NotNull ItemAttribute> getAttributes() {
-        return Collections.unmodifiableList(attributes);
+        return attributes;
     }
 
     @Contract(pure = true)
@@ -106,12 +105,12 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Contract(pure = true)
     public @NotNull Set<@NotNull Block> getCanDestroy() {
-        return Collections.unmodifiableSet(canDestroy);
+        return canDestroy;
     }
 
     @Contract(pure = true)
     public @NotNull Set<@NotNull Block> getCanPlaceOn() {
-        return Collections.unmodifiableSet(canPlaceOn);
+        return canPlaceOn;
     }
 
     @Override

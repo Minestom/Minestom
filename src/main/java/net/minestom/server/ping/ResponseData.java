@@ -11,7 +11,6 @@ import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Represents the data sent to the player when responding to a ping event.
@@ -197,8 +196,7 @@ public class ResponseData {
     @Deprecated(forRemoval = true) // to throw an error for people using it - this method is *horrible*
     public List<PingPlayer> getPlayers() {
         return this.entries.stream()
-                .map(entry -> PingPlayer.of(PlainComponentSerializer.plain().serialize(entry.getName()), entry.getUuid()))
-                .collect(Collectors.toUnmodifiableList());
+                .map(entry -> PingPlayer.of(PlainComponentSerializer.plain().serialize(entry.getName()), entry.getUuid())).toList();
     }
 
     /**
@@ -328,6 +326,7 @@ public class ResponseData {
 
     /**
      * Represents a player line in the server list hover.
+     *
      * @deprecated See {@link NamedAndIdentified}
      */
     @Deprecated

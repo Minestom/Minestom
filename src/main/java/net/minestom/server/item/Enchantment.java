@@ -3,15 +3,13 @@ package net.minestom.server.item;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@ApiStatus.NonExtendable
-public interface Enchantment extends ProtocolObject, EnchantmentConstants {
+public sealed interface Enchantment extends ProtocolObject, Enchantments permits EnchantmentImpl {
 
     /**
      * Returns the enchantment registry.

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
@@ -18,13 +19,42 @@ public class BoundingBox {
     private final Entity entity;
     private final double x, y, z;
 
-    private volatile Pos lastPosition;
-    private List<Vec> bottomFace;
-    private List<Vec> topFace;
-    private List<Vec> leftFace;
-    private List<Vec> rightFace;
-    private List<Vec> frontFace;
-    private List<Vec> backFace;
+    private final CachedFace bottomFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMinY(), getMaxZ()),
+            new Vec(getMinX(), getMinY(), getMaxZ())
+    ));
+    private final CachedFace topFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMaxY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMaxZ()),
+            new Vec(getMinX(), getMaxY(), getMaxZ())
+    ));
+    private final CachedFace leftFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMinZ()),
+            new Vec(getMinX(), getMaxY(), getMinZ()),
+            new Vec(getMinX(), getMaxY(), getMaxZ()),
+            new Vec(getMinX(), getMinY(), getMaxZ())
+    ));
+    private final CachedFace rightFace = new CachedFace(() -> List.of(
+            new Vec(getMaxX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMaxZ()),
+            new Vec(getMaxX(), getMinY(), getMaxZ())
+    ));
+    private final CachedFace frontFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMinY(), getMinZ()),
+            new Vec(getMaxX(), getMaxY(), getMinZ()),
+            new Vec(getMinX(), getMaxY(), getMinZ())
+    ));
+    private final CachedFace backFace = new CachedFace(() -> List.of(
+            new Vec(getMinX(), getMinY(), getMaxZ()),
+            new Vec(getMaxX(), getMinY(), getMaxZ()),
+            new Vec(getMaxX(), getMaxY(), getMaxZ()),
+            new Vec(getMinX(), getMaxY(), getMaxZ())
+    ));
 
     /**
      * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.
@@ -74,20 +104,15 @@ public class BoundingBox {
     public boolean intersectWithBlock(int blockX, int blockY, int blockZ) {
         final double offsetX = 1;
         final double maxX = (double) blockX + offsetX;
-
         final boolean checkX = getMinX() < maxX && getMaxX() > (double) blockX;
-        if (!checkX)
-            return false;
+        if (!checkX) return false;
 
         final double maxY = (double) blockY + 0.99999;
-
         final boolean checkY = getMinY() < maxY && getMaxY() > (double) blockY;
-        if (!checkY)
-            return false;
+        if (!checkY) return false;
 
         final double offsetZ = 1;
         final double maxZ = (double) blockZ + offsetZ;
-
         // Z check
         return getMinZ() < maxZ && getMaxZ() > (double) blockZ;
     }
@@ -102,14 +127,104 @@ public class BoundingBox {
         return intersectWithBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
     }
 
+    /**
+     * Used to know if the bounding box intersects (contains) a point.
+     *
+     * @param x x-coord of a point
+     * @param y y-coord of a point
+     * @param z z-coord of a point
+     * @return true if the bounding box intersects (contains) with the point, false otherwise
+     */
     public boolean intersect(double x, double y, double z) {
         return (x >= getMinX() && x <= getMaxX()) &&
                 (y >= getMinY() && y <= getMaxY()) &&
                 (z >= getMinZ() && z <= getMaxZ());
     }
 
+    /**
+     * Used to know if the bounding box intersects (contains) a point.
+     *
+     * @param point the point to check
+     * @return true if the bounding box intersects (contains) with the point, false otherwise
+     */
     public boolean intersect(@NotNull Point point) {
         return intersect(point.x(), point.y(), point.z());
+    }
+
+    /**
+     * Used to know if the bounding box intersects a line segment.
+     *
+     * @param x1 x-coord of first line segment point
+     * @param y1 y-coord of first line segment point
+     * @param z1 z-coord of first line segment point
+     * @param x2 x-coord of second line segment point
+     * @param y2 y-coord of second line segment point
+     * @param z2 z-coord of second line segment point
+     * @return true if the bounding box intersects with the line segment, false otherwise.
+     */
+    public boolean intersect(double x1, double y1, double z1, double x2, double y2, double z2) {
+        // originally from http://www.3dkingdoms.com/weekly/weekly.php?a=3
+        double x3 = getMinX();
+        double x4 = getMaxX();
+        double y3 = getMinY();
+        double y4 = getMaxY();
+        double z3 = getMinZ();
+        double z4 = getMaxZ();
+        if (x1 > x3 && x1 < x4 && y1 > y3 && y1 < y4 && z1 > z3 && z1 < z4) {
+            return true;
+        }
+        if (x1 < x3 && x2 < x3 || x1 > x4 && x2 > x4 ||
+                y1 < y3 && y2 < y3 || y1 > y4 && y2 > y4 ||
+                z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
+            return false;
+        }
+        return isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x4, x2 - x4, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y3, y2 - y3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y4, y2 - y4, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z3, z2 - z3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z4, z2 - z4, x1, y1, z1, x2, y2, z2));
+    }
+
+    /**
+     * Used to know if the bounding box intersects a line segment.
+     *
+     * @param start first line segment point
+     * @param end   second line segment point
+     * @return true if the bounding box intersects with the line segment, false otherwise.
+     */
+    public boolean intersect(@NotNull Point start, @NotNull Point end) {
+        return intersect(
+                Math.min(start.x(), end.x()),
+                Math.min(start.y(), end.y()),
+                Math.min(start.z(), end.z()),
+                Math.max(start.x(), end.x()),
+                Math.max(start.y(), end.y()),
+                Math.max(start.z(), end.z())
+        );
+    }
+
+    private @Nullable Vec getSegmentIntersection(double dst1, double dst2, double x1, double y1, double z1, double x2, double y2, double z2) {
+        if (dst1 == dst2 || dst1 * dst2 >= 0D) return null;
+        final double delta = dst1 / (dst1 - dst2);
+        return new Vec(
+                x1 + (x2 - x1) * delta,
+                y1 + (y2 - y1) * delta,
+                z1 + (z2 - z1) * delta
+        );
+    }
+
+    private boolean isInsideBoxWithAxis(Axis axis, @Nullable Vec intersection) {
+        if (intersection == null) return false;
+        double x1 = getMinX();
+        double x2 = getMaxX();
+        double y1 = getMinY();
+        double y2 = getMaxY();
+        double z1 = getMinZ();
+        double z2 = getMaxZ();
+        return axis == Axis.X && intersection.z() > z1 && intersection.z() < z2 && intersection.y() > y1 && intersection.y() < y2 ||
+                axis == Axis.Y && intersection.z() > z1 && intersection.z() < z2 && intersection.x() > x1 && intersection.x() < x2 ||
+                axis == Axis.Z && intersection.x() > x1 && intersection.x() < x2 && intersection.y() > y1 && intersection.y() < y2;
     }
 
     /**
@@ -120,8 +235,7 @@ public class BoundingBox {
      * @param z the Z offset
      * @return a new {@link BoundingBox} expanded
      */
-    @NotNull
-    public BoundingBox expand(double x, double y, double z) {
+    public @NotNull BoundingBox expand(double x, double y, double z) {
         return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
     }
 
@@ -133,8 +247,7 @@ public class BoundingBox {
      * @param z the Z offset
      * @return a new bounding box contracted
      */
-    @NotNull
-    public BoundingBox contract(double x, double y, double z) {
+    public @NotNull BoundingBox contract(double x, double y, double z) {
         return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
 
@@ -225,12 +338,7 @@ public class BoundingBox {
      * @return the points at the bottom of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getBottomFace() {
-        this.bottomFace = get(bottomFace, () ->
-                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMinY(), getMaxZ()),
-                        new Vec(getMinX(), getMinY(), getMaxZ())));
-        return bottomFace;
+        return bottomFace.get();
     }
 
     /**
@@ -239,12 +347,7 @@ public class BoundingBox {
      * @return the points at the top of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getTopFace() {
-        this.topFace = get(topFace, () ->
-                List.of(new Vec(getMinX(), getMaxY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                        new Vec(getMinX(), getMaxY(), getMaxZ())));
-        return topFace;
+        return topFace.get();
     }
 
     /**
@@ -253,12 +356,7 @@ public class BoundingBox {
      * @return the points on the left face of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getLeftFace() {
-        this.leftFace = get(leftFace, () ->
-                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
-                        new Vec(getMinX(), getMaxY(), getMinZ()),
-                        new Vec(getMinX(), getMaxY(), getMaxZ()),
-                        new Vec(getMinX(), getMinY(), getMaxZ())));
-        return leftFace;
+        return leftFace.get();
     }
 
     /**
@@ -267,12 +365,7 @@ public class BoundingBox {
      * @return the points on the right face of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getRightFace() {
-        this.rightFace = get(rightFace, () ->
-                List.of(new Vec(getMaxX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                        new Vec(getMaxX(), getMinY(), getMaxZ())));
-        return rightFace;
+        return rightFace.get();
     }
 
     /**
@@ -281,12 +374,7 @@ public class BoundingBox {
      * @return the points at the front of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getFrontFace() {
-        this.frontFace = get(frontFace, () ->
-                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMinY(), getMinZ()),
-                        new Vec(getMaxX(), getMaxY(), getMinZ()),
-                        new Vec(getMinX(), getMaxY(), getMinZ())));
-        return frontFace;
+        return frontFace.get();
     }
 
     /**
@@ -295,12 +383,7 @@ public class BoundingBox {
      * @return the points at the back of the {@link BoundingBox}
      */
     public @NotNull List<Vec> getBackFace() {
-        this.backFace = get(backFace, () -> List.of(
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ())));
-        return backFace;
+        return backFace.get();
     }
 
     @Override
@@ -315,13 +398,37 @@ public class BoundingBox {
         return result;
     }
 
-    private @NotNull List<Vec> get(@Nullable List<Vec> face, Supplier<? extends List<Vec>> vecSupplier) {
-        final var lastPos = this.lastPosition;
-        final var entityPos = entity.getPosition();
-        if (face != null && lastPos != null && lastPos.samePoint(entityPos)) {
-            return face;
+    private enum Axis {
+        X, Y, Z
+    }
+
+    private final class CachedFace {
+        private final AtomicReference<@Nullable PositionedPoints> reference = new AtomicReference<>(null);
+        private final Supplier<@NotNull List<Vec>> faceProducer;
+
+        private CachedFace(Supplier<@NotNull List<Vec>> faceProducer) {
+            this.faceProducer = faceProducer;
         }
-        this.lastPosition = entityPos;
-        return vecSupplier.get();
+
+        @NotNull List<Vec> get() {
+            //noinspection ConstantConditions
+            return reference.updateAndGet(value -> {
+                Pos entityPosition = entity.getPosition();
+                if (value == null || !value.lastPosition.samePoint(entityPosition)) {
+                    return new PositionedPoints(entityPosition, faceProducer.get());
+                }
+                return value;
+            }).points;
+        }
+    }
+
+    private static final class PositionedPoints {
+        private final @NotNull Pos lastPosition;
+        private final @NotNull List<Vec> points;
+
+        private PositionedPoints(@NotNull Pos lastPosition, @NotNull List<Vec> points) {
+            this.lastPosition = lastPosition;
+            this.points = points;
+        }
     }
 }

@@ -23,20 +23,13 @@ public enum BlockFace {
 
     @NotNull
     public BlockFace getOppositeFace() {
-        switch(this) {
-        case BOTTOM:
-            return TOP;
-        case TOP:
-            return BOTTOM;
-        case NORTH:
-            return SOUTH;
-        case SOUTH:
-            return NORTH;
-        case WEST:
-            return EAST;
-        case EAST:
-            return WEST;
-        }
-        return null;
+        return switch (this) {
+            case BOTTOM -> TOP;
+            case TOP -> BOTTOM;
+            case NORTH -> SOUTH;
+            case SOUTH -> NORTH;
+            case WEST -> EAST;
+            case EAST -> WEST;
+        };
     }
 }

@@ -1,19 +1,14 @@
 package net.minestom.server.acquirable;
 
-import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
-class AcquirableImpl<T> implements Acquirable<T> {
-
-    protected static final ThreadLocal<Collection<ThreadProvider.ChunkEntry>> ENTRIES = ThreadLocal.withInitial(Collections::emptySet);
-    protected static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
+final class AcquirableImpl<T> implements Acquirable<T> {
+    static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
 
     /**
      * Global lock used for synchronization.
@@ -38,41 +33,37 @@ class AcquirableImpl<T> implements Acquirable<T> {
         return handler;
     }
 
-    protected static @Nullable ReentrantLock enter(@Nullable Thread currentThread, @Nullable TickThread elementThread) {
-        // Monitoring
-        long time = System.nanoTime();
-
-        ReentrantLock currentLock;
-        {
-            final TickThread current = currentThread instanceof TickThread ?
-                    (TickThread) currentThread : null;
-            currentLock = current != null && current.getLock().isHeldByCurrentThread() ?
-                    current.getLock() : null;
-        }
-        if (currentLock != null)
-            currentLock.unlock();
-
-        GLOBAL_LOCK.lock();
-
-        if (currentLock != null)
-            currentLock.lock();
-
-        final var lock = elementThread != null ? elementThread.getLock() : null;
-        final boolean acquired = lock == null || lock.isHeldByCurrentThread();
-        if (!acquired) {
-            lock.lock();
-        }
+    static @Nullable ReentrantLock enter(@NotNull Thread currentThread, @Nullable TickThread elementThread) {
+        if (elementThread == null) return null;
+        if (currentThread == elementThread) return null;
+        final ReentrantLock currentLock = currentThread instanceof TickThread ? ((TickThread) currentThread).lock() : null;
+        final ReentrantLock targetLock = elementThread.lock();
+        if (targetLock.isHeldByCurrentThread()) return null;
 
         // Monitoring
-        AcquirableImpl.WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
+        final long time = System.nanoTime();
 
-        return !acquired ? lock : null;
+        // Enter the target thread
+        // TODO reduce global lock scope
+        if (currentLock != null) {
+            while (!GLOBAL_LOCK.tryLock()) {
+                currentLock.unlock();
+                currentLock.lock();
+            }
+        } else {
+            GLOBAL_LOCK.lock();
+        }
+        targetLock.lock();
+
+        // Monitoring
+        WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
+        return targetLock;
     }
 
-    protected static void leave(@Nullable ReentrantLock lock) {
+    static void leave(@Nullable ReentrantLock lock) {
         if (lock != null) {
             lock.unlock();
+            GLOBAL_LOCK.unlock();
         }
-        GLOBAL_LOCK.unlock();
     }
 }

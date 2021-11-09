@@ -1,11 +1,11 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.potion.Potion;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityPotionAddEvent implements EntityEvent {
+public class EntityPotionAddEvent implements EntityInstanceEvent {
 
     private final Entity entity;
     private final Potion potion;

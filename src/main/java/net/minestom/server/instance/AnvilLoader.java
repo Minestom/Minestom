@@ -139,8 +139,16 @@ public class AnvilLoader implements IChunkLoader {
                     for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                         try {
                             final BlockState blockState = section.get(x, y, z);
-                            final Block block = Objects.requireNonNull(Block.fromNamespaceId(blockState.getName()))
-                                    .withProperties(blockState.getProperties());
+                            final String blockName = blockState.getName();
+                            if (blockName.equals("minecraft:air")) continue;
+                            Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName));
+                            // Properties
+                            final Map<String, String> properties = blockState.getProperties();
+                            if (!properties.isEmpty()) block = block.withProperties(properties);
+                            // Handler
+                            final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
+                            if (handler != null) block = block.withHandler(handler);
+
                             chunk.setBlock(x, y + yOffset, z, block);
                         } catch (Exception e) {
                             EXCEPTION_MANAGER.handleException(e);
@@ -164,11 +172,7 @@ public class AnvilLoader implements IChunkLoader {
 
             final String tileEntityID = te.getString("id");
             if (tileEntityID != null) {
-                var handler = BLOCK_MANAGER.getHandler(tileEntityID);
-                if (handler == null) {
-                    LOGGER.warn("Block {} does not have any corresponding handler, default to dummy.", tileEntityID);
-                    handler = BlockHandler.Dummy.get(tileEntityID);
-                }
+                final BlockHandler handler = BLOCK_MANAGER.getHandlerOrDummy(tileEntityID);
                 block = block.withHandler(handler);
             }
             // Remove anvil tags
@@ -237,6 +241,7 @@ public class AnvilLoader implements IChunkLoader {
         try {
             LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
             mcaFile.writeColumn(column);
+            mcaFile.forget(column);
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);

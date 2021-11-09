@@ -22,10 +22,7 @@ import net.minestom.server.entity.metadata.monster.raider.*;
 import net.minestom.server.entity.metadata.monster.skeleton.SkeletonMeta;
 import net.minestom.server.entity.metadata.monster.skeleton.StrayMeta;
 import net.minestom.server.entity.metadata.monster.skeleton.WitherSkeletonMeta;
-import net.minestom.server.entity.metadata.monster.zombie.DrownedMeta;
-import net.minestom.server.entity.metadata.monster.zombie.ZombieMeta;
-import net.minestom.server.entity.metadata.monster.zombie.ZombieVillagerMeta;
-import net.minestom.server.entity.metadata.monster.zombie.ZombifiedPiglinMeta;
+import net.minestom.server.entity.metadata.monster.zombie.*;
 import net.minestom.server.entity.metadata.other.*;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.entity.metadata.villager.WanderingTraderMeta;
@@ -45,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-final class EntityTypeImpl implements EntityType {
+record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
     private static final Registry.Container<EntityType> CONTAINER = new Registry.Container<>(Registry.Resource.ENTITIES,
             (container, namespace, object) -> container.register(new EntityTypeImpl(Registry.entity(namespace, object, null))));
     private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
@@ -119,6 +116,7 @@ final class EntityTypeImpl implements EntityType {
         supplier.put("minecraft:guardian", GuardianMeta::new);
         supplier.put("minecraft:hoglin", HoglinMeta::new);
         supplier.put("minecraft:horse", HorseMeta::new);
+        supplier.put("minecraft:husk", HuskMeta::new);
         supplier.put("minecraft:illusioner", IllusionerMeta::new);
         supplier.put("minecraft:iron_golem", IronGolemMeta::new);
         supplier.put("minecraft:item", ItemEntityMeta::new);
@@ -242,17 +240,6 @@ final class EntityTypeImpl implements EntityType {
         result.put("minecraft:wither_skull", 0.1);
         result.put("minecraft:dragon_fireball", 0.1);
         return result;
-    }
-
-    private final Registry.EntityEntry registry;
-
-    EntityTypeImpl(Registry.EntityEntry registry) {
-        this.registry = registry;
-    }
-
-    @Override
-    public @NotNull Registry.EntityEntry registry() {
-        return registry;
     }
 
     @Override

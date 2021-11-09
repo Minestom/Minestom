@@ -29,6 +29,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
@@ -104,6 +105,14 @@ public class PlayerInit {
                                         .canDestroy(Set.of(Block.DIAMOND_ORE)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
+
+                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
+                        .meta(BundleMeta.class, bundleMetaBuilder -> {
+                            bundleMetaBuilder.addItem(ItemStack.of(Material.DIAMOND, 5));
+                            bundleMetaBuilder.addItem(ItemStack.of(Material.RABBIT_FOOT, 5));
+                        })
+                        .build();
+                player.getInventory().addItemStack(bundle);
             });
 
     static {

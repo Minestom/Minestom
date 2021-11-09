@@ -7,10 +7,10 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CollisionUtils {
@@ -75,7 +75,7 @@ public class CollisionUtils {
      * @return result of the step
      */
     private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, List<Vec> corners) {
-        final List<Vec> mutableCorners = new ArrayList<>(corners);
+        final Vec[] mutableCorners = corners.toArray(Vec[]::new);
         final double sign = Math.signum(stepAmount);
         final int blockLength = (int) stepAmount;
         final double remainingLength = stepAmount - blockLength;
@@ -94,7 +94,7 @@ public class CollisionUtils {
         // find the corner which moved the least
         double smallestDisplacement = Double.POSITIVE_INFINITY;
         for (int i = 0; i < corners.size(); i++) {
-            final double displacement = corners.get(i).distance(mutableCorners.get(i));
+            final double displacement = corners.get(i).distance(mutableCorners[i]);
             if (displacement < smallestDisplacement) {
                 smallestDisplacement = displacement;
             }
@@ -111,27 +111,27 @@ public class CollisionUtils {
      * @param corners  the corners of the bounding box to consider
      * @return true if found collision
      */
-    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, List<Vec> corners) {
+    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
         final double sign = Math.signum(amount);
-        for (int cornerIndex = 0; cornerIndex < corners.size(); cornerIndex++) {
-            final Vec originalCorner = corners.get(cornerIndex);
+        for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
+            final Vec originalCorner = corners[cornerIndex];
             final Vec newCorner = originalCorner.add(axis.mul(amount));
             final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
                 return true;
             }
-            final Block block = chunk.getBlock(newCorner);
+            final Block block = chunk.getBlock(newCorner, BlockGetter.Condition.TYPE);
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
-            if (block.isSolid()) {
-                corners.set(cornerIndex, new Vec(
+            if (block != null && block.isSolid()) {
+                corners[cornerIndex] = new Vec(
                         Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : originalCorner.x(),
                         Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : originalCorner.y(),
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z()));
+                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z());
                 return true;
             }
-            corners.set(cornerIndex, newCorner);
+            corners[cornerIndex] = newCorner;
         }
         return false;
     }
@@ -148,54 +148,28 @@ public class CollisionUtils {
                                                 @NotNull Pos currentPosition, @NotNull Pos newPosition) {
         final WorldBorder worldBorder = instance.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
-        switch (collisionAxis) {
-            case NONE:
-                // Apply velocity + gravity
-                return newPosition;
-            case BOTH:
-                // Apply Y velocity/gravity
-                return new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
-            case X:
-                // Apply Y/Z velocity/gravity
-                return new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
-            case Z:
-                // Apply X/Y velocity/gravity
-                return new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
-        }
-        throw new IllegalStateException("Something weird happened...");
+        return switch (collisionAxis) {
+            case NONE ->
+                    // Apply velocity + gravity
+                    newPosition;
+            case BOTH ->
+                    // Apply Y velocity/gravity
+                    new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
+            case X ->
+                    // Apply Y/Z velocity/gravity
+                    new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
+            case Z ->
+                    // Apply X/Y velocity/gravity
+                    new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
+        };
     }
 
-    public static class PhysicsResult {
-        private final Pos newPosition;
-        private final Vec newVelocity;
-        private final boolean isOnGround;
-
-        public PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround) {
-            this.newPosition = newPosition;
-            this.newVelocity = newVelocity;
-            this.isOnGround = isOnGround;
-        }
-
-        public Pos newPosition() {
-            return newPosition;
-        }
-
-        public Vec newVelocity() {
-            return newVelocity;
-        }
-
-        public boolean isOnGround() {
-            return isOnGround;
-        }
+    public record PhysicsResult(Pos newPosition,
+                                Vec newVelocity,
+                                boolean isOnGround) {
     }
 
-    private static class StepResult {
-        private final Vec newPosition;
-        private final boolean foundCollision;
-
-        public StepResult(Vec newPosition, boolean foundCollision) {
-            this.newPosition = newPosition;
-            this.foundCollision = foundCollision;
-        }
+    private record StepResult(Vec newPosition,
+                              boolean foundCollision) {
     }
 }

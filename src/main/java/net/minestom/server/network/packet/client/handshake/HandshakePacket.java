@@ -61,9 +61,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     public void process(@NotNull PlayerConnection connection) {
 
         // Bungee support (IP forwarding)
-        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection) {
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-
+        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection) {
             if (serverAddress != null) {
                 final String[] split = serverAddress.split("\00");
 

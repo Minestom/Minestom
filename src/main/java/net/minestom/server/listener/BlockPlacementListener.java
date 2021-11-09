@@ -121,11 +121,8 @@ public class BlockPlacementListener {
                         entity.getEntityType() == EntityType.ITEM)
                     continue;
                 // Marker Armor Stands should not prevent block placement
-                if (entity.getEntityMeta() instanceof ArmorStandMeta) {
-                    ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
-                    if (armorStandMeta.isMarker()) {
-                        continue;
-                    }
+                if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
+                    if (armorStandMeta.isMarker()) continue;
                 }
                 intersect = entity.getBoundingBox().intersectWithBlock(placementPosition);
                 if (intersect)
@@ -157,8 +154,8 @@ public class BlockPlacementListener {
             return;
         }
         // Place the block
-        instance.placeBlock(player, resultBlock, placementPosition,
-                blockFace, packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ);
+        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
+                packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand

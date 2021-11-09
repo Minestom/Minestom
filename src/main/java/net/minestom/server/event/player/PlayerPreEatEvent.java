@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * or to cancel its processing, cancelling the event means that the player will
  * continue the animation indefinitely.
  */
-public class PlayerPreEatEvent implements PlayerEvent, CancellableEvent {
+public class PlayerPreEatEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final ItemStack foodItem;

@@ -4,22 +4,22 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.network.packet.FramedPacket;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +39,9 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
 
-    private volatile long lastChangeTime;
-
-    private FramedPacket cachedChunkBuffer;
-    private FramedPacket cachedLightBuffer;
-    private long cachedPacketTime;
+    private long lastChange;
+    private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
         super(instance, biomes, chunkX, chunkZ, true);
@@ -51,7 +49,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        this.lastChangeTime = System.currentTimeMillis();
+        this.lastChange = System.currentTimeMillis();
+        this.chunkCache.invalidate();
+        this.lightCache.invalidate();
         // Update pathfinder
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
@@ -64,7 +64,7 @@ public class DynamicChunk extends Chunk {
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
-        if (handler != null || block.hasNbt()) {
+        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
             this.entries.put(index, block);
         } else {
             this.entries.remove(index);
@@ -95,10 +95,7 @@ public class DynamicChunk extends Chunk {
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
             if (handler == null) return;
-            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-            final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-            final Vec blockPosition = new Vec(x, y, z);
+            final Point blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });
     }
@@ -106,54 +103,39 @@ public class DynamicChunk extends Chunk {
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         // Verify if the block object is present
-        final var entry = !entries.isEmpty() ?
-                entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
-        if (entry != null || condition == Condition.CACHED) {
-            return entry;
+        if (condition != Condition.TYPE) {
+            final Block entry = !entries.isEmpty() ?
+                    entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
+            if (entry != null || condition == Condition.CACHED) {
+                return entry;
+            }
         }
         // Retrieve the block from state id
         final Section section = getOptionalSection(y);
-        if (section == null)
-            return Block.AIR;
+        if (section == null) return Block.AIR; // Section is unloaded
         final short blockStateId = section.getBlockAt(x, y, z);
-        return blockStateId > 0 ?
-                Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR) : Block.AIR;
+        if (blockStateId == -1) return Block.AIR; // Section is empty
+        return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
     }
 
     @Override
     public long getLastChangeTime() {
-        return lastChangeTime;
+        return lastChange;
     }
 
     @Override
-    public synchronized void sendChunk(@NotNull Player player) {
+    public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        final PlayerConnection connection = player.getPlayerConnection();
-        if (connection instanceof PlayerSocketConnection) {
-            final long lastChange = getLastChangeTime();
-            var chunkPacket = cachedChunkBuffer;
-            var lightPacket = cachedLightBuffer;
-            if (lastChange > cachedPacketTime || (chunkPacket == null || lightPacket == null)) {
-                chunkPacket = PacketUtils.allocateTrimmedPacket(createChunkPacket());
-                lightPacket = PacketUtils.allocateTrimmedPacket(createLightPacket());
-                this.cachedChunkBuffer = chunkPacket;
-                this.cachedLightBuffer = lightPacket;
-                this.cachedPacketTime = lastChange;
-            }
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.write(lightPacket);
-            socketConnection.write(chunkPacket);
-        } else {
-            connection.sendPacket(createLightPacket());
-            connection.sendPacket(createChunkPacket());
-        }
+        player.sendPacket(lightCache.retrieve());
+        player.sendPacket(chunkCache.retrieve());
     }
 
     @Override
-    public synchronized void sendChunk() {
+    public void sendChunk() {
         if (!isLoaded()) return;
-        sendPacketToViewers(createLightPacket());
-        sendPacketToViewers(createChunkPacket());
+        if (getViewers().isEmpty()) return;
+        sendPacketToViewers(lightCache.retrieve());
+        sendPacketToViewers(chunkCache.retrieve());
     }
 
     @NotNull
@@ -173,19 +155,34 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
-    private @NotNull ChunkDataPacket createChunkPacket() {
+    private synchronized @NotNull ChunkDataPacket createChunkPacket() {
         ChunkDataPacket packet = new ChunkDataPacket();
         packet.biomes = biomes;
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
         packet.sections = sectionMap.clone(); // TODO deep clone
         packet.entries = entries.clone();
+
+        // TODO: don't hardcode heightmaps
+        // Heightmap
+        int dimensionHeight = getInstance().getDimensionType().getHeight();
+        int[] motionBlocking = new int[16 * 16];
+        int[] worldSurface = new int[16 * 16];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                motionBlocking[x + z * 16] = 0;
+                worldSurface[x + z * 16] = dimensionHeight - 1;
+            }
+        }
+        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
+        packet.heightmapsNBT = new NBTCompound()
+                .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
+                .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+
         return packet;
     }
 
-    private @NotNull UpdateLightPacket createLightPacket() {
-        long skyMask = 0;
-        long blockMask = 0;
+    private synchronized @NotNull UpdateLightPacket createLightPacket() {
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
@@ -206,18 +203,13 @@ public class DynamicChunk extends Chunk {
 
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
-                skyMask |= 1L << index;
+                updateLightPacket.skyLightMask.set(index);
             }
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
-                blockMask |= 1L << index;
+                updateLightPacket.blockLightMask.set(index);
             }
         }
-
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[0];
-        updateLightPacket.emptyBlockLightMask = new long[0];
         return updateLightPacket;
     }
 

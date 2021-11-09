@@ -33,13 +33,8 @@ public class ChunkDataPacket implements ServerPacket {
     public Map<Integer, Block> entries = new HashMap<>();
 
     private static final byte CHUNK_SECTION_COUNT = 16;
-    private static final PacketUtils.LocalCache BLOCK_CACHE = PacketUtils.LocalCache.get("chunk-block-cache", 262_144);
 
-    /**
-     * Heightmaps NBT, as read from raw packet data.
-     * Only filled by #read, and unused at the moment.
-     */
-    public NBTCompound heightmapsNBT;
+    public NBTCompound heightmapsNBT = new NBTCompound();
 
     public ChunkDataPacket() {
     }
@@ -49,7 +44,7 @@ public class ChunkDataPacket implements ServerPacket {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
 
-        ByteBuffer blocks = BLOCK_CACHE.get();
+        ByteBuffer blocks = PacketUtils.localBuffer();
 
         Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
 
@@ -74,24 +69,8 @@ public class ChunkDataPacket implements ServerPacket {
             writer.writeLong(value);
         }
 
-        // TODO: don't hardcode heightmaps
         // Heightmap
-        int[] motionBlocking = new int[16 * 16];
-        int[] worldSurface = new int[16 * 16];
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                motionBlocking[x + z * 16] = 4;
-                worldSurface[x + z * 16] = 5;
-            }
-        }
-
-        {
-            writer.writeNBT("",
-                    new NBTCompound()
-                            .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, 9))
-                            .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, 9))
-            );
-        }
+        writer.writeNBT("", heightmapsNBT);
 
         // Biomes
         if (biomes == null || biomes.length == 0) {
@@ -114,31 +93,34 @@ public class ChunkDataPacket implements ServerPacket {
             List<NBTCompound> compounds = new ArrayList<>();
             for (var entry : entries.entrySet()) {
                 final int index = entry.getKey();
-                final var block = entry.getValue();
+                final Block block = entry.getValue();
+                final String blockEntity = block.registry().blockEntity();
+                if (blockEntity == null) continue; // Only send block entities to client
+                NBTCompound resultNbt = new NBTCompound();
+                // Append handler tags
                 final BlockHandler handler = block.handler();
-                if (handler == null)
-                    continue;
-                final var blockEntityTags = handler.getBlockEntityTags();
-                if (blockEntityTags.isEmpty()) // Verify if the block should be sent as block entity to client
-                    continue;
-                final var blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                final var resultNbt = new NBTCompound();
-                for (Tag<?> tag : blockEntityTags) {
-                    final var value = tag.read(blockNbt);
-                    if (value != null) {
-                        // Tag is present and valid
-                        tag.writeUnsafe(resultNbt, value);
+                if (handler != null) {
+                    final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                    for (Tag<?> tag : handler.getBlockEntityTags()) {
+                        final var value = tag.read(blockNbt);
+                        if (value != null) {
+                            // Tag is present and valid
+                            tag.writeUnsafe(resultNbt, value);
+                        }
                     }
+                } else {
+                    // Complete nbt shall be sent if the block has no handler
+                    // Necessary to support all vanilla blocks
+                    final NBTCompound blockNbt = block.nbt();
+                    if (blockNbt != null) resultNbt = blockNbt;
                 }
-
-                if (resultNbt.getSize() > 0) {
-                    final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-                    resultNbt.setString("id", handler.getNamespaceId().asString())
-                            .setInt("x", blockPosition.blockX())
-                            .setInt("y", blockPosition.blockY())
-                            .setInt("z", blockPosition.blockZ());
-                    compounds.add(resultNbt);
-                }
+                // Add block entity
+                final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                resultNbt.setString("id", blockEntity)
+                        .setInt("x", blockPosition.blockX())
+                        .setInt("y", blockPosition.blockY())
+                        .setInt("z", blockPosition.blockZ());
+                compounds.add(resultNbt);
             }
             writer.writeVarInt(compounds.size());
             compounds.forEach(nbtCompound -> writer.writeNBT("", nbtCompound));
@@ -147,8 +129,8 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        chunkX = reader.readInt();
-        chunkZ = reader.readInt();
+        this.chunkX = reader.readInt();
+        this.chunkZ = reader.readInt();
 
         int maskCount = reader.readVarInt();
         long[] masks = new long[maskCount];
@@ -158,7 +140,7 @@ public class ChunkDataPacket implements ServerPacket {
         try {
             // TODO: Use heightmaps
             // unused at the moment
-            heightmapsNBT = (NBTCompound) reader.readTag();
+            this.heightmapsNBT = (NBTCompound) reader.readTag();
 
             // Biomes
             int[] biomesIds = reader.readVarIntArray();
@@ -168,50 +150,43 @@ public class ChunkDataPacket implements ServerPacket {
             }
 
             // Data
+            this.sections = new HashMap<>();
             int blockArrayLength = reader.readVarInt();
             if (maskCount > 0) {
                 final long mask = masks[0]; // TODO support for variable size
                 for (int sectionIndex = 0; sectionIndex < CHUNK_SECTION_COUNT; sectionIndex++) {
-                    boolean hasSection = (mask & 1 << sectionIndex) != 0;
-                    if (!hasSection)
-                        continue;
+                    final boolean hasSection = (mask & 1 << sectionIndex) != 0;
+                    if (!hasSection) continue;
                     final Section section = sections.computeIfAbsent(sectionIndex, i -> new Section());
                     final Palette palette = section.getPalette();
-                    short blockCount = reader.readShort();
-                    byte bitsPerEntry = reader.readByte();
-
+                    final short blockCount = reader.readShort();
+                    palette.setBlockCount(blockCount);
+                    final byte bitsPerEntry = reader.readByte();
                     // Resize palette if necessary
                     if (bitsPerEntry > palette.getBitsPerEntry()) {
                         palette.resize(bitsPerEntry);
                     }
-
                     // Retrieve palette values
                     if (bitsPerEntry < 9) {
                         int paletteSize = reader.readVarInt();
                         for (int i = 0; i < paletteSize; i++) {
                             final int paletteValue = reader.readVarInt();
-                            palette.getPaletteBlockMap().put((short) i, (short) paletteValue);
+                            palette.getPaletteBlockArray()[i] = (short) paletteValue;
                             palette.getBlockPaletteMap().put((short) paletteValue, (short) i);
                         }
                     }
-
                     // Read blocks
-                    int dataLength = reader.readVarInt();
-                    long[] data = palette.getBlocks();
-                    for (int i = 0; i < dataLength; i++) {
-                        data[i] = reader.readLong();
-                    }
+                    palette.setBlocks(reader.readLongArray());
                 }
             }
 
             // Block entities
             final int blockEntityCount = reader.readVarInt();
-
-            entries = new Int2ObjectOpenHashMap<>();
+            this.entries = new Int2ObjectOpenHashMap<>(blockEntityCount);
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
                 final String id = tag.getString("id");
-                // TODO retrieve handler by namespace
+                final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(id);
                 final int x = tag.getInt("x");
                 final int y = tag.getInt("y");
                 final int z = tag.getInt("z");

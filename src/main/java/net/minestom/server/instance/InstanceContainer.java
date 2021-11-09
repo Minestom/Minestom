@@ -5,14 +5,15 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
@@ -26,6 +27,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +51,7 @@ public class InstanceContainer extends Instance {
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<CompletableFuture<Chunk>> loadingChunks = new Long2ObjectOpenHashMap<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
@@ -66,19 +69,16 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    /**
-     * Creates an {@link InstanceContainer}.
-     *
-     * @param uniqueId      the unique id of the instance
-     * @param dimensionType the dimension type of the instance
-     */
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+    @ApiStatus.Experimental
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
         super(uniqueId, dimensionType);
-        // Set the default chunk supplier using DynamicChunk
         setChunkSupplier(DynamicChunk::new);
-        // Set the default chunk loader which use the Anvil format
-        setChunkLoader(new AnvilLoader("world"));
+        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader("world")));
         this.chunkLoader.loadInstance(this);
+    }
+
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+        this(uniqueId, dimensionType, null);
     }
 
     @Override
@@ -154,12 +154,12 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
-                              @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+        final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!ChunkUtils.isLoaded(chunk)) return false;
-        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block,
-                new BlockHandler.PlayerPlacement(block, this, blockPosition, player, blockFace, cursorX, cursorY, cursorZ), null);
+        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
+                placement.getBlock(), placement, null);
         return true;
     }
 
@@ -218,17 +218,12 @@ public class InstanceContainer extends Instance {
             chunk.removeViewer(viewer);
         }
 
-        EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunkX, chunkZ));
+        EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunk));
         // Remove all entities in chunk
-        getChunkEntities(chunk).forEach(entity -> {
-            if (!(entity instanceof Player)) entity.remove();
-        });
+        getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES, Entity::remove);
         // Clear cache
         synchronized (chunks) {
             this.chunks.remove(index);
-        }
-        synchronized (entitiesLock) {
-            this.chunkEntities.remove(index);
         }
         chunk.unload();
         UPDATE_MANAGER.signalChunkUnload(chunk);
@@ -259,16 +254,26 @@ public class InstanceContainer extends Instance {
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
+        synchronized (loadingChunks) {
+            final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+            CompletableFuture<Chunk> loadingChunk = loadingChunks.get(index);
+            if (loadingChunk != null) return loadingChunk;
+            this.loadingChunks.put(index, completableFuture);
+        }
         final IChunkLoader loader = chunkLoader;
         final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
                 // create the chunk from scratch (with the generator) if the loader couldn't
                 .thenCompose(chunk -> chunk != null ? CompletableFuture.completedFuture(chunk) : createChunk(chunkX, chunkZ))
-                // cache the retrieved chunk (in the next instance tick for thread-safety)
-                .whenComplete((chunk, throwable) -> scheduleNextTick(instance -> {
+                // cache the retrieved chunk
+                .whenComplete((chunk, throwable) -> {
+                    // TODO run in the instance thread?
                     cacheChunk(chunk);
-                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
+                    GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunk));
+                    synchronized (loadingChunks) {
+                        this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
+                    }
                     completableFuture.complete(chunk);
-                }));
+                });
         if (loader.supportsParallelLoading()) {
             CompletableFuture.runAsync(retriever);
         } else {

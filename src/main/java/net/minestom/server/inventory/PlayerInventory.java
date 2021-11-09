@@ -3,15 +3,14 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
-import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
@@ -19,7 +18,7 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public class PlayerInventory extends AbstractInventory implements EquipmentHandler {
+public non-sealed class PlayerInventory extends AbstractInventory implements EquipmentHandler {
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 
@@ -29,17 +28,6 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public PlayerInventory(@NotNull Player player) {
         super(INVENTORY_SIZE);
         this.player = player;
-    }
-
-    @Override
-    public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
-        // fix packet slot to inventory slot conversion
-        InventoryCondition condition = (p, slot, clickType, inventoryConditionResult) -> {
-            final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-            inventoryCondition.accept(p, convertedSlot, clickType, inventoryConditionResult);
-        };
-
-        super.addInventoryCondition(condition);
     }
 
     @Override
@@ -149,20 +137,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         }
     }
 
-    /**
-     * Inserts an item safely (synchronized) in the appropriate slot.
-     *
-     * @param slot      an internal slot
-     * @param itemStack the item to insert at the slot
-     * @throws IllegalArgumentException if the slot {@code slot} does not exist
-     * @throws NullPointerException     if {@code itemStack} is null
-     */
     @Override
-    protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
-                "The slot {0} does not exist for player", slot);
-        Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
-
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
         EquipmentSlot equipmentSlot = null;
         if (slot == player.getHeldSlot()) {
             equipmentSlot = EquipmentSlot.MAIN_HAND;
@@ -189,6 +165,11 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         }
         // Refresh slot
         sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
+    }
+
+    @Override
+    protected void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
+        GlobalHandles.PLAYER_INVENTORY_ITEM_CHANGE_EVENT.call(new PlayerInventoryItemChangeEvent(player, slot, previous, current));
     }
 
     /**
@@ -257,18 +238,19 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
 
     @Override
     public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
-        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStackFromPacketSlot(slot);
+        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(convertedSlot);
         final InventoryClickResult clickResult = clickProcessor.drop(player, this,
-                all, slot, button, clicked, cursor);
+                all, convertedSlot, button, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
         final ItemStack resultClicked = clickResult.getClicked();
         if (resultClicked != null && !outsideDrop) {
-            setItemStackFromPacketSlot(slot, resultClicked);
+            setItemStack(convertedSlot, resultClicked);
         }
         setCursorItem(clickResult.getCursor());
         return true;
@@ -276,20 +258,21 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
 
     @Override
     public boolean shiftClick(@NotNull Player player, int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStackFromPacketSlot(slot);
+        final ItemStack clicked = getItemStack(convertedSlot);
         final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
         final int start = hotBarClick ? 9 : 0;
         final int end = hotBarClick ? getSize() - 9 : 8;
         final InventoryClickResult clickResult = clickProcessor.shiftClick(
                 this, this,
                 start, end, 1,
-                player, slot, clicked, cursor);
+                player, convertedSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
-        setItemStackFromPacketSlot(slot, clickResult.getClicked());
+        setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
         update(); // FIXME: currently not properly client-predicted
         return true;
@@ -299,16 +282,17 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack heldItem = getItemStack(key);
-        final ItemStack clicked = getItemStackFromPacketSlot(slot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, key, clicked, heldItem);
+        final ItemStack clicked = getItemStack(convertedSlot);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, key, clicked, heldItem);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
-        setItemStackFromPacketSlot(slot, clickResult.getClicked());
+        setItemStack(convertedSlot, clickResult.getClicked());
         setItemStack(key, clickResult.getCursor());
-        callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, cursorItem);
+        callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
         return true;
     }
 
@@ -317,9 +301,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                slot, button,
-                clicked, cursor, this::getItemStackFromPacketSlot,
-                this::setItemStackFromPacketSlot);
+                convertPlayerInventorySlot(slot, OFFSET), button, clicked, cursor);
         if (clickResult == null || clickResult.isCancel()) {
             update();
             return false;
@@ -331,9 +313,10 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
 
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStackFromPacketSlot(slot);
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, clicked, cursor);
+        final ItemStack clicked = getItemStack(convertedSlot);
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
             return false;

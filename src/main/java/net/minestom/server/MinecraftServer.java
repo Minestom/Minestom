@@ -6,14 +6,12 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -23,7 +21,6 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
-import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
@@ -31,10 +28,10 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.terminal.MinestomTerminal;
+import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
@@ -118,10 +115,10 @@ public final class MinecraftServer {
     // Data
     private static boolean initialized;
     private static boolean started;
-    private static boolean stopping;
+    private static volatile boolean stopping;
 
-    private static int chunkViewDistance = 8;
-    private static int entityViewDistance = 5;
+    private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
+    private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
     private static int compressionThreshold = 256;
     private static boolean groupedPacket = true;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
@@ -337,6 +334,7 @@ public final class MinecraftServer {
      *
      * @return the data manager
      */
+    @Deprecated
     public static DataManager getDataManager() {
         checkInitStatus(dataManager);
         return dataManager;
@@ -446,20 +444,14 @@ public final class MinecraftServer {
      *
      * @param chunkViewDistance the new chunk view distance
      * @throws IllegalArgumentException if {@code chunkViewDistance} is not between 2 and 32
+     * @deprecated should instead be defined with a java property
      */
+    @Deprecated
     public static void setChunkViewDistance(int chunkViewDistance) {
+        Check.stateCondition(started, "You cannot change the chunk view distance after the server has been started.");
         Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
-        if (started) {
-            for (final Player player : connectionManager.getOnlinePlayers()) {
-                final Chunk playerChunk = player.getChunk();
-                if (playerChunk != null) {
-                    player.getPlayerConnection().sendPacket(new UpdateViewDistancePacket(player.getChunkRange()));
-                    player.refreshVisibleChunks(playerChunk);
-                }
-            }
-        }
     }
 
     /**
@@ -476,19 +468,14 @@ public final class MinecraftServer {
      *
      * @param entityViewDistance the new entity view distance
      * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
+     * @deprecated should instead be defined with a java property
      */
+    @Deprecated
     public static void setEntityViewDistance(int entityViewDistance) {
+        Check.stateCondition(started, "You cannot change the entity view distance after the server has been started.");
         Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
-        if (started) {
-            for (final Player player : connectionManager.getOnlinePlayers()) {
-                final Chunk playerChunk = player.getChunk();
-                if (playerChunk != null) {
-                    player.refreshVisibleEntities(playerChunk);
-                }
-            }
-        }
     }
 
     /**
@@ -673,9 +660,9 @@ public final class MinecraftServer {
 
         updateManager.start();
 
-        // Init & start the TCP server
+        // Init server
         try {
-            server.start(new InetSocketAddress(address, port));
+            server.init(new InetSocketAddress(address, port));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -695,17 +682,24 @@ public final class MinecraftServer {
             LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
         }
 
+        // Start server
+        server.start();
+
         LOGGER.info("Minestom server started successfully.");
 
         if (terminalEnabled) {
             MinestomTerminal.start();
         }
+
+        // Stop the server on SIGINT
+        Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 
     /**
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
     public static void stopCleanly() {
+        if (stopping) return;
         stopping = true;
         LOGGER.info("Stopping Minestom server.");
         extensionManager.unloadAllExtensions();
@@ -719,7 +713,7 @@ public final class MinecraftServer {
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         MinestomTerminal.stop();
-        MinestomThread.shutdownAll();
+        MinestomThreadPool.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
     }
 
