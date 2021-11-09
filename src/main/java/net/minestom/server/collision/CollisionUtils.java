@@ -35,52 +35,38 @@ public final class CollisionUtils {
         final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        boolean xCheck = false, yCheck = false, zCheck = false;
         double xDelta = 0, yDelta = 0, zDelta = 0;
 
         if (deltaPosition.x() != 0) {
-            final StepResult xCollision = stepAxis(instance, originChunk,
-                    X_UPDATER, deltaPosition.x(),
+            xDelta = stepAxis(instance, originChunk, X_UPDATER, deltaPosition.x(),
                     deltaPosition.x() > 0 ? boundingBox.getRightFace() : boundingBox.getLeftFace());
-            xCheck = xCollision.foundCollision();
-            xDelta = xCollision.delta();
         }
 
         if (deltaPosition.y() != 0) {
-            final StepResult yCollision = stepAxis(instance, originChunk,
-                    Y_UPDATER, deltaPosition.y(),
+            yDelta = stepAxis(instance, originChunk, Y_UPDATER, deltaPosition.y(),
                     deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
-            yCheck = yCollision.foundCollision();
-            yDelta = yCollision.delta();
         }
 
         if (deltaPosition.z() != 0) {
-            final StepResult zCollision = stepAxis(instance, originChunk,
-                    Z_UPDATER, deltaPosition.z(),
+            zDelta = stepAxis(instance, originChunk, Z_UPDATER, deltaPosition.z(),
                     deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
-            zCheck = zCollision.foundCollision();
-            zDelta = zCollision.delta();
         }
 
-        final Pos newPosition = xDelta == 0 && yDelta == 0 && zDelta == 0 ? currentPosition :
-                currentPosition.add(xDelta, yDelta, zDelta);
+        final Pos newPosition;
         final Vec newVelocity;
-        if ((xCheck || deltaPosition.x() == 0) &&
-                (yCheck || deltaPosition.y() == 0) &&
-                (zCheck || deltaPosition.z() == 0)) {
+        if (xDelta == 0 && yDelta == 0 && zDelta == 0) {
+            newPosition = currentPosition;
             newVelocity = Vec.ZERO;
         } else {
-            newVelocity = new Vec(
-                    xCheck ? 0 : deltaPosition.x(),
-                    yCheck ? 0 : deltaPosition.y(),
-                    zCheck ? 0 : deltaPosition.z());
+            newVelocity = new Vec(xDelta, yDelta, zDelta);
+            newPosition = currentPosition.add(newVelocity);
         }
-        return new PhysicsResult(newPosition, newVelocity, yCheck);
+        return new PhysicsResult(newPosition, newVelocity, yDelta == 0);
     }
 
-    private static StepResult stepAxis(Instance instance, Chunk originChunk,
-                                       CoordinateUpdater updater, double step,
-                                       List<Vec> faces) {
+    private static double stepAxis(Instance instance, Chunk originChunk,
+                                   CoordinateUpdater updater, double step,
+                                   List<Vec> faces) {
         final double sign = Math.signum(step);
 
         double delta = 0;
@@ -88,14 +74,13 @@ public final class CollisionUtils {
         {
             final double reducer = 1 * sign;
             while (Math.abs(step) > 1) {
-                final StepResult stepResult = stepAxis(instance, originChunk, updater, reducer, faces);
-                delta += stepResult.delta();
-                if (stepResult.foundCollision()) return new StepResult(delta, true);
+                final double stepResult = stepAxis(instance, originChunk, updater, reducer, faces);
+                delta += stepResult;
+                if (stepResult == 0) return delta;
                 step -= reducer;
             }
         }
 
-        boolean collision = false;
         double displacement = 1;
         for (Vec face : faces) {
             final Vec newCorner = updater.adder().update(face, step);
@@ -104,14 +89,13 @@ public final class CollisionUtils {
             final Block block = chunk.getBlock(newCorner, BlockGetter.Condition.TYPE);
             // TODO support custom collision
             if (block == null || !block.isSolid()) continue;
-            collision = true;
             final double newCoordinate = updater.blockFunction().getDouble(newCorner) + (sign > 0 ? 0 : 1);
             displacement = MathUtils.square(updater.fieldFunction().getDouble(face) - newCoordinate);
             break;
         }
         delta += step * displacement;
-        if (Math.abs(delta) < EPSILON) return new StepResult(0, collision);
-        return new StepResult(delta, collision);
+        if (Math.abs(delta) < EPSILON) return 0;
+        return delta;
     }
 
     /**
@@ -143,9 +127,6 @@ public final class CollisionUtils {
     }
 
     public record PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround) {
-    }
-
-    private record StepResult(double delta, boolean foundCollision) {
     }
 
     record CoordinateUpdater(Object2DoubleFunction<Vec> fieldFunction,
