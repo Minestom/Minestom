@@ -35,21 +35,21 @@ public final class CollisionUtils {
         final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        double xDelta = 0, yDelta = 0, zDelta = 0;
+        double xDelta = deltaPosition.x(), yDelta = deltaPosition.y(), zDelta = deltaPosition.z();
 
-        if (deltaPosition.x() != 0) {
-            xDelta = stepAxis(instance, originChunk, X_UPDATER, deltaPosition.x(),
-                    deltaPosition.x() > 0 ? boundingBox.getRightFace() : boundingBox.getLeftFace());
+        if (xDelta != 0) {
+            xDelta = stepAxis(instance, originChunk, X_UPDATER, xDelta,
+                    xDelta > 0 ? boundingBox.getRightFace() : boundingBox.getLeftFace());
         }
 
-        if (deltaPosition.y() != 0) {
-            yDelta = stepAxis(instance, originChunk, Y_UPDATER, deltaPosition.y(),
-                    deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+        if (yDelta != 0) {
+            yDelta = stepAxis(instance, originChunk, Y_UPDATER, yDelta,
+                    yDelta > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
         }
 
-        if (deltaPosition.z() != 0) {
-            zDelta = stepAxis(instance, originChunk, Z_UPDATER, deltaPosition.z(),
-                    deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+        if (zDelta != 0) {
+            zDelta = stepAxis(instance, originChunk, Z_UPDATER, zDelta,
+                    zDelta > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
         }
 
         final Pos newPosition;
