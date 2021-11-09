@@ -64,10 +64,17 @@ public final class CollisionUtils {
 
         final Pos newPosition = xDelta == 0 && yDelta == 0 && zDelta == 0 ? currentPosition :
                 currentPosition.add(xDelta, yDelta, zDelta);
-        final Vec newVelocity = xCheck && yCheck && zCheck ? Vec.ZERO :
-                new Vec(xCheck ? 0 : deltaPosition.x(),
-                        yCheck ? 0 : deltaPosition.y(),
-                        zCheck ? 0 : deltaPosition.z());
+        final Vec newVelocity;
+        if ((xCheck || deltaPosition.x() == 0) &&
+                (yCheck || deltaPosition.y() == 0) &&
+                (zCheck || deltaPosition.z() == 0)) {
+            newVelocity = Vec.ZERO;
+        } else {
+            newVelocity = new Vec(
+                    xCheck ? 0 : deltaPosition.x(),
+                    yCheck ? 0 : deltaPosition.y(),
+                    zCheck ? 0 : deltaPosition.z());
+        }
         return new PhysicsResult(newPosition, newVelocity, yCheck);
     }
 
