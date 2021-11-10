@@ -189,8 +189,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        this.gravityAcceleration = EntityTypeImpl.getAcceleration(entityType.name());
-        this.gravityDragPerTick = EntityTypeImpl.getDrag(entityType.name());
+        this.gravityAcceleration = entityType.registry().acceleration();
+        this.gravityDragPerTick = entityType.registry().drag();
     }
 
     public Entity(@NotNull EntityType entityType) {
