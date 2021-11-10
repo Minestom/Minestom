@@ -173,7 +173,15 @@ public final class Registry {
             this.air = getBoolean("air", false);
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid", false);
-            this.blockEntity = getString("blockEntity", null);
+
+            {
+                Map<String, Object> blockEntity = element("blockEntity");
+                if (blockEntity != null) {
+                    this.blockEntity = (String) blockEntity.get("namespace");
+                } else {
+                    this.blockEntity = null;
+                }
+            }
             {
                 final String materialNamespace = getString("correspondingItem", null);
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
@@ -324,6 +332,8 @@ public final class Registry {
         private final String translationKey;
         private final double width;
         private final double height;
+        private final double drag;
+        private final double acceleration;
         private final EntitySpawnType spawnType;
 
         private EntityEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
@@ -333,6 +343,8 @@ public final class Registry {
             this.translationKey = getString("translationKey");
             this.width = getDouble("width");
             this.height = getDouble("height");
+            this.drag = getDouble("drag", 0.02);
+            this.acceleration = getDouble("acceleration", 0.08);
             this.spawnType = EntitySpawnType.valueOf(getString("packetType").toUpperCase(Locale.ROOT));
         }
 
@@ -354,6 +366,14 @@ public final class Registry {
 
         public double height() {
             return height;
+        }
+
+        public double drag() {
+            return drag;
+        }
+
+        public double acceleration() {
+            return acceleration;
         }
 
         public EntitySpawnType spawnType() {

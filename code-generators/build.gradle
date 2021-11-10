@@ -25,7 +25,7 @@ dependencies {
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
     // Contains the json files
-    implementation 'com.github.Minestom:MinestomDataGenerator:7636d5d473'
+    implementation 'com.github.Minestom:MinestomDataGenerator:47da93dd5a99280314d7e6137d2c81e7793f0fdb'
 }
 
 

@@ -46,8 +46,6 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
     private static final Registry.Container<EntityType> CONTAINER = new Registry.Container<>(Registry.Resource.ENTITIES,
             (container, namespace, object) -> container.register(new EntityTypeImpl(Registry.entity(namespace, object, null))));
     private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
-    private static final Map<String, Double> ACCELERATION_MAP = createAccelerationMap();
-    private static final Map<String, Double> DRAG_MAP = createDragMap();
 
     static EntityType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -67,14 +65,6 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
 
     static EntityMeta createMeta(EntityType entityType, Entity entity, Metadata metadata) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
-    }
-
-    static double getAcceleration(String namespace) {
-        return ACCELERATION_MAP.getOrDefault(namespace, 0.08);
-    }
-
-    static double getDrag(String namespace) {
-        return DRAG_MAP.getOrDefault(namespace, 0.02);
     }
 
     private static Map<String, BiFunction<Entity, Metadata, EntityMeta>> createMetaMap() {
@@ -192,54 +182,6 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
         supplier.put("minecraft:player", PlayerMeta::new);
         supplier.put("minecraft:fishing_bobber", FishingHookMeta::new);
         return supplier;
-    }
-
-    private static Map<String, Double> createDragMap() {
-        Map<String, Double> result = new HashMap<>();
-        result.put("minecraft:boat", 0d);
-
-        result.put("minecraft:llama_spit", 0.01);
-        result.put("minecraft:ender_pearl", 0.01);
-        result.put("minecraft:potion", 0.01);
-        result.put("minecraft:snowball", 0.01);
-        result.put("minecraft:egg", 0.01);
-        result.put("minecraft:trident", 0.01);
-        result.put("minecraft:spectral_arrow", 0.01);
-        result.put("minecraft:arrow", 0.01);
-
-        result.put("minecraft:minecart", 0.05);
-
-        result.put("minecraft:fishing_bobber", 0.08);
-        return result;
-    }
-
-    private static Map<String, Double> createAccelerationMap() {
-        Map<String, Double> result = new HashMap<>();
-        result.put("minecraft:item_frame", 0d);
-
-        result.put("minecraft:egg", 0.03);
-        result.put("minecraft:fishing_bobber", 0.03);
-        result.put("minecraft:experience_bottle", 0.03);
-        result.put("minecraft:ender_pearl", 0.03);
-        result.put("minecraft:potion", 0.03);
-        result.put("minecraft:snowball", 0.03);
-
-        result.put("minecraft:boat", 0.04);
-        result.put("minecraft:tnt", 0.04);
-        result.put("minecraft:falling_block", 0.04);
-        result.put("minecraft:item", 0.04);
-        result.put("minecraft:minecart", 0.04);
-
-        result.put("minecraft:arrow", 0.05);
-        result.put("minecraft:spectral_arrow", 0.05);
-        result.put("minecraft:trident", 0.05);
-
-        result.put("minecraft:llama_spit", 0.06);
-
-        result.put("minecraft:fireball", 0.1);
-        result.put("minecraft:wither_skull", 0.1);
-        result.put("minecraft:dragon_fireball", 0.1);
-        return result;
     }
 
     @Override
