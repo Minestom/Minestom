@@ -316,7 +316,8 @@ public final class PacketUtils {
     private static boolean getBoolean(String name, boolean defaultValue) {
         boolean result = defaultValue;
         try {
-            result = Boolean.parseBoolean(System.getProperty(name));
+            final String value = System.getProperty(name);
+            if (value != null) result = Boolean.parseBoolean(value);
         } catch (IllegalArgumentException | NullPointerException ignored) {
         }
         return result;
