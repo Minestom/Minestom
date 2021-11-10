@@ -9,8 +9,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class PluginMessagePacket implements ServerPacket {
 
-    public String channel = "none";
-    public byte[] data = new byte[0];
+    public String channel;
+    public byte[] data;
+
+    public PluginMessagePacket(String channel, byte[] data) {
+        this.channel = channel;
+        this.data = data;
+    }
+
+    public PluginMessagePacket() {
+        this("none", new byte[0]);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

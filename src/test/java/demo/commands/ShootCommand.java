@@ -52,11 +52,11 @@ public class ShootCommand extends Command {
             default:
                 return;
         }
-        var pos = player.getPosition().clone().add(0D, player.getEyeHeight(), 0D);
+        var pos = player.getPosition().add(0D, player.getEyeHeight(), 0D);
         //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
         projectile.setInstance(player.getInstance(), pos);
-        var dir = pos.getDirection().multiply(30D);
-        pos = pos.clone().add(dir.getX(), dir.getY(), dir.getZ());
+        var dir = pos.direction().mul(30D);
+        pos = pos.add(dir);
         projectile.shoot(pos, 1D, 0D);
     }
 }

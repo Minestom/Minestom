@@ -8,10 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.security.KeyPair;
 
 public final class MojangAuth {
-
     private static volatile boolean enabled = false;
-
-    private static KeyPair keyPair;
+    private static volatile KeyPair keyPair;
 
     /**
      * Enables mojang authentication on the server.
@@ -21,19 +19,16 @@ public final class MojangAuth {
     public static void init() {
         Check.stateCondition(enabled, "Mojang auth is already enabled!");
         Check.stateCondition(MinecraftServer.isStarted(), "The server has already been started!");
-
-        enabled = true;
-
+        MojangAuth.enabled = true;
         // Generate necessary fields...
-        keyPair = MojangCrypt.generateKeyPair();
+        MojangAuth.keyPair = MojangCrypt.generateKeyPair();
     }
 
     public static boolean isEnabled() {
         return enabled;
     }
 
-    @Nullable
-    public static KeyPair getKeyPair() {
+    public static @Nullable KeyPair getKeyPair() {
         return keyPair;
     }
 }

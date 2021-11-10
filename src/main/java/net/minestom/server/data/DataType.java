@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the type of the object
  */
+@Deprecated
 public abstract class DataType<T> {
 
     /**

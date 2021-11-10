@@ -7,7 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class ResponsePacket implements ServerPacket {
 
-    public String jsonResponse = "";
+    public String jsonResponse;
+
+    public ResponsePacket(String jsonResponse) {
+        this.jsonResponse = jsonResponse;
+    }
+
+    public ResponsePacket() {
+        this("");
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

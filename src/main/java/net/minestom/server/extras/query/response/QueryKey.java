@@ -20,8 +20,8 @@ public enum QueryKey {
     MAP(() -> "world"),
     NUM_PLAYERS("numplayers", () -> String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayers().size())),
     MAX_PLAYERS("maxplayers", () -> String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayers().size() + 1)),
-    HOST_PORT("hostport", () -> String.valueOf(MinecraftServer.getNettyServer().getPort())),
-    HOST_IP("hostip", () -> Objects.requireNonNullElse(MinecraftServer.getNettyServer().getAddress(), "localhost"));
+    HOST_PORT("hostport", () -> String.valueOf(MinecraftServer.getServer().getPort())),
+    HOST_IP("hostip", () -> Objects.requireNonNullElse(MinecraftServer.getServer().getAddress(), "localhost"));
 
     static QueryKey[] VALUES = QueryKey.values();
 

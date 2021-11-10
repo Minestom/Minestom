@@ -1,8 +1,6 @@
 package net.minestom.server.timer;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -22,7 +20,9 @@ public class TaskBuilder {
     private final Runnable runnable;
     // True if the task planned for the application shutdown
     private final boolean shutdown;
-    /** Extension which owns this task, or null if none */
+    /**
+     * Extension which owns this task, or null if none
+     */
     private final String owningExtension;
     // Delay value for the task execution
     private long delay;
@@ -30,8 +30,8 @@ public class TaskBuilder {
     private long repeat;
     /**
      * If this task is owned by an extension, should it survive the unloading of said extension?
-     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     *  reload of that extension.
+     * May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     * reload of that extension.
      */
     private boolean isTransient;
 
@@ -69,24 +69,8 @@ public class TaskBuilder {
      * @param unit The unit of time for {@code time}
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder delay(long time, @NotNull TemporalUnit unit) {
+    public @NotNull TaskBuilder delay(long time, @NotNull TemporalUnit unit) {
         return delay(Duration.of(time, unit));
-    }
-
-    /**
-     * Specifies that the {@link Task} should delay its execution by the specified amount of time.
-     *
-     * @param updateOption the UpdateOption for this builder.
-     * @return this builder, for chaining
-     *
-     * @deprecated Replaced by {@link #delay(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @NotNull
-    @Deprecated(forRemoval = true)
-    public TaskBuilder delay(net.minestom.server.utils.time.UpdateOption updateOption) {
-        return delay(updateOption.toDuration());
     }
 
     /**
@@ -95,8 +79,7 @@ public class TaskBuilder {
      * @param duration the Duration for this builder.
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder delay(Duration duration) {
+    public @NotNull TaskBuilder delay(@NotNull Duration duration) {
         this.delay = duration.toMillis();
         return this;
     }
@@ -108,24 +91,8 @@ public class TaskBuilder {
      * @param unit The {@link TemporalUnit} for {@code time}
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder repeat(long time, @NotNull TemporalUnit unit) {
+    public @NotNull TaskBuilder repeat(long time, @NotNull TemporalUnit unit) {
         return repeat(Duration.of(time, unit));
-    }
-
-    /**
-     * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
-     *
-     * @param updateOption the UpdateOption for this builder.
-     * @return this builder, for chaining
-     *
-     * @deprecated Replaced by {@link #repeat(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @NotNull
-    @Deprecated(forRemoval = true)
-    public TaskBuilder repeat(net.minestom.server.utils.time.UpdateOption updateOption) {
-        return repeat(updateOption.toDuration());
     }
 
     /**
@@ -134,8 +101,7 @@ public class TaskBuilder {
      * @param duration the Duration for this builder.
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder repeat(Duration duration) {
+    public @NotNull TaskBuilder repeat(@NotNull Duration duration) {
         this.repeat = duration.toMillis();
         return this;
     }
@@ -145,8 +111,7 @@ public class TaskBuilder {
      *
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder clearDelay() {
+    public @NotNull TaskBuilder clearDelay() {
         this.delay = 0L;
         return this;
     }
@@ -156,28 +121,29 @@ public class TaskBuilder {
      *
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder clearRepeat() {
+    public @NotNull TaskBuilder clearRepeat() {
         this.repeat = 0L;
         return this;
     }
 
-    /** If this task is owned by an extension, should it survive the unloading of said extension?
-     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     *  reload of that extension. */
+    /**
+     * If this task is owned by an extension, should it survive the unloading of said extension?
+     * May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     * reload of that extension.
+     */
     public TaskBuilder makeTransient() {
         isTransient = true;
         return this;
     }
 
     /**
-     * Schedules this {@link Task} for execution.
+     * Builds a {@link Task}.
      *
      * @return the built {@link Task}
      */
     @NotNull
-    public Task schedule() {
-        Task task = new Task(
+    public Task build() {
+        return new Task(
                 this.schedulerManager,
                 this.runnable,
                 this.shutdown,
@@ -185,21 +151,17 @@ public class TaskBuilder {
                 this.repeat,
                 this.isTransient,
                 this.owningExtension);
-        if (this.shutdown) {
-            Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
-            synchronized (shutdownTasks) {
-                shutdownTasks.put(task.getId(), task);
-            }
-            if(owningExtension != null) {
-                this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, task);
-            }
-        } else {
-            Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;
-            synchronized (tasks) {
-                tasks.put(task.getId(), task);
-            }
-            task.schedule();
-        }
+    }
+
+    /**
+     * Schedules this {@link Task} for execution.
+     *
+     * @return the scheduled {@link Task}
+     */
+    @NotNull
+    public Task schedule() {
+        Task task = build();
+        task.schedule();
         return task;
     }
 }

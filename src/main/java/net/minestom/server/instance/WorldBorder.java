@@ -1,11 +1,12 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -159,20 +160,21 @@ public class WorldBorder {
     /**
      * Used to check at which axis does the position collides with the world border.
      *
-     * @param position the position to check
+     * @param point the point to check
      * @return the axis where the position collides with the world border
      */
-    @NotNull
-    public CollisionAxis getCollisionAxis(@NotNull Position position) {
+    public @NotNull CollisionAxis getCollisionAxis(@NotNull Point point) {
         final double radius = getDiameter() / 2d;
-        final boolean checkX = position.getX() <= getCenterX() + radius && position.getX() >= getCenterX() - radius;
-        final boolean checkZ = position.getZ() <= getCenterZ() + radius && position.getZ() >= getCenterZ() - radius;
-        if (!checkX && !checkZ) {
-            return CollisionAxis.BOTH;
-        } else if (!checkX) {
-            return CollisionAxis.X;
-        } else if (!checkZ) {
-            return CollisionAxis.Z;
+        final boolean checkX = point.x() <= getCenterX() + radius && point.x() >= getCenterX() - radius;
+        final boolean checkZ = point.z() <= getCenterZ() + radius && point.z() >= getCenterZ() - radius;
+        if (!checkX || !checkZ) {
+            if (!checkX && !checkZ) {
+                return CollisionAxis.BOTH;
+            } else if (!checkX) {
+                return CollisionAxis.X;
+            } else {
+                return CollisionAxis.Z;
+            }
         }
         return CollisionAxis.NONE;
     }
@@ -180,11 +182,11 @@ public class WorldBorder {
     /**
      * Used to know if a position is located inside the world border or not.
      *
-     * @param position the position to check
+     * @param point the point to check
      * @return true if {@code position} is inside the world border, false otherwise
      */
-    public boolean isInside(@NotNull Position position) {
-        return getCollisionAxis(position) == CollisionAxis.NONE;
+    public boolean isInside(@NotNull Point point) {
+        return getCollisionAxis(point) == CollisionAxis.NONE;
     }
 
     /**
@@ -225,7 +227,8 @@ public class WorldBorder {
      *
      * @param player the player to send the packet to
      */
-    protected void init(@NotNull Player player) {
+    @ApiStatus.Internal
+    public void init(@NotNull Player player) {
         player.getPlayerConnection().sendPacket(
                 InitializeWorldBorderPacket.of(centerX, centerZ, oldDiameter, newDiameter, speed,
                         portalTeleportBoundary, warningTime, warningBlocks));

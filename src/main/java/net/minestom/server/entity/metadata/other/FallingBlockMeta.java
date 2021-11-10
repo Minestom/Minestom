@@ -1,11 +1,12 @@
 package net.minestom.server.entity.metadata.other;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
@@ -18,11 +19,11 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
         super(entity, metadata);
     }
 
-    public BlockPosition getSpawnPosition() {
-        return super.metadata.getIndex(OFFSET, new BlockPosition(0, 0, 0));
+    public Point getSpawnPosition() {
+        return super.metadata.getIndex(OFFSET, Vec.ZERO);
     }
 
-    public void setSpawnPosition(BlockPosition value) {
+    public void setSpawnPosition(Point value) {
         super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 
@@ -41,17 +42,13 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
         this.block = block;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public int getObjectData() {
-        int id = this.block.getBlockId();
-        int metadata = 0; // TODO ?
-        return id | (metadata << 12);
+        return block.stateId();
     }
 
     @Override
     public boolean requiresVelocityPacketAtSpawn() {
         return false;
     }
-
 }

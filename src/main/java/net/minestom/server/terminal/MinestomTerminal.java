@@ -39,7 +39,9 @@ public class MinestomTerminal {
                     command = reader.readLine(PROMPT);
                     COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender(), command);
                 } catch (UserInterruptException e) {
-                    // Ignore
+                    // Handle Ctrl + C
+                    System.exit(0);
+                    return;
                 } catch (EndOfFileException e) {
                     return;
                 }

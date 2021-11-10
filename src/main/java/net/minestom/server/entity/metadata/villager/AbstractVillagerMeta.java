@@ -3,7 +3,6 @@ package net.minestom.server.entity.metadata.villager;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.AgeableMobMeta;
-import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class AbstractVillagerMeta extends AgeableMobMeta {

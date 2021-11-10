@@ -8,6 +8,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class EntityMetaDataPacket implements ServerPacket {
@@ -15,13 +16,20 @@ public class EntityMetaDataPacket implements ServerPacket {
     public int entityId;
     public Collection<Metadata.Entry<?>> entries;
 
-    public EntityMetaDataPacket() {}
+    public EntityMetaDataPacket(int entityId, Collection<Metadata.Entry<?>> entries) {
+        this.entityId = entityId;
+        this.entries = entries;
+    }
+
+    public EntityMetaDataPacket() {
+        this(0, Collections.emptyList());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
 
-        if(entries != null) {
+        if (entries != null) {
             // Write all the fields
             for (Metadata.Entry<?> entry : entries) {
                 entry.write(writer);
@@ -36,10 +44,10 @@ public class EntityMetaDataPacket implements ServerPacket {
         entityId = reader.readVarInt();
 
         entries = new LinkedList<>();
-        while(true) {
+        while (true) {
             byte index = reader.readByte();
 
-            if(index == (byte) 0xFF) { // reached the end
+            if (index == (byte) 0xFF) { // reached the end
                 break;
             }
 

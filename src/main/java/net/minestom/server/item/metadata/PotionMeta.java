@@ -5,7 +5,6 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -52,7 +51,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
 
         public Builder potionType(@NotNull PotionType potionType) {
             this.potionType = potionType;
-            mutateNbt(compound -> compound.setString("Potion", potionType.getNamespaceID().asString()));
+            mutateNbt(compound -> compound.setString("Potion", potionType.name()));
             return this;
         }
 
@@ -90,7 +89,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
             if (nbtCompound.containsKey("Potion")) {
-                potionType(Registries.getPotionType(nbtCompound.getString("Potion")));
+                potionType(PotionType.fromNamespaceId(nbtCompound.getString("Potion")));
             }
 
             if (nbtCompound.containsKey("CustomPotionEffects")) {

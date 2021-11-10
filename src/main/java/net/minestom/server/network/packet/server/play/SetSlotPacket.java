@@ -10,16 +10,25 @@ import org.jetbrains.annotations.NotNull;
 public class SetSlotPacket implements ServerPacket {
 
     public byte windowId;
+    public int stateId;
     public short slot;
     public ItemStack itemStack;
 
+    public SetSlotPacket(byte windowId, int stateId, short slot, ItemStack itemStack) {
+        this.windowId = windowId;
+        this.stateId = stateId;
+        this.slot = slot;
+        this.itemStack = itemStack;
+    }
+
     public SetSlotPacket() {
-        itemStack = ItemStack.AIR;
+        this((byte) 0, 0, (short) 0, ItemStack.AIR);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
+        writer.writeVarInt(stateId);
         writer.writeShort(slot);
         writer.writeItemStack(itemStack);
     }
@@ -27,6 +36,7 @@ public class SetSlotPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         windowId = reader.readByte();
+        stateId = reader.readVarInt();
         slot = reader.readShort();
         itemStack = reader.readItemStack();
     }
@@ -42,12 +52,7 @@ public class SetSlotPacket implements ServerPacket {
      * @param cursorItem the cursor item
      * @return a set slot packet to change a player cursor item
      */
-    @NotNull
-    public static SetSlotPacket createCursorPacket(@NotNull ItemStack cursorItem) {
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = -1;
-        setSlotPacket.slot = -1;
-        setSlotPacket.itemStack = cursorItem;
-        return setSlotPacket;
+    public static @NotNull SetSlotPacket createCursorPacket(@NotNull ItemStack cursorItem) {
+        return new SetSlotPacket((byte) -1, 0, (short) -1, cursorItem);
     }
 }

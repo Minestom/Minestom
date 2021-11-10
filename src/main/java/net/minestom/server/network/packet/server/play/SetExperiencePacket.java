@@ -12,7 +12,15 @@ public class SetExperiencePacket implements ServerPacket {
     public int level;
     public int totalExperience;
 
-    public SetExperiencePacket() {}
+    public SetExperiencePacket(float percentage, int level, int totalExperience) {
+        this.percentage = percentage;
+        this.level = level;
+        this.totalExperience = totalExperience;
+    }
+
+    public SetExperiencePacket() {
+        this(0, 0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

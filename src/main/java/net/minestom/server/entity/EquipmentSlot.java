@@ -1,42 +1,46 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.item.attribute.AttributeSlot;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+
 public enum EquipmentSlot {
-    MAIN_HAND,
-    OFF_HAND,
-    BOOTS,
-    LEGGINGS,
-    CHESTPLATE,
-    HELMET;
+    MAIN_HAND(false, -1),
+    OFF_HAND(false, -1),
+    BOOTS(true, BOOTS_SLOT),
+    LEGGINGS(true, LEGGINGS_SLOT),
+    CHESTPLATE(true, CHESTPLATE_SLOT),
+    HELMET(true, HELMET_SLOT);
+
+    private final boolean armor;
+    private final int armorSlot;
+
+    EquipmentSlot(boolean armor, int armorSlot) {
+        this.armor = armor;
+        this.armorSlot = armorSlot;
+    }
 
     public boolean isHand() {
-        return this == MAIN_HAND || this == OFF_HAND;
+        return !armor;
     }
 
     public boolean isArmor() {
-        return !isHand();
+        return armor;
     }
 
-    @NotNull
-    public static EquipmentSlot fromAttributeSlot(AttributeSlot attributeSlot) {
-        switch (attributeSlot) {
-            case MAINHAND:
-                return MAIN_HAND;
-            case OFFHAND:
-                return OFF_HAND;
-            case FEET:
-                return BOOTS;
-            case LEGS:
-                return LEGGINGS;
-            case CHEST:
-                return CHESTPLATE;
-            case HEAD:
-                return HELMET;
-        }
-        throw new IllegalStateException("Something weird happened");
+    public int armorSlot() {
+        return armorSlot;
     }
 
+    public static EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
+        return switch (attributeSlot) {
+            case MAINHAND -> MAIN_HAND;
+            case OFFHAND -> OFF_HAND;
+            case FEET -> BOOTS;
+            case LEGS -> LEGGINGS;
+            case CHEST -> CHESTPLATE;
+            case HEAD -> HELMET;
+        };
+    }
 }

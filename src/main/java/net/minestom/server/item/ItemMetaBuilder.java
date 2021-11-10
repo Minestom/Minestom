@@ -119,7 +119,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("-> this")
     public @NotNull ItemMetaBuilder clearEnchantment() {
-        this.enchantmentMap = Collections.emptyMap();
+        this.enchantmentMap = new HashMap<>();
         enchantments(enchantmentMap);
         return this;
     }
@@ -127,7 +127,6 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
         this.attributes = new ArrayList<>(attributes);
-
         handleCollection(attributes, "AttributeModifiers", () -> {
             NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
             for (ItemAttribute itemAttribute : attributes) {
@@ -160,7 +159,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.canPlaceOn = new HashSet<>(blocks);
         handleCollection(canPlaceOn, "CanPlaceOn", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canPlaceOn.forEach(block -> list.add(new NBTString(block.getName())));
+            canPlaceOn.forEach(block -> list.add(new NBTString(block.name())));
             return list;
         });
         return this;
@@ -176,7 +175,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.canDestroy = new HashSet<>(blocks);
         handleCollection(canDestroy, "CanDestroy", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canDestroy.forEach(block -> list.add(new NBTString(block.getName())));
+            canDestroy.forEach(block -> list.add(new NBTString(block.name())));
             return list;
         });
         return this;

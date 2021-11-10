@@ -49,28 +49,13 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
 
         for (int i = 0; i < playerInfoCount; i++) {
             UUID uuid = reader.readUuid();
-            PlayerInfo info;
-            switch (action) {
-                case ADD_PLAYER:
-                    info = new AddPlayer(uuid, reader);
-                    break;
-                case UPDATE_GAMEMODE:
-                    info = new UpdateGamemode(uuid, reader);
-                    break;
-                case UPDATE_LATENCY:
-                    info = new UpdateLatency(uuid, reader);
-                    break;
-                case UPDATE_DISPLAY_NAME:
-                    info = new UpdateDisplayName(uuid, reader);
-                    break;
-                case REMOVE_PLAYER:
-                    info = new RemovePlayer(uuid);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unsupported action encountered: " + action.name());
-            }
-
+            PlayerInfo info = switch (action) {
+                case ADD_PLAYER -> new AddPlayer(uuid, reader);
+                case UPDATE_GAMEMODE -> new UpdateGamemode(uuid, reader);
+                case UPDATE_LATENCY -> new UpdateLatency(uuid, reader);
+                case UPDATE_DISPLAY_NAME -> new UpdateDisplayName(uuid, reader);
+                case REMOVE_PLAYER -> new RemovePlayer(uuid);
+            };
             playerInfos.set(i, info);
         }
     }

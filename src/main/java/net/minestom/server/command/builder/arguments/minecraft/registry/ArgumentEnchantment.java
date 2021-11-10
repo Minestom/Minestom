@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.arguments.minecraft.registry;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,7 +16,7 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
 
     @Override
     public Enchantment getRegistry(@NotNull String value) {
-        return Registries.getEnchantment(value);
+        return Enchantment.fromNamespaceId(value);
     }
 
     @Override

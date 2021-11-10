@@ -1,7 +1,5 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -22,7 +20,8 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public abstract class AbstractInventory implements InventoryClickHandler, TagHandler, DataContainer {
+public sealed abstract class AbstractInventory implements InventoryClickHandler, TagHandler
+        permits Inventory, PlayerInventory {
 
     private final int size;
     protected final ItemStack[] itemStacks;
@@ -34,7 +33,6 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
 
     private final Object nbtLock = new Object();
     private final NBTCompound nbt = new NBTCompound();
-    private Data data;
 
     protected AbstractInventory(int size) {
         this.size = size;
@@ -55,7 +53,34 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
         safeItemInsert(slot, itemStack);
     }
 
-    protected abstract void safeItemInsert(int slot, @NotNull ItemStack itemStack);
+    /**
+     * Inserts safely an item into the inventory.
+     * <p>
+     * This will update the slot for all viewers and warn the inventory that
+     * the window items packet is not up-to-date.
+     *
+     * @param slot      the internal slot id
+     * @param itemStack the item to insert (use air instead of null)
+     *
+     * @throws IllegalArgumentException if the slot {@code slot} does not exist
+     */
+    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+        ItemStack previous;
+        synchronized (this) {
+            Check.argCondition(
+                    !MathUtils.isBetween(slot, 0, getSize()),
+                    "The slot {0} does not exist in this inventory",
+                    slot
+            );
+            previous = itemStacks[slot];
+            UNSAFE_itemInsert(slot, itemStack);
+        }
+        callItemChangeEvent(slot, previous, itemStack);
+    }
+
+    protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack);
+
+    protected abstract void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current);
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
@@ -227,15 +252,5 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
         synchronized (nbtLock) {
             tag.write(nbt, value);
         }
-    }
-
-    @Override
-    public @Nullable Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
     }
 }

@@ -7,6 +7,8 @@ import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,9 +41,9 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     private final int amount;
     private final ItemMeta meta;
 
-    protected ItemStack(@NotNull Material material, int amount,
-                        @NotNull ItemMeta meta,
-                        @Nullable StackingRule stackingRule) {
+    ItemStack(@NotNull Material material, int amount,
+              @NotNull ItemMeta meta,
+              @Nullable StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
@@ -78,6 +80,24 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return fromNBT(material, nbtCompound, 1);
     }
 
+    /**
+     * Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta).
+     *
+     * @param nbtCompound The nbt representation of the item
+     */
+    @ApiStatus.Experimental
+    public static @NotNull ItemStack fromItemNBT(@NotNull NBTCompound nbtCompound) {
+        String id = nbtCompound.getString("id");
+        Check.notNull(id, "Item NBT must contain an id field.");
+        Material material = Material.fromNamespaceId(id);
+        Check.notNull(material, "Unknown material: {0}", id);
+
+        Byte amount = nbtCompound.getByte("Count");
+        return fromNBT(material,
+                nbtCompound.getCompound("tag"),
+                amount == null ? 1 : amount);
+    }
+
     @Contract(pure = true)
     public @NotNull Material getMaterial() {
         return material;
@@ -105,6 +125,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return withAmount(intUnaryOperator.applyAsInt(amount));
     }
 
+    @ApiStatus.Experimental
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull ItemStack consume(int amount) {
+        return stackingRule.apply(this, currentAmount -> currentAmount - amount);
+    }
+
     @Contract(value = "_, _ -> new", pure = true)
     public <T extends ItemMetaBuilder, U extends ItemMetaBuilder.Provider<T>> @NotNull ItemStack withMeta(Class<U> metaType, Consumer<T> metaConsumer) {
         return builder().meta(metaType, metaConsumer).build();
@@ -113,6 +139,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @Contract(value = "_ -> new", pure = true)
     public @NotNull ItemStack withMeta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> metaOperator) {
         return builder().meta(metaOperator).build();
+    }
+
+    @ApiStatus.Experimental
+    @Contract(value = "_ -> new", pure = true)
+    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
+        return builder().meta(meta).build();
     }
 
     @Contract(pure = true)
@@ -188,11 +220,14 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return result;
     }
 
-    @Contract(value = "-> new", pure = true)
-    protected @NotNull ItemStackBuilder builder() {
-        return new ItemStackBuilder(material, meta.builder())
-                .amount(amount)
-                .stackingRule(stackingRule);
+    @Override
+    public String toString() {
+        return "ItemStack{" +
+                "stackingRule=" + stackingRule +
+                ", material=" + material +
+                ", amount=" + amount +
+                ", meta=" + meta +
+                '}';
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -210,5 +245,26 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
                 this.amount,
                 NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
+    }
+
+    /**
+     * Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta)
+     *
+     * @return The nbt representation of the item
+     */
+    @ApiStatus.Experimental
+    public @NotNull NBTCompound toItemNBT() {
+        final NBTCompound nbtCompound = new NBTCompound();
+        nbtCompound.setString("id", getMaterial().name());
+        nbtCompound.setByte("Count", (byte) getAmount());
+        nbtCompound.set("tag", getMeta().toNBT());
+        return nbtCompound;
+    }
+
+    @Contract(value = "-> new", pure = true)
+    private @NotNull ItemStackBuilder builder() {
+        return new ItemStackBuilder(material, meta.builder())
+                .amount(amount)
+                .stackingRule(stackingRule);
     }
 }

@@ -1,15 +1,12 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
@@ -46,30 +43,6 @@ public class Metadata {
         return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), BinaryReader::readSizedString);
     }
 
-    @Deprecated
-    public static Value<JsonMessage> Chat(@NotNull JsonMessage value) {
-        return new Value<>(TYPE_CHAT, value, writer -> writer.writeSizedString(value.toString()), reader -> reader.readJsonMessage(Integer.MAX_VALUE));
-    }
-
-    @Deprecated
-    public static Value<JsonMessage> OptChat(@Nullable JsonMessage value) {
-        return new Value<>(TYPE_OPTCHAT, value, writer -> {
-            final boolean present = value != null;
-            writer.writeBoolean(present);
-            if (present) {
-                writer.writeSizedString(value.toString());
-            }
-        },
-                reader -> {
-                    boolean present = reader.readBoolean();
-                    if (present) {
-                        return reader.readJsonMessage(Integer.MAX_VALUE);
-                    } else {
-                        return null;
-                    }
-                });
-    }
-
     public static Value<Component> Chat(@NotNull Component value) {
         return new Value<>(TYPE_CHAT, value, writer -> writer.writeComponent(value), BinaryReader::readComponent);
     }
@@ -98,19 +71,19 @@ public class Metadata {
         return new Value<>(TYPE_BOOLEAN, value, writer -> writer.writeBoolean(value), BinaryReader::readBoolean);
     }
 
-    public static Value<Vector> Rotation(@NotNull Vector value) {
+    public static Value<Point> Rotation(@NotNull Point value) {
         return new Value<>(TYPE_ROTATION, value, writer -> {
-            writer.writeFloat((float) value.getX());
-            writer.writeFloat((float) value.getY());
-            writer.writeFloat((float) value.getZ());
-        }, reader -> new Vector(reader.readFloat(), reader.readFloat(), reader.readFloat()));
+            writer.writeFloat((float) value.x());
+            writer.writeFloat((float) value.y());
+            writer.writeFloat((float) value.z());
+        }, reader -> new Vec(reader.readFloat(), reader.readFloat(), reader.readFloat()));
     }
 
-    public static Value<BlockPosition> Position(@NotNull BlockPosition value) {
+    public static Value<Point> Position(@NotNull Point value) {
         return new Value<>(TYPE_POSITION, value, writer -> writer.writeBlockPosition(value), BinaryReader::readBlockPosition);
     }
 
-    public static Value<BlockPosition> OptPosition(@Nullable BlockPosition value) {
+    public static Value<Point> OptPosition(@Nullable Point value) {
         return new Value<>(TYPE_OPTPOSITION, value, writer -> {
             final boolean present = value != null;
             writer.writeBoolean(present);
@@ -255,11 +228,7 @@ public class Metadata {
                 }
                 return;
             }
-            EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-            metaDataPacket.entityId = this.entity.getEntityId();
-            metaDataPacket.entries = Collections.singleton(entry);
-
-            this.entity.sendPacketToViewersAndSelf(metaDataPacket);
+            this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Collections.singleton(entry)));
         }
     }
 
@@ -267,7 +236,6 @@ public class Metadata {
         if (this.notifyAboutChanges == notifyAboutChanges) {
             return;
         }
-
         Collection<Entry<?>> entries = null;
         synchronized (this.notNotifiedChanges) {
             this.notifyAboutChanges = notifyAboutChanges;
@@ -279,16 +247,10 @@ public class Metadata {
                 this.notNotifiedChanges.clear();
             }
         }
-
         if (entries == null || this.entity == null || !this.entity.isActive()) {
             return;
         }
-
-        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-        metaDataPacket.entityId = this.entity.getEntityId();
-        metaDataPacket.entries = entries;
-
-        this.entity.sendPacketToViewersAndSelf(metaDataPacket);
+        this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
     }
 
     @NotNull
@@ -329,49 +291,28 @@ public class Metadata {
     }
 
     private static <T> Value<T> getCorrespondingNewEmptyValue(int type) {
-        switch (type) {
-            case TYPE_BYTE:
-                return (Value<T>) Byte((byte) 0);
-            case TYPE_VARINT:
-                return (Value<T>) VarInt(0);
-            case TYPE_FLOAT:
-                return (Value<T>) Float(0);
-            case TYPE_STRING:
-                return (Value<T>) String("");
-            case TYPE_CHAT:
-                return (Value<T>) Chat(ColoredText.of(""));
-            case TYPE_OPTCHAT:
-                return (Value<T>) OptChat((Component) null);
-            case TYPE_SLOT:
-                return (Value<T>) Slot(ItemStack.AIR);
-            case TYPE_BOOLEAN:
-                return (Value<T>) Boolean(false);
-            case TYPE_ROTATION:
-                return (Value<T>) Rotation(new Vector());
-            case TYPE_POSITION:
-                return (Value<T>) Position(new BlockPosition(0, 0, 0));
-            case TYPE_OPTPOSITION:
-                return (Value<T>) OptPosition(null);
-            case TYPE_DIRECTION:
-                return (Value<T>) Direction(Direction.DOWN);
-            case TYPE_OPTUUID:
-                return (Value<T>) OptUUID(null);
-            case TYPE_OPTBLOCKID:
-                return (Value<T>) OptBlockID(null);
-            case TYPE_NBT:
-                return (Value<T>) NBT(new NBTEnd());
-            case TYPE_PARTICLE:
-                throw new UnsupportedOperationException();
-            case TYPE_VILLAGERDATA:
-                return (Value<T>) VillagerData(0, 0, 0);
-            case TYPE_OPTVARINT:
-                return (Value<T>) OptVarInt(null);
-            case TYPE_POSE:
-                return (Value<T>) Pose(Entity.Pose.STANDING);
-
-            default:
-                throw new UnsupportedOperationException();
-        }
+        return switch (type) {
+            case TYPE_BYTE -> (Value<T>) Byte((byte) 0);
+            case TYPE_VARINT -> (Value<T>) VarInt(0);
+            case TYPE_FLOAT -> (Value<T>) Float(0);
+            case TYPE_STRING -> (Value<T>) String("");
+            case TYPE_CHAT -> (Value<T>) Chat(Component.empty());
+            case TYPE_OPTCHAT -> (Value<T>) OptChat(null);
+            case TYPE_SLOT -> (Value<T>) Slot(ItemStack.AIR);
+            case TYPE_BOOLEAN -> (Value<T>) Boolean(false);
+            case TYPE_ROTATION -> (Value<T>) Rotation(Vec.ZERO);
+            case TYPE_POSITION -> (Value<T>) Position(Vec.ZERO);
+            case TYPE_OPTPOSITION -> (Value<T>) OptPosition(null);
+            case TYPE_DIRECTION -> (Value<T>) Direction(Direction.DOWN);
+            case TYPE_OPTUUID -> (Value<T>) OptUUID(null);
+            case TYPE_OPTBLOCKID -> (Value<T>) OptBlockID(null);
+            case TYPE_NBT -> (Value<T>) NBT(new NBTEnd());
+            case TYPE_PARTICLE -> throw new UnsupportedOperationException();
+            case TYPE_VILLAGERDATA -> (Value<T>) VillagerData(0, 0, 0);
+            case TYPE_OPTVARINT -> (Value<T>) OptVarInt(null);
+            case TYPE_POSE -> (Value<T>) Pose(Entity.Pose.STANDING);
+            default -> throw new UnsupportedOperationException();
+        };
     }
 
     private static <T> Value<T> read(int type, BinaryReader reader) {

@@ -1,22 +1,22 @@
 package net.minestom.server.event.entity;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.utils.Vector;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a velocity is applied to an entity using {@link Entity#setVelocity(Vector)}.
+ * Called when a velocity is applied to an entity using {@link Entity#setVelocity(Vec)}.
  */
-public class EntityVelocityEvent implements EntityEvent, CancellableEvent {
+public class EntityVelocityEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
-    private Vector velocity;
+    private Vec velocity;
 
     private boolean cancelled;
 
-    public EntityVelocityEvent(@NotNull Entity entity, @NotNull Vector velocity) {
+    public EntityVelocityEvent(@NotNull Entity entity, @NotNull Vec velocity) {
         this.entity = entity;
         this.velocity = velocity;
     }
@@ -26,9 +26,8 @@ public class EntityVelocityEvent implements EntityEvent, CancellableEvent {
      *
      * @return the entity
      */
-    @NotNull
     @Override
-    public Entity getEntity() {
+    public @NotNull Entity getEntity() {
         return entity;
     }
 
@@ -37,8 +36,7 @@ public class EntityVelocityEvent implements EntityEvent, CancellableEvent {
      *
      * @return the velocity
      */
-    @NotNull
-    public Vector getVelocity() {
+    public @NotNull Vec getVelocity() {
         return velocity;
     }
 
@@ -47,7 +45,7 @@ public class EntityVelocityEvent implements EntityEvent, CancellableEvent {
      *
      * @param velocity the new velocity
      */
-    public void setVelocity(@NotNull Vector velocity) {
+    public void setVelocity(@NotNull Vec velocity) {
         this.velocity = velocity;
     }
 

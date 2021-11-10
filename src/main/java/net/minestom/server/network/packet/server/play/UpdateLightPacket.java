@@ -4,49 +4,32 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryPacketCache;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-public class UpdateLightPacket implements ServerPacket, CacheablePacket {
-
-    public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
+public class UpdateLightPacket implements ServerPacket {
 
     public int chunkX;
     public int chunkZ;
     //todo make changeable
     public boolean trustEdges = true;
 
-    public long[] skyLightMask = new long[0];
-    public long[] blockLightMask = new long[0];
+    public BitSet skyLightMask = new BitSet();
+    public BitSet blockLightMask = new BitSet();
 
-    public long[] emptySkyLightMask = new long[0];
-    public long[] emptyBlockLightMask = new long[0];
+    public BitSet emptySkyLightMask = new BitSet();
+    public BitSet emptyBlockLightMask = new BitSet();
 
     public List<byte[]> skyLight = new ArrayList<>();
     public List<byte[]> blockLight = new ArrayList<>();
 
-    // Cacheable data
-    private final UUID identifier;
-    private final long timestamp;
-
     /**
      * Default constructor, required for reflection operations.
-     * This one will make a packet that is not meant to be cached
      */
     public UpdateLightPacket() {
-        this(UUID.randomUUID(), Long.MAX_VALUE);
-    }
-
-    public UpdateLightPacket(@Nullable UUID identifier, long timestamp) {
-        this.identifier = identifier;
-        this.timestamp = timestamp;
     }
 
     @Override
@@ -56,11 +39,11 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
         writer.writeBoolean(trustEdges);
 
-        writer.writeLongArray(skyLightMask);
-        writer.writeLongArray(blockLightMask);
+        writer.writeLongArray(skyLightMask.toLongArray());
+        writer.writeLongArray(blockLightMask.toLongArray());
 
-        writer.writeLongArray(emptySkyLightMask);
-        writer.writeLongArray(emptyBlockLightMask);
+        writer.writeLongArray(emptySkyLightMask.toLongArray());
+        writer.writeLongArray(emptyBlockLightMask.toLongArray());
 
         writer.writeVarInt(skyLight.size());
         for (byte[] bytes : skyLight) {
@@ -82,11 +65,11 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
         trustEdges = reader.readBoolean();
 
-        skyLightMask = reader.readLongArray();
-        blockLightMask = reader.readLongArray();
+        skyLightMask = BitSet.valueOf(reader.readLongArray());
+        blockLightMask = BitSet.valueOf(reader.readLongArray());
 
-        emptySkyLightMask = reader.readLongArray();
-        emptyBlockLightMask = reader.readLongArray();
+        emptySkyLightMask = BitSet.valueOf(reader.readLongArray());
+        emptyBlockLightMask = BitSet.valueOf(reader.readLongArray());
 
         // sky light
         skyLight.clear();
@@ -117,20 +100,5 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.UPDATE_LIGHT;
-    }
-
-    @Override
-    public @NotNull TemporaryPacketCache getCache() {
-        return CACHE;
-    }
-
-    @Override
-    public UUID getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public long getTimestamp() {
-        return timestamp;
     }
 }

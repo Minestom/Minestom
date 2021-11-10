@@ -55,9 +55,3 @@ gradle-app.setting
 # When running the demo we generate the extensions folder
 /extensions/
 /.mixin.out/
-
-# When compiling we get a docs folder
-**/docs
-
-# The data for generation and the resources is included in this folder
-src/main/resources/minecraft_data

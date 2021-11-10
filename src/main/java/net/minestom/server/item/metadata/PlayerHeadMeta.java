@@ -10,6 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -19,7 +20,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
     private final PlayerSkin playerSkin;
 
     protected PlayerHeadMeta(@NotNull ItemMetaBuilder metaBuilder, UUID skullOwner,
-                             PlayerSkin playerSkin) {
+                             @Nullable PlayerSkin playerSkin) {
         super(metaBuilder);
         this.skullOwner = skullOwner;
         this.playerSkin = playerSkin;
@@ -29,7 +30,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
         return skullOwner;
     }
 
-    public PlayerSkin getPlayerSkin() {
+    public @Nullable PlayerSkin getPlayerSkin() {
         return playerSkin;
     }
 
@@ -40,18 +41,22 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
 
         public Builder skullOwner(@Nullable UUID skullOwner) {
             this.skullOwner = skullOwner;
-            handleCompound("SkullOwner", nbtCompound -> {
-                nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner));
-            });
+            handleCompound("SkullOwner", nbtCompound ->
+                    nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner)));
             return this;
         }
 
         public Builder playerSkin(@Nullable PlayerSkin playerSkin) {
             this.playerSkin = playerSkin;
             handleCompound("SkullOwner", nbtCompound -> {
+                if (playerSkin == null) {
+                    nbtCompound.removeTag("Properties");
+                    return;
+                }
+
                 NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
-                String value = this.playerSkin.getTextures() == null ? "" : this.playerSkin.getTextures();
-                String signature = this.playerSkin.getSignature() == null ? "" : this.playerSkin.getSignature();
+                final String value = Objects.requireNonNullElse(this.playerSkin.textures(), "");
+                final String signature = Objects.requireNonNullElse(this.playerSkin.signature(), "");
                 textures.add(new NBTCompound().setString("Value", value).setString("Signature", signature));
                 nbtCompound.set("Properties", new NBTCompound().set("textures", textures));
             });

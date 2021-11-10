@@ -41,18 +41,6 @@ public class ClientPingServerEvent implements CancellableEvent {
      * @param connection the player connection
      * @param payload    the payload the client sent
      */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, net.minestom.server.utils.time.UpdateOption delay) {
-        this(connection, payload, delay.toDuration());
-    }
-
-    /**
-     * Creates a new client ping server event with 0 delay
-     *
-     * @param connection the player connection
-     * @param payload    the payload the client sent
-     */
     public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, Duration delay) {
         this.connection = connection;
         this.payload = payload;
@@ -102,35 +90,9 @@ public class ClientPingServerEvent implements CancellableEvent {
      * Adds to the delay until minestom will send the ping response packet.
      *
      * @param delay the delay
-     *
-     * @deprecated Replaced by {@link #addDelay(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public void addDelay(@NotNull net.minestom.server.utils.time.UpdateOption delay) {
-        addDelay(delay.toDuration());
-    }
-
-    /**
-     * Adds to the delay until minestom will send the ping response packet.
-     *
-     * @param delay the delay
      */
     public void addDelay(@NotNull Duration delay) {
         this.delay = this.delay.plus(delay);
-    }
-
-    /**
-     * Sets the delay until minestom will send the ping response packet.
-     *
-     * @param delay the delay
-     *
-     * @deprecated Replaced by {@link #setDelay(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public void setDelay(@NotNull net.minestom.server.utils.time.UpdateOption delay) {
-        setDelay(delay.toDuration());
     }
 
     /**

@@ -10,23 +10,19 @@ public class CommandResult {
     protected ParsedCommand parsedCommand;
     protected CommandData commandData;
 
-    @NotNull
-    public Type getType() {
+    public @NotNull Type getType() {
         return type;
     }
 
-    @NotNull
-    public String getInput() {
+    public @NotNull String getInput() {
         return input;
     }
 
-    @Nullable
-    public ParsedCommand getParsedCommand() {
+    public @Nullable ParsedCommand getParsedCommand() {
         return parsedCommand;
     }
 
-    @Nullable
-    public CommandData getCommandData() {
+    public @Nullable CommandData getCommandData() {
         return commandData;
     }
 
@@ -35,30 +31,25 @@ public class CommandResult {
          * Command and syntax successfully found.
          */
         SUCCESS,
-
         /**
          * Command found, but the syntax is invalid.
          * Executor sets to {@link Command#getDefaultExecutor()}.
          */
         INVALID_SYNTAX,
-
         /**
          * Command cancelled by an event listener.
          */
         CANCELLED,
-
         /**
          * Command is not registered, it is also the default result type.
          */
         UNKNOWN
     }
 
-    @NotNull
-    public static CommandResult of(@NotNull Type type, @NotNull String input) {
+    public static @NotNull CommandResult of(@NotNull Type type, @NotNull String input) {
         CommandResult result = new CommandResult();
         result.type = type;
         result.input = input;
         return result;
     }
-
 }

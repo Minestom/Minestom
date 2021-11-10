@@ -1,10 +1,6 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minestom.server.coordinate.Vec;
 
 import java.util.Comparator;
 
@@ -14,20 +10,11 @@ public class ExperienceOrb extends Entity {
     private Player target;
     private long lastTargetUpdateTick;
 
-
-    public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition) {
-        super(EntityType.EXPERIENCE_ORB, spawnPosition);
+    public ExperienceOrb(short experienceCount) {
+        super(EntityType.EXPERIENCE_ORB);
         setBoundingBox(0.5f, 0.5f, 0.5f);
         //todo vanilla sets random velocity here?
         this.experienceCount = experienceCount;
-    }
-
-    public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        this(experienceCount, spawnPosition);
-
-        if (instance != null) {
-            setInstance(instance);
-        }
     }
 
     @Override
@@ -44,7 +31,7 @@ public class ExperienceOrb extends Entity {
 
         double d = 8.0;
         if (lastTargetUpdateTick < time - 20 + getEntityId() % 100) {
-            if (target == null || target.getPosition().getDistanceSquared(getPosition()) > 64) {
+            if (target == null || target.getPosition().distanceSquared(getPosition()) > 64) {
                 this.target = getClosestPlayer(this, 8);
             }
 
@@ -56,13 +43,13 @@ public class ExperienceOrb extends Entity {
         }
 
         if (target != null) {
-            Position pos = getPosition();
-            Position targetPos = target.getPosition();
-            Vector toTarget = new Vector(targetPos.getX() - pos.getX(), targetPos.getY() + (target.getEyeHeight() / 2) - pos.getY(), targetPos.getZ() - pos.getZ());
+            final var pos = getPosition();
+            final var targetPos = target.getPosition();
+            final Vec toTarget = new Vec(targetPos.x() - pos.x(), targetPos.y() + (target.getEyeHeight() / 2) - pos.y(), targetPos.z() - pos.z());
             double e = toTarget.length(); //could really be lengthSquared
             if (e < 8) {
                 double f = 1 - (e / 8);
-                setVelocity(getVelocity().add(toTarget.normalize().multiply(f * f * 0.1)));
+                setVelocity(getVelocity().add(toTarget.normalize().mul(f * f * 0.1)));
             }
         }
 
@@ -74,9 +61,10 @@ public class ExperienceOrb extends Entity {
         }
         // apply slipperiness
 
-        setVelocity(getVelocity().multiply(new Vector(g, 0.98f, g)));
-        if (isOnGround())
-            setVelocity(getVelocity().multiply(new Vector(1, -0.9f, 1)));
+        setVelocity(getVelocity().mul(new Vec(g, 0.98f, g)));
+        if (isOnGround()) {
+            setVelocity(getVelocity().mul(new Vec(1, -0.9f, 1)));
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.minestom.server.item;
 
-import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
@@ -13,9 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.*;
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ItemMeta implements TagReadable, Writeable {
 
@@ -33,26 +34,26 @@ public class ItemMeta implements TagReadable, Writeable {
     private final Set<Block> canDestroy;
     private final Set<Block> canPlaceOn;
 
+    private final ItemMetaBuilder metaBuilder;
     private final NBTCompound nbt;
-    private final ItemMetaBuilder emptyBuilder;
 
     private String cachedSNBT;
-    private ByteBuf cachedBuffer;
+    private ByteBuffer cachedBuffer;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
         this.unbreakable = metaBuilder.unbreakable;
         this.hideFlag = metaBuilder.hideFlag;
         this.displayName = metaBuilder.displayName;
-        this.lore = new ArrayList<>(metaBuilder.lore);
-        this.enchantmentMap = new HashMap<>(metaBuilder.enchantmentMap);
-        this.attributes = new ArrayList<>(metaBuilder.attributes);
+        this.lore = List.copyOf(metaBuilder.lore);
+        this.enchantmentMap = Map.copyOf(metaBuilder.enchantmentMap);
+        this.attributes = List.copyOf(metaBuilder.attributes);
         this.customModelData = metaBuilder.customModelData;
-        this.canDestroy = new HashSet<>(metaBuilder.canDestroy);
-        this.canPlaceOn = new HashSet<>(metaBuilder.canPlaceOn);
+        this.canDestroy = Set.copyOf(metaBuilder.canDestroy);
+        this.canPlaceOn = Set.copyOf(metaBuilder.canPlaceOn);
 
+        this.metaBuilder = metaBuilder;
         this.nbt = metaBuilder.nbt();
-        this.emptyBuilder = metaBuilder.getSupplier().get();
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -84,17 +85,17 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Contract(pure = true)
     public @NotNull List<@NotNull Component> getLore() {
-        return Collections.unmodifiableList(lore);
+        return lore;
     }
 
     @Contract(pure = true)
     public @NotNull Map<Enchantment, Short> getEnchantmentMap() {
-        return Collections.unmodifiableMap(enchantmentMap);
+        return enchantmentMap;
     }
 
     @Contract(pure = true)
     public @NotNull List<@NotNull ItemAttribute> getAttributes() {
-        return Collections.unmodifiableList(attributes);
+        return attributes;
     }
 
     @Contract(pure = true)
@@ -104,12 +105,12 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Contract(pure = true)
     public @NotNull Set<@NotNull Block> getCanDestroy() {
-        return Collections.unmodifiableSet(canDestroy);
+        return canDestroy;
     }
 
     @Contract(pure = true)
     public @NotNull Set<@NotNull Block> getCanPlaceOn() {
-        return Collections.unmodifiableSet(canPlaceOn);
+        return canPlaceOn;
     }
 
     @Override
@@ -142,9 +143,16 @@ public class ItemMeta implements TagReadable, Writeable {
         return nbt.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+                "nbt=" + nbt +
+                '}';
+    }
+
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
-        return ItemMetaBuilder.fromNBT(emptyBuilder, nbt);
+        return ItemMetaBuilder.fromNBT(metaBuilder, nbt);
     }
 
     @Override
@@ -155,23 +163,5 @@ public class ItemMeta implements TagReadable, Writeable {
             this.cachedBuffer = w.getBuffer();
         }
         writer.write(cachedBuffer);
-        this.cachedBuffer.resetReaderIndex();
-    }
-
-    /**
-     * @deprecated use {@link #getTag(Tag)} with {@link Tag#defaultValue(Supplier)}
-     */
-    @Deprecated
-    @Contract(pure = true)
-    public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
-        return tag.defaultValue(defaultValue).read(toNBT());
-    }
-
-    /**
-     * @deprecated use {@link #getTag(Tag)}
-     */
-    @Deprecated
-    public <T> @Nullable T get(@NotNull Tag<T> tag) {
-        return getTag(tag);
     }
 }

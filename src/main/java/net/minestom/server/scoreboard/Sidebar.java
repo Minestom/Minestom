@@ -3,7 +3,6 @@ package net.minestom.server.scoreboard;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -137,18 +136,6 @@ public class Sidebar implements Scoreboard {
             // Send to current viewers
             sendPacketsToViewers(scoreboardLine.sidebarTeam.getCreationPacket(), scoreboardLine.getScoreCreationPacket(objectiveName));
         }
-    }
-
-    /**
-     * Updates a {@link ScoreboardLine} content through the given identifier.
-     *
-     * @param id      The identifier of the {@link ScoreboardLine}
-     * @param content The new content for the {@link ScoreboardLine}
-     * @deprecated Use {@link #updateLineContent(String, Component)}
-     */
-    @Deprecated
-    public void updateLineContent(@NotNull String id, @NotNull JsonMessage content) {
-        this.updateLineContent(id, content.asComponent());
     }
 
     /**
@@ -295,14 +282,6 @@ public class Sidebar implements Scoreboard {
          */
         private SidebarTeam sidebarTeam;
 
-        /**
-         * @deprecated Use {@link #ScoreboardLine(String, Component, int)}
-         */
-        @Deprecated
-        public ScoreboardLine(@NotNull String id, @NotNull JsonMessage content, int line) {
-            this(id, content.asComponent(), line);
-        }
-
         public ScoreboardLine(@NotNull String id, @NotNull Component content, int line) {
             this.id = id;
             this.content = content;
@@ -316,8 +295,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return the line identifier
          */
-        @NotNull
-        public String getId() {
+        public @NotNull String getId() {
             return id;
         }
 
@@ -325,21 +303,8 @@ public class Sidebar implements Scoreboard {
          * Gets the content of the line
          *
          * @return The line content
-         * @deprecated Use {@link #getContent()}
          */
-        @NotNull
-        @Deprecated
-        public JsonMessage getContentJson() {
-            return JsonMessage.fromComponent(getContent());
-        }
-
-        /**
-         * Gets the content of the line
-         *
-         * @return The line content
-         */
-        @NotNull
-        public Component getContent() {
+        public @NotNull Component getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
@@ -536,6 +501,4 @@ public class Sidebar implements Scoreboard {
             this.prefix = prefix;
         }
     }
-
-
 }

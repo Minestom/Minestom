@@ -1,12 +1,9 @@
 package net.minestom.server.instance.batch;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.Data;
-import net.minestom.server.instance.BlockModifier;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.utils.thread.MinestomThread;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.instance.block.BlockSetter;
+import net.minestom.server.thread.MinestomThreadPool;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,31 +23,15 @@ import java.util.concurrent.ExecutorService;
  * applied.
  *
  * @param <C> The callback function type.
- *
  * @see ChunkBatch
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
-public interface Batch<C> extends BlockModifier {
+public interface Batch<C> extends BlockSetter {
 
-    ExecutorService BLOCK_BATCH_POOL = new MinestomThread(
+    ExecutorService BLOCK_BATCH_POOL = new MinestomThreadPool(
             MinecraftServer.THREAD_COUNT_BLOCK_BATCH,
             MinecraftServer.THREAD_NAME_BLOCK_BATCH);
-
-    @Override
-    default void setBlockStateId(int x, int y, int z, short blockStateId, @Nullable Data data) {
-        setSeparateBlocks(x, y, z, blockStateId, (short) 0, data);
-    }
-
-    @Override
-    default void setCustomBlock(int x, int y, int z, short customBlockId, @Nullable Data data) {
-        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        Check.notNull(customBlock, "The custom block with the id " + customBlockId + " does not exist!");
-        setSeparateBlocks((byte) x, y, (byte) z, customBlock.getDefaultBlockStateId(), customBlockId, data);
-    }
-
-    @Override
-    void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data);
 
     /**
      * Gets if the batch is ready to be applied to an instance.

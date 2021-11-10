@@ -1,21 +1,16 @@
 package net.minestom.server.event.instance;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.event.trait.InstanceEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called by an Instance when an entity is removed from it.
  */
-public class RemoveEntityFromInstanceEvent implements InstanceEvent, EntityEvent, CancellableEvent {
-
+public class RemoveEntityFromInstanceEvent implements EntityInstanceEvent {
     private final Instance instance;
     private final Entity entity;
-
-    private boolean cancelled;
 
     public RemoveEntityFromInstanceEvent(@NotNull Instance instance, @NotNull Entity entity) {
         this.instance = instance;
@@ -32,18 +27,7 @@ public class RemoveEntityFromInstanceEvent implements InstanceEvent, EntityEvent
      *
      * @return entity being removed
      */
-    @NotNull
-    public Entity getEntity() {
+    public @NotNull Entity getEntity() {
         return entity;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
     }
 }

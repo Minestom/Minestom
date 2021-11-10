@@ -4,15 +4,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongList;
-import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -39,14 +34,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
-    // Need to be synchronized manually
-    // Format: blockIndex/blockStateId/customBlockId (32/16/16 bits)
-    private final LongList blocks;
-
-    // Need to be synchronized manually
-    // block index - data
-    private final Int2ObjectMap<Data> blockDataMap;
-
+    private final Int2ObjectMap<Block> blocks = new Int2ObjectOpenHashMap<>();
     // Available for other implementations to handle.
     protected final CountDownLatch readyLatch;
     private final BatchOption options;
@@ -56,37 +44,19 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     }
 
     public ChunkBatch(BatchOption options) {
-        this(new LongArrayList(), new Int2ObjectOpenHashMap<>(), options);
+        this(options, true);
     }
 
-    protected ChunkBatch(LongList blocks, Int2ObjectMap<Data> blockDataMap, BatchOption options) {
-        this(blocks, blockDataMap, options, true);
-    }
-
-    private ChunkBatch(LongList blocks, Int2ObjectMap<Data> blockDataMap, BatchOption options, boolean ready) {
-        this.blocks = blocks;
-        this.blockDataMap = blockDataMap;
-
+    private ChunkBatch(BatchOption options, boolean ready) {
         this.readyLatch = new CountDownLatch(ready ? 0 : 1);
         this.options = options;
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
-        // Cache the entry to be placed later during flush
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
         final int index = ChunkUtils.getBlockIndex(x, y, z);
-        long value = index;
-        value = (value << 16) | blockStateId;
-        value = (value << 16) | customBlockId;
-
         synchronized (blocks) {
-            this.blocks.add(value);
-        }
-
-        if (data != null) {
-            synchronized (blockDataMap) {
-                this.blockDataMap.put(index, data);
-            }
+            this.blocks.put(index, block);
         }
     }
 
@@ -182,7 +152,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                                boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
-        final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(new LongArrayList(), new Int2ObjectOpenHashMap<>(), options, false) : null;
+        final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(options, false) : null;
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(instance, chunk, inverse, callback, safeCallback));
         return inverse;
     }
@@ -199,18 +169,23 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 return;
             }
 
-            if (this.options.isFullChunk())
+            if (this.options.isFullChunk()) {
+                // Clear the chunk
                 chunk.reset();
+            }
 
             if (blocks.isEmpty()) {
+                // Nothing to flush
                 OptionalCallback.execute(callback, chunk);
                 return;
             }
 
             final IntSet sections = new IntArraySet();
             synchronized (blocks) {
-                for (long block : blocks) {
-                    final int section = apply(chunk, block, inverse);
+                for (var entry : blocks.int2ObjectEntrySet()) {
+                    final int position = entry.getIntKey();
+                    final Block block = entry.getValue();
+                    final int section = apply(chunk, position, block, inverse);
                     sections.add(section);
                 }
             }
@@ -226,29 +201,19 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * Applies a single block change given a chunk and a value in the described format.
      *
      * @param chunk The chunk to apply the change
-     * @param value block index|state id|custom block id (32|16|16 bits)
+     * @param index the block position computed using {@link ChunkUtils#getBlockIndex(int, int, int)}
+     * @param block the block to place
      * @return The chunk section which the block was placed
      */
-    private int apply(@NotNull Chunk chunk, long value, @Nullable ChunkBatch inverse) {
-        final short customBlockId = (short) (value & 0xFFFF);
-        final short blockId = (short) ((value >> 16) & 0xFFFF);
-        final int index = (int) ((value >> 32) & 0xFFFFFFFFL);
-
-        Data data = null;
-        if (!blockDataMap.isEmpty()) {
-            synchronized (blockDataMap) {
-                data = blockDataMap.get(index);
-            }
-        }
-
+    private int apply(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
         final int x = ChunkUtils.blockIndexToChunkPositionX(index);
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-
-        if (inverse != null)
-            inverse.setSeparateBlocks(x, y, z, chunk.getBlockStateId(x, y, z), chunk.getCustomBlockId(x, y, z), chunk.getBlockData(index));
-
-        chunk.UNSAFE_setBlock(x, y, z, blockId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+        if (inverse != null) {
+            Block prevBlock = chunk.getBlock(x, y, z);
+            inverse.setBlock(x, y, z, prevBlock);
+        }
+        chunk.setBlock(x, y, z, block);
         return ChunkUtils.getSectionAt(y);
     }
 
@@ -257,9 +222,10 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      */
     private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
-        ChunkDataPacket chunkDataPacket = chunk.createChunkPacket();
-        // TODO update all sections from `updatedSections`
-        PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket);
+        if (options.shouldSendUpdate()) {
+            // TODO update all sections from `updatedSections`
+            chunk.sendChunk();
+        }
 
         if (instance instanceof InstanceContainer) {
             // FIXME: put method in Instance instead

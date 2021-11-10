@@ -21,6 +21,7 @@ public class ClosestEntityTarget extends TargetSelector {
     private final float range;
     private final Class<? extends LivingEntity>[] entitiesTarget;
 
+    @SafeVarargs
     public ClosestEntityTarget(@NotNull EntityCreature entityCreature, float range,
                                @NotNull Class<? extends LivingEntity>... entitiesTarget) {
         super(entityCreature);
