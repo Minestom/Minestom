@@ -30,8 +30,6 @@ import java.util.zip.ZipFile;
 
 public class ExtensionManager {
 
-    public final static String DISABLE_EARLY_LOAD_SYSTEM_KEY = "minestom.extension.disable_early_load";
-
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
     public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
@@ -164,7 +162,8 @@ public class ExtensionManager {
             // set class loaders for all extensions.
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
                 try {
-                    discoveredExtension.setMinestomExtensionClassLoader(discoveredExtension.makeClassLoader());
+                    discoveredExtension.setMinestomExtensionClassLoader(discoveredExtension.makeClassLoader(discoveredExtensions)); //TODO: This is a hack to pass the dependent DiscoveredExtensions to the classloader
+                    System.out.println("SET " + discoveredExtension.getName() + " TO " + discoveredExtension.getMinestomExtensionClassLoader());
                 } catch (Exception e) {
                     discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
                     MinecraftServer.getExceptionManager().handleException(e);
@@ -547,7 +546,7 @@ public class ExtensionManager {
                 }
 
                 getter.addMavenResolver(repoList);
-                getter.addResolver(extensionDependencyResolver);
+//                getter.addResolver(extensionDependencyResolver);
 
                 for (String artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
@@ -555,11 +554,11 @@ public class ExtensionManager {
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
 
-                for (String dependencyName : discoveredExtension.getDependencies()) {
-                    var resolved = getter.get(dependencyName, dependenciesFolder);
-                    addDependencyFile(resolved, discoveredExtension);
-                    LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
-                }
+//                for (String dependencyName : discoveredExtension.getDependencies()) {
+//                    var resolved = getter.get(dependencyName, dependenciesFolder);
+//                    addDependencyFile(resolved, discoveredExtension);
+//                    LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
+//                }
             } catch (Exception e) {
                 discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
                 LOGGER.error("Failed to load dependencies for extension {}", discoveredExtension.getName());
@@ -570,6 +569,7 @@ public class ExtensionManager {
     }
 
     private void addDependencyFile(@NotNull ResolvedDependency dependency, @NotNull DiscoveredExtension extension) {
+        System.out.println("ADDING DEPENDENCY " + dependency.getName() + " TO " + extension.getName());
         URL location = dependency.getContentsLocation();
         extension.files.add(location);
         LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
@@ -721,7 +721,7 @@ public class ExtensionManager {
         // setup new classloaders for the extensions to reload
         for (DiscoveredExtension toReload : extensionsToLoad) {
             LOGGER.debug("Setting up classloader for extension {}", toReload.getName());
-            toReload.setMinestomExtensionClassLoader(toReload.makeClassLoader());
+//            toReload.setMinestomExtensionClassLoader(toReload.makeClassLoader()); //TODO: Fix this
         }
 
         List<Extension> newExtensions = new LinkedList<>();
