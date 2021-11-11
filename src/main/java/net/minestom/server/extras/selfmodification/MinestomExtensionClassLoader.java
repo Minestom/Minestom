@@ -11,7 +11,7 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
     /**
      * Root ClassLoader, everything goes through it before any attempt at loading is done inside this classloader
      */
-    private final MinestomRootClassLoader root;
+    private final ClassLoader root;
 
     /**
      * Main of the main class of the extension linked to this classloader
@@ -20,7 +20,7 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
 
     private final Logger logger = LoggerFactory.getLogger(MinestomExtensionClassLoader.class);
 
-    public MinestomExtensionClassLoader(String extensionName, String mainClassName, URL[] urls, MinestomRootClassLoader root) {
+    public MinestomExtensionClassLoader(String extensionName, String mainClassName, URL[] urls, ClassLoader root) {
         super(extensionName, urls, root);
         this.root = root;
         this.mainClassName = mainClassName;
@@ -47,12 +47,38 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        return root.loadClass(name);
+        try {
+            System.out.println("TRYING TO LOAD " + name + " IN " + getName());
+            return super.loadClass(name);
+        } catch (ClassNotFoundException e) {
+            System.out.println("COULD NOT LOAD, TRYING CHILDREN");
+            for (MinestomExtensionClassLoader child : children) {
+                try {
+                    return child.loadClass(name);
+                } catch (ClassNotFoundException ignored) {
+                    System.out.println("NOT FOUND IN " + child.getName() + " EITHER");
+                }
+            }
+            throw e;
+        }
     }
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        return root.loadClass(name, resolve);
+        try {
+            System.out.println("TRYING 2 LOAD " + name + " IN " + getName());
+            return super.loadClass(name, resolve);
+        } catch (ClassNotFoundException e) {
+            System.out.println("COULD NOT LOAD 2, TRYING CHILDREN");
+            for (MinestomExtensionClassLoader child : children) {
+                try {
+                    return child.loadClass(name, resolve);
+                } catch (ClassNotFoundException ignored) {
+                    System.out.println("NOT FOUND IN " + child.getName() + " EITHER");
+                }
+            }
+            throw e;
+        }
     }
 
     /**
@@ -62,44 +88,42 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
      * @throws ClassNotFoundException if the class is not found inside this classloader
      */
     public Class<?> loadClassAsChild(String name, boolean resolve) throws ClassNotFoundException {
-        Class<?> loadedClass = findLoadedClass(name);
-        if(loadedClass != null) {
-            return loadedClass;
-        }
-
-        try {
-            // not in children, attempt load in this classloader
-            String path = name.replace(".", "/") + ".class";
-            InputStream in = getResourceAsStream(path);
-            if (in == null) {
-                throw new ClassNotFoundException("Could not load class " + name);
-            }
-            try (in) {
-                byte[] bytes = in.readAllBytes();
-                Class<?> clazz = defineClass(name, bytes, 0, bytes.length);
-                if (resolve) {
-                    resolveClass(clazz);
-                }
-                return clazz;
-            } catch (IOException e) {
-                throw new ClassNotFoundException("Could not load class " + name, e);
-            }
-        } catch (ClassNotFoundException e) {
-            for(MinestomExtensionClassLoader child : children) {
-                try {
-                    return child.loadClassAsChild(name, resolve);
-                } catch (ClassNotFoundException e1) {
-                    // move on to next child
-                }
-            }
-            throw e;
-        }
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        logger.info("Class loader " + getName() + " finalized.");
+        throw new RuntimeException("Cannot load " + name + " using old mechanism");
+//        logger.info("Loading class " + name + " as child of " + getName());
+//        Class<?> loadedClass = findLoadedClass(name);
+//        if(loadedClass != null) {
+//            logger.info("Found loaded class");
+//            return loadedClass;
+//        }
+//
+//        try {
+//            // not in children, attempt load in this classloader
+//            String path = name.replace(".", "/") + ".class";
+//            InputStream in = getResourceAsStream(path);
+//            if (in == null) {
+//                throw new ClassNotFoundException("Could not load class " + name);
+//            }
+//            logger.info("Found in resources");
+//            try (in) {
+//                byte[] bytes = in.readAllBytes();
+//                Class<?> clazz = defineClass(name, bytes, 0, bytes.length);
+//                if (resolve) {
+//                    resolveClass(clazz);
+//                }
+//                return clazz;
+//            } catch (IOException e) {
+//                throw new ClassNotFoundException("Could not load class " + name, e);
+//            }
+//        } catch (ClassNotFoundException e) {
+//            for(MinestomExtensionClassLoader child : children) {
+//                try {
+//                    return child.loadClassAsChild(name, resolve);
+//                } catch (ClassNotFoundException e1) {
+//                    // move on to next child
+//                }
+//            }
+//            throw e;
+//        }
     }
 
     /**
