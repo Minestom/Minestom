@@ -1,5 +1,9 @@
 package net.minestom.server.command;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,6 +14,24 @@ import org.jetbrains.annotations.NotNull;
  * view of a mutable string reader.
  */
 public sealed class FixedStringReader permits StringReader {
+
+    /**
+     * A static style instance that represents {@link NamedTextColor#RED} and {@link TextDecoration#UNDERLINED}. This is
+     * here so that some style instances don't have to be created each time they're used.
+     */
+    public static final @NotNull Style RED_UNDERLINED_STYLE = Style.style(NamedTextColor.RED, TextDecoration.UNDERLINED);
+
+    /**
+     * A static style instance that represents {@link NamedTextColor#GRAY}. This is here so that gray style instances
+     * don't have to be created each time they're used.
+     */
+    public static final @NotNull Style GRAY_STYLE = Style.style(NamedTextColor.GRAY);
+
+    /**
+     * A static translatable component that represents the message that appears after incorrect command syntax, e.g.
+     * "/gamemode test<--[HERE]". It's automatically styled to be red and italicised.
+     */
+    public static final @NotNull Component CONTEXT_HERE = Component.translatable("command.context.here", NamedTextColor.RED, TextDecoration.ITALIC);
 
     private final @NotNull String input;
     /**
@@ -100,6 +122,21 @@ public sealed class FixedStringReader permits StringReader {
      */
     public char peek(int offset) {
         return input.charAt(currentPosition + offset);
+    }
+
+    /**
+     * Generates a context message for this instance. Here's an example of the output (using MiniMessage syntax) with
+     * the translatable components converted to the en-US locale:<br>
+     * Input: "/gamemode survival creative"<br>
+     * Position: 19<br>
+     * Output: "&lt;gray&gt; survival &lt;/gray&gt;&lt;red&gt;&lt;underlined&gt;survival&lt;/underlined&gt;&lt;/red&gt;
+     * &lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"<br>
+     */
+    public @NotNull Component generateContextMessage(){
+        Component read = Component.text(this.input.substring(Math.max(this.currentPosition - 10, 0), this.currentPosition), GRAY_STYLE);
+        Component error = Component.text(this.unreadCharacters(), RED_UNDERLINED_STYLE);
+
+        return Component.text().append(read, error, CONTEXT_HERE).build();
     }
 
 }
