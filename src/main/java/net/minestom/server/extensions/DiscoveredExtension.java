@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents an extension from an `extension.json` that is capable of powering an Extension object.
@@ -21,6 +23,7 @@ import java.util.List;
  * This has no constructor as its properties are set via GSON.
  */
 public final class DiscoveredExtension {
+    private static final ExtensionManager EXTENSION_MANAGER = MinecraftServer.getExtensionManager();
 
     /** Static logger for this class. */
     public static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
@@ -205,29 +208,46 @@ public final class DiscoveredExtension {
         return meta;
     }
 
-    public MinestomExtensionClassLoader makeClassLoader() {
+    public MinestomExtensionClassLoader makeClassLoader(List<DiscoveredExtension> discoveredExtensions) {
         final URL[] urls = this.files.toArray(new URL[0]);
 
-        MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), this.getEntrypoint(), urls, MinecraftServer.class.getClassLoader());
 
-        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), this.getEntrypoint(), urls, root);
+        System.out.println("CREATED " + loader + " WITH " + Arrays.toString(urls));
 
-        if (this.getDependencies().length == 0 || MinecraftServer.getExtensionManager() == null) { // it also may invoked in early class loader
-            // orphaned extension, we can insert it directly
-            root.addChild(loader);
-        } else {
-            // add children to the dependencies
-            for (String dependency : this.getDependencies()) {
-                if (MinecraftServer.getExtensionManager().hasExtension(dependency.toLowerCase())) {
-                    MinestomExtensionClassLoader parentLoader = MinecraftServer.getExtensionManager().getExtension(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
+        // add children to the dependencies
+        for (String dependencyName : this.getDependencies()) {
+            DiscoveredExtension dependency = discoveredExtensions.stream()
+                    .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
+                    .findFirst().orElse(null);
 
-                    // TODO should never happen but replace with better throws error.
-                    assert parentLoader != null;
+            if (dependency != null) {
+                MinestomExtensionClassLoader dependencyLoader = dependency.getMinestomExtensionClassLoader();
+                assert dependencyLoader != null; //TODO: Better error handling
 
-                    parentLoader.addChild(loader);
-                }
+                loader.addChild(dependencyLoader);
+            } else {
+                //TODO: Better error handling
+                throw new RuntimeException("Missing dependency " + dependencyName);
             }
         }
+
+//        if (this.getDependencies().length == 0 || MinecraftServer.getExtensionManager() == null) { // it also may invoked in early class loader
+//            // orphaned extension, we can insert it directly
+//            root.addChild(loader);
+//        } else {
+//            // add children to the dependencies
+//            for (String dependency : this.getDependencies()) {
+//                if (MinecraftServer.getExtensionManager().hasExtension(dependency.toLowerCase())) {
+//                    MinestomExtensionClassLoader parentLoader = MinecraftServer.getExtensionManager().getExtension(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
+//
+//                    // TODO should never happen but replace with better throws error.
+//                    assert parentLoader != null;
+//
+//                    parentLoader.addChild(loader);
+//                }
+//            }
+//        }
 
         return loader;
     }

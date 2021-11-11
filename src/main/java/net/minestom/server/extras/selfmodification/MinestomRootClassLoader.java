@@ -54,6 +54,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             add("kotlin");
         }
     };
+
     /**
      * Used to let ASM find out common super types, without actually commiting to loading them
      * Otherwise ASM would accidentally load classes we might want to modify
@@ -122,18 +123,19 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         try {
             // we do not load system classes by ourselves
             Class<?> systemClass = ClassLoader.getPlatformClassLoader().loadClass(name);
-            LOGGER.trace("System class: {}", systemClass);
+            LOGGER.info("System class: {}", systemClass);
             return systemClass;
         } catch (ClassNotFoundException e) {
             try {
                 if (isProtected(name)) {
-                    LOGGER.trace("Protected: {}", name);
+                    LOGGER.info("Protected: {}", name);
                     return super.loadClass(name, resolve);
                 }
 
+                LOGGER.info("Define: {}", name);
                 return define(name, resolve);
             } catch (Exception ex) {
-                LOGGER.trace("Fail to load class, resorting to parent loader: " + name, ex);
+                LOGGER.info("Fail to load class, resorting to parent loader: " + name, ex);
                 // fail to load class, let parent load
                 // this forbids code modification, but at least it will load
                 return super.loadClass(name, resolve);
