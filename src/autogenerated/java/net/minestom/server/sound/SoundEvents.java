@@ -323,6 +323,12 @@ interface SoundEvents {
 
     SoundEvent ITEM_BUCKET_FILL_POWDER_SNOW = SoundEventImpl.get("minecraft:item.bucket.fill_powder_snow");
 
+    SoundEvent ITEM_BUNDLE_DROP_CONTENTS = SoundEventImpl.get("minecraft:item.bundle.drop_contents");
+
+    SoundEvent ITEM_BUNDLE_INSERT = SoundEventImpl.get("minecraft:item.bundle.insert");
+
+    SoundEvent ITEM_BUNDLE_REMOVE_ONE = SoundEventImpl.get("minecraft:item.bundle.remove_one");
+
     SoundEvent BLOCK_CAKE_ADD_CANDLE = SoundEventImpl.get("minecraft:block.cake.add_candle");
 
     SoundEvent BLOCK_CALCITE_BREAK = SoundEventImpl.get("minecraft:block.calcite.break");
@@ -923,6 +929,8 @@ interface SoundEvents {
 
     SoundEvent BLOCK_GRINDSTONE_USE = SoundEventImpl.get("minecraft:block.grindstone.use");
 
+    SoundEvent BLOCK_GROWING_PLANT_CROP = SoundEventImpl.get("minecraft:block.growing_plant.crop");
+
     SoundEvent ENTITY_GUARDIAN_AMBIENT = SoundEventImpl.get("minecraft:entity.guardian.ambient");
 
     SoundEvent ENTITY_GUARDIAN_AMBIENT_LAND = SoundEventImpl.get("minecraft:entity.guardian.ambient_land");
@@ -1263,6 +1271,8 @@ interface SoundEvents {
 
     SoundEvent MUSIC_DISC_WARD = SoundEventImpl.get("minecraft:music_disc.ward");
 
+    SoundEvent MUSIC_DISC_OTHERSIDE = SoundEventImpl.get("minecraft:music_disc.otherside");
+
     SoundEvent MUSIC_DRAGON = SoundEventImpl.get("minecraft:music.dragon");
 
     SoundEvent MUSIC_END = SoundEventImpl.get("minecraft:music.end");
@@ -1273,11 +1283,27 @@ interface SoundEvents {
 
     SoundEvent MUSIC_NETHER_BASALT_DELTAS = SoundEventImpl.get("minecraft:music.nether.basalt_deltas");
 
+    SoundEvent MUSIC_NETHER_CRIMSON_FOREST = SoundEventImpl.get("minecraft:music.nether.crimson_forest");
+
+    SoundEvent MUSIC_OVERWORLD_DRIPSTONE_CAVES = SoundEventImpl.get("minecraft:music.overworld.dripstone_caves");
+
+    SoundEvent MUSIC_OVERWORLD_GROVE = SoundEventImpl.get("minecraft:music.overworld.grove");
+
+    SoundEvent MUSIC_OVERWORLD_JAGGED_PEAKS = SoundEventImpl.get("minecraft:music.overworld.jagged_peaks");
+
+    SoundEvent MUSIC_OVERWORLD_LUSH_CAVES = SoundEventImpl.get("minecraft:music.overworld.lush_caves");
+
+    SoundEvent MUSIC_OVERWORLD_MEADOW = SoundEventImpl.get("minecraft:music.overworld.meadow");
+
     SoundEvent MUSIC_NETHER_NETHER_WASTES = SoundEventImpl.get("minecraft:music.nether.nether_wastes");
+
+    SoundEvent MUSIC_OVERWORLD_FROZEN_PEAKS = SoundEventImpl.get("minecraft:music.overworld.frozen_peaks");
+
+    SoundEvent MUSIC_OVERWORLD_SNOWY_SLOPES = SoundEventImpl.get("minecraft:music.overworld.snowy_slopes");
 
     SoundEvent MUSIC_NETHER_SOUL_SAND_VALLEY = SoundEventImpl.get("minecraft:music.nether.soul_sand_valley");
 
-    SoundEvent MUSIC_NETHER_CRIMSON_FOREST = SoundEventImpl.get("minecraft:music.nether.crimson_forest");
+    SoundEvent MUSIC_OVERWORLD_STONY_PEAKS = SoundEventImpl.get("minecraft:music.overworld.stony_peaks");
 
     SoundEvent MUSIC_NETHER_WARPED_FOREST = SoundEventImpl.get("minecraft:music.nether.warped_forest");
 
