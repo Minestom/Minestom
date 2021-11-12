@@ -3,42 +3,25 @@ package net.minestom.server.world.biomes;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
 
-public class BiomeParticles {
-
-    private final float probability;
-    private final ParticleOptions options;
-
-    public BiomeParticles(float probability, ParticleOptions options) {
-        this.probability = probability;
-        this.options = options;
-    }
-
+public record BiomeParticle(float probability, Option option) {
     public NBTCompound toNbt() {
         NBTCompound nbt = new NBTCompound();
         nbt.setFloat("probability", probability);
-        nbt.set("options", options.toNbt());
+        nbt.set("options", option.toNbt());
         return nbt;
     }
 
-    public interface ParticleOptions {
+    public interface Option {
         NBTCompound toNbt();
     }
 
-    public static class BlockParticle implements ParticleOptions {
-
+    public record BlockOption(Block block) implements Option {
         //TODO also can be falling_dust
         private static final String type = "block";
-
-        private final Block block;
-
-        public BlockParticle(Block block) {
-            this.block = block;
-        }
 
         @Override
         public NBTCompound toNbt() {
@@ -53,24 +36,10 @@ public class BiomeParticles {
             }
             return nbtCompound;
         }
-
     }
 
-    public static class DustParticle implements ParticleOptions {
-
+    public record DustOption(float red, float green, float blue, float scale) implements Option {
         private static final String type = "dust";
-
-        private final float red;
-        private final float green;
-        private final float blue;
-        private final float scale;
-
-        public DustParticle(float red, float green, float blue, float scale) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.scale = scale;
-        }
 
         @Override
         public NBTCompound toNbt() {
@@ -82,18 +51,10 @@ public class BiomeParticles {
             nbtCompound.setFloat("scale", scale);
             return nbtCompound;
         }
-
     }
 
-    public static class ItemParticle implements ParticleOptions {
-
+    public record ItemOption(ItemStack item) implements Option {
         private static final String type = "item";
-
-        private final ItemStack item;
-
-        public ItemParticle(ItemStack item) {
-            this.item = item;
-        }
 
         @Override
         public NBTCompound toNbt() {
@@ -102,23 +63,14 @@ public class BiomeParticles {
             nbtCompound.setString("type", type);
             return nbtCompound;
         }
-
     }
 
-    public static class NormalParticle implements ParticleOptions {
-
-        private final NamespaceID type;
-
-        public NormalParticle(@NotNull NamespaceID type) {
-            this.type = type;
-        }
-
+    public record NormalOption(NamespaceID type) implements Option {
         @Override
         public NBTCompound toNbt() {
             NBTCompound nbtCompound = new NBTCompound();
             nbtCompound.setString("type", type.toString());
             return nbtCompound;
         }
-
     }
 }
