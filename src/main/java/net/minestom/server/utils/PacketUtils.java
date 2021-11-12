@@ -47,6 +47,10 @@ public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
 
+    public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
+    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", true);
+    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
+
     /// Local buffers
     private static final LocalCache<ByteBuffer> PACKET_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
     private static final LocalCache<ByteBuffer> LOCAL_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
@@ -114,7 +118,7 @@ public final class PacketUtils {
         if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
             needsTranslating = ComponentUtils.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
-        if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {
+        if (GROUPED_PACKET && !needsTranslating) {
             // Send grouped packet...
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
@@ -155,6 +159,10 @@ public final class PacketUtils {
         if (entity != null && !entity.hasPredictableViewers()) {
             // Operation cannot be optimized
             entity.sendPacketToViewers(serverPacket);
+            return;
+        }
+        if (!VIEWABLE_PACKET) {
+            sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;
@@ -303,5 +311,15 @@ public final class PacketUtils {
             }
             // TODO for non-socket connection
         }
+    }
+
+    private static boolean getBoolean(String name, boolean defaultValue) {
+        boolean result = defaultValue;
+        try {
+            final String value = System.getProperty(name);
+            if (value != null) result = Boolean.parseBoolean(value);
+        } catch (IllegalArgumentException | NullPointerException ignored) {
+        }
+        return result;
     }
 }

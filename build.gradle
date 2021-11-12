@@ -159,7 +159,7 @@ dependencies {
     }
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
-    implementation 'com.github.Minestom:MinestomDataGenerator:ffab80576e0a505bcead3fcabc1add97bc28a300'
+    implementation 'com.github.Minestom:MinestomDataGenerator:25243214b7eecfbb6fbd444f303e1eaff26cb347'
 
     // Adventure, for user-interface
     api "net.kyori:adventure-api:$adventureVersion"

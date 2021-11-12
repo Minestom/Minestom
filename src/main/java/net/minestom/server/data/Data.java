@@ -13,6 +13,7 @@ import java.util.Set;
  * <p>
  * See {@link DataImpl} for the default implementation.
  */
+@Deprecated
 public abstract class Data implements PublicCloneable<Data> {
 
     public static final Data EMPTY = new Data() {
