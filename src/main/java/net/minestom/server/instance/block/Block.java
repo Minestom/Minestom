@@ -254,5 +254,4 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
             TYPE
         }
     }
-
 }

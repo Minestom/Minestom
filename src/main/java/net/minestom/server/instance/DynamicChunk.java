@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
@@ -18,6 +19,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -60,7 +62,7 @@ public class DynamicChunk extends Chunk {
             final var blockDescription = PFBlock.get(block);
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
-        Section section = getSection(ChunkUtils.getSectionAt(y));
+        Section section = getSectionAt(y);
         section.blockPalette().set(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z), block.stateId());
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
@@ -77,6 +79,13 @@ public class DynamicChunk extends Chunk {
         } else {
             this.tickableMap.remove(index);
         }
+    }
+
+    @Override
+    public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+        this.chunkCache.invalidate();
+        Section section = getSectionAt(y);
+        section.biomePalette().set(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(x) / 4, biome.id());
     }
 
     @Override
@@ -116,6 +125,14 @@ public class DynamicChunk extends Chunk {
         final int blockStateId = section.blockPalette().get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
         if (blockStateId == -1) return Block.AIR; // Section is empty
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
+    }
+
+    @Override
+    public @NotNull Biome getBiome(int x, int y, int z) {
+        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        if (section == null) return Biome.PLAINS; // Section is unloaded
+        final int id = section.biomePalette().get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
+        return MinecraftServer.getBiomeManager().getById(id);
     }
 
     @Override
