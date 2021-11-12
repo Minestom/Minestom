@@ -7,7 +7,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -121,7 +120,7 @@ public class CollisionUtils {
                 // Collision at chunk border
                 return true;
             }
-            final Block block = chunk.getBlock(newCorner, BlockGetter.Condition.TYPE);
+            final Block block = chunk.getBlock(newCorner, Block.Getter.Condition.TYPE);
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block != null && block.isSolid()) {
