@@ -25,7 +25,6 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -658,7 +657,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                     final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
                     if (!ChunkUtils.isLoaded(chunk))
                         continue;
-                    final Block block = chunk.getBlock(x, y, z, BlockGetter.Condition.CACHED);
+                    final Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.CACHED);
                     if (block == null)
                         continue;
                     final BlockHandler handler = block.handler();

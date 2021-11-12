@@ -15,7 +15,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceTickEvent;
-import net.minestom.server.instance.block.*;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
@@ -49,7 +51,7 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockGetter, BlockSetter, Tickable, TagHandler, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, TagHandler, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
