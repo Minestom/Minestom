@@ -174,13 +174,11 @@ public final class Registry {
             this.air = getBoolean("air", false);
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid", false);
-
-            // Block entity
             {
-                final Map<String, Object> blockEntityProperties = element("blockEntity");
-                if (blockEntityProperties != null) {
-                    this.blockEntity = (String) blockEntityProperties.get("namespace");
-                    this.blockEntityId = ((Number) blockEntityProperties.get("id")).intValue();
+                Map<String, Object> blockEntity = element("blockEntity");
+                if (blockEntity != null) {
+                    this.blockEntity = (String) blockEntity.get("namespace");
+                    this.blockEntityId = ((Number) blockEntity.get("id")).intValue();
                 } else {
                     this.blockEntity = null;
                     this.blockEntityId = 0;
