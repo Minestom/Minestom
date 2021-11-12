@@ -2059,6 +2059,8 @@ interface Materials {
 
     Material MUSIC_DISC_WAIT = MaterialImpl.get("minecraft:music_disc_wait");
 
+    Material MUSIC_DISC_OTHERSIDE = MaterialImpl.get("minecraft:music_disc_otherside");
+
     Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("minecraft:music_disc_pigstep");
 
     Material TRIDENT = MaterialImpl.get("minecraft:trident");
