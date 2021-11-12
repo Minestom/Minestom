@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public record BiomeEffects(int fogColor, int skyColor, int waterColor, int waterFogColor, int foliageColor,
                            int grassColor,
-                           GrassColorModifier grassColorModifier, BiomeParticles biomeParticles,
+                           GrassColorModifier grassColorModifier, BiomeParticle biomeParticle,
                            NamespaceID ambientSound, MoodSound moodSound, AdditionsSound additionsSound,
                            Music music) {
 
@@ -26,8 +26,8 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         nbt.setInt("water_fog_color", waterFogColor);
         if (grassColorModifier != null)
             nbt.setString("grass_color_modifier", grassColorModifier.name().toLowerCase(Locale.ROOT));
-        if (biomeParticles != null)
-            nbt.set("particle", biomeParticles.toNbt());
+        if (biomeParticle != null)
+            nbt.set("particle", biomeParticle.toNbt());
         if (ambientSound != null)
             nbt.setString("ambient_sound", ambientSound.toString());
         if (moodSound != null)
@@ -82,7 +82,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         private int foliageColor = -1;
         private int grassColor = -1;
         private GrassColorModifier grassColorModifier;
-        private BiomeParticles biomeParticles;
+        private BiomeParticle biomeParticle;
         private NamespaceID ambientSound;
         private MoodSound moodSound;
         private AdditionsSound additionsSound;
@@ -126,8 +126,8 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
             return this;
         }
 
-        public Builder biomeParticles(BiomeParticles biomeParticles) {
-            this.biomeParticles = biomeParticles;
+        public Builder biomeParticle(BiomeParticle biomeParticle) {
+            this.biomeParticle = biomeParticle;
             return this;
         }
 
@@ -153,7 +153,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
 
         public BiomeEffects build() {
             return new BiomeEffects(fogColor, skyColor, waterColor, waterFogColor, foliageColor,
-                    grassColor, grassColorModifier, biomeParticles,
+                    grassColor, grassColorModifier, biomeParticle,
                     ambientSound, moodSound, additionsSound, music);
         }
     }
