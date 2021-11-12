@@ -1,5 +1,6 @@
 package net.minestom.server.world.biomes;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -193,6 +194,22 @@ public final class Biome {
 
         public Biome build() {
             return new Biome(name, depth, temperature, scale, downfall, category, effects, precipitation, temperatureModifier);
+        }
+    }
+
+    public interface Setter {
+        void setBiome(int x, int y, int z, @NotNull Biome biome);
+
+        default void setBiome(@NotNull Point blockPosition, @NotNull Biome biome) {
+            setBiome(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), biome);
+        }
+    }
+
+    public interface Getter {
+        @NotNull Biome getBiome(int x, int y, int z);
+
+        default @NotNull Biome getBiome(@NotNull Point point) {
+            return getBiome(point.blockX(), point.blockY(), point.blockZ());
         }
     }
 }
