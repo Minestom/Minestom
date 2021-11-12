@@ -127,10 +127,10 @@ configurations.all {
     exclude("org.checkerframework:checker-qual")
 }
 
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            from components["java"]
-//        }
-//    }
-//}
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
+}
