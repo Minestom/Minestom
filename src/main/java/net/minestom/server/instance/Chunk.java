@@ -7,8 +7,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
-import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
@@ -34,7 +32,7 @@ import java.util.UUID;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler {
+public abstract class Chunk implements Block.Getter, Block.Setter, Viewable, Tickable, TagHandler {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
