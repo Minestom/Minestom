@@ -259,12 +259,8 @@ public class AnvilLoader implements IChunkLoader {
                 for (int y = 0; y < 256; y++) { // TODO don't hardcode world height
                     final Block block = chunk.getBlock(x, y, z);
                     // Block
-                    BlockState state = new BlockState(block.name(), block.properties());
-                    chunkColumn.setBlockState(x, y, z, state);
-                    // TODO Biome
-                    //int index = ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3); // https://wiki.vg/Chunk_Format#Biomes
-                    //Biome biome = chunk.getBiomes()[index];
-                    //chunkColumn.setBiome(x, 0, z, biome.getId());
+                    chunkColumn.setBlockState(x, y, z, new BlockState(block.name(), block.properties()));
+                    chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).id());
 
                     // Tile entity
                     var nbt = block.nbt();
