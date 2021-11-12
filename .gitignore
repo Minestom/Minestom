@@ -53,5 +53,5 @@ gradle-app.setting
 /src/main/java/com/mcecraft/
 
 # When running the demo we generate the extensions folder
-/extensions/
-/.mixin.out/
+demo/extensions/
+demo/.mixin.out/
