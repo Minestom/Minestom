@@ -16,6 +16,12 @@ import org.jetbrains.annotations.NotNull;
 public sealed class FixedStringReader permits StringReader {
 
     /**
+     * A static style instance that represents {@link NamedTextColor#RED}. This is here so that some style instances
+     * don't have to be created each time they're used.
+     */
+    public static final @NotNull Style RED_STYLE = Style.style(NamedTextColor.RED);
+
+    /**
      * A static style instance that represents {@link NamedTextColor#RED} and {@link TextDecoration#UNDERLINED}. This is
      * here so that some style instances don't have to be created each time they're used.
      */
