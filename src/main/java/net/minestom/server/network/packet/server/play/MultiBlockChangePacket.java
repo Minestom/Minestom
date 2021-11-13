@@ -15,21 +15,10 @@ public class MultiBlockChangePacket implements ServerPacket {
     public int chunkZ;
     public int section;
     //TODO this is important prob if we add a light api
-    public boolean suppressLightUpdates = true;
-    public BlockEntry[] blockChanges = new BlockEntry[0];
+    public boolean suppressLightUpdates;
+    public BlockEntry[] blockChanges;
 
-    public MultiBlockChangePacket() {
-    }
-
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeLong(((long) (chunkX & 0x3FFFFF) << 42) | (section & 0xFFFFF) | ((long) (chunkZ & 0x3FFFFF) << 20));
-        writer.writeBoolean(suppressLightUpdates);
-        writer.writeArray(blockChanges);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
+    public MultiBlockChangePacket(BinaryReader reader) {
         final long chunkIndexWithSection = reader.readLong();
         this.chunkX = (int) ((chunkIndexWithSection >> 42) & 4194303L);
         this.chunkZ = (int) ((chunkIndexWithSection >> 20) & 4194303L);
@@ -51,27 +40,19 @@ public class MultiBlockChangePacket implements ServerPacket {
     }
 
     @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeLong(((long) (chunkX & 0x3FFFFF) << 42) | (section & 0xFFFFF) | ((long) (chunkZ & 0x3FFFFF) << 20));
+        writer.writeBoolean(suppressLightUpdates);
+        writer.writeArray(blockChanges);
+    }
+
+    @Override
     public int getId() {
         return ServerPacketIdentifier.MULTI_BLOCK_CHANGE;
     }
 
-    public static final class BlockEntry implements Writeable {
-        private final Vec chunkPosition;
-        public final Block block;
-
-        public BlockEntry(Vec chunkPosition, Block block) {
-            this.chunkPosition = chunkPosition;
-            this.block = block;
-        }
-
-        public Vec chunkPosition() {
-            return chunkPosition;
-        }
-
-        public Block block() {
-            return block;
-        }
-
+    public record BlockEntry(Vec chunkPosition,
+                             Block block) implements Writeable {
         @Override
         public void write(@NotNull BinaryWriter writer) {
             writer.writeVarLong((long) block.stateId() << 12 |

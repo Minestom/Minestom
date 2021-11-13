@@ -233,7 +233,14 @@ public class BinaryReader extends InputStream {
     }
 
     public <T> List<T> readVarIntList(@NotNull Function<BinaryReader, T> supplier) {
-        final int length = readVarInt();
+        return readList(readVarInt(), supplier);
+    }
+
+    public <T> List<T> readByteList(@NotNull Function<BinaryReader, T> supplier) {
+        return readList(readByte(), supplier);
+    }
+
+    private <T> List<T> readList(int length, @NotNull Function<BinaryReader, T> supplier) {
         List<T> list = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
             list.add(supplier.apply(this));
