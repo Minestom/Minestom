@@ -66,9 +66,7 @@ public class ReadWritePackets {
                         // exceptions
                         if (clazz.getSimpleName().equals("EntityEquipmentPacket")) {
                             // requires at least one slot and one item
-                            EntityEquipmentPacket p = new EntityEquipmentPacket();
-                            p.itemStacks = new ItemStack[]{ItemStack.AIR};
-                            p.slots = new EquipmentSlot[]{EquipmentSlot.MAIN_HAND};
+                            EntityEquipmentPacket p = new EntityEquipmentPacket(0, new EquipmentSlot[]{EquipmentSlot.MAIN_HAND}, new ItemStack[]{ItemStack.AIR});
                             packet = (T) p;
                         } else {
                             packet = (T) constructor.newInstance();

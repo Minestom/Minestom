@@ -345,12 +345,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreCreationPacket(String objectiveName) {
-            UpdateScorePacket updateScorePacket = new UpdateScorePacket();
-            updateScorePacket.entityName = entityName;
-            updateScorePacket.action = 0; // Create/Update
-            updateScorePacket.objectiveName = objectiveName;
-            updateScorePacket.value = line;
-            return updateScorePacket;
+            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, line);
         }
 
         /**
@@ -360,11 +355,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreDestructionPacket(String objectiveName) {
-            UpdateScorePacket updateScorePacket = new UpdateScorePacket();
-            updateScorePacket.entityName = entityName;
-            updateScorePacket.action = 1; // Remove
-            updateScorePacket.objectiveName = objectiveName;
-            return updateScorePacket;
+            return new UpdateScorePacket(entityName, (byte) 1, objectiveName, 0);
         }
 
         /**

@@ -50,12 +50,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
                 final String channel = VelocityProxy.PLAYER_INFO_CHANNEL;
                 // Important in order to retrieve the channel in the response packet
                 socketConnection.addPluginRequestEntry(messageId, channel);
-
-                LoginPluginRequestPacket loginPluginRequestPacket = new LoginPluginRequestPacket();
-                loginPluginRequestPacket.messageId = messageId;
-                loginPluginRequestPacket.channel = channel;
-                loginPluginRequestPacket.data = null;
-                connection.sendPacket(loginPluginRequestPacket);
+                connection.sendPacket(new LoginPluginRequestPacket(messageId, channel, null));
                 return;
             }
         }

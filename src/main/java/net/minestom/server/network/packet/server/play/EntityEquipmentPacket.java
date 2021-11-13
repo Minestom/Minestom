@@ -11,44 +11,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EntityEquipmentPacket implements ServerPacket {
+public final class EntityEquipmentPacket implements ServerPacket {
+    public final int entityId;
+    public final EquipmentSlot[] slots;
+    public final ItemStack[] itemStacks;
 
-    public int entityId;
-    public EquipmentSlot[] slots;
-    public ItemStack[] itemStacks;
-
-    public EntityEquipmentPacket() {
-    }
-
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(entityId);
-
+    public EntityEquipmentPacket(int entityId, EquipmentSlot[] slots, ItemStack[] itemStacks) {
         if (slots == null || itemStacks == null) {
             throw new IllegalArgumentException("You need to specify at least one slot and one item");
         }
-
         if (slots.length != itemStacks.length) {
             throw new IllegalArgumentException("You need the same amount of slots and items");
         }
-
-        for (int i = 0; i < slots.length; i++) {
-            final EquipmentSlot slot = slots[i];
-            final ItemStack itemStack = itemStacks[i];
-            final boolean last = i == slots.length - 1;
-
-            byte slotEnum = (byte) slot.ordinal();
-            if (!last) {
-                slotEnum |= 0x80;
-            }
-
-            writer.writeByte(slotEnum);
-            writer.writeItemStack(itemStack);
-        }
+        this.entityId = entityId;
+        this.slots = slots;
+        this.itemStacks = itemStacks;
     }
 
-    @Override
-    public void read(@NotNull BinaryReader reader) {
+    public EntityEquipmentPacket(BinaryReader reader) {
         entityId = reader.readVarInt();
 
         boolean hasRemaining = true;
@@ -67,8 +47,23 @@ public class EntityEquipmentPacket implements ServerPacket {
     }
 
     @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(entityId);
+        for (int i = 0; i < slots.length; i++) {
+            final EquipmentSlot slot = slots[i];
+            final ItemStack itemStack = itemStacks[i];
+            final boolean last = i == slots.length - 1;
+
+            byte slotEnum = (byte) slot.ordinal();
+            if (!last) slotEnum |= 0x80;
+
+            writer.writeByte(slotEnum);
+            writer.writeItemStack(itemStack);
+        }
+    }
+
+    @Override
     public int getId() {
         return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
-
 }

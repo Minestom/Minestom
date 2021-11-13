@@ -30,9 +30,6 @@ public record Potion(PotionEffect effect, byte amplifier, int duration, byte fla
      * @param entity the entity to remove the effect from
      */
     public void sendRemovePacket(@NotNull Entity entity) {
-        RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-        removeEntityEffectPacket.entityId = entity.getEntityId();
-        removeEntityEffectPacket.effect = effect;
-        entity.sendPacketToViewersAndSelf(removeEntityEffectPacket);
+        entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 }

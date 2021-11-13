@@ -164,15 +164,9 @@ public interface EquipmentHandler {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
-
         final ItemStack itemStack = getEquipment(slot);
-
-        EntityEquipmentPacket entityEquipmentPacket = new EntityEquipmentPacket();
-        entityEquipmentPacket.entityId = entity.getEntityId();
-        entityEquipmentPacket.slots = new EquipmentSlot[]{slot};
-        entityEquipmentPacket.itemStacks = new ItemStack[]{itemStack};
-
-        entity.sendPacketToViewers(entityEquipmentPacket);
+        entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(),
+                new EquipmentSlot[]{slot}, new ItemStack[]{itemStack}));
     }
 
     /**
@@ -189,12 +183,7 @@ public interface EquipmentHandler {
             final EquipmentSlot slot = slots[i];
             equipments[i] = getEquipment(slot);
         }
-        // Create equipment packet
-        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = ((Entity) this).getEntityId();
-        equipmentPacket.slots = slots;
-        equipmentPacket.itemStacks = equipments;
-        return equipmentPacket;
+        return new EntityEquipmentPacket(((Entity) this).getEntityId(), slots, equipments);
     }
 
 }

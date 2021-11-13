@@ -225,11 +225,11 @@ public class FakePlayerController {
     public void consumePacket(ServerPacket serverPacket) {
         if (serverPacket instanceof PlayerPositionAndLookPacket) {
             ClientTeleportConfirmPacket teleportConfirmPacket = new ClientTeleportConfirmPacket();
-            teleportConfirmPacket.teleportId = ((PlayerPositionAndLookPacket) serverPacket).teleportId;
+            teleportConfirmPacket.teleportId = ((PlayerPositionAndLookPacket) serverPacket).teleportId();
             addToQueue(teleportConfirmPacket);
         } else if (serverPacket instanceof KeepAlivePacket) {
             ClientKeepAlivePacket keepAlivePacket = new ClientKeepAlivePacket();
-            keepAlivePacket.id = ((KeepAlivePacket) serverPacket).id;
+            keepAlivePacket.id = ((KeepAlivePacket) serverPacket).id();
             addToQueue(keepAlivePacket);
         }
     }

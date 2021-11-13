@@ -429,10 +429,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setFireForDuration(0);
         setOnFire(false);
         refreshHealth();
-        RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimensionType = getDimensionType();
-        respawnPacket.gameMode = getGameMode();
-        respawnPacket.isFlat = levelFlat;
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
+                0, gameMode, gameMode, false, levelFlat, true);
         getPlayerConnection().sendPacket(respawnPacket);
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -878,10 +876,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-
-        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
-        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
-        sendPacketToViewersAndSelf(infoPacket);
+        final List<PlayerInfoPacket.Info> info = List.of(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
+        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME, info));
     }
 
     /**
@@ -1242,10 +1238,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
-
-            PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
-            infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
-            sendPacketToViewersAndSelf(infoPacket);
+            final List<PlayerInfoPacket.Info> info = List.of(new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode));
+            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE, info));
         }
     }
 
@@ -1711,9 +1705,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
-        sendPacketToViewersAndSelf(playerInfoPacket);
+        final List<PlayerInfoPacket.Info> info = List.of(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
+        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY, info));
     }
 
     public void refreshOnGround(boolean onGround) {
@@ -1834,21 +1827,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return a {@link PlayerInfoPacket} to add the player
      */
     protected @NotNull PlayerInfoPacket getAddPlayerToList() {
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-
-        PlayerInfoPacket.AddPlayer addPlayer =
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
-        addPlayer.displayName = displayName;
-
-        // Skin support
-        if (skin != null) {
-            PlayerInfoPacket.AddPlayer.Property prop =
-                    new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature());
-            addPlayer.properties.add(prop);
-        }
-
-        playerInfoPacket.playerInfos.add(addPlayer);
-        return playerInfoPacket;
+        final PlayerSkin skin = this.skin;
+        List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
+                List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
+                Collections.emptyList();
+        final PlayerInfoPacket.Info info = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName);
+        return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER, List.of(info));
     }
 
     /**
@@ -1857,9 +1841,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return a {@link PlayerInfoPacket} to remove the player
      */
     protected @NotNull PlayerInfoPacket getRemovePlayerToList() {
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
-        return playerInfoPacket;
+        return new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER,
+                List.of(new PlayerInfoPacket.RemovePlayer(getUuid())));
     }
 
     /**
