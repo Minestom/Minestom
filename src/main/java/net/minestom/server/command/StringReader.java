@@ -1,9 +1,10 @@
 package net.minestom.server.command;
 
-import net.minestom.server.command.builder.exception.SectionParsingException;
+import net.minestom.server.command.builder.exception.CommandException;
+import net.minestom.server.command.builder.exception.RenderedCommandException;
 import org.jetbrains.annotations.NotNull;
 
-import static net.minestom.server.command.builder.exception.SectionParsingException.*;
+import java.util.UUID;
 
 /**
  * A mutable string reader implementation.
@@ -114,87 +115,105 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next integer in the string
      */
-    public int readInteger() throws SectionParsingException {
+    public int readInteger() throws RenderedCommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
         }
         if (currentPosition == start){
-            throw new SectionParsingException(INT_EXPECTED, this);
+            throw CommandException.PARSING_INT_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
         try {
             return Integer.parseInt(number);
         } catch (NumberFormatException exception){
             currentPosition = start;
-            throw new SectionParsingException(INT_INVALID, this, number);
+            throw CommandException.PARSING_INT_INVALID.generateException(this, number);
         }
     }
 
     /**
      * @return the next long in the string
      */
-    public long readLong() throws SectionParsingException {
+    public long readLong() throws RenderedCommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
         }
         if (currentPosition == start){
-            throw new SectionParsingException(LONG_EXPECTED, this);
+            throw CommandException.PARSING_LONG_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
         try {
             return Long.parseLong(number);
         } catch (NumberFormatException exception){
             currentPosition = start;
-            throw new SectionParsingException(LONG_INVALID, this, number);
+            throw CommandException.PARSING_LONG_INVALID.generateException(this, number);
         }
     }
 
     /**
      * @return the next double in the string
      */
-    public double readDouble() throws SectionParsingException {
+    public double readDouble() throws RenderedCommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
         }
         if (currentPosition == start){
-            throw new SectionParsingException(DOUBLE_EXPECTED, this);
+            throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
         try {
             return Double.parseDouble(number);
         } catch (NumberFormatException exception){
             currentPosition = start;
-            throw new SectionParsingException(DOUBLE_INVALID, this, number);
+            throw CommandException.PARSING_DOUBLE_INVALID.generateException(this, number);
         }
     }
 
     /**
      * @return the next float in the string
      */
-    public float readFloat() throws SectionParsingException {
+    public float readFloat() throws RenderedCommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
         }
         if (currentPosition == start){
-            throw new SectionParsingException(FLOAT_EXPECTED, this);
+            throw CommandException.PARSING_FLOAT_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
         try {
             return Float.parseFloat(number);
         } catch (NumberFormatException exception){
             currentPosition = start;
-            throw new SectionParsingException(FLOAT_INVALID, this, number);
+            throw CommandException.PARSING_FLOAT_INVALID.generateException(this, number);
+        }
+    }
+
+    /**
+     * @return the next boolean in the string
+     */
+    public boolean readBoolean() throws RenderedCommandException {
+        int start = currentPosition;
+        String next = readString();
+        if (next.isEmpty()) {
+            throw CommandException.PARSING_BOOL_EXPECTED.generateException(this);
+        } else if (next.equals("true")) {
+            return true;
+        } else if (next.equals("false")){
+            return false;
+        } else {
+            currentPosition = start;
+            throw CommandException.PARSING_BOOL_INVALID.generateException(this, next);
         }
     }
 
     /**
      * @return the rest of the string or until there is a character equal to the terminator parameter
      */
-    public @NotNull String readStringUntil(char terminator) throws SectionParsingException {
+    public @NotNull String readStringUntil(char terminator) throws RenderedCommandException {
         final StringBuilder result = new StringBuilder();
         boolean escaped = false;
         while (canRead()) {
@@ -205,7 +224,7 @@ public final class StringReader extends FixedStringReader {
                     escaped = false;
                 } else {
                     currentPosition--;
-                    throw new SectionParsingException(QUOTE_ESCAPE, this, Character.toString(c));
+                    throw CommandException.PARSING_QUOTE_ESCAPE.generateException(this, String.valueOf(c));
                 }
             } else if (c == ESCAPE) {
                 escaped = true;
@@ -215,13 +234,13 @@ public final class StringReader extends FixedStringReader {
                 result.append(c);
             }
         }
-        throw new SectionParsingException(QUOTE_EXPECTED_END, this);
+        throw CommandException.PARSING_QUOTE_EXPECTED_END.generateException(this);
     }
 
     /**
      * @return the next quoted or unquoted string in the input
      */
-    public @NotNull String readString() throws SectionParsingException {
+    public @NotNull String readString() throws RenderedCommandException {
         if (!canRead()) {
             return "";
         }
@@ -237,42 +256,43 @@ public final class StringReader extends FixedStringReader {
      * @return the next string surrounded by quotes (the quotes must be the same character, e.g. the string cannot start
      * with ' and end with ").
      */
-    public @NotNull String readQuotedString() throws SectionParsingException {
+    public @NotNull String readQuotedString() throws RenderedCommandException {
         if (!canRead()) {
             return "";
         }
         final char next = peek();
         if (!isValidQuote(next)) {
-            throw new SectionParsingException(QUOTE_EXPECTED_START, this);
+            throw CommandException.PARSING_QUOTE_EXPECTED_START.generateException(this);
         }
         skip();
         return readStringUntil(next);
     }
 
     /**
-     * @return the next boolean in the string
+     * @return the next UUID in the string
      */
-    public boolean readBoolean() throws SectionParsingException {
+    public @NotNull UUID readUUID() throws RenderedCommandException {
         int start = currentPosition;
-        String next = readString();
-        if (next.isEmpty()) {
-            throw new SectionParsingException(BOOL_EXPECTED, this);
-        } else if (next.equals("true")) {
-            return true;
-        } else if (next.equals("false")){
-            return false;
-        } else {
-            currentPosition = start;
-            throw new SectionParsingException(BOOL_INVALID, this, next);
+        while (canRead()){
+            char c = peek();
+            if (!(c == '-' || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9'))){
+                throw CommandException.ARGUMENT_UUID_INVALID.generateException(this);
+            }
+            skip();
+        }
+        try {
+            return UUID.fromString(all().substring(start, currentPosition));
+        } catch (IllegalArgumentException exception) {
+            throw CommandException.ARGUMENT_UUID_INVALID.generateException(this);
         }
     }
 
     /**
      * Throws an exception if the next character is not {@code c}, and then skips the next character.
      */
-    public void expect(char c) throws SectionParsingException {
+    public void expect(char c) throws RenderedCommandException {
         if (!canRead() || c != peek()) {
-            throw new SectionParsingException(EXPECTED, this, Character.toString(c));
+            throw CommandException.PARSING_EXPECTED.generateException(this, Character.toString(c));
         }
         skip();
     }
