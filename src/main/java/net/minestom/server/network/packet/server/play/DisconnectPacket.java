@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.function.UnaryOperator;
 
 public record DisconnectPacket(Component message) implements ComponentHoldingServerPacket {
-    private DisconnectPacket(BinaryReader reader) {
+    public DisconnectPacket(BinaryReader reader) {
         this(reader.readComponent());
     }
 
