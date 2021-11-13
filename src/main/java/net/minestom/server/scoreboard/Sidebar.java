@@ -419,18 +419,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} which creates a new team
          */
         private TeamsPacket getCreationPacket() {
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = teamName;
-            teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = teamDisplayName;
-            teamsPacket.friendlyFlags = friendlyFlags;
-            teamsPacket.nameTagVisibility = nameTagVisibility;
-            teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix;
-            teamsPacket.teamSuffix = suffix;
-            teamsPacket.entities = new String[]{entityName};
-            return teamsPacket;
+            final var action = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, new String[]{entityName});
+            return new TeamsPacket(teamName, action);
         }
 
         /**
@@ -439,10 +430,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} which destroyed a team
          */
         private TeamsPacket getDestructionPacket() {
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = teamName;
-            teamsPacket.action = TeamsPacket.Action.REMOVE_TEAM;
-            return teamsPacket;
+            return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
         }
 
         /**
@@ -452,17 +440,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} with the updated prefix
          */
         private TeamsPacket updatePrefix(Component prefix) {
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = teamName;
-            teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-            teamsPacket.teamDisplayName = teamDisplayName;
-            teamsPacket.friendlyFlags = friendlyFlags;
-            teamsPacket.nameTagVisibility = nameTagVisibility;
-            teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix;
-            teamsPacket.teamSuffix = suffix;
-            return teamsPacket;
+            final var action = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, new String[]{entityName});
+            return new TeamsPacket(teamName, action);
         }
 
         /**
