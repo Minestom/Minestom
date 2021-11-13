@@ -67,36 +67,6 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        mapId = reader.readVarInt();
-        scale = reader.readByte();
-        locked = reader.readBoolean();
-        trackingPosition = reader.readBoolean();
-
-        if (trackingPosition) {
-            int iconCount = reader.readVarInt();
-            icons = new Icon[iconCount];
-            for (int i = 0; i < iconCount; i++) {
-                icons[i] = new Icon();
-                icons[i].read(reader);
-            }
-        } else {
-            icons = new Icon[0];
-        }
-
-        columns = reader.readByte();
-        if (columns <= 0) {
-            return;
-        }
-
-        rows = reader.readByte();
-        x = reader.readByte();
-        z = reader.readByte();
-        int dataLength = reader.readVarInt();
-        data = reader.readBytes(dataLength);
-    }
-
-    @Override
     public int getId() {
         return ServerPacketIdentifier.MAP_DATA;
     }

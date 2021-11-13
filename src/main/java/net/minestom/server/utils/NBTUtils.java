@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.util.Codec;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
@@ -24,7 +23,6 @@ import org.jglrxavpok.hephaistos.nbt.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 
 // for lack of a better name
@@ -129,15 +127,10 @@ public final class NBTUtils {
         final byte count = reader.readByte();
         NBTCompound nbtCompound = null;
 
-        try {
-            final NBT itemNBT = reader.readTag();
-            if (itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
-                nbtCompound = (NBTCompound) itemNBT;
-            }
-        } catch (IOException | NBTException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+        final NBT itemNBT = reader.readTag();
+        if (itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
+            nbtCompound = (NBTCompound) itemNBT;
         }
-
         return ItemStack.fromNBT(material, nbtCompound, count);
     }
 

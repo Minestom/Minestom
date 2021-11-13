@@ -28,28 +28,6 @@ public class DeclareRecipesPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        int recipeCount = reader.readVarInt();
-        recipes = new DeclaredRecipe[recipeCount];
-        for (int i = 0; i < recipeCount; i++) {
-            String type = reader.readSizedString();
-            String id = reader.readSizedString();
-
-            switch (type) {
-                case "crafting_shapeless" -> recipes[i] = new DeclaredShapelessCraftingRecipe(id, reader);
-                case "crafting_shaped" -> recipes[i] = new DeclaredShapedCraftingRecipe(id, reader);
-                case "smelting" -> recipes[i] = new DeclaredSmeltingRecipe(id, reader);
-                case "blasting" -> recipes[i] = new DeclaredBlastingRecipe(id, reader);
-                case "smoking" -> recipes[i] = new DeclaredSmokingRecipe(id, reader);
-                case "campfire_cooking" -> recipes[i] = new DeclaredCampfireCookingRecipe(id, reader);
-                case "stonecutter" -> recipes[i] = new DeclaredStonecutterRecipe(id, reader);
-                case "smithing" -> recipes[i] = new DeclaredSmithingRecipe(id, reader);
-                default -> throw new UnsupportedOperationException("Unrecognized type: " + type + " (id is " + id + ")");
-            }
-        }
-    }
-
-    @Override
     public int getId() {
         return ServerPacketIdentifier.DECLARE_RECIPES;
     }

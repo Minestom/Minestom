@@ -23,17 +23,6 @@ public class DeclareCommandsPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        int nodeCount = reader.readVarInt();
-        nodes = new Node[nodeCount];
-        for (int i = 0; i < nodeCount; i++) {
-            nodes[i] = new Node();
-            nodes[i].read(reader);
-        }
-        rootIndex = reader.readVarInt();
-    }
-
-    @Override
     public int getId() {
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }

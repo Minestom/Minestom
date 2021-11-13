@@ -9,13 +9,14 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -45,7 +46,7 @@ public class ReadWritePackets {
         return checkImplementationPresence(ClientPacket.class);
     }
 
-    private <T extends Readable & Writeable> Collection<DynamicTest> checkImplementationPresence(Class<T> packetClass) throws IOException {
+    private <T extends Writeable> Collection<DynamicTest> checkImplementationPresence(Class<T> packetClass) throws IOException {
         ClassPath cp = ClassPath.from(ClassLoader.getSystemClassLoader());
         List<DynamicTest> allTests = new LinkedList<>();
         for (ClassPath.ClassInfo classInfo : cp.getAllClasses()) {
@@ -78,7 +79,7 @@ public class ReadWritePackets {
                         // re-read packet
                         byte[] originalBytes = writer.toByteArray();
                         BinaryReader reader = new BinaryReader(originalBytes);
-                        packet.read(reader);
+                        packet = (T) MethodHandles.lookup().findConstructor(packetClass, MethodType.methodType(packetClass, BinaryReader.class)).invoke(packet, reader);
 
                         Assertions.assertEquals(0, reader.readRemainingBytes().length, "Packet did not read all available data");
 

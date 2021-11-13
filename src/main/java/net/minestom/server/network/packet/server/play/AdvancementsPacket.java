@@ -45,27 +45,6 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        resetAdvancements = reader.readBoolean();
-
-        int mappingCount = reader.readVarInt();
-        advancementMappings = new AdvancementMapping[mappingCount];
-        for (int i = 0; i < mappingCount; i++) {
-            advancementMappings[i] = new AdvancementMapping();
-            advancementMappings[i].read(reader);
-        }
-
-        identifiersToRemove = reader.readSizedStringArray(Integer.MAX_VALUE);
-
-        int progressCount = reader.readVarInt();
-        progressMappings = new ProgressMapping[progressCount];
-        for (int i = 0; i < progressCount; i++) {
-            progressMappings[i] = new ProgressMapping();
-            progressMappings[i].read(reader);
-        }
-    }
-
-    @Override
     public int getId() {
         return ServerPacketIdentifier.ADVANCEMENTS;
     }
