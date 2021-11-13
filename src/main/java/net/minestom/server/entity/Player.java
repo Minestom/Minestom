@@ -81,6 +81,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -238,15 +239,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        JoinGamePacket joinGamePacket = new JoinGamePacket();
-        joinGamePacket.entityId = getEntityId();
-        joinGamePacket.gameMode = gameMode;
-        joinGamePacket.dimensionType = dimensionType;
-        joinGamePacket.maxPlayers = 0; // Unused
-        joinGamePacket.viewDistance = MinecraftServer.getChunkViewDistance();
-        joinGamePacket.simulationDistance = MinecraftServer.getChunkViewDistance();
-        joinGamePacket.reducedDebugInfo = false;
-        joinGamePacket.isFlat = levelFlat;
+        NBTCompound nbt = new NBTCompound();
+        NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
+        NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
+        nbt.set("minecraft:dimension_type", dimensions);
+        nbt.set("minecraft:worldgen/biome", biomes);
+
+        final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), gameMode.isHardcore(), gameMode, null,
+                List.of("minestom:world"), nbt, dimensionType.toNBT(), dimensionType.getName().asString(),
+                0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
+                false, true, false, levelFlat);
         playerConnection.sendPacket(joinGamePacket);
 
         // Server brand name
@@ -908,10 +910,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimensionType = getDimensionType();
-        respawnPacket.gameMode = getGameMode();
-        respawnPacket.isFlat = levelFlat;
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
+                0, gameMode, gameMode, false, levelFlat, true);
 
         playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
@@ -1262,11 +1262,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
-        RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimensionType = dimensionType;
-        respawnPacket.gameMode = gameMode;
-        respawnPacket.isFlat = levelFlat;
-        playerConnection.sendPacket(respawnPacket);
+        sendPacket(new RespawnPacket(dimensionType, dimensionType.getName().asString(),
+                0, gameMode, gameMode, false, levelFlat, true));
     }
 
     /**
