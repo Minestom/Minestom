@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public record LoginSuccessPacket(UUID uuid, String username) implements ServerPacket {
-    private LoginSuccessPacket(BinaryReader reader) {
+    public LoginSuccessPacket(BinaryReader reader) {
         this(reader.readUuid(), reader.readSizedString());
     }
 

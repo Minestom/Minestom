@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public record SetCompressionPacket(int threshold) implements ServerPacket {
-    private SetCompressionPacket(BinaryReader reader) {
+    public SetCompressionPacket(BinaryReader reader) {
         this(reader.readVarInt());
     }
 

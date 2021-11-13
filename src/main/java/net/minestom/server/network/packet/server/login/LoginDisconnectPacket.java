@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record LoginDisconnectPacket(Component kickMessage) implements ComponentHoldingServerPacket {
-    private LoginDisconnectPacket(BinaryReader reader) {
+    public LoginDisconnectPacket(BinaryReader reader) {
         this(reader.readComponent());
     }
 

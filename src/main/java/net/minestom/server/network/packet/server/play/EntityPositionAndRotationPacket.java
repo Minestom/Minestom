@@ -18,8 +18,8 @@ public record EntityPositionAndRotationPacket(int entityId, short deltaX, short 
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeShort(deltaX);
-        writer.writeShort(deltaZ);
         writer.writeShort(deltaY);
+        writer.writeShort(deltaZ);
         writer.writeByte((byte) (yaw * 256 / 360));
         writer.writeByte((byte) (pitch * 256 / 360));
         writer.writeBoolean(onGround);
