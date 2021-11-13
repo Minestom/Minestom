@@ -1,6 +1,6 @@
 package net.minestom.server.timer;
 
-import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -59,7 +59,7 @@ public class TaskBuilder {
         this.runnable = runnable;
         this.shutdown = shutdown;
         this.isTransient = false;
-        this.owningExtension = MinestomRootClassLoader.findExtensionObjectOwner(runnable);
+        this.owningExtension = MinestomExtensionClassLoader.findExtensionObjectOwner(runnable);
     }
 
     /**

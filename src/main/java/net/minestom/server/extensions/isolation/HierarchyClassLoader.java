@@ -1,4 +1,4 @@
-package net.minestom.server.extras.selfmodification;
+package net.minestom.server.extensions.isolation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +20,24 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
 
     public void addChild(@NotNull MinestomExtensionClassLoader loader) {
         children.add(loader);
+    }
+
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        try {
+            System.out.println("TRYING 2 LOAD " + name + " IN " + getName());
+            return super.loadClass(name, resolve);
+        } catch (ClassNotFoundException e) {
+            System.out.println("COULD NOT LOAD 2, TRYING CHILDREN");
+            for (MinestomExtensionClassLoader child : children) {
+                try {
+                    return child.loadClass(name, resolve);
+                } catch (ClassNotFoundException ignored) {
+                    System.out.println("NOT FOUND IN " + child.getName() + " EITHER");
+                }
+            }
+            throw e;
+        }
     }
 
     public InputStream getResourceAsStreamWithChildren(@NotNull String name) {
