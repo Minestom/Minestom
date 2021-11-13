@@ -12,31 +12,29 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.UnaryOperator;
 
-public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
+public final class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
+    public final String objectiveName;
+    public final byte mode;
+    public final Component objectiveValue;
+    public final Type type;
 
-    /**
-     * An unique name for the objective
-     */
-    public String objectiveName;
-    /**
-     * 0 = create the scoreboard <br>
-     * 1 = to remove the scoreboard<br>
-     * 2 = to update the display text
-     */
-    public byte mode;
-    /**
-     * The text to be displayed for the score
-     */
-    public Component objectiveValue; // Only text
-    /**
-     * The type how the score is displayed
-     */
-    public Type type;
+    public ScoreboardObjectivePacket(String objectiveName, byte mode, Component objectiveValue, Type type) {
+        this.objectiveName = objectiveName;
+        this.mode = mode;
+        this.objectiveValue = objectiveValue;
+        this.type = type;
+    }
 
-    public ScoreboardObjectivePacket() {
-        objectiveName = "";
-        objectiveValue = Component.empty();
-        type = Type.INTEGER;
+    public ScoreboardObjectivePacket(BinaryReader reader) {
+        this.objectiveName = reader.readSizedString();
+        this.mode = reader.readByte();
+        if (mode == 0 || mode == 2) {
+            this.objectiveValue = reader.readComponent();
+            this.type = Type.values()[reader.readVarInt()];
+        } else {
+            this.objectiveValue = null;
+            this.type = null;
+        }
     }
 
     @Override
@@ -47,17 +45,6 @@ public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
         if (mode == 0 || mode == 2) {
             writer.writeComponent(objectiveValue);
             writer.writeVarInt(type.ordinal());
-        }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        objectiveName = reader.readSizedString();
-        mode = reader.readByte();
-
-        if (mode == 0 || mode == 2) {
-            objectiveValue = reader.readComponent();
-            type = Type.values()[reader.readVarInt()];
         }
     }
 
@@ -78,12 +65,7 @@ public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         if (mode == 0 || mode == 2) {
-            ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
-            packet.objectiveName = objectiveName;
-            packet.mode = mode;
-            packet.objectiveValue = operator.apply(objectiveValue);
-            packet.type = type;
-            return packet;
+            return new ScoreboardObjectivePacket(objectiveName, mode, operator.apply(objectiveValue), type);
         } else {
             return this;
         }

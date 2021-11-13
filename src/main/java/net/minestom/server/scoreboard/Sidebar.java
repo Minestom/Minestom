@@ -97,14 +97,8 @@ public class Sidebar implements Scoreboard {
      */
     public void setTitle(@NotNull Component title) {
         this.title = title;
-
-        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 2; // Update display text
-        scoreboardObjectivePacket.objectiveValue = title;
-        scoreboardObjectivePacket.type = ScoreboardObjectivePacket.Type.INTEGER;
-
-        sendPacketToViewers(scoreboardObjectivePacket);
+        sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
+                ScoreboardObjectivePacket.Type.INTEGER));
     }
 
     /**
@@ -366,9 +360,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
-            UpdateScorePacket updateScorePacket = getScoreCreationPacket(objectiveName);
-            updateScorePacket.value = score;
-            return updateScorePacket;
+            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, score);
         }
 
         /**
