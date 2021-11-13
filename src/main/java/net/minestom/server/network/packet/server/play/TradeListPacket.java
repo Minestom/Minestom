@@ -41,7 +41,6 @@ public record TradeListPacket(int windowId, List<Trade> trades,
                         ItemStack inputItem2, boolean tradeDisabled,
                         int tradeUsesNumber, int maxTradeUsesNumber, int exp,
                         int specialPrice, float priceMultiplier, int demand) implements Writeable {
-
         public Trade(BinaryReader reader) {
             this(reader.readItemStack(), reader.readItemStack(),
                     reader.readBoolean() ? reader.readItemStack() : null, reader.readBoolean(),

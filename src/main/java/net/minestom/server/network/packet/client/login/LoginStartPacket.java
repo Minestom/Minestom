@@ -64,8 +64,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
             }
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.setConnectionState(ConnectionState.LOGIN);
-            EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(socketConnection);
-            socketConnection.sendPacket(encryptionRequestPacket);
+
+            final byte[] publicKey = MojangAuth.getKeyPair().getPublic().getEncoded();
+            byte[] nonce = new byte[4];
+            ThreadLocalRandom.current().nextBytes(nonce);
+            socketConnection.setNonce(nonce);
+            socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce));
         } else {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
