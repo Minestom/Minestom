@@ -31,7 +31,8 @@ public class RenderedCommandException extends CommandException {
     /**
      * @return the component that this exception will render
      */
-    public @NotNull Component getComponent() {
+    @Override
+    public @NotNull Component getDisplayComponent() {
         return component;
     }
 }

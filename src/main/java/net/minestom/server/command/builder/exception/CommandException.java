@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.exception;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.command.FixedStringReader;
 import org.jetbrains.annotations.NotNull;
 
@@ -188,5 +189,12 @@ public class CommandException extends RuntimeException {
      */
     public @NotNull FixedStringReader getStringReader() {
         return stringReader;
+    }
+
+    /**
+     * @return the default component for {@code CommandException}s
+     */
+    public @NotNull Component getDisplayComponent(){
+        return CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent();
     }
 }
