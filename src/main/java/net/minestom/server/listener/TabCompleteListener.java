@@ -56,24 +56,10 @@ public class TabCompleteListener {
             Suggestion suggestion = new Suggestion(input, start, inputLength);
             suggestionCallback.apply(player, queryResult.context, suggestion);
 
-            TabCompletePacket tabCompletePacket = new TabCompletePacket();
-            tabCompletePacket.transactionId = packet.transactionId;
-            tabCompletePacket.start = suggestion.getStart();
-            tabCompletePacket.length = suggestion.getLength();
-            tabCompletePacket.matches = suggestion.getEntries()
-                    .stream()
-                    .map(suggestionEntry -> {
-                        TabCompletePacket.Match match = new TabCompletePacket.Match();
-                        match.match = suggestionEntry.getEntry();
-                        match.hasTooltip = suggestionEntry.getTooltip() != null;
-                        match.tooltip = suggestionEntry.getTooltip();
-                        return match;
-                    }).toArray(TabCompletePacket.Match[]::new);
-
-            player.getPlayerConnection().sendPacket(tabCompletePacket);
+            player.getPlayerConnection().sendPacket(new TabCompletePacket(packet.transactionId, suggestion.getStart(), suggestion.getLength(),
+                    suggestion.getEntries().stream()
+                            .map(suggestionEntry -> new TabCompletePacket.Match(suggestionEntry.getEntry(), suggestionEntry.getTooltip())).toList()));
         }
-
-
     }
 
 }
