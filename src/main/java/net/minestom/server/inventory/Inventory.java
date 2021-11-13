@@ -93,14 +93,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     public void setTitle(@NotNull Component title) {
         this.title = title;
-
-        OpenWindowPacket packet = new OpenWindowPacket(title);
-
-        packet.windowId = getWindowId();
-        packet.windowType = getInventoryType().getWindowType();
-
         // Re-open the inventory
-        sendPacketToViewers(packet);
+        sendPacketToViewers(new OpenWindowPacket(getWindowId(), getInventoryType().getWindowType(), title));
         // Send inventory items
         update();
     }

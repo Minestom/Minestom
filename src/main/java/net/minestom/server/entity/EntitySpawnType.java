@@ -53,13 +53,9 @@ public enum EntitySpawnType {
     EXPERIENCE_ORB {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            SpawnExperienceOrbPacket packet = new SpawnExperienceOrbPacket();
-            packet.entityId = entity.getEntityId();
-            packet.position = entity.getPosition();
-            if (entity.getEntityMeta() instanceof ExperienceOrbMeta experienceOrbMeta) {
-                packet.expCount = (short) experienceOrbMeta.getCount();
-            }
-            return packet;
+            final short expCount = (short) (entity.getEntityMeta() instanceof ExperienceOrbMeta experienceOrbMeta ?
+                    experienceOrbMeta.getCount() : 0);
+            return new SpawnExperienceOrbPacket(entity.getEntityId(), entity.getPosition(), expCount);
         }
     },
     PAINTING {

@@ -6,13 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class PingPacket implements ServerPacket {
-
-    public int id;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.id = reader.readInt();
+public record PingPacket(int id) implements ServerPacket {
+    public PingPacket(BinaryReader reader) {
+        this(reader.readInt());
     }
 
     @Override

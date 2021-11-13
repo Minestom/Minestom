@@ -6,23 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetCooldownPacket implements ServerPacket {
-
-    public int itemId;
-    public int cooldownTicks;
-
-    public SetCooldownPacket() {}
+public record SetCooldownPacket(int itemId, int cooldownTicks) implements ServerPacket {
+    public SetCooldownPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readVarInt());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(itemId);
         writer.writeVarInt(cooldownTicks);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        itemId = reader.readVarInt();
-        cooldownTicks = reader.readVarInt();
     }
 
     @Override

@@ -677,7 +677,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final List<TimedPotion> effects = this.effects;
         if (effects.isEmpty()) return;
         effects.removeIf(timedPotion -> {
-            final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
+            final long potionTime = (long) timedPotion.getPotion().duration() * MinecraftServer.TICK_MS;
             // Remove if the potion should be expired
             if (time >= timedPotion.getStartingTime() + potionTime) {
                 // Send the packet that the potion should no longer be applied
@@ -1041,17 +1041,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected @NotNull SetPassengersPacket getPassengersPacket() {
-        SetPassengersPacket passengersPacket = new SetPassengersPacket();
-        passengersPacket.vehicleEntityId = getEntityId();
-
         int[] passengers = new int[this.passengers.size()];
         int counter = 0;
         for (Entity passenger : this.passengers) {
             passengers[counter++] = passenger.getEntityId();
         }
-
-        passengersPacket.passengersId = passengers;
-        return passengersPacket;
+        return new SetPassengersPacket(getEntityId(), passengers);
     }
 
     /**
@@ -1405,7 +1400,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param potion The potion to add
      */
     public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.getEffect());
+        removeEffect(potion.effect());
         this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
         EventDispatcher.call(new EntityPotionAddEvent(this, potion));
@@ -1418,7 +1413,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void removeEffect(@NotNull PotionEffect effect) {
         this.effects.removeIf(timedPotion -> {
-            if (timedPotion.getPotion().getEffect() == effect) {
+            if (timedPotion.getPotion().effect() == effect) {
                 timedPotion.getPotion().sendRemovePacket(this);
                 EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
                 return true;

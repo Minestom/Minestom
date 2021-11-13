@@ -406,7 +406,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
-                playerConnection.sendPacket(DeathCombatEventPacket.of(getEntityId(), -1, deathText));
+                playerConnection.sendPacket(new DeathCombatEventPacket(getEntityId(), -1, deathText));
             }
 
             // #buildDeathMessage can return null, check here
@@ -697,12 +697,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param disableRelativeVolume disable volume scaling based on distance
      */
     public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
-        EffectPacket packet = new EffectPacket();
-        packet.effectId = effect.getId();
-        packet.position = new Vec(x, y, z);
-        packet.data = data;
-        packet.disableRelativeVolume = disableRelativeVolume;
-        playerConnection.sendPacket(packet);
+        playerConnection.sendPacket(new EffectPacket(effect.getId(), new Vec(x, y, z), data, disableRelativeVolume));
     }
 
     @Override
@@ -995,10 +990,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     private void sendChangeGameStatePacket(@NotNull ChangeGameStatePacket.Reason reason, float value) {
-        ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
-        changeGameStatePacket.reason = reason;
-        changeGameStatePacket.value = value;
-        playerConnection.sendPacket(changeGameStatePacket);
+        playerConnection.sendPacket(new ChangeGameStatePacket(reason, value));
     }
 
     /**
@@ -1394,10 +1386,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 return;
             }
 
-            OpenWindowPacket openWindowPacket = new OpenWindowPacket(newInventory.getTitle());
-            openWindowPacket.windowId = newInventory.getWindowId();
-            openWindowPacket.windowType = newInventory.getInventoryType().getWindowType();
-            playerConnection.sendPacket(openWindowPacket);
+            playerConnection.sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
+                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
@@ -1427,11 +1417,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        CloseWindowPacket closeWindowPacket = new CloseWindowPacket();
+        CloseWindowPacket closeWindowPacket;
         if (openInventory == null) {
-            closeWindowPacket.windowId = 0;
+            closeWindowPacket = new CloseWindowPacket((byte) 0);
         } else {
-            closeWindowPacket.windowId = openInventory.getWindowId();
+            closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
             openInventory.removeViewer(this); // Clear cache
             this.openInventory = null;
         }

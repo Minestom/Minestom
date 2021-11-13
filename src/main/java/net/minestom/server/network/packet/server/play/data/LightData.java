@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play.data;
 
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,16 @@ public final class LightData implements Writeable {
         this.emptyBlockMask = emptyBlockMask;
         this.skyLight = skyLight;
         this.blockLight = blockLight;
+    }
+
+    public LightData(BinaryReader reader) {
+        this.trustEdges = reader.readBoolean();
+        this.skyMask = BitSet.valueOf(reader.readLongArray());
+        this.blockMask = BitSet.valueOf(reader.readLongArray());
+        this.emptySkyMask = BitSet.valueOf(reader.readLongArray());
+        this.emptyBlockMask = BitSet.valueOf(reader.readLongArray());
+        this.skyLight = reader.readVarIntList(r -> r.readBytes(r.readVarInt()));
+        this.blockLight = reader.readVarIntList(r -> r.readBytes(r.readVarInt()));
     }
 
     @Override

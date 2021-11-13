@@ -6,24 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class KeepAlivePacket implements ServerPacket {
-
-    public long id;
-
-    KeepAlivePacket() {}
-
-    public KeepAlivePacket(long id) {
-        this.id = id;
+public record KeepAlivePacket(long id) implements ServerPacket {
+    public KeepAlivePacket(BinaryReader reader) {
+        this(reader.readLong());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeLong(id);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        id = reader.readLong();
     }
 
     @Override

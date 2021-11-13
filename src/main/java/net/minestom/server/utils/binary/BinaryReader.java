@@ -2,6 +2,7 @@ package net.minestom.server.utils.binary;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NBTUtils;
@@ -18,7 +19,10 @@ import java.io.InputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -181,6 +185,14 @@ public class BinaryReader extends InputStream {
         return itemStack;
     }
 
+    public ItemStack[] readItemStackArray() {
+        ItemStack[] itemStacks = new ItemStack[readVarInt()];
+        for (int i = 0; i < itemStacks.length; i++) {
+            itemStacks[i] = readItemStack();
+        }
+        return itemStacks;
+    }
+
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
@@ -220,6 +232,15 @@ public class BinaryReader extends InputStream {
         return (T[]) result;
     }
 
+    public <T> List<T> readVarIntList(@NotNull Function<BinaryReader, T> supplier) {
+        final int length = readVarInt();
+        List<T> list = new ArrayList<>(length);
+        for (int i = 0; i < length; i++) {
+            list.add(supplier.apply(this));
+        }
+        return list;
+    }
+
     public ByteBuffer getBuffer() {
         return buffer;
     }
@@ -234,13 +255,18 @@ public class BinaryReader extends InputStream {
         return buffer.remaining();
     }
 
-    public NBT readTag() throws IOException, NBTException {
+    public NBT readTag() {
         NBTReader reader = this.nbtReader;
         if (reader == null) {
             reader = new NBTReader(this, false);
             this.nbtReader = reader;
         }
-        return reader.read();
+        try {
+            return reader.read();
+        } catch (IOException | NBTException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            throw new RuntimeException();
+        }
     }
 
     /**

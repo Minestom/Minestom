@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -22,6 +23,13 @@ public final class ChunkData implements Writeable {
         this.heightmaps = heightmaps.deepClone();
         this.data = data.clone();
         this.blockEntities = Map.copyOf(blockEntities);
+    }
+
+    public ChunkData(BinaryReader reader) {
+        this.heightmaps = (NBTCompound) reader.readTag();
+        this.data = reader.readBytes(reader.readVarInt());
+        // TODO read block entities
+        this.blockEntities = null;
     }
 
     @Override
