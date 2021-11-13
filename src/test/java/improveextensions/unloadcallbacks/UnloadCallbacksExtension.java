@@ -8,7 +8,7 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.extensions.Extension;
-import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Assertions;
@@ -65,8 +65,8 @@ public class UnloadCallbacksExtension extends Extension {
         }).repeat(100L, TimeUnit.MILLISECOND).schedule();
 
         try {
-            Assertions.assertNotNull(MinestomRootClassLoader.findExtensionObjectOwner(callback));
-            Assertions.assertEquals("UnloadCallbacksExtension", MinestomRootClassLoader.findExtensionObjectOwner(callback));
+            Assertions.assertNotNull(MinestomExtensionClassLoader.findExtensionObjectOwner(callback));
+            Assertions.assertEquals("UnloadCallbacksExtension", MinestomExtensionClassLoader.findExtensionObjectOwner(callback));
         } catch (AssertionFailedError e) {
             e.printStackTrace();
             System.exit(-1);
