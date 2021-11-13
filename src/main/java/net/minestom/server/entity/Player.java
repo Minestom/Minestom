@@ -722,7 +722,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void clearTitle() {
-        playerConnection.sendPacket(new ClearTitlesPacket());
+        playerConnection.sendPacket(new ClearTitlesPacket(false));
     }
 
     @Override
@@ -1043,18 +1043,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private void facePosition(@NotNull FacePoint facePoint, @NotNull Point targetPosition,
                               @Nullable Entity entity, @Nullable FacePoint targetPoint) {
-        FacePlayerPacket facePlayerPacket = new FacePlayerPacket();
-        facePlayerPacket.entityFacePosition = facePoint == FacePoint.EYE ?
-                FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
-        facePlayerPacket.targetX = targetPosition.x();
-        facePlayerPacket.targetY = targetPosition.y();
-        facePlayerPacket.targetZ = targetPosition.z();
-        if (entity != null) {
-            facePlayerPacket.entityId = entity.getEntityId();
-            facePlayerPacket.entityFacePosition = targetPoint == FacePoint.EYE ?
-                    FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
-        }
-        playerConnection.sendPacket(facePlayerPacket);
+        final int entityId = entity != null ? entity.getEntityId() : 0;
+        playerConnection.sendPacket(new FacePlayerPacket(
+                facePoint == FacePoint.EYE ?
+                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET, targetPosition,
+                entityId,
+                targetPoint == FacePoint.EYE ?
+                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET));
     }
 
     /**

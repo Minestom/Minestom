@@ -78,9 +78,7 @@ public class WindowListener {
         refreshCursorItem(player, inventory);
 
         // (Why is the ping packet necessary?)
-        PingPacket pingPacket = new PingPacket();
-        pingPacket.id = (1 << 30) | (windowId << 16);
-        player.getPlayerConnection().sendPacket(pingPacket);
+        player.getPlayerConnection().sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
     }
 
     public static void pong(ClientPongPacket packet, Player player) {
