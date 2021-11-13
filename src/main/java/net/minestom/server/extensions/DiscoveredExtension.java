@@ -2,8 +2,7 @@ package net.minestom.server.extensions;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
-import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Represents an extension from an `extension.json` that is capable of powering an Extension object.
@@ -211,7 +209,7 @@ public final class DiscoveredExtension {
     public MinestomExtensionClassLoader makeClassLoader(List<DiscoveredExtension> discoveredExtensions) {
         final URL[] urls = this.files.toArray(new URL[0]);
 
-        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), this.getEntrypoint(), urls, MinecraftServer.class.getClassLoader());
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), urls);
 
         System.out.println("CREATED " + loader + " WITH " + Arrays.toString(urls));
 
