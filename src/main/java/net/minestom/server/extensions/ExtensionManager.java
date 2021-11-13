@@ -7,8 +7,7 @@ import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
-import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -644,7 +643,8 @@ public class ExtensionManager {
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
+        //TODO : Remove extension from dependents
+//        MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
     }
 
     public boolean reload(@NotNull String extensionName) {
