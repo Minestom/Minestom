@@ -18,6 +18,10 @@ import java.util.function.UnaryOperator;
 
 public record TabCompletePacket(int transactionId, int start, int length,
                                 List<Match> matches) implements ComponentHoldingServerPacket {
+    public TabCompletePacket {
+        matches = List.copyOf(matches);
+    }
+
     public TabCompletePacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readVarInt(), reader.readVarInt(), reader.readVarIntList(Match::new));
     }

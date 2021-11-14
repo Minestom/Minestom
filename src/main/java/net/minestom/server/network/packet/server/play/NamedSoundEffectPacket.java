@@ -8,8 +8,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record NamedSoundEffectPacket(String soundName, Source source, int x, int y, int z, float volume,
-                                     float pitch) implements ServerPacket {
+public record NamedSoundEffectPacket(String soundName, Source source, int x, int y, int z,
+                                     float volume, float pitch) implements ServerPacket {
     public NamedSoundEffectPacket(BinaryReader reader) {
         this(reader.readSizedString(), Source.values()[reader.readVarInt()],
                 reader.readInt() / 8, reader.readInt() / 8, reader.readInt() / 8,

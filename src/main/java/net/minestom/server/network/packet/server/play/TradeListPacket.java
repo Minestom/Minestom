@@ -13,6 +13,10 @@ import java.util.List;
 public record TradeListPacket(int windowId, List<Trade> trades,
                               int villagerLevel, int experience,
                               boolean regularVillager, boolean canRestock) implements ServerPacket {
+    public TradeListPacket {
+        trades = List.copyOf(trades);
+    }
+
     public TradeListPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readByteList(Trade::new),
                 reader.readVarInt(), reader.readVarInt(),

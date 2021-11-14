@@ -19,6 +19,10 @@ public record TagsPacket(Map<Tag.BasicType, List<Tag>> tagsMap) implements Serve
     @ApiStatus.Internal
     public static final FramedPacket DEFAULT_TAGS = PacketUtils.allocateTrimmedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
 
+    public TagsPacket {
+        tagsMap = Map.copyOf(tagsMap);
+    }
+
     public TagsPacket(BinaryReader reader) {
         this(new HashMap<>()); // TODO
     }

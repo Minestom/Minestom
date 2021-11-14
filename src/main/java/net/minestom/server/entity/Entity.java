@@ -1041,12 +1041,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected @NotNull SetPassengersPacket getPassengersPacket() {
-        int[] passengers = new int[this.passengers.size()];
-        int counter = 0;
-        for (Entity passenger : this.passengers) {
-            passengers[counter++] = passenger.getEntityId();
-        }
-        return new SetPassengersPacket(getEntityId(), passengers);
+        return new SetPassengersPacket(getEntityId(), passengers.stream().map(Entity::getEntityId).toList());
     }
 
     /**

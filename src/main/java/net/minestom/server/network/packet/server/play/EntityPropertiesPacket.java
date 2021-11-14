@@ -14,6 +14,10 @@ import java.util.Collection;
 import java.util.List;
 
 public record EntityPropertiesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket {
+    public EntityPropertiesPacket {
+        properties = List.copyOf(properties);
+    }
+
     public EntityPropertiesPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readVarIntList(r -> {
             final Attribute attribute = Attribute.fromKey(reader.readSizedString());

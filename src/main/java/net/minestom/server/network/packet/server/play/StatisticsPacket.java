@@ -11,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public record StatisticsPacket(List<Statistic> statistics) implements ServerPacket {
+    public StatisticsPacket {
+        statistics = List.copyOf(statistics);
+    }
+
     public StatisticsPacket(BinaryReader reader) {
         this(reader.readVarIntList(Statistic::new));
     }
