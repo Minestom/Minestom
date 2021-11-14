@@ -39,6 +39,11 @@ public final class MojangUtils {
             try {
                 // Retrieve from the rate-limited Mojang API
                 final String response = URLUtils.getText(url);
+                // If our response is "", that means the url did not get a proper object from the url
+                // So the username or UUID was invalid, and therefore we return null
+                if(response.isEmpty()) {
+                    return null;
+                }
                 return JsonParser.parseString(response).getAsJsonObject();
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
