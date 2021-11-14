@@ -13,7 +13,7 @@ public class A1ExceptionGenerator extends ContextualExceptionGenerator {
 
     /**
      * Creates a new contextual exception generator that requires 1 placeholder to generate the message. For
-     * placeholders, use the string "%s".
+     * placeholders, use {@link CommandException#PLACEHOLDER}.
      */
     public A1ExceptionGenerator(@NotNull String translationKey, int errorCode, @NotNull String exceptionMessage){
         super(translationKey, errorCode);

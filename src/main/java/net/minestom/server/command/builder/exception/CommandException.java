@@ -4,10 +4,23 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.FixedStringReader;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.regex.Pattern;
+
 /**
  * This represents a basic command-related exception.
  */
 public class CommandException extends RuntimeException {
+
+    /**
+     * This represents the constant that is used for placeholders for error messages. If you want to use {@link
+     * String#split(String)} with this, make sure to use {@link #PATTERN_SAFE_PLACEHOLDER}.
+     */
+    public static final @NotNull String PLACEHOLDER = "%s";
+
+    /**
+     * The alternative to {@link #PLACEHOLDER} that is safe to use in regular expressions.
+     */
+    public static final @NotNull String PATTERN_SAFE_PLACEHOLDER = Pattern.quote(PLACEHOLDER);
 
     // These are generated with a script from the language files. Try not to modify these.
     public static final @NotNull A0ExceptionGenerator ATTRIBUTE_UNKNOWN = new A0ExceptionGenerator("attribute.unknown", 0, "Unknown attribute");

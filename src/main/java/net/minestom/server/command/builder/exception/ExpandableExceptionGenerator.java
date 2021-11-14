@@ -14,11 +14,12 @@ public class ExpandableExceptionGenerator extends ContextualExceptionGenerator {
 
     /**
      * Creates a new expandable exception generator with the provided translation key and the parts to the exception
-     * message. This constructor turns the {@code exceptionMessage} parameter into its parts via splitting by {@code %s}.
+     * message. This constructor turns the {@code exceptionMessage} parameter into its parts via splitting by
+     * {@link CommandException#PATTERN_SAFE_PLACEHOLDER}.
      */
     public ExpandableExceptionGenerator(@NotNull String translationKey, int errorCode, @NotNull String exceptionMessage){
         super(translationKey, errorCode);
-        this.exceptionMessage = exceptionMessage.split("%s");
+        this.exceptionMessage = exceptionMessage.split(CommandException.PATTERN_SAFE_PLACEHOLDER);
     }
 
     /**

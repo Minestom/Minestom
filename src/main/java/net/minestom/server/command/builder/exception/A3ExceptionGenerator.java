@@ -13,7 +13,7 @@ public class A3ExceptionGenerator extends ContextualExceptionGenerator {
 
     /**
      * Creates a new contextual exception generator that requires 3 placeholders to generate the message. For
-     * placeholders, use the string "%s".
+     * placeholders, use {@link CommandException#PLACEHOLDER}.
      */
     public A3ExceptionGenerator(@NotNull String translationKey, int errorCode, @NotNull String exceptionMessage){
         super(translationKey, errorCode);
