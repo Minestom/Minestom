@@ -16,7 +16,8 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
     }
 
     public WindowItemsPacket(BinaryReader reader) {
-        this(reader.readByte(), reader.readVarInt(), reader.readVarIntList(BinaryReader::readItemStack), ItemStack.AIR);
+        this(reader.readByte(), reader.readVarInt(), reader.readVarIntList(BinaryReader::readItemStack),
+                reader.readItemStack());
     }
 
     @Override
