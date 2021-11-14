@@ -8,6 +8,8 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 /**
  * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots.
  */
@@ -165,8 +167,7 @@ public interface EquipmentHandler {
 
         Entity entity = (Entity) this;
         final ItemStack itemStack = getEquipment(slot);
-        entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(),
-                new EquipmentSlot[]{slot}, new ItemStack[]{itemStack}));
+        entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(), Map.of(slot, itemStack)));
     }
 
     /**
@@ -177,13 +178,13 @@ public interface EquipmentHandler {
      */
     default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
-        final EquipmentSlot[] slots = EquipmentSlot.values();
-        ItemStack[] equipments = new ItemStack[slots.length];
-        for (int i = 0; i < equipments.length; i++) {
-            final EquipmentSlot slot = slots[i];
-            equipments[i] = getEquipment(slot);
-        }
-        return new EntityEquipmentPacket(((Entity) this).getEntityId(), slots, equipments);
+        return new EntityEquipmentPacket(((Entity) this).getEntityId(), Map.of(
+                EquipmentSlot.MAIN_HAND, getEquipment(EquipmentSlot.MAIN_HAND),
+                EquipmentSlot.OFF_HAND, getEquipment(EquipmentSlot.OFF_HAND),
+                EquipmentSlot.BOOTS, getEquipment(EquipmentSlot.BOOTS),
+                EquipmentSlot.LEGGINGS, getEquipment(EquipmentSlot.LEGGINGS),
+                EquipmentSlot.CHESTPLATE, getEquipment(EquipmentSlot.CHESTPLATE),
+                EquipmentSlot.HELMET, getEquipment(EquipmentSlot.HELMET)));
     }
 
 }

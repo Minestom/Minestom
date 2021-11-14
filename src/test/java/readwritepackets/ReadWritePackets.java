@@ -22,6 +22,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * If you are using IntelliJ, set it up so that tests are run through IntelliJ and not Gradle for this collection of tests
@@ -67,7 +68,7 @@ public class ReadWritePackets {
                         // exceptions
                         if (clazz.getSimpleName().equals("EntityEquipmentPacket")) {
                             // requires at least one slot and one item
-                            EntityEquipmentPacket p = new EntityEquipmentPacket(0, new EquipmentSlot[]{EquipmentSlot.MAIN_HAND}, new ItemStack[]{ItemStack.AIR});
+                            EntityEquipmentPacket p = new EntityEquipmentPacket(0, Map.of(EquipmentSlot.MAIN_HAND, ItemStack.AIR));
                             packet = (T) p;
                         } else {
                             packet = (T) constructor.newInstance();
