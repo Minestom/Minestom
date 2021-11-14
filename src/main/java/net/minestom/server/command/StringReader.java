@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.command.builder.exception.RenderedCommandException;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -250,6 +251,18 @@ public final class StringReader extends FixedStringReader {
             return readStringUntil(next);
         }
         return readUnquotedString();
+    }
+
+    /**
+     * @return the next NamespaceID in the input
+     */
+    public @NotNull NamespaceID readNamespaceID() throws RenderedCommandException {
+        String next = readUnquotedString();
+        try {
+            return NamespaceID.from(next);
+        } catch (AssertionError error){
+            throw CommandException.ARGUMENT_ID_INVALID.generateException(this);
+        }
     }
 
     /**
