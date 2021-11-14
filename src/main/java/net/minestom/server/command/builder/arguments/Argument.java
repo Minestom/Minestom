@@ -1,10 +1,13 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
+import net.minestom.server.command.builder.exception.RenderedCommandException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -89,7 +92,18 @@ public abstract class Argument<T> {
      * @return the parsed argument
      * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
+        throw new ArgumentSyntaxException("Arguments are currently being converted to using StringReaders.", input, -1);
+    }
+
+    /**
+     * Reads from and parses the provided input, and throws a {@link RenderedCommandException} if there is an error
+     * while reading the input into a {@code T}.<br>
+     * <b>Note that this method is not abstract because the conversion to {@code StringReader}s is not complete.</b>
+     */
+    public @NotNull T parse(@NotNull StringReader input) throws RenderedCommandException {
+        throw CommandException.COMMAND_EXCEPTION.generateException(input, input.all());
+    }
 
     /**
      * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
