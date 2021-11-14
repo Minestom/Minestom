@@ -7,7 +7,7 @@ import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
-import net.minestom.server.Viewable;
+import net.minestom.server.Witness;
 import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
@@ -67,7 +67,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Witness, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -343,63 +343,42 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         lookAt(entity.position);
     }
 
-    /**
-     * Gets if this entity is automatically sent to surrounding players.
-     * True by default.
-     *
-     * @return true if the entity is automatically viewable for close players, false otherwise
-     */
+    @Override
     public boolean isAutoViewable() {
         return viewEngine.viewableOption.isAuto();
     }
 
-    /**
-     * Decides if this entity should be auto-viewable by nearby players.
-     *
-     * @param autoViewable true to add surrounding players, false to remove
-     * @see #isAutoViewable()
-     */
+    @Override
     public void setAutoViewable(boolean autoViewable) {
         this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
-    @ApiStatus.Experimental
+    @Override
     public void updateViewableRule(@NotNull Predicate<Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
-    @ApiStatus.Experimental
+    @Override
     public void updateViewableRule() {
         this.viewEngine.viewableOption.updateRule();
     }
 
-    /**
-     * Gets if surrounding entities are automatically visible by this.
-     * True by default.
-     *
-     * @return true if surrounding entities are visible by this
-     */
-    @ApiStatus.Experimental
+    @Override
     public boolean autoViewEntities() {
         return viewEngine.viewerOption.isAuto();
     }
 
-    /**
-     * Decides if surrounding entities must be visible.
-     *
-     * @param autoViewer true to add view surrounding entities, false to remove
-     */
-    @ApiStatus.Experimental
+    @Override
     public void setAutoViewEntities(boolean autoViewer) {
         this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
-    @ApiStatus.Experimental
+    @Override
     public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
-    @ApiStatus.Experimental
+    @Override
     public void updateViewerRule() {
         this.viewEngine.viewerOption.updateRule();
     }
@@ -418,13 +397,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return true;
     }
 
-    /**
-     * Called when a new viewer must be shown.
-     * Method can be subject to deadlocking if the target's viewers are also accessed.
-     *
-     * @param player the player to send the packets to
-     */
-    @ApiStatus.Internal
+    @Override
     public void updateNewViewer(@NotNull Player player) {
         player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
@@ -441,13 +414,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
-    /**
-     * Called when a viewer must be destroyed.
-     * Method can be subject to deadlocking if the target's viewers are also accessed.
-     *
-     * @param player the player to send the packets to
-     */
-    @ApiStatus.Internal
+    @Override
     public void updateOldViewer(@NotNull Player player) {
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
@@ -463,9 +430,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         return viewers;
     }
 
-    /**
-     * Gets if this entity's viewers (surrounding players) can be predicted from surrounding chunks.
-     */
+    @Override
     public boolean hasPredictableViewers() {
         return viewEngine.hasPredictableViewers();
     }
