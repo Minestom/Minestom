@@ -23,8 +23,12 @@ public record EntityEquipmentPacket(int entityId, Map<EquipmentSlot, ItemStack> 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
+        int index = 0;
         for (var entry : equipments.entrySet()) {
-            writer.writeByte((byte) (entry.getKey().ordinal() | 0x80));
+            final boolean last = index++ == equipments.size() - 1;
+            byte slotEnum = (byte) entry.getKey().ordinal();
+            if (!last) slotEnum |= 0x80;
+            writer.writeByte(slotEnum);
             writer.writeItemStack(entry.getValue());
         }
     }
