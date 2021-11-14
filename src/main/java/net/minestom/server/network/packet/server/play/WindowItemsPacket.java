@@ -7,25 +7,23 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record WindowItemsPacket(byte windowId, int stateId, ItemStack[] items,
-                                ItemStack carriedItem) implements ServerPacket {
+import java.util.List;
+
+public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
+                                @NotNull ItemStack carriedItem) implements ServerPacket {
+    public WindowItemsPacket {
+        items = List.copyOf(items);
+    }
+
     public WindowItemsPacket(BinaryReader reader) {
-        this(reader.readByte(), reader.readVarInt(), reader.readItemStackArray(), ItemStack.AIR);
+        this(reader.readByte(), reader.readVarInt(), reader.readVarIntList(BinaryReader::readItemStack), ItemStack.AIR);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
         writer.writeVarInt(stateId);
-
-        if (items == null) {
-            writer.writeVarInt(0);
-        } else {
-            writer.writeVarInt(items.length);
-            for (ItemStack item : items) {
-                writer.writeItemStack(item);
-            }
-        }
+        writer.writeVarIntList(items, BinaryWriter::writeItemStack);
         writer.writeItemStack(carriedItem);
     }
 
