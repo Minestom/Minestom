@@ -139,7 +139,11 @@ public sealed class FixedStringReader permits StringReader {
      * &lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"<br>
      */
     public @NotNull Component generateContextMessage(){
-        Component read = Component.text(this.input.substring(Math.max(this.currentPosition - 10, 0), this.currentPosition), GRAY_STYLE);
+        String preRead = input;
+        if (currentPosition > 10) {
+            preRead = "..." + this.input.substring(0, this.currentPosition - 10);
+        }
+        Component read = Component.text(preRead, GRAY_STYLE);
         Component error = Component.text(this.unreadCharacters(), RED_UNDERLINED_STYLE);
 
         return Component.text().append(read, error, CONTEXT_HERE).build();
