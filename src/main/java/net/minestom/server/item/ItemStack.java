@@ -137,7 +137,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public @NotNull ItemStack withMeta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> metaOperator) {
+    public <T extends ItemMetaBuilder> @NotNull ItemStack withMeta(@NotNull UnaryOperator<@NotNull T> metaOperator) {
         return builder().meta(metaOperator).build();
     }
 
