@@ -1,7 +1,6 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.exception.CommandException;
-import net.minestom.server.command.builder.exception.RenderedCommandException;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
@@ -116,7 +115,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next integer in the string
      */
-    public int readInteger() throws RenderedCommandException {
+    public int readInteger() throws CommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
@@ -136,7 +135,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next long in the string
      */
-    public long readLong() throws RenderedCommandException {
+    public long readLong() throws CommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
@@ -156,7 +155,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next double in the string
      */
-    public double readDouble() throws RenderedCommandException {
+    public double readDouble() throws CommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
@@ -176,7 +175,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next float in the string
      */
-    public float readFloat() throws RenderedCommandException {
+    public float readFloat() throws CommandException {
         int start = currentPosition;
         while(canRead() && isValidNumber(peek())){
             skip();
@@ -196,7 +195,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next boolean in the string
      */
-    public boolean readBoolean() throws RenderedCommandException {
+    public boolean readBoolean() throws CommandException {
         int start = currentPosition;
         String next = readString();
         if (next.isEmpty()) {
@@ -214,7 +213,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the rest of the string or until there is a character equal to the terminator parameter
      */
-    public @NotNull String readStringUntil(char terminator) throws RenderedCommandException {
+    public @NotNull String readStringUntil(char terminator) throws CommandException {
         final StringBuilder result = new StringBuilder();
         boolean escaped = false;
         while (canRead()) {
@@ -241,7 +240,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next quoted or unquoted string in the input
      */
-    public @NotNull String readString() throws RenderedCommandException {
+    public @NotNull String readString() throws CommandException {
         if (!canRead()) {
             return "";
         }
@@ -256,7 +255,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next NamespaceID in the input
      */
-    public @NotNull NamespaceID readNamespaceID() throws RenderedCommandException {
+    public @NotNull NamespaceID readNamespaceID() throws CommandException {
         String next = readUnquotedString();
         try {
             return NamespaceID.from(next);
@@ -269,7 +268,7 @@ public final class StringReader extends FixedStringReader {
      * @return the next string surrounded by quotes (the quotes must be the same character, e.g. the string cannot start
      * with ' and end with ").
      */
-    public @NotNull String readQuotedString() throws RenderedCommandException {
+    public @NotNull String readQuotedString() throws CommandException {
         if (!canRead()) {
             return "";
         }
@@ -284,7 +283,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return the next UUID in the string
      */
-    public @NotNull UUID readUUID() throws RenderedCommandException {
+    public @NotNull UUID readUUID() throws CommandException {
         int start = currentPosition;
         while (canRead()){
             char c = peek();
@@ -303,7 +302,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * Throws an exception if the next character is not {@code c}, and then skips the next character.
      */
-    public void expect(char c) throws RenderedCommandException {
+    public void expect(char c) throws CommandException {
         if (!canRead() || c != peek()) {
             throw CommandException.PARSING_EXPECTED.generateException(this, Character.toString(c));
         }

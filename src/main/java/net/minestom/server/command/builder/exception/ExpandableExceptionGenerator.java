@@ -56,4 +56,12 @@ public class ExpandableExceptionGenerator extends ContextualExceptionGenerator {
         }
         return builder.append(exceptionMessage[exceptionMessage.length - 1]).toString();
     }
+
+    /**
+     * @return a new CommandException based on this instance, the provided string reader, and the provided
+     * placeholders.
+     */
+    public @NotNull CommandException generateException(@NotNull FixedStringReader reader, @NotNull String @NotNull ... args){
+        return new CommandException(generateExceptionMessage(args), errorCode(), reader, generateComponent(args));
+    }
 }

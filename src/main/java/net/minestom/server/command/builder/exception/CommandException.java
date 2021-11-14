@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.exception;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.FixedStringReader;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
@@ -170,44 +171,41 @@ public class CommandException extends RuntimeException {
     public static final @NotNull A0ExceptionGenerator COMMAND_EXPECTED_SEPARATOR = new A0ExceptionGenerator("command.expected.separator", 144, "Expected whitespace to end one argument, but found trailing data");
 
     private final int errorCode;
-    private final FixedStringReader stringReader;
+    private final @NotNull FixedStringReader stringReader;
+    private final @Nullable Component component;
 
     /**
-     * Creates a new CommandException with the provided message, error code, and string reader.
+     * Creates a new CommandException with the provided error message (which may be null), error code (mostly for
+     * display purposes), fixed string reader (for creating error messages) and component (for providing extra
+     * information about
      */
-    public CommandException(@NotNull String message, int errorCode, @NotNull FixedStringReader stringReader){
+    public CommandException(@Nullable String message, int errorCode, @NotNull FixedStringReader stringReader,
+                            @Nullable Component component){
         super(message);
         this.errorCode = errorCode;
         this.stringReader = stringReader;
-    }
-
-    /**
-     * Creates a new CommandException with the provided error code and string reader.
-     */
-    public CommandException(int errorCode, @NotNull FixedStringReader stringReader){
-        super();
-        this.errorCode = errorCode;
-        this.stringReader = stringReader;
+        this.component = component;
     }
 
     /**
      * @return this exception's error code
      */
-    public int getErrorCode() {
+    public int errorCode() {
         return errorCode;
     }
 
     /**
      * @return this exception's string reader
      */
-    public @NotNull FixedStringReader getStringReader() {
+    public @NotNull FixedStringReader stringReader() {
         return stringReader;
     }
 
     /**
-     * @return the default component for {@code CommandException}s
+     * @return the component that should be displayed, or {@code CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent()}
+     * if it is null.
      */
     public @NotNull Component getDisplayComponent(){
-        return CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent();
+        return component == null ? CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent() : component;
     }
 }

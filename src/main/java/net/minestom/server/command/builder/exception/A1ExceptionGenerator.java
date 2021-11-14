@@ -35,11 +35,11 @@ public class A1ExceptionGenerator extends ContextualExceptionGenerator {
     }
 
     /**
-     * @return a new RenderedCommandException based on this instance, the provided string reader, and the provided
+     * @return a new CommandException based on this instance, the provided string reader, and the provided
      * placeholder.
      */
-    public @NotNull RenderedCommandException generateException(@NotNull FixedStringReader reader, @NotNull String arg1){
-        return new RenderedCommandException(generateExceptionMessage(arg1), errorCode(), reader, generateComponent(arg1));
+    public @NotNull CommandException generateException(@NotNull FixedStringReader reader, @NotNull String arg1){
+        return new CommandException(generateExceptionMessage(arg1), errorCode(), reader, generateComponent(arg1));
     }
 
 }

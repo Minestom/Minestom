@@ -35,11 +35,11 @@ public class A3ExceptionGenerator extends ContextualExceptionGenerator {
     }
 
     /**
-     * @return a new RenderedCommandException based on this instance, the provided string reader, and the provided
+     * @return a new CommandException based on this instance, the provided string reader, and the provided
      * placeholders.
      */
-    public @NotNull RenderedCommandException generateException(@NotNull FixedStringReader reader, @NotNull String arg1, @NotNull String arg2, @NotNull String arg3){
-        return new RenderedCommandException(generateExceptionMessage(arg1, arg2, arg3), errorCode(), reader, generateComponent(arg1, arg2, arg2));
+    public @NotNull CommandException generateException(@NotNull FixedStringReader reader, @NotNull String arg1, @NotNull String arg2, @NotNull String arg3){
+        return new CommandException(generateExceptionMessage(arg1, arg2, arg3), errorCode(), reader, generateComponent(arg1, arg2, arg2));
     }
 
 }
