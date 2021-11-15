@@ -16,6 +16,12 @@ import org.jetbrains.annotations.NotNull;
 public sealed class FixedStringReader permits StringReader {
 
     /**
+     * Represents the length after which characters will be cut off from the result of {@link #generateContextMessage()}.
+     * If there are more than CUTOFF_LENGTH characters, the extra characters will be replaced with "...".
+     */
+    public static final int CUTOFF_LENGTH = 10;
+
+    /**
      * A static style instance that represents {@link NamedTextColor#RED}. This is here so that some style instances
      * don't have to be created each time they're used.
      */
@@ -139,9 +145,9 @@ public sealed class FixedStringReader permits StringReader {
      * &lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"<br>
      */
     public @NotNull Component generateContextMessage(){
-        String preRead = input;
-        if (currentPosition > 10) {
-            preRead = "..." + this.input.substring(0, this.currentPosition - 10);
+        String preRead = previouslyRead();
+        if (preRead.length() > CUTOFF_LENGTH) {
+            preRead = "..." + preRead.substring(preRead.length() - CUTOFF_LENGTH);
         }
         Component read = Component.text(preRead, GRAY_STYLE);
         Component error = Component.text(this.unreadCharacters(), RED_UNDERLINED_STYLE);
