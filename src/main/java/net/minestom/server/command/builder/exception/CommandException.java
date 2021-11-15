@@ -177,7 +177,7 @@ public class CommandException extends RuntimeException {
     /**
      * Creates a new CommandException with the provided error message (which may be null), error code (mostly for
      * display purposes), fixed string reader (for creating error messages) and component (for providing extra
-     * information about
+     * information about the error to the player).
      */
     public CommandException(@Nullable String message, int errorCode, @NotNull FixedStringReader stringReader,
                             @Nullable Component component){
