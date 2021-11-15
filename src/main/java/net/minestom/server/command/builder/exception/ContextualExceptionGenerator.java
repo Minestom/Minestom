@@ -37,7 +37,7 @@ public abstract class ContextualExceptionGenerator {
      * Otherwise, it returns the string split into its parts.
      */
     protected @NotNull String @NotNull [] assurePlaceholders(@NotNull String exceptionMessage, int expected){
-        String[] split = exceptionMessage.split(CommandException.PATTERN_SAFE_PLACEHOLDER);
+        String[] split = exceptionMessage.split(CommandException.PATTERN_SAFE_PLACEHOLDER, -1);
         if ((split.length - 1) != expected){
             StringBuilder builder = new StringBuilder("Expected the exception message to have ").append(expected).append(" placeholder");
             if (expected != 1){
