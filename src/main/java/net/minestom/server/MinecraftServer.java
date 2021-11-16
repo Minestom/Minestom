@@ -667,14 +667,13 @@ public final class MinecraftServer {
         if (stopping) return;
         stopping = true;
         LOGGER.info("Stopping Minestom server.");
-        extensionManager.unloadAllExtensions();
+        LOGGER.info("Unloading all extensions.");
+        extensionManager.shutdown();
         updateManager.stop();
         schedulerManager.shutdown();
         connectionManager.shutdown();
         server.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
-        LOGGER.info("Unloading all extensions.");
-        extensionManager.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         MinestomTerminal.stop();
