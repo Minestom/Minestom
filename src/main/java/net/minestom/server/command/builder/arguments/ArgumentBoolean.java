@@ -1,7 +1,9 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +29,11 @@ public class ArgumentBoolean extends Argument<Boolean> {
             return false;
 
         throw new ArgumentSyntaxException("Not a boolean", input, NOT_BOOLEAN_ERROR);
+    }
+
+    @Override
+    public @NotNull Boolean parse(@NotNull StringReader input) throws CommandException {
+        return input.readBoolean();
     }
 
     @Override
