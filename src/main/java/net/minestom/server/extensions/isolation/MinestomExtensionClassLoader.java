@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 
 public class MinestomExtensionClassLoader extends HierarchyClassLoader {
-    private final Logger logger = LoggerFactory.getLogger(MinestomExtensionClassLoader.class);
 
     public MinestomExtensionClassLoader(String extensionName, URL[] urls) {
         super("Ext_" + extensionName, urls, MinecraftServer.class.getClassLoader());
