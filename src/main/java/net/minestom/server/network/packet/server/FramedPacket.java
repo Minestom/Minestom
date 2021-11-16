@@ -1,6 +1,5 @@
-package net.minestom.server.network.packet;
+package net.minestom.server.network.packet.server;
 
-import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
