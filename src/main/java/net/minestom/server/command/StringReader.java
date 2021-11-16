@@ -285,10 +285,10 @@ public final class StringReader extends FixedStringReader {
      */
     public @NotNull UUID readUUID() throws CommandException {
         int start = currentPosition;
-        while (canRead()){
+        while (canRead()) {
             char c = peek();
-            if (!(c == '-' || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9'))){
-                throw CommandException.ARGUMENT_UUID_INVALID.generateException(this);
+            if (!(c == '-' || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9'))) {
+                break;
             }
             skip();
         }
