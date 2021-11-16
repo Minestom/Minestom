@@ -1,11 +1,26 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.StringReader;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     public ArgumentInteger(String id) {
         super(id, "brigadier:integer", Integer::parseInt, Integer::parseInt, BinaryWriter::writeInt, Integer::compare);
+    }
+
+    @Override
+    public @NotNull Integer parse(@NotNull StringReader input) throws CommandException {
+        int value = input.readInteger();
+        if (hasMin() && value < min){
+            throw CommandException.ARGUMENT_INTEGER_LOW.generateException(input, min.toString(), Integer.toString(value));
+        }
+        if (hasMax() && value > max){
+            throw CommandException.ARGUMENT_INTEGER_BIG.generateException(input, max.toString(), Integer.toString(value));
+        }
+        return value;
     }
 
     @Override
