@@ -16,6 +16,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
@@ -29,6 +30,8 @@ public final class Worker extends MinestomThread {
     private final Server server;
     private final PacketProcessor packetProcessor;
 
+    private final AtomicBoolean flush = new AtomicBoolean();
+
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
         super("Ms-worker-" + COUNTER.getAndIncrement());
         this.server = server;
@@ -39,6 +42,11 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
+                // Flush all connections if needed
+                if (flush.compareAndSet(true, false)) {
+                    connectionMap.values().forEach(PlayerSocketConnection::flush);
+                }
+                // Wait for an event
                 this.selector.select(key -> {
                     final SocketChannel channel = (SocketChannel) key.channel();
                     if (!channel.isOpen()) return;
@@ -89,6 +97,11 @@ public final class Worker extends MinestomThread {
         socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
         socket.setTcpNoDelay(Server.NO_DELAY);
         socket.setSoTimeout(30 * 1000); // 30 seconds
+        this.selector.wakeup();
+    }
+
+    public void flush() {
+        this.flush.set(true);
         this.selector.wakeup();
     }
 
