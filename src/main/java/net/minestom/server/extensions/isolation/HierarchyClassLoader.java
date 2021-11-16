@@ -18,6 +18,11 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
         super(name, urls, parent);
     }
 
+    @Override
+    public void addURL(@NotNull URL url) {
+        super.addURL(url);
+    }
+
     public void addChild(@NotNull MinestomExtensionClassLoader loader) {
         children.add(loader);
     }
