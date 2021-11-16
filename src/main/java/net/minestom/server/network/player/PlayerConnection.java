@@ -8,6 +8,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -105,6 +106,11 @@ public abstract class PlayerConnection {
     @ApiStatus.Experimental
     public void sendPacket(@NotNull FramedPacket framedPacket) {
         this.sendPacket(framedPacket.packet());
+    }
+
+    @ApiStatus.Experimental
+    public void sendPacket(@NotNull CachedPacket cachedPacket) {
+        this.sendPacket(cachedPacket.retrieve());
     }
 
     /**

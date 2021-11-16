@@ -15,9 +15,12 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.zip.Inflater;
 
 @ApiStatus.Internal
@@ -29,7 +32,7 @@ public final class Worker extends MinestomThread {
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final PacketProcessor packetProcessor;
-
+    private final Queue<Consumer<Context>> queue = new ConcurrentLinkedQueue<>();
     private final AtomicBoolean flush = new AtomicBoolean();
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
@@ -42,9 +45,15 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
+                {
+                    Consumer<Context> consumer;
+                    while ((consumer = queue.poll()) != null) {
+                        consumer.accept(context);
+                    }
+                }
                 // Flush all connections if needed
                 if (flush.compareAndSet(true, false)) {
-                    connectionMap.values().forEach(PlayerSocketConnection::flush);
+                    connectionMap.values().forEach(PlayerSocketConnection::flushSync);
                 }
                 // Wait for an event
                 this.selector.select(key -> {
@@ -61,6 +70,7 @@ public final class Worker extends MinestomThread {
                         connection.processPackets(context, packetProcessor);
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
+                        e.printStackTrace();
                         connection.disconnect();
                     } catch (IllegalArgumentException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
@@ -103,6 +113,10 @@ public final class Worker extends MinestomThread {
     public void flush() {
         this.flush.set(true);
         this.selector.wakeup();
+    }
+
+    public Queue<Consumer<Context>> queue() {
+        return queue;
     }
 
     /**

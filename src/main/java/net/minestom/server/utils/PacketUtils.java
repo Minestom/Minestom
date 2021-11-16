@@ -14,6 +14,7 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.network.packet.CachedPacket;
 import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -48,8 +49,8 @@ public final class PacketUtils {
     private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
 
     public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
-    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
+    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", false);
+    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", false);
 
     /// Local buffers
     private static final LocalCache<ByteBuffer> PACKET_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
@@ -122,12 +123,12 @@ public final class PacketUtils {
             // Send grouped packet...
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
-            final FramedPacket framedPacket = new FramedPacket(packet, createFramedPacket(packet));
+            final CachedPacket cachedPacket = new CachedPacket(() -> packet);
             // Send packet to all players
             players.forEach(player -> {
                 if (!player.isOnline() || !playerValidator.isValid(player))
                     return;
-                player.sendPacket(framedPacket);
+                player.sendPacket(cachedPacket);
             });
         } else {
             // Write the same packet for each individual players
