@@ -8,6 +8,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;

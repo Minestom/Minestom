@@ -54,6 +54,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
