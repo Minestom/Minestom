@@ -30,16 +30,12 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         try {
-            System.out.println("TRYING 2 LOAD " + name + " IN " + getName());
             return super.loadClass(name, resolve);
         } catch (ClassNotFoundException e) {
-            System.out.println("COULD NOT LOAD 2, TRYING CHILDREN");
             for (MinestomExtensionClassLoader child : children) {
                 try {
                     return child.loadClass(name, resolve);
-                } catch (ClassNotFoundException ignored) {
-                    System.out.println("NOT FOUND IN " + child.getName() + " EITHER");
-                }
+                } catch (ClassNotFoundException ignored) {}
             }
             throw e;
         }
