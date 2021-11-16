@@ -169,6 +169,7 @@ public class ExtensionManager {
         }
 
         //TODO(mattw) What is the purpose of this?
+
         // Periodically cleanup observers
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             for (Extension ext : extensions.values()) {
@@ -189,9 +190,7 @@ public class ExtensionManager {
             while (extensionIterator.hasNext()) {
                 DiscoveredExtension discoveredExtension = extensionIterator.next();
                 try {
-                    MinestomExtensionClassLoader classLoader = discoveredExtension.makeClassLoader();
-                    discoveredExtension.setMinestomExtensionClassLoader(classLoader);
-                    System.out.println("SET " + discoveredExtension.getName() + " TO " + discoveredExtension.getMinestomExtensionClassLoader());
+                    discoveredExtension.createClassLoader();
                 } catch (Exception e) {
                     discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
                     MinecraftServer.getExceptionManager().handleException(e);
@@ -243,7 +242,7 @@ public class ExtensionManager {
         String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
 
-        MinestomExtensionClassLoader loader = discoveredExtension.getMinestomExtensionClassLoader();
+        MinestomExtensionClassLoader loader = discoveredExtension.getClassLoader();
 
         if (extensions.containsKey(extensionName.toLowerCase())) {
             LOGGER.error("An extension called '{}' has already been registered.", extensionName);
@@ -589,16 +588,16 @@ public class ExtensionManager {
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
 
-                MinestomExtensionClassLoader extensionClassLoader = discoveredExtension.getMinestomExtensionClassLoader();
+                MinestomExtensionClassLoader extensionClassLoader = discoveredExtension.getClassLoader();
                 for (String dependencyName : discoveredExtension.getDependencies()) {
                     var resolved = extensions.stream()
                             .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
                             .findFirst().orElse(null);
-
-                    MinestomExtensionClassLoader dependencyClassLoader = resolved.getMinestomExtensionClassLoader();
-                    if (dependencyClassLoader == null) {
-                        throw new IllegalStateException("Dependency '" + dependencyName + "' of '" + discoveredExtension.getName() + "' has not been loaded.");
+                    if (resolved == null) {
+                        throw new IllegalStateException("Unknown dependency '" + dependencyName + "' of '" + discoveredExtension.getName() + "'");
                     }
+
+                    MinestomExtensionClassLoader dependencyClassLoader = resolved.getClassLoader();
 
                     extensionClassLoader.addChild(dependencyClassLoader);
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
@@ -613,10 +612,9 @@ public class ExtensionManager {
     }
 
     private void addDependencyFile(@NotNull ResolvedDependency dependency, @NotNull DiscoveredExtension extension) {
-        System.out.println("ADDING DEPENDENCY " + dependency.getName() + " TO " + extension.getName());
         URL location = dependency.getContentsLocation();
         extension.files.add(location);
-        extension.getMinestomExtensionClassLoader().addURL(location);
+        extension.getClassLoader().addURL(location);
         LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
 
         // recurse to add full dependency tree
@@ -717,12 +715,6 @@ public class ExtensionManager {
         extensions.remove(id);
 
         // cleanup classloader
-        try {
-            MinestomExtensionClassLoader classloader = ext.getOrigin().removeMinestomExtensionClassLoader();
-            classloader.close();
-            //todo child classloaders, also since there is no reload, is this actually necessary?
-        } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
+        // TODO: Is it necessary to remove the CLs since this is only called on shutdown?
     }
 }
