@@ -71,13 +71,6 @@ public abstract class Extension {
 
     }
 
-    /**
-     * Called after postTerminate when reloading an extension
-     */
-    public void unload() {
-
-    }
-
     @NotNull
     public DiscoveredExtension getOrigin() {
         return origin;
