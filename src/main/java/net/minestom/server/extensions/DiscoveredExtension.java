@@ -206,7 +206,7 @@ public final class DiscoveredExtension {
         return meta;
     }
 
-    public MinestomExtensionClassLoader makeClassLoader(List<DiscoveredExtension> discoveredExtensions) {
+    public MinestomExtensionClassLoader makeClassLoader() {
         final URL[] urls = this.files.toArray(new URL[0]);
 
         MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), urls);
@@ -214,21 +214,21 @@ public final class DiscoveredExtension {
         System.out.println("CREATED " + loader + " WITH " + Arrays.toString(urls));
 
         // add children to the dependencies
-        for (String dependencyName : this.getDependencies()) {
-            DiscoveredExtension dependency = discoveredExtensions.stream()
-                    .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
-                    .findFirst().orElse(null);
-
-            if (dependency != null) {
-                MinestomExtensionClassLoader dependencyLoader = dependency.getMinestomExtensionClassLoader();
-                assert dependencyLoader != null; //TODO: Better error handling
-
-                loader.addChild(dependencyLoader);
-            } else {
-                //TODO: Better error handling
-                throw new RuntimeException("Missing dependency " + dependencyName);
-            }
-        }
+//        for (String dependencyName : this.getDependencies()) {
+//            DiscoveredExtension dependency = discoveredExtensions.stream()
+//                    .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
+//                    .findFirst().orElse(null);
+//
+//            if (dependency != null) {
+//                MinestomExtensionClassLoader dependencyLoader = dependency.getMinestomExtensionClassLoader();
+//                assert dependencyLoader != null; //TODO: Better error handling
+//
+//                loader.addChild(dependencyLoader);
+//            } else {
+//                //TODO: Better error handling
+//                throw new RuntimeException("Missing dependency " + dependencyName);
+//            }
+//        }
 
 //        if (this.getDependencies().length == 0 || MinecraftServer.getExtensionManager() == null) { // it also may invoked in early class loader
 //            // orphaned extension, we can insert it directly

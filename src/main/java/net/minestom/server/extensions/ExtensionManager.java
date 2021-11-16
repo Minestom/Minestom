@@ -168,6 +168,7 @@ public class ExtensionManager {
             }
         }
 
+        //TODO(mattw) What is the purpose of this?
         // Periodically cleanup observers
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             for (Extension ext : extensions.values()) {
@@ -183,24 +184,25 @@ public class ExtensionManager {
             // Don't waste resources on doing extra actions if there is nothing to do.
             if (discoveredExtensions.isEmpty()) return;
 
-            discoveredExtensions = generateLoadOrder(discoveredExtensions);
-            loadDependencies(discoveredExtensions);
-
-            // remove invalid extensions
-            discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
-
-            // set class loaders for all extensions.
-            for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
+            // Create classloaders for each extension (so that they can be used during dependency resolution)
+            Iterator<DiscoveredExtension> extensionIterator = discoveredExtensions.iterator();
+            while (extensionIterator.hasNext()) {
+                DiscoveredExtension discoveredExtension = extensionIterator.next();
                 try {
-                    discoveredExtension.setMinestomExtensionClassLoader(discoveredExtension.makeClassLoader(discoveredExtensions)); //TODO: This is a hack to pass the dependent DiscoveredExtensions to the classloader
+                    MinestomExtensionClassLoader classLoader = discoveredExtension.makeClassLoader();
+                    discoveredExtension.setMinestomExtensionClassLoader(classLoader);
                     System.out.println("SET " + discoveredExtension.getName() + " TO " + discoveredExtension.getMinestomExtensionClassLoader());
                 } catch (Exception e) {
                     discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
                     MinecraftServer.getExceptionManager().handleException(e);
                     LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
                     LOGGER.error("Failed to load extension", e);
+                    extensionIterator.remove();
                 }
             }
+
+            discoveredExtensions = generateLoadOrder(discoveredExtensions);
+            loadDependencies(discoveredExtensions);
 
             // remove invalid extensions
             discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
@@ -382,6 +384,9 @@ public class ExtensionManager {
             }
         }
 
+        //TODO(mattw): Extract this into its own method to load an extension given classes and resources directory.
+        //TODO(mattw): Should show a warning if one is set and not the other. It is most likely a mistake.
+
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
         if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
             LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
@@ -558,8 +563,6 @@ public class ExtensionManager {
         for (Extension extension : immutableExtensions.values())
             allLoadedExtensions.add(extension.getOrigin());
 
-        ExtensionDependencyResolver extensionDependencyResolver = new ExtensionDependencyResolver(allLoadedExtensions);
-
         for (DiscoveredExtension discoveredExtension : extensions) {
             try {
                 DependencyGetter getter = new DependencyGetter();
@@ -567,27 +570,18 @@ public class ExtensionManager {
                 List<MavenRepository> repoList = new LinkedList<>();
                 for (var repository : externalDependencies.repositories) {
 
-                    if (repository.name == null) {
+                    if (repository.name == null || repository.name.isEmpty()) {
                         throw new IllegalStateException("Missing 'name' element in repository object.");
                     }
 
-                    if (repository.name.isEmpty()) {
-                        throw new IllegalStateException("Invalid 'name' element in repository object.");
-                    }
-
-                    if (repository.url == null) {
+                    if (repository.url == null || repository.url.isEmpty()) {
                         throw new IllegalStateException("Missing 'url' element in repository object.");
-                    }
-
-                    if (repository.url.isEmpty()) {
-                        throw new IllegalStateException("Invalid 'url' element in repository object.");
                     }
 
                     repoList.add(new MavenRepository(repository.name, repository.url));
                 }
 
                 getter.addMavenResolver(repoList);
-//                getter.addResolver(extensionDependencyResolver);
 
                 for (String artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
@@ -595,11 +589,20 @@ public class ExtensionManager {
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
 
-//                for (String dependencyName : discoveredExtension.getDependencies()) {
-//                    var resolved = getter.get(dependencyName, dependenciesFolder);
-//                    addDependencyFile(resolved, discoveredExtension);
-//                    LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
-//                }
+                MinestomExtensionClassLoader extensionClassLoader = discoveredExtension.getMinestomExtensionClassLoader();
+                for (String dependencyName : discoveredExtension.getDependencies()) {
+                    var resolved = extensions.stream()
+                            .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
+                            .findFirst().orElse(null);
+
+                    MinestomExtensionClassLoader dependencyClassLoader = resolved.getMinestomExtensionClassLoader();
+                    if (dependencyClassLoader == null) {
+                        throw new IllegalStateException("Dependency '" + dependencyName + "' of '" + discoveredExtension.getName() + "' has not been loaded.");
+                    }
+
+                    extensionClassLoader.addChild(dependencyClassLoader);
+                    LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
+                }
             } catch (Exception e) {
                 discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
                 LOGGER.error("Failed to load dependencies for extension {}", discoveredExtension.getName());
@@ -613,6 +616,7 @@ public class ExtensionManager {
         System.out.println("ADDING DEPENDENCY " + dependency.getName() + " TO " + extension.getName());
         URL location = dependency.getContentsLocation();
         extension.files.add(location);
+        extension.getMinestomExtensionClassLoader().addURL(location);
         LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
 
         // recurse to add full dependency tree
