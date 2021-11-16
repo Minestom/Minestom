@@ -1,7 +1,6 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.JsonObject;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,8 +19,6 @@ import java.util.List;
  * This has no constructor as its properties are set via GSON.
  */
 public final class DiscoveredExtension {
-    private static final ExtensionManager EXTENSION_MANAGER = MinecraftServer.getExtensionManager();
-
     /** Static logger for this class. */
     public static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
 
@@ -68,7 +64,7 @@ public final class DiscoveredExtension {
     transient private Path dataDirectory;
 
     /** The class loader that powers it. */
-    transient private MinestomExtensionClassLoader minestomExtensionClassLoader;
+    transient private MinestomExtensionClassLoader classLoader;
 
     @NotNull
     public String getName() {
@@ -117,19 +113,15 @@ public final class DiscoveredExtension {
         this.dataDirectory = dataDirectory;
     }
 
-    MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
-        MinestomExtensionClassLoader oldClassLoader = getMinestomExtensionClassLoader();
-        setMinestomExtensionClassLoader(null);
-        return oldClassLoader;
+    public void createClassLoader() {
+        if (classLoader != null) throw new IllegalStateException("Extension classloader has already been created!");
+        final URL[] urls = this.files.toArray(new URL[0]);
+        classLoader = new MinestomExtensionClassLoader(this.getName(), urls);
     }
 
-    void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
-        this.minestomExtensionClassLoader = minestomExtensionClassLoader;
-    }
-
-    @Nullable
-    public MinestomExtensionClassLoader getMinestomExtensionClassLoader() {
-        return this.minestomExtensionClassLoader;
+    @NotNull
+    public MinestomExtensionClassLoader getClassLoader() {
+        return classLoader;
     }
 
     /**
@@ -204,50 +196,6 @@ public final class DiscoveredExtension {
     @NotNull
     public JsonObject getMeta() {
         return meta;
-    }
-
-    public MinestomExtensionClassLoader makeClassLoader() {
-        final URL[] urls = this.files.toArray(new URL[0]);
-
-        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), urls);
-
-        System.out.println("CREATED " + loader + " WITH " + Arrays.toString(urls));
-
-        // add children to the dependencies
-//        for (String dependencyName : this.getDependencies()) {
-//            DiscoveredExtension dependency = discoveredExtensions.stream()
-//                    .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
-//                    .findFirst().orElse(null);
-//
-//            if (dependency != null) {
-//                MinestomExtensionClassLoader dependencyLoader = dependency.getMinestomExtensionClassLoader();
-//                assert dependencyLoader != null; //TODO: Better error handling
-//
-//                loader.addChild(dependencyLoader);
-//            } else {
-//                //TODO: Better error handling
-//                throw new RuntimeException("Missing dependency " + dependencyName);
-//            }
-//        }
-
-//        if (this.getDependencies().length == 0 || MinecraftServer.getExtensionManager() == null) { // it also may invoked in early class loader
-//            // orphaned extension, we can insert it directly
-//            root.addChild(loader);
-//        } else {
-//            // add children to the dependencies
-//            for (String dependency : this.getDependencies()) {
-//                if (MinecraftServer.getExtensionManager().hasExtension(dependency.toLowerCase())) {
-//                    MinestomExtensionClassLoader parentLoader = MinecraftServer.getExtensionManager().getExtension(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
-//
-//                    // TODO should never happen but replace with better throws error.
-//                    assert parentLoader != null;
-//
-//                    parentLoader.addChild(loader);
-//                }
-//            }
-//        }
-
-        return loader;
     }
 
     /**
