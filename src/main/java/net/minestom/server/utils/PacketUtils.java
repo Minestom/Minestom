@@ -256,13 +256,15 @@ public final class PacketUtils {
 
         private void process(Viewable viewable) {
             if (buffer.writerOffset() == 0) return;
-            viewable.getViewers().forEach(this::processPlayer);
+            ByteBuffer copy = ByteBuffer.allocateDirect(buffer.writerOffset());
+            copy.put(buffer.asByteBuffer(0, copy.capacity()));
+            viewable.getViewers().forEach(player -> processPlayer(player, copy));
             this.buffer.clear();
             this.entityIdMap.clear();
         }
 
-        private void processPlayer(Player player) {
-            final int size = buffer.writerOffset();
+        private void processPlayer(Player player, ByteBuffer buffer) {
+            final int size = buffer.limit();
             final PlayerConnection connection = player.getPlayerConnection();
             final LongArrayList pairs = entityIdMap.get(player.getEntityId());
             if (pairs != null) {
@@ -272,18 +274,14 @@ public final class PacketUtils {
                 for (int i = 0; i < pairs.size(); ++i) {
                     final long offsets = elements[i];
                     final int start = (int) (offsets >> 32);
-                    if (start != lastWrite) writeTo(connection, lastWrite, start - lastWrite);
+                    if (start != lastWrite) writeTo(connection, buffer, lastWrite, start - lastWrite);
                     lastWrite = (int) offsets; // End = last 32 bits
                 }
-                if (size != lastWrite) writeTo(connection, lastWrite, size - lastWrite);
+                if (size != lastWrite) writeTo(connection, buffer, lastWrite, size - lastWrite);
             } else {
                 // Write all
-                writeTo(connection, 0, size);
+                writeTo(connection, buffer, 0, size);
             }
-        }
-
-        private void writeTo(PlayerConnection connection, int offset, int length) {
-            writeTo(connection, buffer.asByteBuffer(), offset, length);
         }
 
         private static void writeTo(PlayerConnection connection, ByteBuffer buffer, int offset, int length) {
