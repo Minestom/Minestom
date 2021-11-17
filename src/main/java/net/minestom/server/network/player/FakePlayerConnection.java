@@ -4,7 +4,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerController;
-import net.minestom.server.network.packet.server.*;
+import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +26,6 @@ public class FakePlayerConnection extends PlayerConnection {
             controller.consumePacket(framedPacket.packet());
         } else if (packet instanceof CachedPacket cachedPacket) {
             controller.consumePacket(cachedPacket.retrieve().packet());
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            controller.consumePacket(lazyPacket.packet());
         } else {
             throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }

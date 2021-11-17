@@ -4,5 +4,5 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Experimental
 public sealed interface SendablePacket
-        permits ServerPacket, CachedPacket, FramedPacket, LazyPacket {
+        permits ServerPacket, CachedPacket, FramedPacket {
 }

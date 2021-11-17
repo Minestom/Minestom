@@ -382,8 +382,6 @@ public class PlayerSocketConnection extends PlayerConnection {
             writeFramedPacketSync(framedPacket);
         } else if (packet instanceof CachedPacket cachedPacket) {
             writeFramedPacketSync(cachedPacket.retrieve());
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            writeFramedPacketSync(lazyPacket.retrieve());
         } else {
             throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }

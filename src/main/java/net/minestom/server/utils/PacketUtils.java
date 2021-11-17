@@ -13,8 +13,8 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
-import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -114,7 +114,7 @@ public final class PacketUtils {
         if (players.isEmpty()) return;
         if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players)) return;
         // work out if the packet needs to be sent individually due to server-side translating
-        final SendablePacket sendablePacket = GROUPED_PACKET ? new LazyPacket(packet) : packet;
+        final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
