@@ -84,6 +84,12 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public final class </span><span class="element-name type-name-label">CachedPacket</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span></div>
+<div class="block">Represents a packet that is compute only when required (either due to memory demand or invalidated data)
+ <p>
+ The <a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server"><code>FramedPacket</code></a> is stored in a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ref/SoftReference.html" title="class or interface in java.lang.ref" class="external-link"><code>SoftReference</code></a> and is invalidated when the <a href="#invalidate()"><code>invalidate()</code></a> method is called.
+ <p>
+ The <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> may be computed dynamically in another thread, or be a constant to potentially
+ improve retrieval performance at the cost of the object staying in the heap.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -96,9 +102,15 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.function.Supplier)" class="member-name-link">CachedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;packetSupplier)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Creates a new cached packet that will force the allocation of a new <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a>
+ during invalidation due to memory constraint or invalidation.</div>
+</div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">CachedPacket</a><wbr>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a new cached packet from a constant <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a>
+ which will be the return value of <a href="#packet()"><code>packet()</code></a>.</div>
+</div>
 </div>
 </section>
 </li>
@@ -118,10 +130,14 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#packet()" class="member-name-link">packet</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Retrieves the packet object without allocating a buffer.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retrieve()" class="member-name-link">retrieve</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Retrieves the packet content.</div>
+</div>
 </div>
 </div>
 </div>
@@ -144,6 +160,10 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <h3>CachedPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CachedPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;packetSupplier)</span></div>
+<div class="block">Creates a new cached packet that will force the allocation of a new <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a>
+ during invalidation due to memory constraint or invalidation.
+ <p>
+ <code>packetSupplier</code> must be thread-safe.</div>
 </section>
 </li>
 <li>
@@ -151,6 +171,8 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <h3>CachedPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CachedPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
+<div class="block">Creates a new cached packet from a constant <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a>
+ which will be the return value of <a href="#packet()"><code>packet()</code></a>.</div>
 </section>
 </li>
 </ul>
@@ -172,6 +194,10 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <h3>packet</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span>&nbsp;<span class="element-name">packet</span>()</div>
+<div class="block">Retrieves the packet object without allocating a buffer.
+ <p>
+ This method can be useful in case the payload is not important (e.g. for packet listening),
+ but <a href="#retrieve()"><code>retrieve()</code></a> should be privileged otherwise.</div>
 </section>
 </li>
 <li>
@@ -179,6 +205,10 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <h3>retrieve</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a></span>&nbsp;<span class="element-name">retrieve</span>()</div>
+<div class="block">Retrieves the packet content. May be recomputed if the packet is invalidated or
+ if there is memory demand (handled by a soft reference).
+ <p>
+ <a href="FramedPacket.html#body()"><code>FramedPacket.body()</code></a> will contain a buffer allocated by this method.</div>
 </section>
 </li>
 </ul>
