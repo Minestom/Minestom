@@ -172,8 +172,6 @@ public final class UpdateManager {
                     long currentTime = System.nanoTime();
                     final long tickStart = System.currentTimeMillis();
 
-                    PacketUtils.clear();
-
                     // Tick start callbacks
                     doTickCallback(tickStartCallbacks, tickStart);
 

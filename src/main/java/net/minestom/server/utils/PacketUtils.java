@@ -161,11 +161,6 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static void clear() {
-        VIEWABLE_STORAGE_MAP.values().parallelStream().forEach(ViewableStorage::clear);
-    }
-
-    @ApiStatus.Internal
     public static void flush() {
         VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
                 entry.getValue().process(entry.getKey()));
@@ -230,10 +225,10 @@ public final class PacketUtils {
     private static final class ViewableStorage {
         // Player id -> list of offsets to ignore (32:32 bits)
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
-        private BinaryBuffer buffer = PooledBuffers.get();
+        private final BinaryBuffer buffer = PooledBuffers.get();
 
-        private void clear() {
-            this.buffer = PooledBuffers.get();
+        {
+            PooledBuffers.registerBuffer(this, buffer);
         }
 
         private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
@@ -262,6 +257,7 @@ public final class PacketUtils {
         private void process(Viewable viewable) {
             if (buffer.writerOffset() == 0) return;
             viewable.getViewers().forEach(this::processPlayer);
+            this.buffer.clear();
             this.entityIdMap.clear();
         }
 
