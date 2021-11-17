@@ -125,16 +125,14 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        player.sendPacket(lightCache);
-        player.sendPacket(chunkCache);
+        player.sendPackets(lightCache, chunkCache);
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        sendPacketToViewers(lightCache.retrieve());
-        sendPacketToViewers(chunkCache.retrieve());
+        sendPacketsToViewers(lightCache, chunkCache);
     }
 
     @NotNull

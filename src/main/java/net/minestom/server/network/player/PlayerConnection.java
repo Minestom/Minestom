@@ -10,10 +10,12 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -88,6 +90,18 @@ public abstract class PlayerConnection {
      * @see #shouldSendPacket(ServerPacket)
      */
     public abstract void sendPacket(@NotNull SendablePacket packet);
+
+    @ApiStatus.Experimental
+    public void sendPackets(@NotNull SendablePacket... packets) {
+        for (SendablePacket p : packets) {
+            sendPacket(p);
+        }
+    }
+
+    @ApiStatus.Experimental
+    public void sendPackets(@NotNull Collection<SendablePacket> packet) {
+        packet.forEach(this::sendPacket);
+    }
 
     /**
      * Flush waiting data to the connection.

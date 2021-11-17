@@ -455,7 +455,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 if (passenger != player) passenger.viewEngine.viewableOption.removal.accept(player);
             }
         }
-        player.sendPacket(destroyPacketCache.retrieve());
+        player.sendPacket(destroyPacketCache);
     }
 
     @Override

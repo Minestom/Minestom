@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -76,6 +77,10 @@ public interface Viewable {
         for (SendablePacket packet : packets) {
             sendPacketToViewers(packet);
         }
+    }
+
+    default void sendPacketsToViewers(@NotNull Collection<SendablePacket> packets) {
+        packets.forEach(this::sendPacketToViewers);
     }
 
     /**
