@@ -1,9 +1,12 @@
 package net.minestom.server.network.packet.server;
 
 import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+@ApiStatus.Internal
+@ApiStatus.Experimental
 public final class LazyPacket implements SendablePacket {
     private final ServerPacket packet;
     private final AtomicReference<Entry> entry = new AtomicReference<>();
