@@ -163,22 +163,19 @@ public class AdventurePacketConvertor {
      * @return the sound stop packet
      */
     public static ServerPacket createSoundStopPacket(@NotNull SoundStop stop) {
-        StopSoundPacket packet = new StopSoundPacket();
-        packet.flags = 0x0;
+        byte flags = 0x0;
+        Sound.Source source = stop.source();
+        String sound = null;
 
-        final Sound.Source source = stop.source();
-        if (source != null) {
-            packet.flags |= 0x1;
-            packet.source = AdventurePacketConvertor.getSoundSourceValue(source);
+        if (source != null) flags |= 0x1;
+
+        final Key soundKey = stop.sound();
+        if (soundKey != null) {
+            flags |= 0x2;
+            sound = soundKey.asString();
         }
 
-        final Key sound = stop.sound();
-        if (sound != null) {
-            packet.flags |= 0x2;
-            packet.sound = sound.asString();
-        }
-
-        return packet;
+        return new StopSoundPacket(flags, source, sound);
     }
 
     /**
