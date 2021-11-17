@@ -9,6 +9,7 @@ import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -65,22 +66,12 @@ public interface Viewable {
         }
     }
 
-    /**
-     * Sends multiple packets to all viewers.
-     * <p>
-     * It is better than looping through the viewers
-     * to send a packet since it is here only serialized once.
-     *
-     * @param packets the packets to send
-     */
-    default void sendPacketsToViewers(@NotNull SendablePacket... packets) {
-        for (SendablePacket packet : packets) {
-            sendPacketToViewers(packet);
-        }
-    }
-
     default void sendPacketsToViewers(@NotNull Collection<SendablePacket> packets) {
         packets.forEach(this::sendPacketToViewers);
+    }
+
+    default void sendPacketsToViewers(@NotNull SendablePacket... packets) {
+        sendPacketsToViewers(List.of(packets));
     }
 
     /**
