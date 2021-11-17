@@ -109,13 +109,9 @@ public final class NBTUtils {
         nbt.set(listName, enchantList);
     }
 
-    @NotNull
-    public static ItemStack readItemStack(@NotNull BinaryReader reader) {
+    public static @NotNull ItemStack readItemStack(@NotNull BinaryReader reader) {
         final boolean present = reader.readBoolean();
-
-        if (!present) {
-            return ItemStack.AIR;
-        }
+        if (!present) return ItemStack.AIR;
 
         final int id = reader.readVarInt();
         if (id == -1) {
@@ -125,12 +121,8 @@ public final class NBTUtils {
 
         final Material material = Material.fromId((short) id);
         final byte count = reader.readByte();
-        NBTCompound nbtCompound = null;
-
-        final NBT itemNBT = reader.readTag();
-        if (itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
-            nbtCompound = (NBTCompound) itemNBT;
-        }
+        NBTCompound nbtCompound = reader.readTag() instanceof NBTCompound compound ?
+                compound : null;
         return ItemStack.fromNBT(material, nbtCompound, count);
     }
 
