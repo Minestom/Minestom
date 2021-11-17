@@ -872,8 +872,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        final List<PlayerInfoPacket.Info> info = List.of(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME, info));
+        final List<PlayerInfoPacket.Entry> entry = List.of(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
+        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME, entry));
     }
 
     /**
@@ -1237,8 +1237,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
-            final List<PlayerInfoPacket.Info> info = List.of(new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode));
-            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE, info));
+            final List<PlayerInfoPacket.Entry> entry = List.of(new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode));
+            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE, entry));
         }
     }
 
@@ -1701,8 +1701,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        final List<PlayerInfoPacket.Info> info = List.of(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY, info));
+        final List<PlayerInfoPacket.Entry> entry = List.of(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
+        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY, entry));
     }
 
     public void refreshOnGround(boolean onGround) {
@@ -1827,8 +1827,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 Collections.emptyList();
-        final PlayerInfoPacket.Info info = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName);
-        return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER, List.of(info));
+        final PlayerInfoPacket.Entry entry = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName);
+        return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER, List.of(entry));
     }
 
     /**
