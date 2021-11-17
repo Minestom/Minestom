@@ -7,9 +7,9 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(ServerPacket)}.
+ * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(SendablePacket)}.
  */
-public interface ServerPacket extends Readable, Writeable {
+public non-sealed interface ServerPacket extends Readable, Writeable, SendablePacket {
 
     @Override
     default void read(@NotNull BinaryReader reader) {
