@@ -116,9 +116,9 @@ public class Team implements PacketGroupingAudience {
 
         // Initializes add player packet
         final TeamsPacket addPlayerPacket = new TeamsPacket(teamName,
-                new TeamsPacket.AddEntitiesToTeamAction(members.toArray(new String[0])));
+                new TeamsPacket.AddEntitiesToTeamAction(members));
         // Sends to all online players the add player packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), addPlayerPacket);
+        PacketUtils.broadcastPacket(addPlayerPacket);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
@@ -134,7 +134,7 @@ public class Team implements PacketGroupingAudience {
         final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
                 new TeamsPacket.RemoveEntitiesToTeamAction(new String[]{member}));
         // Sends to all online player teh remove player packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), removePlayerPacket);
+        PacketUtils.broadcastPacket(removePlayerPacket);
 
         // Removes the member from the team
         this.members.remove(member);
@@ -347,7 +347,7 @@ public class Team implements PacketGroupingAudience {
      */
     public @NotNull TeamsPacket createTeamsCreationPacket() {
         final var info = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
-                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members.toArray(new String[0]));
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
         return new TeamsPacket(teamName, info);
     }
 
@@ -433,12 +433,12 @@ public class Team implements PacketGroupingAudience {
     }
 
     /**
-     * Sends an {@link TeamsPacket.Action#UPDATE_TEAM_INFO} packet.
+     * Sends an {@link TeamsPacket.UpdateTeamAction} action packet.
      */
     public void sendUpdatePacket() {
         final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
-                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members.toArray(new String[0]));
-        PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), new TeamsPacket(teamName, info));
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
+        PacketUtils.broadcastPacket(new TeamsPacket(teamName, info));
     }
 
     @Override

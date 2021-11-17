@@ -19,7 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -335,17 +335,17 @@ public class BinaryWriter extends OutputStream {
         }
     }
 
-    public <T> void writeVarIntList(List<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
+    public <T> void writeVarIntList(Collection<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
         writeVarInt(list.size());
         writeList(list, consumer);
     }
 
-    public <T> void writeByteList(List<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
+    public <T> void writeByteList(Collection<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
         writeByte((byte) list.size());
         writeList(list, consumer);
     }
 
-    private <T> void writeList(List<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
+    private <T> void writeList(Collection<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
         for (T t : list) consumer.accept(this, t);
     }
 

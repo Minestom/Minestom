@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -412,7 +413,7 @@ public class Sidebar implements Scoreboard {
          */
         private TeamsPacket getCreationPacket() {
             final var action = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
-                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, new String[]{entityName});
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.of(entityName));
             return new TeamsPacket(teamName, action);
         }
 
@@ -433,7 +434,7 @@ public class Sidebar implements Scoreboard {
          */
         private TeamsPacket updatePrefix(Component prefix) {
             final var action = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
-                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, new String[]{entityName});
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.of(entityName));
             return new TeamsPacket(teamName, action);
         }
 

@@ -11,6 +11,9 @@ import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * The packet creates or updates teams
  */
@@ -41,11 +44,16 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record CreateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   String[] entities) implements Action {
+                                   Collection<String> entities) implements Action {
+        public CreateTeamAction {
+            entities = List.copyOf(entities);
+        }
+
         public CreateTeamAction(BinaryReader reader) {
             this(reader.readComponent(), reader.readByte(),
                     NameTagVisibility.fromIdentifier(reader.readSizedString()), CollisionRule.fromIdentifier(reader.readSizedString()),
-                    NamedTextColor.ofExact(reader.readVarInt()), reader.readComponent(), reader.readComponent(), reader.readSizedStringArray());
+                    NamedTextColor.ofExact(reader.readVarInt()), reader.readComponent(), reader.readComponent(),
+                    reader.readVarIntList(BinaryReader::readSizedString));
         }
 
         @Override
@@ -57,6 +65,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(teamColor));
             writer.writeComponent(teamPrefix);
             writer.writeComponent(teamSuffix);
+            writer.writeVarIntList(entities, BinaryWriter::writeSizedString);
         }
 
         @Override
@@ -79,11 +88,16 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record UpdateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   String[] entities) implements Action {
+                                   Collection<String> entities) implements Action {
+        public UpdateTeamAction {
+            entities = List.copyOf(entities);
+        }
+
         public UpdateTeamAction(BinaryReader reader) {
             this(reader.readComponent(), reader.readByte(),
                     NameTagVisibility.fromIdentifier(reader.readSizedString()), CollisionRule.fromIdentifier(reader.readSizedString()),
-                    NamedTextColor.ofExact(reader.readVarInt()), reader.readComponent(), reader.readComponent(), reader.readSizedStringArray());
+                    NamedTextColor.ofExact(reader.readVarInt()), reader.readComponent(), reader.readComponent(),
+                    reader.readVarIntList(BinaryReader::readSizedString));
         }
 
         @Override
@@ -95,6 +109,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(teamColor));
             writer.writeComponent(teamPrefix);
             writer.writeComponent(teamSuffix);
+            writer.writeVarIntList(entities, BinaryWriter::writeSizedString);
         }
 
         @Override
@@ -103,14 +118,18 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record AddEntitiesToTeamAction(String[] entities) implements Action {
+    public record AddEntitiesToTeamAction(Collection<String> entities) implements Action {
+        public AddEntitiesToTeamAction {
+            entities = List.copyOf(entities);
+        }
+
         public AddEntitiesToTeamAction(BinaryReader reader) {
-            this(reader.readSizedStringArray());
+            this(reader.readVarIntList(BinaryReader::readSizedString));
         }
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
-            writer.writeStringArray(entities);
+            writer.writeVarIntList(entities, BinaryWriter::writeSizedString);
         }
 
         @Override
