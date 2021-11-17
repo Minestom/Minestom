@@ -20,7 +20,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.zip.Inflater;
 
 @ApiStatus.Internal
@@ -32,7 +31,7 @@ public final class Worker extends MinestomThread {
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final PacketProcessor packetProcessor;
-    private final MpscUnboundedArrayQueue<Consumer<Context>> queue = new MpscUnboundedArrayQueue<>(1024);
+    private final MpscUnboundedArrayQueue<Runnable> queue = new MpscUnboundedArrayQueue<>(1024);
     private final AtomicBoolean flush = new AtomicBoolean();
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
@@ -45,7 +44,7 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
-                this.queue.drain(e -> e.accept(context));
+                this.queue.drain(Runnable::run);
                 // Flush all connections if needed
                 if (flush.compareAndSet(true, false)) {
                     connectionMap.values().forEach(PlayerSocketConnection::flushSync);
@@ -110,7 +109,7 @@ public final class Worker extends MinestomThread {
         this.selector.wakeup();
     }
 
-    public Queue<Consumer<Context>> queue() {
+    public Queue<Runnable> queue() {
         return queue;
     }
 

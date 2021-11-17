@@ -34,7 +34,6 @@ import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -193,24 +192,13 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
-        Queue<Consumer<Worker.Context>> queue = this.worker.queue();
-        if (packet instanceof ServerPacket serverPacket) {
-            final boolean compressed = this.compressed;
-            queue.offer(context -> writePacketSync(serverPacket, compressed));
-        } else if (packet instanceof FramedPacket framedPacket) {
-            queue.offer(context -> writeFramedPacketSync(framedPacket));
-        } else if (packet instanceof CachedPacket cachedPacket) {
-            queue.offer(context -> writeFramedPacketSync(cachedPacket.retrieve()));
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            queue.offer(context -> writeFramedPacketSync(lazyPacket.retrieve()));
-        } else {
-            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
-        }
+        final boolean compressed = this.compressed;
+        this.worker.queue().offer(() -> writePacketSync(packet, compressed));
     }
 
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer, int index, int length) {
-        this.worker.queue().offer(context -> writeBufferSync(buffer, index, length));
+        this.worker.queue().offer(() -> writeBufferSync(buffer, index, length));
     }
 
     @ApiStatus.Internal
@@ -220,15 +208,15 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
         final boolean compressed = this.compressed;
-        this.worker.queue().offer(context -> {
-            writePacketSync(packet, compressed);
+        this.worker.queue().offer(() -> {
+            writeServerPacketSync(packet, compressed);
             flushSync();
         });
     }
 
     @Override
     public void flush() {
-        this.worker.queue().offer(context -> flushSync());
+        this.worker.queue().offer(this::flushSync);
     }
 
     @Override
@@ -250,7 +238,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        this.worker.queue().offer(context -> this.worker.disconnect(this, channel));
+        this.worker.queue().offer(() -> this.worker.disconnect(this, channel));
     }
 
     public @NotNull SocketChannel getChannel() {
@@ -386,8 +374,22 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    private void writePacketSync(ServerPacket serverPacket, boolean compressed) {
+    private void writePacketSync(SendablePacket packet, boolean compressed) {
         if (!channel.isConnected()) return;
+        if (packet instanceof ServerPacket serverPacket) {
+            writeServerPacketSync(serverPacket, compressed);
+        } else if (packet instanceof FramedPacket framedPacket) {
+            writeFramedPacketSync(framedPacket);
+        } else if (packet instanceof CachedPacket cachedPacket) {
+            writeFramedPacketSync(cachedPacket.retrieve());
+        } else if (packet instanceof LazyPacket lazyPacket) {
+            writeFramedPacketSync(lazyPacket.retrieve());
+        } else {
+            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
+        }
+    }
+
+    private void writeServerPacketSync(ServerPacket serverPacket, boolean compressed) {
         if (!shouldSendPacket(serverPacket)) return;
         final Player player = getPlayer();
         if (player != null) {
