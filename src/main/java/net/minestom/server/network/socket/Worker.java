@@ -64,7 +64,6 @@ public final class Worker extends MinestomThread {
                         connection.processPackets(context, packetProcessor);
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
-                        e.printStackTrace();
                         connection.disconnect();
                     } catch (IllegalArgumentException e) {
                         MinecraftServer.getExceptionManager().handleException(e);
