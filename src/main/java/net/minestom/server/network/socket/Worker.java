@@ -7,6 +7,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +31,7 @@ public final class Worker extends MinestomThread {
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final PacketProcessor packetProcessor;
-
+    private final MpscUnboundedArrayQueue<Runnable> queue = new MpscUnboundedArrayQueue<>(1024);
     private final AtomicBoolean flush = new AtomicBoolean();
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
@@ -42,9 +44,10 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
+                this.queue.drain(Runnable::run);
                 // Flush all connections if needed
                 if (flush.compareAndSet(true, false)) {
-                    connectionMap.values().forEach(PlayerSocketConnection::flush);
+                    connectionMap.values().forEach(PlayerSocketConnection::flushSync);
                 }
                 // Wait for an event
                 this.selector.select(key -> {
@@ -103,6 +106,10 @@ public final class Worker extends MinestomThread {
     public void flush() {
         this.flush.set(true);
         this.selector.wakeup();
+    }
+
+    public Queue<Runnable> queue() {
+        return queue;
     }
 
     /**
