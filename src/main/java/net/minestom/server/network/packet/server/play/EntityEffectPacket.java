@@ -15,10 +15,7 @@ public record EntityEffectPacket(int entityId, Potion potion) implements ServerP
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeByte((byte) potion.effect().id());
-        writer.writeByte(potion.amplifier());
-        writer.writeVarInt(potion.duration());
-        writer.writeByte(potion.flags());
+        writer.write(potion);
     }
 
     @Override

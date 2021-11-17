@@ -4,11 +4,15 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-public record Potion(PotionEffect effect, byte amplifier, int duration, byte flags) {
+public record Potion(PotionEffect effect, byte amplifier, int duration, byte flags)
+        implements Writeable {
     public Potion(BinaryReader reader) {
-        this(PotionEffect.fromId(reader.readVarInt()), reader.readByte(), reader.readVarInt(), reader.readByte());
+        this(PotionEffect.fromId(reader.readVarInt()), reader.readByte(),
+                reader.readVarInt(), reader.readByte());
     }
 
     /**
@@ -31,5 +35,13 @@ public record Potion(PotionEffect effect, byte amplifier, int duration, byte fla
      */
     public void sendRemovePacket(@NotNull Entity entity) {
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeByte((byte) effect.id());
+        writer.writeByte(amplifier);
+        writer.writeVarInt(duration);
+        writer.writeByte(flags);
     }
 }
