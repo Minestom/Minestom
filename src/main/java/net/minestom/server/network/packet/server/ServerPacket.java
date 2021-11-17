@@ -4,9 +4,10 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.Writeable;
 
 /**
- * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(ServerPacket)}.
+ * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(SendablePacket)}.
  */
-public interface ServerPacket extends Writeable {
+public non-sealed interface ServerPacket extends Writeable, SendablePacket {
+
     /**
      * Gets the id of this packet.
      * <p>

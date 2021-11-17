@@ -1,6 +1,5 @@
-package net.minestom.server.network.packet;
+package net.minestom.server.network.packet.server;
 
-import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +13,7 @@ import java.nio.ByteBuffer;
  */
 @ApiStatus.Internal
 public record FramedPacket(@NotNull ServerPacket packet,
-                           @NotNull ByteBuffer body) {
+                           @NotNull ByteBuffer body) implements SendablePacket {
 
     public FramedPacket {
         body = body.position(0).asReadOnlyBuffer();

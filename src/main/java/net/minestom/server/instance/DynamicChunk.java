@@ -9,7 +9,7 @@ import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.network.packet.CachedPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
@@ -143,14 +143,14 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        player.sendPacket(chunkCache.retrieve());
+        player.sendPacket(chunkCache);
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        sendPacketToViewers(chunkCache.retrieve());
+        sendPacketToViewers(chunkCache);
     }
 
     @NotNull
