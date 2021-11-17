@@ -131,6 +131,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.zaxxer/SparseBitSet
     implementation group: 'com.zaxxer', name: 'SparseBitSet', version: '1.2'
 
+    // https://mvnrepository.com/artifact/org.jctools/jctools-core
+    implementation group: 'org.jctools', name: 'jctools-core', version: '3.3.0'
+
     // Guava 21.0+ required for Mixin
     api 'com.google.guava:guava:31.0.1-jre'
 
