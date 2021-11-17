@@ -22,7 +22,6 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -89,17 +88,13 @@ public class AnvilLoader implements IChunkLoader {
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
         // TODO Biomes
-        Biome[] biomes;
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
-            int[] fileChunkBiomes = fileChunk.getBiomes();
-            biomes = new Biome[fileChunkBiomes.length];
-            for (int i = 0; i < fileChunkBiomes.length; i++) {
-                final int id = fileChunkBiomes[i];
-                biomes[i] = Objects.requireNonNullElse(BIOME_MANAGER.getById(id), BIOME);
+            final int[] fileChunkBiomes = fileChunk.getBiomes();
+            for (int id : fileChunkBiomes) {
+                // ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3)
+                final Biome biome = Objects.requireNonNullElse(BIOME_MANAGER.getById(id), BIOME);
+                chunk.setBiome(0, 0, 0, biome);
             }
-        } else {
-            biomes = new Biome[1024]; // TODO don't hardcode
-            Arrays.fill(biomes, BIOME);
         }
         // Blocks
         loadBlocks(chunk, fileChunk);
