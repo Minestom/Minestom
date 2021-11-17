@@ -190,15 +190,8 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.compressed = true;
     }
 
-    /**
-     * Writes a packet to the connection channel.
-     * <p>
-     * All packets are flushed during {@link net.minestom.server.entity.Player#update(long)}.
-     *
-     * @param packet the packet to write
-     */
     @Override
-    public void sendPacket(@NotNull SendablePacket packet, boolean skipTranslating) {
+    public void sendPacket(@NotNull SendablePacket packet) {
         final boolean compressed = this.compressed;
         if (packet instanceof ServerPacket serverPacket) {
             this.worker.queue().offer(context -> writePacketSync(serverPacket, compressed));
@@ -208,6 +201,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             this.worker.queue().offer(context -> writeFramedPacketSync(cachedPacket.retrieve()));
         } else if (packet instanceof LazyPacket lazyPacket) {
             this.worker.queue().offer(context -> writeFramedPacketSync(lazyPacket.retrieve()));
+        } else {
+            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }
     }
 

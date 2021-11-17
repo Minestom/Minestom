@@ -87,19 +87,7 @@ public abstract class PlayerConnection {
      * @param packet the packet to send
      * @see #shouldSendPacket(ServerPacket)
      */
-    public void sendPacket(@NotNull SendablePacket packet) {
-        this.sendPacket(packet, false);
-    }
-
-    /**
-     * Serializes the packet and send it to the client, optionally skipping the translation phase.
-     * <p>
-     * Also responsible for executing {@link ConnectionManager#onPacketSend(ServerPacketConsumer)} consumers.
-     *
-     * @param packet the packet to send
-     * @see #shouldSendPacket(ServerPacket)
-     */
-    public abstract void sendPacket(@NotNull SendablePacket packet, boolean skipTranslating);
+    public abstract void sendPacket(@NotNull SendablePacket packet);
 
     /**
      * Flush waiting data to the connection.
