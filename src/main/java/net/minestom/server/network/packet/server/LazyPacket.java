@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server;
 
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -20,6 +21,10 @@ public final class LazyPacket implements SendablePacket {
         Entry test = entry.updateAndGet(entry ->
                 entry != null && entry.thread == currentThread ? entry : new Entry(currentThread));
         return test.body;
+    }
+
+    public @NotNull ServerPacket packet() {
+        return packet;
     }
 
     private final class Entry {
