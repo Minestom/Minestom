@@ -642,18 +642,18 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/MessageType.html" title="class or interface in net.kyori.adventure.audience" class="external-link">MessageType</a>&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacket(net.minestom.server.network.packet.server.FramedPacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../network/packet/server/FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a>&nbsp;framedPacket)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shortcut for <a href="../network/player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>PlayerConnection.sendPacket(ServerPacket)</code></a>.</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacket(net.minestom.server.network.packet.server.SendablePacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shortcut for <a href="../network/player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.SendablePacket)"><code>PlayerConnection.sendPacket(SendablePacket)</code></a>.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPackets(java.util.Collection)" class="member-name-link">sendPackets</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&gt;&nbsp;packets)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.FramedPacket)" class="member-name-link">sendPacketToViewersAndSelf</a><wbr>(@NotNull <a href="../network/packet/server/FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a>&nbsp;framedPacket)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPackets(net.minestom.server.network.packet.server.SendablePacket...)" class="member-name-link">sendPackets</a><wbr>(@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>...&nbsp;packets)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendPacketToViewersAndSelf</a><wbr>(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.SendablePacket)" class="member-name-link">sendPacketToViewersAndSelf</a><wbr>(@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a packet to all viewers and the viewable element if it is a player.</div>
 </div>
@@ -951,7 +951,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.Viewable">Methods inherited from interface&nbsp;net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></h3>
-<code><a href="../Viewable.html#getViewersAsAudience()">getViewersAsAudience</a>, <a href="../Viewable.html#getViewersAsAudiences()">getViewersAsAudiences</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.FramedPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a></code></div>
+<code><a href="../Viewable.html#getViewersAsAudience()">getViewersAsAudience</a>, <a href="../Viewable.html#getViewersAsAudiences()">getViewersAsAudiences</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(java.util.Collection)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.SendablePacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.SendablePacket)">sendPacketToViewers</a></code></div>
 </section>
 </li>
 </ul>
@@ -1115,30 +1115,19 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </section>
 </li>
 <li>
-<section class="detail" id="sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">
+<section class="detail" id="sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.SendablePacket)">
 <h3>sendPacketToViewersAndSelf</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacketToViewersAndSelf</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">Viewable</a></code></span></div>
+ @NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.SendablePacket)">Viewable</a></code></span></div>
 <div class="block">Sends a packet to all viewers and the viewable element if it is a player.
  <p>
- If 'this' isn't a player, then only <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)"><code>Viewable.sendPacketToViewers(ServerPacket)</code></a> is called.</div>
+ If 'this' isn't a player, then only <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.SendablePacket)"><code>Viewable.sendPacketToViewers(SendablePacket)</code></a> is called.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.SendablePacket)">sendPacketToViewersAndSelf</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>packet</code> - the packet to send</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.FramedPacket)">
-<h3>sendPacketToViewersAndSelf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacketToViewersAndSelf</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../network/packet/server/FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a>&nbsp;framedPacket)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.FramedPacket)">sendPacketToViewersAndSelf</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 </section>
 </li>
@@ -1866,12 +1855,12 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </section>
 </li>
 <li>
-<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.ServerPacket)">
+<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.SendablePacket)">
 <h3>sendPacket</h3>
 <div class="member-signature"><span class="annotations">@Experimental
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
-<div class="block">Shortcut for <a href="../network/player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>PlayerConnection.sendPacket(ServerPacket)</code></a>.</div>
+ @NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</span></div>
+<div class="block">Shortcut for <a href="../network/player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.SendablePacket)"><code>PlayerConnection.sendPacket(SendablePacket)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>packet</code> - the packet to send</dd>
@@ -1879,11 +1868,19 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </section>
 </li>
 <li>
-<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.FramedPacket)">
-<h3>sendPacket</h3>
+<section class="detail" id="sendPackets(net.minestom.server.network.packet.server.SendablePacket...)">
+<h3>sendPackets</h3>
 <div class="member-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../network/packet/server/FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a>&nbsp;framedPacket)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPackets</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>...&nbsp;packets)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="sendPackets(java.util.Collection)">
+<h3>sendPackets</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPackets</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&gt;&nbsp;packets)</span></div>
 </section>
 </li>
 <li>

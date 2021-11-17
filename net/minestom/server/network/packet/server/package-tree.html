@@ -59,10 +59,10 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">net.minestom.server.network.packet.server.<a href="CachedPacket.html" class="type-name-link" title="class in net.minestom.server.network.packet.server">CachedPacket</a></li>
+<li class="circle">net.minestom.server.network.packet.server.<a href="CachedPacket.html" class="type-name-link" title="class in net.minestom.server.network.packet.server">CachedPacket</a> (implements net.minestom.server.network.packet.server.<a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>)</li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
 <ul>
-<li class="circle">net.minestom.server.network.packet.server.<a href="FramedPacket.html" class="type-name-link" title="class in net.minestom.server.network.packet.server">FramedPacket</a></li>
+<li class="circle">net.minestom.server.network.packet.server.<a href="FramedPacket.html" class="type-name-link" title="class in net.minestom.server.network.packet.server">FramedPacket</a> (implements net.minestom.server.network.packet.server.<a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>)</li>
 </ul>
 </li>
 <li class="circle">net.minestom.server.network.packet.server.<a href="ServerPacketIdentifier.html" class="type-name-link" title="class in net.minestom.server.network.packet.server">ServerPacketIdentifier</a></li>
@@ -80,7 +80,16 @@ loadScripts(document, 'script');</script>
 </li>
 <li class="circle">net.minestom.server.utils.binary.<a href="../../../utils/binary/Readable.html" class="type-name-link" title="interface in net.minestom.server.utils.binary">Readable</a>
 <ul>
-<li class="circle">net.minestom.server.network.packet.server.<a href="ServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ServerPacket</a> (also extends net.minestom.server.utils.binary.<a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>)
+<li class="circle">net.minestom.server.network.packet.server.<a href="ServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ServerPacket</a> (also extends net.minestom.server.network.packet.server.<a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>, net.minestom.server.utils.binary.<a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>)
+<ul>
+<li class="circle">net.minestom.server.network.packet.server.<a href="ComponentHoldingServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a> (also extends net.minestom.server.adventure.<a href="../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;T&gt;)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.network.packet.server.<a href="SendablePacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>
+<ul>
+<li class="circle">net.minestom.server.network.packet.server.<a href="ServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ServerPacket</a> (also extends net.minestom.server.utils.binary.<a href="../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>, net.minestom.server.utils.binary.<a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>)
 <ul>
 <li class="circle">net.minestom.server.network.packet.server.<a href="ComponentHoldingServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a> (also extends net.minestom.server.adventure.<a href="../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;T&gt;)</li>
 </ul>
@@ -89,7 +98,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li class="circle">net.minestom.server.utils.binary.<a href="../../../utils/binary/Writeable.html" class="type-name-link" title="interface in net.minestom.server.utils.binary">Writeable</a>
 <ul>
-<li class="circle">net.minestom.server.network.packet.server.<a href="ServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ServerPacket</a> (also extends net.minestom.server.utils.binary.<a href="../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>)
+<li class="circle">net.minestom.server.network.packet.server.<a href="ServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ServerPacket</a> (also extends net.minestom.server.utils.binary.<a href="../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>, net.minestom.server.network.packet.server.<a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>)
 <ul>
 <li class="circle">net.minestom.server.network.packet.server.<a href="ComponentHoldingServerPacket.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a> (also extends net.minestom.server.adventure.<a href="../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;T&gt;)</li>
 </ul>

@@ -188,20 +188,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshOnline(boolean)" class="member-name-link">refreshOnline</a><wbr>(boolean&nbsp;online)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacket(net.minestom.server.network.packet.server.FramedPacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../packet/server/FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a>&nbsp;framedPacket)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#sendPacket(net.minestom.server.network.packet.server.SendablePacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Serializes the packet and send it to the client.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
- boolean&nbsp;skipTranslating)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Serializes the packet and send it to the client, optionally skipping the translation phase.</div>
-</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPackets(java.util.Collection)" class="member-name-link">sendPackets</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&gt;&nbsp;packet)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPackets(net.minestom.server.network.packet.server.SendablePacket...)" class="member-name-link">sendPackets</a><wbr>(@NotNull <a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>...&nbsp;packets)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConnectionState(net.minestom.server.network.ConnectionState)" class="member-name-link">setConnectionState</a><wbr>(@NotNull <a href="../ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a>&nbsp;connectionState)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -294,16 +291,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.ServerPacket)">
+<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.SendablePacket)">
 <h3>sendPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</span></div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</span></div>
 <div class="block">Serializes the packet and send it to the client.
  <p>
  Also responsible for executing <a href="../ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a> consumers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>serverPacket</code> - the packet to send</dd>
+<dd><code>packet</code> - the packet to send</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
@@ -314,32 +311,19 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">
-<h3>sendPacket</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
- boolean&nbsp;skipTranslating)</span></div>
-<div class="block">Serializes the packet and send it to the client, optionally skipping the translation phase.
- <p>
- Also responsible for executing <a href="../ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a> consumers.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>serverPacket</code> - the packet to send</dd>
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>shouldSendPacket(ServerPacket)</code></a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="sendPacket(net.minestom.server.network.packet.server.FramedPacket)">
-<h3>sendPacket</h3>
+<section class="detail" id="sendPackets(net.minestom.server.network.packet.server.SendablePacket...)">
+<h3>sendPackets</h3>
 <div class="member-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../packet/server/FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a>&nbsp;framedPacket)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPackets</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>...&nbsp;packets)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="sendPackets(java.util.Collection)">
+<h3>sendPackets</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPackets</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&gt;&nbsp;packet)</span></div>
 </section>
 </li>
 <li>

@@ -75,10 +75,15 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">net.minestom.server.network.packet.server.CachedPacket</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
 </span><span class="modifiers">public final class </span><span class="element-name type-name-label">CachedPacket</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -90,8 +95,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.function.Supplier)" class="member-name-link">CachedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;supplier)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.function.Supplier)" class="member-name-link">CachedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;packetSupplier)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">CachedPacket</a><wbr>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -109,9 +116,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retrieve()" class="member-name-link">retrieve</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#packet()" class="member-name-link">packet</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retrieve()" class="member-name-link">retrieve</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -133,7 +143,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>CachedPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CachedPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;supplier)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;packetSupplier)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.packet.server.ServerPacket)">
+<h3>CachedPacket</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CachedPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
 </section>
 </li>
 </ul>
@@ -148,6 +165,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="invalidate()">
 <h3>invalidate</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">invalidate</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="packet()">
+<h3>packet</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span>&nbsp;<span class="element-name">packet</span>()</div>
 </section>
 </li>
 <li>

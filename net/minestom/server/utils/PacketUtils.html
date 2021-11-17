@@ -151,13 +151,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendGroupedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Same as <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)"><code>sendGroupedPacket(Collection, ServerPacket, PlayerValidator)</code></a>
+<div class="block">Same as <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,java.util.function.Predicate)"><code>sendGroupedPacket(Collection, ServerPacket, Predicate)</code></a>
  but with the player validator sets to null.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)" class="member-name-link">sendGroupedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,java.util.function.Predicate)" class="member-name-link">sendGroupedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
- @NotNull <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;predicate)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.</div>
 </div>
@@ -251,14 +251,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)">
+<section class="detail" id="sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,java.util.function.Predicate)">
 <h3>sendGroupedPacket</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendGroupedPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
  @NotNull
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
  @NotNull
- @NotNull <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;predicate)</span></div>
 <div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.
  <p>
  Can drastically improve performance since the packet will not have to be processed as much.</div>
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>players</code> - the players to send the packet to</dd>
 <dd><code>packet</code> - the packet to send to the players</dd>
-<dd><code>playerValidator</code> - optional callback to check if a specify player of <code>players</code> should receive the packet</dd>
+<dd><code>predicate</code> - predicate to ignore specific players</dd>
 </dl>
 </section>
 </li>
@@ -277,13 +277,13 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
  @NotNull
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
-<div class="block">Same as <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)"><code>sendGroupedPacket(Collection, ServerPacket, PlayerValidator)</code></a>
+<div class="block">Same as <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,java.util.function.Predicate)"><code>sendGroupedPacket(Collection, ServerPacket, Predicate)</code></a>
  but with the player validator sets to null.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
-<li><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)"><code>sendGroupedPacket(Collection, ServerPacket, PlayerValidator)</code></a></li>
+<li><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,java.util.function.Predicate)"><code>sendGroupedPacket(Collection, ServerPacket, Predicate)</code></a></li>
 </ul>
 </dd>
 </dl>

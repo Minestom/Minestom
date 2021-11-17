@@ -77,10 +77,15 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
 </span><span class="modifiers">public record </span><span class="element-name type-name-label">FramedPacket</span>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet, @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
+implements <a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span></div>
 <div class="block">Represents a packet which is already framed. (packet id+payload) + optional compression
  Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.
  <p>
