@@ -44,10 +44,18 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
-                this.queue.drain(Runnable::run);
+                try {
+                    this.queue.drain(Runnable::run);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
                 // Flush all connections if needed
                 if (flush.compareAndSet(true, false)) {
-                    connectionMap.values().forEach(PlayerSocketConnection::flushSync);
+                    try {
+                        connectionMap.values().forEach(PlayerSocketConnection::flushSync);
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
                 }
                 // Wait for an event
                 this.selector.select(key -> {
