@@ -203,54 +203,57 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes the packet and send it to the client.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConnectionState(net.minestom.server.network.ConnectionState)" class="member-name-link">setConnectionState</a><wbr>(@NotNull <a href="../ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a>&nbsp;connectionState)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPackets(java.util.Collection)" class="member-name-link">sendPackets</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&gt;&nbsp;packets)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEncryptionKey(javax.crypto.SecretKey)" class="member-name-link">setEncryptionKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/javax/crypto/SecretKey.html" title="class or interface in javax.crypto" class="external-link">SecretKey</a>&nbsp;secretKey)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConnectionState(net.minestom.server.network.ConnectionState)" class="member-name-link">setConnectionState</a><wbr>(@NotNull <a href="../ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a>&nbsp;connectionState)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEncryptionKey(javax.crypto.SecretKey)" class="member-name-link">setEncryptionKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/javax/crypto/SecretKey.html" title="class or interface in javax.crypto" class="external-link">SecretKey</a>&nbsp;secretKey)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the encryption key and add the codecs to the pipeline.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNonce(byte%5B%5D)" class="member-name-link">setNonce</a><wbr>(byte[]&nbsp;nonce)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemoteAddress(java.net.SocketAddress)" class="member-name-link">setRemoteAddress</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/SocketAddress.html" title="class or interface in java.net" class="external-link">SocketAddress</a>&nbsp;remoteAddress)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNonce(byte%5B%5D)" class="member-name-link">setNonce</a><wbr>(byte[]&nbsp;nonce)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemoteAddress(java.net.SocketAddress)" class="member-name-link">setRemoteAddress</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/SocketAddress.html" title="class or interface in java.net" class="external-link">SocketAddress</a>&nbsp;remoteAddress)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the internal remote address field.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startCompression()" class="member-name-link">startCompression</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startCompression()" class="member-name-link">startCompression</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Enables compression and add a new codec to the pipeline.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setBungeeSkin(net.minestom.server.entity.PlayerSkin)" class="member-name-link">UNSAFE_setBungeeSkin</a><wbr>(<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;bungeeSkin)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setBungeeUuid(java.util.UUID)" class="member-name-link">UNSAFE_setBungeeUuid</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;bungeeUuid)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setBungeeSkin(net.minestom.server.entity.PlayerSkin)" class="member-name-link">UNSAFE_setBungeeSkin</a><wbr>(<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;bungeeSkin)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setLoginUsername(java.lang.String)" class="member-name-link">UNSAFE_setLoginUsername</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loginUsername)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setBungeeUuid(java.util.UUID)" class="member-name-link">UNSAFE_setBungeeUuid</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;bungeeUuid)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setLoginUsername(java.lang.String)" class="member-name-link">UNSAFE_setLoginUsername</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loginUsername)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the internal login username field.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.nio.ByteBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.nio.ByteBuffer,int,int)" class="member-name-link">write</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
- int&nbsp;index,
- int&nbsp;length)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.nio.ByteBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeAndFlush(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">writeAndFlush</a><wbr>(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.nio.ByteBuffer,int,int)" class="member-name-link">write</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
+ int&nbsp;index,
+ int&nbsp;length)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeAndFlush(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">writeAndFlush</a><wbr>(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.network.player.PlayerConnection">Methods inherited from class&nbsp;net.minestom.server.network.player.<a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></h3>
-<code><a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getLastPacketCounter()">getLastPacketCounter</a>, <a href="PlayerConnection.html#getPacketCounter()">getPacketCounter</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#refreshOnline(boolean)">refreshOnline</a>, <a href="PlayerConnection.html#sendPackets(java.util.Collection)">sendPackets</a>, <a href="PlayerConnection.html#sendPackets(net.minestom.server.network.packet.server.SendablePacket...)">sendPackets</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a>, <a href="PlayerConnection.html#toString()">toString</a>, <a href="PlayerConnection.html#update()">update</a></code></div>
+<code><a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getLastPacketCounter()">getLastPacketCounter</a>, <a href="PlayerConnection.html#getPacketCounter()">getPacketCounter</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#refreshOnline(boolean)">refreshOnline</a>, <a href="PlayerConnection.html#sendPackets(net.minestom.server.network.packet.server.SendablePacket...)">sendPackets</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a>, <a href="PlayerConnection.html#toString()">toString</a>, <a href="PlayerConnection.html#update()">update</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -341,6 +344,17 @@ loadScripts(document, 'script');</script>
 <li><a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>PlayerConnection.shouldSendPacket(ServerPacket)</code></a></li>
 </ul>
 </dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="sendPackets(java.util.Collection)">
+<h3>sendPackets</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPackets</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&gt;&nbsp;packets)</span></div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="PlayerConnection.html#sendPackets(java.util.Collection)">sendPackets</a></code>&nbsp;in class&nbsp;<code><a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></dd>
 </dl>
 </section>
 </li>
