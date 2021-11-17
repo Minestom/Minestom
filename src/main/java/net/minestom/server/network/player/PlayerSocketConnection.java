@@ -441,13 +441,17 @@ public class PlayerSocketConnection extends PlayerConnection {
         try {
             if (!channel.isConnected()) throw new ClosedChannelException();
             try {
-                updateLocalBuffer();
-            } catch (OutOfMemoryError e) {
-                this.waitingBuffers.clear();
-                System.gc(); // Explicit gc forcing buffers to be collected
-                throw new ClosedChannelException();
-            }
-            try {
+                if (waitingBuffers.isEmpty() && tickBuffer.getPlain().writeChannel(channel))
+                    return; // Fast exit if the tick buffer can be reused
+
+                try {
+                    updateLocalBuffer();
+                } catch (OutOfMemoryError e) {
+                    this.waitingBuffers.clear();
+                    System.gc(); // Explicit gc forcing buffers to be collected
+                    throw new ClosedChannelException();
+                }
+
                 // Write as much as possible from the waiting list
                 Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
                 while (iterator.hasNext()) {
