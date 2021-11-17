@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
-public final class CachedPacket {
+public final class CachedPacket implements SendablePacket {
     private static final AtomicIntegerFieldUpdater<CachedPacket> UPDATER = AtomicIntegerFieldUpdater.newUpdater(CachedPacket.class, "updated");
     private final Supplier<ServerPacket> supplier;
     // 0 means that the reference needs to be updated

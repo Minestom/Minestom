@@ -125,8 +125,8 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        player.sendPacket(lightCache.retrieve());
-        player.sendPacket(chunkCache.retrieve());
+        player.sendPacket(lightCache);
+        player.sendPacket(chunkCache);
     }
 
     @Override

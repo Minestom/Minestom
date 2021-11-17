@@ -9,14 +9,13 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.LazyPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -49,8 +48,8 @@ public final class PacketUtils {
     private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
 
     public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
-    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", false);
-    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", false);
+    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", true);
+    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
 
     /// Local buffers
     private static final LocalCache<ByteBuffer> PACKET_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
@@ -112,32 +111,15 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull PlayerValidator playerValidator) {
-        if (players.isEmpty())
-            return;
+        if (players.isEmpty()) return;
+        if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players)) return;
         // work out if the packet needs to be sent individually due to server-side translating
-        boolean needsTranslating = false;
-        if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
-            needsTranslating = ComponentUtils.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
-        }
-        if (GROUPED_PACKET && !needsTranslating) {
-            // Send grouped packet...
-            if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
+        final SendablePacket sendablePacket = GROUPED_PACKET ? new LazyPacket(packet) : packet;
+        players.forEach(player -> {
+            if (!player.isOnline() || !playerValidator.isValid(player))
                 return;
-            final CachedPacket cachedPacket = new CachedPacket(() -> packet);
-            // Send packet to all players
-            players.forEach(player -> {
-                if (!player.isOnline() || !playerValidator.isValid(player))
-                    return;
-                player.sendPacket(cachedPacket);
-            });
-        } else {
-            // Write the same packet for each individual players
-            players.forEach(player -> {
-                if (!player.isOnline() || !playerValidator.isValid(player))
-                    return;
-                player.getPlayerConnection().sendPacket(packet, false);
-            });
-        }
+            player.sendPacket(sendablePacket);
+        });
     }
 
     /**

@@ -54,8 +54,8 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
-import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -1181,23 +1181,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Shortcut for {@link PlayerConnection#sendPacket(ServerPacket)}.
+     * Shortcut for {@link PlayerConnection#sendPacket(SendablePacket)}.
      *
      * @param packet the packet to send
      */
     @ApiStatus.Experimental
-    public void sendPacket(@NotNull ServerPacket packet) {
+    public void sendPacket(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
-    }
-
-    @ApiStatus.Experimental
-    public void sendPacket(@NotNull FramedPacket framedPacket) {
-        this.playerConnection.sendPacket(framedPacket);
-    }
-
-    @ApiStatus.Experimental
-    public void sendPacket(@NotNull CachedPacket cachedPacket) {
-        this.playerConnection.sendPacket(cachedPacket);
     }
 
     /**

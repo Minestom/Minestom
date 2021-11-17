@@ -8,9 +8,7 @@ import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
-import net.minestom.server.network.packet.server.FramedPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
@@ -197,17 +195,20 @@ public class PlayerSocketConnection extends PlayerConnection {
      * <p>
      * All packets are flushed during {@link net.minestom.server.entity.Player#update(long)}.
      *
-     * @param serverPacket the packet to write
+     * @param packet the packet to write
      */
     @Override
-    public void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating) {
+    public void sendPacket(@NotNull SendablePacket packet, boolean skipTranslating) {
         final boolean compressed = this.compressed;
-        this.worker.queue().offer(context -> writePacketSync(serverPacket, compressed));
-    }
-
-    @Override
-    public void sendPacket(@NotNull FramedPacket framedPacket) {
-        this.worker.queue().offer(context -> writeFramedPacketSync(framedPacket));
+        if (packet instanceof ServerPacket serverPacket) {
+            this.worker.queue().offer(context -> writePacketSync(serverPacket, compressed));
+        } else if (packet instanceof FramedPacket framedPacket) {
+            this.worker.queue().offer(context -> writeFramedPacketSync(framedPacket));
+        } else if (packet instanceof CachedPacket cachedPacket) {
+            this.worker.queue().offer(context -> writeFramedPacketSync(cachedPacket.retrieve()));
+        } else if (packet instanceof LazyPacket lazyPacket) {
+            this.worker.queue().offer(context -> writeFramedPacketSync(lazyPacket.retrieve()));
+        }
     }
 
     @ApiStatus.Internal
