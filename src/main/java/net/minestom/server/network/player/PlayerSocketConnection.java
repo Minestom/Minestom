@@ -386,7 +386,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    public void writePacketSync(ServerPacket serverPacket, boolean compressed) {
+    private void writePacketSync(ServerPacket serverPacket, boolean compressed) {
         if (!channel.isConnected()) return;
         if (!shouldSendPacket(serverPacket)) return;
         final Player player = getPlayer();
@@ -395,19 +395,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                         GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
-            writeBufferSync(PacketUtils.createFramedPacket(serverPacket, compressed));
-        } else {
-            // Player is probably not logged yet
-            writeBufferSync(PacketUtils.createFramedPacket(serverPacket, compressed));
-            flushSync();
         }
+        writeBufferSync(PacketUtils.createFramedPacket(serverPacket, compressed));
+        if (player == null) flushSync(); // Player is probably not logged yet
     }
 
-    public void writeFramedPacketSync(FramedPacket framedPacket) {
+    private void writeFramedPacketSync(FramedPacket framedPacket) {
         writeBufferSync(framedPacket.body());
     }
 
-    public void writeBufferSync(@NotNull ByteBuffer buffer, int index, int length) {
+    private void writeBufferSync(@NotNull ByteBuffer buffer, int index, int length) {
         if (encrypted) { // Encryption support
             ByteBuffer output = PacketUtils.localBuffer();
             try {
@@ -436,7 +433,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    public void writeBufferSync(@NotNull ByteBuffer buffer) {
+    private void writeBufferSync(@NotNull ByteBuffer buffer) {
         writeBufferSync(buffer, buffer.position(), buffer.remaining());
     }
 

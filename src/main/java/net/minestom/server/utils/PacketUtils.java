@@ -24,7 +24,6 @@ import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.cache.LocalCache;
-import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Predicate;
 import java.util.zip.Deflater;
 
 /**
@@ -105,27 +105,26 @@ public final class PacketUtils {
      * <p>
      * Can drastically improve performance since the packet will not have to be processed as much.
      *
-     * @param players         the players to send the packet to
-     * @param packet          the packet to send to the players
-     * @param playerValidator optional callback to check if a specify player of {@code players} should receive the packet
+     * @param players   the players to send the packet to
+     * @param packet    the packet to send to the players
+     * @param predicate predicate to ignore specific players
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
-                                         @NotNull PlayerValidator playerValidator) {
+                                         @NotNull Predicate<Player> predicate) {
         if (players.isEmpty()) return;
         if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players)) return;
         // work out if the packet needs to be sent individually due to server-side translating
         final SendablePacket sendablePacket = GROUPED_PACKET ? new LazyPacket(packet) : packet;
         players.forEach(player -> {
-            if (!playerValidator.isValid(player)) return;
-            player.sendPacket(sendablePacket);
+            if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
     }
 
     /**
-     * Same as {@link #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)}
+     * Same as {@link #sendGroupedPacket(Collection, ServerPacket, Predicate)}
      * but with the player validator sets to null.
      *
-     * @see #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)
+     * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
         sendGroupedPacket(players, packet, player -> true);
