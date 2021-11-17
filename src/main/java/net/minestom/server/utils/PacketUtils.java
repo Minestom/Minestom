@@ -116,8 +116,7 @@ public final class PacketUtils {
         // work out if the packet needs to be sent individually due to server-side translating
         final SendablePacket sendablePacket = GROUPED_PACKET ? new LazyPacket(packet) : packet;
         players.forEach(player -> {
-            if (!player.isOnline() || !playerValidator.isValid(player))
-                return;
+            if (!playerValidator.isValid(player)) return;
             player.sendPacket(sendablePacket);
         });
     }

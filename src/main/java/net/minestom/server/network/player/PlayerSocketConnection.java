@@ -34,6 +34,7 @@ import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -192,15 +193,16 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
-        final boolean compressed = this.compressed;
+        Queue<Consumer<Worker.Context>> queue = this.worker.queue();
         if (packet instanceof ServerPacket serverPacket) {
-            this.worker.queue().offer(context -> writePacketSync(serverPacket, compressed));
+            final boolean compressed = this.compressed;
+            queue.offer(context -> writePacketSync(serverPacket, compressed));
         } else if (packet instanceof FramedPacket framedPacket) {
-            this.worker.queue().offer(context -> writeFramedPacketSync(framedPacket));
+            queue.offer(context -> writeFramedPacketSync(framedPacket));
         } else if (packet instanceof CachedPacket cachedPacket) {
-            this.worker.queue().offer(context -> writeFramedPacketSync(cachedPacket.retrieve()));
+            queue.offer(context -> writeFramedPacketSync(cachedPacket.retrieve()));
         } else if (packet instanceof LazyPacket lazyPacket) {
-            this.worker.queue().offer(context -> writeFramedPacketSync(lazyPacket.retrieve()));
+            queue.offer(context -> writeFramedPacketSync(lazyPacket.retrieve()));
         } else {
             throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }

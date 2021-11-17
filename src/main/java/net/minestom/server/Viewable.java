@@ -3,10 +3,9 @@ package net.minestom.server;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -57,14 +56,11 @@ public interface Viewable {
      *
      * @param packet the packet to send to all viewers
      */
-    default void sendPacketToViewers(@NotNull ServerPacket packet) {
-        PacketUtils.sendGroupedPacket(getViewers(), packet);
-    }
-
-    @ApiStatus.Experimental
-    default void sendPacketToViewers(@NotNull FramedPacket framedPacket) {
-        for (Player viewer : getViewers()) {
-            viewer.sendPacket(framedPacket);
+    default void sendPacketToViewers(@NotNull SendablePacket packet) {
+        if (packet instanceof ServerPacket serverPacket) {
+            PacketUtils.sendGroupedPacket(getViewers(), serverPacket);
+        } else {
+            getViewers().forEach(player -> player.sendPacket(packet));
         }
     }
 
@@ -76,26 +72,21 @@ public interface Viewable {
      *
      * @param packets the packets to send
      */
-    default void sendPacketsToViewers(@NotNull ServerPacket... packets) {
-        for (ServerPacket packet : packets) {
-            PacketUtils.sendGroupedPacket(getViewers(), packet);
+    default void sendPacketsToViewers(@NotNull SendablePacket... packets) {
+        for (SendablePacket packet : packets) {
+            sendPacketToViewers(packet);
         }
     }
 
     /**
      * Sends a packet to all viewers and the viewable element if it is a player.
      * <p>
-     * If 'this' isn't a player, then only {@link #sendPacketToViewers(ServerPacket)} is called.
+     * If 'this' isn't a player, then only {@link #sendPacketToViewers(SendablePacket)} is called.
      *
      * @param packet the packet to send
      */
-    default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
+    default void sendPacketToViewersAndSelf(@NotNull SendablePacket packet) {
         sendPacketToViewers(packet);
-    }
-
-    @ApiStatus.Experimental
-    default void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
-        sendPacketToViewers(framedPacket);
     }
 
     /**
