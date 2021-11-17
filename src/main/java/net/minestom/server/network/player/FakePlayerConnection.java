@@ -25,7 +25,7 @@ public class FakePlayerConnection extends PlayerConnection {
         } else if (packet instanceof FramedPacket framedPacket) {
             controller.consumePacket(framedPacket.packet());
         } else if (packet instanceof CachedPacket cachedPacket) {
-            controller.consumePacket(cachedPacket.retrieve().packet());
+            controller.consumePacket(cachedPacket.packet());
         } else {
             throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }
