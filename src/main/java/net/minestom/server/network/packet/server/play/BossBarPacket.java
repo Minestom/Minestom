@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
+public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ServerPacket {
     public BossBarPacket(BinaryReader reader) {
         this(reader.readUuid(), switch (reader.readVarInt()) {
             case 0 -> new AddAction(reader);
@@ -29,7 +29,7 @@ public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeUuid(uuid);
         writer.writeVarInt(action.id());
-        this.action.write(writer);
+        writer.write(action);
     }
 
     public sealed interface Action extends Writeable
@@ -37,8 +37,13 @@ public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
         int id();
     }
 
-    public record AddAction(Component title, float health, BossBar.Color color,
-                            BossBar.Overlay overlay, byte flags) implements Action {
+    public record AddAction(@NotNull Component title, float health, @NotNull BossBar.Color color,
+                            @NotNull BossBar.Overlay overlay, byte flags) implements Action {
+        public AddAction(@NotNull BossBar bar) {
+            this(bar.name(), bar.progress(), bar.color(), bar.overlay(),
+                    AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
+        }
+
         public AddAction(BinaryReader reader) {
             this(reader.readComponent(), reader.readFloat(),
                     BossBar.Color.values()[reader.readVarInt()],
@@ -72,6 +77,10 @@ public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
     }
 
     public record UpdateHealthAction(float health) implements Action {
+        public UpdateHealthAction(@NotNull BossBar bar) {
+            this(bar.progress());
+        }
+
         public UpdateHealthAction(BinaryReader reader) {
             this(reader.readFloat());
         }
@@ -87,7 +96,11 @@ public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
         }
     }
 
-    public record UpdateTitleAction(Component title) implements Action {
+    public record UpdateTitleAction(@NotNull Component title) implements Action {
+        public UpdateTitleAction(@NotNull BossBar bar) {
+            this(bar.name());
+        }
+
         public UpdateTitleAction(BinaryReader reader) {
             this(reader.readComponent());
         }
@@ -103,7 +116,12 @@ public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
         }
     }
 
-    public record UpdateStyleAction(BossBar.Color color, BossBar.Overlay overlay) implements Action {
+    public record UpdateStyleAction(@NotNull BossBar.Color color,
+                                    @NotNull BossBar.Overlay overlay) implements Action {
+        public UpdateStyleAction(@NotNull BossBar bar) {
+            this(bar.color(), bar.overlay());
+        }
+
         public UpdateStyleAction(BinaryReader reader) {
             this(BossBar.Color.values()[reader.readVarInt()], BossBar.Overlay.values()[reader.readVarInt()]);
         }
@@ -121,6 +139,10 @@ public record BossBarPacket(UUID uuid, Action action) implements ServerPacket {
     }
 
     public record UpdateFlagsAction(byte flags) implements Action {
+        public UpdateFlagsAction(@NotNull BossBar bar) {
+            this(AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
+        }
+
         public UpdateFlagsAction(BinaryReader reader) {
             this(reader.readByte());
         }

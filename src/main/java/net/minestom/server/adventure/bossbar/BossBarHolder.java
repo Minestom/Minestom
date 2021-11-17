@@ -32,8 +32,7 @@ final class BossBarHolder implements Viewable {
     }
 
     @NotNull BossBarPacket createAddPacket() {
-        return new BossBarPacket(uuid, new BossBarPacket.AddAction(bar.name(), bar.progress(), bar.color(), bar.overlay(),
-                AdventurePacketConvertor.getBossBarFlagValue(bar.flags())));
+        return new BossBarPacket(uuid, new BossBarPacket.AddAction(bar));
     }
 
     @NotNull BossBarPacket createPercentUpdate(float newPercent) {

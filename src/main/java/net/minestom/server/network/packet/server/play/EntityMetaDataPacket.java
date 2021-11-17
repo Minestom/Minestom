@@ -9,8 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-public record EntityMetaDataPacket(int entityId, Collection<Metadata.Entry<?>> entries) implements ServerPacket {
+public record EntityMetaDataPacket(int entityId,
+                                   @NotNull Collection<Metadata.Entry<?>> entries) implements ServerPacket {
+    public EntityMetaDataPacket {
+        entries = List.copyOf(entries);
+    }
+
     public EntityMetaDataPacket(BinaryReader reader) {
         this(reader.readVarInt(), readEntries(reader));
     }
@@ -18,11 +24,8 @@ public record EntityMetaDataPacket(int entityId, Collection<Metadata.Entry<?>> e
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        if (entries != null) {
-            // Write all the fields
-            for (Metadata.Entry<?> entry : entries) {
-                entry.write(writer);
-            }
+        for (Metadata.Entry<?> entry : entries) {
+            entry.write(writer);
         }
         writer.writeByte((byte) 0xFF); // End
     }
