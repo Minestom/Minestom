@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -92,15 +93,13 @@ public abstract class PlayerConnection {
     public abstract void sendPacket(@NotNull SendablePacket packet);
 
     @ApiStatus.Experimental
-    public void sendPackets(@NotNull SendablePacket... packets) {
-        for (SendablePacket p : packets) {
-            sendPacket(p);
-        }
+    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+        packets.forEach(this::sendPacket);
     }
 
     @ApiStatus.Experimental
-    public void sendPackets(@NotNull Collection<SendablePacket> packet) {
-        packet.forEach(this::sendPacket);
+    public void sendPackets(@NotNull SendablePacket... packets) {
+        sendPackets(List.of(packets));
     }
 
     /**
