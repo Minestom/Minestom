@@ -54,7 +54,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
-import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -502,15 +502,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
+    public void sendPacketToViewersAndSelf(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
         super.sendPacketToViewersAndSelf(packet);
-    }
-
-    @Override
-    public void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
-        this.playerConnection.sendPacket(framedPacket);
-        super.sendPacketToViewersAndSelf(framedPacket);
     }
 
     /**
@@ -1180,18 +1174,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Shortcut for {@link PlayerConnection#sendPacket(ServerPacket)}.
+     * Shortcut for {@link PlayerConnection#sendPacket(SendablePacket)}.
      *
      * @param packet the packet to send
      */
     @ApiStatus.Experimental
-    public void sendPacket(@NotNull ServerPacket packet) {
+    public void sendPacket(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
     }
 
     @ApiStatus.Experimental
-    public void sendPacket(@NotNull FramedPacket framedPacket) {
-        this.playerConnection.sendPacket(framedPacket);
+    public void sendPackets(@NotNull SendablePacket... packets) {
+        this.playerConnection.sendPackets(packets);
+    }
+
+    @ApiStatus.Experimental
+    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+        this.playerConnection.sendPackets(packets);
     }
 
     /**

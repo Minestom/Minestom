@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
  */
 @ApiStatus.Internal
 public record FramedPacket(@NotNull ServerPacket packet,
-                           @NotNull ByteBuffer body) {
+                           @NotNull ByteBuffer body) implements SendablePacket {
 
     public FramedPacket {
         body = body.position(0).asReadOnlyBuffer();
