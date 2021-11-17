@@ -196,6 +196,14 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.worker.queue().offer(() -> writePacketSync(packet, compressed));
     }
 
+    @Override
+    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+        final boolean compressed = this.compressed;
+        this.worker.queue().offer(() -> {
+            for (SendablePacket packet : packets) writePacketSync(packet, compressed);
+        });
+    }
+
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer, int index, int length) {
         this.worker.queue().offer(() -> writeBufferSync(buffer, index, length));
