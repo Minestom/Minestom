@@ -16,6 +16,11 @@ import java.util.List;
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
                                  @NotNull List<String> identifiersToRemove,
                                  @NotNull List<ProgressMapping> progressMappings) implements ServerPacket {
+    public AdvancementsPacket {
+        advancementMappings = List.copyOf(advancementMappings);
+        identifiersToRemove = List.copyOf(identifiersToRemove);
+        progressMappings = List.copyOf(progressMappings);
+    }
 
     public AdvancementsPacket(BinaryReader reader) {
         this(reader.readBoolean(), reader.readVarIntList(AdvancementMapping::new),
