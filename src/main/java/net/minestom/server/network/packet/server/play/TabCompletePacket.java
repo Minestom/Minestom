@@ -9,6 +9,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record TabCompletePacket(int transactionId, int start, int length,
-                                List<Match> matches) implements ComponentHoldingServerPacket {
+                                @NotNull List<Match> matches) implements ComponentHoldingServerPacket {
     public TabCompletePacket {
         matches = List.copyOf(matches);
     }
@@ -31,9 +32,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
         writer.writeVarInt(transactionId);
         writer.writeVarInt(start);
         writer.writeVarInt(length);
-
-        writer.writeVarInt(matches.size());
-        for (Match match : matches) match.write(writer);
+        writer.writeVarIntList(matches, BinaryWriter::write);
     }
 
     @Override
@@ -43,33 +42,26 @@ public record TabCompletePacket(int transactionId, int start, int length,
 
     @Override
     public @NotNull Collection<Component> components() {
-        if (matches == null || matches.isEmpty()) {
-            return Collections.emptyList();
-        } else {
-            List<Component> components = new ArrayList<>(matches.size());
-            for (Match match : matches) {
-                if (match.tooltip != null) {
-                    components.add(match.tooltip);
-                }
+        if (matches.isEmpty()) return Collections.emptyList();
+        List<Component> components = new ArrayList<>(matches.size());
+        for (Match match : matches) {
+            if (match.tooltip != null) {
+                components.add(match.tooltip);
             }
-            return components;
         }
+        return components;
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        if (matches == null || matches.isEmpty()) {
-            return this;
-        } else {
-            var updatedMatches = new Match[matches.size()];
-            for (int i = 0; i < updatedMatches.length; i++) {
-                updatedMatches[i] = matches.get(i).copyWithOperator(operator);
-            }
-            return new TabCompletePacket(transactionId, start, length, List.of(updatedMatches));
-        }
+        if (matches.isEmpty()) return this;
+        final List<Match> updatedMatches = matches.stream().map(match -> match.copyWithOperator(operator)).toList();
+        return new TabCompletePacket(transactionId, start, length, updatedMatches);
+
     }
 
-    public record Match(String match, Component tooltip) implements Writeable, ComponentHolder<Match> {
+    public record Match(@NotNull String match,
+                        @Nullable Component tooltip) implements Writeable, ComponentHolder<Match> {
         public Match(BinaryReader reader) {
             this(reader.readSizedString(), reader.readBoolean() ? reader.readComponent() : null);
         }
