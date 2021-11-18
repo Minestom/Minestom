@@ -33,7 +33,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(teamName);
         writer.writeByte((byte) action.id());
-        this.action.write(writer);
+        writer.write(action);
     }
 
     public sealed interface Action extends Writeable
