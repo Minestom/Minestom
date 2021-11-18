@@ -10,13 +10,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public final class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
-    public final String objectiveName;
-    public final byte mode;
-    public final Component objectiveValue;
-    public final Type type;
+    private final String objectiveName;
+    private final byte mode;
+    private final Component objectiveValue;
+    private final Type type;
 
     public ScoreboardObjectivePacket(String objectiveName, byte mode, Component objectiveValue, Type type) {
         this.objectiveName = objectiveName;
@@ -41,11 +42,26 @@ public final class ScoreboardObjectivePacket implements ComponentHoldingServerPa
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(objectiveName);
         writer.writeByte(mode);
-
         if (mode == 0 || mode == 2) {
             writer.writeComponent(objectiveValue);
             writer.writeVarInt(type.ordinal());
         }
+    }
+
+    public String objectiveName() {
+        return objectiveName;
+    }
+
+    public byte mode() {
+        return mode;
+    }
+
+    public Component objectiveValue() {
+        return objectiveValue;
+    }
+
+    public Type type() {
+        return type;
     }
 
     @Override
@@ -54,21 +70,28 @@ public final class ScoreboardObjectivePacket implements ComponentHoldingServerPa
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ScoreboardObjectivePacket that)) return false;
+        return mode == that.mode && objectiveName.equals(that.objectiveName) &&
+                Objects.equals(objectiveValue, that.objectiveValue) && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(objectiveName, mode, objectiveValue, type);
+    }
+
+    @Override
     public @NotNull Collection<Component> components() {
-        if (mode == 0 || mode == 2) {
-            return Collections.singleton(objectiveValue);
-        } else {
-            return Collections.emptyList();
-        }
+        return mode == 0 || mode == 2 ? Collections.singleton(objectiveValue) :
+                Collections.emptyList();
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        if (mode == 0 || mode == 2) {
-            return new ScoreboardObjectivePacket(objectiveName, mode, operator.apply(objectiveValue), type);
-        } else {
-            return this;
-        }
+        return mode == 0 || mode == 2 ? new ScoreboardObjectivePacket(objectiveName, mode,
+                operator.apply(objectiveValue), type) : this;
     }
 
     /**
