@@ -11,25 +11,22 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public final class ChunkData implements Writeable {
-    private final NBTCompound heightmaps;
-    private final byte[] data;
-    private final Map<Integer, Block> blockEntities;
-
-    public ChunkData(NBTCompound heightmaps, byte[] data, Map<Integer, Block> blockEntities) {
-        this.heightmaps = heightmaps.deepClone();
-        this.data = data.clone();
-        this.blockEntities = Map.copyOf(blockEntities);
+public record ChunkData(NBTCompound heightmaps, byte[] data,
+                        Map<Integer, Block> blockEntities) implements Writeable {
+    public ChunkData {
+        heightmaps = heightmaps.deepClone();
+        data = data.clone();
+        blockEntities = Map.copyOf(blockEntities);
     }
 
     public ChunkData(BinaryReader reader) {
-        this.heightmaps = (NBTCompound) reader.readTag();
-        this.data = reader.readBytes(reader.readVarInt());
-        // TODO read block entities
-        this.blockEntities = null;
+        this((NBTCompound) reader.readTag(),
+                reader.readBytes(reader.readVarInt()),
+                readBlockEntities(reader));
     }
 
     @Override
@@ -74,7 +71,20 @@ public final class ChunkData implements Writeable {
                 final NBTCompound blockNbt = block.nbt();
                 resultNbt = blockNbt == null ? new NBTCompound() : blockNbt;
             }
-            if (resultNbt != null) writer.writeNBT("", resultNbt); // block nbt
+            writer.writeNBT("", resultNbt); // block nbt
         }
+    }
+
+    private static Map<Integer, Block> readBlockEntities(BinaryReader reader) {
+        final Map<Integer, Block> blockEntities = new HashMap<>();
+        final int size = reader.readVarInt();
+        for (int i = 0; i < size; i++) {
+            final byte xz = reader.readByte();
+            final short y = reader.readShort();
+            final int blockEntityId = reader.readVarInt();
+            final NBTCompound nbt = (NBTCompound) reader.readTag();
+            // TODO create block object
+        }
+        return blockEntities;
     }
 }
