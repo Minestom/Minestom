@@ -2,6 +2,8 @@ package net.minestom.server.utils.advancement;
 
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 
+import java.util.List;
+
 public final class AdvancementUtils {
 
     private AdvancementUtils() {
@@ -15,12 +17,6 @@ public final class AdvancementUtils {
      * @return the packet to remove all the identifiers
      */
     public static AdvancementsPacket getRemovePacket(String[] identifiers) {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-        advancementsPacket.identifiersToRemove = identifiers;
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{};
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
-
-        return advancementsPacket;
+        return new AdvancementsPacket(false, List.of(), List.of(identifiers), List.of());
     }
 }
