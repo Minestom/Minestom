@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public record TradeListPacket(int windowId, List<Trade> trades,
+public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
                               int villagerLevel, int experience,
                               boolean regularVillager, boolean canRestock) implements ServerPacket {
     public TradeListPacket {
@@ -26,10 +26,7 @@ public record TradeListPacket(int windowId, List<Trade> trades,
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(windowId);
-        writer.writeByte((byte) trades.size());
-        for (Trade trade : trades) {
-            trade.write(writer);
-        }
+        writer.writeByteList(trades, BinaryWriter::write);
         writer.writeVarInt(villagerLevel);
         writer.writeVarInt(experience);
         writer.writeBoolean(regularVillager);
@@ -59,8 +56,7 @@ public record TradeListPacket(int windowId, List<Trade> trades,
             writer.writeItemStack(inputItem1);
             writer.writeItemStack(result);
             writer.writeBoolean(hasSecondItem);
-            if (hasSecondItem)
-                writer.writeItemStack(inputItem2);
+            if (hasSecondItem) writer.writeItemStack(inputItem2);
             writer.writeBoolean(tradeDisabled);
             writer.writeInt(tradeUsesNumber);
             writer.writeInt(maxTradeUsesNumber);

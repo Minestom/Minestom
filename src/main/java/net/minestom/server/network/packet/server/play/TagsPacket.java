@@ -23,7 +23,7 @@ public record TagsPacket(Map<Tag.BasicType, List<Tag>> tagsMap) implements Serve
     }
 
     public TagsPacket(BinaryReader reader) {
-        this(new HashMap<>()); // TODO
+        this(readTagsMap(reader));
     }
 
     @Override
@@ -48,5 +48,26 @@ public record TagsPacket(Map<Tag.BasicType, List<Tag>> tagsMap) implements Serve
     @Override
     public int getId() {
         return ServerPacketIdentifier.TAGS;
+    }
+
+    private static Map<Tag.BasicType, List<Tag>> readTagsMap(BinaryReader reader) {
+        Map<Tag.BasicType, List<Tag>> tagsMap = new HashMap<>();
+        // Read amount of tag types
+        final int typeCount = reader.readVarInt();
+        for (int i = 0; i < typeCount; i++) {
+            // Read tag type
+            final Tag.BasicType tagType = Tag.BasicType.fromIdentifer(reader.readSizedString());
+            if (tagType == null) {
+                throw new IllegalArgumentException("Tag type could not be resolved");
+            }
+
+            final int tagCount = reader.readVarInt();
+            for (int j = 0; j < tagCount; j++) {
+                final String tagName = reader.readSizedString();
+                final int[] entries = reader.readVarIntArray();
+                // TODO convert
+            }
+        }
+        return tagsMap;
     }
 }
