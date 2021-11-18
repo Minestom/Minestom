@@ -6,11 +6,13 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public final class UpdateScorePacket implements ServerPacket {
-    public final String entityName;
-    public final byte action;
-    public final String objectiveName;
-    public final int value;
+    private final String entityName;
+    private final byte action;
+    private final String objectiveName;
+    private final int value;
 
     public UpdateScorePacket(String entityName, byte action, String objectiveName, int value) {
         this.entityName = entityName;
@@ -36,8 +38,37 @@ public final class UpdateScorePacket implements ServerPacket {
         }
     }
 
+    public String entityName() {
+        return entityName;
+    }
+
+    public byte action() {
+        return action;
+    }
+
+    public String objectiveName() {
+        return objectiveName;
+    }
+
+    public int value() {
+        return value;
+    }
+
     @Override
     public int getId() {
         return ServerPacketIdentifier.UPDATE_SCORE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UpdateScorePacket that)) return false;
+        return action == that.action && value == that.value &&
+                Objects.equals(entityName, that.entityName) && Objects.equals(objectiveName, that.objectiveName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entityName, action, objectiveName, value);
     }
 }
