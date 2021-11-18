@@ -185,14 +185,6 @@ public class BinaryReader extends InputStream {
         return itemStack;
     }
 
-    public ItemStack[] readItemStackArray() {
-        ItemStack[] itemStacks = new ItemStack[readVarInt()];
-        for (int i = 0; i < itemStacks.length; i++) {
-            itemStacks[i] = readItemStack();
-        }
-        return itemStacks;
-    }
-
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
