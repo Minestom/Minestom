@@ -1,0 +1,5 @@
+metadata.format.version = "1.1"
+
+[versions]
+
+minecraft = "1.17.1"

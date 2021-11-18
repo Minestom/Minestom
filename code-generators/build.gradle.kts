@@ -8,15 +8,14 @@ application {
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.8.9")
-    implementation("org.jetbrains:annotations:22.0.0")
-    implementation("com.squareup:javapoet:1.13.0")
+    implementation(libs.gson)
+    implementation(libs.jetbrainsAnnotations)
+    implementation(libs.javaPoet)
     // Logging
-    implementation("org.apache.logging.log4j:log4j-core:2.14.1")
-    // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
+    implementation(libs.log4j.core)
+    implementation(libs.log4j.slf4j)
     // Contains the json files
-    implementation("com.github.Minestom:MinestomDataGenerator:47da93dd5a99280314d7e6137d2c81e7793f0fdb")
+    implementation(libs.minestomData)
 }
 
 java {

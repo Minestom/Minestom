@@ -1,0 +1,99 @@
+metadata.format.version = "1.1"
+
+[versions]
+
+# Important dependencies
+adventure = "4.9.3"
+kotlin = "1.5.31"
+hydrazine = "1.6.0"
+dependencyGetter = "v1.0.1"
+minestomData = "47da93dd5a99280314d7e6137d2c81e7793f0fdb"
+hephaistos = "v1.1.8"
+jetbrainsAnnotations = "23.0.0"
+
+# Code modification
+asm = "9.2"
+mixin = "0.8.4"
+
+# Terminal / Logging
+log4j = "2.14.1"
+jline = "3.21.0"
+
+# Performance / Data Structures
+caffeine = "3.0.4"
+fastutil = "8.5.6"
+gson = "2.8.9"
+guava = "31.0.1-jre"
+sparseBitSet = "1.2"
+jcTools = "3.3.0"
+
+# Code Generation
+javaPoet = "1.13.0"
+
+# Demo
+jNoise = "3.0.1"
+
+# Test
+junit-jupiter = "5.8.1"
+mockito = "4.0.0"
+
+[libraries]
+
+# Important Dependencies
+# Adventure
+adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+adventure-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
+adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
+adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
+
+# Kotlin
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+
+# Miscellaneous
+hydrazine = { group = "com.github.MadMartian", name = "hydrazine-path-finding", version.ref = "hydrazine" }
+mixin = { group = "org.spongepowered", name = "mixin", version.ref = "mixin" }
+dependencyGetter = { group = "com.github.Minestom", name = "DependencyGetter", version.ref = "dependencyGetter" }
+minestomData = { group = "com.github.Minestom", name = "MinestomDataGenerator", version.ref = "minestomData" }
+jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
+
+# ASM
+asm = { group = "org.ow2.asm", name = "asm", version.ref = "asm" }
+asmTree = { group = "org.ow2.asm", name = "asm-tree", version.ref = "asm" }
+asmAnalysis = { group = "org.ow2.asm", name = "asm-analysis", version.ref = "asm" }
+asmUtil = { group = "org.ow2.asm", name = "asm-util", version.ref = "asm" }
+asmCommons = { group = "org.ow2.asm", name = "asm-commons", version.ref = "asm" }
+
+# Logging
+log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
+log4j-slf4j = { group ="org.apache.logging.log4j", name = "log4j-slf4j-impl", version.ref = "log4j" }
+
+# Terminal
+jline = {group = "org.jline", name = "jline", version.ref = "jline"}
+jline-jansi = { group = "org.jline", name = "jline-terminal-jansi", version.ref = "jline" }
+
+# Performance / Data Structures
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+sparseBitSet = {group = "com.zaxxer", name = "SparseBitSet", version.ref = "sparseBitSet" }
+jcTools = {group = "org.jctools", name = "jctools-core", version.ref = "jcTools"}
+
+# Test
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito"}
+
+# Code Generation
+javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
+
+# Demo
+jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNoise" }
+
+[bundles]
+
+kotlin = ["kotlin-stdlib-jdk8", "kotlin-reflect"]
+adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain"]
+asm = ["asm", "asmTree", "asmAnalysis", "asmUtil", "asmCommons"]
+terminal = ["jline", "jline-jansi"]

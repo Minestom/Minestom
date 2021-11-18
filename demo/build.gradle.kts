@@ -9,7 +9,7 @@ application {
 
 dependencies {
     implementation(rootProject)
-    implementation("com.github.Articdive:JNoise:3.0.1")
+    implementation(libs.jNoise)
 }
 
 java {
