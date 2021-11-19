@@ -129,13 +129,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     };
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
-        final Instance instance = this.instance;
-        if (instance == null) return;
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-            GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
-        }
+        sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+        GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
 
     private final AtomicInteger teleportId = new AtomicInteger();
