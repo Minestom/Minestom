@@ -1,7 +1,9 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +39,17 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
             }
         }
         throw new ArgumentSyntaxException("Not a " + this.enumClass.getSimpleName() + " value", input, NOT_ENUM_VALUE_ERROR);
+    }
+
+    @Override
+    public @NotNull E parse(@NotNull StringReader input) throws CommandException {
+        String next = input.readString();
+        for (E value : this.values){
+            if (this.format.formatter.apply(value.name()).equals(next)){
+                return value;
+            }
+        }
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -19,9 +21,13 @@ public class ArgumentStringArray extends Argument<String[]> {
         super(id, true, true);
     }
 
-    @NotNull
     @Override
-    public String[] parse(@NotNull String input) {
+    public @NotNull String @NotNull [] parse(@NotNull StringReader input) throws CommandException {
+        return input.readAll().split(Pattern.quote(StringUtils.SPACE));
+    }
+
+    @Override
+    public @NotNull String @NotNull [] parse(@NotNull String input) {
         return input.split(Pattern.quote(StringUtils.SPACE));
     }
 
