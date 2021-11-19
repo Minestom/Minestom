@@ -1,18 +1,46 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Argument which will take a quoted string.
+ * Argument which will take a string.
  * <p>
  * Example: "Hey I am a string"
  */
 public class ArgumentString extends Argument<String> {
+
+    /**
+     * Represents different ways of reading a string from provided {@code StringReader}s
+     */
+    public enum ReadType {
+
+        /**
+         * Reads a quoted string from the provided reader via {@link StringReader#readQuotedString()}.
+         */
+        QUOTED_STRING,
+
+        /**
+         * Reads an unquoted string from the provided reader via {@link StringReader#readUnquotedString()} ()}.
+         */
+        UNQUOTED_STRING,
+
+        /**
+         * Reads a quoted or unquoted string from the provided reader via {@link StringReader#readString()}.
+         */
+        STRING,
+
+        /**
+         * Reads and returns the entire rest of the string from the reader via {@link StringReader#readAll()}.
+         */
+        GREEDY
+    }
 
     private static final char BACKSLASH = '\\';
     private static final char DOUBLE_QUOTE = '"';
@@ -20,8 +48,28 @@ public class ArgumentString extends Argument<String> {
 
     public static final int QUOTE_ERROR = 1;
 
+    private ReadType readType = ReadType.STRING;
+
     public ArgumentString(String id) {
         super(id, true);
+    }
+
+    public void setReadType(@NotNull ReadType readType) {
+        this.readType = readType;
+    }
+
+    public ReadType getReadType() {
+        return readType;
+    }
+
+    @Override
+    public @NotNull String parse(@NotNull StringReader input) throws CommandException {
+        return switch(readType){
+            case QUOTED_STRING -> input.readQuotedString();
+            case UNQUOTED_STRING -> input.readUnquotedString();
+            case STRING -> input.readString();
+            case GREEDY -> input.readAll();
+        };
     }
 
     @NotNull
