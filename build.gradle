@@ -110,7 +110,7 @@ dependencies {
     api 'it.unimi.dsi:fastutil:8.5.6'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    api 'com.google.code.gson:gson:2.8.8'
+    api 'com.google.code.gson:gson:2.8.9'
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
@@ -127,6 +127,12 @@ dependencies {
     implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.20.0'
 
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
+
+    // https://mvnrepository.com/artifact/com.zaxxer/SparseBitSet
+    implementation group: 'com.zaxxer', name: 'SparseBitSet', version: '1.2'
+
+    // https://mvnrepository.com/artifact/org.jctools/jctools-core
+    implementation group: 'org.jctools', name: 'jctools-core', version: '3.3.0'
 
     // Guava 21.0+ required for Mixin
     api 'com.google.guava:guava:31.0.1-jre'
@@ -155,7 +161,7 @@ dependencies {
     }
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
-    implementation 'com.github.Minestom:MinestomDataGenerator:7636d5d473'
+    implementation 'com.github.Minestom:MinestomDataGenerator:47da93dd5a99280314d7e6137d2c81e7793f0fdb'
 
     // Adventure, for user-interface
     api "net.kyori:adventure-api:$adventureVersion"

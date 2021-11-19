@@ -7,6 +7,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import org.jctools.queues.MpscGrowableArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
@@ -15,7 +16,9 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
@@ -28,6 +31,8 @@ public final class Worker extends MinestomThread {
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final PacketProcessor packetProcessor;
+    private final MpscGrowableArrayQueue<Runnable> queue = new MpscGrowableArrayQueue<>(1024, Integer.MAX_VALUE / 2);
+    private final AtomicBoolean flush = new AtomicBoolean();
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
         super("Ms-worker-" + COUNTER.getAndIncrement());
@@ -39,6 +44,20 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
+                try {
+                    this.queue.drain(Runnable::run);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+                // Flush all connections if needed
+                if (flush.compareAndSet(true, false)) {
+                    try {
+                        connectionMap.values().forEach(PlayerSocketConnection::flushSync);
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }
+                // Wait for an event
                 this.selector.select(key -> {
                     final SocketChannel channel = (SocketChannel) key.channel();
                     if (!channel.isOpen()) return;
@@ -90,6 +109,15 @@ public final class Worker extends MinestomThread {
         socket.setTcpNoDelay(Server.NO_DELAY);
         socket.setSoTimeout(30 * 1000); // 30 seconds
         this.selector.wakeup();
+    }
+
+    public void flush() {
+        this.flush.set(true);
+        this.selector.wakeup();
+    }
+
+    public Queue<Runnable> queue() {
+        return queue;
     }
 
     /**

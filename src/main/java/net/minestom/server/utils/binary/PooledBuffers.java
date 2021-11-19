@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @ApiStatus.Experimental
 public final class PooledBuffers {
     private final static Queue<SoftReference<BinaryBuffer>> POOLED_BUFFERS = new ConcurrentLinkedQueue<>();
-    private final static int BUFFER_SIZE = 262_143;
+    private final static int BUFFER_SIZE = Integer.getInteger("minestom.pooled-buffer-size", 262_143);
     private final static Cleaner CLEANER = Cleaner.create();
 
     public static BinaryBuffer get() {
@@ -52,39 +52,21 @@ public final class PooledBuffers {
         CLEANER.register(ref, new BuffersCleaner(buffers));
     }
 
-    private static final class BufferRefCleaner implements Runnable {
-        private final AtomicReference<BinaryBuffer> bufferRef;
-
-        public BufferRefCleaner(AtomicReference<BinaryBuffer> bufferRef) {
-            this.bufferRef = bufferRef;
-        }
-
+    private record BufferRefCleaner(AtomicReference<BinaryBuffer> bufferRef) implements Runnable {
         @Override
         public void run() {
             add(bufferRef.get());
         }
     }
 
-    private static final class BufferCleaner implements Runnable {
-        private final BinaryBuffer buffer;
-
-        public BufferCleaner(BinaryBuffer buffer) {
-            this.buffer = buffer;
-        }
-
+    private record BufferCleaner(BinaryBuffer buffer) implements Runnable {
         @Override
         public void run() {
             add(buffer);
         }
     }
 
-    private static final class BuffersCleaner implements Runnable {
-        private final Collection<BinaryBuffer> buffers;
-
-        public BuffersCleaner(Collection<BinaryBuffer> buffers) {
-            this.buffers = buffers;
-        }
-
+    private record BuffersCleaner(Collection<BinaryBuffer> buffers) implements Runnable {
         @Override
         public void run() {
             if (buffers.isEmpty()) return;

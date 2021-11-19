@@ -1,21 +1,23 @@
 package net.minestom.server.registry;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Supplier;
@@ -25,48 +27,45 @@ import java.util.function.Supplier;
  * Use at your own risk.
  */
 public final class Registry {
-    private static final Gson GSON = new Gson();
-
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static BlockEntry block(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new BlockEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static MaterialEntry material(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static MaterialEntry material(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new MaterialEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static EntityEntry entity(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static EntityEntry entity(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new EntityEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static EnchantmentEntry enchantment(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new EnchantmentEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+    public static PotionEffectEntry potionEffect(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
         return new PotionEffectEntry(namespace, jsonObject, override);
     }
 
     @ApiStatus.Internal
-    public static JsonObject load(Resource resource) {
-        final var resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
-        Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-        final var reader = new JsonReader(new InputStreamReader(resourceStream));
-        try {
-            return GSON.fromJson(reader, JsonObject.class);
-        } finally {
-            try {
-                resourceStream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+    public static Map<String, Map<String, Object>> load(Resource resource) {
+        Map<String, Map<String, Object>> map = new HashMap<>();
+        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
+            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
+                reader.beginObject();
+                while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));
+                reader.endObject();
             }
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
         }
+        return map;
     }
 
     public static class Container<T extends ProtocolObject> {
@@ -76,21 +75,20 @@ public final class Registry {
         // namespace -> registry data
         private final Map<String, T> namespaceMap = new HashMap<>();
         // id -> registry data
-        private final Int2ObjectOpenHashMap<T> idMap = new Int2ObjectOpenHashMap<>();
+        private final ObjectArray<T> ids = new ObjectArray<>();
         private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
 
         private final boolean initialized;
 
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
-            final JsonObject objects = Registry.load(resource);
-            for (var entry : objects.entrySet()) {
+            for (var entry : Registry.load(resource).entrySet()) {
                 final String namespace = entry.getKey();
-                final JsonObject object = entry.getValue().getAsJsonObject();
+                final Map<String, Object> object = entry.getValue();
                 loader.accept(this, namespace, object);
             }
             this.initialized = true;
-            this.idMap.trim();
+            this.ids.trim();
         }
 
         public T get(@NotNull String namespace) {
@@ -102,7 +100,7 @@ public final class Registry {
         }
 
         public T getId(int id) {
-            return idMap.get(id);
+            return ids.get(id);
         }
 
         public Collection<T> values() {
@@ -111,12 +109,12 @@ public final class Registry {
 
         public void register(@NotNull T value) {
             Check.stateCondition(initialized, "Registering is only available within the loader lambda.");
-            this.idMap.put(value.id(), value);
+            this.ids.set(value.id(), value);
             this.namespaceMap.put(value.name(), value);
         }
 
         public interface Loader<T extends ProtocolObject> {
-            void accept(Container<T> container, String namespace, JsonObject object);
+            void accept(Container<T> container, String namespace, Map<String, Object> object);
         }
     }
 
@@ -161,7 +159,7 @@ public final class Registry {
         private final String blockEntity;
         private final Supplier<Material> materialSupplier;
 
-        private BlockEntry(String namespace, JsonObject main, JsonObject override) {
+        private BlockEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -175,7 +173,15 @@ public final class Registry {
             this.air = getBoolean("air", false);
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid", false);
-            this.blockEntity = getString("blockEntity", null);
+
+            {
+                Map<String, Object> blockEntity = element("blockEntity");
+                if (blockEntity != null) {
+                    this.blockEntity = (String) blockEntity.get("namespace");
+                } else {
+                    this.blockEntity = null;
+                }
+            }
             {
                 final String materialNamespace = getString("correspondingItem", null);
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
@@ -253,7 +259,7 @@ public final class Registry {
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
 
-        private MaterialEntry(String namespace, JsonObject main, JsonObject override) {
+        private MaterialEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -267,9 +273,9 @@ public final class Registry {
             }
 
             {
-                final var armorProperties = element("armorProperties");
+                final Map<String, Object> armorProperties = element("armorProperties");
                 if (armorProperties != null) {
-                    final String slot = armorProperties.getAsJsonObject().get("slot").getAsString();
+                    final String slot = (String) armorProperties.get("slot");
                     switch (slot) {
                         case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
                         case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
@@ -326,15 +332,19 @@ public final class Registry {
         private final String translationKey;
         private final double width;
         private final double height;
+        private final double drag;
+        private final double acceleration;
         private final EntitySpawnType spawnType;
 
-        private EntityEntry(String namespace, JsonObject main, JsonObject override) {
+        private EntityEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
             this.translationKey = getString("translationKey");
             this.width = getDouble("width");
             this.height = getDouble("height");
+            this.drag = getDouble("drag", 0.02);
+            this.acceleration = getDouble("acceleration", 0.08);
             this.spawnType = EntitySpawnType.valueOf(getString("packetType").toUpperCase(Locale.ROOT));
         }
 
@@ -358,6 +368,14 @@ public final class Registry {
             return height;
         }
 
+        public double drag() {
+            return drag;
+        }
+
+        public double acceleration() {
+            return acceleration;
+        }
+
         public EntitySpawnType spawnType() {
             return spawnType;
         }
@@ -373,7 +391,7 @@ public final class Registry {
         private final boolean isTradeable;
         private final boolean isTreasureOnly;
 
-        private EnchantmentEntry(String namespace, JsonObject main, JsonObject override) {
+        private EnchantmentEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -425,7 +443,7 @@ public final class Registry {
         private final int color;
         private final boolean isInstantaneous;
 
-        private PotionEffectEntry(String namespace, JsonObject main, JsonObject override) {
+        private PotionEffectEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
@@ -456,54 +474,78 @@ public final class Registry {
     }
 
     public static class Entry {
-        private final JsonObject main, override;
+        private final Map<String, Object> main, override;
 
-        private Entry(JsonObject main, JsonObject override) {
+        private Entry(Map<String, Object> main, Map<String, Object> override) {
             this.main = main;
             this.override = override;
         }
 
         public String getString(String name, String defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsString() : defaultValue;
+            return element != null ? (String) element : defaultValue;
         }
 
         public String getString(String name) {
-            return element(name).getAsString();
+            return element(name);
         }
 
         public double getDouble(String name, double defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsDouble() : defaultValue;
+            return element != null ? ((Number) element).doubleValue() : defaultValue;
         }
 
         public double getDouble(String name) {
-            return element(name).getAsDouble();
+            return ((Number) element(name)).doubleValue();
         }
 
         public int getInt(String name, int defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsInt() : defaultValue;
+            return element != null ? ((Number) element).intValue() : defaultValue;
         }
 
         public int getInt(String name) {
-            return element(name).getAsInt();
+            return ((Number) element(name)).intValue();
         }
 
         public boolean getBoolean(String name, boolean defaultValue) {
             var element = element(name);
-            return element != null ? element.getAsBoolean() : defaultValue;
+            return element != null ? (boolean) element : defaultValue;
         }
 
         public boolean getBoolean(String name) {
-            return element(name).getAsBoolean();
+            return element(name);
         }
 
-        protected JsonElement element(String name) {
-            if (override != null && override.has(name)) {
-                return override.get(name);
+        protected <T> T element(String name) {
+            Object result;
+            if (override != null && (result = override.get(name)) != null) {
+                return (T) result;
             }
-            return main.get(name);
+            return (T) main.get(name);
         }
+    }
+
+    private static Object readObject(JsonReader reader) throws IOException {
+        return switch (reader.peek()) {
+            case BEGIN_ARRAY -> {
+                ObjectArrayList<Object> list = new ObjectArrayList<>();
+                reader.beginArray();
+                while (reader.hasNext()) list.add(readObject(reader));
+                reader.endArray();
+                yield new ObjectArrayList<>(list);
+            }
+            case BEGIN_OBJECT -> {
+                Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
+                reader.beginObject();
+                while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
+                reader.endObject();
+                yield new Object2ObjectArrayMap<>(map);
+            }
+            case STRING -> reader.nextString().intern();
+            case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
+            case BOOLEAN -> reader.nextBoolean();
+            default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
+        };
     }
 }

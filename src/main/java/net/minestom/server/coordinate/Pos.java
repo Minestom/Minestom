@@ -139,24 +139,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
                 xz * Math.cos(Math.toRadians(rotX)));
     }
 
-    @Override
-    @Contract(pure = true)
-    public double x() {
-        return x;
-    }
-
-    @Override
-    @Contract(pure = true)
-    public double y() {
-        return y;
-    }
-
-    @Override
-    @Contract(pure = true)
-    public double z() {
-        return z;
-    }
-
     /**
      * Returns a new position based on this position fields.
      *
@@ -267,16 +249,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     @Override
     public @NotNull Pos relative(@NotNull BlockFace face) {
         return (Pos) Point.super.relative(face);
-    }
-
-    @Contract(pure = true)
-    public float yaw() {
-        return yaw;
-    }
-
-    @Contract(pure = true)
-    public float pitch() {
-        return pitch;
     }
 
     @Contract(pure = true)

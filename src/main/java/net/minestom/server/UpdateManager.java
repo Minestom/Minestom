@@ -6,10 +6,10 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.socket.Worker;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -166,6 +166,7 @@ public final class UpdateManager {
         @Override
         public void run() {
             final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            final List<Worker> workers = MinecraftServer.getServer().workers();
             while (!stopRequested) {
                 try {
                     long currentTime = System.nanoTime();
@@ -185,10 +186,7 @@ public final class UpdateManager {
 
                     // Flush all waiting packets
                     PacketUtils.flush();
-                    AsyncUtils.runAsync(() -> MinecraftServer.getConnectionManager()
-                            .getOnlinePlayers()
-                            .parallelStream()
-                            .forEach(player -> player.getPlayerConnection().flush()));
+                    workers.forEach(Worker::flush);
 
                     // the time that the tick took in nanoseconds
                     final long tickTime = System.nanoTime() - currentTime;
