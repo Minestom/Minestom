@@ -99,8 +99,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     public @NotNull EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var childImpl = (EventNodeImpl<? extends T>) child;
-            Check.stateCondition(childImpl.parent != null, "Node already has a parent");
-            Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
+            Check.stateCondition(childImpl.parent != null, "Node " + childImpl.name + "already has a parent");
+            Check.stateCondition(Objects.equals(parent, child), "Node " + childImpl.name + "cannot have a child as parent");
             if (!children.add((EventNodeImpl<T>) childImpl)) return this; // Couldn't add the child (already present?)
             childImpl.parent = this;
             childImpl.invalidateEventsFor(this);
@@ -146,8 +146,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var nodeImpl = (EventNodeImpl<? extends T>) node;
-            Check.stateCondition(nodeImpl.parent != null, "Node already has a parent");
-            Check.stateCondition(Objects.equals(parent, nodeImpl), "Cannot map to self");
+            Check.stateCondition(nodeImpl.parent != null, "Node " + nodeImpl.name + "already has a parent");
+            Check.stateCondition(Objects.equals(parent, nodeImpl), "Cannot map " + nodeImpl.name + "to self");
             EventNodeImpl<T> previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
             if (previous != null) previous.parent = null;
             nodeImpl.parent = this;
