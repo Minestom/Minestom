@@ -1,9 +1,12 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,6 +16,16 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 
     public ArgumentEntityType(String id) {
         super(id);
+    }
+
+    @Override
+    public @NotNull EntityType parse(@NotNull StringReader input) throws CommandException {
+        NamespaceID id = input.readNamespaceID();
+        EntityType enchantment = EntityType.fromNamespaceId(id);
+        if (enchantment == null){
+            throw CommandException.ENTITY_NOTFOUND.generateException(input, id.asString());
+        }
+        return enchantment;
     }
 
     @Override
