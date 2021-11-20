@@ -7,7 +7,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import org.jctools.queues.MpscGrowableArrayQueue;
+import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public final class Worker extends MinestomThread {
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final PacketProcessor packetProcessor;
-    private final MpscGrowableArrayQueue<Runnable> queue = new MpscGrowableArrayQueue<>(1024, Integer.MAX_VALUE / 2);
+    private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
     private final AtomicBoolean flush = new AtomicBoolean();
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
