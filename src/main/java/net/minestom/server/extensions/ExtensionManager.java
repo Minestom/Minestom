@@ -7,9 +7,7 @@ import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -168,15 +166,6 @@ public class ExtensionManager {
             }
         }
 
-        //TODO(mattw) What is the purpose of this?
-
-        // Periodically cleanup observers
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            for (Extension ext : extensions.values()) {
-                ext.cleanupObservers();
-            }
-        }).repeat(1L, TimeUnit.MINUTE).schedule();
-
         // Load extensions
         {
             // Get all extensions and order them accordingly.
@@ -242,7 +231,7 @@ public class ExtensionManager {
         String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
 
-        MinestomExtensionClassLoader loader = discoveredExtension.getClassLoader();
+        ExtensionClassLoader loader = discoveredExtension.getClassLoader();
 
         if (extensions.containsKey(extensionName.toLowerCase())) {
             LOGGER.error("An extension called '{}' has already been registered.", extensionName);
@@ -588,16 +577,14 @@ public class ExtensionManager {
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
 
-                MinestomExtensionClassLoader extensionClassLoader = discoveredExtension.getClassLoader();
+                ExtensionClassLoader extensionClassLoader = discoveredExtension.getClassLoader();
                 for (String dependencyName : discoveredExtension.getDependencies()) {
                     var resolved = extensions.stream()
                             .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
-                            .findFirst().orElse(null);
-                    if (resolved == null) {
-                        throw new IllegalStateException("Unknown dependency '" + dependencyName + "' of '" + discoveredExtension.getName() + "'");
-                    }
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalStateException("Unknown dependency '" + dependencyName + "' of '" + discoveredExtension.getName() + "'"));
 
-                    MinestomExtensionClassLoader dependencyClassLoader = resolved.getClassLoader();
+                    ExtensionClassLoader dependencyClassLoader = resolved.getClassLoader();
 
                     extensionClassLoader.addChild(dependencyClassLoader);
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
@@ -700,9 +687,6 @@ public class ExtensionManager {
     private void unload(@NotNull Extension ext) {
         ext.preTerminate();
         ext.terminate();
-        // remove callbacks for this extension
-        String extensionName = ext.getOrigin().getName();
-        ext.triggerChange(observer -> observer.onExtensionUnload(extensionName));
 
         // Remove event node
         EventNode<Event> eventNode = ext.getEventNode();
