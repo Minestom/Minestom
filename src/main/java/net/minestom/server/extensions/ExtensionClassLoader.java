@@ -1,5 +1,6 @@
-package net.minestom.server.extensions.isolation;
+package net.minestom.server.extensions;
 
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -8,14 +9,15 @@ import java.net.URLClassLoader;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Classloader part of a hierarchy of classloader
- */
-public abstract class HierarchyClassLoader extends URLClassLoader {
-    protected final List<MinestomExtensionClassLoader> children = new LinkedList<>();
+public final class ExtensionClassLoader extends URLClassLoader {
+    private final List<ExtensionClassLoader> children = new LinkedList<>();
 
-    public HierarchyClassLoader(String name, URL[] urls, ClassLoader parent) {
-        super(name, urls, parent);
+    public ExtensionClassLoader(String name, URL[] urls) {
+        super("Ext_" + name, urls, MinecraftServer.class.getClassLoader());
+    }
+
+    public ExtensionClassLoader(String name, URL[] urls, ClassLoader parent) {
+        super("Ext_" + name, urls, parent);
     }
 
     @Override
@@ -23,7 +25,7 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
         super.addURL(url);
     }
 
-    public void addChild(@NotNull MinestomExtensionClassLoader loader) {
+    public void addChild(@NotNull ExtensionClassLoader loader) {
         children.add(loader);
     }
 
@@ -32,7 +34,7 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
         try {
             return super.loadClass(name, resolve);
         } catch (ClassNotFoundException e) {
-            for (MinestomExtensionClassLoader child : children) {
+            for (ExtensionClassLoader child : children) {
                 try {
                     return child.loadClass(name, resolve);
                 } catch (ClassNotFoundException ignored) {}
@@ -45,21 +47,12 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
         InputStream in = getResourceAsStream(name);
         if (in != null) return in;
 
-        for (MinestomExtensionClassLoader child : children) {
+        for (ExtensionClassLoader child : children) {
             InputStream childInput = child.getResourceAsStreamWithChildren(name);
             if (childInput != null)
                 return childInput;
         }
 
         return null;
-    }
-
-    public void removeChildInHierarchy(MinestomExtensionClassLoader child) {
-        children.remove(child);
-
-        // Also remove all children from these extension's children.
-        for (MinestomExtensionClassLoader subChild : children) {
-            subChild.removeChildInHierarchy(child);
-        }
     }
 }
