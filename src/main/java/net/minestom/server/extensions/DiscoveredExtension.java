@@ -1,7 +1,6 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.JsonObject;
-import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -64,7 +63,7 @@ public final class DiscoveredExtension {
     transient private Path dataDirectory;
 
     /** The class loader that powers it. */
-    transient private MinestomExtensionClassLoader classLoader;
+    transient private ExtensionClassLoader classLoader;
 
     @NotNull
     public String getName() {
@@ -116,11 +115,11 @@ public final class DiscoveredExtension {
     public void createClassLoader() {
         if (classLoader != null) throw new IllegalStateException("Extension classloader has already been created!");
         final URL[] urls = this.files.toArray(new URL[0]);
-        classLoader = new MinestomExtensionClassLoader(this.getName(), urls);
+        classLoader = new ExtensionClassLoader(this.getName(), urls);
     }
 
     @NotNull
-    public MinestomExtensionClassLoader getClassLoader() {
+    public ExtensionClassLoader getClassLoader() {
         return classLoader;
     }
 
