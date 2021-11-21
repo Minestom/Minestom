@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -15,7 +16,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -118,7 +118,7 @@ public final class Worker extends MinestomThread {
         this.selector.wakeup();
     }
 
-    public Queue<Runnable> queue() {
+    public MessagePassingQueue<Runnable> queue() {
         return queue;
     }
 
