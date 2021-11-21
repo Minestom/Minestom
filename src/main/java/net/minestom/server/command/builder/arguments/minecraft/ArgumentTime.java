@@ -2,9 +2,11 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +28,26 @@ public class ArgumentTime extends Argument<Duration> {
 
     public ArgumentTime(String id) {
         super(id);
+    }
+
+    @Override
+    public @NotNull Duration parse(@NotNull StringReader input) throws CommandException {
+
+        long amount = input.readLong();
+
+        if (amount < 0){
+            throw CommandException.ARGUMENT_TIME_INVALID_TICK_COUNT.generateException(input);
+        }
+
+        String stringUnit = input.readUnquotedString();
+        TemporalUnit unit = switch (stringUnit) {
+            case "d", "" -> TimeUnit.DAY;
+            case "s" -> TimeUnit.SECOND;
+            case "t" -> TimeUnit.SERVER_TICK;
+            default -> throw CommandException.ARGUMENT_TIME_INVALID_UNIT.generateException(input);
+        };
+
+        return Duration.of(amount, unit);
     }
 
     @NotNull
