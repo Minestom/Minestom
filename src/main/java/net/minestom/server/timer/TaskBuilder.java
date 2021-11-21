@@ -1,6 +1,5 @@
 package net.minestom.server.timer;
 
-import net.minestom.server.extensions.isolation.MinestomExtensionClassLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -20,20 +19,10 @@ public class TaskBuilder {
     private final Runnable runnable;
     // True if the task planned for the application shutdown
     private final boolean shutdown;
-    /**
-     * Extension which owns this task, or null if none
-     */
-    private final String owningExtension;
     // Delay value for the task execution
     private long delay;
     // Repeat value for the task execution
     private long repeat;
-    /**
-     * If this task is owned by an extension, should it survive the unloading of said extension?
-     * May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     * reload of that extension.
-     */
-    private boolean isTransient;
 
     /**
      * Creates a task builder.
@@ -58,8 +47,6 @@ public class TaskBuilder {
         this.schedulerManager = schedulerManager;
         this.runnable = runnable;
         this.shutdown = shutdown;
-        this.isTransient = false;
-        this.owningExtension = MinestomExtensionClassLoader.findExtensionObjectOwner(runnable);
     }
 
     /**
@@ -127,16 +114,6 @@ public class TaskBuilder {
     }
 
     /**
-     * If this task is owned by an extension, should it survive the unloading of said extension?
-     * May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     * reload of that extension.
-     */
-    public TaskBuilder makeTransient() {
-        isTransient = true;
-        return this;
-    }
-
-    /**
      * Builds a {@link Task}.
      *
      * @return the built {@link Task}
@@ -148,9 +125,7 @@ public class TaskBuilder {
                 this.runnable,
                 this.shutdown,
                 this.delay,
-                this.repeat,
-                this.isTransient,
-                this.owningExtension);
+                this.repeat);
     }
 
     /**
