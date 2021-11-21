@@ -2,7 +2,6 @@ package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.IExtensionObserver;
@@ -146,8 +145,7 @@ public final class SchedulerManager implements IExtensionObserver {
      *
      * @return a {@link Collection} with all the registered {@link Task}
      */
-    @NotNull
-    public ObjectCollection<Task> getTasks() {
+    public @NotNull Collection<Task> getTasks() {
         return tasks.values();
     }
 
@@ -166,8 +164,7 @@ public final class SchedulerManager implements IExtensionObserver {
      *
      * @return a {@link Collection} with all the registered shutdown {@link Task}
      */
-    @NotNull
-    public ObjectCollection<Task> getShutdownTasks() {
+    public @NotNull Collection<Task> getShutdownTasks() {
         return shutdownTasks.values();
     }
 
