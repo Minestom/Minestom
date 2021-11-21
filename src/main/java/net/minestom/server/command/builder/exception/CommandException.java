@@ -175,15 +175,58 @@ public class CommandException extends RuntimeException {
     private final @Nullable Component component;
 
     /**
-     * Creates a new CommandException with the provided error message (which may be null), error code (mostly for
-     * display purposes), fixed string reader (for creating error messages) and component (for providing extra
-     * information about the error to the player).
+     * Creates a new CommandException
+     * @param reader the string reader that will be used mostly for displaying information to the player
+     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
+     *                  unless custom error callbacks are being used
      */
-    public CommandException(@Nullable String message, int errorCode, @NotNull FixedStringReader stringReader,
-                            @Nullable Component component){
-        super(message);
+    public CommandException(@NotNull FixedStringReader reader, int errorCode){
+        this(reader, errorCode, null, null, null);
+    }
+
+    /**
+     * Creates a new CommandException
+     * @param reader the string reader that will be used mostly for displaying information to the player
+     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
+     *                  unless custom error callbacks are being used
+     * @param message the message, as a string, that will be displayed. because minecraft usually uses components, this
+     *                will likely only be used for displaying errors to the console or as a way to display error
+     *                messages in non-Minecraft formats
+     */
+    public CommandException(@NotNull FixedStringReader reader, int errorCode, @Nullable String message){
+        this(reader, errorCode, message, null, null);
+    }
+
+    /**
+     * Creates a new CommandException
+     * @param reader the string reader that will be used mostly for displaying information to the player
+     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
+     *                  unless custom error callbacks are being used
+     * @param message the message, as a string, that will be displayed. because minecraft usually uses components, this
+     *                will likely only be used for displaying errors to the console or as a way to display error
+     *                messages in non-Minecraft formats
+     * @param component the component that should be displayed to the player
+     */
+    public CommandException(@NotNull FixedStringReader reader, int errorCode, @Nullable String message, @Nullable Component component){
+        this(reader, errorCode, message, component, null);
+    }
+
+    /**
+     * Creates a new CommandException
+     * @param reader the string reader that will be used mostly for displaying information to the player
+     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
+     *                  unless custom error callbacks are being used
+     * @param message the message, as a string, that will be displayed. because minecraft usually uses components, this
+     *                will likely only be used for displaying errors to the console or as a way to display error
+     *                messages in non-Minecraft formats
+     * @param component the component that should be displayed to the player
+     * @param cause the cause of this CommandException. this parameter will likely only be used when this exception is
+     *              being printed to the console
+     */
+    public CommandException(@NotNull FixedStringReader reader, int errorCode, @Nullable String message, @Nullable Component component, @Nullable Throwable cause){
+        super(message, cause);
         this.errorCode = errorCode;
-        this.stringReader = stringReader;
+        this.stringReader = reader;
         this.component = component;
     }
 

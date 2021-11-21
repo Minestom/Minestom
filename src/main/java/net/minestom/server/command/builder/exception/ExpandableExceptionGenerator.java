@@ -62,6 +62,6 @@ public class ExpandableExceptionGenerator extends ContextualExceptionGenerator {
      * placeholders.
      */
     public @NotNull CommandException generateException(@NotNull FixedStringReader reader, @NotNull String @NotNull ... args){
-        return new CommandException(generateExceptionMessage(args), errorCode(), reader, generateComponent(args));
+        return new CommandException(reader, errorCode(), generateExceptionMessage(args), generateComponent(args));
     }
 }

@@ -39,7 +39,7 @@ public class A1ExceptionGenerator extends ContextualExceptionGenerator {
      * placeholder.
      */
     public @NotNull CommandException generateException(@NotNull FixedStringReader reader, @NotNull String arg1){
-        return new CommandException(generateExceptionMessage(arg1), errorCode(), reader, generateComponent(arg1));
+        return new CommandException(reader, errorCode(), generateExceptionMessage(arg1), generateComponent(arg1));
     }
 
 }
