@@ -78,6 +78,8 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,7 +89,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -130,19 +131,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     };
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
-        final Instance instance = this.instance;
-        if (instance == null) return;
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-            GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
-        }
+        sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+        GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final Queue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
+    private final MessagePassingQueue<ClientPlayPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
@@ -321,10 +317,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.update();
 
         // Process received packets
-        ClientPlayPacket packet;
-        while ((packet = packets.poll()) != null) {
-            packet.process(this);
-        }
+        this.packets.drain(packet -> packet.process(this));
 
         super.update(time); // Super update (item pickup/fire management)
 
@@ -1691,7 +1684,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param packet the packet to add in the queue
      */
     public void addPacketToQueue(@NotNull ClientPlayPacket packet) {
-        this.packets.add(packet);
+        this.packets.offer(packet);
     }
 
     /**

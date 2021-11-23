@@ -161,8 +161,10 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
-                entry.getValue().process(entry.getKey()));
+        if (VIEWABLE_PACKET) {
+            VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
+                    entry.getValue().process(entry.getKey()));
+        }
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,

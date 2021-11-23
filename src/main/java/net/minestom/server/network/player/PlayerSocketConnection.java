@@ -16,6 +16,7 @@ import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.validate.Check;
+import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
 
     private final Worker worker;
+    private final MessagePassingQueue<Runnable> workerQueue;
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
@@ -79,6 +81,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     public PlayerSocketConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
         super();
         this.worker = worker;
+        this.workerQueue = worker.queue();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
         PooledBuffers.registerBuffer(this, tickBuffer);
@@ -193,20 +196,21 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
         final boolean compressed = this.compressed;
-        this.worker.queue().offer(() -> writePacketSync(packet, compressed));
+        this.workerQueue.relaxedOffer(() -> writePacketSync(packet, compressed));
     }
 
     @Override
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+        final List<SendablePacket> packetsCopy = List.copyOf(packets);
         final boolean compressed = this.compressed;
-        this.worker.queue().offer(() -> {
-            for (SendablePacket packet : packets) writePacketSync(packet, compressed);
+        this.workerQueue.relaxedOffer(() -> {
+            for (SendablePacket packet : packetsCopy) writePacketSync(packet, compressed);
         });
     }
 
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer, int index, int length) {
-        this.worker.queue().offer(() -> writeBufferSync(buffer, index, length));
+        this.workerQueue.relaxedOffer(() -> writeBufferSync(buffer, index, length));
     }
 
     @ApiStatus.Internal
@@ -216,7 +220,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
         final boolean compressed = this.compressed;
-        this.worker.queue().offer(() -> {
+        this.workerQueue.relaxedOffer(() -> {
             writeServerPacketSync(packet, compressed);
             flushSync();
         });
@@ -224,7 +228,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void flush() {
-        this.worker.queue().offer(this::flushSync);
+        this.workerQueue.relaxedOffer(this::flushSync);
     }
 
     @Override
@@ -246,7 +250,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        this.worker.queue().offer(() -> this.worker.disconnect(this, channel));
+        this.workerQueue.relaxedOffer(() -> this.worker.disconnect(this, channel));
     }
 
     public @NotNull SocketChannel getChannel() {

@@ -3,6 +3,7 @@ package net.minestom.server.network.socket;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,12 +12,11 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class Server {
-    public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
-            Math.max(1, Runtime.getRuntime().availableProcessors() / 2));
+    public static final int WORKER_COUNT = Integer.getInteger("minestom.workers", Runtime.getRuntime().availableProcessors());
     public static final int MAX_PACKET_SIZE = Integer.getInteger("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
     public static final int SOCKET_SEND_BUFFER_SIZE = Integer.getInteger("minestom.send-buffer-size", 262_143);
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = Integer.getInteger("minestom.receive-buffer-size", 32_767);
@@ -26,6 +26,7 @@ public final class Server {
     private volatile boolean stop;
 
     private final Selector selector = Selector.open();
+    private final PacketProcessor packetProcessor;
     private final List<Worker> workers;
     private int index;
 
@@ -34,14 +35,10 @@ public final class Server {
     private int port;
 
     public Server(PacketProcessor packetProcessor) throws IOException {
-        // Create all workers
-        List<Worker> workers = new ArrayList<>(WORKER_COUNT);
-        for (int i = 0; i < WORKER_COUNT; i++) {
-            Worker worker = new Worker(this, packetProcessor);
-            workers.add(worker);
-            worker.start();
-        }
-        this.workers = List.copyOf(workers);
+        this.packetProcessor = packetProcessor;
+        Worker[] workers = new Worker[WORKER_COUNT];
+        Arrays.setAll(workers, value -> new Worker(this));
+        this.workers = List.of(workers);
     }
 
     @ApiStatus.Internal
@@ -60,6 +57,7 @@ public final class Server {
 
     @ApiStatus.Internal
     public void start() {
+        this.workers.forEach(Thread::start);
         new Thread(() -> {
             while (!stop) {
                 // Busy wait for connections
@@ -90,6 +88,11 @@ public final class Server {
         this.stop = true;
         this.selector.wakeup();
         this.workers.forEach(worker -> worker.selector.wakeup());
+    }
+
+    @ApiStatus.Internal
+    public @NotNull PacketProcessor packetProcessor() {
+        return packetProcessor;
     }
 
     @ApiStatus.Internal
