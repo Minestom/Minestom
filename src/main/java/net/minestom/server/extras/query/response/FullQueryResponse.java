@@ -9,7 +9,6 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A full query response containing a dynamic set of responses.
@@ -36,7 +35,7 @@ public class FullQueryResponse implements Writeable {
         this.players = MinecraftServer.getConnectionManager().getOnlinePlayers()
                 .stream()
                 .map(player -> PLAIN.serialize(player.getName()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
