@@ -2,12 +2,14 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.time.Tick;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +17,17 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 
 /**
- * Represents an argument giving a time (day/second/tick).
+ * An argument that returns a number of ticks (as a Long)
  * <p>
- * Example: 50d, 25s, 75t
+ * Example: "50d" returns 1200000, 25s returns 500, and 75t returns 75.
  */
-public class ArgumentTime extends Argument<Duration> {
+public class ArgumentTime extends Argument<Long> {
+
+    /**
+     * Static constant that represents the default value for the number of ticks per day. This is defined as 20 minutes
+     * converted to server ticks.
+     */
+    public static final long TICKS_PER_DAY = Tick.SERVER_TICKS.fromDuration(Duration.ofMinutes(20));
 
     public static final int INVALID_TIME_FORMAT = -2;
     public static final int NO_NUMBER = -3;
@@ -31,28 +39,27 @@ public class ArgumentTime extends Argument<Duration> {
     }
 
     @Override
-    public @NotNull Duration parse(@NotNull StringReader input) throws CommandException {
+    public @NotNull Long parse(@NotNull StringReader input) throws CommandException {
 
-        long amount = input.readLong();
+        double amount = input.readDouble();
 
         if (amount < 0){
             throw CommandException.ARGUMENT_TIME_INVALID_TICK_COUNT.generateException(input);
         }
 
         String stringUnit = input.readUnquotedString();
-        TemporalUnit unit = switch (stringUnit) {
-            case "d", "" -> TimeUnit.DAY;
-            case "s" -> TimeUnit.SECOND;
-            case "t" -> TimeUnit.SERVER_TICK;
+
+        return switch (stringUnit) {
+            case "d" -> Math.round(TICKS_PER_DAY * amount);
+            case "s" -> Math.round(MinecraftServer.TICK_PER_SECOND * amount);
+            case "t", "" -> Math.round(amount);
             default -> throw CommandException.ARGUMENT_TIME_INVALID_UNIT.generateException(input);
         };
-
-        return Duration.of(amount, unit);
     }
 
     @NotNull
     @Override
-    public Duration parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Long parse(@NotNull String input) throws ArgumentSyntaxException {
         final char lastChar = input.charAt(input.length() - 1);
 
         TemporalUnit timeUnit;
@@ -76,7 +83,7 @@ public class ArgumentTime extends Argument<Duration> {
         try {
             // Check if value is a number
             final int time = Integer.parseInt(input);
-            return Duration.of(time, timeUnit);
+            return Duration.of(time, timeUnit).toMillis() / MinecraftServer.TICK_MS;
         } catch (NumberFormatException e) {
             throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
         }
