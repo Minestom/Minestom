@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 // TODO
 
@@ -150,7 +149,7 @@ public class EntityFinder {
             final int maxDistance = distance.getMaximum();
             result = result.stream()
                     .filter(entity -> MathUtils.isBetween(entity.getDistance(pos), minDistance, maxDistance))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Diff X/Y/Z
@@ -173,14 +172,14 @@ public class EntityFinder {
                     return false;
 
                 return true;
-            }).collect(Collectors.toList());
+            }).toList();
         }
 
         // Entity type
         if (!entityTypes.isEmpty()) {
             result = result.stream()
                     .filter(entity -> filterToggleableMap(entity.getEntityType(), entityTypes))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // GameMode
@@ -188,7 +187,7 @@ public class EntityFinder {
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> filterToggleableMap(((Player) entity).getGameMode(), gameModes))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Level
@@ -198,7 +197,7 @@ public class EntityFinder {
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> MathUtils.isBetween(((Player) entity).getLevel(), minLevel, maxLevel))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Name
@@ -206,14 +205,14 @@ public class EntityFinder {
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> filterToggleableMap(((Player) entity).getUsername(), names))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // UUID
         if (!uuids.isEmpty()) {
             result = result.stream()
                     .filter(entity -> filterToggleableMap(entity.getUuid(), uuids))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
 
@@ -232,7 +231,7 @@ public class EntityFinder {
                                 1 : 0;
                     })
                     .limit(limit != null ? limit : Integer.MAX_VALUE)
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (entitySort == EntitySort.RANDOM) {
                 Collections.shuffle(result);

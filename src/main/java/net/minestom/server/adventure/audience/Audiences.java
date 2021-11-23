@@ -8,7 +8,6 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Utility class to access Adventure audiences.
@@ -61,7 +60,7 @@ public class Audiences {
      * @return all players matching the predicate
      */
     public static @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList()));
+        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList());
     }
 
     /**
