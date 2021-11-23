@@ -242,12 +242,8 @@ public class EntityFinder {
     }
 
     public @NotNull List<@NotNull Entity> find(@NotNull CommandSender sender) {
-        if (sender.isPlayer()) {
-            Player player = sender.asPlayer();
-            return find(player.getInstance(), player);
-        } else {
-            return find(null, null);
-        }
+        return sender instanceof Player player ?
+                find(player.getInstance(), player) : find(null, null);
     }
 
     /**
@@ -260,37 +256,27 @@ public class EntityFinder {
     public @Nullable Player findFirstPlayer(@Nullable Instance instance, @Nullable Entity self) {
         final List<Entity> entities = find(instance, self);
         for (Entity entity : entities) {
-            if (entity instanceof Player) {
-                return (Player) entity;
+            if (entity instanceof Player player) {
+                return player;
             }
         }
         return null;
     }
 
     public @Nullable Player findFirstPlayer(@NotNull CommandSender sender) {
-        if (sender.isPlayer()) {
-            final Player player = sender.asPlayer();
-            return findFirstPlayer(player.getInstance(), player);
-        } else {
-            return findFirstPlayer(null, null);
-        }
+        return sender instanceof Player player ?
+                findFirstPlayer(player.getInstance(), player) :
+                findFirstPlayer(null, null);
     }
 
     public @Nullable Entity findFirstEntity(@Nullable Instance instance, @Nullable Entity self) {
         final List<Entity> entities = find(instance, self);
-        for (Entity entity : entities) {
-            return entity;
-        }
-        return null;
+        return entities.isEmpty() ? null : entities.get(0);
     }
 
     public @Nullable Entity findFirstEntity(@NotNull CommandSender sender) {
-        if (sender.isPlayer()) {
-            final Player player = sender.asPlayer();
-            return findFirstEntity(player.getInstance(), player);
-        } else {
-            return findFirstEntity(null, null);
-        }
+        return sender instanceof Player player ?
+                findFirstEntity(player.getInstance(), player) : findFirstEntity(null, null);
     }
 
     public enum TargetSelector {

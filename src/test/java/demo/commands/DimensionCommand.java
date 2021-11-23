@@ -15,7 +15,7 @@ public class DimensionCommand extends Command {
         setCondition(Conditions::playerOnly);
 
         addSyntax((sender, context) -> {
-            final Player player = sender.asPlayer();
+            final Player player = (Player) sender;
             final Instance instance = player.getInstance();
             final var instances = MinecraftServer.getInstanceManager().getInstances().stream().filter(instance1 -> !instance1.equals(instance)).toList();
             if (instances.isEmpty()) {

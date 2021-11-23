@@ -21,7 +21,7 @@ public class TitleCommand extends Command {
     }
 
     private void handleTitle(CommandSender source, CommandContext context) {
-        Player player = source.asPlayer();
+        Player player = (Player) source;
         String titleContent = context.get("content");
 
         player.showTitle(Title.title(Component.text(titleContent), Component.empty(), Title.DEFAULT_TIMES));

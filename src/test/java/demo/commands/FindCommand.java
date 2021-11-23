@@ -8,7 +8,8 @@ import net.minestom.server.entity.Player;
 
 import java.util.Collection;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
 public class FindCommand extends Command {
     public FindCommand() {
@@ -22,7 +23,7 @@ public class FindCommand extends Command {
     }
 
     private void executorEntity(CommandSender sender, CommandContext context) {
-        Player player = sender.asPlayer();
+        Player player = (Player) sender;
         float range = context.get("range");
 
         Collection<Entity> entities = player.getInstance().getNearbyEntities(player.getPosition(), range);
