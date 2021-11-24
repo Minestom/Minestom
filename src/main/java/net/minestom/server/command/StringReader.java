@@ -16,7 +16,7 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return true if the character is a valid letter
      */
-    public static boolean isValidLetter(int c){
+    public static boolean isValidLetter(int c) {
         c = Character.toLowerCase(c);
         return (c >= 'a' && c <= 'z');
     }
@@ -24,14 +24,14 @@ public final class StringReader extends FixedStringReader {
     /**
      * @return true if the character is a number (0 to 9), a period ('.'), or a dash ('-')
      */
-    public static boolean isValidNumber(int c){
+    public static boolean isValidNumber(int c) {
         return (c >= '0' && c <= '9') || (c == '.') || (c == '-');
     }
 
     /**
      * @return true if the character is an apostrophe or quotation marks
      */
-    public static boolean isValidQuote(int c){
+    public static boolean isValidQuote(int c) {
         return c == DOUBLE_QUOTE || c == SINGLE_QUOTE;
     }
 
@@ -39,7 +39,7 @@ public final class StringReader extends FixedStringReader {
      * @return true if the character is an underscore ('_'), a plus ('+'), a valid number according to {@link
      * #isValidNumber(int)}, or a valid letter according to {@link #isValidLetter(int)
      */
-    public static boolean isValidUnquotedCharacter(int c){
+    public static boolean isValidUnquotedCharacter(int c) {
         return c == '_' || c == '+' || isValidNumber(c) || isValidLetter(c);
     }
 
@@ -76,7 +76,7 @@ public final class StringReader extends FixedStringReader {
      * Sets the current position to the provided new position. This is not checked, so errors will likely occur if the
      * provided value is below zero or greater than or equal to than the length of the string.
      */
-    public void currentPosition(int newPosition){
+    public void currentPosition(int newPosition) {
         this.currentPosition = newPosition;
     }
 
@@ -120,7 +120,7 @@ public final class StringReader extends FixedStringReader {
     public void assureWhitespace() throws CommandException {
         int start = currentPosition;
         skipWhitespace();
-        if (start == currentPosition){
+        if (start == currentPosition) {
             throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
         }
     }
@@ -130,7 +130,7 @@ public final class StringReader extends FixedStringReader {
      * skipped. If it is not, an exception is thrown.
      */
     public void assureWhitespaceCharacter() throws CommandException {
-        if (!canRead() || !Character.isWhitespace(peek())){
+        if (!canRead() || !Character.isWhitespace(peek())) {
             throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
         }
         skip();
@@ -141,16 +141,19 @@ public final class StringReader extends FixedStringReader {
      */
     public int readInteger() throws CommandException {
         int start = currentPosition;
-        while(canRead() && isValidNumber(peek())){
+        while (canRead() && isValidNumber(peek())) {
             skip();
         }
-        if (currentPosition == start){
+        if (currentPosition == start) {
             throw CommandException.PARSING_INT_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
+        if (number.isBlank()) {
+            throw CommandException.PARSING_INT_EXPECTED.generateException(this);
+        }
         try {
             return Integer.parseInt(number);
-        } catch (NumberFormatException exception){
+        } catch (NumberFormatException exception) {
             currentPosition = start;
             throw CommandException.PARSING_INT_INVALID.generateException(this, number);
         }
@@ -161,16 +164,19 @@ public final class StringReader extends FixedStringReader {
      */
     public long readLong() throws CommandException {
         int start = currentPosition;
-        while(canRead() && isValidNumber(peek())){
+        while (canRead() && isValidNumber(peek())) {
             skip();
         }
-        if (currentPosition == start){
+        if (currentPosition == start) {
             throw CommandException.PARSING_LONG_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
+        if (number.isBlank()) {
+            throw CommandException.PARSING_LONG_EXPECTED.generateException(this);
+        }
         try {
             return Long.parseLong(number);
-        } catch (NumberFormatException exception){
+        } catch (NumberFormatException exception) {
             currentPosition = start;
             throw CommandException.PARSING_LONG_INVALID.generateException(this, number);
         }
@@ -181,16 +187,19 @@ public final class StringReader extends FixedStringReader {
      */
     public double readDouble() throws CommandException {
         int start = currentPosition;
-        while(canRead() && isValidNumber(peek())){
+        while (canRead() && isValidNumber(peek())) {
             skip();
         }
-        if (currentPosition == start){
+        if (currentPosition == start) {
             throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
+        if (number.isBlank()) {
+            throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(this);
+        }
         try {
             return Double.parseDouble(number);
-        } catch (NumberFormatException exception){
+        } catch (NumberFormatException exception) {
             currentPosition = start;
             throw CommandException.PARSING_DOUBLE_INVALID.generateException(this, number);
         }
@@ -201,16 +210,19 @@ public final class StringReader extends FixedStringReader {
      */
     public float readFloat() throws CommandException {
         int start = currentPosition;
-        while(canRead() && isValidNumber(peek())){
+        while (canRead() && isValidNumber(peek())) {
             skip();
         }
-        if (currentPosition == start){
+        if (currentPosition == start) {
             throw CommandException.PARSING_FLOAT_EXPECTED.generateException(this);
         }
         String number = all().substring(start, currentPosition);
+        if (number.isBlank()) {
+            throw CommandException.PARSING_FLOAT_EXPECTED.generateException(this);
+        }
         try {
             return Float.parseFloat(number);
-        } catch (NumberFormatException exception){
+        } catch (NumberFormatException exception) {
             currentPosition = start;
             throw CommandException.PARSING_FLOAT_INVALID.generateException(this, number);
         }
@@ -222,11 +234,11 @@ public final class StringReader extends FixedStringReader {
     public boolean readBoolean() throws CommandException {
         int start = currentPosition;
         String next = readString();
-        if (next.isEmpty()) {
+        if (next.isEmpty() || next.isBlank()) {
             throw CommandException.PARSING_BOOL_EXPECTED.generateException(this);
         } else if (next.equals("true")) {
             return true;
-        } else if (next.equals("false")){
+        } else if (next.equals("false")) {
             return false;
         } else {
             currentPosition = start;
@@ -283,7 +295,7 @@ public final class StringReader extends FixedStringReader {
         String next = readUnquotedString();
         try {
             return NamespaceID.from(next);
-        } catch (AssertionError error){
+        } catch (AssertionError error) {
             throw CommandException.ARGUMENT_ID_INVALID.generateException(this);
         }
     }
