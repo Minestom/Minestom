@@ -16,18 +16,18 @@ import java.util.function.Function;
 /**
  * Contains registered packets and a way to instantiate them.
  * <p>
- * Packets are register using {@link #register(int, ClientPacketSupplier)}
+ * Packets are register using {@link #register(int, Function)}
  * (you can override a packet id even if not recommended and not officially supported) and retrieved with {@link #createPacket(int, BinaryReader)}.
  */
 public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, ClientPacketsHandler.Login, ClientPacketsHandler.Play {
-    private final ObjectArray<ClientPacketSupplier> suppliers = new ObjectArray<>(0x10);
+    private final ObjectArray<Function<BinaryReader, ClientPacket>> suppliers = new ObjectArray<>(0x10);
 
-    public void register(int id, @NotNull ClientPacketSupplier packetSupplier) {
+    public void register(int id, @NotNull Function<@NotNull BinaryReader, @NotNull ClientPacket> packetSupplier) {
         this.suppliers.set(id, packetSupplier);
     }
 
     public @UnknownNullability ClientPacket createPacket(int packetId, @NotNull BinaryReader reader) {
-        final ClientPacketSupplier supplier = suppliers.get(packetId);
+        final Function<BinaryReader, ClientPacket> supplier = suppliers.get(packetId);
         if (supplier == null)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
         return supplier.apply(reader);
@@ -101,8 +101,5 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(0x2E, ClientPlayerBlockPlacementPacket::new);
             register(0x2F, ClientUseItemPacket::new);
         }
-    }
-
-    protected interface ClientPacketSupplier extends Function<BinaryReader, ClientPacket> {
     }
 }
