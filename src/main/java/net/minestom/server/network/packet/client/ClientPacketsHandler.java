@@ -22,6 +22,9 @@ import java.util.function.Function;
 public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, ClientPacketsHandler.Login, ClientPacketsHandler.Play {
     private final ObjectArray<Function<BinaryReader, ClientPacket>> suppliers = new ObjectArray<>(0x10);
 
+    private ClientPacketsHandler() {
+    }
+
     public void register(int id, @NotNull Function<@NotNull BinaryReader, @NotNull ClientPacket> packetSupplier) {
         this.suppliers.set(id, packetSupplier);
     }
