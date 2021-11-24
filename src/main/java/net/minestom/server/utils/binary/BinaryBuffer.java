@@ -141,6 +141,8 @@ public final class BinaryBuffer {
     }
 
     public boolean writeChannel(WritableByteChannel channel) throws IOException {
+        if (readerOffset == writerOffset)
+            return true; // Nothing to write
         var writeBuffer = nioBuffer.slice(readerOffset, writerOffset - readerOffset);
         final int count = channel.write(writeBuffer);
         if (count == -1) {
