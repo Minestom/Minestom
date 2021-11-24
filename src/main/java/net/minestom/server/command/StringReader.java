@@ -130,7 +130,7 @@ public final class StringReader extends FixedStringReader {
      * skipped. If it is not, an exception is thrown.
      */
     public void assureWhitespaceCharacter() throws CommandException {
-        if (!Character.isWhitespace(peek())){
+        if (!canRead() || !Character.isWhitespace(peek())){
             throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
         }
         skip();
