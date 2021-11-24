@@ -1,17 +1,13 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientKeepAlivePacket extends ClientPlayPacket {
-
-    public long id;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.id = reader.readLong();
+public record ClientKeepAlivePacket(long id) implements ClientPacket {
+    public ClientKeepAlivePacket(BinaryReader reader) {
+        this(reader.readLong());
     }
 
     @Override

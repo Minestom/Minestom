@@ -25,15 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class EncryptionResponsePacket implements ClientPreplayPacket {
+public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) implements ClientPreplayPacket {
     private static final String MOJANG_AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined").concat("?username=%s&serverId=%s");
     private static final Gson GSON = new Gson();
-    private byte[] sharedSecret;
-    private byte[] verifyToken;
 
-    public EncryptionResponsePacket() {
-        sharedSecret = new byte[0];
-        verifyToken = new byte[0];
+    public EncryptionResponsePacket(BinaryReader reader) {
+        this(reader.readBytes(reader.readVarInt()), reader.readBytes(reader.readVarInt()));
     }
 
     @Override
@@ -90,12 +87,6 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                 }
             });
         });
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.sharedSecret = ByteArrayData.decodeByteArray(reader);
-        this.verifyToken = ByteArrayData.decodeByteArray(reader);
     }
 
     @Override

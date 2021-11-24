@@ -34,9 +34,9 @@ public class BlockPlacementListener {
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
-        final Player.Hand hand = packet.hand;
-        final BlockFace blockFace = packet.blockFace;
-        final Point blockPosition = packet.blockPosition;
+        final Player.Hand hand = packet.hand();
+        final BlockFace blockFace = packet.blockFace();
+        final Point blockPosition = packet.blockPosition();
         final Direction direction = blockFace.toDirection();
 
         final Instance instance = player.getInstance();
@@ -134,7 +134,7 @@ public class BlockPlacementListener {
             return;
         }
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand);
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
@@ -155,7 +155,7 @@ public class BlockPlacementListener {
         }
         // Place the block
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ));
+                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand

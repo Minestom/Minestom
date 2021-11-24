@@ -2,7 +2,7 @@ package net.minestom.server.network;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientPlayPacketsHandler;
@@ -52,8 +52,7 @@ public final class PacketProcessor {
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (packetId == 0) {
-                HandshakePacket handshakePacket = new HandshakePacket();
-                safeRead(playerConnection, handshakePacket, binaryReader);
+                final HandshakePacket handshakePacket = new HandshakePacket(binaryReader);
                 handshakePacket.process(playerConnection);
             }
             return;
@@ -61,19 +60,16 @@ public final class PacketProcessor {
         switch (connectionState) {
             case PLAY -> {
                 final Player player = playerConnection.getPlayer();
-                ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packetId);
-                safeRead(playerConnection, playPacket, binaryReader);
+                ClientPacket playPacket = playPacketsHandler.createPacket(packetId, binaryReader);
                 assert player != null;
                 player.addPacketToQueue(playPacket);
             }
             case LOGIN -> {
-                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packetId);
-                safeRead(playerConnection, loginPacket, binaryReader);
+                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.createPacket(packetId, binaryReader);
                 loginPacket.process(playerConnection);
             }
             case STATUS -> {
-                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packetId);
-                safeRead(playerConnection, statusPacket, binaryReader);
+                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.createPacket(packetId, binaryReader);
                 statusPacket.process(playerConnection);
             }
         }

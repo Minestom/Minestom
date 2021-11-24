@@ -12,7 +12,7 @@ import java.util.Map;
 public class StatusListener {
 
     public static void listener(ClientStatusPacket packet, Player player) {
-        switch (packet.action) {
+        switch (packet.action()) {
             case PERFORM_RESPAWN -> player.respawn();
             case REQUEST_STATS -> {
                 List<StatisticsPacket.Statistic> statisticList = new ArrayList<>();

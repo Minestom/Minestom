@@ -21,11 +21,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LoginStartPacket implements ClientPreplayPacket {
-
+public record LoginStartPacket(@NotNull String username) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
-    public String username = "";
+    public LoginStartPacket(BinaryReader reader) {
+        this(reader.readSizedString(16));
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -82,11 +83,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
                 player.setSkin(((PlayerSocketConnection) connection).getBungeeSkin());
             }
         }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.username = reader.readSizedString(16);
     }
 
     @Override

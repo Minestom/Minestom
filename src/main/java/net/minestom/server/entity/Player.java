@@ -46,13 +46,14 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
+import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -102,6 +103,7 @@ import java.util.function.UnaryOperator;
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
+    private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -138,7 +140,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final MessagePassingQueue<ClientPlayPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
+    private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
@@ -317,7 +319,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.update();
 
         // Process received packets
-        this.packets.drain(packet -> packet.process(this));
+        this.packets.drain(packet -> PACKET_LISTENER_MANAGER.processClientPacket(packet, this));
 
         super.update(time); // Super update (item pickup/fire management)
 
@@ -640,9 +642,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param message the message that the player will send
      */
     public void chat(@NotNull String message) {
-        ClientChatMessagePacket chatMessagePacket = new ClientChatMessagePacket();
-        chatMessagePacket.message = message;
-        addPacketToQueue(chatMessagePacket);
+        addPacketToQueue(new ClientChatMessagePacket(message));
     }
 
     @Override
@@ -1683,7 +1683,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param packet the packet to add in the queue
      */
-    public void addPacketToQueue(@NotNull ClientPlayPacket packet) {
+    public void addPacketToQueue(@NotNull ClientPacket packet) {
         this.packets.offer(packet);
     }
 

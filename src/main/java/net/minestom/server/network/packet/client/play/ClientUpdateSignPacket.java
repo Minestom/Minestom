@@ -1,27 +1,18 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientUpdateSignPacket extends ClientPlayPacket {
-
-    public Point blockPosition = Vec.ZERO;
-    public String line1 = "";
-    public String line2 = "";
-    public String line3 = "";
-    public String line4 = "";
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.blockPosition = reader.readBlockPosition();
-        this.line1 = reader.readSizedString(384);
-        this.line2 = reader.readSizedString(384);
-        this.line3 = reader.readSizedString(384);
-        this.line4 = reader.readSizedString(384);
+public record ClientUpdateSignPacket(@NotNull Point blockPosition,
+                                     @NotNull String line1, @NotNull String line2,
+                                     @NotNull String line3, @NotNull String line4) implements ClientPacket {
+    public ClientUpdateSignPacket(BinaryReader reader) {
+        this(reader.readBlockPosition(),
+                reader.readSizedString(384), reader.readSizedString(384),
+                reader.readSizedString(384), reader.readSizedString(384));
     }
 
     @Override
