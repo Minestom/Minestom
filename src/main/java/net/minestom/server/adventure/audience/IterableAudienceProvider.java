@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -39,7 +38,7 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
 
     @Override
     public @NotNull Iterable<? extends Audience> players(@NotNull Predicate<Player> filter) {
-        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList());
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList();
     }
 
     @Override
@@ -64,7 +63,7 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
 
     @Override
     public @NotNull Iterable<? extends Audience> custom(@NotNull Key key, Predicate<Audience> filter) {
-        return StreamSupport.stream(this.registry.of(key).spliterator(), false).filter(filter).collect(Collectors.toList());
+        return StreamSupport.stream(this.registry.of(key).spliterator(), false).filter(filter).toList();
     }
 
     @Override
@@ -74,7 +73,7 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
 
     @Override
     public @NotNull Iterable<? extends Audience> all(@NotNull Predicate<Audience> filter) {
-        return StreamSupport.stream(this.all().spliterator(), false).filter(filter).collect(Collectors.toList());
+        return StreamSupport.stream(this.all().spliterator(), false).filter(filter).toList();
     }
 
     @Override

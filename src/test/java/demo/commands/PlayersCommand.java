@@ -8,7 +8,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class PlayersCommand extends Command {
 
@@ -27,7 +26,7 @@ public class PlayersCommand extends Command {
                 sender.sendMessage(Component.text(player.getUsername()));
             }
         } else {
-            for (final Player player : players.stream().limit(limit).collect(Collectors.toList())) {
+            for (final Player player : players.stream().limit(limit).toList()) {
                 sender.sendMessage(Component.text(player.getUsername()));
             }
             sender.sendMessage(Component.text("..."));

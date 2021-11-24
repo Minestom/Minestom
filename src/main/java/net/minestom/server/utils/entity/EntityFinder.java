@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 // TODO
 
@@ -150,7 +149,7 @@ public class EntityFinder {
             final int maxDistance = distance.getMaximum();
             result = result.stream()
                     .filter(entity -> MathUtils.isBetween(entity.getDistance(pos), minDistance, maxDistance))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Diff X/Y/Z
@@ -173,14 +172,14 @@ public class EntityFinder {
                     return false;
 
                 return true;
-            }).collect(Collectors.toList());
+            }).toList();
         }
 
         // Entity type
         if (!entityTypes.isEmpty()) {
             result = result.stream()
                     .filter(entity -> filterToggleableMap(entity.getEntityType(), entityTypes))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // GameMode
@@ -188,7 +187,7 @@ public class EntityFinder {
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> filterToggleableMap(((Player) entity).getGameMode(), gameModes))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Level
@@ -198,7 +197,7 @@ public class EntityFinder {
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> MathUtils.isBetween(((Player) entity).getLevel(), minLevel, maxLevel))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Name
@@ -206,14 +205,14 @@ public class EntityFinder {
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> filterToggleableMap(((Player) entity).getUsername(), names))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // UUID
         if (!uuids.isEmpty()) {
             result = result.stream()
                     .filter(entity -> filterToggleableMap(entity.getUuid(), uuids))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
 
@@ -232,7 +231,7 @@ public class EntityFinder {
                                 1 : 0;
                     })
                     .limit(limit != null ? limit : Integer.MAX_VALUE)
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (entitySort == EntitySort.RANDOM) {
                 Collections.shuffle(result);
@@ -243,12 +242,8 @@ public class EntityFinder {
     }
 
     public @NotNull List<@NotNull Entity> find(@NotNull CommandSender sender) {
-        if (sender.isPlayer()) {
-            Player player = sender.asPlayer();
-            return find(player.getInstance(), player);
-        } else {
-            return find(null, null);
-        }
+        return sender instanceof Player player ?
+                find(player.getInstance(), player) : find(null, null);
     }
 
     /**
@@ -261,37 +256,27 @@ public class EntityFinder {
     public @Nullable Player findFirstPlayer(@Nullable Instance instance, @Nullable Entity self) {
         final List<Entity> entities = find(instance, self);
         for (Entity entity : entities) {
-            if (entity instanceof Player) {
-                return (Player) entity;
+            if (entity instanceof Player player) {
+                return player;
             }
         }
         return null;
     }
 
     public @Nullable Player findFirstPlayer(@NotNull CommandSender sender) {
-        if (sender.isPlayer()) {
-            final Player player = sender.asPlayer();
-            return findFirstPlayer(player.getInstance(), player);
-        } else {
-            return findFirstPlayer(null, null);
-        }
+        return sender instanceof Player player ?
+                findFirstPlayer(player.getInstance(), player) :
+                findFirstPlayer(null, null);
     }
 
     public @Nullable Entity findFirstEntity(@Nullable Instance instance, @Nullable Entity self) {
         final List<Entity> entities = find(instance, self);
-        for (Entity entity : entities) {
-            return entity;
-        }
-        return null;
+        return entities.isEmpty() ? null : entities.get(0);
     }
 
     public @Nullable Entity findFirstEntity(@NotNull CommandSender sender) {
-        if (sender.isPlayer()) {
-            final Player player = sender.asPlayer();
-            return findFirstEntity(player.getInstance(), player);
-        } else {
-            return findFirstEntity(null, null);
-        }
+        return sender instanceof Player player ?
+                findFirstEntity(player.getInstance(), player) : findFirstEntity(null, null);
     }
 
     public enum TargetSelector {
