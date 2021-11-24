@@ -113,6 +113,30 @@ public final class StringReader extends FixedStringReader {
     }
 
     /**
+     * If there is any directly readable whitespace, this skips it. If there is not, an exception is thrown. This is
+     * similar to {@link #assureWhitespaceCharacter()} except that this method reads all available whitespace instead of
+     * just the next character.
+     */
+    public void assureWhitespace() throws CommandException {
+        int start = currentPosition;
+        skipWhitespace();
+        if (start == currentPosition){
+            throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
+        }
+    }
+
+    /**
+     * If the next character is a whitespace character according to {@link Character#isWhitespace(char)}, it gets
+     * skipped. If it is not, an exception is thrown.
+     */
+    public void assureWhitespaceCharacter() throws CommandException {
+        if (!Character.isWhitespace(peek())){
+            throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
+        }
+        skip();
+    }
+
+    /**
      * @return the next integer in the string
      */
     public int readInteger() throws CommandException {
