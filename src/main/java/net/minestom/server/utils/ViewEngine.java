@@ -77,6 +77,12 @@ public final class ViewEngine {
         }
     }
 
+    public void forManuals(@NotNull Consumer<Player> consumer) {
+        synchronized (mutex) {
+            this.manualViewers.forEach(consumer);
+        }
+    }
+
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
