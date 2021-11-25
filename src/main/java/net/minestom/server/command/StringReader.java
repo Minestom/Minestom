@@ -65,6 +65,13 @@ public final class StringReader extends FixedStringReader {
     }
 
     /**
+     * Skips the provided number of characters
+     */
+    public void skip(int chars) {
+        currentPosition += chars;
+    }
+
+    /**
      * @return the next readable character, incrementing the current position in the process
      */
     public char nextChar() {
