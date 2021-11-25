@@ -1,7 +1,9 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,6 +13,15 @@ public class ArgumentLiteral extends Argument<String> {
 
     public ArgumentLiteral(@NotNull String id) {
         super(id);
+    }
+
+    @Override
+    public @NotNull String parse(@NotNull StringReader input) throws CommandException {
+        String value = input.readUnquotedString();
+        if (!value.equals(getId())) {
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+        }
+        return value;
     }
 
     @NotNull
