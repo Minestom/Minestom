@@ -51,11 +51,9 @@ public final class CommandManager {
     public synchronized void register(@NotNull Command command) {
         Check.stateCondition(commandExists(command.getName()),
                 "A command with the name " + command.getName() + " is already registered!");
-        if (command.getAliases() != null) {
-            for (String alias : command.getAliases()) {
-                Check.stateCondition(commandExists(alias),
-                        "A command with the name " + alias + " is already registered!");
-            }
+        for (String alias : command.getAliases()) {
+            Check.stateCondition(commandExists(alias),
+                    "A command with the name " + alias + " is already registered!");
         }
         this.dispatcher.register(command);
     }
@@ -269,17 +267,14 @@ public final class CommandManager {
         }
 
         // Use redirection to hook aliases with the command
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
-                aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
-                        false, true, false);
-                aliasNode.name = alias;
-                aliasNode.redirectedNode = mainNodeIndex;
+        for (String alias : command.getAliases()) {
+            DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
+            aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                    false, true, false);
+            aliasNode.name = alias;
+            aliasNode.redirectedNode = mainNodeIndex;
 
-                addCommandNameNode(aliasNode, rootChildren, nodes);
-            }
+            addCommandNameNode(aliasNode, rootChildren, nodes);
         }
 
         return mainNodeIndex;

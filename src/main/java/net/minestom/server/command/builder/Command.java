@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minestom.server.command.CommandSender;
@@ -20,7 +21,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * Represents a command which has suggestion/auto-completion.
@@ -47,8 +47,8 @@ public class Command {
     public final static Logger LOGGER = LoggerFactory.getLogger(Command.class);
 
     private final String name;
-    private final String[] aliases;
-    private final String[] names;
+    private final ImmutableList<String> aliases;
+    private final ImmutableList<String> names;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
@@ -65,8 +65,8 @@ public class Command {
      */
     public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
-        this.aliases = aliases;
-        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
+        this.aliases = aliases == null ? ImmutableList.of() : ImmutableList.copyOf(aliases);
+        this.names = ImmutableList.<String>builder().add(name).addAll(this.aliases).build();
 
         this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
@@ -174,6 +174,7 @@ public class Command {
                 final boolean isLast = ++i == args.length;
                 if (argument.isOptional()) {
                     // Set default value
+                    //noinspection unchecked
                     defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
 
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
@@ -240,7 +241,7 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    public @Nullable String[] getAliases() {
+    public @NotNull ImmutableList<String> getAliases() {
         return aliases;
     }
 
@@ -251,7 +252,7 @@ public class Command {
      *
      * @return this command names
      */
-    public @NotNull String[] getNames() {
+    public @NotNull ImmutableList<String> getNames() {
         return names;
     }
 
@@ -323,7 +324,7 @@ public class Command {
     @ApiStatus.Experimental
     public @NotNull String getSyntaxesTree() {
         Node commandNode = new Node();
-        commandNode.names.addAll(Arrays.asList(getNames()));
+        commandNode.names.addAll(names);
 
         // current node, literal = returned node
         BiFunction<Node, Set<String>, Node> findNode = (currentNode, literals) -> {
@@ -385,7 +386,7 @@ public class Command {
 
         // Subcommands
         this.subcommands.forEach(command -> {
-            final Node node = findNode.apply(commandNode, Set.of(command.getNames()));
+            final Node node = findNode.apply(commandNode, Set.copyOf(command.getNames()));
             command.getSyntaxes().forEach(syntax -> syntaxProcessor.accept(syntax, node));
         });
 
