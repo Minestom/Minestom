@@ -18,71 +18,45 @@ import java.nio.ByteBuffer;
  * You can retrieve the different packet handlers per state (status/login/play)
  * from the {@link ClientPacketsHandler} classes.
  */
-public final class PacketProcessor {
-    private final ClientPacketsHandler statusPacketsHandler = new ClientPacketsHandler.Status();
-    private final ClientPacketsHandler loginPacketsHandler = new ClientPacketsHandler.Login();
-    private final ClientPacketsHandler playPacketsHandler = new ClientPacketsHandler.Play();
+public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
+                              @NotNull ClientPacketsHandler loginHandler,
+                              @NotNull ClientPacketsHandler playHandler) {
+    public PacketProcessor() {
+        this(new ClientPacketsHandler.Status(),
+                new ClientPacketsHandler.Login(),
+                new ClientPacketsHandler.Play());
+    }
 
-    public void process(@NotNull PlayerSocketConnection playerConnection, int packetId, ByteBuffer body) {
+    public void process(@NotNull PlayerSocketConnection connection, int packetId, ByteBuffer body) {
         if (MinecraftServer.getRateLimit() > 0) {
             // Increment packet count (checked in PlayerConnection#update)
-            playerConnection.getPacketCounter().incrementAndGet();
+            connection.getPacketCounter().incrementAndGet();
         }
         BinaryReader binaryReader = new BinaryReader(body);
-        final ConnectionState connectionState = playerConnection.getConnectionState();
+        final ConnectionState connectionState = connection.getConnectionState();
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (packetId == 0) {
                 final HandshakePacket handshakePacket = new HandshakePacket(binaryReader);
-                handshakePacket.process(playerConnection);
+                handshakePacket.process(connection);
             }
             return;
         }
         switch (connectionState) {
             case PLAY -> {
-                final Player player = playerConnection.getPlayer();
-                ClientPacket playPacket = playPacketsHandler.createPacket(packetId, binaryReader);
+                final Player player = connection.getPlayer();
+                ClientPacket playPacket = playHandler.createPacket(packetId, binaryReader);
                 assert player != null;
                 player.addPacketToQueue(playPacket);
             }
             case LOGIN -> {
-                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.createPacket(packetId, binaryReader);
-                loginPacket.process(playerConnection);
+                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginHandler.createPacket(packetId, binaryReader);
+                loginPacket.process(connection);
             }
             case STATUS -> {
-                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.createPacket(packetId, binaryReader);
-                statusPacket.process(playerConnection);
+                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusHandler.createPacket(packetId, binaryReader);
+                statusPacket.process(connection);
             }
         }
-    }
-
-    /**
-     * Gets the handler for client status packets.
-     *
-     * @return the status packets handler
-     * @see <a href="https://wiki.vg/Protocol#Status">Status packets</a>
-     */
-    public @NotNull ClientPacketsHandler statusPacketsHandler() {
-        return statusPacketsHandler;
-    }
-
-    /**
-     * Gets the handler for client login packets.
-     *
-     * @return the status login handler
-     * @see <a href="https://wiki.vg/Protocol#Login">Login packets</a>
-     */
-    public @NotNull ClientPacketsHandler loginPacketsHandler() {
-        return loginPacketsHandler;
-    }
-
-    /**
-     * Gets the handler for client play packets.
-     *
-     * @return the play packets handler
-     * @see <a href="https://wiki.vg/Protocol#Play">Play packets</a>
-     */
-    public @NotNull ClientPacketsHandler playPacketsHandler() {
-        return playPacketsHandler;
     }
 }
