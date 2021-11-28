@@ -155,4 +155,21 @@ public sealed class FixedStringReader permits StringReader {
         return Component.text().append(read, error, CONTEXT_HERE).build();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[read=\"" + previouslyRead() + "\", unread=\"" + unreadCharacters() + "\", currentPosition=" + currentPosition + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FixedStringReader that = (FixedStringReader) o;
+        return currentPosition == that.currentPosition && input.equals(that.input);
+    }
+
+    @Override
+    public int hashCode() {
+        return input.hashCode() * 31 + currentPosition;
+    }
 }
