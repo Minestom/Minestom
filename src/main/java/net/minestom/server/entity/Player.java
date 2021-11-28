@@ -282,11 +282,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 recipesIdentifier.add(recipe.getRecipeId());
             }
             if (!recipesIdentifier.isEmpty()) {
-                final String[] identifiers = recipesIdentifier.toArray(new String[0]);
-                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
-                unlockRecipesPacket.mode = 0;
-                unlockRecipesPacket.recipesId = identifiers;
-                unlockRecipesPacket.initRecipesId = identifiers;
+                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
+                        false, false,
+                        false, false,
+                        false, false,
+                        false, false,
+                        recipesIdentifier, recipesIdentifier);
                 playerConnection.sendPacket(unlockRecipesPacket);
             }
         }
