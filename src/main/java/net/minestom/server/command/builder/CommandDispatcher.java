@@ -36,30 +36,17 @@ public class CommandDispatcher {
      * @param command the command to register
      */
     public void register(@NotNull Command command) {
-        this.commandMap.put(command.getName().toLowerCase(), command);
-
-        // Register aliases
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                this.commandMap.put(alias.toLowerCase(), command);
-            }
+        for (String name : command.getNames()) {
+            this.commandMap.put(name.toLowerCase(Locale.ROOT), command);
         }
 
         this.commands.add(command);
     }
 
     public void unregister(@NotNull Command command) {
-        this.commandMap.remove(command.getName().toLowerCase());
-
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                this.commandMap.remove(alias.toLowerCase());
-            }
+        for (String name : command.getNames()) {
+            this.commandMap.remove(name.toLowerCase(Locale.ROOT), command);
         }
-
-        this.commands.remove(command);
 
         // Clear cache
         this.cache.invalidateAll();
