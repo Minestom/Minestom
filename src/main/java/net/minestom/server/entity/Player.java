@@ -272,10 +272,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Recipes start
         {
             RecipeManager recipeManager = MinecraftServer.getRecipeManager();
-            DeclareRecipesPacket declareRecipesPacket = recipeManager.getDeclareRecipesPacket();
-            if (declareRecipesPacket.recipes != null) {
-                playerConnection.sendPacket(declareRecipesPacket);
-            }
+            playerConnection.sendPacket(recipeManager.getDeclareRecipesPacket());
 
             List<String> recipesIdentifier = new ArrayList<>();
             for (Recipe recipe : recipeManager.getRecipes()) {
