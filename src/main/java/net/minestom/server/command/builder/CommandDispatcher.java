@@ -36,16 +36,16 @@ public class CommandDispatcher {
      * @param command the command to register
      */
     public void register(@NotNull Command command) {
-        for (String name : command.getNames()) {
-            this.commandMap.put(name.toLowerCase(Locale.ROOT), command);
+        for (String name : command.getFormattedNames()) {
+            this.commandMap.put(name, command);
         }
 
         this.commands.add(command);
     }
 
     public void unregister(@NotNull Command command) {
-        for (String name : command.getNames()) {
-            this.commandMap.remove(name.toLowerCase(Locale.ROOT), command);
+        for (String name : command.getFormattedNames()) {
+            this.commandMap.remove(name, command);
         }
 
         // Clear cache

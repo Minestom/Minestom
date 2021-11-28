@@ -49,6 +49,7 @@ public class Command {
     private final String name;
     private final ImmutableList<String> aliases;
     private final ImmutableList<String> names;
+    private final ImmutableList<String> formattedNames;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
@@ -67,6 +68,12 @@ public class Command {
         this.name = name;
         this.aliases = aliases == null ? ImmutableList.of() : ImmutableList.copyOf(aliases);
         this.names = ImmutableList.<String>builder().add(name).addAll(this.aliases).build();
+
+        var formattedNamesBuilder = ImmutableList.<String>builder();
+        for (String n : names) {
+            formattedNamesBuilder.add(n.toLowerCase(Locale.ROOT));
+        }
+        this.formattedNames = formattedNamesBuilder.build();
 
         this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
@@ -254,6 +261,15 @@ public class Command {
      */
     public @NotNull ImmutableList<String> getNames() {
         return names;
+    }
+
+    /**
+     * Gets all the possible names for this command, formatted for parsing. Currently, the names are just converted to
+     * lowercase.<br>
+     * This includes {@link #getName()} and {@link #getAliases()}.
+     */
+    public @NotNull ImmutableList<String> getFormattedNames() {
+        return formattedNames;
     }
 
     /**
