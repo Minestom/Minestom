@@ -7,35 +7,33 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-public final class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
-    private final String objectiveName;
-    private final byte mode;
-    private final Component objectiveValue;
-    private final Type type;
-
-    public ScoreboardObjectivePacket(String objectiveName, byte mode, Component objectiveValue, Type type) {
-        this.objectiveName = objectiveName;
-        this.mode = mode;
-        this.objectiveValue = objectiveValue;
-        this.type = type;
+public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode,
+                                        @Nullable Component objectiveValue,
+                                        @Nullable Type type) implements ComponentHoldingServerPacket {
+    public ScoreboardObjectivePacket(BinaryReader reader) {
+        this(read(reader));
     }
 
-    public ScoreboardObjectivePacket(BinaryReader reader) {
-        this.objectiveName = reader.readSizedString();
-        this.mode = reader.readByte();
+    private ScoreboardObjectivePacket(ScoreboardObjectivePacket packet) {
+        this(packet.objectiveName, packet.mode, packet.objectiveValue, packet.type);
+    }
+
+    private static ScoreboardObjectivePacket read(BinaryReader reader) {
+        var objectiveName = reader.readSizedString();
+        var mode = reader.readByte();
+        Component objectiveValue = null;
+        Type type = null;
         if (mode == 0 || mode == 2) {
-            this.objectiveValue = reader.readComponent();
-            this.type = Type.values()[reader.readVarInt()];
-        } else {
-            this.objectiveValue = null;
-            this.type = null;
+            objectiveValue = reader.readComponent();
+            type = Type.values()[reader.readVarInt()];
         }
+        return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type);
     }
 
     @Override
@@ -43,43 +41,16 @@ public final class ScoreboardObjectivePacket implements ComponentHoldingServerPa
         writer.writeSizedString(objectiveName);
         writer.writeByte(mode);
         if (mode == 0 || mode == 2) {
+            assert objectiveValue != null;
             writer.writeComponent(objectiveValue);
+            assert type != null;
             writer.writeVarInt(type.ordinal());
         }
-    }
-
-    public String objectiveName() {
-        return objectiveName;
-    }
-
-    public byte mode() {
-        return mode;
-    }
-
-    public Component objectiveValue() {
-        return objectiveValue;
-    }
-
-    public Type type() {
-        return type;
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.SCOREBOARD_OBJECTIVE;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ScoreboardObjectivePacket that)) return false;
-        return mode == that.mode && objectiveName.equals(that.objectiveName) &&
-                Objects.equals(objectiveValue, that.objectiveValue) && type == that.type;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(objectiveName, mode, objectiveValue, type);
     }
 
     @Override

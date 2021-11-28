@@ -6,26 +6,22 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public final class UpdateScorePacket implements ServerPacket {
-    private final String entityName;
-    private final byte action;
-    private final String objectiveName;
-    private final int value;
-
-    public UpdateScorePacket(String entityName, byte action, String objectiveName, int value) {
-        this.entityName = entityName;
-        this.action = action;
-        this.objectiveName = objectiveName;
-        this.value = value;
+public record UpdateScorePacket(@NotNull String entityName, byte action,
+                                @NotNull String objectiveName, int value) implements ServerPacket {
+    public UpdateScorePacket(BinaryReader reader) {
+        this(read(reader));
     }
 
-    public UpdateScorePacket(BinaryReader reader) {
-        this.entityName = reader.readSizedString();
-        this.action = reader.readByte();
-        this.objectiveName = reader.readSizedString();
-        this.value = action != 1 ? reader.readVarInt() : 0;
+    private UpdateScorePacket(UpdateScorePacket packet) {
+        this(packet.entityName, packet.action, packet.objectiveName, packet.value);
+    }
+
+    private static UpdateScorePacket read(BinaryReader reader) {
+        var entityName = reader.readSizedString();
+        var action = reader.readByte();
+        var objectiveName = reader.readSizedString();
+        var value = action != 1 ? reader.readVarInt() : 0;
+        return new UpdateScorePacket(entityName, action, objectiveName, value);
     }
 
     @Override
@@ -33,42 +29,11 @@ public final class UpdateScorePacket implements ServerPacket {
         writer.writeSizedString(entityName);
         writer.writeByte(action);
         writer.writeSizedString(objectiveName);
-        if (action != 1) {
-            writer.writeVarInt(value);
-        }
-    }
-
-    public String entityName() {
-        return entityName;
-    }
-
-    public byte action() {
-        return action;
-    }
-
-    public String objectiveName() {
-        return objectiveName;
-    }
-
-    public int value() {
-        return value;
+        if (action != 1) writer.writeVarInt(value);
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.UPDATE_SCORE;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UpdateScorePacket that)) return false;
-        return action == that.action && value == that.value &&
-                Objects.equals(entityName, that.entityName) && Objects.equals(objectiveName, that.objectiveName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(entityName, action, objectiveName, value);
     }
 }
