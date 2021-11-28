@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minestom.server.command.CommandSender;
@@ -21,6 +20,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Represents a command which has suggestion/auto-completion.
@@ -47,9 +47,9 @@ public class Command {
     public final static Logger LOGGER = LoggerFactory.getLogger(Command.class);
 
     private final String name;
-    private final ImmutableList<String> aliases;
-    private final ImmutableList<String> names;
-    private final ImmutableList<String> formattedNames;
+    private final List<String> aliases;
+    private final List<String> names;
+    private final List<String> formattedNames;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
@@ -66,14 +66,9 @@ public class Command {
      */
     public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
-        this.aliases = aliases == null ? ImmutableList.of() : ImmutableList.copyOf(aliases);
-        this.names = ImmutableList.<String>builder().add(name).addAll(this.aliases).build();
-
-        var formattedNamesBuilder = ImmutableList.<String>builder();
-        for (String n : names) {
-            formattedNamesBuilder.add(n.toLowerCase(Locale.ROOT));
-        }
-        this.formattedNames = formattedNamesBuilder.build();
+        this.aliases = aliases == null ? List.of() : List.of(aliases);
+        this.names = Stream.concat(Stream.of(name), this.aliases.stream()).toList();
+        this.formattedNames = names.stream().map(s -> s.toLowerCase(Locale.ROOT)).toList();
 
         this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
@@ -248,7 +243,7 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    public @NotNull ImmutableList<String> getAliases() {
+    public @NotNull List<String> getAliases() {
         return aliases;
     }
 
@@ -259,7 +254,7 @@ public class Command {
      *
      * @return this command names
      */
-    public @NotNull ImmutableList<String> getNames() {
+    public @NotNull List<String> getNames() {
         return names;
     }
 
@@ -268,7 +263,7 @@ public class Command {
      * lowercase.<br>
      * This includes {@link #getName()} and {@link #getAliases()}.
      */
-    public @NotNull ImmutableList<String> getFormattedNames() {
+    public @NotNull List<String> getFormattedNames() {
         return formattedNames;
     }
 
