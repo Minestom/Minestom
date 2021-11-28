@@ -79,15 +79,34 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
     }
 
-    public record DisplayData(Component title, Component description,
-                              ItemStack icon, FrameType frameType,
-                              int flags, String backgroundTexture,
+    public record DisplayData(@NotNull Component title, @NotNull Component description,
+                              @NotNull ItemStack icon, @NotNull FrameType frameType,
+                              int flags, @Nullable String backgroundTexture,
                               float x, float y) implements Writeable {
         public DisplayData(BinaryReader reader) {
-            this(reader.readComponent(), reader.readComponent(),
-                    reader.readItemStack(), FrameType.values()[reader.readVarInt()],
-                    reader.readInt(), reader.readSizedString(), // FIXME: based on the flags ((flags & 0x1) != 0)
-                    reader.readFloat(), reader.readFloat());
+            this(read(reader));
+        }
+
+        private DisplayData(DisplayData displayData) {
+            this(displayData.title, displayData.description,
+                    displayData.icon, displayData.frameType,
+                    displayData.flags, displayData.backgroundTexture,
+                    displayData.x, displayData.y);
+        }
+
+        private static DisplayData read(BinaryReader reader) {
+            var title = reader.readComponent();
+            var description = reader.readComponent();
+            var icon = reader.readItemStack();
+            var frameType = FrameType.values()[reader.readVarInt()];
+            var flags = reader.readInt();
+            var backgroundTexture = (flags & 0x1) != 0 ? reader.readSizedString() : null;
+            var x = reader.readFloat();
+            var y = reader.readFloat();
+            return new DisplayData(title, description,
+                    icon, frameType,
+                    flags, backgroundTexture,
+                    x, y);
         }
 
         @Override
@@ -98,6 +117,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);
             if ((flags & 0x1) != 0) {
+                assert backgroundTexture != null;
                 writer.writeSizedString(backgroundTexture);
             }
             writer.writeFloat(x);
