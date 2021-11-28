@@ -5,29 +5,29 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class ClientAdvancementTabPacket implements ClientPacket {
-    public final AdvancementAction action;
-    public final String tabIdentifier;
-
-    public ClientAdvancementTabPacket(AdvancementAction action, String tabIdentifier) {
-        this.action = action;
-        this.tabIdentifier = tabIdentifier;
+public record ClientAdvancementTabPacket(@NotNull AdvancementAction action,
+                                         @Nullable String tabIdentifier) implements ClientPacket {
+    public ClientAdvancementTabPacket(BinaryReader reader) {
+        this(read(reader));
     }
 
-    public ClientAdvancementTabPacket(BinaryReader reader) {
-        this.action = AdvancementAction.values()[reader.readVarInt()];
-        if (action == AdvancementAction.OPENED_TAB) {
-            this.tabIdentifier = reader.readSizedString(256);
-        } else {
-            this.tabIdentifier = null;
-        }
+    private ClientAdvancementTabPacket(ClientAdvancementTabPacket packet) {
+        this(packet.action, packet.tabIdentifier);
+    }
+
+    private static ClientAdvancementTabPacket read(BinaryReader reader) {
+        var action = AdvancementAction.values()[reader.readVarInt()];
+        var tabIdentifier = action == AdvancementAction.OPENED_TAB ? reader.readSizedString(256) : null;
+        return new ClientAdvancementTabPacket(action, tabIdentifier);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
         if (action == AdvancementAction.OPENED_TAB) {
+            assert tabIdentifier != null;
             if (tabIdentifier.length() > 256) {
                 throw new IllegalArgumentException("Tab identifier cannot be longer than 256 characters.");
             }
