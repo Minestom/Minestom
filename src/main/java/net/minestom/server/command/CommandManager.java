@@ -446,37 +446,5 @@ public final class CommandManager {
         return node;
     }
 
-    private static class IndexedArgument {
-        private final CommandSyntax syntax;
-        private final Argument<?> argument;
-        private final int index;
-
-        public IndexedArgument(CommandSyntax syntax, Argument<?> argument, int index) {
-            this.syntax = syntax;
-            this.argument = argument;
-            this.index = index;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            IndexedArgument that = (IndexedArgument) o;
-            return index == that.index && Objects.equals(syntax, that.syntax) && Objects.equals(argument, that.argument);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(syntax, argument, index);
-        }
-
-        @Override
-        public String toString() {
-            return "IndexedArgument{" +
-                    "syntax=" + syntax +
-                    ", argument=" + argument +
-                    ", index=" + index +
-                    '}';
-        }
-    }
+    private record IndexedArgument(CommandSyntax syntax, Argument<?> argument, int index) { }
 }
