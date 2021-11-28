@@ -45,16 +45,16 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
         switch (connectionState) {
             case PLAY -> {
                 final Player player = connection.getPlayer();
-                ClientPacket playPacket = playHandler.createPacket(packetId, binaryReader);
+                ClientPacket playPacket = playHandler.create(packetId, binaryReader);
                 assert player != null;
                 player.addPacketToQueue(playPacket);
             }
             case LOGIN -> {
-                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginHandler.createPacket(packetId, binaryReader);
+                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginHandler.create(packetId, binaryReader);
                 loginPacket.process(connection);
             }
             case STATUS -> {
-                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusHandler.createPacket(packetId, binaryReader);
+                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusHandler.create(packetId, binaryReader);
                 statusPacket.process(connection);
             }
         }

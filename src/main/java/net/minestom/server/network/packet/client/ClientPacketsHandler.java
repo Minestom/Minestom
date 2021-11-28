@@ -16,8 +16,7 @@ import java.util.function.Function;
 /**
  * Contains registered packets and a way to instantiate them.
  * <p>
- * Packets are register using {@link #register(int, Function)}
- * (you can override a packet id even if not recommended and not officially supported) and retrieved with {@link #createPacket(int, BinaryReader)}.
+ * Packets are registered using {@link #register(int, Function)} and created using {@link #create(int, BinaryReader)}.
  */
 public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, ClientPacketsHandler.Login, ClientPacketsHandler.Play {
     private final ObjectArray<Function<BinaryReader, ClientPacket>> suppliers = new ObjectArray<>(0x10);
@@ -29,7 +28,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
         this.suppliers.set(id, packetSupplier);
     }
 
-    public @UnknownNullability ClientPacket createPacket(int packetId, @NotNull BinaryReader reader) {
+    public @UnknownNullability ClientPacket create(int packetId, @NotNull BinaryReader reader) {
         final Function<BinaryReader, ClientPacket> supplier = suppliers.get(packetId);
         if (supplier == null)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
@@ -45,9 +44,9 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
 
     public static final class Login extends ClientPacketsHandler {
         public Login() {
-            register(0, LoginStartPacket::new);
-            register(1, EncryptionResponsePacket::new);
-            register(2, LoginPluginResponsePacket::new);
+            register(0x00, LoginStartPacket::new);
+            register(0x01, EncryptionResponsePacket::new);
+            register(0x02, LoginPluginResponsePacket::new);
         }
     }
 
@@ -85,7 +84,6 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(0x1D, ClientPongPacket::new);
             register(0x1E, ClientSetRecipeBookStatePacket::new);
             register(0x1F, ClientSetDisplayedRecipePacket::new);
-
 
             register(0x20, ClientNameItemPacket::new);
             register(0x21, ClientResourcePackStatusPacket::new);
