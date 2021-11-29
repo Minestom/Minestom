@@ -44,6 +44,13 @@ public final class StringReader extends FixedStringReader {
     }
 
     /**
+     * @return true if the character is a valid whitespace character
+     */
+    public static boolean isValidWhitespace(char c) {
+        return Character.isWhitespace(c);
+    }
+
+    /**
      * Creates a string reader that will read from the following input, starting at the start of the string.
      */
     public StringReader(@NotNull String input) {
@@ -114,7 +121,7 @@ public final class StringReader extends FixedStringReader {
      * {@link Character#isWhitespace(char)}.
      */
     public void skipWhitespace() {
-        while (canRead() && Character.isWhitespace(peek())) {
+        while (canRead() && isValidWhitespace(peek())) {
             skip();
         }
     }
@@ -137,7 +144,7 @@ public final class StringReader extends FixedStringReader {
      * skipped. If it is not, an exception is thrown.
      */
     public void assureWhitespaceCharacter() throws CommandException {
-        if (!canRead() || !Character.isWhitespace(peek())) {
+        if (!canRead() || !isValidWhitespace(peek())) {
             throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
         }
         skip();

@@ -114,7 +114,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
 
         // If there is no more to read, we know that the string must have just a single number, which is equivalent to
         // a range with the same min and max.
-        if (!reader.canRead() || Character.isWhitespace(reader.peek())) {
+        if (!reader.canRead() || StringReader.isValidWhitespace(reader.peek())) {
             if (min == null) {
                 throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader);
             }

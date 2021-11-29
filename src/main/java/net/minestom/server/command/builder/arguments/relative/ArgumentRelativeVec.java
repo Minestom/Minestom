@@ -114,15 +114,15 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         }
 
         boolean ra = startsWithRelative(reader);
-        int a = reader.canRead() && !Character.isWhitespace(reader.peek()) ? reader.readInteger() : 0;
+        int a = reader.canRead() && !StringReader.isValidWhitespace(reader.peek()) ? reader.readInteger() : 0;
         skipSingularWhitespace(reader, true);
 
         boolean rb = startsWithRelative(reader);
-        int b = reader.canRead() && !Character.isWhitespace(reader.peek()) ? reader.readInteger() : 0;
+        int b = reader.canRead() && !StringReader.isValidWhitespace(reader.peek()) ? reader.readInteger() : 0;
         skipSingularWhitespace(reader, true);
 
         boolean rc = startsWithRelative(reader);
-        int c = reader.canRead() && !Character.isWhitespace(reader.peek()) ? reader.readInteger() : 0;
+        int c = reader.canRead() && !StringReader.isValidWhitespace(reader.peek()) ? reader.readInteger() : 0;
 
         if (ra || rb || rc) {
             return new RelativeVec(new Vec(a, b, c), RelativeVec.CoordinateType.RELATIVE, ra, rb, rc);
@@ -184,7 +184,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
     }
 
     private static double readRelativeValue(@NotNull StringReader reader, boolean adjustIntegers, boolean isRelative) {
-        if (!reader.canRead() || Character.isWhitespace(reader.peek())) {
+        if (!reader.canRead() || StringReader.isValidWhitespace(reader.peek())) {
             return 0;
         }
         if (!adjustIntegers || isRelative) {
@@ -220,7 +220,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
     }
 
     private static void skipSingularWhitespace(@NotNull StringReader reader, boolean useY) {
-        if (!reader.canRead() || !Character.isWhitespace(reader.peek())) {
+        if (!reader.canRead() || !StringReader.isValidWhitespace(reader.peek())) {
             throw (useY ? CommandException.ARGUMENT_POS3D_INCOMPLETE : CommandException.ARGUMENT_POS2D_INCOMPLETE).generateException(reader);
         }
         reader.skip();
@@ -234,7 +234,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
             throw CommandException.ARGUMENT_POS_MIXED.generateException(reader);
         }
         reader.skip();
-        if (!reader.canRead() || Character.isWhitespace(reader.peek())) {
+        if (!reader.canRead() || StringReader.isValidWhitespace(reader.peek())) {
             return 0;
         }
         return reader.readDouble();
