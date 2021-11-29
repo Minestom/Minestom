@@ -19,7 +19,7 @@ public final class ChunkData implements Writeable {
     private final Map<Integer, Block> blockEntities;
 
     public ChunkData(NBTCompound heightmaps, byte[] data, Map<Integer, Block> blockEntities) {
-        this.heightmaps = heightmaps.deepClone();
+        this.heightmaps = heightmaps;
         this.data = data.clone();
         this.blockEntities = Map.copyOf(blockEntities);
     }

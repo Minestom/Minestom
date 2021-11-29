@@ -22,6 +22,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
@@ -187,9 +188,10 @@ public class DynamicChunk extends Chunk {
                 }
             }
             final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-            heightmapsNBT = new NBTCompound()
-                    .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
-                    .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+            heightmapsNBT = NBT.Compound(nbt -> {
+                    nbt.setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight));
+                    nbt.setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+            });
         }
         // Data
         final BinaryWriter writer = new BinaryWriter();
