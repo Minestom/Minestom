@@ -5,7 +5,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ResponsePacket(String jsonResponse) implements ServerPacket {
+public record ResponsePacket(@NotNull String jsonResponse) implements ServerPacket {
     public ResponsePacket(BinaryReader reader) {
         this(reader.readSizedString());
     }

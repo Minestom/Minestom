@@ -7,8 +7,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ClientPlayerDiggingPacket(Status status, Point blockPosition,
-                                        BlockFace blockFace) implements ClientPacket {
+public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point blockPosition,
+                                        @NotNull BlockFace blockFace) implements ClientPacket {
     public ClientPlayerDiggingPacket(BinaryReader reader) {
         this(Status.values()[reader.readVarInt()], reader.readBlockPosition(),
                 BlockFace.values()[reader.readByte()]);

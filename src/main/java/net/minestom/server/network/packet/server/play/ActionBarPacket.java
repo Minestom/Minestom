@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ActionBarPacket(Component text) implements ServerPacket {
+public record ActionBarPacket(@NotNull Component text) implements ServerPacket {
     public ActionBarPacket(BinaryReader reader) {
         this(reader.readComponent());
     }

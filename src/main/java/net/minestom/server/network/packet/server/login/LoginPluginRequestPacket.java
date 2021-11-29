@@ -5,10 +5,13 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public record LoginPluginRequestPacket(int messageId, String channel, byte[] data) implements ServerPacket {
+public record LoginPluginRequestPacket(int messageId, @NotNull String channel,
+                                       byte @Nullable [] data) implements ServerPacket {
     public LoginPluginRequestPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readSizedString(), reader.readRemainingBytes());
+        this(reader.readVarInt(), reader.readSizedString(),
+                reader.readRemainingBytes());
     }
 
     @Override

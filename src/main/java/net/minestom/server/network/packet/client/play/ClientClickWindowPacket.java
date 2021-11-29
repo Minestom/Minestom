@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public record ClientClickWindowPacket(byte windowId, int stateId,
-                                      short slot, byte button, ClickType clickType,
-                                      List<ChangedSlot> changedSlots,
-                                      ItemStack clickedItem) implements ClientPacket {
+                                      short slot, byte button, @NotNull ClickType clickType,
+                                      @NotNull List<ChangedSlot> changedSlots,
+                                      @NotNull ItemStack clickedItem) implements ClientPacket {
     public ClientClickWindowPacket {
         changedSlots = List.copyOf(changedSlots);
     }
@@ -34,7 +34,7 @@ public record ClientClickWindowPacket(byte windowId, int stateId,
         writer.writeItemStack(clickedItem);
     }
 
-    public record ChangedSlot(short slot, ItemStack item) implements Writeable {
+    public record ChangedSlot(short slot, @NotNull ItemStack item) implements Writeable {
         public ChangedSlot(BinaryReader reader) {
             this(reader.readShort(), reader.readItemStack());
         }

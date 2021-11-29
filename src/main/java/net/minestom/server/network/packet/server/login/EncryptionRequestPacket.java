@@ -6,11 +6,13 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record EncryptionRequestPacket(String serverId,
-                                      byte[] publicKey,
-                                      byte[] verifyToken) implements ServerPacket {
+public record EncryptionRequestPacket(@NotNull String serverId,
+                                      byte @NotNull [] publicKey,
+                                      byte @NotNull [] verifyToken) implements ServerPacket {
     public EncryptionRequestPacket(BinaryReader reader) {
-        this(reader.readSizedString(), reader.readBytes(reader.readVarInt()), reader.readBytes(reader.readVarInt()));
+        this(reader.readSizedString(),
+                reader.readBytes(reader.readVarInt()),
+                reader.readBytes(reader.readVarInt()));
     }
 
     @Override

@@ -6,7 +6,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ClientPlayerPositionAndRotationPacket(Pos position, boolean onGround) implements ClientPacket {
+public record ClientPlayerPositionAndRotationPacket(@NotNull Pos position,
+                                                    boolean onGround) implements ClientPacket {
     public ClientPlayerPositionAndRotationPacket(BinaryReader reader) {
         this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
                 reader.readFloat(), reader.readFloat()), reader.readBoolean());

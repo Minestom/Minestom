@@ -6,7 +6,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ClientCreativeInventoryActionPacket(short slot, ItemStack item) implements ClientPacket {
+public record ClientCreativeInventoryActionPacket(short slot, @NotNull ItemStack item) implements ClientPacket {
     public ClientCreativeInventoryActionPacket(BinaryReader reader) {
         this(reader.readShort(), reader.readItemStack());
     }

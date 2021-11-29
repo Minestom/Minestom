@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record LoginSuccessPacket(UUID uuid, String username) implements ServerPacket {
+public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username) implements ServerPacket {
     public LoginSuccessPacket(BinaryReader reader) {
         this(reader.readUuid(), reader.readSizedString());
     }

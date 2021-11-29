@@ -5,7 +5,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ClientSetDisplayedRecipePacket(String recipeId) implements ClientPacket {
+public record ClientSetDisplayedRecipePacket(@NotNull String recipeId) implements ClientPacket {
     public ClientSetDisplayedRecipePacket(BinaryReader reader) {
         this(reader.readSizedString(256));
     }

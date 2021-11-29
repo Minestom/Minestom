@@ -5,7 +5,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ClientUpdateCommandBlockMinecartPacket(int entityId, String command,
+public record ClientUpdateCommandBlockMinecartPacket(int entityId, @NotNull String command,
                                                      boolean trackOutput) implements ClientPacket {
     public ClientUpdateCommandBlockMinecartPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readSizedString(Short.MAX_VALUE), reader.readBoolean());
