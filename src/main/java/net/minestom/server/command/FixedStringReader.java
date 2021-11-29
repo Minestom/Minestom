@@ -123,6 +123,20 @@ public sealed class FixedStringReader permits StringReader {
     }
 
     /**
+     * @return true if the provided string is equal to the next characters in this reader
+     */
+    public boolean canRead(@NotNull String canRead) {
+        return canRead(canRead.length()) && all().regionMatches(currentPosition, canRead, 0, canRead.length());
+    }
+
+    /**
+     * @return true if the provided string is equal to the next characters in this reader
+     */
+    public boolean canRead(@NotNull String canRead, boolean ignoreCase) {
+        return canRead(canRead.length()) && all().regionMatches(ignoreCase, currentPosition, canRead, 0, canRead.length());
+    }
+
+    /**
      * @return the next readable character, without moving the cursor forwards
      */
     public char peek() {
