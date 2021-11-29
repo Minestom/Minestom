@@ -1,34 +1,56 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.function.UnaryOperator;
+import java.util.List;
 
-public class MapDataPacket implements ComponentHoldingServerPacket {
+public record MapDataPacket(int mapId, byte scale, boolean locked,
+                            boolean trackingPosition, @NotNull List<Icon> icons,
+                            byte columns, byte rows, byte x, byte z,
+                            byte @Nullable [] data) implements ServerPacket {
+    public MapDataPacket {
+        icons = List.copyOf(icons);
+    }
 
-    public int mapId;
-    public byte scale;
-    public boolean locked;
-    public boolean trackingPosition;
+    public MapDataPacket(BinaryReader reader) {
+        this(read(reader));
+    }
 
-    public Icon[] icons = new Icon[0];
+    private MapDataPacket(MapDataPacket packet) {
+        this(packet.mapId, packet.scale, packet.locked,
+                packet.trackingPosition, packet.icons,
+                packet.columns, packet.rows, packet.x, packet.z,
+                packet.data);
+    }
 
-    public short columns;
-    public short rows;
-    public byte x;
-    public byte z;
-    public byte[] data = new byte[0];
+    private static MapDataPacket read(BinaryReader reader) {
+        var mapId = reader.readVarInt();
+        var scale = reader.readByte();
+        var locked = reader.readBoolean();
+        var trackingPosition = reader.readBoolean();
+        List<Icon> icons = trackingPosition ? reader.readVarIntList(Icon::new) : List.of();
 
-    public MapDataPacket() {
+        var columns = reader.readByte();
+        byte rows = 0;
+        byte x = 0;
+        byte z = 0;
+        byte[] data = null;
+        if (columns > 0) {
+            rows = reader.readByte();
+            x = reader.readByte();
+            z = reader.readByte();
+            data = reader.readBytes(reader.readVarInt());
+        }
+        return new MapDataPacket(mapId, scale, locked,
+                trackingPosition, icons, columns, rows, x, z,
+                data);
     }
 
     @Override
@@ -37,24 +59,11 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         writer.writeByte(scale);
         writer.writeBoolean(locked);
         writer.writeBoolean(trackingPosition);
+        if (trackingPosition) writer.writeVarIntList(icons, BinaryWriter::write);
 
-        if (trackingPosition) {
-            if (icons != null && icons.length > 0) {
-                writer.writeVarInt(icons.length);
-                for (Icon icon : icons) {
-                    icon.write(writer);
-                }
-            } else {
-                writer.writeVarInt(0);
-            }
-        }
-
-        writer.writeByte((byte) columns);
-        if (columns <= 0) {
-            return;
-        }
-
-        writer.writeByte((byte) rows);
+        writer.writeByte(columns);
+        if (columns <= 0) return;
+        writer.writeByte(rows);
         writer.writeByte(x);
         writer.writeByte(z);
         if (data != null && data.length > 0) {
@@ -63,7 +72,6 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         } else {
             writer.writeVarInt(0);
         }
-
     }
 
     @Override
@@ -71,77 +79,20 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         return ServerPacketIdentifier.MAP_DATA;
     }
 
-    @Override
-    public @NotNull Collection<Component> components() {
-        if (icons == null || icons.length == 0) {
-            return Collections.emptyList();
-        } else {
-            List<Component> components = new ArrayList<>();
-            for (Icon icon : icons) {
-                components.add(icon.displayName);
-            }
-            return components;
+    public record Icon(int type, byte x, byte z, byte direction,
+                       @Nullable Component displayName) implements Writeable {
+        public Icon(BinaryReader reader) {
+            this(reader.readVarInt(), reader.readByte(), reader.readByte(), reader.readByte(),
+                    reader.readBoolean() ? reader.readComponent() : null);
         }
-    }
-
-    @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        if (this.icons == null || this.icons.length == 0) {
-            return this;
-        } else {
-            MapDataPacket packet = new MapDataPacket();
-            packet.mapId = this.mapId;
-            packet.scale = this.scale;
-            packet.trackingPosition = this.trackingPosition;
-            packet.locked = this.locked;
-            packet.columns = this.columns;
-            packet.rows = this.rows;
-            packet.x = this.x;
-            packet.z = this.z;
-            packet.data = this.data;
-
-            packet.icons = Arrays.copyOf(this.icons, this.icons.length);
-            for (Icon icon : packet.icons) {
-                icon.displayName = operator.apply(icon.displayName);
-            }
-
-            return packet;
-        }
-    }
-
-    public static class Icon implements Writeable, Readable {
-        public int type;
-        public byte x, z;
-        public byte direction;
-        public Component displayName;
 
         public void write(BinaryWriter writer) {
             writer.writeVarInt(type);
             writer.writeByte(x);
             writer.writeByte(z);
             writer.writeByte(direction);
-
-            final boolean hasDisplayName = displayName != null;
-            writer.writeBoolean(hasDisplayName);
-            if (hasDisplayName) {
-                writer.writeComponent(displayName);
-            }
-        }
-
-        @Override
-        public void read(@NotNull BinaryReader reader) {
-            type = reader.readVarInt();
-            x = reader.readByte();
-            z = reader.readByte();
-            direction = reader.readByte();
-
-            boolean hasDisplayName = reader.readBoolean();
-            if (hasDisplayName) {
-                displayName = reader.readComponent();
-            } else {
-                displayName = null;
-            }
+            writer.writeBoolean(displayName != null);
+            if (displayName != null) writer.writeComponent(displayName);
         }
     }
-
 }
