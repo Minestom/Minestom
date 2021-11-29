@@ -877,6 +877,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        this.viewEngine.forManuals(this::removeViewer);
     }
 
     /**
