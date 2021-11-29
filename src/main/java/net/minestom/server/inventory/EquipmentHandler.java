@@ -179,12 +179,12 @@ public interface EquipmentHandler {
     default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
         return new EntityEquipmentPacket(((Entity) this).getEntityId(), Map.of(
-                EquipmentSlot.MAIN_HAND, getEquipment(EquipmentSlot.MAIN_HAND),
-                EquipmentSlot.OFF_HAND, getEquipment(EquipmentSlot.OFF_HAND),
-                EquipmentSlot.BOOTS, getEquipment(EquipmentSlot.BOOTS),
-                EquipmentSlot.LEGGINGS, getEquipment(EquipmentSlot.LEGGINGS),
-                EquipmentSlot.CHESTPLATE, getEquipment(EquipmentSlot.CHESTPLATE),
-                EquipmentSlot.HELMET, getEquipment(EquipmentSlot.HELMET)));
+                EquipmentSlot.MAIN_HAND, getItemInMainHand(),
+                EquipmentSlot.OFF_HAND, getItemInOffHand(),
+                EquipmentSlot.BOOTS, getBoots(),
+                EquipmentSlot.LEGGINGS, getLeggings(),
+                EquipmentSlot.CHESTPLATE, getChestplate(),
+                EquipmentSlot.HELMET, getHelmet()));
     }
 
 }
