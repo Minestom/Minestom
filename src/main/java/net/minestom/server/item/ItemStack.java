@@ -12,6 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
@@ -254,11 +255,11 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      */
     @ApiStatus.Experimental
     public @NotNull NBTCompound toItemNBT() {
-        final NBTCompound nbtCompound = new NBTCompound();
-        nbtCompound.setString("id", getMaterial().name());
-        nbtCompound.setByte("Count", (byte) getAmount());
-        nbtCompound.set("tag", getMeta().toNBT());
-        return nbtCompound;
+        return NBT.Compound(nbtCompound -> {
+            nbtCompound.setString("id", getMaterial().name());
+            nbtCompound.setByte("Count", (byte) getAmount());
+            nbtCompound.set("tag", getMeta().toNBT());
+        });
     }
 
     @Contract(value = "-> new", pure = true)
