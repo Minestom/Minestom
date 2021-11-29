@@ -52,7 +52,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
             this.playerSkin = playerSkin;
             handleCompound("SkullOwner", nbtCompound -> {
                 if (playerSkin == null) {
-                    nbtCompound.removeTag("Properties");
+                    nbtCompound.remove("Properties");
                     return;
                 }
 

@@ -8,6 +8,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
@@ -51,15 +52,16 @@ public final class ChunkData implements Writeable {
             // Append handler tags
             final BlockHandler handler = block.handler();
             if (handler != null) {
-                resultNbt = new NBTCompound();
-                final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                for (Tag<?> tag : handler.getBlockEntityTags()) {
-                    final var value = tag.read(blockNbt);
-                    if (value != null) {
-                        // Tag is present and valid
-                        tag.writeUnsafe(resultNbt, value);
+                resultNbt = NBT.Compound(nbt -> {
+                    final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                    for (Tag<?> tag : handler.getBlockEntityTags()) {
+                        final var value = tag.read(blockNbt);
+                        if (value != null) {
+                            // Tag is present and valid
+                            tag.writeUnsafe(nbt, value);
+                        }
                     }
-                }
+                });
             } else {
                 // Complete nbt shall be sent if the block has no handler
                 // Necessary to support all vanilla blocks
