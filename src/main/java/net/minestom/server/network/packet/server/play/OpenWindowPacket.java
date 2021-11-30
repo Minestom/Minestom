@@ -7,7 +7,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record OpenWindowPacket(int windowId, int windowType, Component title) implements ServerPacket {
+public record OpenWindowPacket(int windowId, int windowType,
+                               @NotNull Component title) implements ServerPacket {
     public OpenWindowPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readVarInt(), reader.readComponent());
     }

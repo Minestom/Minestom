@@ -229,7 +229,7 @@ public class WorldBorder {
      */
     @ApiStatus.Internal
     public void init(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(new InitializeWorldBorderPacket(centerX, centerZ,
+        player.sendPacket(new InitializeWorldBorderPacket(centerX, centerZ,
                 oldDiameter, newDiameter, speed, portalTeleportBoundary, warningTime, warningBlocks));
     }
 
