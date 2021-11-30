@@ -8,29 +8,26 @@ import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-public class DeclareCommandsPacket implements ServerPacket {
+import java.util.List;
 
-    public Node[] nodes = new Node[0];
-    public int rootIndex;
+public record DeclareCommandsPacket(@NotNull List<Node> nodes,
+                                    int rootIndex) implements ServerPacket {
+    public DeclareCommandsPacket {
+        nodes = List.copyOf(nodes);
+    }
 
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(nodes.length);
-        for (Node node : nodes) {
-            node.write(writer);
-        }
-        writer.writeVarInt(rootIndex);
+    public DeclareCommandsPacket(@NotNull BinaryReader reader) {
+        this(reader.readVarIntList(r -> {
+            Node node = new Node();
+            node.read(r);
+            return node;
+        }), reader.readVarInt());
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        int nodeCount = reader.readVarInt();
-        nodes = new Node[nodeCount];
-        for (int i = 0; i < nodeCount; i++) {
-            nodes[i] = new Node();
-            nodes[i].read(reader);
-        }
-        rootIndex = reader.readVarInt();
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarIntList(nodes, BinaryWriter::write);
+        writer.writeVarInt(rootIndex);
     }
 
     @Override
@@ -38,8 +35,7 @@ public class DeclareCommandsPacket implements ServerPacket {
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
-    public static class Node implements Writeable, Readable {
-
+    public static final class Node implements Writeable, Readable {
         public byte flags;
         public int[] children = new int[0];
         public int redirectedNode; // Only if flags & 0x08
@@ -133,35 +129,17 @@ public class DeclareCommandsPacket implements ServerPacket {
         private boolean isArgument() {
             return (flags & 0b10) != 0;
         }
-
     }
 
     public static byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
-        byte result = (byte) type.mask;
-
-        if (executable) {
-            result |= 0x04;
-        }
-
-        if (redirect) {
-            result |= 0x08;
-        }
-
-        if (suggestionType) {
-            result |= 0x10;
-        }
+        byte result = (byte) type.ordinal();
+        if (executable) result |= 0x04;
+        if (redirect) result |= 0x08;
+        if (suggestionType) result |= 0x10;
         return result;
     }
 
     public enum NodeType {
-        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
-
-        private final int mask;
-
-        NodeType(int mask) {
-            this.mask = mask;
-        }
-
+        ROOT, LITERAL, ARGUMENT, NONE;
     }
-
 }

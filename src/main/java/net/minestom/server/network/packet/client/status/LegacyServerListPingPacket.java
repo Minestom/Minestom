@@ -6,18 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class LegacyServerListPingPacket implements ClientPreplayPacket {
-
-    private byte payload;
+public record LegacyServerListPingPacket(byte payload) implements ClientPreplayPacket {
+    public LegacyServerListPingPacket(BinaryReader reader) {
+        this(reader.readByte());
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.payload = reader.readByte();
     }
 
     @Override

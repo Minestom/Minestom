@@ -6,29 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class UpdateViewPositionPacket implements ServerPacket {
-
-    public int chunkX, chunkZ;
-
-    public UpdateViewPositionPacket(int chunkX, int chunkZ) {
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-    }
-
-    public UpdateViewPositionPacket() {
-        this(0, 0);
+public record UpdateViewPositionPacket(int chunkX, int chunkZ) implements ServerPacket {
+    public UpdateViewPositionPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readVarInt());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(chunkX);
         writer.writeVarInt(chunkZ);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        chunkX = reader.readVarInt();
-        chunkZ = reader.readVarInt();
     }
 
     @Override

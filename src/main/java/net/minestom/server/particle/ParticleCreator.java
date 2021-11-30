@@ -15,40 +15,22 @@ public class ParticleCreator {
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
                                                       float particleData, int count, @Nullable Consumer<BinaryWriter> dataWriter) {
-        ParticlePacket particlePacket = new ParticlePacket();
-        particlePacket.particleId = particleType.id();
-        particlePacket.longDistance = distance;
-
-        particlePacket.x = x;
-        particlePacket.y = y;
-        particlePacket.z = z;
-
-        particlePacket.offsetX = offsetX;
-        particlePacket.offsetY = offsetY;
-        particlePacket.offsetZ = offsetZ;
-
-        particlePacket.particleData = particleData;
-        particlePacket.particleCount = count;
-
+        byte[] data;
         if (dataWriter != null) {
             BinaryWriter writer = new BinaryWriter();
             dataWriter.accept(writer);
-            particlePacket.data = writer.toByteArray();
+            data = writer.toByteArray();
         } else {
-            particlePacket.data = new byte[0];
+            data = new byte[0];
         }
-
-        return particlePacket;
+        return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, data);
     }
 
     public static ParticlePacket createParticlePacket(Particle particleType,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
                                                       int count) {
-        return createParticlePacket(particleType, true,
-                x, y, z,
-                offsetX, offsetY, offsetZ,
-                0, count, null);
+        return createParticlePacket(particleType, true, x, y, z,
+                offsetX, offsetY, offsetZ, 0, count, null);
     }
-
 }

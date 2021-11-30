@@ -6,25 +6,22 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetPassengersPacket implements ServerPacket {
+import java.util.List;
 
-    public int vehicleEntityId;
-    public int[] passengersId;
+public record SetPassengersPacket(int vehicleEntityId,
+                                  @NotNull List<Integer> passengersId) implements ServerPacket {
+    public SetPassengersPacket {
+        passengersId = List.copyOf(passengersId);
+    }
 
-    public SetPassengersPacket() {
-        passengersId = new int[0];
+    public SetPassengersPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readVarIntList(BinaryReader::readVarInt));
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(vehicleEntityId);
-        writer.writeVarIntArray(passengersId);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        vehicleEntityId = reader.readVarInt();
-        passengersId = reader.readVarIntArray();
+        writer.writeVarIntList(passengersId, BinaryWriter::writeVarInt);
     }
 
     @Override

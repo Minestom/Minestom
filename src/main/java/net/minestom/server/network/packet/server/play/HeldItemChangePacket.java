@@ -6,26 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class HeldItemChangePacket implements ServerPacket {
-
-    public byte slot;
-
-    public HeldItemChangePacket(byte slot) {
-        this.slot = slot;
-    }
-
-    public HeldItemChangePacket() {
-        this((byte) 0);
+public record HeldItemChangePacket(byte slot) implements ServerPacket {
+    public HeldItemChangePacket(BinaryReader reader) {
+        this(reader.readByte());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(slot);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        slot = reader.readByte();
     }
 
     @Override

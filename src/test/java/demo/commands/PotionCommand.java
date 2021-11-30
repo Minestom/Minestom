@@ -37,11 +37,7 @@ public class PotionCommand extends Command {
         final Integer duration = context.get(this.duration);
 
         player.sendMessage(Component.text(player.getActiveEffects().toString()));
-        player.addEffect(new Potion(
-                potionEffect,
-                (byte) 0,
-                duration * MinecraftServer.TICK_PER_SECOND
-        ));
+        player.addEffect(new Potion(potionEffect, (byte) 0, duration * MinecraftServer.TICK_PER_SECOND, (byte) 0));
     }
 
 }

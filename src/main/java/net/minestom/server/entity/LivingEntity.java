@@ -369,12 +369,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-
-                SoundEffectPacket damageSoundPacket =
-                        SoundEffectPacket.create(soundCategory, sound,
-                                getPosition(),
-                                1.0f, 1.0f);
-                sendPacketToViewersAndSelf(damageSoundPacket);
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory,
+                        getPosition(), 1.0f, 1.0f));
             }
         });
 
@@ -590,32 +586,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attributes the attributes to include in the packet
      * @return an {@link EntityPropertiesPacket} linked to this entity
      */
-    @NotNull
-    protected EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
+    protected @NotNull EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
         // Get all the attributes which should be sent to the client
-        final AttributeInstance[] instances = attributes.stream()
-                .filter(i -> i.getAttribute().isShared())
-                .toArray(AttributeInstance[]::new);
-
-
-        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
-        propertiesPacket.entityId = getEntityId();
-
-        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
-        for (int i = 0; i < properties.length; ++i) {
-            EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
-
-            final float value = instances[i].getBaseValue();
-
-            property.instance = instances[i];
-            property.attribute = instances[i].getAttribute();
-            property.value = value;
-
-            properties[i] = property;
-        }
-
-        propertiesPacket.properties = properties;
-        return propertiesPacket;
+        final List<AttributeInstance> properties = attributes.stream()
+                .filter(i -> i.getAttribute().isShared()).toList();
+        return new EntityPropertiesPacket(getEntityId(), properties);
     }
 
     @Override

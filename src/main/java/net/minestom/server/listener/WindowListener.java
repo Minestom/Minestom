@@ -16,16 +16,16 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
-        final int windowId = packet.windowId;
+        final int windowId = packet.windowId();
         final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
         if (inventory == null) {
             // Invalid packet
             return;
         }
 
-        final short slot = packet.slot;
-        final byte button = packet.button;
-        final ClientClickWindowPacket.ClickType clickType = packet.clickType;
+        final short slot = packet.slot();
+        final byte button = packet.button();
+        final ClientClickWindowPacket.ClickType clickType = packet.clickType();
 
         //System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | clickType: " + clickType);
 
@@ -56,7 +56,7 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
             successful = player.isCreative();
             if (successful) {
-                setCursor(player, inventory, packet.item);
+                setCursor(player, inventory, packet.clickedItem());
             }
         } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
             successful = inventory.drop(player, false, slot, button);
@@ -78,9 +78,7 @@ public class WindowListener {
         refreshCursorItem(player, inventory);
 
         // (Why is the ping packet necessary?)
-        PingPacket pingPacket = new PingPacket();
-        pingPacket.id = (1 << 30) | (windowId << 16);
-        player.getPlayerConnection().sendPacket(pingPacket);
+        player.getPlayerConnection().sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
     }
 
     public static void pong(ClientPongPacket packet, Player player) {

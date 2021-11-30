@@ -8,34 +8,19 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class AttachEntityPacket implements ServerPacket {
-
-    public int attachedEntityId;
-    public int holdingEntityId; // Or -1 to detach
-
-    public AttachEntityPacket(int attachedEntityId, int holdingEntityId) {
-        this.attachedEntityId = attachedEntityId;
-        this.holdingEntityId = holdingEntityId;
-    }
-
+public record AttachEntityPacket(int attachedEntityId, int holdingEntityId) implements ServerPacket {
     public AttachEntityPacket(@NotNull Entity attachedEntity, @Nullable Entity holdingEntity) {
         this(attachedEntity.getEntityId(), holdingEntity != null ? holdingEntity.getEntityId() : -1);
     }
 
-    public AttachEntityPacket() {
-        this(0, 0);
+    public AttachEntityPacket(BinaryReader reader) {
+        this(reader.readInt(), reader.readInt());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(attachedEntityId);
         writer.writeInt(holdingEntityId);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        attachedEntityId = reader.readInt();
-        holdingEntityId = reader.readInt();
     }
 
     @Override

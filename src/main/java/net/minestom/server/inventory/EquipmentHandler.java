@@ -8,6 +8,8 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 /**
  * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots.
  */
@@ -164,15 +166,8 @@ public interface EquipmentHandler {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
-
         final ItemStack itemStack = getEquipment(slot);
-
-        EntityEquipmentPacket entityEquipmentPacket = new EntityEquipmentPacket();
-        entityEquipmentPacket.entityId = entity.getEntityId();
-        entityEquipmentPacket.slots = new EquipmentSlot[]{slot};
-        entityEquipmentPacket.itemStacks = new ItemStack[]{itemStack};
-
-        entity.sendPacketToViewers(entityEquipmentPacket);
+        entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(), Map.of(slot, itemStack)));
     }
 
     /**
@@ -183,18 +178,13 @@ public interface EquipmentHandler {
      */
     default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
-        final EquipmentSlot[] slots = EquipmentSlot.values();
-        ItemStack[] equipments = new ItemStack[slots.length];
-        for (int i = 0; i < equipments.length; i++) {
-            final EquipmentSlot slot = slots[i];
-            equipments[i] = getEquipment(slot);
-        }
-        // Create equipment packet
-        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = ((Entity) this).getEntityId();
-        equipmentPacket.slots = slots;
-        equipmentPacket.itemStacks = equipments;
-        return equipmentPacket;
+        return new EntityEquipmentPacket(((Entity) this).getEntityId(), Map.of(
+                EquipmentSlot.MAIN_HAND, getItemInMainHand(),
+                EquipmentSlot.OFF_HAND, getItemInOffHand(),
+                EquipmentSlot.BOOTS, getBoots(),
+                EquipmentSlot.LEGGINGS, getLeggings(),
+                EquipmentSlot.CHESTPLATE, getChestplate(),
+                EquipmentSlot.HELMET, getHelmet()));
     }
 
 }

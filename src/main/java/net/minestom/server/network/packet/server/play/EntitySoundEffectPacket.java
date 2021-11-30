@@ -8,34 +8,19 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntitySoundEffectPacket implements ServerPacket {
-
-    public int soundId;
-    public Sound.Source soundSource;
-    public int entityId;
-    public float volume;
-    public float pitch;
-
-    public EntitySoundEffectPacket() {
-        soundSource = Sound.Source.NEUTRAL;
+public record EntitySoundEffectPacket(int soundId, Sound.Source source, int entityId,
+                                      float volume, float pitch) implements ServerPacket {
+    public EntitySoundEffectPacket(BinaryReader reader) {
+        this(reader.readVarInt(), Sound.Source.values()[reader.readVarInt()], reader.readVarInt(), reader.readFloat(), reader.readFloat());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(soundId);
-        writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(soundSource));
+        writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(source));
         writer.writeVarInt(entityId);
         writer.writeFloat(volume);
         writer.writeFloat(pitch);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        soundId = reader.readVarInt();
-        soundSource = Sound.Source.values()[reader.readVarInt()];
-        entityId = reader.readVarInt();
-        volume = reader.readFloat();
-        pitch = reader.readFloat();
     }
 
     @Override

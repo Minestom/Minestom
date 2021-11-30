@@ -6,7 +6,7 @@ import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public final class PacketListenerManager {
     public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
-    private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
+    private final Map<Class<? extends ClientPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
     public PacketListenerManager() {
         setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
@@ -65,7 +65,7 @@ public final class PacketListenerManager {
      * @param player the player who sent the packet
      * @param <T>    the packet type
      */
-    public <T extends ClientPlayPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
+    public <T extends ClientPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
 
         final Class clazz = packet.getClass();
 
@@ -135,7 +135,7 @@ public final class PacketListenerManager {
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPlayPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketListenerConsumer<T> consumer) {
         this.listeners.put(packetClass, consumer);
     }
 
