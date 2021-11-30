@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record OpenSignEditorPacket(Point position) implements ServerPacket {
+public record OpenSignEditorPacket(@NotNull Point position) implements ServerPacket {
     public OpenSignEditorPacket(BinaryReader reader) {
         this(reader.readBlockPosition());
     }
