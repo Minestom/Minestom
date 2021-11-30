@@ -24,9 +24,7 @@ public record EntityMetaDataPacket(int entityId,
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        for (Metadata.Entry<?> entry : entries) {
-            entry.write(writer);
-        }
+        this.entries.forEach(writer::write);
         writer.writeByte((byte) 0xFF); // End
     }
 
