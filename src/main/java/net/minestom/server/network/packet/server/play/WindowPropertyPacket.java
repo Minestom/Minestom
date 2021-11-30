@@ -6,20 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class WindowPropertyPacket implements ServerPacket {
-
-    public byte windowId;
-    public short property;
-    public short value;
-
-    public WindowPropertyPacket(byte windowId, short property, short value) {
-        this.windowId = windowId;
-        this.property = property;
-        this.value = value;
-    }
-
-    public WindowPropertyPacket() {
-        this((byte) 0, (short) 0, (short) 0);
+public record WindowPropertyPacket(byte windowId, short property, short value) implements ServerPacket {
+    public WindowPropertyPacket(BinaryReader reader) {
+        this(reader.readByte(), reader.readShort(), reader.readShort());
     }
 
     @Override
@@ -27,13 +16,6 @@ public class WindowPropertyPacket implements ServerPacket {
         writer.writeByte(windowId);
         writer.writeShort(property);
         writer.writeShort(value);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        windowId = reader.readByte();
-        property = reader.readShort();
-        value = reader.readShort();
     }
 
     @Override

@@ -6,30 +6,24 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class DestroyEntitiesPacket implements ServerPacket {
+import java.util.List;
 
-    public int[] entityIds;
-
-    public DestroyEntitiesPacket(int[] entityIds) {
-        this.entityIds = entityIds;
+public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements ServerPacket {
+    public DestroyEntitiesPacket {
+        entityIds = List.copyOf(entityIds);
     }
 
     public DestroyEntitiesPacket(int entityId) {
-        this(new int[]{entityId});
+        this(List.of(entityId));
     }
 
-    public DestroyEntitiesPacket() {
-        this(0);
+    public DestroyEntitiesPacket(BinaryReader reader) {
+        this(reader.readVarIntList(BinaryReader::readVarInt));
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarIntArray(entityIds);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.entityIds = reader.readVarIntArray();
+        writer.writeVarIntList(entityIds, BinaryWriter::writeVarInt);
     }
 
     @Override

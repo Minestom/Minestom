@@ -1,7 +1,6 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
@@ -15,9 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTEnd;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -136,15 +133,7 @@ public class Metadata {
     }
 
     public static Value<NBT> NBT(@NotNull NBT nbt) {
-        return new Value<>(TYPE_NBT, nbt, writer ->
-                writer.writeNBT("", nbt), reader -> {
-            try {
-                return reader.readTag();
-            } catch (IOException | NBTException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                return null;
-            }
-        });
+        return new Value<>(TYPE_NBT, nbt, writer -> writer.writeNBT("", nbt), BinaryReader::readTag);
     }
 
     public static Value<int[]> VillagerData(int villagerType,

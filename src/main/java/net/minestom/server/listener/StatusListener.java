@@ -12,24 +12,18 @@ import java.util.Map;
 public class StatusListener {
 
     public static void listener(ClientStatusPacket packet, Player player) {
-        switch (packet.action) {
+        switch (packet.action()) {
             case PERFORM_RESPAWN -> player.respawn();
             case REQUEST_STATS -> {
                 List<StatisticsPacket.Statistic> statisticList = new ArrayList<>();
-                StatisticsPacket statisticsPacket = new StatisticsPacket();
                 final Map<PlayerStatistic, Integer> playerStatisticValueMap = player.getStatisticValueMap();
                 for (var entry : playerStatisticValueMap.entrySet()) {
                     final PlayerStatistic playerStatistic = entry.getKey();
                     final int value = entry.getValue();
-
-                    StatisticsPacket.Statistic statistic = new StatisticsPacket.Statistic();
-                    statistic.category = playerStatistic.getCategory();
-                    statistic.statisticId = playerStatistic.getStatisticId();
-                    statistic.value = value;
-
-                    statisticList.add(statistic);
+                    statisticList.add(new StatisticsPacket.Statistic(playerStatistic.getCategory(),
+                            playerStatistic.getStatisticId(), value));
                 }
-                statisticsPacket.statistics = statisticList.toArray(new StatisticsPacket.Statistic[0]);
+                StatisticsPacket statisticsPacket = new StatisticsPacket(statisticList);
                 player.getPlayerConnection().sendPacket(statisticsPacket);
             }
         }

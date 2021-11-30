@@ -8,33 +8,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class LoginSuccessPacket implements ServerPacket {
-
-    public UUID uuid;
-    public String username;
-
-    /**
-     * DO NOT USE.
-     */
-    private LoginSuccessPacket() {
-        this(new UUID(0, 0), "");
-    }
-
-    public LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username) {
-        this.uuid = uuid;
-        this.username = username;
+public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username) implements ServerPacket {
+    public LoginSuccessPacket(BinaryReader reader) {
+        this(reader.readUuid(), reader.readSizedString());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeUuid(uuid);
         writer.writeSizedString(username);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        uuid = reader.readUuid();
-        username = reader.readSizedString();
     }
 
     @Override

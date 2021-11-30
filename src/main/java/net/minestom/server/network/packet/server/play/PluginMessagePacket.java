@@ -7,30 +7,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class PluginMessagePacket implements ServerPacket {
-
-    public String channel;
-    public byte[] data;
-
-    public PluginMessagePacket(String channel, byte[] data) {
-        this.channel = channel;
-        this.data = data;
-    }
-
-    public PluginMessagePacket() {
-        this("none", new byte[0]);
+public record PluginMessagePacket(String channel, byte[] data) implements ServerPacket {
+    public PluginMessagePacket(BinaryReader reader) {
+        this(reader.readSizedString(), reader.readRemainingBytes());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(channel);
         writer.writeBytes(data);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        channel = reader.readSizedString();
-        data = reader.readRemainingBytes();
     }
 
     @Override
@@ -45,17 +30,10 @@ public class PluginMessagePacket implements ServerPacket {
      *
      * @return the current brand name packet
      */
-    @NotNull
-    public static PluginMessagePacket getBrandPacket() {
-        PluginMessagePacket brandMessage = new PluginMessagePacket();
-        brandMessage.channel = "minecraft:brand";
-
+    public static @NotNull PluginMessagePacket getBrandPacket() {
         final String brandName = MinecraftServer.getBrandName();
         BinaryWriter writer = new BinaryWriter(4 + brandName.length());
         writer.writeSizedString(brandName);
-
-        brandMessage.data = writer.toByteArray();
-
-        return brandMessage;
+        return new PluginMessagePacket("minecraft:brand", writer.toByteArray());
     }
 }

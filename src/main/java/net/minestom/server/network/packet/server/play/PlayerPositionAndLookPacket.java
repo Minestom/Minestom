@@ -7,22 +7,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerPositionAndLookPacket implements ServerPacket {
-
-    public Pos position;
-    public byte flags;
-    public int teleportId;
-    public boolean dismountVehicle;
-
-    public PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId, boolean dismountVehicle) {
-        this.position = position;
-        this.flags = flags;
-        this.teleportId = teleportId;
-        this.dismountVehicle = dismountVehicle;
-    }
-
-    public PlayerPositionAndLookPacket() {
-        this(Pos.ZERO, (byte) 0, 0, false);
+public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId,
+                                          boolean dismountVehicle) implements ServerPacket {
+    public PlayerPositionAndLookPacket(BinaryReader reader) {
+        this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(), reader.readFloat(), reader.readFloat()),
+                reader.readByte(), reader.readVarInt(), reader.readBoolean());
     }
 
     @Override
@@ -37,15 +26,6 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
         writer.writeByte(flags);
         writer.writeVarInt(teleportId);
         writer.writeBoolean(dismountVehicle);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        position = new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(), reader.readFloat(), reader.readFloat());
-
-        flags = reader.readByte();
-        teleportId = reader.readVarInt();
-        dismountVehicle = reader.readBoolean();
     }
 
     @Override

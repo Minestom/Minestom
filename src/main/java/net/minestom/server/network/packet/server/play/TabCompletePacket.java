@@ -7,7 +7,9 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,15 +17,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-public class TabCompletePacket implements ComponentHoldingServerPacket {
+public record TabCompletePacket(int transactionId, int start, int length,
+                                @NotNull List<Match> matches) implements ComponentHoldingServerPacket {
+    public TabCompletePacket {
+        matches = List.copyOf(matches);
+    }
 
-    public int transactionId;
-    public int start;
-    public int length;
-    public Match[] matches;
-
-    public TabCompletePacket() {
-        matches = new Match[0];
+    public TabCompletePacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readVarInt(), reader.readVarInt(), reader.readVarIntList(Match::new));
     }
 
     @Override
@@ -31,37 +32,7 @@ public class TabCompletePacket implements ComponentHoldingServerPacket {
         writer.writeVarInt(transactionId);
         writer.writeVarInt(start);
         writer.writeVarInt(length);
-
-        writer.writeVarInt(matches.length);
-        for (Match match : matches) {
-            writer.writeSizedString(match.match);
-            writer.writeBoolean(match.hasTooltip);
-            if (match.hasTooltip)
-                writer.writeComponent(match.tooltip);
-        }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        transactionId = reader.readVarInt();
-        start = reader.readVarInt();
-        length = reader.readVarInt();
-
-        int matchCount = reader.readVarInt();
-        matches = new Match[matchCount];
-        for (int i = 0; i < matchCount; i++) {
-            String match = reader.readSizedString();
-            boolean hasTooltip = reader.readBoolean();
-            Component tooltip = null;
-            if (hasTooltip) {
-                tooltip = reader.readComponent();
-            }
-            Match newMatch = new Match();
-            newMatch.match = match;
-            newMatch.hasTooltip = hasTooltip;
-            newMatch.tooltip = tooltip;
-            matches[i] = newMatch;
-        }
+        writer.writeVarIntList(matches, BinaryWriter::write);
     }
 
     @Override
@@ -71,64 +42,45 @@ public class TabCompletePacket implements ComponentHoldingServerPacket {
 
     @Override
     public @NotNull Collection<Component> components() {
-        if (matches == null || matches.length == 0) {
-            return Collections.emptyList();
-        } else {
-            List<Component> components = new ArrayList<>(matches.length);
-            for (Match match : matches) {
-                if (match.hasTooltip) {
-                    components.add(match.tooltip);
-                }
+        if (matches.isEmpty()) return Collections.emptyList();
+        List<Component> components = new ArrayList<>(matches.size());
+        for (Match match : matches) {
+            if (match.tooltip != null) {
+                components.add(match.tooltip);
             }
-            return components;
         }
+        return components;
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        if (matches == null || matches.length == 0) {
-            return this;
-        } else {
-            TabCompletePacket packet = new TabCompletePacket();
-            packet.transactionId = transactionId;
-            packet.start = start;
-            packet.length = length;
-            packet.matches = new Match[matches.length];
+        if (matches.isEmpty()) return this;
+        final List<Match> updatedMatches = matches.stream().map(match -> match.copyWithOperator(operator)).toList();
+        return new TabCompletePacket(transactionId, start, length, updatedMatches);
 
-            for (int i = 0; i < matches.length; i++) {
-                packet.matches[i] = matches[i].copyWithOperator(operator);
-            }
-
-            return packet;
-        }
     }
 
-    public static class Match implements ComponentHolder<Match> {
-        public String match;
-        public boolean hasTooltip;
-        public Component tooltip;
+    public record Match(@NotNull String match,
+                        @Nullable Component tooltip) implements Writeable, ComponentHolder<Match> {
+        public Match(BinaryReader reader) {
+            this(reader.readSizedString(), reader.readBoolean() ? reader.readComponent() : null);
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(match);
+            writer.writeBoolean(tooltip != null);
+            if (tooltip != null) writer.writeComponent(tooltip);
+        }
 
         @Override
         public @NotNull Collection<Component> components() {
-            if (hasTooltip) {
-                return Collections.singleton(tooltip);
-            } else {
-                return Collections.emptyList();
-            }
+            return tooltip != null ? Collections.singletonList(tooltip) : Collections.emptyList();
         }
 
         @Override
         public @NotNull Match copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            if (hasTooltip) {
-                Match newMatch = new Match();
-                newMatch.match = match;
-                newMatch.hasTooltip = hasTooltip;
-                newMatch.tooltip = tooltip;
-                return newMatch;
-            } else {
-                return this;
-            }
+            return tooltip != null ? new Match(match, operator.apply(tooltip)) : this;
         }
     }
-
 }

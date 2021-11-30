@@ -8,39 +8,23 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class NamedSoundEffectPacket implements ServerPacket {
-
-    public String soundName;
-    public Source soundSource;
-    public int x, y, z;
-    public float volume;
-    public float pitch;
-
-    public NamedSoundEffectPacket() {
-        soundName = "";
-        soundSource = Source.AMBIENT;
+public record NamedSoundEffectPacket(String soundName, Source source, int x, int y, int z,
+                                     float volume, float pitch) implements ServerPacket {
+    public NamedSoundEffectPacket(BinaryReader reader) {
+        this(reader.readSizedString(), Source.values()[reader.readVarInt()],
+                reader.readInt() / 8, reader.readInt() / 8, reader.readInt() / 8,
+                reader.readFloat(), reader.readFloat());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(soundName);
-        writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(soundSource));
+        writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(source));
         writer.writeInt(x * 8);
         writer.writeInt(y * 8);
         writer.writeInt(z * 8);
         writer.writeFloat(volume);
         writer.writeFloat(pitch);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        soundName = reader.readSizedString();
-        soundSource = Source.values()[reader.readVarInt()];
-        x = reader.readInt() / 8;
-        y = reader.readInt() / 8;
-        z = reader.readInt() / 8;
-        volume = reader.readFloat();
-        pitch = reader.readFloat();
     }
 
     @Override

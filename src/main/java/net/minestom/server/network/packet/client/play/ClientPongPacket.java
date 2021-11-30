@@ -1,17 +1,13 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientPongPacket extends ClientPlayPacket {
-
-    public int id;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.id = reader.readInt();
+public record ClientPongPacket(int id) implements ClientPacket {
+    public ClientPongPacket(BinaryReader reader) {
+        this(reader.readInt());
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -93,14 +94,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     public void setTitle(@NotNull Component title) {
         this.title = title;
-
-        OpenWindowPacket packet = new OpenWindowPacket(title);
-
-        packet.windowId = getWindowId();
-        packet.windowType = getInventoryType().getWindowType();
-
         // Re-open the inventory
-        sendPacketToViewers(packet);
+        sendPacketToViewers(new OpenWindowPacket(getWindowId(), getInventoryType().getWindowType(), title));
         // Send inventory items
         update();
     }
@@ -226,7 +221,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      * @return a new {@link WindowItemsPacket} packet
      */
     private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
-        return new WindowItemsPacket(getWindowId(), 0, getItemStacks(), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
+        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
     }
 
     /**
