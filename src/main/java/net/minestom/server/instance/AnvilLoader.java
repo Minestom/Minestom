@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -23,10 +24,7 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
-import java.util.Objects;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -90,13 +88,24 @@ public class AnvilLoader implements IChunkLoader {
             return CompletableFuture.completedFuture(null);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
-        // TODO Biomes
+        // TODO: Parallelize block, block entities and biome loading
+
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
-            final int[] fileChunkBiomes = fileChunk.getBiomes();
-            for (int id : fileChunkBiomes) {
-                // ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3)
-                final Biome biome = Objects.requireNonNullElse(BIOME_MANAGER.getById(id), BIOME);
-                chunk.setBiome(0, 0, 0, biome);
+            HashMap<String, Biome> biomeCache = new HashMap<>();
+
+            for (ChunkSection section : fileChunk.getSections().values()) {
+                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                            int finalX = fileChunk.getX() * Chunk.CHUNK_SIZE_X + x;
+                            int finalZ = fileChunk.getZ() * Chunk.CHUNK_SIZE_Z + z;
+                            int finalY = section.getY() * Chunk.CHUNK_SECTION_SIZE + y;
+                            String biomeName = section.getBiome(finalX, finalY, finalZ);
+                            Biome biome = biomeCache.computeIfAbsent(biomeName, n -> Objects.requireNonNullElse(BIOME_MANAGER.getByName(NamespaceID.from(n)), BIOME));
+                            chunk.setBiome(finalX, finalY, finalZ, biome);
+                        }
+                    }
+                }
             }
         }
         // Blocks
@@ -261,7 +270,7 @@ public class AnvilLoader implements IChunkLoader {
                     final Block block = chunk.getBlock(x, y, z);
                     // Block
                     chunkColumn.setBlockState(x, y, z, new BlockState(block.name(), block.properties()));
-                    chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).id());
+                    chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).name().asString());
 
                     // Tile entity
                     final BlockHandler handler = block.handler();

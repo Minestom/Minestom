@@ -27,8 +27,9 @@ public class DimensionType {
             .ceilingEnabled(false)
             .fixedTime(null)
             .ambientLight(0.0f)
-            .height(256)
-            .logicalHeight(256)
+            .height(384)
+            .minY(-64)
+            .logicalHeight(384)
             .infiniburn(NamespaceID.from("minecraft:infiniburn_overworld"))
             .build();
 
