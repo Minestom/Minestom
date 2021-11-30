@@ -1,66 +1,81 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientInteractEntityPacket extends ClientPlayPacket {
-
-    public int targetId;
-    public Type type = Type.INTERACT;
-    public float x;
-    public float y;
-    public float z;
-    public Player.Hand hand = Player.Hand.MAIN;
-    public boolean sneaking;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.targetId = reader.readVarInt();
-        this.type = Type.values()[reader.readVarInt()];
-
-        switch (type) {
-            case INTERACT:
-                this.hand = Player.Hand.values()[reader.readVarInt()];
-                break;
-            case ATTACK:
-                break;
-            case INTERACT_AT:
-                this.x = reader.readFloat();
-                this.y = reader.readFloat();
-                this.z = reader.readFloat();
-                this.hand = Player.Hand.values()[reader.readVarInt()];
-                break;
-        }
-        this.sneaking = reader.readBoolean();
+public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boolean sneaking) implements ClientPacket {
+    public ClientInteractEntityPacket(BinaryReader reader) {
+        this(reader.readVarInt(), switch (reader.readVarInt()) {
+            case 0 -> new Interact(reader);
+            case 1 -> new Attack();
+            case 2 -> new InteractAt(reader);
+            default -> throw new RuntimeException("Unknown action id");
+        }, reader.readBoolean());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(targetId);
-        writer.writeVarInt(type.ordinal());
-
-        switch (type) {
-            case INTERACT:
-                writer.writeVarInt(hand.ordinal());
-                break;
-            case ATTACK:
-                break;
-            case INTERACT_AT:
-                writer.writeFloat(x);
-                writer.writeFloat(y);
-                writer.writeFloat(z);
-                writer.writeVarInt(hand.ordinal());
-                break;
-        }
+        writer.writeVarInt(type.id());
+        writer.write(type);
         writer.writeBoolean(sneaking);
     }
 
-    public enum Type {
-        INTERACT,
-        ATTACK,
-        INTERACT_AT
+    public sealed interface Type extends Writeable
+            permits Interact, Attack, InteractAt {
+        int id();
+    }
+
+    public record Interact(@NotNull Player.Hand hand) implements Type {
+        public Interact(BinaryReader reader) {
+            this(Player.Hand.values()[reader.readVarInt()]);
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            writer.writeVarInt(hand.ordinal());
+        }
+
+        @Override
+        public int id() {
+            return 0;
+        }
+    }
+
+    public record Attack() implements Type {
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Empty
+        }
+
+        @Override
+        public int id() {
+            return 1;
+        }
+    }
+
+    public record InteractAt(float targetX, float targetY, float targetZ,
+                             Player.Hand hand) implements Type {
+        public InteractAt(BinaryReader reader) {
+            this(reader.readFloat(), reader.readFloat(), reader.readFloat(),
+                    Player.Hand.values()[reader.readVarInt()]);
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            writer.writeFloat(targetX);
+            writer.writeFloat(targetY);
+            writer.writeFloat(targetZ);
+            writer.writeVarInt(hand.ordinal());
+        }
+
+        @Override
+        public int id() {
+            return 2;
+        }
     }
 }

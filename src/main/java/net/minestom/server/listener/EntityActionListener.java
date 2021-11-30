@@ -8,8 +8,7 @@ import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
 public class EntityActionListener {
 
     public static void listener(ClientEntityActionPacket packet, Player player) {
-        ClientEntityActionPacket.Action action = packet.action;
-        switch (action) {
+        switch (packet.action()) {
             case START_SNEAKING -> EntityActionListener.setSneaking(player, true);
             case STOP_SNEAKING -> EntityActionListener.setSneaking(player, false);
             case START_SPRINTING -> EntityActionListener.setSprinting(player, true);

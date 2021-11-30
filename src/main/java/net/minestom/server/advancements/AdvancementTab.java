@@ -87,24 +87,14 @@ public class AdvancementTab implements Viewable {
      *
      * @return the packet adding this advancement tab and all its advancements
      */
-    @NotNull
-    protected AdvancementsPacket createPacket() {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-
+    protected @NotNull AdvancementsPacket createPacket() {
         List<AdvancementsPacket.AdvancementMapping> mappings = new ArrayList<>();
         List<AdvancementsPacket.ProgressMapping> progressMappings = new ArrayList<>();
-
         for (Advancement advancement : advancementMap.keySet()) {
             mappings.add(advancement.toMapping());
             progressMappings.add(advancement.toProgressMapping());
         }
-
-        advancementsPacket.identifiersToRemove = new String[]{};
-        advancementsPacket.advancementMappings = mappings.toArray(new AdvancementsPacket.AdvancementMapping[0]);
-        advancementsPacket.progressMappings = progressMappings.toArray(new AdvancementsPacket.ProgressMapping[0]);
-
-        return advancementsPacket;
+        return new AdvancementsPacket(false, mappings, List.of(), progressMappings);
     }
 
     /**

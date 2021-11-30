@@ -22,7 +22,7 @@ public class ChatMessageListener {
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     public static void listener(ClientChatMessagePacket packet, Player player) {
-        String message = packet.message;
+        String message = packet.message();
 
         final String cmdPrefix = CommandManager.COMMAND_PREFIX;
         if (message.startsWith(cmdPrefix)) {

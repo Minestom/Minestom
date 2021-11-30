@@ -2,7 +2,7 @@ package net.minestom.server.listener.manager;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,5 +18,5 @@ public interface ClientPacketConsumer {
      * @param packetController the packet controller, can be used to cancel the packet
      * @param packet           the packet
      */
-    void accept(@NotNull Player player, @NotNull PacketController packetController, @NotNull ClientPlayPacket packet);
+    void accept(@NotNull Player player, @NotNull PacketController packetController, @NotNull ClientPacket packet);
 }

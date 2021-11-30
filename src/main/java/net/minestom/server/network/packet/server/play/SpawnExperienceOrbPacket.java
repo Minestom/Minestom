@@ -1,20 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
-public class SpawnExperienceOrbPacket implements ServerPacket {
-
-    public int entityId;
-    public Pos position;
-    public short expCount;
-
-    public SpawnExperienceOrbPacket() {
-        position = Pos.ZERO;
+public record SpawnExperienceOrbPacket(int entityId, Pos position, short expCount) implements ServerPacket {
+    public SpawnExperienceOrbPacket(BinaryReader reader) {
+        this(reader.readVarInt(), new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble()), reader.readShort());
     }
 
     @Override
@@ -24,13 +19,6 @@ public class SpawnExperienceOrbPacket implements ServerPacket {
         writer.writeDouble(position.y());
         writer.writeDouble(position.z());
         writer.writeShort(expCount);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        position = new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble());
-        expCount = reader.readShort();
     }
 
     @Override

@@ -10,11 +10,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class PingPacket implements ClientPreplayPacket {
-
-    private long number;
-
-    public PingPacket() {
+public record PingPacket(long number) implements ClientPreplayPacket {
+    public PingPacket(BinaryReader reader) {
+        this(reader.readLong());
     }
 
     @Override
@@ -35,11 +33,6 @@ public class PingPacket implements ClientPreplayPacket {
                 }).delay(clientPingEvent.getDelay()).schedule();
             }
         }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.number = reader.readLong();
     }
 
     @Override

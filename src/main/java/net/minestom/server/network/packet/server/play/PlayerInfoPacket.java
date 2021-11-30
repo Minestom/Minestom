@@ -11,53 +11,50 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.UnaryOperator;
 
-public class PlayerInfoPacket implements ComponentHoldingServerPacket {
+public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
+    private final Action action;
+    private final List<Entry> entries;
 
-    public Action action;
-    public List<PlayerInfo> playerInfos;
-
-    PlayerInfoPacket() {
-        this(Action.UPDATE_DISPLAY_NAME);
+    public PlayerInfoPacket(@NotNull Action action, @NotNull List<Entry> entries) {
+        this.action = action;
+        this.entries = List.copyOf(entries);
     }
 
-    public PlayerInfoPacket(Action action) {
-        this.action = action;
-        this.playerInfos = new CopyOnWriteArrayList<>();
+    public PlayerInfoPacket(BinaryReader reader) {
+        this.action = Action.values()[reader.readVarInt()];
+        final int playerInfoCount = reader.readVarInt();
+        this.entries = new ArrayList<>(playerInfoCount);
+        for (int i = 0; i < playerInfoCount; i++) {
+            final UUID uuid = reader.readUuid();
+            this.entries.add(switch (action) {
+                case ADD_PLAYER -> new AddPlayer(uuid, reader);
+                case UPDATE_GAMEMODE -> new UpdateGameMode(uuid, reader);
+                case UPDATE_LATENCY -> new UpdateLatency(uuid, reader);
+                case UPDATE_DISPLAY_NAME -> new UpdateDisplayName(uuid, reader);
+                case REMOVE_PLAYER -> new RemovePlayer(uuid);
+            });
+        }
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
-        writer.writeVarInt(playerInfos.size());
-
-        for (PlayerInfo playerInfo : this.playerInfos) {
-            if (!playerInfo.getClass().equals(action.getClazz())) continue;
-            writer.writeUuid(playerInfo.uuid);
-            playerInfo.write(writer);
+        writer.writeVarInt(entries.size());
+        for (Entry entry : this.entries) {
+            if (!entry.getClass().equals(action.getClazz())) continue;
+            writer.writeUuid(entry.uuid());
+            entry.write(writer);
         }
     }
 
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        action = Action.values()[reader.readVarInt()];
-        int playerInfoCount = reader.readVarInt();
+    public Action action() {
+        return action;
+    }
 
-        playerInfos = new ArrayList<>(playerInfoCount);
-
-        for (int i = 0; i < playerInfoCount; i++) {
-            UUID uuid = reader.readUuid();
-            PlayerInfo info = switch (action) {
-                case ADD_PLAYER -> new AddPlayer(uuid, reader);
-                case UPDATE_GAMEMODE -> new UpdateGamemode(uuid, reader);
-                case UPDATE_LATENCY -> new UpdateLatency(uuid, reader);
-                case UPDATE_DISPLAY_NAME -> new UpdateDisplayName(uuid, reader);
-                case REMOVE_PLAYER -> new RemovePlayer(uuid);
-            };
-            playerInfos.set(i, info);
-        }
+    public List<Entry> entries() {
+        return entries;
     }
 
     @Override
@@ -66,14 +63,27 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlayerInfoPacket)) return false;
+        PlayerInfoPacket that = (PlayerInfoPacket) o;
+        return action == that.action && entries.equals(that.entries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(action, entries);
+    }
+
+    @Override
     public @NotNull Collection<Component> components() {
         switch (this.action) {
             case ADD_PLAYER:
             case UPDATE_DISPLAY_NAME:
                 List<Component> components = new ArrayList<>();
-                for (PlayerInfo playerInfo : playerInfos) {
-                    if (playerInfo instanceof ComponentHolder) {
-                        components.addAll(((ComponentHolder<? extends PlayerInfo>) playerInfo).components());
+                for (Entry entry : entries) {
+                    if (entry instanceof ComponentHolder) {
+                        components.addAll(((ComponentHolder<? extends Entry>) entry).components());
                     }
                 }
                 return components;
@@ -84,89 +94,55 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        switch (this.action) {
-            case ADD_PLAYER:
-            case UPDATE_DISPLAY_NAME:
-                PlayerInfoPacket packet = new PlayerInfoPacket(action);
-                packet.playerInfos = new ArrayList<>(playerInfos.size());
-                for (PlayerInfo playerInfo : playerInfos) {
-                    if (playerInfo instanceof ComponentHolder) {
-                        playerInfos.add(((ComponentHolder<? extends PlayerInfo>) playerInfo).copyWithOperator(operator));
+        return switch (action) {
+            case ADD_PLAYER, UPDATE_DISPLAY_NAME -> {
+                List<Entry> entries = new ArrayList<>(this.entries.size());
+                for (Entry entry : this.entries) {
+                    if (entry instanceof ComponentHolder) {
+                        entries.add(((ComponentHolder<? extends Entry>) entry).copyWithOperator(operator));
                     } else {
-                        playerInfos.add(playerInfo);
+                        entries.add(entry);
                     }
                 }
-            default:
-                return this;
-        }
+                yield new PlayerInfoPacket(action, entries);
+            }
+            default -> this;
+        };
     }
 
     public enum Action {
-
         ADD_PLAYER(AddPlayer.class),
-        UPDATE_GAMEMODE(UpdateGamemode.class),
+        UPDATE_GAMEMODE(UpdateGameMode.class),
         UPDATE_LATENCY(UpdateLatency.class),
         UPDATE_DISPLAY_NAME(UpdateDisplayName.class),
         REMOVE_PLAYER(RemovePlayer.class);
 
-        private final Class<? extends PlayerInfo> clazz;
+        private final Class<? extends Entry> clazz;
 
-        Action(Class<? extends PlayerInfo> clazz) {
+        Action(Class<? extends Entry> clazz) {
             this.clazz = clazz;
         }
 
         @NotNull
-        public Class<? extends PlayerInfo> getClazz() {
+        public Class<? extends Entry> getClazz() {
             return clazz;
         }
     }
 
-    public static abstract class PlayerInfo {
+    public sealed interface Entry
+            permits AddPlayer, UpdateGameMode, UpdateLatency, UpdateDisplayName, RemovePlayer {
+        void write(BinaryWriter writer);
 
-        public UUID uuid;
-
-        public PlayerInfo(UUID uuid) {
-            this.uuid = uuid;
-        }
-
-        public abstract void write(BinaryWriter writer);
+        UUID uuid();
     }
 
-    public static class AddPlayer extends PlayerInfo implements ComponentHolder<AddPlayer> {
-
-        public String name;
-        public List<Property> properties;
-        public GameMode gameMode;
-        public int ping;
-        public Component displayName;
-
-        public AddPlayer(UUID uuid, String name, GameMode gameMode, int ping) {
-            super(uuid);
-            this.name = name;
-            this.properties = new ArrayList<>();
-            this.gameMode = gameMode;
-            this.ping = ping;
-        }
-
-        AddPlayer(UUID uuid, BinaryReader reader) {
-            super(uuid);
-            name = reader.readSizedString();
-            int propertyCount = reader.readVarInt();
-
-            properties = new ArrayList<>(propertyCount);
-            for (int i = 0; i < propertyCount; i++) {
-                properties.set(i, new Property(reader));
-            }
-
-            gameMode = GameMode.fromId((byte) reader.readVarInt());
-            ping = reader.readVarInt();
-            boolean hasDisplayName = reader.readBoolean();
-
-            if (hasDisplayName) {
-                displayName = reader.readComponent();
-            } else {
-                displayName = null;
-            }
+    public record AddPlayer(UUID uuid, String name, List<Property> properties, GameMode gameMode, int ping,
+                            Component displayName) implements Entry, ComponentHolder<AddPlayer> {
+        public AddPlayer(UUID uuid, BinaryReader reader) {
+            this(uuid, reader.readSizedString(),
+                    reader.readVarIntList(Property::new),
+                    GameMode.values()[reader.readVarInt()], reader.readVarInt(),
+                    reader.readBoolean() ? reader.readComponent() : null);
         }
 
         @Override
@@ -181,54 +157,27 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
 
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
-            if (hasDisplayName)
-                writer.writeComponent(displayName);
+            if (hasDisplayName) writer.writeComponent(displayName);
         }
 
         @Override
         public @NotNull Collection<Component> components() {
-            if (displayName == null) {
-                return Collections.emptyList();
-            } else {
-                return Collections.singleton(displayName);
-            }
+            return displayName != null ? Collections.singleton(displayName) : Collections.emptyList();
         }
 
         @Override
         public @NotNull AddPlayer copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            if (displayName == null) {
-                return this;
-            } else {
-                AddPlayer addPlayer = new AddPlayer(uuid, name, gameMode, ping);
-                addPlayer.displayName = operator.apply(displayName);
-                return addPlayer;
-            }
+            return displayName != null ?
+                    new AddPlayer(uuid, name, properties, gameMode, ping, operator.apply(displayName)) : this;
         }
 
-        public static class Property {
-
-            public String name;
-            public String value;
-            public String signature;
-
-            public Property(String name, String value, String signature) {
-                this.name = name;
-                this.value = value;
-                this.signature = signature;
-            }
-
+        public record Property(String name, String value, String signature) {
             public Property(String name, String value) {
                 this(name, value, null);
             }
 
-            Property(BinaryReader reader) {
-                name = reader.readSizedString();
-                value = reader.readSizedString();
-                boolean hasSignature = reader.readBoolean();
-
-                if (hasSignature) {
-                    signature = reader.readSizedString();
-                }
+            public Property(BinaryReader reader) {
+                this(reader.readSizedString(), reader.readSizedString(), reader.readBoolean() ? reader.readSizedString() : null);
             }
 
             public void write(BinaryWriter writer) {
@@ -237,24 +186,14 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
 
                 final boolean signed = signature != null;
                 writer.writeBoolean(signed);
-                if (signed)
-                    writer.writeSizedString(signature);
+                if (signed) writer.writeSizedString(signature);
             }
         }
     }
 
-    public static class UpdateGamemode extends PlayerInfo {
-
-        public GameMode gameMode;
-
-        public UpdateGamemode(UUID uuid, GameMode gameMode) {
-            super(uuid);
-            this.gameMode = gameMode;
-        }
-
-        UpdateGamemode(UUID uuid, BinaryReader reader) {
-            super(uuid);
-            gameMode = GameMode.fromId((byte) reader.readVarInt());
+    public record UpdateGameMode(UUID uuid, GameMode gameMode) implements Entry {
+        public UpdateGameMode(UUID uuid, BinaryReader reader) {
+            this(uuid, GameMode.fromId((byte) reader.readVarInt()));
         }
 
         @Override
@@ -263,18 +202,9 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
         }
     }
 
-    public static class UpdateLatency extends PlayerInfo {
-
-        public int ping;
-
-        public UpdateLatency(UUID uuid, int ping) {
-            super(uuid);
-            this.ping = ping;
-        }
-
-        UpdateLatency(UUID uuid, BinaryReader reader) {
-            super(uuid);
-            ping = reader.readVarInt();
+    public record UpdateLatency(UUID uuid, int ping) implements Entry {
+        public UpdateLatency(UUID uuid, BinaryReader reader) {
+            this(uuid, reader.readVarInt());
         }
 
         @Override
@@ -283,58 +213,31 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
         }
     }
 
-    public static class UpdateDisplayName extends PlayerInfo implements ComponentHolder<UpdateDisplayName> {
-
-        public Component displayName;
-
-        public UpdateDisplayName(UUID uuid, Component displayName) {
-            super(uuid);
-            this.displayName = displayName;
-        }
-
-        UpdateDisplayName(UUID uuid, BinaryReader reader) {
-            super(uuid);
-            boolean hasDisplayName = reader.readBoolean();
-            if (hasDisplayName) {
-                displayName = reader.readComponent();
-            } else {
-                displayName = null;
-            }
+    public record UpdateDisplayName(UUID uuid,
+                                    Component displayName) implements Entry, ComponentHolder<UpdateDisplayName> {
+        public UpdateDisplayName(UUID uuid, BinaryReader reader) {
+            this(uuid, reader.readBoolean() ? reader.readComponent() : null);
         }
 
         @Override
         public void write(BinaryWriter writer) {
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
-            if (hasDisplayName)
-                writer.writeComponent(displayName);
+            if (hasDisplayName) writer.writeComponent(displayName);
         }
 
         @Override
         public @NotNull Collection<Component> components() {
-            if (displayName == null) {
-                return Collections.emptyList();
-            } else {
-                return Collections.singleton(displayName);
-            }
+            return displayName != null ? Collections.singleton(displayName) : Collections.emptyList();
         }
 
         @Override
         public @NotNull UpdateDisplayName copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            if (displayName == null) {
-                return this;
-            } else {
-                return new UpdateDisplayName(uuid, operator.apply(displayName));
-            }
+            return displayName != null ? new UpdateDisplayName(uuid, operator.apply(displayName)) : this;
         }
     }
 
-    public static class RemovePlayer extends PlayerInfo {
-
-        public RemovePlayer(UUID uuid) {
-            super(uuid);
-        }
-
+    public record RemovePlayer(UUID uuid) implements Entry {
         @Override
         public void write(BinaryWriter writer) {
         }

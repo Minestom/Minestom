@@ -6,24 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerAbilitiesPacket implements ServerPacket {
-    public static final byte FLAG_INVULNERABLE  = 0x01;
-    public static final byte FLAG_FLYING        = 0x02;
-    public static final byte FLAG_ALLOW_FLYING  = 0x04;
+public record PlayerAbilitiesPacket(byte flags, float flyingSpeed, float fieldViewModifier) implements ServerPacket {
+    public static final byte FLAG_INVULNERABLE = 0x01;
+    public static final byte FLAG_FLYING = 0x02;
+    public static final byte FLAG_ALLOW_FLYING = 0x04;
     public static final byte FLAG_INSTANT_BREAK = 0x08;
 
-    public byte flags;
-    public float flyingSpeed;
-    public float fieldViewModifier;
-
-    public PlayerAbilitiesPacket(byte flags, float flyingSpeed, float fieldViewModifier) {
-        this.flags = flags;
-        this.flyingSpeed = flyingSpeed;
-        this.fieldViewModifier = fieldViewModifier;
-    }
-
-    public PlayerAbilitiesPacket() {
-        this((byte) 0, 0f, 0f);
+    public PlayerAbilitiesPacket(BinaryReader reader) {
+        this(reader.readByte(), reader.readFloat(), reader.readFloat());
     }
 
     @Override
@@ -31,13 +21,6 @@ public class PlayerAbilitiesPacket implements ServerPacket {
         writer.writeByte(flags);
         writer.writeFloat(flyingSpeed);
         writer.writeFloat(fieldViewModifier);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.flags = reader.readByte();
-        this.flyingSpeed = reader.readFloat();
-        this.fieldViewModifier = reader.readFloat();
     }
 
     @Override

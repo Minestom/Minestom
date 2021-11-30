@@ -8,58 +8,26 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
 
-import java.io.IOException;
-
-public class RespawnPacket implements ServerPacket {
-
-    public DimensionType dimensionType;
-    public long hashedSeed;
-    public GameMode gameMode;
-    public boolean isDebug = false;
-    public boolean isFlat = true;
-    public boolean copyMeta = true;
-
-    public RespawnPacket() {
-        dimensionType = DimensionType.OVERWORLD;
-        gameMode = GameMode.SURVIVAL;
+public record RespawnPacket(DimensionType dimensionType, String worldName,
+                            long hashedSeed, GameMode gameMode, GameMode previousGameMode,
+                            boolean isDebug, boolean isFlat, boolean copyMeta) implements ServerPacket {
+    public RespawnPacket(BinaryReader reader) {
+        this(DimensionType.fromNBT((NBTCompound) reader.readTag()), reader.readSizedString(),
+                reader.readLong(), GameMode.values()[reader.readByte()], GameMode.values()[reader.readByte()],
+                reader.readBoolean(), reader.readBoolean(), reader.readBoolean());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeNBT("", dimensionType.toNBT());
-
-        // Warning: must be different for each dimension type! Otherwise the client seems to cache the world name
-        writer.writeSizedString(dimensionType.getName().toString());
-
+        writer.writeSizedString(worldName);
         writer.writeLong(hashedSeed);
         writer.writeByte(gameMode.getId());
-        writer.writeByte(gameMode.getId()); // Hardcore flag not included
+        writer.writeByte(previousGameMode.getId()); // Hardcore flag not included
         writer.writeBoolean(isDebug);
         writer.writeBoolean(isFlat);
         writer.writeBoolean(copyMeta);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        try {
-            dimensionType = DimensionType.fromNBT((NBTCompound) reader.readTag());
-
-            // dimension type name
-            reader.readSizedString();
-
-            hashedSeed = reader.readLong();
-            gameMode = GameMode.values()[reader.readByte()];
-            // TODO: hardcore flag
-            reader.readByte();
-            isDebug = reader.readBoolean();
-            isFlat = reader.readBoolean();
-            copyMeta = reader.readBoolean();
-        } catch (IOException | NBTException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to read DimensionType inside RespawnPacket", e);
-        }
     }
 
     @Override
