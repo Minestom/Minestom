@@ -102,11 +102,8 @@ public class Demo {
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             renderingCode.accept(framebuffer);
             for (int i = 0; i < subviews.length; i++) {
-                final MapDataPacket packet = new MapDataPacket();
-                packet.mapId = mapIDStart + i;
-
                 Framebuffer f = subviews[i];
-                f.preparePacket(packet);
+                MapDataPacket packet = f.preparePacket(mapIDStart + i);
                 sendPacket(packet);
             }
         }).repeat(15, TimeUnit.MILLISECOND).schedule();

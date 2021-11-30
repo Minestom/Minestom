@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class RecipeManager {
-    private final DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket();
+    private DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket(List.of());
     private final Set<Recipe> recipes = new CopyOnWriteArraySet<>();
 
     public void addRecipe(@NotNull Recipe recipe) {
@@ -48,7 +48,7 @@ public class RecipeManager {
                             new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
                                     shapelessRecipe.getRecipeId(),
                                     shapelessRecipe.getGroup(),
-                                    shapelessRecipe.getIngredients().toArray(new DeclareRecipesPacket.Ingredient[0]),
+                                    shapelessRecipe.getIngredients(),
                                     shapelessRecipe.getResult()
                             )
                     );
@@ -61,7 +61,7 @@ public class RecipeManager {
                                     shapedRecipe.getWidth(),
                                     shapedRecipe.getHeight(),
                                     shapedRecipe.getGroup(),
-                                    shapedRecipe.getIngredients().toArray(new DeclareRecipesPacket.Ingredient[0]),
+                                    shapedRecipe.getIngredients(),
                                     shapedRecipe.getResult()
                             )
                     );
@@ -143,7 +143,7 @@ public class RecipeManager {
             }
         }
 
-        declareRecipesPacket.recipes = recipesCache.toArray(new DeclareRecipesPacket.DeclaredRecipe[0]);
+        declareRecipesPacket = new DeclareRecipesPacket(recipesCache);
     }
 
 }

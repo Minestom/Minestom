@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -110,25 +111,11 @@ public class AdventurePacketConvertor {
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         if (minestomSound == null) {
-            final NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
-            packet.soundName = sound.name().asString();
-            packet.soundSource = sound.source();
-            packet.x = (int) x;
-            packet.y = (int) y;
-            packet.z = (int) z;
-            packet.volume = sound.volume();
-            packet.pitch = sound.pitch();
-            return packet;
+            return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
+                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch());
         } else {
-            final SoundEffectPacket packet = new SoundEffectPacket();
-            packet.soundId = minestomSound.id();
-            packet.soundSource = sound.source();
-            packet.x = (int) x;
-            packet.y = (int) y;
-            packet.z = (int) z;
-            packet.volume = sound.volume();
-            packet.pitch = sound.pitch();
-            return packet;
+            return new SoundEffectPacket(minestomSound.id(), sound.source(),
+                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch());
         }
     }
 
@@ -148,24 +135,11 @@ public class AdventurePacketConvertor {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
 
         if (minestomSound != null) {
-            final EntitySoundEffectPacket packet = new EntitySoundEffectPacket();
-            packet.soundId = minestomSound.id();
-            packet.soundSource = sound.source();
-            packet.entityId = entity.getEntityId();
-            packet.volume = sound.volume();
-            packet.pitch = sound.pitch();
-            return packet;
+            return new EntitySoundEffectPacket(minestomSound.id(), sound.source(), entity.getEntityId(), sound.volume(), sound.pitch());
         } else {
-            final var pos = entity.getPosition();
-            final NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
-            packet.soundName = sound.name().asString();
-            packet.soundSource = sound.source();
-            packet.x = (int) pos.x();
-            packet.y = (int) pos.y();
-            packet.z = (int) pos.z();
-            packet.volume = sound.volume();
-            packet.pitch = sound.pitch();
-            return packet;
+            final Pos pos = entity.getPosition();
+            return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
+                    (int) pos.x(), (int) pos.y(), (int) pos.z(), sound.volume(), sound.pitch());
         }
     }
 
@@ -189,30 +163,27 @@ public class AdventurePacketConvertor {
      * @return the sound stop packet
      */
     public static ServerPacket createSoundStopPacket(@NotNull SoundStop stop) {
-        StopSoundPacket packet = new StopSoundPacket();
-        packet.flags = 0x0;
+        byte flags = 0x0;
+        Sound.Source source = stop.source();
+        String sound = null;
 
-        final Sound.Source source = stop.source();
-        if (source != null) {
-            packet.flags |= 0x1;
-            packet.source = AdventurePacketConvertor.getSoundSourceValue(source);
+        if (source != null) flags |= 0x1;
+
+        final Key soundKey = stop.sound();
+        if (soundKey != null) {
+            flags |= 0x2;
+            sound = soundKey.asString();
         }
 
-        final Key sound = stop.sound();
-        if (sound != null) {
-            packet.flags |= 0x2;
-            packet.sound = sound.asString();
-        }
-
-        return packet;
+        return new StopSoundPacket(flags, source, sound);
     }
 
     /**
      * Creates one of the three title packets from a title part and a value.
      *
-     * @param part the part
+     * @param part  the part
      * @param value the value
-     * @param <T> the type of the part
+     * @param <T>   the type of the part
      * @return the title packet
      */
     public static <T> @NotNull ServerPacket createTitlePartPacket(@NotNull TitlePart<T> part, @NotNull T value) {

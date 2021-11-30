@@ -13,6 +13,8 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
@@ -194,7 +196,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
             final int slot = convertToPacketSlot(i);
             convertedSlots[slot] = itemStacks[i];
         }
-        return new WindowItemsPacket((byte) 0, 0, convertedSlots, cursorItem);
+        return new WindowItemsPacket((byte) 0, 0, List.of(convertedSlots), cursorItem);
     }
 
     @Override

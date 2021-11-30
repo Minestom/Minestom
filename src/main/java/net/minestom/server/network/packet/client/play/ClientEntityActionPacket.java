@@ -1,21 +1,15 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientEntityActionPacket extends ClientPlayPacket {
-
-    public int playerId;
-    public Action action = Action.START_SNEAKING;
-    public int horseJumpBoost;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.playerId = reader.readVarInt();
-        this.action = Action.values()[reader.readVarInt()];
-        this.horseJumpBoost = reader.readVarInt();
+public record ClientEntityActionPacket(int playerId, @NotNull Action action,
+                                       int horseJumpBoost) implements ClientPacket {
+    public ClientEntityActionPacket(BinaryReader reader) {
+        this(reader.readVarInt(), Action.values()[reader.readVarInt()],
+                reader.readVarInt());
     }
 
     @Override
@@ -36,5 +30,4 @@ public class ClientEntityActionPacket extends ClientPlayPacket {
         OPEN_HORSE_INVENTORY,
         START_FLYING_ELYTRA
     }
-
 }

@@ -6,19 +6,22 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class UpdateScorePacket implements ServerPacket {
+public record UpdateScorePacket(@NotNull String entityName, byte action,
+                                @NotNull String objectiveName, int value) implements ServerPacket {
+    public UpdateScorePacket(BinaryReader reader) {
+        this(read(reader));
+    }
 
-    public String entityName;
-    public byte action;
-    public String objectiveName;
-    public int value;
+    private UpdateScorePacket(UpdateScorePacket packet) {
+        this(packet.entityName, packet.action, packet.objectiveName, packet.value);
+    }
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public UpdateScorePacket() {
-        entityName = "";
-        objectiveName = "";
+    private static UpdateScorePacket read(BinaryReader reader) {
+        var entityName = reader.readSizedString();
+        var action = reader.readByte();
+        var objectiveName = reader.readSizedString();
+        var value = action != 1 ? reader.readVarInt() : 0;
+        return new UpdateScorePacket(entityName, action, objectiveName, value);
     }
 
     @Override
@@ -26,19 +29,7 @@ public class UpdateScorePacket implements ServerPacket {
         writer.writeSizedString(entityName);
         writer.writeByte(action);
         writer.writeSizedString(objectiveName);
-        if (action != 1) {
-            writer.writeVarInt(value);
-        }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityName = reader.readSizedString();
-        action = reader.readByte();
-        objectiveName = reader.readSizedString();
-        if (action != 1) {
-            value = reader.readVarInt();
-        }
+        if (action != 1) writer.writeVarInt(value);
     }
 
     @Override

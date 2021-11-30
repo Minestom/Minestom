@@ -6,20 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClearTitlesPacket implements ServerPacket {
-
-    public boolean reset;
-
-    public ClearTitlesPacket() {
-    }
-
-    public ClearTitlesPacket(boolean reset) {
-        this.reset = reset;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.reset = reader.readBoolean();
+public record ClearTitlesPacket(boolean reset) implements ServerPacket {
+    public ClearTitlesPacket(BinaryReader reader) {
+        this(reader.readBoolean());
     }
 
     @Override

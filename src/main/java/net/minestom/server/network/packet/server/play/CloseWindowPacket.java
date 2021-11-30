@@ -6,20 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class CloseWindowPacket implements ServerPacket {
-
-    public byte windowId;
-
-    public CloseWindowPacket() {}
+public record CloseWindowPacket(byte windowId) implements ServerPacket {
+    public CloseWindowPacket(BinaryReader reader) {
+        this(reader.readByte());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        windowId = reader.readByte();
     }
 
     @Override

@@ -7,20 +7,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityTeleportPacket implements ServerPacket {
-
-    public int entityId;
-    public Pos position;
-    public boolean onGround;
-
-    public EntityTeleportPacket(int entityId, Pos position, boolean onGround) {
-        this.entityId = entityId;
-        this.position = position;
-        this.onGround = onGround;
-    }
-
-    public EntityTeleportPacket() {
-        this(0, Pos.ZERO, false);
+public record EntityTeleportPacket(int entityId, Pos position, boolean onGround) implements ServerPacket {
+    public EntityTeleportPacket(BinaryReader reader) {
+        this(reader.readVarInt(), new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
+                        reader.readByte() * 360f / 256f, reader.readByte() * 360f / 256f),
+                reader.readBoolean());
     }
 
     @Override
@@ -32,19 +23,6 @@ public class EntityTeleportPacket implements ServerPacket {
         writer.writeByte((byte) (position.yaw() * 256f / 360f));
         writer.writeByte((byte) (position.pitch() * 256f / 360f));
         writer.writeBoolean(onGround);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        position = new Pos(
-                reader.readDouble(),
-                reader.readDouble(),
-                reader.readDouble(),
-                reader.readByte() * 360f / 256f,
-                reader.readByte() * 360f / 256f
-        );
-        onGround = reader.readBoolean();
     }
 
     @Override

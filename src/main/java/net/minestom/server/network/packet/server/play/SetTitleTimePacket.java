@@ -6,27 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetTitleTimePacket implements ServerPacket {
-
-    public int fadeIn;
-    public int stay;
-    public int fadeOut;
-
-    public SetTitleTimePacket() {
-    }
-
-    public SetTitleTimePacket(int fadeIn, int stay, int fadeOut) {
-        this.fadeIn = fadeIn;
-        this.stay = stay;
-        this.fadeOut = fadeOut;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.fadeIn = reader.readInt();
-        this.stay = reader.readInt();
-        this.fadeOut = reader.readInt();
-
+public record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements ServerPacket {
+    public SetTitleTimePacket(BinaryReader reader) {
+        this(reader.readInt(), reader.readInt(), reader.readInt());
     }
 
     @Override

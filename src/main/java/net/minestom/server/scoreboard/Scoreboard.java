@@ -37,15 +37,8 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param type  The type for the objective
      * @return the creation objective packet
      */
-    @NotNull
-    default ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
-        final ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
-        packet.objectiveName = this.getObjectiveName();
-        packet.mode = 0; // Create Scoreboard
-        packet.objectiveValue = value;
-        packet.type = type;
-
-        return packet;
+    default @NotNull ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
+        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type);
     }
 
     /**
@@ -53,13 +46,8 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      *
      * @return the destruction objective packet
      */
-    @NotNull
-    default ScoreboardObjectivePacket getDestructionObjectivePacket() {
-        final ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
-        packet.objectiveName = this.getObjectiveName();
-        packet.mode = 1; // Destroy Scoreboard
-
-        return packet;
+    default @NotNull ScoreboardObjectivePacket getDestructionObjectivePacket() {
+        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 1, null, null);
     }
 
     /**
@@ -68,13 +56,8 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param position The position of the scoreboard
      * @return the created display scoreboard packet
      */
-    @NotNull
-    default DisplayScoreboardPacket getDisplayScoreboardPacket(byte position) {
-        final DisplayScoreboardPacket packet = new DisplayScoreboardPacket();
-        packet.position = position;
-        packet.scoreName = this.getObjectiveName();
-
-        return packet;
+    default @NotNull DisplayScoreboardPacket getDisplayScoreboardPacket(byte position) {
+        return new DisplayScoreboardPacket(position, getObjectiveName());
     }
 
     /**
@@ -84,13 +67,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param score  The new score
      */
     default void updateScore(Player player, int score) {
-        final UpdateScorePacket packet = new UpdateScorePacket();
-        packet.entityName = player.getUsername();
-        packet.action = 0; // Create/Update score
-        packet.objectiveName = this.getObjectiveName();
-        packet.value = score;
-
-        sendPacketsToViewers(packet);
+        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), (byte) 0, getObjectiveName(), score));
     }
 
     /**
@@ -98,11 +75,10 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      *
      * @return the objective name
      */
-    @NotNull
-    String getObjectiveName();
+    @NotNull String getObjectiveName();
 
     @Override
-    @NotNull default Collection<Player> getPlayers() {
+    default @NotNull Collection<Player> getPlayers() {
         return this.getViewers();
     }
 }

@@ -10,7 +10,10 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class StatusRequestPacket implements ClientPreplayPacket {
+public record StatusRequestPacket() implements ClientPreplayPacket {
+    public StatusRequestPacket(BinaryReader reader) {
+        this();
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -18,11 +21,6 @@ public class StatusRequestPacket implements ClientPreplayPacket {
         final ServerListPingEvent statusRequestEvent = new ServerListPingEvent(connection, pingVersion);
         EventDispatcher.callCancellable(statusRequestEvent, () ->
                 connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getResponseData()))));
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        // Empty
     }
 
     @Override

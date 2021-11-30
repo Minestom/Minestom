@@ -78,7 +78,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void clearTitle() {
-        sendGroupedPacket(new ClearTitlesPacket());
+        sendGroupedPacket(new ClearTitlesPacket(false));
     }
 
     @Override

@@ -177,8 +177,6 @@ public final class CommandManager {
      * @return the commands packet for the specific player
      */
     private @NotNull DeclareCommandsPacket buildPacket(@NotNull Player player) {
-        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
-
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         // Contains the children of the main node (all commands name)
         IntList rootChildren = new IntArrayList();
@@ -227,11 +225,7 @@ public final class CommandManager {
         }
         // Add root node children
         rootNode.children = ArrayUtils.toArray(rootChildren);
-
-        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
-        declareCommandsPacket.rootIndex = 0;
-
-        return declareCommandsPacket;
+        return new DeclareCommandsPacket(nodes, 0);
     }
 
     private int serializeCommand(CommandSender sender, Command command,

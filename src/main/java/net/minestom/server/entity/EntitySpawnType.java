@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
@@ -11,37 +13,28 @@ public enum EntitySpawnType {
     BASE {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            SpawnEntityPacket packet = new SpawnEntityPacket();
-            packet.entityId = entity.getEntityId();
-            packet.uuid = entity.getUuid();
-            packet.type = entity.getEntityType().id();
-            packet.position = entity.getPosition();
+            int data = 0;
+            short velocityX = 0, velocityZ = 0, velocityY = 0;
             if (entity.getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
-                packet.data = objectDataProvider.getObjectData();
+                data = objectDataProvider.getObjectData();
                 if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
                     final var velocity = entity.getVelocityForPacket();
-                    packet.velocityX = (short) velocity.x();
-                    packet.velocityY = (short) velocity.y();
-                    packet.velocityZ = (short) velocity.z();
+                    velocityX = (short) velocity.x();
+                    velocityY = (short) velocity.y();
+                    velocityZ = (short) velocity.z();
                 }
             }
-            return packet;
+            return new SpawnEntityPacket(entity.getEntityId(), entity.getUuid(), entity.getEntityType().id(),
+                    entity.getPosition(), data, velocityX, velocityY, velocityZ);
         }
     },
     LIVING {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            SpawnLivingEntityPacket packet = new SpawnLivingEntityPacket();
-            packet.entityId = entity.getEntityId();
-            packet.entityUuid = entity.getUuid();
-            packet.entityType = entity.getEntityType().id();
-            packet.position = entity.getPosition();
-            packet.headPitch = entity.getPosition().pitch();
-            final var velocity = entity.getVelocityForPacket();
-            packet.velocityX = (short) velocity.x();
-            packet.velocityY = (short) velocity.y();
-            packet.velocityZ = (short) velocity.z();
-            return packet;
+            final Pos position = entity.getPosition();
+            final Vec velocity = entity.getVelocityForPacket();
+            return new SpawnLivingEntityPacket(entity.getEntityId(), entity.getUuid(), entity.getEntityType().id(),
+                    position, position.yaw(), (short) velocity.x(), (short) velocity.y(), (short) velocity.z());
         }
     },
     PLAYER {
@@ -53,41 +46,35 @@ public enum EntitySpawnType {
     EXPERIENCE_ORB {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            SpawnExperienceOrbPacket packet = new SpawnExperienceOrbPacket();
-            packet.entityId = entity.getEntityId();
-            packet.position = entity.getPosition();
-            if (entity.getEntityMeta() instanceof ExperienceOrbMeta experienceOrbMeta) {
-                packet.expCount = (short) experienceOrbMeta.getCount();
-            }
-            return packet;
+            final short expCount = (short) (entity.getEntityMeta() instanceof ExperienceOrbMeta experienceOrbMeta ?
+                    experienceOrbMeta.getCount() : 0);
+            return new SpawnExperienceOrbPacket(entity.getEntityId(), entity.getPosition(), expCount);
         }
     },
     PAINTING {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            SpawnPaintingPacket packet = new SpawnPaintingPacket();
-            packet.entityId = entity.getEntityId();
-            packet.entityUuid = entity.getUuid();
+            int motive = 0;
+            Point position = Vec.ZERO;
+            byte direction = 0;
             if (entity.getEntityMeta() instanceof PaintingMeta paintingMeta) {
-                packet.motive = paintingMeta.getMotive().ordinal();
-                packet.position = new Vec(
+                motive = paintingMeta.getMotive().ordinal();
+                position = new Vec(
                         Math.max(0, (paintingMeta.getMotive().getWidth() >> 1) - 1),
                         paintingMeta.getMotive().getHeight() >> 1,
                         0
                 );
-                switch (paintingMeta.getDirection()) {
-                    case SOUTH -> packet.direction = 0;
-                    case WEST -> packet.direction = 1;
-                    case NORTH -> packet.direction = 2;
-                    case EAST -> packet.direction = 3;
-                }
-            } else {
-                packet.position = Vec.ZERO;
+                direction = switch (paintingMeta.getDirection()) {
+                    case SOUTH -> 0;
+                    case WEST -> 1;
+                    case NORTH -> 2;
+                    case EAST -> 3;
+                    default -> 0;
+                };
             }
-            return packet;
+            return new SpawnPaintingPacket(entity.getEntityId(), entity.getUuid(), motive, position, direction);
         }
     };
 
     public abstract ServerPacket getSpawnPacket(Entity entity);
-
 }
