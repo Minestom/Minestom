@@ -309,7 +309,7 @@ public final class CommandManager {
         Map<IndexedArgument, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         // Sort syntaxes by argument count. Brigadier requires it.
-        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).toList();
+        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().size())).toList();
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
             if (commandCondition != null && !commandCondition.canUse(sender, null)) {

@@ -118,7 +118,7 @@ public final class StringReader extends FixedStringReader {
 
     /**
      * Skips characters until the end of the string has been reached or the next character is whitespace according to
-     * {@link Character#isWhitespace(char)}.
+     * {@link StringReader#isValidWhitespace(char)}.
      */
     public void skipWhitespace() {
         while (canRead() && isValidWhitespace(peek())) {
@@ -140,8 +140,8 @@ public final class StringReader extends FixedStringReader {
     }
 
     /**
-     * If the next character is a whitespace character according to {@link Character#isWhitespace(char)}, it gets
-     * skipped. If it is not, an exception is thrown.
+     * If the next character is a whitespace character according to {@link StringReader#isValidWhitespace(char)}, it
+     * gets skipped. If it is not, an exception is thrown.
      */
     public void assureWhitespaceCharacter() throws CommandException {
         if (!canRead() || !isValidWhitespace(peek())) {
