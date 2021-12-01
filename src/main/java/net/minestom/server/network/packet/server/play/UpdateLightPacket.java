@@ -7,8 +7,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record UpdateLightPacket(int chunkX, int chunkZ, LightData lightData)
-        implements ServerPacket {
+public record UpdateLightPacket(int chunkX, int chunkZ,
+                                @NotNull LightData lightData) implements ServerPacket {
     public UpdateLightPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readVarInt(), new LightData(reader));
     }
@@ -17,7 +17,7 @@ public record UpdateLightPacket(int chunkX, int chunkZ, LightData lightData)
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(chunkX);
         writer.writeVarInt(chunkZ);
-        this.lightData.write(writer);
+        writer.write(lightData);
     }
 
     @Override
