@@ -4,7 +4,6 @@ import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.advancement.AdvancementUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,10 +36,8 @@ public class AdvancementTab implements Viewable {
 
     protected AdvancementTab(@NotNull String rootIdentifier, @NotNull AdvancementRoot root) {
         this.root = root;
-
         cacheAdvancement(rootIdentifier, root, null);
-
-        this.removePacket = AdvancementUtils.getRemovePacket(new String[]{rootIdentifier});
+        this.removePacket = new AdvancementsPacket(false, List.of(), List.of(rootIdentifier), List.of());
     }
 
     /**
