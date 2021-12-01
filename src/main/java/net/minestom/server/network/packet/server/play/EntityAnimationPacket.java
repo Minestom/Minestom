@@ -6,7 +6,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record EntityAnimationPacket(int entityId, Animation animation) implements ServerPacket {
+public record EntityAnimationPacket(int entityId, @NotNull Animation animation) implements ServerPacket {
     public EntityAnimationPacket(BinaryReader reader) {
         this(reader.readVarInt(), Animation.values()[reader.readByte()]);
     }
