@@ -8,39 +8,30 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-public record PlayerListHeaderAndFooterPacket(Component header,
-                                              Component footer) implements ComponentHoldingServerPacket {
+public record PlayerListHeaderAndFooterPacket(@NotNull Component header,
+                                              @NotNull Component footer) implements ComponentHoldingServerPacket {
     public PlayerListHeaderAndFooterPacket(BinaryReader reader) {
         this(reader.readComponent(), reader.readComponent());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeComponent(Objects.requireNonNullElseGet(header, Component::empty));
-        writer.writeComponent(Objects.requireNonNullElseGet(footer, Component::empty));
+        writer.writeComponent(header);
+        writer.writeComponent(footer);
     }
 
     @Override
     public @NotNull Collection<Component> components() {
-        List<Component> components = new ArrayList<>();
-        if (header != null) {
-            components.add(header);
-        }
-        if (footer != null) {
-            components.add(footer);
-        }
-        return components;
+        return List.of(header, footer);
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new PlayerListHeaderAndFooterPacket(header == null ? null : operator.apply(header), footer == null ? null : operator.apply(footer));
+        return new PlayerListHeaderAndFooterPacket(operator.apply(header), operator.apply(footer));
     }
 
     @Override

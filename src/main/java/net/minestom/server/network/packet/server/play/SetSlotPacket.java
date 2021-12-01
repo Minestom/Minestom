@@ -7,9 +7,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record SetSlotPacket(byte windowId, int stateId, short slot, ItemStack itemStack) implements ServerPacket {
+public record SetSlotPacket(byte windowId, int stateId, short slot,
+                            @NotNull ItemStack itemStack) implements ServerPacket {
     public SetSlotPacket(BinaryReader reader) {
-        this(reader.readByte(), reader.readVarInt(), reader.readShort(), reader.readItemStack());
+        this(reader.readByte(), reader.readVarInt(), reader.readShort(),
+                reader.readItemStack());
     }
 
     @Override

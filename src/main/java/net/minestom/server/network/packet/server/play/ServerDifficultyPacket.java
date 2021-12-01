@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.Difficulty;
 import org.jetbrains.annotations.NotNull;
 
-public record ServerDifficultyPacket(Difficulty difficulty, boolean locked) implements ServerPacket {
+public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean locked) implements ServerPacket {
     public ServerDifficultyPacket(BinaryReader reader) {
         this(Difficulty.values()[reader.readByte()], reader.readBoolean());
     }

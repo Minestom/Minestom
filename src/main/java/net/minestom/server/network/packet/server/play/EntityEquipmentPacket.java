@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumMap;
 import java.util.Map;
 
-public record EntityEquipmentPacket(int entityId, Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket {
+public record EntityEquipmentPacket(int entityId,
+                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket {
     public EntityEquipmentPacket {
         equipments = Map.copyOf(equipments);
     }
@@ -39,11 +40,10 @@ public record EntityEquipmentPacket(int entityId, Map<EquipmentSlot, ItemStack> 
     }
 
     private static Map<EquipmentSlot, ItemStack> readEquipments(BinaryReader reader) {
-        EnumMap<EquipmentSlot, ItemStack> equipments = new EnumMap<>(EquipmentSlot.class);
-        boolean hasRemaining = true;
-        while (hasRemaining) {
-            byte slotEnum = reader.readByte();
-            hasRemaining = (slotEnum & 0x80) == 0x80;
+        Map<EquipmentSlot, ItemStack> equipments = new EnumMap<>(EquipmentSlot.class);
+        while (true) {
+            final byte slotEnum = reader.readByte();
+            if ((slotEnum & 0x80) != 0x80) break;
             equipments.put(EquipmentSlot.values()[slotEnum & 0x7F], reader.readItemStack());
         }
         return equipments;
