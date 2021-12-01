@@ -9,7 +9,6 @@ import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -305,7 +304,7 @@ public class Advancement {
         final String parentIdentifier = parent != null ? parent.getIdentifier() : null;
         AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement(parentIdentifier, toDisplayData(),
                 List.of(criteria.criterionIdentifier()),
-                List.of(criteria.criterionIdentifier()));
+                List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))));
         return new AdvancementsPacket.AdvancementMapping(getIdentifier(), adv);
     }
 
@@ -335,27 +334,16 @@ public class Advancement {
     }
 
     protected void updateCriteria() {
-        Long achievedDate = achieved ? new Date(System.currentTimeMillis()).getTime() : null;
+        final Long achievedDate = achieved ? System.currentTimeMillis() : null;
         final var progress = new AdvancementsPacket.CriterionProgress(achievedDate);
         this.criteria = new AdvancementsPacket.Criteria(identifier, progress);
     }
 
     private int getFlags() {
         byte result = 0;
-
-        if (background != null) {
-            result |= 0x1;
-        }
-
-        if (hasToast()) {
-            result |= 0x2;
-        }
-
-        if (isHidden()) {
-            result |= 0x4;
-        }
-
+        if (background != null) result |= 0x1;
+        if (hasToast()) result |= 0x2;
+        if (isHidden()) result |= 0x4;
         return result;
     }
-
 }

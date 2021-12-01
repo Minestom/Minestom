@@ -7,48 +7,20 @@ import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a message which can be send using the {@link NotificationCenter}.
+ * Represents a message which can be sent using the {@link NotificationCenter}.
  */
-public class Notification {
-
-    private final Component title;
-    private final FrameType frameType;
-    private final ItemStack icon;
-
-    public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
-        this.title = title;
-        this.frameType = frameType;
-        this.icon = icon;
-    }
-
+public record Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
     public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull Material icon) {
         this(title, frameType, ItemStack.of(icon));
     }
 
-    /**
-     * Gets the title of the notification.
-     *
-     * @return the notification title
-     */
-    public Component getTitle() {
+    @Deprecated
+    public @NotNull Component getTitle() {
         return title;
     }
 
-    /**
-     * Gets the {@link FrameType} of the notification.
-     *
-     * @return the notification frame type
-     */
+    @Deprecated
     public @NotNull FrameType getFrameType() {
         return frameType;
-    }
-
-    /**
-     * Gets the icon of the notification.
-     *
-     * @return the notification icon
-     */
-    protected @NotNull ItemStack getIcon() {
-        return icon;
     }
 }

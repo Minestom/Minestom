@@ -3,10 +3,8 @@ package net.minestom.server.advancements.notifications;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.advancement.AdvancementUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,9 +15,9 @@ import java.util.List;
  * <p>
  * You can simply create a {@link Notification} object and call {@link #send(Notification, Player)}.
  */
-public class NotificationCenter {
-
+public final class NotificationCenter {
     private static final String IDENTIFIER = "minestom:notification";
+    private static final AdvancementsPacket REMOVE_PACKET = new AdvancementsPacket(false, List.of(), List.of(IDENTIFIER), List.of());
 
     /**
      * Can't create an instance, use the static methods instead.
@@ -33,12 +31,9 @@ public class NotificationCenter {
      * @param notification the {@link Notification} to send
      * @param player       the player to send the notification to
      */
-    public static void send(Notification notification, Player player) {
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        playerConnection.sendPacket(getCreatePacket(notification));
-
-        playerConnection.sendPacket(AdvancementUtils.getRemovePacket(new String[]{IDENTIFIER}));
+    public static void send(@NotNull Notification notification, @NotNull Player player) {
+        player.sendPacket(createPacket(notification));
+        player.sendPacket(REMOVE_PACKET);
     }
 
     /**
@@ -47,7 +42,7 @@ public class NotificationCenter {
      * @param notification the {@link Notification} to send
      * @param players      the collection of players to send the notification to
      */
-    public static void send(Notification notification, Collection<Player> players) {
+    public static void send(@NotNull Notification notification, @NotNull Collection<Player> players) {
         // Can't use PacketWriterUtils because we need the packets to come in the correct order
         players.forEach(player -> send(notification, player));
     }
@@ -58,19 +53,20 @@ public class NotificationCenter {
      * @param notification the notification
      * @return the packet used to show the Toast
      */
-    private static AdvancementsPacket getCreatePacket(Notification notification) {
+    private static AdvancementsPacket createPacket(Notification notification) {
         // For An advancement to be shown, it must have all of its criteria achieved (progress 100%)
         // Create a Criteria that we can set to 100% achieved.
         final var displayData = new AdvancementsPacket.DisplayData(
-                notification.getTitle(), Component.text("Articdive was here. #Minestom"),
-                notification.getIcon(), notification.getFrameType(),
+                notification.title(), Component.text("Articdive was here. #Minestom"),
+                notification.icon(), notification.frameType(),
                 0x6, null, 0f, 0f);
 
         final var criteria = new AdvancementsPacket.Criteria("minestom:some_criteria",
-                new AdvancementsPacket.CriterionProgress(new Date(System.currentTimeMillis()).getTime()));
+                new AdvancementsPacket.CriterionProgress(System.currentTimeMillis()));
 
         final var advancement = new AdvancementsPacket.Advancement(null, displayData,
-                List.of(criteria.criterionIdentifier()), List.of(criteria.criterionIdentifier()));
+                List.of(criteria.criterionIdentifier()),
+                List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))));
 
         final var mapping = new AdvancementsPacket.AdvancementMapping(IDENTIFIER, advancement);
         final var progressMapping = new AdvancementsPacket.ProgressMapping(IDENTIFIER,

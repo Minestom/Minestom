@@ -57,24 +57,42 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
-                              @NotNull List<String> criterions,
-                              @NotNull List<String> requirements) implements Writeable {
+                              @NotNull List<String> criteria,
+                              @NotNull List<Requirement> requirements) implements Writeable {
+        public Advancement {
+            criteria = List.copyOf(criteria);
+            requirements = List.copyOf(requirements);
+        }
+
         public Advancement(BinaryReader reader) {
             this(reader.readBoolean() ? reader.readSizedString() : null,
                     reader.readBoolean() ? new DisplayData(reader) : null,
                     reader.readVarIntList(BinaryReader::readSizedString),
-                    reader.readVarIntList(BinaryReader::readSizedString));
+                    reader.readVarIntList(Requirement::new));
         }
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
             writer.writeBoolean(parentIdentifier != null);
             if (parentIdentifier != null) writer.writeSizedString(parentIdentifier);
-
             writer.writeBoolean(displayData != null);
             if (displayData != null) writer.write(displayData);
+            writer.writeVarIntList(criteria, BinaryWriter::writeSizedString);
+            writer.writeVarIntList(requirements, BinaryWriter::write);
+        }
+    }
 
-            writer.writeVarIntList(criterions, BinaryWriter::writeSizedString);
+    public record Requirement(@NotNull List<String> requirements) implements Writeable {
+        public Requirement {
+            requirements = List.copyOf(requirements);
+        }
+
+        public Requirement(BinaryReader reader) {
+            this(reader.readVarIntList(BinaryReader::readSizedString));
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeVarIntList(requirements, BinaryWriter::writeSizedString);
         }
     }
