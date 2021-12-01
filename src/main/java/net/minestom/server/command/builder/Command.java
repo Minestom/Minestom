@@ -161,7 +161,7 @@ public class Command {
         }
 
         if (!hasOptional) {
-            final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
+            final CommandSyntax syntax = new CommandSyntax(List.of(args), executor, commandCondition);
             this.syntaxes.add(syntax);
             return Collections.singleton(syntax);
         } else {
@@ -180,23 +180,23 @@ public class Command {
                     defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
 
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
+                        final CommandSyntax syntax = new CommandSyntax(requiredArguments, executor,
+                                commandCondition, defaultValuesMap);
                         // First optional argument, create a syntax with current cached arguments
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
                         optionalSyntaxes.add(syntax);
                         optionalBranch = true;
                     } else {
                         // New optional argument, save syntax with current cached arguments and save default value
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
+                        final CommandSyntax syntax = new CommandSyntax(requiredArguments, executor,
+                                commandCondition, defaultValuesMap);
                         optionalSyntaxes.add(syntax);
                     }
                 }
                 requiredArguments.add(argument);
                 if (isLast) {
                     // Create the last syntax
-                    final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                            requiredArguments.toArray(new Argument[0]));
+                    final CommandSyntax syntax = new CommandSyntax(requiredArguments, executor,
+                            commandCondition, defaultValuesMap);
                     optionalSyntaxes.add(syntax);
                 }
             }

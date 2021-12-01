@@ -2,7 +2,10 @@ package net.minestom.server.command.builder.parser;
 
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -139,7 +142,7 @@ public class ArgumentParser {
 
     @Nullable
     public static ArgumentResult validate(@NotNull Argument<?> argument,
-                                          @NotNull Argument<?>[] arguments, int argIndex,
+                                          @NotNull List<Argument<?>> arguments, int argIndex,
                                           @NotNull String[] inputArguments, int inputIndex) {
         final boolean end = inputIndex == inputArguments.length;
         if (end) // Stop if there is no input to analyze left
@@ -189,7 +192,7 @@ public class ArgumentParser {
 
                     // Prevent quitting the parsing too soon if the argument
                     // does not allow space
-                    final boolean lastArgumentIteration = argIndex + 1 == arguments.length;
+                    final boolean lastArgumentIteration = argIndex + 1 == arguments.size();
                     if (lastArgumentIteration && i + 1 < inputArguments.length) {
                         if (!argument.allowSpace())
                             break;

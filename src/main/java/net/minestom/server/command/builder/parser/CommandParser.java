@@ -62,7 +62,7 @@ public class CommandParser {
         return CommandParser.findCommand(null, commandName, args);
     }
 
-    public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
+    public static void parse(@Nullable CommandSyntax syntax, @NotNull List<Argument<?>> commandArguments, @NotNull String[] inputArguments,
                              @NotNull String commandString,
                              @Nullable List<ValidSyntaxHolder> validSyntaxes,
                              @Nullable Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions) {
@@ -74,8 +74,8 @@ public class CommandParser {
 
         boolean useRemaining = false;
         // Check the validity of the arguments...
-        for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
-            final Argument<?> argument = commandArguments[argIndex];
+        for (int argIndex = 0; argIndex < commandArguments.size(); argIndex++) {
+            final Argument<?> argument = commandArguments.get(argIndex);
             ArgumentParser.ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, inputArguments, inputIndex);
             if (argumentResult == null) {
                 break;
@@ -104,7 +104,7 @@ public class CommandParser {
 
         // Add the syntax to the list of valid syntaxes if correct
         if (syntaxCorrect) {
-            if (commandArguments.length == argumentValueMap.size() || useRemaining) {
+            if (commandArguments.size() == argumentValueMap.size() || useRemaining) {
                 if (validSyntaxes != null) {
                     ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
                     validSyntaxHolder.commandString = commandString;
@@ -180,13 +180,13 @@ public class CommandParser {
 
             final CommandContext context = new CommandContext(commandString);
 
-            final Argument<?>[] commandArguments = syntax.getArguments();
+            final List<Argument<?>> commandArguments = syntax.getArguments();
             int inputIndex = 0;
 
             ArgumentQueryResult maxArg = null;
             int maxArgIndex = 0;
-            for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
-                Argument<?> argument = commandArguments[argIndex];
+            for (int argIndex = 0; argIndex < commandArguments.size(); argIndex++) {
+                Argument<?> argument = commandArguments.get(argIndex);
                 ArgumentParser.ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, args, inputIndex);
                 if (argumentResult == null) {
                     // Nothing to analyze, create a dummy object

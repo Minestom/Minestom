@@ -305,12 +305,12 @@ public final class CommandManager {
         final int literalNodeId = addCommandNameNode(literalNode, rootChildren, nodes);
 
         // Contains the arguments of the already-parsed syntaxes
-        Map<CommandSyntax, Argument<?>[]> syntaxesArguments = new HashMap<>();
+        Map<CommandSyntax, List<Argument<?>>> syntaxesArguments = new HashMap<>();
         // Contains the nodes of an argument
         Map<IndexedArgument, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         // Sort syntaxes by argument count. Brigadier requires it.
-        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).collect(Collectors.toList());
+        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().size())).collect(Collectors.toList());
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
             if (commandCondition != null && !commandCondition.canUse(sender, null)) {
@@ -327,10 +327,10 @@ public final class CommandManager {
             NodeMaker nodeMaker = new NodeMaker(lastNodes, literalNodeId);
             int lastArgumentNodeIndex = nodeMaker.getNodesCount();
 
-            final Argument<?>[] arguments = syntax.getArguments();
-            for (int i = 0; i < arguments.length; i++) {
-                final Argument<?> argument = arguments[i];
-                final boolean isLast = i == arguments.length - 1;
+            final List<Argument<?>> arguments = syntax.getArguments();
+            for (int i = 0; i < arguments.size(); i++) {
+                final Argument<?> argument = arguments.get(i);
+                final boolean isLast = i == arguments.size() - 1;
 
                 // Search previously parsed syntaxes to find identical part in order to create a link between those
                 {
@@ -339,8 +339,15 @@ public final class CommandManager {
                     for (var entry : syntaxesArguments.entrySet()) {
                         final var parsedArguments = entry.getValue();
                         final int index = i + 1;
-                        if (Arrays.mismatch(arguments, 0, index, parsedArguments, 0, index) == -1) {
-                            final Argument<?> sharedArgument = parsedArguments[i];
+
+                        SharedPart:
+                        {
+                            for (int j = 0; j < index; j++) {
+                                if (!Objects.equals(arguments.get(j), parsedArguments.get(j))) {
+                                    break SharedPart;
+                                }
+                            }
+                            final Argument<?> sharedArgument = parsedArguments.get(i);
                             final var sharedSyntax = entry.getKey();
                             final var indexed = new IndexedArgument(sharedSyntax, sharedArgument, i);
                             final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(indexed);

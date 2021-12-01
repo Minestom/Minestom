@@ -7,7 +7,7 @@ import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -17,31 +17,27 @@ import java.util.function.Supplier;
  */
 public class CommandSyntax {
 
-    private CommandCondition commandCondition;
+    private final List<Argument<?>> arguments;
     private CommandExecutor executor;
 
+    private CommandCondition commandCondition;
     private final Map<String, Supplier<Object>> defaultValuesMap;
-    private final Argument<?>[] args;
 
     private final boolean suggestion;
 
-    protected CommandSyntax(@Nullable CommandCondition commandCondition,
-                            @NotNull CommandExecutor commandExecutor,
-                            @Nullable Map<String, Supplier<Object>> defaultValuesMap,
-                            @NotNull Argument<?>... args) {
+    protected CommandSyntax(@NotNull List<Argument<?>> arguments, @NotNull CommandExecutor executor,
+                            @Nullable CommandCondition commandCondition,
+                            @Nullable Map<String, Supplier<Object>> defaultValuesMap) {
+        this.arguments = List.copyOf(arguments);
+        this.executor = executor;
         this.commandCondition = commandCondition;
-        this.executor = commandExecutor;
-
         this.defaultValuesMap = defaultValuesMap;
-        this.args = args;
-
-        this.suggestion = Arrays.stream(args).anyMatch(Argument::hasSuggestion);
+        this.suggestion = this.arguments.stream().anyMatch(Argument::hasSuggestion);
     }
 
-    protected CommandSyntax(@Nullable CommandCondition commandCondition,
-                            @NotNull CommandExecutor commandExecutor,
-                            @NotNull Argument<?>... args) {
-        this(commandCondition, commandExecutor, null, args);
+    protected CommandSyntax(@NotNull List<Argument<?>> arguments, @NotNull CommandExecutor executor,
+                            @Nullable CommandCondition commandCondition) {
+        this(arguments, executor, commandCondition, null);
     }
 
     /**
@@ -97,8 +93,8 @@ public class CommandSyntax {
      * @return the required arguments
      */
     @NotNull
-    public Argument<?>[] getArguments() {
-        return args;
+    public List<Argument<?>> getArguments() {
+        return arguments;
     }
 
     public boolean hasSuggestion() {
@@ -107,7 +103,7 @@ public class CommandSyntax {
 
     public @NotNull String getSyntaxString() {
         StringBuilder builder = new StringBuilder();
-        for (Argument<?> argument : args) {
+        for (Argument<?> argument : arguments) {
             builder.append(argument.toString())
                     .append(StringUtils.SPACE);
         }

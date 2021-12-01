@@ -17,6 +17,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Convenient class listing all the basics {@link Argument}.
  * <p>
@@ -36,7 +38,7 @@ public class ArgumentType {
      * @see ArgumentGroup
      */
     @Contract("_, _ -> new")
-    public static @NotNull ArgumentGroup Group(@NotNull String id, @NotNull Argument<?>... arguments) {
+    public static @NotNull ArgumentGroup Group(@NotNull String id, @NotNull List<Argument<?>> arguments) {
         return new ArgumentGroup(id, arguments);
     }
 

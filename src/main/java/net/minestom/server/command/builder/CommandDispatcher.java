@@ -149,7 +149,7 @@ public class CommandDispatcher {
         if (!hasArgument) {
             Optional<CommandSyntax> optionalSyntax = command.getSyntaxes()
                     .stream()
-                    .filter(syntax -> syntax.getArguments().length == 0)
+                    .filter(syntax -> syntax.getArguments().isEmpty())
                     .findFirst();
 
             if (optionalSyntax.isPresent()) {
@@ -218,7 +218,7 @@ public class CommandDispatcher {
             final int argIndex = suggestionHolder.argIndex;
 
             // Found the closest syntax with at least 1 correct argument
-            final Argument<?> argument = syntax.getArguments()[argIndex];
+            final Argument<?> argument = syntax.getArguments().get(argIndex);
             if (argument.hasErrorCallback() && argumentSyntaxException != null) {
                 parsedCommand.callback = argument.getCallback();
                 parsedCommand.argumentSyntaxException = argumentSyntaxException;
