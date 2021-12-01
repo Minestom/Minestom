@@ -66,14 +66,20 @@ public final class ViewEngine {
     public boolean manualAdd(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            return !manualViewers.add(player);
+            return manualViewers.add(player);
         }
     }
 
     public boolean manualRemove(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            return !manualViewers.remove(player);
+            return manualViewers.remove(player);
+        }
+    }
+
+    public void forManuals(@NotNull Consumer<Player> consumer) {
+        synchronized (mutex) {
+            this.manualViewers.forEach(consumer);
         }
     }
 

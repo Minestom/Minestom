@@ -52,9 +52,9 @@ import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
-import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -78,6 +78,8 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,7 +88,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -129,19 +130,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     };
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
-        final Instance instance = this.instance;
-        if (instance == null) return;
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-            GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
-        }
+        sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+        GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final Queue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
+    private final MessagePassingQueue<ClientPlayPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
@@ -318,10 +314,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.update();
 
         // Process received packets
-        ClientPlayPacket packet;
-        while ((packet = packets.poll()) != null) {
-            packet.process(this);
-        }
+        this.packets.drain(packet -> packet.process(this));
 
         super.update(time); // Super update (item pickup/fire management)
 
@@ -502,15 +495,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
+    public void sendPacketToViewersAndSelf(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
         super.sendPacketToViewersAndSelf(packet);
-    }
-
-    @Override
-    public void sendPacketToViewersAndSelf(@NotNull FramedPacket framedPacket) {
-        this.playerConnection.sendPacket(framedPacket);
-        super.sendPacketToViewersAndSelf(framedPacket);
     }
 
     /**
@@ -1180,18 +1167,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Shortcut for {@link PlayerConnection#sendPacket(ServerPacket)}.
+     * Shortcut for {@link PlayerConnection#sendPacket(SendablePacket)}.
      *
      * @param packet the packet to send
      */
     @ApiStatus.Experimental
-    public void sendPacket(@NotNull ServerPacket packet) {
+    public void sendPacket(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
     }
 
     @ApiStatus.Experimental
-    public void sendPacket(@NotNull FramedPacket framedPacket) {
-        this.playerConnection.sendPacket(framedPacket);
+    public void sendPackets(@NotNull SendablePacket... packets) {
+        this.playerConnection.sendPackets(packets);
+    }
+
+    @ApiStatus.Experimental
+    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+        this.playerConnection.sendPackets(packets);
     }
 
     /**
@@ -1715,7 +1707,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param packet the packet to add in the queue
      */
     public void addPacketToQueue(@NotNull ClientPlayPacket packet) {
-        this.packets.add(packet);
+        this.packets.offer(packet);
     }
 
     /**

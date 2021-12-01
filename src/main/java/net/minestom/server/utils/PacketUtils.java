@@ -9,13 +9,13 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.network.packet.FramedPacket;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -24,7 +24,6 @@ import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.cache.LocalCache;
-import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Predicate;
 import java.util.zip.Deflater;
 
 /**
@@ -105,45 +105,26 @@ public final class PacketUtils {
      * <p>
      * Can drastically improve performance since the packet will not have to be processed as much.
      *
-     * @param players         the players to send the packet to
-     * @param packet          the packet to send to the players
-     * @param playerValidator optional callback to check if a specify player of {@code players} should receive the packet
+     * @param players   the players to send the packet to
+     * @param packet    the packet to send to the players
+     * @param predicate predicate to ignore specific players
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
-                                         @NotNull PlayerValidator playerValidator) {
-        if (players.isEmpty())
-            return;
+                                         @NotNull Predicate<Player> predicate) {
+        if (players.isEmpty()) return;
+        if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players)) return;
         // work out if the packet needs to be sent individually due to server-side translating
-        boolean needsTranslating = false;
-        if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
-            needsTranslating = ComponentUtils.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
-        }
-        if (GROUPED_PACKET && !needsTranslating) {
-            // Send grouped packet...
-            if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
-                return;
-            final FramedPacket framedPacket = new FramedPacket(packet, createFramedPacket(packet));
-            // Send packet to all players
-            players.forEach(player -> {
-                if (!player.isOnline() || !playerValidator.isValid(player))
-                    return;
-                player.sendPacket(framedPacket);
-            });
-        } else {
-            // Write the same packet for each individual players
-            players.forEach(player -> {
-                if (!player.isOnline() || !playerValidator.isValid(player))
-                    return;
-                player.getPlayerConnection().sendPacket(packet, false);
-            });
-        }
+        final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
+        players.forEach(player -> {
+            if (predicate.test(player)) player.sendPacket(sendablePacket);
+        });
     }
 
     /**
-     * Same as {@link #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)}
+     * Same as {@link #sendGroupedPacket(Collection, ServerPacket, Predicate)}
      * but with the player validator sets to null.
      *
-     * @see #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)
+     * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
         sendGroupedPacket(players, packet, player -> true);
@@ -180,8 +161,10 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
-                entry.getValue().process(entry.getKey()));
+        if (VIEWABLE_PACKET) {
+            VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
+                    entry.getValue().process(entry.getKey()));
+        }
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
@@ -274,13 +257,15 @@ public final class PacketUtils {
 
         private void process(Viewable viewable) {
             if (buffer.writerOffset() == 0) return;
-            viewable.getViewers().forEach(this::processPlayer);
+            ByteBuffer copy = ByteBuffer.allocateDirect(buffer.writerOffset());
+            copy.put(buffer.asByteBuffer(0, copy.capacity()));
+            viewable.getViewers().forEach(player -> processPlayer(player, copy));
             this.buffer.clear();
             this.entityIdMap.clear();
         }
 
-        private void processPlayer(Player player) {
-            final int size = buffer.writerOffset();
+        private void processPlayer(Player player, ByteBuffer buffer) {
+            final int size = buffer.limit();
             final PlayerConnection connection = player.getPlayerConnection();
             final LongArrayList pairs = entityIdMap.get(player.getEntityId());
             if (pairs != null) {
@@ -290,18 +275,14 @@ public final class PacketUtils {
                 for (int i = 0; i < pairs.size(); ++i) {
                     final long offsets = elements[i];
                     final int start = (int) (offsets >> 32);
-                    if (start != lastWrite) writeTo(connection, lastWrite, start - lastWrite);
+                    if (start != lastWrite) writeTo(connection, buffer, lastWrite, start - lastWrite);
                     lastWrite = (int) offsets; // End = last 32 bits
                 }
-                if (size != lastWrite) writeTo(connection, lastWrite, size - lastWrite);
+                if (size != lastWrite) writeTo(connection, buffer, lastWrite, size - lastWrite);
             } else {
                 // Write all
-                writeTo(connection, 0, size);
+                writeTo(connection, buffer, 0, size);
             }
-        }
-
-        private void writeTo(PlayerConnection connection, int offset, int length) {
-            writeTo(connection, buffer.asByteBuffer(), offset, length);
         }
 
         private static void writeTo(PlayerConnection connection, ByteBuffer buffer, int offset, int length) {

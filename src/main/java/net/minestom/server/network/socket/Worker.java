@@ -3,10 +3,11 @@ package net.minestom.server.network.socket;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
@@ -23,22 +25,41 @@ import java.util.zip.Inflater;
 public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    final Selector selector = Selector.open();
+    final Selector selector;
     private final Context context = new Context();
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
-    private final PacketProcessor packetProcessor;
+    private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
+    private final AtomicBoolean flush = new AtomicBoolean();
 
-    public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
+    Worker(Server server) {
         super("Ms-worker-" + COUNTER.getAndIncrement());
         this.server = server;
-        this.packetProcessor = packetProcessor;
+        try {
+            this.selector = Selector.open();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void run() {
         while (server.isOpen()) {
             try {
+                try {
+                    this.queue.drain(Runnable::run);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+                // Flush all connections if needed
+                if (flush.compareAndSet(true, false)) {
+                    try {
+                        connectionMap.values().forEach(PlayerSocketConnection::flushSync);
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }
+                // Wait for an event
                 this.selector.select(key -> {
                     final SocketChannel channel = (SocketChannel) key.channel();
                     if (!channel.isOpen()) return;
@@ -50,7 +71,7 @@ public final class Worker extends MinestomThread {
                         connection.consumeCache(readBuffer);
                         // Read & process
                         readBuffer.readChannel(channel);
-                        connection.processPackets(context, packetProcessor);
+                        connection.processPackets(context, server.packetProcessor());
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
@@ -90,6 +111,15 @@ public final class Worker extends MinestomThread {
         socket.setTcpNoDelay(Server.NO_DELAY);
         socket.setSoTimeout(30 * 1000); // 30 seconds
         this.selector.wakeup();
+    }
+
+    public void flush() {
+        this.flush.set(true);
+        this.selector.wakeup();
+    }
+
+    public MessagePassingQueue<Runnable> queue() {
+        return queue;
     }
 
     /**

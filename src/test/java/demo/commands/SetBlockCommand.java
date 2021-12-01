@@ -16,7 +16,7 @@ public class SetBlockCommand extends Command {
         final ArgumentBlockState block = BlockState("block");
 
         addSyntax((sender, context) -> {
-            final Player player = sender.asPlayer();
+            final Player player = (Player) sender;
             player.getInstance().setBlock(context.get(position).from(player), context.get(block));
         }, position, block);
     }

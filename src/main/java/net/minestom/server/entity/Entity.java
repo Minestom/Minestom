@@ -27,7 +27,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.network.packet.CachedPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
@@ -455,7 +455,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 if (passenger != player) passenger.viewEngine.viewableOption.removal.accept(player);
             }
         }
-        player.sendPacket(destroyPacketCache.retrieve());
+        player.sendPacket(destroyPacketCache);
     }
 
     @Override
@@ -878,6 +878,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        this.viewEngine.forManuals(this::removeViewer);
     }
 
     /**
