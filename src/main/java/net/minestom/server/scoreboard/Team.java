@@ -8,7 +8,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
@@ -25,9 +24,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * This object represents a team on a scoreboard that has a common display theme and other properties.
  */
 public class Team implements PacketGroupingAudience {
-
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
-
     private static final byte ALLOW_FRIENDLY_FIRE_BIT = 0x01;
     private static final byte SEE_INVISIBLE_PLAYERS_BIT = 0x02;
 

@@ -6,7 +6,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ExplosionPacket(float x, float y, float z, float radius, byte[] records,
+public record ExplosionPacket(float x, float y, float z, float radius, byte @NotNull [] records,
                               float playerMotionX, float playerMotionY, float playerMotionZ) implements ServerPacket {
     public ExplosionPacket(BinaryReader reader) {
         this(reader.readFloat(), reader.readFloat(), reader.readFloat(),
@@ -21,7 +21,7 @@ public record ExplosionPacket(float x, float y, float z, float radius, byte[] re
         writer.writeFloat(z);
         writer.writeFloat(radius);
         writer.writeVarInt(records.length / 3); // each record is 3 bytes long
-        for (byte record : records) writer.writeByte(record);
+        writer.writeBytes(records);
         writer.writeFloat(playerMotionX);
         writer.writeFloat(playerMotionY);
         writer.writeFloat(playerMotionZ);
