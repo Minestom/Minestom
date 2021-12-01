@@ -8,36 +8,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.BitSet;
 import java.util.List;
 
-public final class LightData implements Writeable {
-    private final boolean trustEdges;
-    private final BitSet skyMask;
-    private final BitSet blockMask;
-    private final BitSet emptySkyMask;
-    private final BitSet emptyBlockMask;
-    private final List<byte[]> skyLight;
-    private final List<byte[]> blockLight;
-
-    public LightData(boolean trustEdges,
-                     BitSet skyMask, BitSet blockMask,
-                     BitSet emptySkyMask, BitSet emptyBlockMask,
-                     List<byte[]> skyLight, List<byte[]> blockLight) {
-        this.trustEdges = trustEdges;
-        this.skyMask = skyMask;
-        this.blockMask = blockMask;
-        this.emptySkyMask = emptySkyMask;
-        this.emptyBlockMask = emptyBlockMask;
-        this.skyLight = skyLight;
-        this.blockLight = blockLight;
-    }
-
+public record LightData(boolean trustEdges,
+                        @NotNull BitSet skyMask, @NotNull BitSet blockMask,
+                        @NotNull BitSet emptySkyMask, @NotNull BitSet emptyBlockMask,
+                        @NotNull List<byte[]> skyLight, @NotNull List<byte[]> blockLight) implements Writeable {
     public LightData(BinaryReader reader) {
-        this.trustEdges = reader.readBoolean();
-        this.skyMask = BitSet.valueOf(reader.readLongArray());
-        this.blockMask = BitSet.valueOf(reader.readLongArray());
-        this.emptySkyMask = BitSet.valueOf(reader.readLongArray());
-        this.emptyBlockMask = BitSet.valueOf(reader.readLongArray());
-        this.skyLight = reader.readVarIntList(r -> r.readBytes(r.readVarInt()));
-        this.blockLight = reader.readVarIntList(r -> r.readBytes(r.readVarInt()));
+        this(reader.readBoolean(),
+                BitSet.valueOf(reader.readLongArray()), BitSet.valueOf(reader.readLongArray()),
+                BitSet.valueOf(reader.readLongArray()), BitSet.valueOf(reader.readLongArray()),
+                reader.readVarIntList(r -> r.readBytes(r.readVarInt())), reader.readVarIntList(r -> r.readBytes(r.readVarInt())));
     }
 
     @Override
@@ -50,16 +29,7 @@ public final class LightData implements Writeable {
         writer.writeLongArray(emptySkyMask.toLongArray());
         writer.writeLongArray(emptyBlockMask.toLongArray());
 
-        writer.writeVarInt(skyLight.size());
-        for (byte[] bytes : skyLight) {
-            writer.writeVarInt(2048); // Always 2048 length
-            writer.writeBytes(bytes);
-        }
-
-        writer.writeVarInt(blockLight.size());
-        for (byte[] bytes : blockLight) {
-            writer.writeVarInt(2048); // Always 2048 length
-            writer.writeBytes(bytes);
-        }
+        writer.writeVarIntList(skyLight, BinaryWriter::writeByteArray);
+        writer.writeVarIntList(blockLight, BinaryWriter::writeByteArray);
     }
 }

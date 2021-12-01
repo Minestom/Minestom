@@ -231,6 +231,15 @@ public class BinaryWriter extends OutputStream {
         }
     }
 
+    public void writeByteArray(byte[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+        writeVarInt(array.length);
+        writeBytes(array);
+    }
+
     /**
      * Writes a byte array.
      * <p>
