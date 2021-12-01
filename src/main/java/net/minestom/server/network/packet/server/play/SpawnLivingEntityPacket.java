@@ -9,14 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record SpawnLivingEntityPacket(int entityId, UUID entityUuid, int entityType, Pos position, float headPitch,
+public record SpawnLivingEntityPacket(int entityId, @NotNull UUID entityUuid, int entityType,
+                                      @NotNull Pos position, float headPitch,
                                       short velocityX, short velocityY, short velocityZ) implements ServerPacket {
     public SpawnLivingEntityPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readUuid(), reader.readVarInt(),
                 new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
                         reader.readByte() * 360f / 256f,
-                        reader.readByte() * 360f / 256f),
-                reader.readByte() * 360f / 256f,
+                        reader.readByte() * 360f / 256f), reader.readByte() * 360f / 256f,
                 reader.readShort(), reader.readShort(), reader.readShort());
     }
 

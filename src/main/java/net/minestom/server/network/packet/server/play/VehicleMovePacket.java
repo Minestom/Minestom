@@ -7,9 +7,10 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record VehicleMovePacket(Pos position) implements ServerPacket {
+public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
     public VehicleMovePacket(BinaryReader reader) {
-        this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(), reader.readFloat(), reader.readFloat()));
+        this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
+                reader.readFloat(), reader.readFloat()));
     }
 
     @Override

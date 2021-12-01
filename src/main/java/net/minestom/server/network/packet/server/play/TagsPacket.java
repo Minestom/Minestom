@@ -10,11 +10,11 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public record TagsPacket(Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket {
+public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket {
     @ApiStatus.Internal
     public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
 
@@ -51,7 +51,7 @@ public record TagsPacket(Map<Tag.BasicType, List<Tag>> tagsMap) implements Serve
     }
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(BinaryReader reader) {
-        Map<Tag.BasicType, List<Tag>> tagsMap = new HashMap<>();
+        Map<Tag.BasicType, List<Tag>> tagsMap = new EnumMap<>(Tag.BasicType.class);
         // Read amount of tag types
         final int typeCount = reader.readVarInt();
         for (int i = 0; i < typeCount; i++) {
