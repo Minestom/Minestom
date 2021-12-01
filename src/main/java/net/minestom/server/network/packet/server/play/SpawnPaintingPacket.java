@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record SpawnPaintingPacket(int entityId, UUID entityUuid, int motive, Point position,
-                                  byte direction) implements ServerPacket {
+public record SpawnPaintingPacket(int entityId, @NotNull UUID entityUuid, int motive,
+                                  @NotNull Point position, byte direction) implements ServerPacket {
     public SpawnPaintingPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readUuid(), reader.readVarInt(), reader.readBlockPosition(), reader.readByte());
+        this(reader.readVarInt(), reader.readUuid(), reader.readVarInt(),
+                reader.readBlockPosition(), reader.readByte());
     }
 
     @Override
