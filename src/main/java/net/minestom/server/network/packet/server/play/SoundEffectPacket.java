@@ -10,7 +10,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record SoundEffectPacket(int soundId, Source source, int x, int y, int z,
+public record SoundEffectPacket(int soundId, @NotNull Source source,
+                                int x, int y, int z,
                                 float volume, float pitch) implements ServerPacket {
     public SoundEffectPacket(BinaryReader reader) {
         this(reader.readVarInt(), Source.values()[reader.readVarInt()],
@@ -18,8 +19,10 @@ public record SoundEffectPacket(int soundId, Source source, int x, int y, int z,
                 reader.readFloat(), reader.readFloat());
     }
 
-    public SoundEffectPacket(SoundEvent sound, Source source, Point position, float volume, float pitch) {
-        this(sound.id(), source, (int) position.x(), (int) position.y(), (int) position.z(), volume, pitch);
+    public SoundEffectPacket(@NotNull SoundEvent sound, @NotNull Source source,
+                             @NotNull Point position, float volume, float pitch) {
+        this(sound.id(), source,
+                (int) position.x(), (int) position.y(), (int) position.z(), volume, pitch);
     }
 
     @Override
