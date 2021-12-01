@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.UnaryOperator;
 
-public record DisconnectPacket(Component message) implements ComponentHoldingServerPacket {
+public record DisconnectPacket(@NotNull Component message) implements ComponentHoldingServerPacket {
     public DisconnectPacket(BinaryReader reader) {
         this(reader.readComponent());
     }
