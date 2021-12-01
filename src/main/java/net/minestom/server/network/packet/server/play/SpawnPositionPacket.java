@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record SpawnPositionPacket(Point position, float angle) implements ServerPacket {
+public record SpawnPositionPacket(@NotNull Point position, float angle) implements ServerPacket {
     public SpawnPositionPacket(BinaryReader reader) {
         this(reader.readBlockPosition(), reader.readFloat());
     }

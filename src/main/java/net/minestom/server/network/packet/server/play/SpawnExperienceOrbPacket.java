@@ -7,9 +7,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record SpawnExperienceOrbPacket(int entityId, Pos position, short expCount) implements ServerPacket {
+public record SpawnExperienceOrbPacket(int entityId,
+                                       @NotNull Pos position, short expCount) implements ServerPacket {
     public SpawnExperienceOrbPacket(BinaryReader reader) {
-        this(reader.readVarInt(), new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble()), reader.readShort());
+        this(reader.readVarInt(),
+                new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble()), reader.readShort());
     }
 
     @Override

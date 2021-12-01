@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public record StatisticsPacket(List<Statistic> statistics) implements ServerPacket {
+public record StatisticsPacket(@NotNull List<Statistic> statistics) implements ServerPacket {
     public StatisticsPacket {
         statistics = List.copyOf(statistics);
     }
@@ -21,10 +21,7 @@ public record StatisticsPacket(List<Statistic> statistics) implements ServerPack
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(statistics.size());
-        for (Statistic statistic : statistics) {
-            statistic.write(writer);
-        }
+        writer.writeVarIntList(statistics, BinaryWriter::write);
     }
 
     @Override
@@ -32,9 +29,11 @@ public record StatisticsPacket(List<Statistic> statistics) implements ServerPack
         return ServerPacketIdentifier.STATISTICS;
     }
 
-    public record Statistic(StatisticCategory category, int statisticId, int value) implements Writeable {
+    public record Statistic(@NotNull StatisticCategory category,
+                            int statisticId, int value) implements Writeable {
         public Statistic(BinaryReader reader) {
-            this(StatisticCategory.values()[reader.readVarInt()], reader.readVarInt(), reader.readVarInt());
+            this(StatisticCategory.values()[reader.readVarInt()],
+                    reader.readVarInt(), reader.readVarInt());
         }
 
         @Override
