@@ -7,66 +7,40 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
-public final class StopSoundPacket implements ServerPacket {
-    private final byte flags;
-    private final Sound.Source source;
-    private final String sound;
-
-    public StopSoundPacket(byte flags, Sound.Source source, String sound) {
-        this.flags = flags;
-        this.source = source;
-        this.sound = sound;
+public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
+                              @Nullable String sound) implements ServerPacket {
+    public StopSoundPacket(BinaryReader reader) {
+        this(read(reader));
     }
 
-    public StopSoundPacket(BinaryReader reader) {
-        this.flags = reader.readByte();
-        if (flags == 3 || flags == 1) {
-            this.source = Sound.Source.values()[reader.readVarInt()];
-        } else this.source = null;
-        if (flags == 2 || flags == 3) {
-            this.sound = reader.readSizedString();
-        } else this.sound = null;
+    private StopSoundPacket(StopSoundPacket packet) {
+        this(packet.flags, packet.source, packet.sound);
+    }
+
+    private static StopSoundPacket read(BinaryReader reader) {
+        var flags = reader.readByte();
+        var source = flags == 3 || flags == 1 ? Sound.Source.values()[reader.readVarInt()] : null;
+        var sound = flags == 2 || flags == 3 ? reader.readSizedString() : null;
+        return new StopSoundPacket(flags, source, sound);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(flags);
-        if (flags == 3 || flags == 1)
+        if (flags == 3 || flags == 1) {
+            assert source != null;
             writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(source));
-        if (flags == 2 || flags == 3)
+        }
+        if (flags == 2 || flags == 3) {
+            assert sound != null;
             writer.writeSizedString(sound);
-    }
-
-    public byte flags() {
-        return flags;
-    }
-
-    public Sound.Source source() {
-        return source;
-    }
-
-    public String sound() {
-        return sound;
+        }
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.STOP_SOUND;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StopSoundPacket that)) return false;
-        return flags == that.flags && source == that.source &&
-                Objects.equals(sound, that.sound);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(flags, source, sound);
     }
 }

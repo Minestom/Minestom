@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record OpenBookPacket(Player.Hand hand) implements ServerPacket {
+public record OpenBookPacket(@NotNull Player.Hand hand) implements ServerPacket {
     public OpenBookPacket(BinaryReader reader) {
         this(Player.Hand.values()[reader.readVarInt()]);
     }

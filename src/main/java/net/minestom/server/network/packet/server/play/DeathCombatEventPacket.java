@@ -7,7 +7,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record DeathCombatEventPacket(int playerId, int entityId, Component message) implements ServerPacket {
+public record DeathCombatEventPacket(int playerId, int entityId,
+                                     @NotNull Component message) implements ServerPacket {
     public DeathCombatEventPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readInt(), reader.readComponent());
     }

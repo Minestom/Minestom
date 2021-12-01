@@ -7,7 +7,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record EntityEffectPacket(int entityId, Potion potion) implements ServerPacket {
+public record EntityEffectPacket(int entityId, @NotNull Potion potion) implements ServerPacket {
     public EntityEffectPacket(BinaryReader reader) {
         this(reader.readVarInt(), new Potion(reader));
     }
