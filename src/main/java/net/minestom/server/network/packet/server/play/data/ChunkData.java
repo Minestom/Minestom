@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public record ChunkData(NBTCompound heightmaps, byte[] data,
-                        Map<Integer, Block> blockEntities) implements Writeable {
+public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
+                        @NotNull Map<Integer, Block> blockEntities) implements Writeable {
     public ChunkData {
         heightmaps = heightmaps.deepClone();
         data = data.clone();

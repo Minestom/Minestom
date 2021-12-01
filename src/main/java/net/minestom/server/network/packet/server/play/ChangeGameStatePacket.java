@@ -6,7 +6,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record ChangeGameStatePacket(Reason reason, float value) implements ServerPacket {
+public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket {
     public ChangeGameStatePacket(BinaryReader reader) {
         this(Reason.values()[reader.readByte()], reader.readFloat());
     }
