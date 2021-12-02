@@ -14,6 +14,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -43,6 +44,8 @@ public class DynamicChunk extends Chunk {
     private long lastChange;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
+
+    private final Scheduler scheduler = Scheduler.newScheduler();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -100,6 +103,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
+        this.scheduler.processTick();
         if (tickableMap.isEmpty()) return;
         tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
             final int index = entry.getIntKey();
@@ -174,6 +178,11 @@ public class DynamicChunk extends Chunk {
             if (section != null) section.clear();
         }
         this.entries.clear();
+    }
+
+    @Override
+    public @NotNull Scheduler scheduler() {
+        return scheduler;
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {

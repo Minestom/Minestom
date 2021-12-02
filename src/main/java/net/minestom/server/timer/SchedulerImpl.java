@@ -3,7 +3,7 @@ package net.minestom.server.timer;
 import com.zaxxer.sparsebits.SparseBitSet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import net.minestom.server.MinecraftServer;
-import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
+import org.jctools.queues.MpscGrowableArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -24,7 +24,7 @@ final class SchedulerImpl implements Scheduler {
     private final ReadWriteLock bitSetLock = new ReentrantReadWriteLock();
 
     private final Int2ObjectAVLTreeMap<List<MTask>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
-    private final MpmcUnboundedXaddArrayQueue<MTask> taskQueue = new MpmcUnboundedXaddArrayQueue<>(1024);
+    private final MpscGrowableArrayQueue<MTask> taskQueue = new MpscGrowableArrayQueue<>(64);
     private final Set<MTask> parkedTasks = ConcurrentHashMap.newKeySet();
 
     private final AtomicInteger tickState = new AtomicInteger();
@@ -39,13 +39,15 @@ final class SchedulerImpl implements Scheduler {
         processTick(tickState.incrementAndGet());
     }
 
-    private void processTick(int tick) {
+    private synchronized void processTick(int tick) {
         // Tasks based on tick
         synchronized (tickTaskQueue) {
-            int tickToProcess;
-            while ((tickToProcess = tickTaskQueue.firstIntKey()) <= tick) {
-                final List<MTask> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
-                if (tickScheduledTasks != null) tickScheduledTasks.forEach(this::execute);
+            if (!tickTaskQueue.isEmpty()) {
+                int tickToProcess;
+                while ((tickToProcess = tickTaskQueue.firstIntKey()) <= tick) {
+                    final List<MTask> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
+                    if (tickScheduledTasks != null) tickScheduledTasks.forEach(this::execute);
+                }
             }
         }
         // Unparked tasks & based on time
