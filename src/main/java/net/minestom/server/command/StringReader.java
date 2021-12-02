@@ -82,8 +82,7 @@ public final class StringReader extends FixedStringReader {
      * @return the next readable character, incrementing the current position in the process
      */
     public char nextChar() {
-        currentPosition++;
-        return all().charAt(currentPosition);
+        return all().charAt(currentPosition++);
     }
 
     /**

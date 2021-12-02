@@ -166,7 +166,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
             if (c == NUMBER_SEPARATOR.charAt(positionInSeparator)) {
                 positionInSeparator++;
                 if (positionInSeparator == NUMBER_SEPARATOR.length()) {
-                    reader.currentPosition(1 + reader.currentPosition() - NUMBER_SEPARATOR.length());
+                    reader.currentPosition(reader.currentPosition() - NUMBER_SEPARATOR.length());
                     return reader.all().substring(startingPosition, reader.currentPosition());
                 }
             } else {
