@@ -10,8 +10,14 @@ record MTaskImpl(int id,
                  @NotNull Supplier<Status> task,
                  @NotNull ExecutionType executionType,
                  @NotNull SchedulerImpl owner) implements MTask {
+    @Override
     public void wakeup() {
         this.owner.wakeupTask(this);
+    }
+
+    @Override
+    public void stop() {
+        this.owner.stopTask(this);
     }
 
     record DurationStatus(@NotNull Duration duration) implements MTask.Status {

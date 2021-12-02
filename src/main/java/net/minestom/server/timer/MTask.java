@@ -6,13 +6,15 @@ import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
 public sealed interface MTask permits MTaskImpl {
-    void wakeup();
-
     int id();
 
     @NotNull ExecutionType executionType();
 
     @NotNull Scheduler owner();
+
+    void wakeup();
+
+    void stop();
 
     sealed interface Status permits
             MTaskImpl.DurationStatus,

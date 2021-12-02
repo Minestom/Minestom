@@ -70,6 +70,10 @@ final class SchedulerImpl implements Scheduler {
         }
     }
 
+    void stopTask(MTask mTask) {
+        // TODO: stop task
+    }
+
     private void execute(MTask task) {
         switch (task.executionType()) {
             case SYNC -> handleStatus(task);
@@ -95,11 +99,10 @@ final class SchedulerImpl implements Scheduler {
                 }
                 execute(task);
             });
-            // TODO
         } else if (status instanceof MTaskImpl.ParkStatus) {
             this.parkedTasks.add(task);
         } else if (status instanceof MTaskImpl.StopStatus) {
-            // Do nothing
+            this.tasks.remove(task);
         }
     }
 }
