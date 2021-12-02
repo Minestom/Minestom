@@ -106,6 +106,7 @@ final class SchedulerImpl implements Scheduler {
     }
 
     private void execute(MTask task) {
+        if (!task.isAlive()) return;
         switch (task.executionType()) {
             case SYNC -> handleStatus(task);
             case ASYNC -> EXECUTOR.submit(() -> handleStatus(task));
