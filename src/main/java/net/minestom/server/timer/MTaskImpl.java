@@ -10,6 +10,9 @@ record MTaskImpl(int id,
                  @NotNull Supplier<Status> task,
                  @NotNull ExecutionType executionType,
                  @NotNull SchedulerImpl owner) implements MTask {
+    static Status PARK = new ParkStatus();
+    static Status STOP = new StopStatus();
+
     @Override
     public void unpark() {
         this.owner.unparkTask(this);

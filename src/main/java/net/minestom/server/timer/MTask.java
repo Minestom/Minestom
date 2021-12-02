@@ -42,11 +42,11 @@ public sealed interface MTask permits MTaskImpl {
         }
 
         static @NotNull MTask.Status park() {
-            return new MTaskImpl.ParkStatus();
+            return MTaskImpl.PARK;
         }
 
         static @NotNull MTask.Status stop() {
-            return new MTaskImpl.StopStatus();
+            return MTaskImpl.STOP;
         }
     }
 
