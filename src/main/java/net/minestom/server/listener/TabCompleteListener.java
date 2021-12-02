@@ -64,9 +64,9 @@ public class TabCompleteListener {
                     .stream()
                     .map(suggestionEntry -> {
                         TabCompletePacket.Match match = new TabCompletePacket.Match();
-                        match.match = suggestionEntry.getEntry();
-                        match.hasTooltip = suggestionEntry.getTooltip() != null;
-                        match.tooltip = suggestionEntry.getTooltip();
+                        match.match = suggestionEntry.entry();
+                        match.hasTooltip = suggestionEntry.tooltip() != null;
+                        match.tooltip = suggestionEntry.tooltip();
                         return match;
                     }).toArray(TabCompletePacket.Match[]::new);
 
