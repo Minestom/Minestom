@@ -21,7 +21,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     public static final int INVALID_NBT = 1;
 
-    public ArgumentNbtCompoundTag(String id) {
+    public ArgumentNbtCompoundTag(@NotNull String id) {
         super(id, true);
     }
 

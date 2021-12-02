@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
 
-    public ArgumentPotionEffect(String id) {
+    public ArgumentPotionEffect(@NotNull String id) {
         super(id);
     }
 

@@ -26,7 +26,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static final int INVALID_NBT = 2;
     public static final int INVALID_MATERIAL = 3;
 
-    public ArgumentItemStack(String id) {
+    public ArgumentItemStack(@NotNull String id) {
         super(id, true);
     }
 

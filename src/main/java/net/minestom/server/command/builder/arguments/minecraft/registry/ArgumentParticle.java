@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentParticle extends ArgumentRegistry<Particle> {
 
-    public ArgumentParticle(String id) {
+    public ArgumentParticle(@NotNull String id) {
         super(id);
     }
 

@@ -50,7 +50,7 @@ public class ArgumentString extends Argument<String> {
 
     private ReadType readType = ReadType.STRING;
 
-    public ArgumentString(String id) {
+    public ArgumentString(@NotNull String id) {
         super(id, true);
     }
 

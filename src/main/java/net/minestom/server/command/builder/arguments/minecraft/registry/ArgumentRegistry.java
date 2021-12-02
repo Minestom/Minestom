@@ -8,7 +8,7 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
 
     public static final int INVALID_NAME = -2;
 
-    public ArgumentRegistry(String id) {
+    public ArgumentRegistry(@NotNull String id) {
         super(id);
     }
 

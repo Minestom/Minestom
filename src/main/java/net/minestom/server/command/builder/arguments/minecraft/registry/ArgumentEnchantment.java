@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
 
-    public ArgumentEnchantment(String id) {
+    public ArgumentEnchantment(@NotNull String id) {
         super(id);
     }
 

@@ -19,7 +19,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
     private final E[] values;
     private Format format = Format.DEFAULT;
 
-    public ArgumentEnum(@NotNull String id, Class<E> enumClass) {
+    public ArgumentEnum(@NotNull String id, @NotNull Class<E> enumClass) {
         super(id);
         this.enumClass = enumClass;
         this.values = enumClass.getEnumConstants();

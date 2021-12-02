@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ArgumentInteger extends ArgumentNumber<Integer> {
 
-    public ArgumentInteger(String id) {
+    public ArgumentInteger(@NotNull String id) {
         super(id, "brigadier:integer", Integer::parseInt, Integer::parseInt, BinaryWriter::writeInt, Integer::compare);
     }
 

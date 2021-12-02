@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentFloatRange extends ArgumentRange<FloatRange, Float> {
 
-    public ArgumentFloatRange(String id) {
+    public ArgumentFloatRange(@NotNull String id) {
         super(id, "minecraft:float_range", Float.MIN_VALUE, Float.MAX_VALUE, Float::parseFloat, FloatRange::new);
     }
 

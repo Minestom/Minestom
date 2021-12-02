@@ -20,7 +20,7 @@ public class ArgumentColor extends Argument<Style> {
 
     public static final int UNDEFINED_COLOR = -2;
 
-    public ArgumentColor(String id) {
+    public ArgumentColor(@NotNull String id) {
         super(id);
     }
 

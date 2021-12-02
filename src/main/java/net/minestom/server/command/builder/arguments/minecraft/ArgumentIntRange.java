@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentIntRange extends ArgumentRange<IntRange, Integer> {
 
-    public ArgumentIntRange(String id) {
+    public ArgumentIntRange(@NotNull String id) {
         super(id, "minecraft:int_range", Integer.MIN_VALUE, Integer.MAX_VALUE, Integer::parseInt, IntRange::new);
     }
 

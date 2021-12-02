@@ -22,7 +22,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
 
     public static final int INVALID_NBT = 1;
 
-    public ArgumentNbtTag(String id) {
+    public ArgumentNbtTag(@NotNull String id) {
         super(id, true);
     }
 

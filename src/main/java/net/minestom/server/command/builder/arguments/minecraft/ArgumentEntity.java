@@ -51,7 +51,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     private boolean onlySingleEntity;
     private boolean onlyPlayers;
 
-    public ArgumentEntity(String id) {
+    public ArgumentEntity(@NotNull String id) {
         super(id, true);
     }
 

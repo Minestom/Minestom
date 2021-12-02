@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 
-    public ArgumentEntityType(String id) {
+    public ArgumentEntityType(@NotNull String id) {
         super(id);
     }
 

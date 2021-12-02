@@ -34,7 +34,7 @@ public class ArgumentTime extends Argument<Long> {
 
     private static final CharList SUFFIXES = new CharArrayList(new char[]{'d', 's', 't'});
 
-    public ArgumentTime(String id) {
+    public ArgumentTime(@NotNull String id) {
         super(id);
     }
 

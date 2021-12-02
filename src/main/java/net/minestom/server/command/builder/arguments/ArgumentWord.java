@@ -25,7 +25,7 @@ public class ArgumentWord extends Argument<String> {
 
     protected String[] restrictions;
 
-    public ArgumentWord(String id) {
+    public ArgumentWord(@NotNull String id) {
         super(id);
     }
 
