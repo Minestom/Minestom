@@ -12,9 +12,16 @@ public sealed interface MTask permits MTaskImpl {
 
     @NotNull Scheduler owner();
 
-    void wakeup();
+    /**
+     * Unpark the tasks to be executed during next processing.
+     *
+     * @throws IllegalStateException if the task is not parked
+     */
+    void unpark();
 
     void stop();
+
+    boolean isAlive();
 
     sealed interface Status permits
             MTaskImpl.DurationStatus,

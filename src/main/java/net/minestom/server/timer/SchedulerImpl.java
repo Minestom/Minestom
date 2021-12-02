@@ -1,17 +1,17 @@
 package net.minestom.server.timer;
 
+import com.zaxxer.sparsebits.SparseBitSet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import net.minestom.server.MinecraftServer;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 final class SchedulerImpl implements Scheduler {
@@ -19,7 +19,10 @@ final class SchedulerImpl implements Scheduler {
     private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor();
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
-    private final List<MTask> tasks = new CopyOnWriteArrayList<>();
+    private final Set<MTask> tasks = ConcurrentHashMap.newKeySet();
+    private final SparseBitSet bitSet = new SparseBitSet();
+    private final ReadWriteLock bitSetLock = new ReentrantReadWriteLock();
+
     private final Int2ObjectAVLTreeMap<List<MTask>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
     private final MpmcUnboundedXaddArrayQueue<MTask> taskQueue = new MpmcUnboundedXaddArrayQueue<>(1024);
     private final Set<MTask> parkedTasks = ConcurrentHashMap.newKeySet();
@@ -45,7 +48,7 @@ final class SchedulerImpl implements Scheduler {
                 if (tickScheduledTasks != null) tickScheduledTasks.forEach(this::execute);
             }
         }
-        // Tasks based on time
+        // Unparked tasks & based on time
         this.taskQueue.drain(this::execute);
     }
 
@@ -54,24 +57,52 @@ final class SchedulerImpl implements Scheduler {
                                  @NotNull MTask.ExecutionType executionType) {
         MTaskImpl taskRef = new MTaskImpl(TASK_COUNTER.getAndIncrement(), task,
                 executionType, this);
-        this.tasks.add(taskRef);
+        var lock = bitSetLock.writeLock();
+        lock.lock();
+        try {
+            this.bitSet.set(taskRef.id());
+            this.tasks.add(taskRef);
+        } finally {
+            lock.unlock();
+        }
         execute(taskRef);
         return taskRef;
     }
 
     @Override
-    public @NotNull List<@NotNull MTask> scheduledTasks() {
-        return Collections.unmodifiableList(tasks);
+    public @NotNull Collection<@NotNull MTask> scheduledTasks() {
+        return Collections.unmodifiableSet(tasks);
     }
 
-    void wakeupTask(MTask task) {
-        if (parkedTasks.remove(task)) {
-            execute(task);
+    void unparkTask(MTask task) {
+        if (!parkedTasks.remove(task)) {
+            throw new IllegalStateException("Task is not parked");
+        }
+        execute(task);
+        // TODO task executed on next processing?
+        // this.taskQueue.relaxedOffer(task);
+    }
+
+    void stopTask(MTask task) {
+        var lock = bitSetLock.writeLock();
+        lock.lock();
+        try {
+            this.bitSet.clear(task.id());
+            if (!tasks.remove(task))
+                throw new IllegalStateException("Task is not scheduled");
+        } finally {
+            lock.unlock();
         }
     }
 
-    void stopTask(MTask mTask) {
-        // TODO: stop task
+    boolean isTaskAlive(MTaskImpl task) {
+        var lock = bitSetLock.readLock();
+        lock.lock();
+        try {
+            return bitSet.get(task.id());
+        } finally {
+            lock.unlock();
+        }
     }
 
     private void execute(MTask task) {

@@ -11,13 +11,18 @@ record MTaskImpl(int id,
                  @NotNull ExecutionType executionType,
                  @NotNull SchedulerImpl owner) implements MTask {
     @Override
-    public void wakeup() {
-        this.owner.wakeupTask(this);
+    public void unpark() {
+        this.owner.unparkTask(this);
     }
 
     @Override
     public void stop() {
         this.owner.stopTask(this);
+    }
+
+    @Override
+    public boolean isAlive() {
+        return owner.isTaskAlive(this);
     }
 
     record DurationStatus(@NotNull Duration duration) implements MTask.Status {
