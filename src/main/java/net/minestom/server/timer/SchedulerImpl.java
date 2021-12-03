@@ -14,7 +14,11 @@ import java.util.function.Supplier;
 
 final class SchedulerImpl implements Scheduler {
     private static final AtomicInteger TASK_COUNTER = new AtomicInteger();
-    private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
     private final Set<OwnedTask> tasks = ConcurrentHashMap.newKeySet();
