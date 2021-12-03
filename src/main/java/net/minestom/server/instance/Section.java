@@ -1,9 +1,11 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-public final class Section {
+public final class Section implements Writeable {
     private Palette blockPalette;
     private Palette biomePalette;
     private byte[] skyLight;
@@ -57,5 +59,12 @@ public final class Section {
     public @NotNull Section clone() {
         return new Section(blockPalette.clone(), biomePalette.clone(),
                 skyLight.clone(), blockLight.clone());
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeShort((short) blockPalette.size());
+        writer.write(blockPalette);
+        writer.write(biomePalette);
     }
 }
