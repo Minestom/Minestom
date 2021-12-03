@@ -9,27 +9,29 @@ import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ArgumentLoop<T> extends Argument<List<T>> {
 
     public static final int INVALID_INPUT_ERROR = 1;
 
-    private final List<Argument<T>> arguments = new ArrayList<>();
+    private final List<Argument<T>> arguments;
 
     @SafeVarargs
     public ArgumentLoop(@NotNull String id, @NotNull Argument<T>... arguments) {
         super(id, true, true);
-        this.arguments.addAll(Arrays.asList(arguments));
+        this.arguments = List.of(arguments);
     }
 
     @Override
     public @NotNull List<T> parse(@NotNull StringReader input) throws CommandException {
         List<T> result = new ArrayList<>();
 
-        for (var argument : this.arguments){
-            result.add(argument.parse(input));
+        for (int i = 0; i < this.arguments.size(); i++) {
+            result.add(arguments.get(i).parse(input));
+            if (i != this.arguments.size() - 1) {
+                input.assureWhitespace();
+            }
         }
 
         return result;
