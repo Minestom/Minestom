@@ -21,6 +21,10 @@ public sealed interface Scheduler permits SchedulerImpl {
     @NotNull OwnedTask submit(@NotNull Supplier<TaskSchedule> task,
                               @NotNull ExecutionType executionType);
 
+    @NotNull OwnedTask submitAfter(@NotNull TaskSchedule schedule,
+                                   @NotNull Supplier<TaskSchedule> task,
+                                   @NotNull ExecutionType executionType);
+
     @NotNull Collection<@NotNull OwnedTask> scheduledTasks();
 
     static @NotNull Scheduler newScheduler() {

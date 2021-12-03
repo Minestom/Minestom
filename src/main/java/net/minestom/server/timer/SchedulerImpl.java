@@ -10,8 +10,6 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 final class SchedulerImpl implements Scheduler {
@@ -21,7 +19,6 @@ final class SchedulerImpl implements Scheduler {
 
     private final Set<OwnedTask> tasks = ConcurrentHashMap.newKeySet();
     private final SparseBitSet bitSet = new SparseBitSet();
-    private final ReadWriteLock bitSetLock = new ReentrantReadWriteLock();
 
     private final Int2ObjectAVLTreeMap<List<OwnedTask>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
     private final MpscGrowableArrayQueue<OwnedTask> taskQueue = new MpscGrowableArrayQueue<>(64);
@@ -39,35 +36,32 @@ final class SchedulerImpl implements Scheduler {
         processTick(tickState.incrementAndGet());
     }
 
-    private synchronized void processTick(int tick) {
-        // Tasks based on tick
-        synchronized (tickTaskQueue) {
-            if (!tickTaskQueue.isEmpty()) {
-                int tickToProcess;
-                while ((tickToProcess = tickTaskQueue.firstIntKey()) <= tick) {
-                    final List<OwnedTask> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
-                    if (tickScheduledTasks != null) tickScheduledTasks.forEach(this::execute);
-                }
+    private void processTick(int tick) {
+        synchronized (this) {
+            int tickToProcess;
+            while ((tickToProcess = !tickTaskQueue.isEmpty() ? tickTaskQueue.firstIntKey() : Integer.MAX_VALUE) <= tick) {
+                final List<OwnedTask> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
+                if (tickScheduledTasks != null) tickScheduledTasks.forEach(taskQueue::relaxedOffer);
             }
         }
-        // Unparked tasks & based on time
+        // Run all tasks lock-free
         this.taskQueue.drain(this::execute);
     }
 
     @Override
     public @NotNull OwnedTask submit(@NotNull Supplier<TaskSchedule> task,
                                      @NotNull ExecutionType executionType) {
-        OwnedTaskImpl taskRef = new OwnedTaskImpl(TASK_COUNTER.getAndIncrement(), task,
-                executionType, this);
-        var lock = bitSetLock.writeLock();
-        lock.lock();
-        try {
-            this.bitSet.set(taskRef.id());
-            this.tasks.add(taskRef);
-        } finally {
-            lock.unlock();
-        }
+        final OwnedTaskImpl taskRef = register(task, executionType);
         execute(taskRef);
+        return taskRef;
+    }
+
+    @Override
+    public @NotNull OwnedTask submitAfter(@NotNull TaskSchedule schedule,
+                                          @NotNull Supplier<TaskSchedule> task,
+                                          @NotNull ExecutionType executionType) {
+        final OwnedTaskImpl taskRef = register(task, executionType);
+        handleStatus(taskRef, schedule);
         return taskRef;
     }
 
@@ -85,44 +79,39 @@ final class SchedulerImpl implements Scheduler {
         // this.taskQueue.relaxedOffer(task);
     }
 
-    void stopTask(OwnedTask task) {
-        var lock = bitSetLock.writeLock();
-        lock.lock();
-        try {
-            this.bitSet.clear(task.id());
-            if (!tasks.remove(task))
-                throw new IllegalStateException("Task is not scheduled");
-        } finally {
-            lock.unlock();
-        }
+    synchronized void stopTask(OwnedTask task) {
+        this.bitSet.clear(task.id());
+        if (!tasks.remove(task)) throw new IllegalStateException("Task is not scheduled");
     }
 
-    boolean isTaskAlive(OwnedTaskImpl task) {
-        var lock = bitSetLock.readLock();
-        lock.lock();
-        try {
-            return bitSet.get(task.id());
-        } finally {
-            lock.unlock();
-        }
+    synchronized boolean isTaskAlive(OwnedTaskImpl task) {
+        return bitSet.get(task.id());
+    }
+
+    private synchronized OwnedTaskImpl register(@NotNull Supplier<TaskSchedule> task,
+                                                @NotNull ExecutionType executionType) {
+        OwnedTaskImpl taskRef = new OwnedTaskImpl(TASK_COUNTER.getAndIncrement(), task,
+                executionType, this);
+        this.bitSet.set(taskRef.id());
+        this.tasks.add(taskRef);
+        return taskRef;
     }
 
     private void execute(OwnedTask task) {
         if (!task.isAlive()) return;
         switch (task.executionType()) {
-            case SYNC -> handleStatus(task);
-            case ASYNC -> EXECUTOR.submit(() -> handleStatus(task));
+            case SYNC -> handleStatus(task, ((OwnedTaskImpl) task).task().get());
+            case ASYNC -> EXECUTOR.submit(() -> handleStatus(task, ((OwnedTaskImpl) task).task().get()));
         }
     }
 
-    private void handleStatus(OwnedTask task) {
-        final TaskSchedule schedule = ((OwnedTaskImpl) task).task().get();
+    private void handleStatus(OwnedTask task, TaskSchedule schedule) {
         if (schedule instanceof TaskScheduleImpl.DurationSchedule durationSchedule) {
             final Duration duration = durationSchedule.duration();
             SCHEDULER.schedule(() -> taskQueue.offer(task), duration.toMillis(), TimeUnit.MILLISECONDS);
         } else if (schedule instanceof TaskScheduleImpl.TickSchedule tickSchedule) {
             final int target = tickState.get() + tickSchedule.tick();
-            synchronized (tickTaskQueue) {
+            synchronized (this) {
                 this.tickTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
             }
         } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {

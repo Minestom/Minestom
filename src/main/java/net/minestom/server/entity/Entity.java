@@ -38,7 +38,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.Tasks;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -207,7 +207,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @Deprecated
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.scheduler.submit(Tasks.nextTick(() -> callback.accept(this)), ExecutionType.SYNC);
+        this.scheduler.submitAfter(TaskSchedule.scheduleTick(1), () -> {
+            callback.accept(this);
+            return TaskSchedule.stop();
+        }, ExecutionType.SYNC);
     }
 
     /**

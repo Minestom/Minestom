@@ -24,7 +24,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.Tasks;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -122,7 +122,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      */
     @Deprecated
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
-        this.scheduler.submit(Tasks.nextTick(() -> callback.accept(this)), ExecutionType.SYNC);
+        this.scheduler.submitAfter(TaskSchedule.scheduleTick(1), () -> {
+            callback.accept(this);
+            return TaskSchedule.stop();
+        }, ExecutionType.SYNC);
     }
 
     @ApiStatus.Internal
