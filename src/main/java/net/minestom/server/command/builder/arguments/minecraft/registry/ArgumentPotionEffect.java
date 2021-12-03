@@ -5,8 +5,8 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an argument giving a {@link PotionEffect}.
@@ -18,18 +18,13 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
     }
 
     @Override
-    public @NotNull PotionEffect parse(@NotNull StringReader input) throws CommandException {
-        NamespaceID id = input.readNamespaceID();
-        PotionEffect potionEffect = PotionEffect.fromNamespaceId(id);
-        if (potionEffect == null){
-            throw CommandException.EFFECT_EFFECTNOTFOUND.generateException(input, id.asString());
-        }
-        return potionEffect;
+    public @Nullable PotionEffect getRegistry(@NotNull String key) {
+        return PotionEffect.fromNamespaceId(key);
     }
 
     @Override
-    public PotionEffect getRegistry(@NotNull String value) {
-        return PotionEffect.fromNamespaceId(value);
+    public @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id) {
+        return CommandException.EFFECT_EFFECTNOTFOUND.generateException(input, id);
     }
 
     @Override

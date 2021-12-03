@@ -6,8 +6,8 @@ import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an argument giving an {@link EntityType}.
@@ -19,18 +19,13 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
     }
 
     @Override
-    public @NotNull EntityType parse(@NotNull StringReader input) throws CommandException {
-        NamespaceID id = input.readNamespaceID();
-        EntityType enchantment = EntityType.fromNamespaceId(id);
-        if (enchantment == null){
-            throw CommandException.ENTITY_NOTFOUND.generateException(input, id.asString());
-        }
-        return enchantment;
+    public @Nullable EntityType getRegistry(@NotNull String key) {
+        return EntityType.fromNamespaceId(key);
     }
 
     @Override
-    public EntityType getRegistry(@NotNull String value) {
-        return EntityType.fromNamespaceId(value);
+    public @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id) {
+        return CommandException.ENTITY_NOTFOUND.generateException(input, id);
     }
 
     @Override

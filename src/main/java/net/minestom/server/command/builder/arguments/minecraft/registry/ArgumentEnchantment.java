@@ -5,8 +5,8 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an argument giving an {@link Enchantment}.
@@ -18,18 +18,13 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
     }
 
     @Override
-    public @NotNull Enchantment parse(@NotNull StringReader input) throws CommandException {
-        NamespaceID id = input.readNamespaceID();
-        Enchantment enchantment = Enchantment.fromNamespaceId(id);
-        if (enchantment == null){
-            throw CommandException.ENCHANTMENT_UNKNOWN.generateException(input, id.asString());
-        }
-        return enchantment;
+    public @Nullable Enchantment getRegistry(@NotNull String key) {
+        return Enchantment.fromNamespaceId(key);
     }
 
     @Override
-    public Enchantment getRegistry(@NotNull String value) {
-        return Enchantment.fromNamespaceId(value);
+    public @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id) {
+        return CommandException.ENCHANTMENT_UNKNOWN.generateException(input, id);
     }
 
     @Override

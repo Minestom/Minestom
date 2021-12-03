@@ -5,8 +5,8 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an argument giving a {@link Particle}.
@@ -18,18 +18,13 @@ public class ArgumentParticle extends ArgumentRegistry<Particle> {
     }
 
     @Override
-    public @NotNull Particle parse(@NotNull StringReader input) throws CommandException {
-        NamespaceID id = input.readNamespaceID();
-        Particle particle = Particle.fromNamespaceId(id);
-        if (particle == null){
-            throw CommandException.PARTICLE_NOTFOUND.generateException(input, id.asString());
-        }
-        return particle;
+    public @Nullable Particle getRegistry(@NotNull String key) {
+        return Particle.fromNamespaceId(key);
     }
 
     @Override
-    public Particle getRegistry(@NotNull String value) {
-        return Particle.fromNamespaceId(value);
+    public @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id) {
+        return CommandException.PARTICLE_NOTFOUND.generateException(input, id);
     }
 
     @Override
