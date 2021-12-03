@@ -25,6 +25,8 @@ public class CommandDispatcher {
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Set<Command> commands = new HashSet<>();
 
+    private final Set<Command> commandsView = Collections.unmodifiableSet(commands);
+
     private final Cache<String, CommandResult> cache = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .build();
@@ -53,7 +55,7 @@ public class CommandDispatcher {
     }
 
     public @NotNull Set<Command> getCommands() {
-        return Collections.unmodifiableSet(commands);
+        return commandsView;
     }
 
     /**
