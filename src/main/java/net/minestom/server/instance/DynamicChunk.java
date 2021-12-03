@@ -9,7 +9,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
@@ -50,6 +49,7 @@ public class DynamicChunk extends Chunk {
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = instance.getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
         this.sections = new Section[maxSection - minSection];
+        Arrays.setAll(sections, value -> new Section());
     }
 
     @Override
@@ -94,9 +94,7 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Section getSection(int section) {
         final int index = section - minSection;
-        Section result = sections[index];
-        if (result == null) sections[index] = result = new Section();
-        return result;
+        return sections[index];
     }
 
     @Override
@@ -124,7 +122,6 @@ public class DynamicChunk extends Chunk {
         }
         // Retrieve the block from state id
         final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
-        if (section == null) return Block.AIR; // Section is unloaded
         final int blockStateId = section.blockPalette()
                 .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
         if (blockStateId == -1) return Block.AIR; // Section is empty
@@ -134,7 +131,6 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
         final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
-        if (section == null) return Biome.PLAINS; // Section is unloaded
         final int id = section.biomePalette()
                 .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
@@ -171,9 +167,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void reset() {
-        for (Section section : sections) {
-            if (section != null) section.clear();
-        }
+        for (Section section : sections) section.clear();
         this.entries.clear();
     }
 
@@ -198,21 +192,7 @@ public class DynamicChunk extends Chunk {
         }
         // Data
         final BinaryWriter writer = new BinaryWriter();
-        for (Section section : sections) {
-            if (section != null) {
-                final Palette blockPalette = section.blockPalette();
-                writer.writeShort((short) blockPalette.size());
-                blockPalette.write(writer); // Blocks
-                section.biomePalette().write(writer); // Biomes
-            } else {
-                // Hardcode empty section
-                writer.writeShort((short) 0); // Block count
-                writer.writeByte((byte) 15); // Block bpe
-                writer.writeVarInt(0); // Block data length
-                writer.writeByte((byte) 15); // Biome bpe
-                writer.writeVarInt(0); // Biome data length
-            }
-        }
+        for (Section section : sections) writer.write(section);
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
                 createLightData());
@@ -233,20 +213,15 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            if (section != null) {
-                final byte[] skyLight = section.getSkyLight();
-                final byte[] blockLight = section.getBlockLight();
-                if (!ArrayUtils.empty(skyLight)) {
-                    skyLights.add(skyLight);
-                    skyMask.set(index);
-                }
-                if (!ArrayUtils.empty(blockLight)) {
-                    blockLights.add(blockLight);
-                    blockMask.set(index);
-                }
-            } else {
-                emptyBlockMask.set(index);
-                emptySkyMask.set(index);
+            final byte[] skyLight = section.getSkyLight();
+            final byte[] blockLight = section.getBlockLight();
+            if (!ArrayUtils.empty(skyLight)) {
+                skyLights.add(skyLight);
+                skyMask.set(index);
+            }
+            if (!ArrayUtils.empty(blockLight)) {
+                blockLights.add(blockLight);
+                blockMask.set(index);
             }
         }
         return new LightData(true,
