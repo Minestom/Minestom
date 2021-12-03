@@ -108,7 +108,12 @@ final class SchedulerImpl implements Scheduler {
     private void handleStatus(OwnedTask task, TaskSchedule schedule) {
         if (schedule instanceof TaskScheduleImpl.DurationSchedule durationSchedule) {
             final Duration duration = durationSchedule.duration();
-            SCHEDULER.schedule(() -> taskQueue.offer(task), duration.toMillis(), TimeUnit.MILLISECONDS);
+            SCHEDULER.schedule(() -> {
+                switch (task.executionType()) {
+                    case SYNC -> taskQueue.offer(task);
+                    case ASYNC -> execute(task);
+                }
+            }, duration.toMillis(), TimeUnit.MILLISECONDS);
         } else if (schedule instanceof TaskScheduleImpl.TickSchedule tickSchedule) {
             final int target = tickState.get() + tickSchedule.tick();
             synchronized (this) {

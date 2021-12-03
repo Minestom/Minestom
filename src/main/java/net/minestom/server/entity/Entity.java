@@ -207,7 +207,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @Deprecated
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.scheduler.submitAfter(TaskSchedule.scheduleTick(1), () -> {
+        this.scheduler.submitAfter(TaskSchedule.tick(1), () -> {
             callback.accept(this);
             return TaskSchedule.stop();
         }, ExecutionType.SYNC);

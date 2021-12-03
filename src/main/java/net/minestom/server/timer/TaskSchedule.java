@@ -11,15 +11,15 @@ public sealed interface TaskSchedule permits
         TaskScheduleImpl.Park,
         TaskScheduleImpl.Stop,
         TaskScheduleImpl.TickSchedule {
-    static @NotNull TaskSchedule scheduleDuration(@NotNull Duration duration) {
+    static @NotNull TaskSchedule duration(@NotNull Duration duration) {
         return new TaskScheduleImpl.DurationSchedule(duration);
     }
 
-    static @NotNull TaskSchedule scheduleTick(int tick) {
+    static @NotNull TaskSchedule tick(int tick) {
         return new TaskScheduleImpl.TickSchedule(tick);
     }
 
-    static @NotNull TaskSchedule scheduleFuture(@NotNull CompletableFuture<?> future) {
+    static @NotNull TaskSchedule future(@NotNull CompletableFuture<?> future) {
         return new TaskScheduleImpl.FutureSchedule(future);
     }
 

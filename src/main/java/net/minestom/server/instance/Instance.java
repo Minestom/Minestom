@@ -122,7 +122,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      */
     @Deprecated
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
-        this.scheduler.submitAfter(TaskSchedule.scheduleTick(1), () -> {
+        this.scheduler.submitAfter(TaskSchedule.tick(1), () -> {
             callback.accept(this);
             return TaskSchedule.stop();
         }, ExecutionType.SYNC);
