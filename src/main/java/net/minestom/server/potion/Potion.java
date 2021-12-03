@@ -35,7 +35,7 @@ public record Potion(PotionEffect effect, byte amplifier, int duration, byte fla
      * @see #PARTICLES_FLAG
      * @see #flags()
      */
-    public static final byte ICON_FLAG = 0x01;
+    public static final byte ICON_FLAG = 0x03;
     
     public Potion(BinaryReader reader) {
         this(PotionEffect.fromId(reader.readVarInt()), reader.readByte(),
