@@ -4,14 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public final class MTasks {
-    private MTasks() {
+public final class Tasks {
+    private Tasks() {
     }
 
-    public static @NotNull Supplier<MTask.Status> nextTick(@NotNull Runnable runnable) {
+    public static @NotNull Supplier<TaskSchedule> nextTick(@NotNull Runnable runnable) {
         return () -> {
             runnable.run();
-            return MTask.Status.stop();
+            return TaskSchedule.stop();
         };
     }
 }

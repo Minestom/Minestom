@@ -18,10 +18,10 @@ public sealed interface Scheduler permits SchedulerImpl {
      */
     void processTick();
 
-    @NotNull MTask submit(@NotNull Supplier<MTask.Status> task,
-                          @NotNull MTask.ExecutionType executionType);
+    @NotNull OwnedTask submit(@NotNull Supplier<TaskSchedule> task,
+                              @NotNull ExecutionType executionType);
 
-    @NotNull Collection<@NotNull MTask> scheduledTasks();
+    @NotNull Collection<@NotNull OwnedTask> scheduledTasks();
 
     static @NotNull Scheduler newScheduler() {
         return new SchedulerImpl();

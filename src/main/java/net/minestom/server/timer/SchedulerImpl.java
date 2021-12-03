@@ -19,13 +19,13 @@ final class SchedulerImpl implements Scheduler {
     private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor();
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
-    private final Set<MTask> tasks = ConcurrentHashMap.newKeySet();
+    private final Set<OwnedTask> tasks = ConcurrentHashMap.newKeySet();
     private final SparseBitSet bitSet = new SparseBitSet();
     private final ReadWriteLock bitSetLock = new ReentrantReadWriteLock();
 
-    private final Int2ObjectAVLTreeMap<List<MTask>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
-    private final MpscGrowableArrayQueue<MTask> taskQueue = new MpscGrowableArrayQueue<>(64);
-    private final Set<MTask> parkedTasks = ConcurrentHashMap.newKeySet();
+    private final Int2ObjectAVLTreeMap<List<OwnedTask>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
+    private final MpscGrowableArrayQueue<OwnedTask> taskQueue = new MpscGrowableArrayQueue<>(64);
+    private final Set<OwnedTask> parkedTasks = ConcurrentHashMap.newKeySet();
 
     private final AtomicInteger tickState = new AtomicInteger();
 
@@ -45,7 +45,7 @@ final class SchedulerImpl implements Scheduler {
             if (!tickTaskQueue.isEmpty()) {
                 int tickToProcess;
                 while ((tickToProcess = tickTaskQueue.firstIntKey()) <= tick) {
-                    final List<MTask> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
+                    final List<OwnedTask> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
                     if (tickScheduledTasks != null) tickScheduledTasks.forEach(this::execute);
                 }
             }
@@ -55,9 +55,9 @@ final class SchedulerImpl implements Scheduler {
     }
 
     @Override
-    public @NotNull MTask submit(@NotNull Supplier<MTask.Status> task,
-                                 @NotNull MTask.ExecutionType executionType) {
-        MTaskImpl taskRef = new MTaskImpl(TASK_COUNTER.getAndIncrement(), task,
+    public @NotNull OwnedTask submit(@NotNull Supplier<TaskSchedule> task,
+                                     @NotNull ExecutionType executionType) {
+        OwnedTaskImpl taskRef = new OwnedTaskImpl(TASK_COUNTER.getAndIncrement(), task,
                 executionType, this);
         var lock = bitSetLock.writeLock();
         lock.lock();
@@ -72,11 +72,11 @@ final class SchedulerImpl implements Scheduler {
     }
 
     @Override
-    public @NotNull Collection<@NotNull MTask> scheduledTasks() {
+    public @NotNull Collection<@NotNull OwnedTask> scheduledTasks() {
         return Collections.unmodifiableSet(tasks);
     }
 
-    void unparkTask(MTask task) {
+    void unparkTask(OwnedTask task) {
         if (!parkedTasks.remove(task)) {
             throw new IllegalStateException("Task is not parked");
         }
@@ -85,7 +85,7 @@ final class SchedulerImpl implements Scheduler {
         // this.taskQueue.relaxedOffer(task);
     }
 
-    void stopTask(MTask task) {
+    void stopTask(OwnedTask task) {
         var lock = bitSetLock.writeLock();
         lock.lock();
         try {
@@ -97,7 +97,7 @@ final class SchedulerImpl implements Scheduler {
         }
     }
 
-    boolean isTaskAlive(MTaskImpl task) {
+    boolean isTaskAlive(OwnedTaskImpl task) {
         var lock = bitSetLock.readLock();
         lock.lock();
         try {
@@ -107,7 +107,7 @@ final class SchedulerImpl implements Scheduler {
         }
     }
 
-    private void execute(MTask task) {
+    private void execute(OwnedTask task) {
         if (!task.isAlive()) return;
         switch (task.executionType()) {
             case SYNC -> handleStatus(task);
@@ -115,27 +115,27 @@ final class SchedulerImpl implements Scheduler {
         }
     }
 
-    private void handleStatus(MTask task) {
-        final MTask.Status status = ((MTaskImpl) task).task().get();
-        if (status instanceof MTaskImpl.DurationStatus durationStatus) {
-            final Duration duration = durationStatus.duration();
+    private void handleStatus(OwnedTask task) {
+        final TaskSchedule schedule = ((OwnedTaskImpl) task).task().get();
+        if (schedule instanceof TaskScheduleImpl.DurationSchedule durationSchedule) {
+            final Duration duration = durationSchedule.duration();
             SCHEDULER.schedule(() -> taskQueue.offer(task), duration.toMillis(), TimeUnit.MILLISECONDS);
-        } else if (status instanceof MTaskImpl.TickStatus tickStatus) {
-            final int target = tickState.get() + tickStatus.tick();
+        } else if (schedule instanceof TaskScheduleImpl.TickSchedule tickSchedule) {
+            final int target = tickState.get() + tickSchedule.tick();
             synchronized (tickTaskQueue) {
                 this.tickTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
             }
-        } else if (status instanceof MTaskImpl.FutureStatus futureStatus) {
-            futureStatus.future().whenComplete((o, throwable) -> {
+        } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {
+            futureSchedule.future().whenComplete((o, throwable) -> {
                 if (throwable != null) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
                     return;
                 }
                 execute(task);
             });
-        } else if (status instanceof MTaskImpl.ParkStatus) {
+        } else if (schedule instanceof TaskScheduleImpl.Park) {
             this.parkedTasks.add(task);
-        } else if (status instanceof MTaskImpl.StopStatus) {
+        } else if (schedule instanceof TaskScheduleImpl.Stop) {
             this.tasks.remove(task);
         }
     }
