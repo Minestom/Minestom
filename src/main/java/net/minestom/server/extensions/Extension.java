@@ -57,26 +57,29 @@ public abstract class Extension {
     }
 
     @NotNull
-    public DiscoveredExtension getOrigin() {
+    public DiscoveredExtension origin() {
         return origin;
     }
 
-    /**
-     * Gets the logger for the extension
-     *
-     * @return The logger for the extension
-     */
     @NotNull
-    public Logger getLogger() {
+    public Logger logger() {
         return logger;
     }
 
-    public @NotNull EventNode<Event> getEventNode() {
+    public @NotNull EventNode<Event> eventNode() {
         return eventNode;
     }
 
-    public @NotNull Path getDataDirectory() {
-        return getOrigin().getDataDirectory();
+    public @NotNull Path dataDirectory() {
+        return origin().dataDirectory();
+    }
+
+    /**
+     * @return A modifiable list of dependents.
+     */
+    public Set<String> getDependents() {
+        //TODO(mattw): This should not be publicly modifiable.
+        return dependents;
     }
 
     /**
@@ -188,9 +191,36 @@ public abstract class Extension {
     }
 
     /**
-     * @return A modifiable list of dependents.
+     * @see #origin()
      */
-    public Set<String> getDependents() {
-        return dependents;
+    @Deprecated
+    @NotNull
+    public DiscoveredExtension getOrigin() {
+        return origin;
+    }
+
+    /**
+     * @see #logger()
+     */
+    @Deprecated
+    @NotNull
+    public Logger getLogger() {
+        return logger;
+    }
+
+    /**
+     * @see #eventNode()
+     */
+    @Deprecated
+    public @NotNull EventNode<Event> getEventNode() {
+        return eventNode;
+    }
+
+    /**
+     * @see #dataDirectory()
+     */
+    @Deprecated
+    public @NotNull Path getDataDirectory() {
+        return getOrigin().dataDirectory();
     }
 }
