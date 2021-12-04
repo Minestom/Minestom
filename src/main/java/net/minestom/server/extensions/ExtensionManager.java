@@ -9,6 +9,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -40,10 +41,7 @@ public class ExtensionManager {
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private Path extensionDataRoot = extensionFolder.toPath();
-    private boolean loaded;
-
-    // Option
-    private boolean loadOnStartup = true;
+    private int state = 0; // -1=do not start, 0=not started, 1=started, 2=preinit, 3=init, 4=postinit
 
     public ExtensionManager() {
     }
@@ -56,7 +54,7 @@ public class ExtensionManager {
      * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
      */
     public boolean shouldLoadOnStartup() {
-        return loadOnStartup;
+        return state != -1;
     }
 
     /**
@@ -67,7 +65,8 @@ public class ExtensionManager {
      * @param loadOnStartup true to load extensions on startup, false to do nothing
      */
     public void setLoadOnStartup(boolean loadOnStartup) {
-        this.loadOnStartup = loadOnStartup;
+        Check.stateCondition(state < 1, "Extensions have already been initialized");
+        this.state = loadOnStartup ? 0 : -1;
     }
 
     @NotNull
@@ -95,6 +94,45 @@ public class ExtensionManager {
 
     public boolean hasExtension(@NotNull String name) {
         return extensions.containsKey(name);
+    }
+
+    //
+    // Init phases
+    //
+
+    @ApiStatus.Internal
+    public void start() {
+        if (state == -1) {
+            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
+            return;
+        }
+        Check.stateCondition(state != 0, "ExtensionManager has already been started");
+        loadExtensions();
+        state = 1;
+    }
+
+    @ApiStatus.Internal
+    public void gotoPreInit() {
+        if (state == -1) return;
+        Check.stateCondition(state != 1, "Extensions have already done pre initialization");
+        extensions.values().forEach(Extension::preInitialize);
+        state = 2;
+    }
+
+    @ApiStatus.Internal
+    public void gotoInit() {
+        if (state == -1) return;
+        Check.stateCondition(state != 2, "Extensions have already done initialization");
+        extensions.values().forEach(Extension::initialize);
+        state = 3;
+    }
+
+    @ApiStatus.Internal
+    public void gotoPostInit() {
+        if (state == -1) return;
+        Check.stateCondition(state != 3, "Extensions have already done post initialization");
+        extensions.values().forEach(Extension::postInitialize);
+        state = 4;
     }
 
     //
@@ -143,10 +181,7 @@ public class ExtensionManager {
      * <p>
      * And finally make a scheduler to clean observers per extension.
      */
-    public void loadExtensions() {
-        Check.stateCondition(loaded, "Extensions are already loaded!");
-        this.loaded = true;
-
+    private void loadExtensions() {
         // Initialize folders
         {
             // Make extensions folder if necessary
