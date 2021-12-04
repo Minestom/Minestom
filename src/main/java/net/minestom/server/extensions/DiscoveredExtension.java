@@ -14,78 +14,85 @@ import java.util.List;
 
 /**
  * Represents an extension from an `extension.json` that is capable of powering an Extension object.
- *
+ * <p>
  * This has no constructor as its properties are set via GSON.
  */
 public final class DiscoveredExtension {
-    /** Static logger for this class. */
+    /**
+     * Static logger for this class.
+     */
     public static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
 
-    /** The regex that this name must pass. If it doesn't, it will not be accepted. */
+    /**
+     * The regex that this name must pass. If it doesn't, it will not be accepted.
+     */
     public static final String NAME_REGEX = "[A-Za-z][_A-Za-z0-9]+";
 
-    /** Name of the DiscoveredExtension. Unique for all extensions. */
+
     private String name;
 
-    /** Main class of this DiscoveredExtension, must extend Extension. */
+    /**
+     * Main class of this DiscoveredExtension, must extend Extension.
+     */
     private String entrypoint;
 
-    /** Version of this extension, highly reccomended to set it. */
+    /**
+     * Version of this extension, highly reccomended to set it.
+     */
     private String version;
 
-    /** People who have made this extension. */
+    /**
+     * People who have made this extension.
+     */
     private String[] authors;
 
-    /** List of extension names that this depends on. */
+    /**
+     * List of extension names that this depends on.
+     */
     private String[] dependencies;
 
-    /** List of Repositories and URLs that this depends on. */
+    /**
+     * List of Repositories and URLs that this depends on.
+     */
     private ExternalDependencies externalDependencies;
 
     /**
      * Extra meta on the object.
      * Do NOT use as configuration:
-     *
+     * <p>
      * Meta is meant to handle properties that will
      * be accessed by other extensions, not accessed by itself
      */
     private JsonObject meta;
 
-    /** All files of this extension */
+    /**
+     * All files of this extension
+     */
     transient List<URL> files = new LinkedList<>();
 
-    /** The load status of this extension -- LOAD_SUCCESS is the only good one. */
+    /**
+     * The load status of this extension -- LOAD_SUCCESS is the only good one.
+     */
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
 
-    /** The original jar this is from. */
+    /**
+     * The original jar this is from.
+     */
     transient Path originFile;
 
     transient Path dataDirectory;
 
-    /** The class loader that powers it. */
+    /**
+     * The class loader that powers it.
+     */
     private transient ExtensionClassLoader classLoader;
 
     /**
-     * @see #name()
+     * @return The name of the extension. Unique for all extensions.
      */
-    @Deprecated
-    @NotNull
-    public String getName() {
-        return name;
-    }
-
     @NotNull
     public String name() {
         return name;
-    }
-
-    /**
-     * @see #entrypoint()
-     */
-    @Deprecated
-    @NotNull
-    public String getEntrypoint() {
-        return entrypoint;
     }
 
     @NotNull
@@ -93,27 +100,9 @@ public final class DiscoveredExtension {
         return entrypoint;
     }
 
-    /**
-     * @see #version()
-     */
-    @Deprecated
-    @NotNull
-    public String getVersion() {
-        return version;
-    }
-
     @NotNull
     public String version() {
         return version;
-    }
-
-    /**
-     * @see #authors()
-     */
-    @Deprecated
-    @NotNull
-    public String[] getAuthors() {
-        return authors;
     }
 
     @NotNull
@@ -121,27 +110,9 @@ public final class DiscoveredExtension {
         return authors;
     }
 
-    /**
-     * @see #dependencies()
-     */
-    @Deprecated
-    @NotNull
-    public String[] getDependencies() {
-        return dependencies;
-    }
-
     @NotNull
     public String[] dependencies() {
         return dependencies;
-    }
-
-    /**
-     * @see #externalDependencies()
-     */
-    @Deprecated
-    @NotNull
-    public ExternalDependencies getExternalDependencies() {
-        return externalDependencies;
     }
 
     @NotNull
@@ -149,31 +120,19 @@ public final class DiscoveredExtension {
         return externalDependencies;
     }
 
+    @NotNull
+    public JsonObject meta() {
+        return meta;
+    }
+
     @Nullable
     public Path file() {
         return originFile;
     }
 
-    /**
-     * @see #dataDirectory()
-     */
-    @Deprecated
-    public @NotNull Path getDataDirectory() {
-        return dataDirectory;
-    }
-
     @NotNull
     public Path dataDirectory() {
         return dataDirectory;
-    }
-
-    /**
-     * @see #classLoader()
-     */
-    @Deprecated
-    @NotNull
-    public ExtensionClassLoader getClassLoader() {
-        return classLoader;
     }
 
     @NotNull
@@ -185,11 +144,6 @@ public final class DiscoveredExtension {
         Check.stateCondition(classLoader != null, "Extension classloader has already been created");
         final URL[] urls = this.files.toArray(new URL[0]);
         classLoader = new ExtensionClassLoader(this.getName(), urls);
-    }
-
-    @NotNull
-    public JsonObject getMeta() {
-        return meta;
     }
 
     /**
@@ -268,7 +222,7 @@ public final class DiscoveredExtension {
 
     /**
      * The status this extension has, all are breakpoints.
-     *
+     * <p>
      * LOAD_SUCCESS is the only valid one.
      */
     enum LoadStatus {
@@ -300,5 +254,85 @@ public final class DiscoveredExtension {
             String name = "";
             String url = "";
         }
+    }
+
+    /**
+     * @see #name()
+     */
+    @Deprecated
+    @NotNull
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @see #entrypoint()
+     */
+    @Deprecated
+    @NotNull
+    public String getEntrypoint() {
+        return entrypoint;
+    }
+
+    /**
+     * @see #version()
+     */
+    @Deprecated
+    @NotNull
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * @see #authors()
+     */
+    @Deprecated
+    @NotNull
+    public String[] getAuthors() {
+        return authors;
+    }
+
+    /**
+     * @see #dependencies()
+     */
+    @Deprecated
+    @NotNull
+    public String[] getDependencies() {
+        return dependencies;
+    }
+
+    /**
+     * @see #externalDependencies()
+     */
+    @Deprecated
+    @NotNull
+    public ExternalDependencies getExternalDependencies() {
+        return externalDependencies;
+    }
+
+    /**
+     * @see #meta()
+     */
+    @Deprecated
+    @NotNull
+    public JsonObject getMeta() {
+        return meta;
+    }
+
+    /**
+     * @see #dataDirectory()
+     */
+    @Deprecated
+    public @NotNull Path getDataDirectory() {
+        return dataDirectory;
+    }
+
+    /**
+     * @see #classLoader()
+     */
+    @Deprecated
+    @NotNull
+    public ExtensionClassLoader getClassLoader() {
+        return classLoader;
     }
 }
