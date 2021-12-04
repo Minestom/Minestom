@@ -41,7 +41,9 @@ public class ExtensionManager {
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private Path extensionDataRoot = extensionFolder.toPath();
-    private int state = 0; // -1=do not start, 0=not started, 1=started, 2=preinit, 3=init, 4=postinit
+
+    private enum State { DO_NOT_START, NOT_STARTED, STARTED, PRE_INIT, INIT, POST_INIT }
+    private State state = State.NOT_STARTED;
 
     public ExtensionManager() {
     }
@@ -54,7 +56,7 @@ public class ExtensionManager {
      * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
      */
     public boolean shouldLoadOnStartup() {
-        return state != -1;
+        return state != State.DO_NOT_START;
     }
 
     /**
@@ -65,8 +67,8 @@ public class ExtensionManager {
      * @param loadOnStartup true to load extensions on startup, false to do nothing
      */
     public void setLoadOnStartup(boolean loadOnStartup) {
-        Check.stateCondition(state < 1, "Extensions have already been initialized");
-        this.state = loadOnStartup ? 0 : -1;
+        Check.stateCondition(state.ordinal() > State.NOT_STARTED.ordinal(), "Extensions have already been initialized");
+        this.state = loadOnStartup ? State.NOT_STARTED : State.DO_NOT_START;
     }
 
     @NotNull
@@ -102,37 +104,37 @@ public class ExtensionManager {
 
     @ApiStatus.Internal
     public void start() {
-        if (state == -1) {
+        if (state == State.DO_NOT_START) {
             LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
             return;
         }
-        Check.stateCondition(state != 0, "ExtensionManager has already been started");
+        Check.stateCondition(state != State.NOT_STARTED, "ExtensionManager has already been started");
         loadExtensions();
-        state = 1;
+        state = State.STARTED;
     }
 
     @ApiStatus.Internal
     public void gotoPreInit() {
-        if (state == -1) return;
-        Check.stateCondition(state != 1, "Extensions have already done pre initialization");
+        if (state == State.DO_NOT_START) return;
+        Check.stateCondition(state != State.STARTED, "Extensions have already done pre initialization");
         extensions.values().forEach(Extension::preInitialize);
-        state = 2;
+        state = State.PRE_INIT;
     }
 
     @ApiStatus.Internal
     public void gotoInit() {
-        if (state == -1) return;
-        Check.stateCondition(state != 2, "Extensions have already done initialization");
+        if (state == State.DO_NOT_START) return;
+        Check.stateCondition(state != State.PRE_INIT, "Extensions have already done initialization");
         extensions.values().forEach(Extension::initialize);
-        state = 3;
+        state = State.INIT;
     }
 
     @ApiStatus.Internal
     public void gotoPostInit() {
-        if (state == -1) return;
-        Check.stateCondition(state != 3, "Extensions have already done post initialization");
+        if (state == State.DO_NOT_START) return;
+        Check.stateCondition(state != State.INIT, "Extensions have already done post initialization");
         extensions.values().forEach(Extension::postInitialize);
-        state = 4;
+        state = State.POST_INIT;
     }
 
     //
