@@ -6,11 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class ExtensionClassLoader extends URLClassLoader {
-    private final List<ExtensionClassLoader> children = new LinkedList<>();
+    private final List<ExtensionClassLoader> children = new ArrayList<>();
 
     public ExtensionClassLoader(String name, URL[] urls) {
         super("Ext_" + name, urls, MinecraftServer.class.getClassLoader());
