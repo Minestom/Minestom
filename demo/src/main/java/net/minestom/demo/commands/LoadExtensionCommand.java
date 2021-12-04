@@ -37,7 +37,7 @@ public class LoadExtensionCommand extends Command {
         sender.sendMessage(Component.text("extensionFile = " + name + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
-        Path extensionFolder = extensionManager.getExtensionFolder().toPath().toAbsolutePath();
+        Path extensionFolder = extensionManager.getExtensionFolder().toAbsolutePath();
         Path extensionJar = extensionFolder.resolve(name);
         try {
             if (!extensionJar.toFile().getCanonicalPath().startsWith(extensionFolder.toFile().getCanonicalPath())) {
@@ -51,7 +51,7 @@ public class LoadExtensionCommand extends Command {
         }
 
         try {
-            boolean managed = extensionManager.loadDynamicExtension(extensionJar.toFile());
+            boolean managed = extensionManager.loadDynamicExtension(extensionJar);
             if (managed) {
                 sender.sendMessage(Component.text("Extension loaded!"));
             } else {
