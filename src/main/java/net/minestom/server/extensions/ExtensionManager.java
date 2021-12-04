@@ -14,12 +14,17 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -39,9 +44,9 @@ public class ExtensionManager {
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
     private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
 
-    private final File extensionFolder = new File("extensions");
-    private final File dependenciesFolder = new File(extensionFolder, ".libs");
-    private Path extensionDataRoot = extensionFolder.toPath();
+    private final Path extensionFolder = Paths.get("extensions");
+    private final Path dependenciesFolder = extensionFolder.resolve(".libs");
+    private Path extensionDataRoot = extensionFolder;
 
     private enum State {DO_NOT_START, NOT_STARTED, STARTED, PRE_INIT, INIT, POST_INIT}
     private State state = State.NOT_STARTED;
@@ -74,7 +79,7 @@ public class ExtensionManager {
     }
 
     @NotNull
-    public File getExtensionFolder() {
+    public Path getExtensionFolder() {
         return extensionFolder;
     }
 
@@ -187,22 +192,20 @@ public class ExtensionManager {
      */
     private void loadExtensions() {
         // Initialize folders
-        {
+        try {
             // Make extensions folder if necessary
-            if (!extensionFolder.exists()) {
-                if (!extensionFolder.mkdirs()) {
-                    LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
-                    return;
-                }
+            if (!Files.exists(extensionFolder)) {
+                Files.createDirectories(extensionFolder);
             }
 
             // Make dependencies folder if necessary
-            if (!dependenciesFolder.exists()) {
-                if (!dependenciesFolder.mkdirs()) {
-                    LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
-                    return;
-                }
+            if (!Files.exists(dependenciesFolder)) {
+                Files.createDirectories(dependenciesFolder);
             }
+        } catch (IOException e) {
+            LOGGER.error("Could not find nor create an extension folder, extensions will not be loaded!");
+            MinecraftServer.getExceptionManager().handleException(e);
+            return;
         }
 
         // Load extensions
@@ -247,12 +250,12 @@ public class ExtensionManager {
         }
     }
 
-    public boolean loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
-        if (!jarFile.exists()) {
-            throw new FileNotFoundException("File '" + jarFile.getAbsolutePath() + "' does not exists. Cannot load extension.");
+    public boolean loadDynamicExtension(@NotNull Path jarFile) throws FileNotFoundException {
+        if (!Files.exists(jarFile)) {
+            throw new FileNotFoundException("File '" + jarFile.toAbsolutePath() + "' does not exists. Cannot load extension.");
         }
 
-        LOGGER.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
+        LOGGER.info("Discover dynamic extension from jar {}", jarFile.toAbsolutePath());
         DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
         List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
         return loadExtensionList(extensionsToLoad);
@@ -378,6 +381,8 @@ public class ExtensionManager {
         return extension;
     }
 
+
+
     /**
      * Get all extensions from the extensions folder and make them discovered.
      * <p>
@@ -388,27 +393,17 @@ public class ExtensionManager {
     private @NotNull List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
 
-        File[] fileList = extensionFolder.listFiles();
-
-        if (fileList != null) {
-            // Loop through all files in extension folder
-            for (File file : fileList) {
-
-                // Ignore folders
-                if (file.isDirectory()) {
-                    continue;
-                }
-
-                // Ignore non .jar files
-                if (!file.getName().endsWith(".jar")) {
-                    continue;
-                }
-
-                DiscoveredExtension extension = discoverFromJar(file);
-                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                    extensions.add(extension);
-                }
-            }
+        // Attempt to find all the extensions
+        try {
+            Files.list(extensionFolder)
+                    .filter(file -> file != null &&
+                            !Files.isDirectory(file) &&
+                            file.getFileName().toString().endsWith(".jar"))
+                    .map(this::discoverFromJar)
+                    .filter(ext -> ext != null && ext.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS)
+                    .forEach(extensions::add);
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
         }
 
         //TODO(mattw): Extract this into its own method to load an extension given classes and resources directory.
@@ -419,10 +414,10 @@ public class ExtensionManager {
             LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
             final String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
             final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
+            try (BufferedReader reader = Files.newBufferedReader(Paths.get(extensionResources, "extension.json"))) {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files.add(new File(extensionClasses).toURI().toURL());
-                extension.files.add(new File(extensionResources).toURI().toURL());
+                extension.files.add(new URL("file://" + extensionClasses));
+                extension.files.add(new URL("file://" + extensionResources));
                 extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
 
                 // Verify integrity and ensure defaults
@@ -444,20 +439,20 @@ public class ExtensionManager {
      * @param file The jar to grab it from (a .jar is a formatted .zip file)
      * @return The created DiscoveredExtension.
      */
-    private @Nullable DiscoveredExtension discoverFromJar(@NotNull File file) {
-        try (ZipFile f = new ZipFile(file)) {
+    private @Nullable DiscoveredExtension discoverFromJar(@NotNull Path file) {
+        try (ZipFile f = new ZipFile(file.toFile())) {
 
             ZipEntry entry = f.getEntry("extension.json");
 
             if (entry == null)
-                throw new IllegalStateException("Missing extension.json in extension " + file.getName() + ".");
+                throw new IllegalStateException("Missing extension.json in extension " + file.getFileName() + ".");
 
             InputStreamReader reader = new InputStreamReader(f.getInputStream(entry));
 
             // Initialize DiscoveredExtension from GSON.
             DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
             extension.setOriginalJar(file);
-            extension.files.add(file.toURI().toURL());
+            extension.files.add(file.toUri().toURL());
             extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
 
             // Verify integrity and ensure defaults
@@ -611,7 +606,7 @@ public class ExtensionManager {
                 getter.addMavenResolver(repoList);
 
                 for (String artifact : externalDependencies.artifacts) {
-                    var resolved = getter.get(artifact, dependenciesFolder);
+                    var resolved = getter.get(artifact, dependenciesFolder.toFile());
                     addDependencyFile(resolved, discoveredExtension);
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
