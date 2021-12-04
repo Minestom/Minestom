@@ -480,7 +480,7 @@ public class ExtensionManager {
             // go through all the discovered extensions and get their dependencies as extensions
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
 
-                List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.dependencies().length);
+                List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.dependencies().size());
 
                 // Map the dependencies into DiscoveredExtensions.
                 for (String dependencyName : discoveredExtension.dependencies()) {
@@ -584,22 +584,16 @@ public class ExtensionManager {
                 DependencyGetter getter = new DependencyGetter();
                 DiscoveredExtension.ExternalDependencies externalDependencies = discoveredExtension.externalDependencies();
                 List<MavenRepository> repoList = new ArrayList<>();
-                for (var repository : externalDependencies.repositories) {
+                for (var repository : externalDependencies.repositories()) {
+                    Check.stateCondition(repository.name().isEmpty(), "Missing 'name' element in repository object.");
+                    Check.stateCondition(repository.url().isEmpty(), "Missing 'url' element in repository object.");
 
-                    if (repository.name == null || repository.name.isEmpty()) {
-                        throw new IllegalStateException("Missing 'name' element in repository object.");
-                    }
-
-                    if (repository.url == null || repository.url.isEmpty()) {
-                        throw new IllegalStateException("Missing 'url' element in repository object.");
-                    }
-
-                    repoList.add(new MavenRepository(repository.name, repository.url));
+                    repoList.add(new MavenRepository(repository.name(), repository.url()));
                 }
 
                 getter.addMavenResolver(repoList);
 
-                for (String artifact : externalDependencies.artifacts) {
+                for (String artifact : externalDependencies.artifacts()) {
                     var resolved = getter.get(artifact, dependenciesFolder.toFile());
                     addDependencyFile(resolved, discoveredExtension);
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.name(), resolved);
