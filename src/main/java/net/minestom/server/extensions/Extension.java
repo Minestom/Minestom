@@ -133,7 +133,7 @@ public abstract class Extension {
      */
     public @Nullable InputStream getPackagedResource(@NotNull String fileName) {
         try {
-            final URL url = getOrigin().getClassLoader().getResource(fileName);
+            final URL url = getOrigin().classLoader().getResource(fileName);
             if (url == null) {
                 getLogger().debug("Resource not found: {}", fileName);
                 return null;

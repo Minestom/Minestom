@@ -106,13 +106,13 @@ public final class DiscoveredExtension {
     }
 
     @NotNull
-    public String[] authors() {
-        return authors;
+    public List<String> authors() {
+        return List.of(authors);
     }
 
     @NotNull
-    public String[] dependencies() {
-        return dependencies;
+    public List<String> dependencies() {
+        return List.of(dependencies);
     }
 
     @NotNull
@@ -247,12 +247,36 @@ public final class DiscoveredExtension {
     }
 
     public static final class ExternalDependencies {
-        Repository[] repositories = new Repository[0];
-        String[] artifacts = new String[0];
+        @SuppressWarnings({"unused", "FieldMayBeFinal"})
+        private Repository[] repositories = new Repository[0];
+        @SuppressWarnings({"unused", "FieldMayBeFinal"})
+        private String[] artifacts = new String[0];
 
         public static class Repository {
-            String name = "";
-            String url = "";
+            @SuppressWarnings({"unused", "FieldMayBeFinal", "FieldCanBeLocal"})
+            private String name = "";
+            @SuppressWarnings({"unused", "FieldMayBeFinal", "FieldCanBeLocal"})
+            private String url = "";
+
+            @NotNull
+            public String name() {
+                return name;
+            }
+
+            @NotNull
+            public String url() {
+                return url;
+            }
+        }
+
+        @NotNull
+        public List<Repository> repositories() {
+            return List.of(repositories);
+        }
+
+        @NotNull
+        public List<String> artifacts() {
+            return List.of(artifacts);
         }
     }
 
