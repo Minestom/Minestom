@@ -58,58 +58,127 @@ public final class DiscoveredExtension {
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
 
     /** The original jar this is from. */
-    transient private Path originalJar;
+    transient Path originFile;
 
-    transient private Path dataDirectory;
+    transient Path dataDirectory;
 
     /** The class loader that powers it. */
-    transient private ExtensionClassLoader classLoader;
+    private transient ExtensionClassLoader classLoader;
 
+    /**
+     * @see #name()
+     */
+    @Deprecated
     @NotNull
     public String getName() {
         return name;
     }
 
     @NotNull
+    public String name() {
+        return name;
+    }
+
+    /**
+     * @see #entrypoint()
+     */
+    @Deprecated
+    @NotNull
     public String getEntrypoint() {
         return entrypoint;
     }
 
+    @NotNull
+    public String entrypoint() {
+        return entrypoint;
+    }
+
+    /**
+     * @see #version()
+     */
+    @Deprecated
     @NotNull
     public String getVersion() {
         return version;
     }
 
     @NotNull
+    public String version() {
+        return version;
+    }
+
+    /**
+     * @see #authors()
+     */
+    @Deprecated
+    @NotNull
     public String[] getAuthors() {
         return authors;
     }
 
+    @NotNull
+    public String[] authors() {
+        return authors;
+    }
+
+    /**
+     * @see #dependencies()
+     */
+    @Deprecated
     @NotNull
     public String[] getDependencies() {
         return dependencies;
     }
 
     @NotNull
+    public String[] dependencies() {
+        return dependencies;
+    }
+
+    /**
+     * @see #externalDependencies()
+     */
+    @Deprecated
+    @NotNull
     public ExternalDependencies getExternalDependencies() {
         return externalDependencies;
     }
 
-    public void setOriginalJar(@Nullable Path originalJarFile) {
-        originalJar = originalJarFile;
+    @NotNull
+    public ExternalDependencies externalDependencies() {
+        return externalDependencies;
     }
 
     @Nullable
-    public Path getOriginalJar() {
-        return originalJar;
+    public Path file() {
+        return originFile;
     }
 
+    /**
+     * @see #dataDirectory()
+     */
+    @Deprecated
     public @NotNull Path getDataDirectory() {
         return dataDirectory;
     }
 
-    public void setDataDirectory(@NotNull Path dataDirectory) {
-        this.dataDirectory = dataDirectory;
+    @NotNull
+    public Path dataDirectory() {
+        return dataDirectory;
+    }
+
+    /**
+     * @see #classLoader()
+     */
+    @Deprecated
+    @NotNull
+    public ExtensionClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    @NotNull
+    public ExtensionClassLoader classLoader() {
+        return classLoader;
     }
 
     void createClassLoader() {
@@ -119,8 +188,8 @@ public final class DiscoveredExtension {
     }
 
     @NotNull
-    public ExtensionClassLoader getClassLoader() {
-        return classLoader;
+    public JsonObject getMeta() {
+        return meta;
     }
 
     /**
@@ -128,7 +197,7 @@ public final class DiscoveredExtension {
      *
      * @param extension The extension to verify
      */
-    public static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
+    static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
         if (extension.name == null) {
             StringBuilder fileList = new StringBuilder();
             for (URL f : extension.files) {
