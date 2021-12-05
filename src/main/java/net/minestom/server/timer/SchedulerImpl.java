@@ -124,7 +124,7 @@ final class SchedulerImpl implements Scheduler {
                 this.tickTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
             }
         } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {
-            futureSchedule.future().whenComplete((o, throwable) -> {
+            futureSchedule.future().whenCompleteAsync((o, throwable) -> {
                 if (throwable != null) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
                     return;
