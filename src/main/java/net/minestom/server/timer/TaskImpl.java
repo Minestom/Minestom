@@ -8,7 +8,6 @@ record TaskImpl(int id,
                 @NotNull Supplier<TaskSchedule> task,
                 @NotNull ExecutionType executionType,
                 @NotNull SchedulerImpl owner) implements Task {
-
     @Override
     public void unpark() {
         this.owner.unparkTask(this);

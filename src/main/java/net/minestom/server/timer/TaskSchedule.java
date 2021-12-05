@@ -3,6 +3,7 @@ package net.minestom.server.timer;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.concurrent.CompletableFuture;
 
 public sealed interface TaskSchedule permits
@@ -29,5 +30,27 @@ public sealed interface TaskSchedule permits
 
     static @NotNull TaskSchedule stop() {
         return TaskScheduleImpl.STOP;
+    }
+
+    // Shortcuts
+
+    static @NotNull TaskSchedule duration(long amount, @NotNull TemporalUnit unit) {
+        return duration(Duration.of(amount, unit));
+    }
+
+    static @NotNull TaskSchedule hours(long hours) {
+        return duration(Duration.ofHours(hours));
+    }
+
+    static @NotNull TaskSchedule minutes(long minutes) {
+        return duration(Duration.ofMinutes(minutes));
+    }
+
+    static @NotNull TaskSchedule seconds(long seconds) {
+        return duration(Duration.ofSeconds(seconds));
+    }
+
+    static @NotNull TaskSchedule millis(long millis) {
+        return duration(Duration.ofMillis(millis));
     }
 }
