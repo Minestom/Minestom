@@ -20,7 +20,7 @@ public sealed interface Task permits TaskImpl {
      */
     void unpark();
 
-    void stop();
+    void cancel();
 
     boolean isAlive();
 

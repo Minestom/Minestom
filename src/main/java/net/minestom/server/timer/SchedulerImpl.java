@@ -83,7 +83,7 @@ final class SchedulerImpl implements Scheduler {
         // this.taskQueue.relaxedOffer(task);
     }
 
-    synchronized void stopTask(Task task) {
+    synchronized void cancelTask(Task task) {
         this.bitSet.clear(task.id());
         if (!tasks.remove(task)) throw new IllegalStateException("Task is not scheduled");
     }

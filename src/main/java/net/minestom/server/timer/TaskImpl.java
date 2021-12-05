@@ -14,8 +14,8 @@ record TaskImpl(int id,
     }
 
     @Override
-    public void stop() {
-        this.owner.stopTask(this);
+    public void cancel() {
+        this.owner.cancelTask(this);
     }
 
     @Override

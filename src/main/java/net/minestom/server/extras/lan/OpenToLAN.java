@@ -92,7 +92,7 @@ public class OpenToLAN {
      */
     public static boolean close() {
         if (socket == null) return false;
-        task.stop();
+        task.cancel();
         socket.close();
 
         task = null;

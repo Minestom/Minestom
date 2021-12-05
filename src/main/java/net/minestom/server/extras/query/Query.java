@@ -115,7 +115,7 @@ public class Query {
             socket.close();
             socket = null;
 
-            task.stop();
+            task.cancel();
             CHALLENGE_TOKENS.clear();
 
             return true;
