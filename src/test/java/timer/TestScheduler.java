@@ -70,7 +70,10 @@ public class TestScheduler {
                 .executionType(ExecutionType.SYNC)
                 .delay(TaskSchedule.park())
                 .schedule();
+        Assertions.assertFalse(result.get(), "Task hasn't been unparked yet");
         task.unpark();
+        Assertions.assertFalse(result.get(), "Tasks must be processed first");
+        scheduler.process();
         Assertions.assertTrue(result.get(), "Parked task should be executed");
     }
 
@@ -84,22 +87,9 @@ public class TestScheduler {
                 .delay(TaskSchedule.future(future))
                 .schedule();
         Assertions.assertFalse(result.get(), "Future is not completed yet");
-
         future.complete(null);
-        Assertions.assertTrue(result.get(), "Future should be completed");
-    }
-
-    @Test
-    public void futureTaskThread() {
-        Scheduler scheduler = Scheduler.newScheduler();
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        AtomicBoolean result = new AtomicBoolean(false);
-        scheduler.buildTask(() -> result.set(true))
-                .executionType(ExecutionType.SYNC)
-                .delay(TaskSchedule.future(future))
-                .schedule();
-        Assertions.assertFalse(result.get(), "Future is not completed yet");
-        future.complete(null);
+        Assertions.assertFalse(result.get(), "Tasks must be processed first");
+        scheduler.process();
         Assertions.assertTrue(result.get(), "Future should be completed");
     }
 
