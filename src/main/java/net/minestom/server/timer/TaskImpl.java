@@ -14,6 +14,11 @@ record TaskImpl(int id,
     }
 
     @Override
+    public boolean isParked() {
+        return owner.isTaskParked(this);
+    }
+
+    @Override
     public void cancel() {
         this.owner.cancelTask(this);
     }

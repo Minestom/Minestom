@@ -15,10 +15,10 @@ public sealed interface Task permits TaskImpl {
 
     /**
      * Unpark the tasks to be executed during next processing.
-     *
-     * @throws IllegalStateException if the task is not parked
      */
     void unpark();
+
+    boolean isParked();
 
     void cancel();
 

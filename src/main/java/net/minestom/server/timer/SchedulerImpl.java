@@ -85,6 +85,10 @@ final class SchedulerImpl implements Scheduler {
         }
     }
 
+    boolean isTaskParked(TaskImpl task) {
+        return parkedTasks.contains(task);
+    }
+
     synchronized void cancelTask(TaskImpl task) {
         this.bitSet.clear(task.id());
         if (!tasks.remove(task)) throw new IllegalStateException("Task is not scheduled");
