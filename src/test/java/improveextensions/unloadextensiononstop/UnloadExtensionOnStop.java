@@ -14,9 +14,9 @@ public class UnloadExtensionOnStop extends Extension {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             Assertions.assertTrue(terminated, "Extension should have been terminated on shutdown.");
             System.out.println("All tests passed.");
-        }).makeTransient().schedule();
+        });
 
-        MinecraftServer.getSchedulerManager().buildTask(MinecraftServer::stopCleanly).makeTransient().delay(1L, TimeUnit.SECOND).schedule();
+        MinecraftServer.getSchedulerManager().buildTask(MinecraftServer::stopCleanly).delay(1L, TimeUnit.SECOND).schedule();
     }
 
     @Override
