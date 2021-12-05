@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-record OwnedTaskImpl(int id,
-                     @NotNull Supplier<TaskSchedule> task,
-                     @NotNull ExecutionType executionType,
-                     @NotNull SchedulerImpl owner) implements OwnedTask {
+record TaskImpl(int id,
+                @NotNull Supplier<TaskSchedule> task,
+                @NotNull ExecutionType executionType,
+                @NotNull SchedulerImpl owner) implements Task {
 
     @Override
     public void unpark() {

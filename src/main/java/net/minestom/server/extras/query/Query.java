@@ -7,7 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.event.FullQueryEvent;
-import net.minestom.server.timer.OwnedTask;
+import net.minestom.server.timer.Task;
 import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
@@ -40,7 +40,7 @@ public class Query {
     private static volatile boolean started;
     private static volatile DatagramSocket socket;
     private static volatile Thread thread;
-    private static volatile OwnedTask task;
+    private static volatile Task task;
 
     private Query() {
     }

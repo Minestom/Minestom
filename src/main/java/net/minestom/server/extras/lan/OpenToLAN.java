@@ -3,7 +3,7 @@ package net.minestom.server.extras.lan;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.timer.OwnedTask;
+import net.minestom.server.timer.Task;
 import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class OpenToLAN {
     private static volatile Cooldown eventCooldown;
     private static volatile DatagramSocket socket = null;
     private static volatile DatagramPacket packet = null;
-    private static volatile OwnedTask task = null;
+    private static volatile Task task = null;
 
     private OpenToLAN() {
     }

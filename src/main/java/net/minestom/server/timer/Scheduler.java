@@ -18,18 +18,18 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
      */
     void processTick();
 
-    @NotNull OwnedTask submit(@NotNull Supplier<TaskSchedule> task,
+    @NotNull Task submit(@NotNull Supplier<TaskSchedule> task,
+                         @NotNull ExecutionType executionType);
+
+    @NotNull Task submitAfter(@NotNull TaskSchedule schedule,
+                              @NotNull Supplier<TaskSchedule> task,
                               @NotNull ExecutionType executionType);
 
-    @NotNull OwnedTask submitAfter(@NotNull TaskSchedule schedule,
-                                   @NotNull Supplier<TaskSchedule> task,
-                                   @NotNull ExecutionType executionType);
-
-    default @NotNull TaskBuilder buildTask(@NotNull Runnable task) {
-        return new TaskBuilder(this, task);
+    default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
+        return new Task.Builder(this, task);
     }
 
-    @NotNull Collection<@NotNull OwnedTask> scheduledTasks();
+    @NotNull Collection<@NotNull Task> scheduledTasks();
 
     static @NotNull Scheduler newScheduler() {
         return new SchedulerImpl();

@@ -19,20 +19,20 @@ public final class SchedulerManager implements Scheduler {
     }
 
     @Override
-    public @NotNull OwnedTask submit(@NotNull Supplier<TaskSchedule> task,
-                                     @NotNull ExecutionType executionType) {
+    public @NotNull Task submit(@NotNull Supplier<TaskSchedule> task,
+                                @NotNull ExecutionType executionType) {
         return scheduler.submit(task, executionType);
     }
 
     @Override
-    public @NotNull OwnedTask submitAfter(@NotNull TaskSchedule schedule,
-                                          @NotNull Supplier<TaskSchedule> task,
-                                          @NotNull ExecutionType executionType) {
+    public @NotNull Task submitAfter(@NotNull TaskSchedule schedule,
+                                     @NotNull Supplier<TaskSchedule> task,
+                                     @NotNull ExecutionType executionType) {
         return scheduler.submitAfter(schedule, task, executionType);
     }
 
     @Override
-    public @NotNull Collection<@NotNull OwnedTask> scheduledTasks() {
+    public @NotNull Collection<@NotNull Task> scheduledTasks() {
         return scheduler.scheduledTasks();
     }
 
@@ -40,7 +40,7 @@ public final class SchedulerManager implements Scheduler {
         // TODO
     }
 
-    public OwnedTask buildShutdownTask(Runnable runnable) {
+    public Task buildShutdownTask(Runnable runnable) {
         // TODO
         return null;
     }
