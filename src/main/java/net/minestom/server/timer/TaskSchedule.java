@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 public sealed interface TaskSchedule permits
         TaskScheduleImpl.DurationSchedule,
         TaskScheduleImpl.FutureSchedule,
+        TaskScheduleImpl.Immediate,
         TaskScheduleImpl.Park,
         TaskScheduleImpl.Stop,
         TaskScheduleImpl.TickSchedule {
@@ -30,6 +31,10 @@ public sealed interface TaskSchedule permits
 
     static @NotNull TaskSchedule stop() {
         return TaskScheduleImpl.STOP;
+    }
+
+    static @NotNull TaskSchedule immediate() {
+        return TaskScheduleImpl.IMMEDIATE;
     }
 
     // Shortcuts

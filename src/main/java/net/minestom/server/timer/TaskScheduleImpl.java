@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 final class TaskScheduleImpl {
     static TaskSchedule PARK = new Park();
     static TaskSchedule STOP = new Stop();
+    static TaskSchedule IMMEDIATE = new Immediate();
 
     record DurationSchedule(@NotNull Duration duration) implements TaskSchedule {
     }
@@ -26,5 +27,8 @@ final class TaskScheduleImpl {
     }
 
     record Stop() implements TaskSchedule {
+    }
+
+    record Immediate() implements TaskSchedule {
     }
 }

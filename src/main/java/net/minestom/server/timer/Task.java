@@ -28,8 +28,8 @@ public sealed interface Task permits TaskImpl {
         private final Scheduler scheduler;
         private final Runnable runnable;
         private ExecutionType executionType = ExecutionType.SYNC;
-        private TaskSchedule startSchedule;
-        private TaskSchedule stepSchedule;
+        private TaskSchedule delay = TaskSchedule.immediate();
+        private TaskSchedule repeat = TaskSchedule.stop();
 
         Builder(Scheduler scheduler, Runnable runnable) {
             this.scheduler = scheduler;
@@ -41,18 +41,18 @@ public sealed interface Task permits TaskImpl {
             return this;
         }
 
-        public @NotNull Builder startSchedule(@NotNull TaskSchedule schedule) {
-            this.startSchedule = schedule;
+        public @NotNull Builder delay(@NotNull TaskSchedule schedule) {
+            this.delay = schedule;
             return this;
         }
 
-        public @NotNull Builder stepSchedule(@NotNull TaskSchedule schedule) {
-            this.stepSchedule = schedule;
+        public @NotNull Builder repeat(@NotNull TaskSchedule schedule) {
+            this.repeat = schedule;
             return this;
         }
 
         public @NotNull Builder delay(@NotNull Duration duration) {
-            return startSchedule(TaskSchedule.duration(duration));
+            return delay(TaskSchedule.duration(duration));
         }
 
         public @NotNull Builder delay(long time, @NotNull TemporalUnit unit) {
@@ -60,7 +60,7 @@ public sealed interface Task permits TaskImpl {
         }
 
         public @NotNull Builder repeat(@NotNull Duration duration) {
-            return stepSchedule(TaskSchedule.duration(duration));
+            return repeat(TaskSchedule.duration(duration));
         }
 
         public @NotNull Builder repeat(long time, @NotNull TemporalUnit unit) {
@@ -68,11 +68,15 @@ public sealed interface Task permits TaskImpl {
         }
 
         public @NotNull Task schedule() {
+            var runnable = this.runnable;
+            var delay = this.delay;
+            var repeat = this.repeat;
+            var executionType = this.executionType;
             final Supplier<TaskSchedule> supplier = () -> {
                 runnable.run();
-                return stepSchedule != null ? stepSchedule : TaskSchedule.stop();
+                return repeat;
             };
-            return startSchedule != null ? scheduler.submitAfter(startSchedule, supplier, executionType) : scheduler.submit(supplier, executionType);
+            return scheduler.submitAfter(delay, supplier, executionType);
         }
     }
 
