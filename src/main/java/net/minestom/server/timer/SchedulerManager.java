@@ -1,6 +1,7 @@
 package net.minestom.server.timer;
 
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -41,10 +42,12 @@ public final class SchedulerManager implements Scheduler {
         return scheduler.scheduledTasks();
     }
 
+    @ApiStatus.Experimental
     public synchronized void prepareParallelTask(@NotNull Runnable task) {
         this.parallelTasks.add(task);
     }
 
+    @ApiStatus.Experimental
     public synchronized void processParallelTasks() {
         this.parallelTasks.parallelStream().forEach(Runnable::run);
         this.parallelTasks.clear();
