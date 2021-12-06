@@ -188,6 +188,8 @@ public final class UpdateManager {
                     // Server tick (chunks/entities)
                     serverTick(tickStart);
 
+                    schedulerManager.processParallelTasks();
+
                     // Flush all waiting packets
                     PacketUtils.flush();
                     workers.forEach(Worker::flush);
