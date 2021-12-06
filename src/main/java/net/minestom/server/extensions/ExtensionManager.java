@@ -34,6 +34,7 @@ public class ExtensionManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
+    private static final boolean LOAD_ON_START = PropertyUtil.getBoolean("minestom.extension.load-on-start", true);
     private static final boolean AUTOSCAN_ENABLED = PropertyUtil.getBoolean("minestom.extension.autoscan", true);
     private final static String INDEV_CLASSES_FOLDER = System.getProperty("minestom.extension.indevfolder.classes");
     private final static String INDEV_RESOURCES_FOLDER = System.getProperty("minestom.extension.indevfolder.resources");
@@ -49,32 +50,9 @@ public class ExtensionManager {
 
     private enum State {DO_NOT_START, NOT_STARTED, STARTED, PRE_INIT, INIT, POST_INIT}
 
-    private State state = State.NOT_STARTED;
+    private State state = LOAD_ON_START ? State.NOT_STARTED : State.DO_NOT_START;
 
     public ExtensionManager() {
-    }
-
-    /**
-     * Gets if the extensions should be loaded during startup.
-     * <p>
-     * Default value is 'true'.
-     *
-     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int)}
-     */
-    public boolean shouldLoadOnStartup() {
-        return state != State.DO_NOT_START;
-    }
-
-    /**
-     * Used to specify if you want extensions to be loaded and initialized during startup.
-     * <p>
-     * Only useful before the server start.
-     *
-     * @param loadOnStartup true to load extensions on startup, false to do nothing
-     */
-    public void setLoadOnStartup(boolean loadOnStartup) {
-        Check.stateCondition(state.ordinal() > State.NOT_STARTED.ordinal(), "Extensions have already been initialized");
-        this.state = loadOnStartup ? State.NOT_STARTED : State.DO_NOT_START;
     }
 
     @NotNull
