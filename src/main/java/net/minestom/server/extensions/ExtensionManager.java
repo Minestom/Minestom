@@ -36,6 +36,7 @@ public class ExtensionManager {
 
     private static final boolean LOAD_ON_START = PropertyUtil.getBoolean("minestom.extension.load-on-start", true);
     private static final boolean AUTOSCAN_ENABLED = PropertyUtil.getBoolean("minestom.extension.autoscan", true);
+    private static final String AUTOSCAN_TARGETS = System.getProperty("minestom.extension.autoscan.targets", "extension.json");
     private final static String INDEV_CLASSES_FOLDER = System.getProperty("minestom.extension.indevfolder.classes");
     private final static String INDEV_RESOURCES_FOLDER = System.getProperty("minestom.extension.indevfolder.resources");
     private final static Gson GSON = new Gson();
@@ -387,16 +388,18 @@ public class ExtensionManager {
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
 
         if (AUTOSCAN_ENABLED) {
-            URL extensionJsonUrl = MinecraftServer.class.getClassLoader().getResource("extension.json");
-            if (extensionJsonUrl != null) try {
-                LOGGER.info("Autoscan found extension.json. Adding to list of discovered extensions.");
-                DiscoveredExtension extension = discoverDynamic(Paths.get(extensionJsonUrl.toURI()));
+            for (String target : AUTOSCAN_TARGETS.split(",")) {
+                URL extensionJsonUrl = MinecraftServer.class.getClassLoader().getResource(target);
+                if (extensionJsonUrl != null) try {
+                    LOGGER.info("Autoscan found {}. Adding to list of discovered extensions.", target);
+                    DiscoveredExtension extension = discoverDynamic(Paths.get(extensionJsonUrl.toURI()));
 
-                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                    extensions.add(extension);
+                    if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                        extensions.add(extension);
+                    }
+                } catch (URISyntaxException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
-            } catch (URISyntaxException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
             }
         } else {
             LOGGER.trace("Autoscan disabled");

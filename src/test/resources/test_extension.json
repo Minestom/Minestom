@@ -1,0 +1,4 @@
+{
+  "entrypoint": "testextension.TestExtension",
+  "name": "Test_extension"
+}
