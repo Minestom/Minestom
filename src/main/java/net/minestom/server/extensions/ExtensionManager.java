@@ -7,6 +7,7 @@ import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.utils.PropertyUtil;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +15,12 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,8 +34,9 @@ public class ExtensionManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
-    public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
-    public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
+    private static final boolean AUTOSCAN_ENABLED = PropertyUtil.getBoolean("minestom.extension.autoscan", true);
+    private final static String INDEV_CLASSES_FOLDER = System.getProperty("minestom.extension.indevfolder.classes");
+    private final static String INDEV_RESOURCES_FOLDER = System.getProperty("minestom.extension.indevfolder.resources");
     private final static Gson GSON = new Gson();
 
     // LinkedHashMaps are HashMaps that preserve order
@@ -46,7 +47,8 @@ public class ExtensionManager {
     private final Path dependenciesFolder = extensionFolder.resolve(".libs");
     private Path extensionDataRoot = extensionFolder;
 
-    private enum State { DO_NOT_START, NOT_STARTED, STARTED, PRE_INIT, INIT, POST_INIT }
+    private enum State {DO_NOT_START, NOT_STARTED, STARTED, PRE_INIT, INIT, POST_INIT}
+
     private State state = State.NOT_STARTED;
 
     public ExtensionManager() {
@@ -85,6 +87,7 @@ public class ExtensionManager {
     }
 
     public void setExtensionDataRoot(@NotNull Path dataRoot) {
+        Check.stateCondition(state.ordinal() > State.NOT_STARTED.ordinal(), "Cannot set data root after initialization.");
         this.extensionDataRoot = dataRoot;
     }
 
@@ -379,7 +382,6 @@ public class ExtensionManager {
     }
 
 
-
     /**
      * Get all extensions from the extensions folder and make them discovered.
      * <p>
@@ -403,29 +405,40 @@ public class ExtensionManager {
             MinecraftServer.getExceptionManager().handleException(e);
         }
 
-        //TODO(mattw): Extract this into its own method to load an extension given classes and resources directory.
-        //TODO(mattw): Should show a warning if one is set and not the other. It is most likely a mistake.
-
+        // Dynamic load (autoscan and indev extension)
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
-        if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
-            LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
-            final String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
-            final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
-            try (BufferedReader reader = Files.newBufferedReader(Paths.get(extensionResources, "extension.json"))) {
-                DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files.add(new URL("file://" + extensionClasses));
-                extension.files.add(new URL("file://" + extensionResources));
-                extension.dataDirectory = getExtensionDataRoot().resolve(extension.name());
 
-                // Verify integrity and ensure defaults
-                DiscoveredExtension.verifyIntegrity(extension);
+        if (AUTOSCAN_ENABLED) {
+            URL extensionJsonUrl = MinecraftServer.class.getClassLoader().getResource("extension.json");
+            if (extensionJsonUrl != null) try {
+                LOGGER.info("Autoscan found extension.json. Adding to list of discovered extensions.");
+                DiscoveredExtension extension = discoverDynamic(Paths.get(extensionJsonUrl.toURI()));
 
-                if (extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
                     extensions.add(extension);
                 }
-            } catch (IOException e) {
+            } catch (URISyntaxException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
+        } else {
+            LOGGER.trace("Autoscan disabled");
+        }
+
+        if (INDEV_CLASSES_FOLDER != null && INDEV_RESOURCES_FOLDER == null) {
+            LOGGER.warn("Found indev classes folder, but not indev resources folder. This is likely a mistake.");
+        } else if (INDEV_CLASSES_FOLDER == null && INDEV_RESOURCES_FOLDER != null) {
+            LOGGER.warn("Found indev resources folder, but not indev classes folder. This is likely a mistake.");
+        } else if (INDEV_CLASSES_FOLDER != null) try {
+            LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
+            DiscoveredExtension extension = discoverDynamic(Paths.get(INDEV_RESOURCES_FOLDER, "extension.json"),
+                    new URL("file://" + INDEV_CLASSES_FOLDER),
+                    new URL("file://" + INDEV_RESOURCES_FOLDER));
+
+            if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                extensions.add(extension);
+            }
+        } catch (MalformedURLException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         return extensions;
     }
@@ -450,6 +463,22 @@ public class ExtensionManager {
             DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
             extension.originFile = file;
             extension.files.add(file.toUri().toURL());
+            extension.dataDirectory = getExtensionDataRoot().resolve(extension.name());
+
+            // Verify integrity and ensure defaults
+            DiscoveredExtension.verifyIntegrity(extension);
+
+            return extension;
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            return null;
+        }
+    }
+
+    private @Nullable DiscoveredExtension discoverDynamic(@NotNull Path extensionJson, @NotNull URL... files) {
+        try (BufferedReader reader = Files.newBufferedReader(extensionJson)) {
+            DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
+            // No files, since the extension.json is in the root classloader.
             extension.dataDirectory = getExtensionDataRoot().resolve(extension.name());
 
             // Verify integrity and ensure defaults
