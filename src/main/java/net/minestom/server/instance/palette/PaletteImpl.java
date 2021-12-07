@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
-final class PaletteImpl implements Palette {
+final class PaletteImpl implements Palette, Cloneable {
     // Magic values generated with "Integer.MAX_VALUE >> (31 - bitsPerIndex)" for bitsPerIndex between 1 and 16
     private static final int[] MAGIC_MASKS =
             {0, 1, 3, 7,

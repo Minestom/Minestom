@@ -11,4 +11,6 @@ public interface Snapshotable {
 
     // Update and return the snapshot from #snapshot()
     @NotNull Snapshot updatedSnapshot();
+
+    void triggerSnapshotChange(Snapshotable snapshotable);
 }

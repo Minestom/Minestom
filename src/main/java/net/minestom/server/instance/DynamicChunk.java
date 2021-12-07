@@ -13,6 +13,9 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.snapshot.*;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -24,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -48,7 +53,7 @@ public class DynamicChunk extends Chunk {
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = instance.getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
         this.sections = new Section[maxSection - minSection];
-        Arrays.setAll(sections, value -> new Section());
+        Arrays.setAll(sections, i -> new Section(this, i - minSection));
     }
 
     @Override
@@ -80,6 +85,8 @@ public class DynamicChunk extends Chunk {
         } else {
             this.tickableMap.remove(index);
         }
+
+        section.triggerSnapshotChange(this);
     }
 
     @Override
@@ -235,5 +242,83 @@ public class DynamicChunk extends Chunk {
             xz += Chunk.CHUNK_SECTION_SIZE;
         }
         return xz;
+    }
+
+    private ChunkSnapshotImpl snapshot;
+    private final Set<Snapshotable> snapshotInvalidates = ConcurrentHashMap.newKeySet();
+
+    @Override
+    public synchronized @NotNull ChunkSnapshot snapshot() {
+        ChunkSnapshotImpl snapshot = this.snapshot;
+        if (snapshot == null) {
+            snapshot = generateSnapshot();
+            this.snapshot = snapshot;
+        }
+        return snapshot;
+    }
+
+    @Override
+    public synchronized @NotNull ChunkSnapshot updatedSnapshot() {
+        ChunkSnapshotImpl snapshot = (ChunkSnapshotImpl) snapshot();
+
+        final AtomicReference<List<SectionSnapshot>> sectionsList = new AtomicReference<>();
+
+        ChunkSnapshotImpl finalSnapshot = snapshot;
+        this.snapshotInvalidates.removeIf(snapshotable -> {
+            // Handle section invalidations
+            if (snapshotable instanceof Section section) {
+                if (sectionsList.getPlain() == null) sectionsList.setPlain(new ArrayList<>(finalSnapshot.sections));
+                final int index = section.index() - finalSnapshot.minSection;
+                sectionsList.getPlain().set(index, section.updatedSnapshot());
+            }
+            // TODO entities/players
+            return true;
+        });
+
+        if (sectionsList.getPlain() != null) snapshot = new ChunkSnapshotImpl(snapshot.minSection,
+                snapshot.chunkX, snapshot.chunkZ,
+                List.copyOf(sectionsList.getPlain()), snapshot.entities, snapshot.players, snapshot.tagReadable);
+
+        this.snapshot = snapshot;
+        return snapshot;
+    }
+
+    @Override
+    public void triggerSnapshotChange(Snapshotable snapshotable) {
+        this.snapshotInvalidates.add(snapshotable);
+        this.instance.triggerSnapshotChange(this);
+    }
+
+    private synchronized ChunkSnapshotImpl generateSnapshot() {
+        var sections = Arrays.stream(this.sections).map(Section::updatedSnapshot).toList();
+        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
+        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ, sections, List.of(), List.of(), tagReader);
+    }
+
+    private record ChunkSnapshotImpl(int minSection,
+                                     int chunkX, int chunkZ,
+                                     List<SectionSnapshot> sections,
+                                     List<EntitySnapshot> entities,
+                                     List<PlayerSnapshot> players,
+                                     TagReadable tagReadable) implements ChunkSnapshot {
+        @Override
+        public @Nullable SectionSnapshot section(int y) {
+            return sections.get(y - minSection);
+        }
+
+        @Override
+        public @NotNull List<@NotNull EntitySnapshot> entities() {
+            return entities;
+        }
+
+        @Override
+        public @NotNull List<@NotNull PlayerSnapshot> players() {
+            return players;
+        }
+
+        @Override
+        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+            return tagReadable.getTag(tag);
+        }
     }
 }

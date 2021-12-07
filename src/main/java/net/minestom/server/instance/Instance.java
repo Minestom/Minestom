@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -20,8 +21,10 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
+import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -36,7 +39,9 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -51,7 +56,7 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, TagHandler, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, TagHandler, Snapshotable, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -612,6 +617,81 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         synchronized (nbtLock) {
             tag.write(nbt, value);
         }
+    }
+
+    private InstanceSnapshotImpl snapshot;
+    private final Set<Snapshotable> snapshotInvalidates = ConcurrentHashMap.newKeySet();
+
+    @Override
+    public synchronized @NotNull InstanceSnapshot snapshot() {
+        InstanceSnapshotImpl snapshot = this.snapshot;
+        if (snapshot == null) {
+            snapshot = generateSnapshot();
+            this.snapshot = snapshot;
+        }
+        return snapshot;
+    }
+
+    @Override
+    public synchronized @NotNull InstanceSnapshot updatedSnapshot() {
+        InstanceSnapshotImpl snapshot = (InstanceSnapshotImpl) snapshot();
+
+        final AtomicReference<Long2ObjectOpenHashMap<ChunkSnapshot>> chunksMap = new AtomicReference<>();
+
+        InstanceSnapshotImpl finalSnapshot = snapshot;
+        this.snapshotInvalidates.removeIf(snapshotable -> {
+            // Handle chunk invalidations
+            if (snapshotable instanceof Chunk chunk) {
+                if (chunksMap.getPlain() == null) chunksMap.setPlain(finalSnapshot.chunksMap.clone());
+                final long index = ChunkUtils.getChunkIndex(chunk);
+                chunksMap.getPlain().put(index, (ChunkSnapshot) chunk.updatedSnapshot());
+            }
+            // TODO entities/players
+            return true;
+        });
+
+        if (chunksMap.getPlain() != null) snapshot = new InstanceSnapshotImpl(snapshot.dimensionType,
+                snapshot.worldAge, snapshot.time,
+                chunksMap.getPlain(), chunksMap.getPlain().values(),
+                snapshot.entities, snapshot.players, snapshot.tagReadable);
+
+        this.snapshot = snapshot;
+        return snapshot;
+    }
+
+    @Override
+    public void triggerSnapshotChange(Snapshotable snapshotable) {
+        this.snapshotInvalidates.add(snapshotable);
+    }
+
+    private record InstanceSnapshotImpl(DimensionType dimensionType,
+                                        long worldAge, long time,
+                                        Long2ObjectOpenHashMap<ChunkSnapshot> chunksMap,
+                                        Collection<ChunkSnapshot> chunks,
+                                        Collection<EntitySnapshot> entities, Collection<PlayerSnapshot> players,
+                                        TagReadable tagReadable) implements InstanceSnapshot {
+        @Override
+        public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
+            return chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        }
+
+        @Override
+        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+            return tagReadable.getTag(tag);
+        }
+    }
+
+    private InstanceSnapshotImpl generateSnapshot() {
+        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
+        var chunks = getChunks();
+        Long2ObjectOpenHashMap<ChunkSnapshot> chunksMap = new Long2ObjectOpenHashMap<>(chunks.size());
+        chunks.forEach(chunk -> chunksMap.put(ChunkUtils.getChunkIndex(chunk), (ChunkSnapshot) chunk.updatedSnapshot()));
+        chunksMap.trim();
+        return new InstanceSnapshotImpl(getDimensionType(),
+                getWorldAge(), getTime(),
+                chunksMap, chunksMap.values(),
+                List.of(), List.of(),
+                tagReader);
     }
 
     /**
