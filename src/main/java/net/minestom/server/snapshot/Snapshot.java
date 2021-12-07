@@ -8,5 +8,8 @@ import org.jetbrains.annotations.ApiStatus;
  * Implementations must be valued-based (immutable & not relying on identity).
  */
 @ApiStatus.Experimental
-public interface Snapshot {
+public sealed interface Snapshot permits
+        ServerSnapshot, InstanceSnapshot,
+        EntitySnapshot, ChunkSnapshot,
+        SectionSnapshot, InventorySnapshot {
 }

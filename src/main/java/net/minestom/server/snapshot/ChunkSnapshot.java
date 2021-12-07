@@ -10,7 +10,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.List;
 import java.util.Objects;
 
-public interface ChunkSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
+public non-sealed interface ChunkSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
     int chunkX();
 
     int chunkZ();
