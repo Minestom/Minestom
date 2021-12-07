@@ -277,7 +277,7 @@ public class DynamicChunk extends Chunk {
 
         if (sectionsList.getPlain() != null) snapshot = new ChunkSnapshotImpl(snapshot.minSection,
                 snapshot.chunkX, snapshot.chunkZ,
-                List.copyOf(sectionsList.getPlain()), snapshot.entities, snapshot.players, snapshot.tagReadable);
+                sectionsList.getPlain(), snapshot.entities, snapshot.players, snapshot.tagReadable);
 
         this.snapshot = snapshot;
         return snapshot;

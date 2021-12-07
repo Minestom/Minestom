@@ -11,7 +11,7 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class Section implements Snapshotable, Writeable {
     private final Chunk chunk;
@@ -85,27 +85,36 @@ public final class Section implements Snapshotable, Writeable {
         writer.write(biomePalette);
     }
 
-    private static final AtomicReferenceFieldUpdater<Section, SectionSnapshot> SNAPSHOT_UPDATER =
-            AtomicReferenceFieldUpdater.newUpdater(Section.class, SectionSnapshot.class, "snapshot");
-    private volatile SectionSnapshot snapshot;
+    private final AtomicBoolean snapshotUpdate = new AtomicBoolean();
+    private SectionSnapshot snapshot;
 
     @Override
-    public @NotNull SectionSnapshot snapshot() {
-        return SNAPSHOT_UPDATER.updateAndGet(this,
-                snap -> snap != null ? snap : generateSnapshot());
+    public synchronized @NotNull SectionSnapshot snapshot() {
+        SectionSnapshot snapshot = this.snapshot;
+        if (snapshot == null) {
+            snapshot = generateSnapshot();
+            this.snapshot = snapshot;
+        }
+        return snapshot;
     }
 
     @Override
-    public @NotNull SectionSnapshot updatedSnapshot() {
-        return SNAPSHOT_UPDATER.updateAndGet(this, s -> s != null ? s : generateSnapshot());
+    public synchronized @NotNull SectionSnapshot updatedSnapshot() {
+        SectionSnapshot snapshot = snapshot();
+        if (snapshotUpdate.compareAndSet(true, false)) {
+            snapshot = generateSnapshot();
+            this.snapshot = snapshot;
+        }
+        return snapshot;
     }
 
     @Override
     public void triggerSnapshotChange(Snapshotable snapshotable) {
+        this.snapshotUpdate.set(true);
         this.chunk.triggerSnapshotChange(this);
     }
 
-    private synchronized SectionSnapshot generateSnapshot() {
+    private SectionSnapshot generateSnapshot() {
         var clone = clone();
         return new SectionSnapshot() {
             @Override
