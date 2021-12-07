@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
+import it.unimi.dsi.fastutil.bytes.ByteArraySet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
@@ -13,7 +14,10 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.PlayerSnapshot;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.ArrayUtils;
@@ -24,11 +28,10 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -53,7 +56,7 @@ public class DynamicChunk extends Chunk {
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = instance.getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
         this.sections = new Section[maxSection - minSection];
-        Arrays.setAll(sections, i -> new Section(this, i - minSection));
+        Arrays.setAll(sections, value -> new Section());
     }
 
     @Override
@@ -86,7 +89,8 @@ public class DynamicChunk extends Chunk {
             this.tickableMap.remove(index);
         }
 
-        section.triggerSnapshotChange(this);
+        triggerSectionChange((byte) ChunkUtils.getSectionAt(y));
+        triggerSnapshotChange(this);
     }
 
     @Override
@@ -245,7 +249,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private ChunkSnapshotImpl snapshot;
-    private final Set<Snapshotable> snapshotInvalidates = ConcurrentHashMap.newKeySet();
+    private final ByteArraySet snapshotSections = new ByteArraySet();
 
     @Override
     public synchronized @NotNull ChunkSnapshot snapshot() {
@@ -261,23 +265,20 @@ public class DynamicChunk extends Chunk {
     public synchronized @NotNull ChunkSnapshot updatedSnapshot() {
         ChunkSnapshotImpl snapshot = (ChunkSnapshotImpl) snapshot();
 
-        final AtomicReference<List<SectionSnapshot>> sectionsList = new AtomicReference<>();
+        ArrayList<Section> sectionsList = null;
+        for (var section : snapshotSections) {
+            if (sectionsList == null) sectionsList = new ArrayList<>(snapshot.sections);
+            final int index = section - minSection;
+            sectionsList.set(index, sectionsList.get(index).clone());
+        }
+        this.snapshotSections.clear();
 
-        ChunkSnapshotImpl finalSnapshot = snapshot;
-        this.snapshotInvalidates.removeIf(snapshotable -> {
-            // Handle section invalidations
-            if (snapshotable instanceof Section section) {
-                if (sectionsList.getPlain() == null) sectionsList.setPlain(new ArrayList<>(finalSnapshot.sections));
-                final int index = section.index() - finalSnapshot.minSection;
-                sectionsList.getPlain().set(index, section.updatedSnapshot());
-            }
-            // TODO entities/players
-            return true;
-        });
-
-        if (sectionsList.getPlain() != null) snapshot = new ChunkSnapshotImpl(snapshot.minSection,
-                snapshot.chunkX, snapshot.chunkZ,
-                sectionsList.getPlain(), snapshot.entities, snapshot.players, snapshot.tagReadable);
+        if (sectionsList != null) {
+            sectionsList.trimToSize();
+            snapshot = new ChunkSnapshotImpl(snapshot.minSection,
+                    snapshot.chunkX, snapshot.chunkZ,
+                    sectionsList, snapshot.blockEntries, snapshot.entities, snapshot.players, snapshot.tagReadable);
+        }
 
         this.snapshot = snapshot;
         return snapshot;
@@ -285,25 +286,52 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void triggerSnapshotChange(Snapshotable snapshotable) {
-        this.snapshotInvalidates.add(snapshotable);
         this.instance.triggerSnapshotChange(this);
     }
 
-    private synchronized ChunkSnapshotImpl generateSnapshot() {
-        var sections = Arrays.stream(this.sections).map(Section::updatedSnapshot).toList();
+    private synchronized void triggerSectionChange(byte index) {
+        this.snapshotSections.add(index);
+    }
+
+    private ChunkSnapshotImpl generateSnapshot() {
+        var sections = Arrays.stream(this.sections).map(Section::clone).toList();
         var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ, sections, List.of(), List.of(), tagReader);
+        var blockEntries = entries.clone();
+        blockEntries.trim();
+        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ, sections, blockEntries, List.of(), List.of(), tagReader);
     }
 
     private record ChunkSnapshotImpl(int minSection,
                                      int chunkX, int chunkZ,
-                                     List<SectionSnapshot> sections,
+                                     List<Section> sections,
+                                     Int2ObjectOpenHashMap<Block> blockEntries,
                                      List<EntitySnapshot> entities,
                                      List<PlayerSnapshot> players,
                                      TagReadable tagReadable) implements ChunkSnapshot {
         @Override
-        public @Nullable SectionSnapshot section(int y) {
-            return sections.get(y - minSection);
+        public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+            // Verify if the block object is present
+            if (condition != Condition.TYPE) {
+                final Block entry = !blockEntries.isEmpty() ?
+                        blockEntries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
+                if (entry != null || condition == Condition.CACHED) {
+                    return entry;
+                }
+            }
+            // Retrieve the block from state id
+            final Section section = sections.get(ChunkUtils.getSectionAt(y) + minSection);
+            final int blockStateId = section.blockPalette()
+                    .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
+            if (blockStateId == -1) return Block.AIR; // Section is empty
+            return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
+        }
+
+        @Override
+        public @NotNull Biome getBiome(int x, int y, int z) {
+            final Section section = sections.get(ChunkUtils.getSectionAt(y) + minSection);
+            final int id = section.biomePalette()
+                    .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
+            return MinecraftServer.getBiomeManager().getById(id);
         }
 
         @Override

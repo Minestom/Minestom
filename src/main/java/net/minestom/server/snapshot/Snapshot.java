@@ -10,6 +10,5 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Experimental
 public sealed interface Snapshot permits
         ServerSnapshot, InstanceSnapshot,
-        EntitySnapshot, ChunkSnapshot,
-        SectionSnapshot, InventorySnapshot {
+        EntitySnapshot, ChunkSnapshot, InventorySnapshot {
 }
