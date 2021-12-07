@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 
 public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
@@ -38,9 +38,9 @@ public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, 
         return chunk(point.chunkX(), point.chunkZ());
     }
 
-    @NotNull List<@NotNull ChunkSnapshot> chunks();
+    @NotNull Collection<@NotNull ChunkSnapshot> chunks();
 
-    @NotNull List<@NotNull EntitySnapshot> entities();
+    @NotNull Collection<@NotNull EntitySnapshot> entities();
 
-    @NotNull List<@NotNull PlayerSnapshot> players();
+    @NotNull Collection<@NotNull PlayerSnapshot> players();
 }
