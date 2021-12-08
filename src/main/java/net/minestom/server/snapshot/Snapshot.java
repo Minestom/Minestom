@@ -17,10 +17,7 @@ import java.util.stream.Collectors;
  * Implementations must be valued-based (immutable & not relying on identity).
  */
 @ApiStatus.Experimental
-public sealed interface Snapshot permits
-        ServerSnapshot, InstanceSnapshot,
-        EntitySnapshot, ChunkSnapshot, InventorySnapshot {
-
+public interface Snapshot {
     interface Updater {
         <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable);
 

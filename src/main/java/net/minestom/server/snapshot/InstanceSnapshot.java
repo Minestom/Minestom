@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.Collection;
 import java.util.Objects;
 
-public non-sealed interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
+public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
     @NotNull DimensionType dimensionType();
 
     long worldAge();

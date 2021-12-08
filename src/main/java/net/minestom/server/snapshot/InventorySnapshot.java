@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public non-sealed interface InventorySnapshot extends Snapshot, TagReadable {
+public interface InventorySnapshot extends Snapshot, TagReadable {
     @NotNull InventoryType type();
 
     @NotNull Component title();
