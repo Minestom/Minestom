@@ -678,13 +678,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     private InstanceSnapshotImpl generateSnapshot(Snapshot.Updater updater) {
-        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        return new InstanceSnapshotImpl(getDimensionType(),
-                getWorldAge(), getTime(),
+        return new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
                 updater.referencesMap(getChunks(), ChunkUtils::getChunkIndex),
                 updater.referencesMap(entityTracker.entities(), Entity::getEntityId),
                 updater.referencesMap(entityTracker.entities(EntityTracker.Target.PLAYERS), Player::getEntityId),
-                tagReader);
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
@@ -709,7 +707,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
         @Override
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
-            return chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)).getPlain();
+            var ref = chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+            return Objects.requireNonNull(ref, "Chunk not found").getPlain();
         }
 
         @Override

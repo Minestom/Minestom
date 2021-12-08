@@ -272,8 +272,7 @@ public class DynamicChunk extends Chunk {
 
         if (sectionsList != null) {
             sectionsList.trimToSize();
-            snapshot = new ChunkSnapshotImpl(snapshot.minSection,
-                    snapshot.chunkX, snapshot.chunkZ,
+            snapshot = new ChunkSnapshotImpl(snapshot.minSection, snapshot.chunkX, snapshot.chunkZ,
                     sectionsList, snapshot.blockEntries, snapshot.entities, snapshot.players, snapshot.tagReadable);
         }
 
@@ -290,15 +289,13 @@ public class DynamicChunk extends Chunk {
     }
 
     private ChunkSnapshotImpl generateSnapshot() {
-        var sections = Arrays.stream(this.sections).map(Section::clone).toList();
-        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        var blockEntries = entries.clone();
-        blockEntries.trim();
-        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ, sections, blockEntries, List.of(), List.of(), tagReader);
+        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
+                Arrays.stream(this.sections).map(Section::clone).toList(),
+                entries.clone(), List.of(), List.of(), // TODO entities/players
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
-    private record ChunkSnapshotImpl(int minSection,
-                                     int chunkX, int chunkZ,
+    private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,
                                      List<Section> sections,
                                      Int2ObjectOpenHashMap<Block> blockEntries,
                                      List<EntitySnapshot> entities,
