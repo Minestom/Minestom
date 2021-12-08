@@ -9,8 +9,8 @@ public interface Snapshotable {
     // Last saved snapshot
     @NotNull Snapshot snapshot();
 
-    // Update and return the snapshot from #snapshot()
-    @NotNull Snapshot updatedSnapshot();
+    // Trigger a snapshot update, references must be set before using #snapshot()
+    void updateSnapshot(Snapshot.Updater updater);
 
     void triggerSnapshotChange(Snapshotable snapshotable);
 }

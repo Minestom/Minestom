@@ -14,10 +14,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.snapshot.ChunkSnapshot;
-import net.minestom.server.snapshot.EntitySnapshot;
-import net.minestom.server.snapshot.PlayerSnapshot;
-import net.minestom.server.snapshot.Snapshotable;
+import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.ArrayUtils;
@@ -253,16 +250,11 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public synchronized @NotNull ChunkSnapshot snapshot() {
-        ChunkSnapshotImpl snapshot = this.snapshot;
-        if (snapshot == null) {
-            snapshot = generateSnapshot();
-            this.snapshot = snapshot;
-        }
         return snapshot;
     }
 
     @Override
-    public synchronized @NotNull ChunkSnapshot updatedSnapshot() {
+    public synchronized void updateSnapshot(Snapshot.Updater updater) {
         ChunkSnapshotImpl snapshot = (ChunkSnapshotImpl) snapshot();
 
         ArrayList<Section> sectionsList = null;
@@ -281,7 +273,6 @@ public class DynamicChunk extends Chunk {
         }
 
         this.snapshot = snapshot;
-        return snapshot;
     }
 
     @Override

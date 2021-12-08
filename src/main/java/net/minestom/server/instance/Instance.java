@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -25,6 +24,7 @@ import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.utils.AtomicCollectionView;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -39,8 +39,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -620,43 +620,54 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     private InstanceSnapshotImpl snapshot;
-    private final Set<Snapshotable> snapshotInvalidates = ConcurrentHashMap.newKeySet();
+    private final Set<Snapshotable> snapshotInvalidates = new CopyOnWriteArraySet<>();
 
     @Override
     public synchronized @NotNull InstanceSnapshot snapshot() {
-        InstanceSnapshotImpl snapshot = this.snapshot;
-        if (snapshot == null) {
-            snapshot = generateSnapshot();
-            this.snapshot = snapshot;
-        }
         return snapshot;
     }
 
     @Override
-    public synchronized @NotNull InstanceSnapshot updatedSnapshot() {
-        InstanceSnapshotImpl snapshot = (InstanceSnapshotImpl) snapshot();
+    public synchronized void updateSnapshot(Snapshot.Updater updater) {
+        InstanceSnapshotImpl snapshot = this.snapshot;
+        if (snapshot == null) {
+            snapshot = generateSnapshot(updater);
+            this.snapshot = snapshot;
+            return;
+        }
 
-        final AtomicReference<Long2ObjectOpenHashMap<ChunkSnapshot>> chunksMap = new AtomicReference<>();
-
-        InstanceSnapshotImpl finalSnapshot = snapshot;
-        this.snapshotInvalidates.removeIf(snapshotable -> {
+        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = null;
+        Map<Integer, AtomicReference<EntitySnapshot>> entitiesList = null;
+        for (Snapshotable snapshotable : snapshotInvalidates) {
             // Handle chunk invalidations
-            if (snapshotable instanceof Chunk chunk) {
-                if (chunksMap.getPlain() == null) chunksMap.setPlain(finalSnapshot.chunksMap.clone());
+            if (snapshotable instanceof Chunk chunk) { // Chunk invalidations
+                if (chunksMap == null) chunksMap = new HashMap<>(snapshot.chunksMap);
                 final long index = ChunkUtils.getChunkIndex(chunk);
-                chunksMap.getPlain().put(index, (ChunkSnapshot) chunk.updatedSnapshot());
+                final var chunkSnapshot = updater.reference(ChunkSnapshot.class, chunk);
+                chunksMap.put(index, chunkSnapshot);
+            } else if (snapshotable instanceof Entity entity) { // Entity invalidations
+                if (entitiesList == null) entitiesList = new HashMap<>(snapshot.entitiesMap);
+                // TODO handle removal
+                final int id = entity.getEntityId();
+                final var ref = updater.reference(EntitySnapshot.class, entity);
+                entitiesList.put(id, ref);
+                // TODO players
             }
-            // TODO entities/players
-            return true;
-        });
+        }
+        this.snapshotInvalidates.clear();
 
-        if (chunksMap.getPlain() != null) snapshot = new InstanceSnapshotImpl(snapshot.dimensionType,
-                snapshot.worldAge, snapshot.time,
-                chunksMap.getPlain(), chunksMap.getPlain().values(),
-                snapshot.entities, snapshot.players, snapshot.tagReadable);
+        if (chunksMap != null || entitiesList != null) {
+            chunksMap = chunksMap == null ? snapshot.chunksMap : chunksMap;
+            entitiesList = entitiesList == null ? snapshot.entitiesMap : entitiesList;
+
+            snapshot = new InstanceSnapshotImpl(snapshot.dimensionType,
+                    snapshot.worldAge, snapshot.time,
+                    chunksMap, new AtomicCollectionView<>(chunksMap.values()),
+                    entitiesList, new AtomicCollectionView<>(entitiesList.values()),
+                    snapshot.players, snapshot.tagReadable);
+        }
 
         this.snapshot = snapshot;
-        return snapshot;
     }
 
     @Override
@@ -664,34 +675,36 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         this.snapshotInvalidates.add(snapshotable);
     }
 
+    private InstanceSnapshotImpl generateSnapshot(Snapshot.Updater updater) {
+        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
+        var chunksMap = updater.referencesMap(ChunkSnapshot.class, getChunks(), ChunkUtils::getChunkIndex);
+        var entitiesMap = updater.referencesMap(EntitySnapshot.class, entityTracker.entities(), Entity::getEntityId);
+        // TODO players
+        return new InstanceSnapshotImpl(getDimensionType(),
+                getWorldAge(), getTime(),
+                chunksMap, new AtomicCollectionView<>(chunksMap.values()),
+                entitiesMap, new AtomicCollectionView<>(entitiesMap.values()),
+                List.of(),
+                tagReader);
+    }
+
     private record InstanceSnapshotImpl(DimensionType dimensionType,
                                         long worldAge, long time,
-                                        Long2ObjectOpenHashMap<ChunkSnapshot> chunksMap,
+                                        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
                                         Collection<ChunkSnapshot> chunks,
-                                        Collection<EntitySnapshot> entities, Collection<PlayerSnapshot> players,
+                                        Map<Integer, AtomicReference<EntitySnapshot>> entitiesMap,
+                                        Collection<EntitySnapshot> entities,
+                                        Collection<PlayerSnapshot> players,
                                         TagReadable tagReadable) implements InstanceSnapshot {
         @Override
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
-            return chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+            return chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)).getPlain();
         }
 
         @Override
         public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
-    }
-
-    private InstanceSnapshotImpl generateSnapshot() {
-        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        var chunks = getChunks();
-        Long2ObjectOpenHashMap<ChunkSnapshot> chunksMap = new Long2ObjectOpenHashMap<>(chunks.size());
-        chunks.forEach(chunk -> chunksMap.put(ChunkUtils.getChunkIndex(chunk), (ChunkSnapshot) chunk.updatedSnapshot()));
-        chunksMap.trim();
-        return new InstanceSnapshotImpl(getDimensionType(),
-                getWorldAge(), getTime(),
-                chunksMap, chunksMap.values(),
-                List.of(), List.of(),
-                tagReader);
     }
 
     /**

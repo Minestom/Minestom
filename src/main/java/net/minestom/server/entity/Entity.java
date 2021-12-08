@@ -34,8 +34,10 @@ import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
+import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -57,6 +59,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -66,7 +69,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -849,6 +852,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                     player.sendPacket(instance.createTimePacket());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                instance.triggerSnapshotChange(this);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -877,6 +881,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        instance.triggerSnapshotChange(this);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1352,6 +1357,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
+            newChunk.triggerSnapshotChange(this);
+            currentChunk.triggerSnapshotChange(this);
             if (this instanceof Player player) { // Update visible chunks
                 player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
                 ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
@@ -1571,6 +1578,77 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
+    }
+
+    private EntitySnapshotImpl snapshot;
+
+    @Override
+    public synchronized @NotNull EntitySnapshot snapshot() {
+        return snapshot;
+    }
+
+    @Override
+    public synchronized void updateSnapshot(Snapshot.Updater updater) {
+        // TODO changes
+        this.snapshot = generateSnapshot(updater);
+    }
+
+    @Override
+    public void triggerSnapshotChange(Snapshotable snapshotable) {
+        // TODO
+    }
+
+    private EntitySnapshotImpl generateSnapshot(Snapshot.Updater updater) {
+        //var viewers = updater.references(EntitySnapshot.class, this.viewers);
+        var instance = updater.reference(InstanceSnapshot.class, this.instance);
+        var chunk = updater.reference(ChunkSnapshot.class, currentChunk);
+        var passengers = updater.references(EntitySnapshot.class, this.passengers);
+        var vehicle = updater.optionalReference(EntitySnapshot.class, this.vehicle);
+
+        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
+        return new EntitySnapshotImpl(entityType, uuid, id,
+                position, velocity,
+                instance, chunk,
+                new AtomicReference<>(null), passengers, vehicle, tagReader);
+    }
+
+    private record EntitySnapshotImpl(EntityType type, UUID uuid, int id,
+                                      Pos position, Vec velocity,
+                                      AtomicReference<InstanceSnapshot> instanceRef,
+                                      AtomicReference<ChunkSnapshot> chunkRef,
+                                      AtomicReference<List<PlayerSnapshot>> viewersRef,
+                                      AtomicReference<List<EntitySnapshot>> passengersRef,
+                                      AtomicReference<EntitySnapshot> vehicleRef,
+                                      TagReadable tagReadable) implements EntitySnapshot {
+        @Override
+        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+            return tagReadable.getTag(tag);
+        }
+
+        @Override
+        public @NotNull InstanceSnapshot instance() {
+            return instanceRef.getPlain();
+        }
+
+        @Override
+        public @NotNull ChunkSnapshot chunk() {
+            return chunkRef.getPlain();
+        }
+
+        @Override
+        public @NotNull List<@NotNull PlayerSnapshot> viewers() {
+            return viewersRef.getPlain();
+        }
+
+        @Override
+        public @NotNull List<@NotNull EntitySnapshot> passengers() {
+            return passengersRef.getPlain();
+        }
+
+        @Override
+        public @Nullable EntitySnapshot vehicle() {
+            return vehicleRef.getPlain();
+        }
     }
 
     /**
