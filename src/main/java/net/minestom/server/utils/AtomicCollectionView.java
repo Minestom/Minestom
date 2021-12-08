@@ -52,14 +52,14 @@ public class AtomicCollectionView<T> implements Collection<T> {
     @Override
     public Object[] toArray() {
         // TODO
-        return new Object[0];
+        throw new UnsupportedOperationException("Unsupported array object");
     }
 
     @NotNull
     @Override
     public <T1> T1[] toArray(@NotNull T1[] a) {
         // TODO
-        return null;
+        throw new UnsupportedOperationException("Unsupported array generic");
     }
 
     @Override

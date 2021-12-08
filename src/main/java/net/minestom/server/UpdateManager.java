@@ -7,6 +7,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
+import net.minestom.server.snapshot.InstanceSnapshot;
 import net.minestom.server.snapshot.Snapshot;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.thread.MinestomThread;
@@ -219,6 +220,8 @@ public final class UpdateManager {
             this.threadDispatcher.shutdown();
         }
 
+        private InstanceSnapshot snapshot;
+
         /**
          * Executes a server tick and returns only once all the futures are completed.
          *
@@ -233,7 +236,11 @@ public final class UpdateManager {
                     instance.updateSnapshot(updater);
                     updater.apply();
 
-                    System.out.println("snapshot: " + instance.snapshot().entities().size());
+                    this.snapshot = instance.snapshot();
+                    System.out.println("test " + snapshot.chunks());
+                    System.out.println("test2 " + snapshot.chunk(0, 0));
+
+                    //System.out.println("snapshot: " + instance.snapshot().entities().size());
                 } catch (Exception e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
@@ -257,18 +264,17 @@ public final class UpdateManager {
             private final List<Runnable> entries = new ArrayList<>();
 
             @Override
-            public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Class<T> snapshotType, @NotNull Snapshotable snapshotable) {
+            public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
                 AtomicReference<T> ref = new AtomicReference<>();
                 this.entries.add(() -> ref.setPlain((T) snapshotable.snapshot()));
                 return ref;
             }
 
             @Override
-            public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Class<T> snapshotType, @NotNull Collection<? extends Snapshotable> snapshotable) {
+            public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotable) {
                 AtomicReference<List<T>> ref = new AtomicReference<>();
                 this.entries.add(() -> {
-                    List<T> list = new ArrayList<>();
-                    snapshotable.forEach(snapshotable1 -> list.add((T) snapshotable1.snapshot()));
+                    List<T> list = (List<T>) snapshotable.stream().map(Snapshotable::snapshot).toList();
                     ref.setPlain(list);
                 });
                 return ref;

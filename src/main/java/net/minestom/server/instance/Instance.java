@@ -643,13 +643,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
             if (snapshotable instanceof Chunk chunk) { // Chunk invalidations
                 if (chunksMap == null) chunksMap = new HashMap<>(snapshot.chunksMap);
                 final long index = ChunkUtils.getChunkIndex(chunk);
-                final var chunkSnapshot = updater.reference(ChunkSnapshot.class, chunk);
-                chunksMap.put(index, chunkSnapshot);
+                chunksMap.put(index, updater.reference(chunk));
             } else if (snapshotable instanceof Entity entity) { // Entity invalidations
                 if (entitiesList == null) entitiesList = new HashMap<>(snapshot.entitiesMap);
                 // TODO handle removal
                 final int id = entity.getEntityId();
-                final var ref = updater.reference(EntitySnapshot.class, entity);
+                final AtomicReference<EntitySnapshot> ref = updater.reference(entity);
                 entitiesList.put(id, ref);
                 if (entity instanceof Player) {
                     if (playersList == null) playersList = new HashMap<>(snapshot.playersMap);
@@ -682,19 +681,15 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     private InstanceSnapshotImpl generateSnapshot(Snapshot.Updater updater) {
         var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        var chunksMap = updater.referencesMap(ChunkSnapshot.class, getChunks(), ChunkUtils::getChunkIndex);
-        var entitiesMap = updater.referencesMap(EntitySnapshot.class, entityTracker.entities(), Entity::getEntityId);
-        var playersMap = updater.referencesMap(PlayerSnapshot.class, entityTracker.entities(EntityTracker.Target.PLAYERS), Player::getEntityId);
         return new InstanceSnapshotImpl(getDimensionType(),
                 getWorldAge(), getTime(),
-                chunksMap, new AtomicCollectionView<>(chunksMap.values()),
-                entitiesMap, new AtomicCollectionView<>(entitiesMap.values()),
-                playersMap, new AtomicCollectionView<>(playersMap.values()),
+                updater.referencesMap(getChunks(), ChunkUtils::getChunkIndex),
+                updater.referencesMap(entityTracker.entities(), Entity::getEntityId),
+                updater.referencesMap(entityTracker.entities(EntityTracker.Target.PLAYERS), Player::getEntityId),
                 tagReader);
     }
 
-    private record InstanceSnapshotImpl(DimensionType dimensionType,
-                                        long worldAge, long time,
+    private record InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
                                         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
                                         Collection<ChunkSnapshot> chunks,
                                         Map<Integer, AtomicReference<EntitySnapshot>> entitiesMap,
@@ -702,6 +697,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
                                         Map<Integer, AtomicReference<PlayerSnapshot>> playersMap,
                                         Collection<PlayerSnapshot> players,
                                         TagReadable tagReadable) implements InstanceSnapshot {
+        private InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
+                                     Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
+                                     Map<Integer, AtomicReference<EntitySnapshot>> entitiesMap,
+                                     Map<Integer, AtomicReference<PlayerSnapshot>> playersMap,
+                                     TagReadable tagReadable) {
+            this(dimensionType, worldAge, time,
+                    chunksMap, new AtomicCollectionView<>(chunksMap.values()),
+                    entitiesMap, new AtomicCollectionView<>(entitiesMap.values()),
+                    playersMap, new AtomicCollectionView<>(playersMap.values()),
+                    tagReadable);
+        }
+
         @Override
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
             return chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)).getPlain();

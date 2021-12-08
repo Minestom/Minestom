@@ -1599,17 +1599,13 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     }
 
     private EntitySnapshotImpl generateSnapshot(Snapshot.Updater updater) {
-        //var viewers = updater.references(EntitySnapshot.class, this.viewers);
-        var instance = updater.reference(InstanceSnapshot.class, this.instance);
-        var chunk = updater.reference(ChunkSnapshot.class, currentChunk);
-        var passengers = updater.references(EntitySnapshot.class, this.passengers);
-        var vehicle = updater.optionalReference(EntitySnapshot.class, this.vehicle);
-
         var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
         return new EntitySnapshotImpl(entityType, uuid, id,
                 position, velocity,
-                instance, chunk,
-                new AtomicReference<>(null), passengers, vehicle, tagReader);
+                updater.reference(instance), updater.reference(currentChunk),
+                updater.references(viewers),
+                updater.references(passengers), updater.optionalReference(this.vehicle),
+                tagReader);
     }
 
     private record EntitySnapshotImpl(EntityType type, UUID uuid, int id,
