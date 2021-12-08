@@ -13,9 +13,9 @@ import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
+import org.jctools.queues.SpscGrowableArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Queue;
@@ -237,8 +237,8 @@ public final class UpdateManager {
                     updater.apply();
 
                     this.snapshot = instance.snapshot();
-                    System.out.println("test " + snapshot.chunks());
-                    System.out.println("test2 " + snapshot.chunk(0, 0));
+                    System.out.println("test " + snapshot.chunks().size());
+                    System.out.println("test2 " + snapshot.chunk(0, 0).chunkX());
 
                     //System.out.println("snapshot: " + instance.snapshot().entities().size());
                 } catch (Exception e) {
@@ -261,27 +261,27 @@ public final class UpdateManager {
         }
 
         private static final class RefUpdater implements Snapshot.Updater {
-            private final List<Runnable> entries = new ArrayList<>();
+            private final SpscGrowableArrayQueue<Runnable> entries = new SpscGrowableArrayQueue<>(1024);
 
             @Override
             public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
                 AtomicReference<T> ref = new AtomicReference<>();
-                this.entries.add(() -> ref.setPlain((T) snapshotable.snapshot()));
+                this.entries.relaxedOffer(() -> ref.setPlain((T) snapshotable.updateSnapshot(this)));
                 return ref;
             }
 
             @Override
             public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotable) {
                 AtomicReference<List<T>> ref = new AtomicReference<>();
-                this.entries.add(() -> {
-                    List<T> list = (List<T>) snapshotable.stream().map(Snapshotable::snapshot).toList();
+                this.entries.relaxedOffer(() -> {
+                    List<T> list = (List<T>) snapshotable.stream().map(snap -> snap.updateSnapshot(this)).toList();
                     ref.setPlain(list);
                 });
                 return ref;
             }
 
             void apply() {
-                this.entries.forEach(Runnable::run);
+                this.entries.drain(Runnable::run);
             }
         }
     }

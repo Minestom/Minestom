@@ -1588,9 +1588,10 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     }
 
     @Override
-    public synchronized void updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public synchronized @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
         // TODO changes
         this.snapshot = generateSnapshot(updater);
+        return snapshot;
     }
 
     @Override
@@ -1600,11 +1601,10 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
 
     private EntitySnapshotImpl generateSnapshot(Snapshot.Updater updater) {
         var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        return new EntitySnapshotImpl(entityType, uuid, id,
-                position, velocity,
+        return new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), updater.reference(currentChunk),
                 updater.references(viewers),
-                updater.references(passengers), updater.optionalReference(this.vehicle),
+                updater.references(passengers), updater.optionalReference(vehicle),
                 tagReader);
     }
 

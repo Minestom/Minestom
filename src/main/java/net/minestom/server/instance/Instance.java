@@ -627,12 +627,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     @Override
-    public synchronized void updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public synchronized @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
         InstanceSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot(updater);
             this.snapshot = snapshot;
-            return;
+            return snapshot;
         }
 
         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = null;
@@ -665,17 +665,14 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
             snapshot = new InstanceSnapshotImpl(snapshot.dimensionType,
                     snapshot.worldAge, snapshot.time,
-                    chunksMap, new AtomicCollectionView<>(chunksMap.values()),
-                    entitiesList, new AtomicCollectionView<>(entitiesList.values()),
-                    playersList, new AtomicCollectionView<>(playersList.values()),
-                    snapshot.tagReadable);
+                    chunksMap, entitiesList, playersList, snapshot.tagReadable);
         }
 
-        this.snapshot = snapshot;
+        return (this.snapshot = snapshot);
     }
 
     @Override
-    public synchronized void triggerSnapshotChange(Snapshotable snapshotable) {
+    public void triggerSnapshotChange(Snapshotable snapshotable) {
         this.snapshotInvalidates.add(snapshotable);
     }
 

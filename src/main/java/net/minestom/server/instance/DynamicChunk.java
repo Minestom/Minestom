@@ -254,12 +254,12 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public synchronized @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
         ChunkSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot();
             this.snapshot = snapshot;
-            return;
+            return snapshot;
         }
 
         ArrayList<Section> sectionsList = null;
@@ -277,7 +277,7 @@ public class DynamicChunk extends Chunk {
                     sectionsList, snapshot.blockEntries, snapshot.entities, snapshot.players, snapshot.tagReadable);
         }
 
-        this.snapshot = snapshot;
+        return (this.snapshot = snapshot);
     }
 
     @Override
