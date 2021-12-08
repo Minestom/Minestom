@@ -249,12 +249,12 @@ public class DynamicChunk extends Chunk {
     private final ByteArraySet snapshotSections = new ByteArraySet();
 
     @Override
-    public synchronized @NotNull ChunkSnapshot snapshot() {
+    public @NotNull ChunkSnapshot snapshot() {
         return snapshot;
     }
 
     @Override
-    public synchronized @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
         ChunkSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot();

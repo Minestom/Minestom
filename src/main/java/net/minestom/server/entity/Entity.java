@@ -1583,12 +1583,12 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     private EntitySnapshotImpl snapshot;
 
     @Override
-    public synchronized @NotNull EntitySnapshot snapshot() {
+    public @NotNull EntitySnapshot snapshot() {
         return snapshot;
     }
 
     @Override
-    public synchronized @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
         // TODO changes
         this.snapshot = generateSnapshot(updater);
         return snapshot;

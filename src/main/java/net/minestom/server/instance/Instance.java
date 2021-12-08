@@ -623,12 +623,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     private final Set<Snapshotable> snapshotInvalidates = new CopyOnWriteArraySet<>();
 
     @Override
-    public synchronized @NotNull InstanceSnapshot snapshot() {
+    public @NotNull InstanceSnapshot snapshot() {
         return snapshot;
     }
 
     @Override
-    public synchronized @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
         InstanceSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot(updater);
