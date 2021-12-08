@@ -237,10 +237,6 @@ public final class UpdateManager {
                     updater.apply();
 
                     this.snapshot = instance.snapshot();
-                    System.out.println("test " + snapshot.chunks().size());
-                    System.out.println("test2 " + snapshot.chunk(0, 0).chunkX());
-
-                    //System.out.println("snapshot: " + instance.snapshot().entities().size());
                 } catch (Exception e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }

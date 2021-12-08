@@ -40,6 +40,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -619,7 +620,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     private InstanceSnapshotImpl snapshot;
-    private final Set<Snapshotable> snapshotInvalidates = new HashSet<>();
+    private final Set<Snapshotable> snapshotInvalidates = new CopyOnWriteArraySet<>();
 
     @Override
     public synchronized @NotNull InstanceSnapshot snapshot() {
@@ -639,6 +640,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         Map<Integer, AtomicReference<EntitySnapshot>> entitiesList = null;
         Map<Integer, AtomicReference<PlayerSnapshot>> playersList = null;
         for (Snapshotable snapshotable : snapshotInvalidates) {
+            if (!snapshotInvalidates.remove(snapshotable)) continue;
             // Handle chunk invalidations
             if (snapshotable instanceof Chunk chunk) { // Chunk invalidations
                 if (chunksMap == null) chunksMap = new HashMap<>(snapshot.chunksMap);
@@ -656,7 +658,6 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
                 }
             }
         }
-        this.snapshotInvalidates.clear();
 
         if (chunksMap != null || entitiesList != null) {
             chunksMap = chunksMap == null ? snapshot.chunksMap : chunksMap;
