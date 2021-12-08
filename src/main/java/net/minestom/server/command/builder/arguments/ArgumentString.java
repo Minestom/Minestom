@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -54,11 +55,13 @@ public class ArgumentString extends Argument<String> {
         super(id, true);
     }
 
-    public void setReadType(@NotNull ReadType readType) {
+    @Contract("_ -> this")
+    public @NotNull ArgumentString setReadType(@NotNull ReadType readType) {
         this.readType = readType;
+        return this;
     }
 
-    public ReadType getReadType() {
+    public @NotNull ReadType getReadType() {
         return readType;
     }
 
