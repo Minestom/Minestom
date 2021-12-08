@@ -40,7 +40,6 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -620,7 +619,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     private InstanceSnapshotImpl snapshot;
-    private final Set<Snapshotable> snapshotInvalidates = new CopyOnWriteArraySet<>();
+    private final Set<Snapshotable> snapshotInvalidates = new HashSet<>();
 
     @Override
     public synchronized @NotNull InstanceSnapshot snapshot() {
@@ -628,7 +627,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     @Override
-    public synchronized void updateSnapshot(Snapshot.Updater updater) {
+    public synchronized void updateSnapshot(Snapshot.@NotNull Updater updater) {
         InstanceSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot(updater);
@@ -638,6 +637,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = null;
         Map<Integer, AtomicReference<EntitySnapshot>> entitiesList = null;
+        Map<Integer, AtomicReference<PlayerSnapshot>> playersList = null;
         for (Snapshotable snapshotable : snapshotInvalidates) {
             // Handle chunk invalidations
             if (snapshotable instanceof Chunk chunk) { // Chunk invalidations
@@ -651,7 +651,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
                 final int id = entity.getEntityId();
                 final var ref = updater.reference(EntitySnapshot.class, entity);
                 entitiesList.put(id, ref);
-                // TODO players
+                if (entity instanceof Player) {
+                    if (playersList == null) playersList = new HashMap<>(snapshot.playersMap);
+                    playersList.put(id, AtomicReference.class.cast(ref));
+                }
             }
         }
         this.snapshotInvalidates.clear();
@@ -659,19 +662,21 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         if (chunksMap != null || entitiesList != null) {
             chunksMap = chunksMap == null ? snapshot.chunksMap : chunksMap;
             entitiesList = entitiesList == null ? snapshot.entitiesMap : entitiesList;
+            playersList = playersList == null ? snapshot.playersMap : playersList;
 
             snapshot = new InstanceSnapshotImpl(snapshot.dimensionType,
                     snapshot.worldAge, snapshot.time,
                     chunksMap, new AtomicCollectionView<>(chunksMap.values()),
                     entitiesList, new AtomicCollectionView<>(entitiesList.values()),
-                    snapshot.players, snapshot.tagReadable);
+                    playersList, new AtomicCollectionView<>(playersList.values()),
+                    snapshot.tagReadable);
         }
 
         this.snapshot = snapshot;
     }
 
     @Override
-    public void triggerSnapshotChange(Snapshotable snapshotable) {
+    public synchronized void triggerSnapshotChange(Snapshotable snapshotable) {
         this.snapshotInvalidates.add(snapshotable);
     }
 
@@ -679,12 +684,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
         var chunksMap = updater.referencesMap(ChunkSnapshot.class, getChunks(), ChunkUtils::getChunkIndex);
         var entitiesMap = updater.referencesMap(EntitySnapshot.class, entityTracker.entities(), Entity::getEntityId);
-        // TODO players
+        var playersMap = updater.referencesMap(PlayerSnapshot.class, entityTracker.entities(EntityTracker.Target.PLAYERS), Player::getEntityId);
         return new InstanceSnapshotImpl(getDimensionType(),
                 getWorldAge(), getTime(),
                 chunksMap, new AtomicCollectionView<>(chunksMap.values()),
                 entitiesMap, new AtomicCollectionView<>(entitiesMap.values()),
-                List.of(),
+                playersMap, new AtomicCollectionView<>(playersMap.values()),
                 tagReader);
     }
 
@@ -694,6 +699,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
                                         Collection<ChunkSnapshot> chunks,
                                         Map<Integer, AtomicReference<EntitySnapshot>> entitiesMap,
                                         Collection<EntitySnapshot> entities,
+                                        Map<Integer, AtomicReference<PlayerSnapshot>> playersMap,
                                         Collection<PlayerSnapshot> players,
                                         TagReadable tagReadable) implements InstanceSnapshot {
         @Override

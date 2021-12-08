@@ -10,7 +10,7 @@ public interface Snapshotable {
     @NotNull Snapshot snapshot();
 
     // Trigger a snapshot update, references must be set before using #snapshot()
-    void updateSnapshot(Snapshot.Updater updater);
+    void updateSnapshot(Snapshot.@NotNull Updater updater);
 
     void triggerSnapshotChange(Snapshotable snapshotable);
 }

@@ -87,7 +87,7 @@ public class DynamicChunk extends Chunk {
         }
 
         triggerSectionChange((byte) ChunkUtils.getSectionAt(y));
-        triggerSnapshotChange(this);
+        this.instance.triggerSnapshotChange(this);
     }
 
     @Override
@@ -254,8 +254,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void updateSnapshot(Snapshot.Updater updater) {
-        ChunkSnapshotImpl snapshot = (ChunkSnapshotImpl) snapshot();
+    public synchronized void updateSnapshot(Snapshot.@NotNull Updater updater) {
+        ChunkSnapshotImpl snapshot = this.snapshot;
+        if (snapshot == null) {
+            snapshot = generateSnapshot();
+            this.snapshot = snapshot;
+            return;
+        }
 
         ArrayList<Section> sectionsList = null;
         for (var section : snapshotSections) {

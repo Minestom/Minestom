@@ -1588,7 +1588,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     }
 
     @Override
-    public synchronized void updateSnapshot(Snapshot.Updater updater) {
+    public synchronized void updateSnapshot(Snapshot.@NotNull Updater updater) {
         // TODO changes
         this.snapshot = generateSnapshot(updater);
     }
