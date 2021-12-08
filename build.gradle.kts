@@ -1,6 +1,6 @@
 plugins {
+    `java-library`
     `maven-publish`
-    id("minestom.common-conventions")
 }
 
 allprojects {
@@ -17,7 +17,23 @@ sourceSets {
     }
 }
 
+configurations.all {
+    // We only use Jetbrains Annotations
+    exclude("org.checkerframework", "checker-qual")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+    withJavadocJar()
+    withSourcesJar()
+}
+
 tasks {
+    withType<Test> {
+        useJUnitPlatform()
+    }
     withType<Javadoc> {
         (options as? StandardJavadocDocletOptions)?.apply {
             encoding = "UTF-8"

@@ -14,10 +14,6 @@ dependencyResolutionManagement {
     }
 }
 
-pluginManagement {
-    includeBuild("build-logic")
-}
-
 rootProject.name = "Minestom"
 include("code-generators")
 include("demo")
