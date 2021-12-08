@@ -25,17 +25,17 @@ public class ArgumentString extends Argument<String> {
         /**
          * Reads a quoted string from the provided reader via {@link StringReader#readQuotedString()}.
          */
-        QUOTED_STRING,
+        QUOTED,
 
         /**
          * Reads an unquoted string from the provided reader via {@link StringReader#readUnquotedString()} ()}.
          */
-        UNQUOTED_STRING,
+        UNQUOTED,
 
         /**
          * Reads a quoted or unquoted string from the provided reader via {@link StringReader#readString()}.
          */
-        STRING,
+        NORMAL,
 
         /**
          * Reads and returns the entire rest of the string from the reader via {@link StringReader#readAll()}.
@@ -49,7 +49,7 @@ public class ArgumentString extends Argument<String> {
 
     public static final int QUOTE_ERROR = 1;
 
-    private ReadType readType = ReadType.STRING;
+    private ReadType readType = ReadType.NORMAL;
 
     public ArgumentString(@NotNull String id) {
         super(id, true);
@@ -68,9 +68,9 @@ public class ArgumentString extends Argument<String> {
     @Override
     public @NotNull String parse(@NotNull StringReader input) throws CommandException {
         return switch(readType){
-            case QUOTED_STRING -> input.readQuotedString();
-            case UNQUOTED_STRING -> input.readUnquotedString();
-            case STRING -> input.readString();
+            case QUOTED -> input.readQuotedString();
+            case UNQUOTED -> input.readUnquotedString();
+            case NORMAL -> input.readString();
             case GREEDY -> input.readAll();
         };
     }
