@@ -1588,7 +1588,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         // TODO changes
         this.snapshot = generateSnapshot(updater);
         return snapshot;
@@ -1599,7 +1599,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
         // TODO
     }
 
-    private EntitySnapshotImpl generateSnapshot(Snapshot.Updater updater) {
+    private EntitySnapshotImpl generateSnapshot(SnapshotUpdater updater) {
         var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
         return new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), updater.reference(currentChunk),

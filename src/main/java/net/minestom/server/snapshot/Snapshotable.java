@@ -10,7 +10,7 @@ public interface Snapshotable {
      * Retrieves the last snapshot.
      * <p>
      * This method does not need to be thread safe assuming
-     * {@link #updateSnapshot(Snapshot.Updater)} is only called at safe-points.
+     * {@link #updateSnapshot(SnapshotUpdater)} is only called at safe-points.
      *
      * @return the last snapshot
      */
@@ -28,7 +28,7 @@ public interface Snapshotable {
      * @param updater the snapshot updater/context
      * @return the updated snapshot
      */
-    @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater);
+    @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater);
 
     void triggerSnapshotChange(Snapshotable snapshotable);
 }

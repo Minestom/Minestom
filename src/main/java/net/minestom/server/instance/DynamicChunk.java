@@ -254,7 +254,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         ChunkSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot();

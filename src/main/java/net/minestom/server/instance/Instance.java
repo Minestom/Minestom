@@ -628,7 +628,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(Snapshot.@NotNull Updater updater) {
+    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         InstanceSnapshotImpl snapshot = this.snapshot;
         if (snapshot == null) {
             snapshot = generateSnapshot(updater);
@@ -677,7 +677,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         this.snapshotInvalidates.add(snapshotable);
     }
 
-    private InstanceSnapshotImpl generateSnapshot(Snapshot.Updater updater) {
+    private InstanceSnapshotImpl generateSnapshot(SnapshotUpdater updater) {
         return new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
                 updater.referencesMap(getChunks(), ChunkUtils::getChunkIndex),
                 updater.referencesMap(entityTracker.entities(), Entity::getEntityId),

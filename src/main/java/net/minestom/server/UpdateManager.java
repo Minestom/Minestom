@@ -8,20 +8,16 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.snapshot.InstanceSnapshot;
-import net.minestom.server.snapshot.Snapshot;
-import net.minestom.server.snapshot.Snapshotable;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
-import org.jctools.queues.SpscGrowableArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
@@ -232,11 +228,7 @@ public final class UpdateManager {
             for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
                 try {
                     instance.tick(tickStart);
-                    var updater = new RefUpdater();
-                    instance.updateSnapshot(updater);
-                    updater.apply();
-
-                    this.snapshot = instance.snapshot();
+                    this.snapshot = SnapshotUpdater.update(instance); // TODO: remove before merging
                 } catch (Exception e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
@@ -253,31 +245,6 @@ public final class UpdateManager {
             LongConsumer callback;
             while ((callback = callbacks.poll()) != null) {
                 callback.accept(value);
-            }
-        }
-
-        private static final class RefUpdater implements Snapshot.Updater {
-            private final SpscGrowableArrayQueue<Runnable> entries = new SpscGrowableArrayQueue<>(1024);
-
-            @Override
-            public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
-                AtomicReference<T> ref = new AtomicReference<>();
-                this.entries.relaxedOffer(() -> ref.setPlain((T) snapshotable.updateSnapshot(this)));
-                return ref;
-            }
-
-            @Override
-            public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotable) {
-                AtomicReference<List<T>> ref = new AtomicReference<>();
-                this.entries.relaxedOffer(() -> {
-                    List<T> list = (List<T>) snapshotable.stream().map(snap -> snap.updateSnapshot(this)).toList();
-                    ref.setPlain(list);
-                });
-                return ref;
-            }
-
-            void apply() {
-                this.entries.drain(Runnable::run);
             }
         }
     }
