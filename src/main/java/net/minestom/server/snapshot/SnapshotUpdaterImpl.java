@@ -39,7 +39,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     private final SpscGrowableArrayQueue<Runnable> entries = new SpscGrowableArrayQueue<>(1024);
-    private final Set<Snapshotable> references = new HashSet<>();
+    private final Collection<Snapshotable> references = new ArrayList<>();
     private final Snapshotable snapshotable;
 
     private Collection<Snapshotable> invalidations = List.of();
@@ -89,7 +89,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
         synchronized (MONITOR) {
             SnapshotReferences ref = SNAPSHOT_REFERENCES.computeIfAbsent(this.snapshotable, s -> new SnapshotReferences());
             ref.requiredReferences.clear();
-            ref.requiredReferences.addAll(this.references);
+            ref.requiredReferences.addAll(this.references); // Prevent duplicate from the array list
         }
         return snapshotable.snapshot();
     }
