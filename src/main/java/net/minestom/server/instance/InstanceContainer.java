@@ -18,6 +18,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -277,6 +278,7 @@ public class InstanceContainer extends Instance {
         } else {
             retriever.run();
         }
+        completableFuture.thenRun(() -> SnapshotUpdater.invalidateSnapshot(this));
         return completableFuture;
     }
 

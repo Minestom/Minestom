@@ -852,7 +852,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
                     player.sendPacket(instance.createTimePacket());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
-                instance.triggerSnapshotChange(this);
+                SnapshotUpdater.invalidateSnapshot(this);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -881,7 +881,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
-        instance.triggerSnapshotChange(this);
+        SnapshotUpdater.invalidateSnapshot(this);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1357,8 +1357,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            newChunk.triggerSnapshotChange(this);
-            currentChunk.triggerSnapshotChange(this);
+            SnapshotUpdater.invalidateSnapshot(this);
             if (this instanceof Player player) { // Update visible chunks
                 player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
                 ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
@@ -1589,23 +1588,17 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
 
     @Override
     public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        // TODO changes
-        this.snapshot = generateSnapshot(updater);
-        return snapshot;
-    }
-
-    @Override
-    public void triggerSnapshotChange(Snapshotable snapshotable) {
-        // TODO
-    }
-
-    private EntitySnapshotImpl generateSnapshot(SnapshotUpdater updater) {
-        var tagReader = TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)));
-        return new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
+        return (this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), updater.reference(currentChunk),
                 updater.references(viewers),
                 updater.references(passengers), updater.optionalReference(vehicle),
-                tagReader);
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)))));
+    }
+
+    @Override
+    public @NotNull SnapshotInfo snapshotInfo() {
+        return SnapshotInfo.of(EntitySnapshot.class,
+                List.of(InstanceSnapshot.class, ChunkSnapshot.class, EntitySnapshot.class, PlayerSnapshot.class));
     }
 
     private record EntitySnapshotImpl(EntityType type, UUID uuid, int id,

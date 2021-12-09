@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.bytes.ByteArraySet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
@@ -86,8 +85,7 @@ public class DynamicChunk extends Chunk {
             this.tickableMap.remove(index);
         }
 
-        triggerSectionChange((byte) ChunkUtils.getSectionAt(y));
-        this.instance.triggerSnapshotChange(this);
+        SnapshotUpdater.invalidateSnapshot(this);
     }
 
     @Override
@@ -246,7 +244,6 @@ public class DynamicChunk extends Chunk {
     }
 
     private ChunkSnapshotImpl snapshot;
-    private final ByteArraySet snapshotSections = new ByteArraySet();
 
     @Override
     public @NotNull ChunkSnapshot snapshot() {
@@ -254,45 +251,16 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        ChunkSnapshotImpl snapshot = this.snapshot;
-        if (snapshot == null) {
-            snapshot = generateSnapshot();
-            this.snapshot = snapshot;
-            return snapshot;
-        }
-
-        ArrayList<Section> sectionsList = null;
-        for (var section : snapshotSections) {
-            if (sectionsList == null) sectionsList = new ArrayList<>(snapshot.sections);
-            final int index = section - minSection;
-            sectionsList.set(index, sectionsList.get(index).clone());
-        }
-        this.snapshotSections.clear();
-
-        if (sectionsList != null) {
-            sectionsList.trimToSize();
-            snapshot = new ChunkSnapshotImpl(snapshot.minSection, snapshot.chunkX, snapshot.chunkZ,
-                    sectionsList, snapshot.blockEntries, snapshot.entities, snapshot.players, snapshot.tagReadable);
-        }
-
-        return (this.snapshot = snapshot);
+    public synchronized @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        return (this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
+                Arrays.stream(this.sections).map(Section::clone).toList(),
+                entries.clone(), List.of(), List.of(), // TODO entities/players
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)))));
     }
 
     @Override
-    public void triggerSnapshotChange(Snapshotable snapshotable) {
-        this.instance.triggerSnapshotChange(this);
-    }
-
-    private synchronized void triggerSectionChange(byte index) {
-        this.snapshotSections.add(index);
-    }
-
-    private ChunkSnapshotImpl generateSnapshot() {
-        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
-                Arrays.stream(this.sections).map(Section::clone).toList(),
-                entries.clone(), List.of(), List.of(), // TODO entities/players
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
+    public @NotNull SnapshotInfo snapshotInfo() {
+        return SnapshotInfo.of(ChunkSnapshot.class, List.of());
     }
 
     private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,
