@@ -222,7 +222,7 @@ public final class ViewEngine {
         public int size() {
             synchronized (mutex) {
                 int size = manualViewers.size();
-                if (entity != null) return size + viewableOption.bitSet.size();
+                if (entity != null) return size + viewableOption.bitSet.cardinality();
                 // Non-entity fallback
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
                 if (auto != null) {
@@ -301,6 +301,7 @@ public final class ViewEngine {
                 Object[] array = new Object[size];
                 AtomicInteger index = new AtomicInteger();
                 forEach(player -> array[index.getAndIncrement()] = player);
+                assert index.get() == size;
                 return array;
             }
         }
@@ -315,6 +316,7 @@ public final class ViewEngine {
 
                 AtomicInteger index = new AtomicInteger();
                 forEach(player -> array[index.getAndIncrement()] = (T) player);
+                assert index.get() == size;
                 return array;
             }
         }
