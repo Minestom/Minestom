@@ -4,7 +4,6 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
@@ -257,10 +256,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public synchronized void updateSnapshot(@NotNull SnapshotUpdater updater) {
-        List<Entity> entities = new ArrayList<>();
-        this.instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES, entities::add);
-        List<Entity> players = new ArrayList<>();
-        this.instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.PLAYERS, players::add);
+        final EntityTracker tracker = instance.getEntityTracker();
+        var entities = tracker.chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
+        var players = tracker.chunkEntities(chunkX, chunkZ, EntityTracker.Target.PLAYERS);
         this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
                 Arrays.stream(this.sections).map(Section::clone).toList(),
                 entries.clone(),
