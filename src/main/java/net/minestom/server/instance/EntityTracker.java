@@ -5,11 +5,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -62,6 +60,18 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     default <T extends Entity> void chunkEntities(@NotNull Point point,
                                                   @NotNull Target<T> target, @NotNull Query<T> query) {
         chunkEntities(point.chunkX(), point.chunkZ(), target, query);
+    }
+
+    /**
+     * Returns a copy of the entities present in the specified chunk.
+     */
+    @ApiStatus.Experimental
+    @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
+
+    @ApiStatus.Experimental
+    @Unmodifiable
+    default <T extends Entity> @NotNull Collection<T> chunkEntities(@NotNull Point point, @NotNull Target<T> target) {
+        return chunkEntities(point.chunkX(), point.chunkZ(), target);
     }
 
     /**
