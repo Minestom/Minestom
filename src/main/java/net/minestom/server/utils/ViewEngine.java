@@ -295,7 +295,7 @@ public final class ViewEngine {
             synchronized (mutex) {
                 final int size = size();
                 if (size == 0) return EMPTY;
-                Player[] array = new Player[size];
+                Object[] array = new Object[size];
                 AtomicInteger index = new AtomicInteger();
                 forEach(player -> array[index.getAndIncrement()] = player);
                 assert index.get() == size;
