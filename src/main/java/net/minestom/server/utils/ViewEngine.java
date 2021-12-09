@@ -14,6 +14,7 @@ import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -287,6 +288,34 @@ public final class ViewEngine {
                         }
                     }
                 }
+            }
+        }
+
+        private static final Object[] EMPTY = new Object[0];
+
+        @Override
+        public @NotNull Object @NotNull [] toArray() {
+            synchronized (mutex) {
+                final int size = size();
+                if (size == 0) return EMPTY;
+                Object[] array = new Object[size];
+                AtomicInteger index = new AtomicInteger();
+                forEach(player -> array[index.getAndIncrement()] = player);
+                return array;
+            }
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> @NotNull T @NotNull [] toArray(@NotNull T @NotNull [] a) {
+            synchronized (mutex) {
+                final int size = size();
+                T[] array = a.length >= size ? a :
+                        (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
+
+                AtomicInteger index = new AtomicInteger();
+                forEach(player -> array[index.getAndIncrement()] = (T) player);
+                return array;
             }
         }
 
