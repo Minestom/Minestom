@@ -31,7 +31,7 @@ public class CommandSyntax {
         this.arguments = List.copyOf(arguments);
         this.executor = executor;
         this.commandCondition = commandCondition;
-        this.defaultValuesMap = defaultValuesMap;
+        this.defaultValuesMap = defaultValuesMap == null ? null : Map.copyOf(defaultValuesMap);
         this.suggestion = this.arguments.stream().anyMatch(Argument::hasSuggestion);
     }
 
@@ -82,8 +82,7 @@ public class CommandSyntax {
         this.executor = executor;
     }
 
-    @Nullable
-    protected Map<String, Supplier<Object>> getDefaultValuesMap() {
+    protected @Nullable Map<String, Supplier<Object>> getDefaultValuesMap() {
         return defaultValuesMap;
     }
 
@@ -92,8 +91,7 @@ public class CommandSyntax {
      *
      * @return the required arguments
      */
-    @NotNull
-    public List<Argument<?>> getArguments() {
+    public @NotNull List<Argument<?>> getArguments() {
         return arguments;
     }
 
