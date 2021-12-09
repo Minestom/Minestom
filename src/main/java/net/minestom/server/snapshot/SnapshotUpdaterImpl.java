@@ -68,16 +68,17 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotables) {
-        this.references.addAll(snapshotables);
+        List<Snapshotable> entries = List.copyOf(snapshotables);
+        this.references.addAll(entries);
         synchronized (MONITOR) {
-            for (var snapshotable : snapshotables) {
+            for (var snapshotable : entries) {
                 SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
                         .referencedBy.add(this.snapshotable);
             }
         }
         AtomicReference<List<T>> ref = new AtomicReference<>();
         this.entries.relaxedOffer(() -> {
-            List<T> list = (List<T>) snapshotables.stream().map(this::optionallyUpdate).toList();
+            List<T> list = (List<T>) entries.stream().map(this::optionallyUpdate).toList();
             ref.setPlain(list);
         });
         return ref;
