@@ -8,12 +8,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -109,6 +107,13 @@ final class EntityTrackerImpl implements EntityTracker {
         final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
         if (entities == null || entities.isEmpty()) return;
         for (Entity entity : entities) query.consume((T) entity);
+    }
+
+    @Override
+    public synchronized @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
+        final TargetEntry<Entity> entry = entries[target.ordinal()];
+        final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
+        return entities != null ? (Collection<T>) List.copyOf(entities) : List.of();
     }
 
     @Override
