@@ -1,5 +1,6 @@
 package net.minestom.server.snapshot;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jctools.queues.SpscGrowableArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +40,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     private final SpscGrowableArrayQueue<Runnable> entries = new SpscGrowableArrayQueue<>(1024);
-    private final Collection<Snapshotable> references = new ArrayList<>();
+    private final ArrayList<Snapshotable> references = new ArrayList<>();
     private final Snapshotable snapshotable;
 
     private Collection<Snapshotable> invalidations = List.of();
@@ -68,18 +69,23 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotables) {
-        List<Snapshotable> entries = List.copyOf(snapshotables);
-        this.references.addAll(entries);
+        Object[] array = snapshotables.toArray(); // Array will be reused until the end to avoid allocations
+        this.references.ensureCapacity(this.references.size() + array.length);
+        for (Object o : array) this.references.add((Snapshotable) o);
         synchronized (MONITOR) {
-            for (var snapshotable : entries) {
-                SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
+            for (var snapshotable : array) {
+                SNAPSHOT_REFERENCES.computeIfAbsent((Snapshotable) snapshotable, s -> new SnapshotReferences())
                         .referencedBy.add(this.snapshotable);
             }
         }
+
+        @SuppressWarnings("rawtypes") List wrappedList = ObjectArrayList.wrap(array);
         AtomicReference<List<T>> ref = new AtomicReference<>();
         this.entries.relaxedOffer(() -> {
-            List<T> list = (List<T>) entries.stream().map(this::optionallyUpdate).toList();
-            ref.setPlain(list);
+            // Update the array content to snapshots instead of snapshotables
+            Arrays.setAll(array, i -> optionallyUpdate((Snapshotable) array[i]));
+            //noinspection unchecked
+            ref.setPlain(wrappedList);
         });
         return ref;
     }
