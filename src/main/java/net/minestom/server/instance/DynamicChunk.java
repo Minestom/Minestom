@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -255,17 +257,22 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public synchronized void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        List<Entity> entities = new ArrayList<>();
+        this.instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES, entities::add);
+        List<Entity> players = new ArrayList<>();
+        this.instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.PLAYERS, players::add);
         this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
                 Arrays.stream(this.sections).map(Section::clone).toList(),
-                entries.clone(), List.of(), List.of(), // TODO entities/players
+                entries.clone(),
+                updater.references(entities), updater.references(players),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,
                                      List<Section> sections,
                                      Int2ObjectOpenHashMap<Block> blockEntries,
-                                     List<EntitySnapshot> entities,
-                                     List<PlayerSnapshot> players,
+                                     AtomicReference<List<EntitySnapshot>> entitiesRef,
+                                     AtomicReference<List<PlayerSnapshot>> playersRef,
                                      TagReadable tagReadable) implements ChunkSnapshot {
         @Override
         public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
@@ -295,12 +302,12 @@ public class DynamicChunk extends Chunk {
 
         @Override
         public @NotNull List<@NotNull EntitySnapshot> entities() {
-            return entities;
+            return entitiesRef.getPlain();
         }
 
         @Override
         public @NotNull List<@NotNull PlayerSnapshot> players() {
-            return players;
+            return playersRef.getPlain();
         }
 
         @Override

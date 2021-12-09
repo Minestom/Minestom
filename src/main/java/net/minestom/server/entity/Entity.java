@@ -1358,6 +1358,8 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
             SnapshotUpdater.invalidateSnapshot(this);
+            SnapshotUpdater.invalidateSnapshot(newChunk);
+            SnapshotUpdater.invalidateSnapshot(currentChunk);
             if (this instanceof Player player) { // Update visible chunks
                 player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
                 ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
