@@ -52,9 +52,8 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
         this.references.requiredReferences.add(snapshotable);
         synchronized (MONITOR) {
-            var references = SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable,
-                    s -> new SnapshotReferences());
-            references.referencedBy.add(this.snapshotable);
+            SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
+                    .referencedBy.add(this.snapshotable);
         }
         AtomicReference<T> ref = new AtomicReference<>();
         this.entries.relaxedOffer(() -> ref.setPlain((T) optionallyUpdate(snapshotable)));
@@ -66,9 +65,8 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
         this.references.requiredReferences.addAll(snapshotables);
         synchronized (MONITOR) {
             for (var snapshotable : snapshotables) {
-                var references = SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable,
-                        s -> new SnapshotReferences());
-                references.referencedBy.add(this.snapshotable);
+                SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
+                        .referencedBy.add(this.snapshotable);
             }
         }
         AtomicReference<List<T>> ref = new AtomicReference<>();
