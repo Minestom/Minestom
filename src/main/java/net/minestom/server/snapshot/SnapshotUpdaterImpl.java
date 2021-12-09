@@ -1,31 +1,35 @@
 package net.minestom.server.snapshot;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.jctools.queues.SpscGrowableArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class SnapshotUpdaterImpl implements SnapshotUpdater {
-    private static final ConcurrentMap<Snapshotable, SnapshotReferences> SNAPSHOT_REFERENCES;
-
-    static {
-        Cache<Snapshotable, SnapshotReferences> referencesCache = Caffeine.newBuilder().weakKeys().build();
-        SNAPSHOT_REFERENCES = referencesCache.asMap();
-    }
+    private static final Object MONITOR = new Object();
+    private static final Map<Snapshotable, SnapshotReferences> SNAPSHOT_REFERENCES = new WeakHashMap<>();
 
     static void invalidate(Snapshotable snapshotable) {
-        SNAPSHOT_REFERENCES.compute(snapshotable, (snap, references) -> {
-            if (references == null) references = new SnapshotReferences();
-            references.invalidations.add(snap); // Invalidate self
+        synchronized (MONITOR) {
+            SnapshotReferences references = SNAPSHOT_REFERENCES.get(snapshotable);
+            if (references == null) {
+                references = new SnapshotReferences();
+                SNAPSHOT_REFERENCES.put(snapshotable, references);
+            }
+            references.invalidations.add(snapshotable); // Invalidate self
             // Invalidate snapshots referencing this snapshot
-            references.referencedBy.forEach(referencedBy ->
-                    SNAPSHOT_REFERENCES.get(referencedBy).invalidations.add(snapshotable));
-            return references;
-        });
+            recursiveInvalidate(references, snapshotable);
+        }
+    }
+
+    static void recursiveInvalidate(SnapshotReferences references, Snapshotable cause) {
+        for (var snapshotable : references.referencedBy) {
+            references = SNAPSHOT_REFERENCES.get(snapshotable);
+            if (references == null) continue;
+            references.invalidations.add(cause);
+            recursiveInvalidate(references, cause);
+        }
     }
 
     private final SpscGrowableArrayQueue<Runnable> entries = new SpscGrowableArrayQueue<>(1024);
@@ -47,11 +51,11 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
         this.references.requiredReferences.add(snapshotable);
-        SNAPSHOT_REFERENCES.compute(snapshotable, (snap, references) -> {
-            if (references == null) references = new SnapshotReferences();
+        synchronized (MONITOR) {
+            var references = SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable,
+                    s -> new SnapshotReferences());
             references.referencedBy.add(this.snapshotable);
-            return references;
-        });
+        }
         AtomicReference<T> ref = new AtomicReference<>();
         this.entries.relaxedOffer(() -> ref.setPlain((T) optionallyUpdate(snapshotable)));
         return ref;
@@ -60,12 +64,12 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotables) {
         this.references.requiredReferences.addAll(snapshotables);
-        for (var snapshotable : snapshotables) {
-            SNAPSHOT_REFERENCES.compute(snapshotable, (snap, references) -> {
-                if (references == null) references = new SnapshotReferences();
+        synchronized (MONITOR) {
+            for (var snapshotable : snapshotables) {
+                var references = SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable,
+                        s -> new SnapshotReferences());
                 references.referencedBy.add(this.snapshotable);
-                return references;
-            });
+            }
         }
         AtomicReference<List<T>> ref = new AtomicReference<>();
         this.entries.relaxedOffer(() -> {
@@ -77,29 +81,29 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     Snapshot update() {
         this.entries.drain(Runnable::run);
-        SNAPSHOT_REFERENCES.put(snapshotable, references);
+        synchronized (MONITOR) {
+            SNAPSHOT_REFERENCES.put(snapshotable, references);
+        }
         return snapshotable.snapshot();
     }
 
     private Snapshot optionallyUpdate(Snapshotable snapshotable) {
-        SnapshotReferences references = SNAPSHOT_REFERENCES.get(snapshotable);
-        if (references == null) {
-            this.invalidations = List.of();
-            return update(snapshotable);
+        boolean requireUpdate = false;
+        synchronized (MONITOR) {
+            SnapshotReferences references = SNAPSHOT_REFERENCES.get(snapshotable);
+            if (references == null) {
+                requireUpdate = true;
+                this.invalidations = List.of();
+            } else {
+                Set<Snapshotable> invalidations = references.invalidations;
+                if (!invalidations.isEmpty()) {
+                    requireUpdate = true;
+                    this.invalidations = List.copyOf(invalidations);
+                    invalidations.clear();
+                }
+            }
         }
-        Set<Snapshotable> invalidations = references.invalidations;
-        if (invalidations.isEmpty()) return snapshotable.snapshot();
-        List<Snapshotable> invalidatedSnapshots = new ArrayList<>(invalidations.size());
-        invalidations.removeIf(snap -> {
-            invalidatedSnapshots.add(snap);
-            return true;
-        });
-        this.invalidations = List.copyOf(invalidatedSnapshots);
-        return update(snapshotable);
-    }
-
-    private Snapshot update(Snapshotable snapshotable) {
-        snapshotable.updateSnapshot(this);
+        if (requireUpdate) snapshotable.updateSnapshot(this);
         return snapshotable.snapshot();
     }
 
@@ -109,11 +113,6 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
         // Represents where this snapshot is referenced
         private final Set<Snapshotable> referencedBy = Collections.newSetFromMap(new WeakHashMap<>());
         // Represents snapshots that invalidate this snapshot
-        private final Set<Snapshotable> invalidations;
-
-        {
-            Cache<Snapshotable, Boolean> invalidationCache = Caffeine.newBuilder().weakKeys().build();
-            invalidations = Collections.newSetFromMap(invalidationCache.asMap());
-        }
+        private final Set<Snapshotable> invalidations = Collections.newSetFromMap(new WeakHashMap<>());
     }
 }
