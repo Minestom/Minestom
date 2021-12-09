@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Represents the context of a snapshot build.
  * Used in {@link Snapshotable#updateSnapshot(SnapshotUpdater)} to create snapshot references and avoid circular dependencies.
+ * Updaters must never leave scope, as its data may be state related (change according to the currently processed snapshot).
  * <p>
  * Implementations do not need to be thread-safe and cannot be re-used.
  */
@@ -36,6 +37,9 @@ public interface SnapshotUpdater {
      * Invalidates a snapshot. Update will occur on next snapshot build using {@link #update(Snapshotable)}.
      * <p>
      * Invalidation can be expensive, as many references may be affected.
+     * Worth noting that only existing references will be updated,
+     * you may need to invalidate multiple snapshotable if the change requires adding or removing an element from a collection
+     * (e.g. a player switching chunk will require invalidating the player to update its chunk field, but also the chunk to create the player reference).
      *
      * @param snapshotable the snapshot container
      */

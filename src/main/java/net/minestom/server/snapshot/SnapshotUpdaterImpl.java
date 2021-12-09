@@ -19,21 +19,27 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
             }
             references.invalidations.add(snapshotable); // Invalidate self
             // Invalidate snapshots referencing this snapshot
-            recursiveInvalidate(references, snapshotable);
+            Set<Snapshotable> interpreted = new HashSet<>();
+            recursiveInvalidate(references, snapshotable, interpreted);
         }
     }
 
-    static void recursiveInvalidate(SnapshotReferences references, Snapshotable cause) {
+    static void recursiveInvalidate(SnapshotReferences references, Snapshotable origin,
+                                    Set<Snapshotable> interpreted) {
         for (var snapshotable : references.referencedBy) {
+            if (snapshotable == origin)
+                continue;
+            if (!interpreted.add(snapshotable))
+                continue; // Prevent circular dependencies from causing stack overflow
             references = SNAPSHOT_REFERENCES.get(snapshotable);
             if (references == null) continue;
-            references.invalidations.add(cause);
-            recursiveInvalidate(references, cause);
+            references.invalidations.add(origin);
+            recursiveInvalidate(references, origin, interpreted);
         }
     }
 
     private final SpscGrowableArrayQueue<Runnable> entries = new SpscGrowableArrayQueue<>(1024);
-    private final SnapshotReferences references = new SnapshotReferences();
+    private final Set<Snapshotable> references = new HashSet<>();
     private final Snapshotable snapshotable;
 
     private Collection<Snapshotable> invalidations = List.of();
@@ -50,7 +56,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
-        this.references.requiredReferences.add(snapshotable);
+        this.references.add(snapshotable);
         synchronized (MONITOR) {
             SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
                     .referencedBy.add(this.snapshotable);
@@ -62,7 +68,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotables) {
-        this.references.requiredReferences.addAll(snapshotables);
+        this.references.addAll(snapshotables);
         synchronized (MONITOR) {
             for (var snapshotable : snapshotables) {
                 SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
@@ -80,7 +86,9 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     Snapshot update() {
         this.entries.drain(Runnable::run);
         synchronized (MONITOR) {
-            SNAPSHOT_REFERENCES.put(snapshotable, references);
+            SnapshotReferences ref = SNAPSHOT_REFERENCES.computeIfAbsent(this.snapshotable, s -> new SnapshotReferences());
+            ref.requiredReferences.clear();
+            ref.requiredReferences.addAll(this.references);
         }
         return snapshotable.snapshot();
     }
