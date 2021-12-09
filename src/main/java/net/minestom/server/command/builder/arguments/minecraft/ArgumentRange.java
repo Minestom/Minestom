@@ -158,22 +158,22 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
      * {@link #NUMBER_SEPARATOR} is found.
      */
     private static @NotNull String readNumberString(@NotNull StringReader reader) {
-        int startingPosition = reader.currentPosition();
+        int startingPosition = reader.position();
         int positionInSeparator = 0;
         while (reader.canRead() && StringReader.isValidNumber(reader.peek())) {
             // Instead of just skipping the character, find out if it's part of the number separator
-            char c = reader.nextChar();
-            if (c == NUMBER_SEPARATOR.charAt(positionInSeparator)) {
+            int c = reader.next();
+            if (c == NUMBER_SEPARATOR.codePointAt(positionInSeparator)) {
                 positionInSeparator++;
                 if (positionInSeparator == NUMBER_SEPARATOR.length()) {
-                    reader.currentPosition(reader.currentPosition() - NUMBER_SEPARATOR.length());
-                    return reader.all().substring(startingPosition, reader.currentPosition());
+                    reader.position(reader.position() - NUMBER_SEPARATOR.length());
+                    return reader.all().substring(startingPosition, reader.position());
                 }
             } else {
                 positionInSeparator = 0;
             }
         }
-        return reader.all().substring(startingPosition, reader.currentPosition());
+        return reader.all().substring(startingPosition, reader.position());
     }
 
     /**
@@ -182,7 +182,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
      */
     private static boolean hasSeparator(@NotNull StringReader reader) {
         return reader.canRead(NUMBER_SEPARATOR.length()) &&
-                reader.all().regionMatches(reader.currentPosition(), NUMBER_SEPARATOR, 0, NUMBER_SEPARATOR.length());
+                reader.all().regionMatches(reader.position(), NUMBER_SEPARATOR, 0, NUMBER_SEPARATOR.length());
     }
 
 }

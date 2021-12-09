@@ -190,13 +190,13 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         if (!adjustIntegers || isRelative) {
             return reader.readDouble();
         }
-        int pos = reader.currentPosition();
+        int pos = reader.position();
         double value = reader.readDouble();
 
         // Add 0.5 to the value if integers should be adjusted
         if (value % 1 == 0) {
-            String total = reader.all().substring(pos, reader.currentPosition());
-            if (!total.contains(".")) {
+            int index = reader.all().indexOf('.', pos);
+            if (index != -1 && index < reader.position()) {
                 value += 0.5;
             }
         }

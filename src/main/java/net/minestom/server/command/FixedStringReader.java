@@ -13,177 +13,157 @@ import org.jetbrains.annotations.NotNull;
  * Note that classes that extend this may make it mutable, but this implementation is still fixed. You can treat it as a
  * view of a mutable string reader.
  */
-public sealed class FixedStringReader permits StringReader {
+public sealed interface FixedStringReader permits StringReader {
 
     /**
-     * Represents the length after which characters will be cut off from the result of {@link #generateContextMessage()}.
-     * If there are more than CUTOFF_LENGTH characters, the extra characters will be replaced with "...".
+     * Represents the length after which characters will be cut off from the result of
+     * {@link #generateContextMessage()}. If there are more than CUTOFF_LENGTH characters, the extra characters will be
+     * replaced with "...".
      */
-    public static final int CUTOFF_LENGTH = 10;
+    int CUTOFF_LENGTH = 10;
 
     /**
      * A static style instance that represents {@link NamedTextColor#RED}. This is here so that some style instances
      * don't have to be created each time they're used.
      */
-    public static final @NotNull Style RED_STYLE = Style.style(NamedTextColor.RED);
+    @NotNull Style RED_STYLE = Style.style(NamedTextColor.RED);
 
     /**
      * A static style instance that represents {@link NamedTextColor#RED} and {@link TextDecoration#UNDERLINED}. This is
      * here so that some style instances don't have to be created each time they're used.
      */
-    public static final @NotNull Style RED_UNDERLINED_STYLE = Style.style(NamedTextColor.RED, TextDecoration.UNDERLINED);
+    @NotNull Style RED_UNDERLINED_STYLE = Style.style(NamedTextColor.RED, TextDecoration.UNDERLINED);
 
     /**
      * A static style instance that represents {@link NamedTextColor#GRAY}. This is here so that gray style instances
      * don't have to be created each time they're used.
      */
-    public static final @NotNull Style GRAY_STYLE = Style.style(NamedTextColor.GRAY);
+    @NotNull Style GRAY_STYLE = Style.style(NamedTextColor.GRAY);
 
     /**
      * A static translatable component that represents the message that appears after incorrect command syntax, e.g.
      * "/gamemode test<--[HERE]". It's automatically styled to be red and italicised.
      */
-    public static final @NotNull Component CONTEXT_HERE = Component.translatable("command.context.here", NamedTextColor.RED, TextDecoration.ITALIC);
-
-    private final @NotNull String input;
-    /**
-     * This is the current position of the string reader.
-     */
-    protected int currentPosition;
+    @NotNull Component CONTEXT_HERE = Component.translatable("command.context.here", NamedTextColor.RED, TextDecoration.ITALIC);
 
     /**
-     * Creates a fixed string reader that will read from the following input, starting at the start of the string.
+     * @return the entire string that this reader is reading
      */
-    public FixedStringReader(@NotNull String input) {
-        this(input, 0);
+    @NotNull String all();
+
+    /**
+     * @return the position of this reader. This is equivalent to the number of characters read
+     */
+    int position();
+
+    /**
+     * @return the total number of characters in this reader
+     */
+    default int length() {
+        return all().length();
     }
 
     /**
-     * Creates a fixed string reader that will read from the following input, starting at the provided position.
+     * @return the number of remaining characters in this reader
      */
-    public FixedStringReader(@NotNull String input, int startingPosition) {
-        this.input = input;
-        this.currentPosition = startingPosition;
+    default int remaining() {
+        return all().length() - position();
     }
 
     /**
-     * @return the string that is being read from
+     * @return the portion of this reader that haven't been read yet
      */
-    public @NotNull String all() {
-        return input;
+    default @NotNull String unread() {
+        return all().substring(position());
     }
 
     /**
-     * @return the current position in the string that is getting read
+     * @return the portion of this reader that has already been read
      */
-    public int currentPosition() {
-        return currentPosition;
+    default @NotNull String previouslyRead() {
+        return all().substring(0, position());
     }
 
     /**
-     * @return the number of remaining characters in the string
+     * @return true if at least {@code characters} can be read from this reader
      */
-    public int remainingCharacters() {
-        return input.length() - currentPosition;
+    default boolean canRead(int characters) {
+        return position() + characters <= all().length();
     }
 
     /**
-     * @return the total length of the string
+     * @return true if at least one character can be read from this reader
      */
-    public int length() {
-        return input.length();
+    default boolean canRead() {
+        return position() + 1 <= all().length();
     }
 
     /**
-     * @return all the characters that have been previously read
+     * @return true if the provided string is equal to the next readable characters in this reader
      */
-    public @NotNull String previouslyRead() {
-        return input.substring(0, currentPosition);
+    default boolean canRead(@NotNull String text) {
+        return canRead(text.length()) && all().regionMatches(position(), text, 0, text.length());
     }
 
     /**
-     * @return all characters that have not been read yet
+     * @return true if the provided string is equal to the next readable characters in this reader, ignoring case if
+     * {@code ignoreCase} is true
      */
-    public @NotNull String unreadCharacters() {
-        return input.substring(currentPosition);
+    default boolean canRead(@NotNull String text, boolean ignoreCase) {
+        return canRead(text.length()) && all().regionMatches(ignoreCase, position(), text, 0, text.length());
     }
 
     /**
-     * @return true if the string has at least {@code characters} more readable characters, otherwise false
+     * @return the next readable character, as a Unicode code point. This does not move the position
      */
-    public boolean canRead(int characters) {
-        return currentPosition + characters <= input.length();
+    default int peek() {
+        return all().codePointAt(position());
     }
 
     /**
-     * @return true if the string has at least one more readable character, otherwise false
+     * @return the next readable character, as a {@code char}. This does not move the position
      */
-    public boolean canRead() {
-        return canRead(1);
+    default char peekChar() {
+        return all().charAt(position());
     }
 
     /**
-     * @return true if the provided string is equal to the next characters in this reader
+     * @return the character that is {@code offset} characters ahead of the position, as a Unicode code point. This does
+     *         not move the position
      */
-    public boolean canRead(@NotNull String canRead) {
-        return canRead(canRead.length()) && all().regionMatches(currentPosition, canRead, 0, canRead.length());
+    default int peek(int offset) {
+        return all().codePointAt(position() + offset);
     }
 
     /**
-     * @return true if the provided string is equal to the next characters in this reader
+     * @return the character that is {@code offset} characters ahead of the position, as a {@code char}. This does not
+     *         move the position
      */
-    public boolean canRead(@NotNull String canRead, boolean ignoreCase) {
-        return canRead(canRead.length()) && all().regionMatches(ignoreCase, currentPosition, canRead, 0, canRead.length());
+    default char peekChar(int offset) {
+        return all().charAt(position() + offset);
     }
 
     /**
-     * @return the next readable character, without moving the cursor forwards
-     */
-    public char peek() {
-        return input.charAt(currentPosition);
-    }
-
-    /**
-     * @return the character that is {@code offset} characters ahead of the cursor, without moving the cursor forwards
-     */
-    public char peek(int offset) {
-        return input.charAt(currentPosition + offset);
-    }
-
-    /**
-     * Generates a context message for this instance. Here's an example of the output (using MiniMessage syntax) with
+     * Generates a context message for this reader. The previously read text is properly formatted and cut off, and
+     * the unread text is formatted. Here's an example of the output (using MiniMessage syntax) with
      * the translatable components converted to the en-US locale:<br>
      * Input: "/gamemode survival creative"<br>
      * Position: 19<br>
-     * Output: "&lt;gray&gt; survival &lt;/gray&gt;&lt;red&gt;&lt;underlined&gt;survival&lt;/underlined&gt;&lt;/red&gt;
-     * &lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"<br>
+     * Output: {@code &lt;gray&gt;... survival &lt;/gray&gt;&lt;red&gt;&lt;underlined&gt;creative&lt;/underlined&gt;&lt;/red&gt;&lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"}<br>
      */
-    public @NotNull Component generateContextMessage(){
-        String preRead = previouslyRead();
-        if (preRead.length() > CUTOFF_LENGTH) {
-            preRead = "..." + preRead.substring(preRead.length() - CUTOFF_LENGTH);
-        }
-        Component read = Component.text(preRead, GRAY_STYLE);
-        Component error = Component.text(this.unreadCharacters(), RED_UNDERLINED_STYLE);
+    default @NotNull Component generateContextMessage() {
+        String prev = (position() > CUTOFF_LENGTH) ?
+                ("..." + all().substring(position() - CUTOFF_LENGTH, position())) :
+                previouslyRead();
+
+        Component read = Component.text(prev, GRAY_STYLE);
+        Component error = Component.text(unread(), RED_UNDERLINED_STYLE);
 
         return Component.text().append(read, error, CONTEXT_HERE).build();
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[read=\"" + previouslyRead() + "\", unread=\"" + unreadCharacters() + "\", currentPosition=" + currentPosition + "]";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FixedStringReader that = (FixedStringReader) o;
-        return currentPosition == that.currentPosition && input.equals(that.input);
-    }
-
-    @Override
-    public int hashCode() {
-        return input.hashCode() * 31 + currentPosition;
+    default @NotNull String asString() {
+        return getClass().getSimpleName() + "[read=\"" + previouslyRead() + "\", unread=\"" + unread() +
+                "\", position=" + position() + "]";
     }
 }
