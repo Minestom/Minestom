@@ -10,10 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
@@ -211,10 +208,12 @@ public final class ViewEngine {
     }
 
     final class SetImpl extends AbstractSet<Player> {
+        private static final Object[] EMPTY = new Object[0];
+
         @Override
         public @NotNull Iterator<Player> iterator() {
             synchronized (mutex) {
-                return new It();
+                return Arrays.asList(toArray(Player[]::new)).iterator();
             }
         }
 
@@ -291,14 +290,12 @@ public final class ViewEngine {
             }
         }
 
-        private static final Object[] EMPTY = new Object[0];
-
         @Override
         public @NotNull Object @NotNull [] toArray() {
             synchronized (mutex) {
                 final int size = size();
                 if (size == 0) return EMPTY;
-                Object[] array = new Object[size];
+                Player[] array = new Player[size];
                 AtomicInteger index = new AtomicInteger();
                 forEach(player -> array[index.getAndIncrement()] = player);
                 assert index.get() == size;
@@ -318,57 +315,6 @@ public final class ViewEngine {
                 forEach(player -> array[index.getAndIncrement()] = (T) player);
                 assert index.get() == size;
                 return array;
-            }
-        }
-
-        final class It implements Iterator<Player> {
-            private Iterator<Player> current = ViewEngine.this.manualViewers.iterator();
-            private boolean autoIterator = false; // True if the current iterator comes from the auto-viewable references
-            private int index;
-            private Player next;
-
-            @Override
-            public boolean hasNext() {
-                synchronized (mutex) {
-                    return next != null || (next = findNext()) != null;
-                }
-            }
-
-            @Override
-            public Player next() {
-                synchronized (mutex) {
-                    if (next == null) return findNext();
-                    final Player temp = this.next;
-                    this.next = null;
-                    return temp;
-                }
-            }
-
-            private Player findNext() {
-                Player result;
-                if ((result = nextValidEntry(current)) != null) return result;
-                this.autoIterator = true;
-                final var references = viewableOption.references;
-                if (references == null || !viewableOption.isAuto()) return null;
-                for (int i = index + 1; i < references.size(); i++) {
-                    final List<Player> players = references.get(i);
-                    Iterator<Player> iterator = players.iterator();
-                    if ((result = nextValidEntry(iterator)) != null) {
-                        this.current = iterator;
-                        this.index = i;
-                        return result;
-                    }
-                }
-                return null;
-            }
-
-            private Player nextValidEntry(Iterator<Player> iterator) {
-                while (iterator.hasNext()) {
-                    final Player player = iterator.next();
-                    if (autoIterator ? validAutoViewer(player) : player != entity)
-                        return player;
-                }
-                return null;
             }
         }
     }
