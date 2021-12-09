@@ -58,10 +58,6 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
         this.references.add(snapshotable);
-        synchronized (MONITOR) {
-            SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable, s -> new SnapshotReferences())
-                    .referencedBy.add(this.snapshotable);
-        }
         AtomicReference<T> ref = new AtomicReference<>();
         this.entries.relaxedOffer(() -> ref.setPlain((T) optionallyUpdate(snapshotable)));
         return ref;
@@ -72,12 +68,6 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
         Object[] array = snapshotables.toArray(); // Array will be reused until the end to avoid allocations
         this.references.ensureCapacity(this.references.size() + array.length);
         for (Object o : array) this.references.add((Snapshotable) o);
-        synchronized (MONITOR) {
-            for (var snapshotable : array) {
-                SNAPSHOT_REFERENCES.computeIfAbsent((Snapshotable) snapshotable, s -> new SnapshotReferences())
-                        .referencedBy.add(this.snapshotable);
-            }
-        }
 
         @SuppressWarnings("rawtypes") List wrappedList = ObjectArrayList.wrap(array);
         AtomicReference<List<T>> ref = new AtomicReference<>();
@@ -96,6 +86,11 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
             SnapshotReferences ref = SNAPSHOT_REFERENCES.computeIfAbsent(this.snapshotable, s -> new SnapshotReferences());
             ref.requiredReferences.clear();
             ref.requiredReferences.addAll(this.references); // Prevent duplicate from the array list
+            // Update all references to ensure proper invalidation
+            this.references.forEach(snap -> {
+                SNAPSHOT_REFERENCES.computeIfAbsent(snap, s -> new SnapshotReferences())
+                        .referencedBy.add(this.snapshotable);
+            });
         }
         return snapshotable.snapshot();
     }
