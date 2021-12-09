@@ -19,6 +19,7 @@ public interface Snapshotable {
     /**
      * Updates the currently cached snapshot if required.
      * The updater can be used to retrieve references to other snapshots while avoiding circular dependency.
+     * Be careful to do not store {@code updater} anywhere as its data will change when building requested references.
      * <p>
      * The return value of {@link #snapshot()} must be updated to reflect changes.
      * <p>

@@ -19,15 +19,39 @@ import java.util.stream.Collectors;
  * Implementations do not need to be thread-safe and cannot be re-used.
  */
 public interface SnapshotUpdater {
+    /**
+     * Updates the snapshot of the given snapshotable.
+     * <p>
+     * Method must be called during a safe-point (when the server state is stable).
+     *
+     * @param snapshotable the snapshot container
+     * @param <T>          the snapshot type
+     * @return the new updated snapshot
+     */
     static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
         return (T) new SnapshotUpdaterImpl(snapshotable).update();
     }
 
+    /**
+     * Invalidates a snapshot. Update will occur on next snapshot build using {@link #update(Snapshotable)}.
+     * <p>
+     * Invalidation can be expensive, as many references may be affected.
+     *
+     * @param snapshotable the snapshot container
+     */
     static void invalidateSnapshot(@NotNull Snapshotable snapshotable) {
         SnapshotUpdaterImpl.invalidate(snapshotable);
     }
 
-    @NotNull Collection<Snapshotable> invalidations();
+    /**
+     * Retrieves all the snapshot holders that have been invalidated, requiring this snapshot to be potentially updated.
+     * Useful to avoid re-computing up-to-date fields.
+     * <p>
+     * The collection may be ignored if the snapshot has never been built yet.
+     *
+     * @return the collection of snapshot holders that have been invalidated
+     */
+    @NotNull Collection<@NotNull Snapshotable> invalidations();
 
     <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable);
 
