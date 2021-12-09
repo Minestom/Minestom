@@ -123,7 +123,7 @@ public class DynamicChunk extends Chunk {
             }
         }
         // Retrieve the block from state id
-        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        final Section section = sections[ChunkUtils.getSectionAt(y) - minSection];
         if (section == null) return Block.AIR; // Section is unloaded
         final int blockStateId = section.blockPalette()
                 .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
@@ -133,7 +133,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
-        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        final Section section = sections[ChunkUtils.getSectionAt(y) - minSection];
         if (section == null) return Biome.PLAINS; // Section is unloaded
         final int id = section.biomePalette()
                 .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
