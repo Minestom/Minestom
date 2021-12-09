@@ -1,5 +1,7 @@
 package net.minestom.server.snapshot;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,8 +37,28 @@ public interface SnapshotUpdater {
 
     <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotables);
 
-    default <T extends Snapshot, S extends Snapshotable, K> @NotNull Map<K, AtomicReference<T>> referencesMap(@NotNull Collection<S> snapshotable,
+    default <T extends Snapshot, S extends Snapshotable, K> @NotNull Map<K, AtomicReference<T>> referencesMap(@NotNull Collection<S> snapshotables,
                                                                                                               @NotNull Function<S, K> mappingFunction) {
-        return snapshotable.stream().collect(Collectors.toUnmodifiableMap(mappingFunction, this::reference));
+        return snapshotables.stream().collect(Collectors.toUnmodifiableMap(mappingFunction, this::reference));
+    }
+
+    default <T extends Snapshot, S extends Snapshotable> @NotNull Map<Long, AtomicReference<T>> referencesMapLong(@NotNull Collection<S> snapshotables,
+                                                                                                                  @NotNull Function<S, Long> mappingFunction) {
+        Long2ObjectOpenHashMap<AtomicReference<T>> map = new Long2ObjectOpenHashMap<>(snapshotables.size());
+        for (S snapshotable : snapshotables) {
+            map.put(mappingFunction.apply(snapshotable).longValue(), reference(snapshotable));
+        }
+        map.trim();
+        return map;
+    }
+
+    default <T extends Snapshot, S extends Snapshotable> @NotNull Map<Integer, AtomicReference<T>> referencesMapInt(@NotNull Collection<S> snapshotables,
+                                                                                                                    @NotNull Function<S, Integer> mappingFunction) {
+        Int2ObjectOpenHashMap<AtomicReference<T>> map = new Int2ObjectOpenHashMap<>(snapshotables.size());
+        for (S snapshotable : snapshotables) {
+            map.put(mappingFunction.apply(snapshotable).intValue(), reference(snapshotable));
+        }
+        map.trim();
+        return map;
     }
 }
