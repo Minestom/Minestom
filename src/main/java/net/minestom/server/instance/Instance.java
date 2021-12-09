@@ -626,18 +626,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        return (this.snapshot = new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
+    public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        this.snapshot = new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
                 updater.referencesMap(getChunks(), ChunkUtils::getChunkIndex),
                 updater.referencesMap(entityTracker.entities(), Entity::getEntityId),
                 updater.referencesMap(entityTracker.entities(EntityTracker.Target.PLAYERS), Player::getEntityId),
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)))));
-    }
-
-    @Override
-    public @NotNull SnapshotInfo snapshotInfo() {
-        return SnapshotInfo.of(InstanceSnapshot.class,
-                List.of(ChunkSnapshot.class, EntitySnapshot.class, PlayerSnapshot.class));
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,

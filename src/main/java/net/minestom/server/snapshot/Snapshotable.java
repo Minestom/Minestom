@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
  * Represents an object which is regularly saved into a snapshot.
  */
 public interface Snapshotable {
-
-    @NotNull SnapshotInfo snapshotInfo();
-
     /**
      * Retrieves the last snapshot.
      * <p>
@@ -29,7 +26,6 @@ public interface Snapshotable {
      * since its execution rely on safe-points (e.g. end of ticks)
      *
      * @param updater the snapshot updater/context
-     * @return the updated snapshot
      */
-    @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater);
+    void updateSnapshot(@NotNull SnapshotUpdater updater);
 }

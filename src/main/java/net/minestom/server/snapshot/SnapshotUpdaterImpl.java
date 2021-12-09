@@ -99,7 +99,8 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     private Snapshot update(Snapshotable snapshotable) {
-        return snapshotable.updateSnapshot(this);
+        snapshotable.updateSnapshot(this);
+        return snapshotable.snapshot();
     }
 
     private static final class SnapshotReferences {

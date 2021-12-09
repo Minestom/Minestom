@@ -13,7 +13,10 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.PlayerSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.ArrayUtils;
@@ -251,16 +254,11 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        return (this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
+    public synchronized void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
                 Arrays.stream(this.sections).map(Section::clone).toList(),
                 entries.clone(), List.of(), List.of(), // TODO entities/players
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)))));
-    }
-
-    @Override
-    public @NotNull SnapshotInfo snapshotInfo() {
-        return SnapshotInfo.of(ChunkSnapshot.class, List.of());
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,

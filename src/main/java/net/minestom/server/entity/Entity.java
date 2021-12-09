@@ -1587,18 +1587,12 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        return (this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
+    public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), updater.reference(currentChunk),
                 updater.references(viewers),
                 updater.references(passengers), updater.optionalReference(vehicle),
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT)))));
-    }
-
-    @Override
-    public @NotNull SnapshotInfo snapshotInfo() {
-        return SnapshotInfo.of(EntitySnapshot.class,
-                List.of(InstanceSnapshot.class, ChunkSnapshot.class, EntitySnapshot.class, PlayerSnapshot.class));
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record EntitySnapshotImpl(EntityType type, UUID uuid, int id,
