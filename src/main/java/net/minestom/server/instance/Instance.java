@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -628,33 +630,49 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     @Override
     public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap =
+                updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
+        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap = new Int2ObjectOpenHashMap<>();
+        Long2ObjectOpenHashMap<List<AtomicReference<EntitySnapshot>>> entitiesChunk = new Long2ObjectOpenHashMap<>();
+        Int2ObjectOpenHashMap<AtomicReference<PlayerSnapshot>> playersMap = new Int2ObjectOpenHashMap<>();
+        Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> playersChunk = new Long2ObjectOpenHashMap<>();
+        {
+            for (Entity entity : entityTracker.entities()) {
+                final int id = entity.getEntityId();
+                final long chunk = ChunkUtils.getChunkIndex(entity.getChunk());
+                AtomicReference<? extends EntitySnapshot> reference = updater.reference(entity);
+                entitiesMap.put(id, (AtomicReference<EntitySnapshot>) reference);
+                entitiesChunk.computeIfAbsent(chunk, k -> new ArrayList<>())
+                        .add((AtomicReference<EntitySnapshot>) reference);
+                if (entity instanceof Player) {
+                    playersMap.put(id, (AtomicReference<PlayerSnapshot>) reference);
+                    playersChunk.computeIfAbsent(chunk, k -> new ArrayList<>())
+                            .add((AtomicReference<PlayerSnapshot>) reference);
+                }
+            }
+            entitiesMap.trim();
+            entitiesChunk.trim();
+            playersMap.trim();
+            playersChunk.trim();
+        }
+
         this.snapshot = new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
-                updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex),
-                updater.referencesMapInt(entityTracker.entities(), Entity::getEntityId),
-                updater.referencesMapInt(entityTracker.entities(EntityTracker.Target.PLAYERS), Player::getEntityId),
+                chunksMap, MappedCollection.plainReferences(chunksMap.values()),
+                entitiesMap, MappedCollection.plainReferences(entitiesMap.values()), entitiesChunk,
+                playersMap, MappedCollection.plainReferences(playersMap.values()), playersChunk,
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
                                         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
                                         Collection<ChunkSnapshot> chunks,
-                                        Map<Integer, AtomicReference<EntitySnapshot>> entitiesMap,
+                                        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap,
                                         Collection<EntitySnapshot> entities,
-                                        Map<Integer, AtomicReference<PlayerSnapshot>> playersMap,
+                                        Long2ObjectOpenHashMap<List<AtomicReference<EntitySnapshot>>> chunkEntities,
+                                        Int2ObjectOpenHashMap<AtomicReference<PlayerSnapshot>> playersMap,
                                         Collection<PlayerSnapshot> players,
+                                        Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> chunkPlayers,
                                         TagReadable tagReadable) implements InstanceSnapshot {
-        private InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
-                                     Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
-                                     Map<Integer, AtomicReference<EntitySnapshot>> entitiesMap,
-                                     Map<Integer, AtomicReference<PlayerSnapshot>> playersMap,
-                                     TagReadable tagReadable) {
-            this(dimensionType, worldAge, time,
-                    chunksMap, MappedCollection.plainReferences(chunksMap.values()),
-                    entitiesMap, MappedCollection.plainReferences(entitiesMap.values()),
-                    playersMap, MappedCollection.plainReferences(playersMap.values()),
-                    tagReadable);
-        }
-
         @Override
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
             var ref = chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
@@ -667,8 +685,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         }
 
         @Override
+        public @NotNull Collection<@NotNull EntitySnapshot> chunkEntities(int chunkX, int chunkZ) {
+            return MappedCollection.plainReferences(chunkEntities.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)));
+        }
+
+        @Override
         public @UnknownNullability PlayerSnapshot player(int playerId) {
             return playersMap.get(playerId).getPlain();
+        }
+
+        @Override
+        public @NotNull Collection<@NotNull PlayerSnapshot> chunkPlayers(int chunkX, int chunkZ) {
+            return MappedCollection.plainReferences(chunkPlayers.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)));
         }
 
         @Override

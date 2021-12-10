@@ -42,9 +42,13 @@ public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, 
 
     @UnknownNullability EntitySnapshot entity(int entityId);
 
+    @NotNull Collection<@NotNull EntitySnapshot> chunkEntities(int chunkX, int chunkZ);
+
     @NotNull Collection<@NotNull EntitySnapshot> entities();
 
     @UnknownNullability PlayerSnapshot player(int playerId);
+
+    @NotNull Collection<@NotNull PlayerSnapshot> chunkPlayers(int chunkX, int chunkZ);
 
     @NotNull Collection<@NotNull PlayerSnapshot> players();
 }
