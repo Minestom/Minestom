@@ -14,8 +14,7 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
-import net.minestom.server.snapshot.EntitySnapshot;
-import net.minestom.server.snapshot.PlayerSnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -256,21 +255,16 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public synchronized void updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final EntityTracker tracker = instance.getEntityTracker();
-        var entities = tracker.chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
-        var players = tracker.chunkEntities(chunkX, chunkZ, EntityTracker.Target.PLAYERS);
         this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
                 Arrays.stream(this.sections).map(Section::clone).toList(),
-                entries.clone(),
-                updater.references(entities), updater.references(players),
+                entries.clone(), updater.reference(instance),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,
                                      List<Section> sections,
                                      Int2ObjectOpenHashMap<Block> blockEntries,
-                                     AtomicReference<List<EntitySnapshot>> entitiesRef,
-                                     AtomicReference<List<PlayerSnapshot>> playersRef,
+                                     AtomicReference<InstanceSnapshot> instanceRef,
                                      TagReadable tagReadable) implements ChunkSnapshot {
         @Override
         public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
@@ -299,18 +293,13 @@ public class DynamicChunk extends Chunk {
         }
 
         @Override
-        public @NotNull List<@NotNull EntitySnapshot> entities() {
-            return entitiesRef.getPlain();
-        }
-
-        @Override
-        public @NotNull List<@NotNull PlayerSnapshot> players() {
-            return playersRef.getPlain();
-        }
-
-        @Override
         public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
             return tagReadable.getTag(tag);
+        }
+
+        @Override
+        public @NotNull InstanceSnapshot instance() {
+            return instanceRef.getPlain();
         }
     }
 }
