@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -1591,20 +1593,25 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
 
     @Override
     public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        final Chunk chunk = currentChunk;
+        IntList passengersId;
+        {
+            var passengers = this.passengers;
+            passengersId = new IntArrayList(passengers.size());
+            for (var passenger : passengers) {
+                passengersId.add(passenger.getEntityId());
+            }
+        }
+        final Entity vehicle = this.vehicle;
         this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
-                updater.reference(instance), updater.reference(currentChunk),
-                updater.references(viewers),
-                updater.references(passengers), updater.optionalReference(vehicle),
+                updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
+                null, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
-    private record EntitySnapshotImpl(EntityType type, UUID uuid, int id,
-                                      Pos position, Vec velocity,
-                                      AtomicReference<InstanceSnapshot> instanceRef,
-                                      AtomicReference<ChunkSnapshot> chunkRef,
-                                      AtomicReference<List<PlayerSnapshot>> viewersRef,
-                                      AtomicReference<List<EntitySnapshot>> passengersRef,
-                                      AtomicReference<EntitySnapshot> vehicleRef,
+    private record EntitySnapshotImpl(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
+                                      AtomicReference<InstanceSnapshot> instanceRef, int chunkX, int chunkZ,
+                                      IntList viewersId, IntList passengersId, int vehicleId,
                                       TagReadable tagReadable) implements EntitySnapshot {
         @Override
         public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
@@ -1618,22 +1625,23 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
 
         @Override
         public @NotNull ChunkSnapshot chunk() {
-            return chunkRef.getPlain();
+            return Objects.requireNonNull(instance().chunk(chunkX, chunkZ));
         }
 
         @Override
         public @NotNull List<@NotNull PlayerSnapshot> viewers() {
-            return viewersRef.getPlain();
+            return List.of(); // TODO map ids
         }
 
         @Override
         public @NotNull List<@NotNull EntitySnapshot> passengers() {
-            return passengersRef.getPlain();
+            return List.of(); // TODO map ids
         }
 
         @Override
         public @Nullable EntitySnapshot vehicle() {
-            return vehicleRef.getPlain();
+            if (vehicleId == -1) return null;
+            return instance().entity(vehicleId);
         }
     }
 

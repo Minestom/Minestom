@@ -34,6 +34,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
@@ -658,6 +659,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
             var ref = chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
             return Objects.requireNonNull(ref, "Chunk not found").getPlain();
+        }
+
+        @Override
+        public @UnknownNullability EntitySnapshot entity(int entityId) {
+            return entitiesMap.get(entityId).getPlain();
         }
 
         @Override
