@@ -54,6 +54,9 @@ public final class CachedPacket implements SendablePacket {
      * but {@link #retrieve()} should be privileged otherwise.
      */
     public @NotNull ServerPacket packet() {
+        FramedPacket cache;
+        if (updated == 1 && (cache = packet.get()) != null)
+            return cache.packet(); // Avoid potential packet allocation
         return packetSupplier.get();
     }
 

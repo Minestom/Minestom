@@ -7,9 +7,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record RemoveEntityEffectPacket(int entityId, PotionEffect potionEffect) implements ServerPacket {
+import java.util.Objects;
+
+public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potionEffect) implements ServerPacket {
     public RemoveEntityEffectPacket(BinaryReader reader) {
-        this(reader.readVarInt(), PotionEffect.fromId(reader.readByte()));
+        this(reader.readVarInt(), Objects.requireNonNull(PotionEffect.fromId(reader.readByte())));
     }
 
     @Override

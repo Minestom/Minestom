@@ -17,10 +17,11 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an outgoing chat message packet.
  */
-public record ChatMessagePacket(Component message, ChatPosition position,
-                                UUID uuid) implements ComponentHoldingServerPacket {
+public record ChatMessagePacket(@NotNull Component message, @NotNull ChatPosition position,
+                                @NotNull UUID uuid) implements ComponentHoldingServerPacket {
     public ChatMessagePacket(BinaryReader reader) {
-        this(reader.readComponent(), ChatPosition.fromPacketID(reader.readByte()), reader.readUuid());
+        this(reader.readComponent(), ChatPosition.fromPacketID(reader.readByte()),
+                reader.readUuid());
     }
 
     @Override

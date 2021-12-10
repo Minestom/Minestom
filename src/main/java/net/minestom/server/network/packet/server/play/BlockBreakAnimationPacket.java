@@ -7,7 +7,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record BlockBreakAnimationPacket(int entityId, Point blockPosition, byte destroyStage) implements ServerPacket {
+public record BlockBreakAnimationPacket(int entityId, @NotNull Point blockPosition,
+                                        byte destroyStage) implements ServerPacket {
     public BlockBreakAnimationPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readBlockPosition(), reader.readByte());
     }

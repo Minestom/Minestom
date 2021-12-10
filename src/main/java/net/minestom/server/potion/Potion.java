@@ -10,9 +10,72 @@ import org.jetbrains.annotations.NotNull;
 
 public record Potion(PotionEffect effect, byte amplifier, int duration, byte flags)
         implements Writeable {
+    /**
+     * A flag indicating that this Potion is ambient (it came from a beacon).
+     *
+     * @see #PARTICLES_FLAG
+     * @see #ICON_FLAG
+     * @see #flags()
+     */
+    public static final byte AMBIENT_FLAG = 0x01;
+    
+    /**
+     * A flag indicating that this Potion has particles.
+     *
+     * @see #AMBIENT_FLAG
+     * @see #ICON_FLAG
+     * @see #flags()
+     */
+    public static final byte PARTICLES_FLAG = 0x02;
+    
+    /**
+     * A flag indicating that this Potion has an icon.
+     *
+     * @see #AMBIENT_FLAG
+     * @see #PARTICLES_FLAG
+     * @see #flags()
+     */
+    public static final byte ICON_FLAG = 0x04;
+    
     public Potion(BinaryReader reader) {
         this(PotionEffect.fromId(reader.readVarInt()), reader.readByte(),
                 reader.readVarInt(), reader.readByte());
+    }
+    
+    /**
+     * Returns the flags that this Potion has.
+     * 
+     * @see #AMBIENT_FLAG
+     * @see #PARTICLES_FLAG
+     * @see #ICON_FLAG
+     */
+    @Override
+    public byte flags() {
+        return flags;
+    }
+    
+    /**
+     * Returns whether this Potion is ambient (it came from a beacon) or not.
+     * @return <code>true</code> if the Potion is ambient
+     */
+    public boolean isAmbient() {
+       return (flags & AMBIENT_FLAG) == AMBIENT_FLAG;
+    }
+    
+    /**
+     * Returns whether this Potion has particles or not.
+     * @return <code>true</code> if the Potion has particles
+     */
+    public boolean hasParticles() {
+       return (flags & PARTICLES_FLAG) == PARTICLES_FLAG;
+    }
+    
+    /**
+     * Returns whether this Potion has an icon or not.
+     * @return <code>true</code> if the Potion has an icon
+     */
+    public boolean hasIcon() {
+       return (flags & ICON_FLAG) == ICON_FLAG;
     }
 
     /**

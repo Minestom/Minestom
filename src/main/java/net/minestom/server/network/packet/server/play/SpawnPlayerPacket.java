@@ -9,10 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record SpawnPlayerPacket(int entityId, UUID playerUuid, Pos position) implements ServerPacket {
+public record SpawnPlayerPacket(int entityId, @NotNull UUID playerUuid,
+                                @NotNull Pos position) implements ServerPacket {
     public SpawnPlayerPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readUuid(), new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
-                (reader.readByte() * 360f) / 256f, (reader.readByte() * 360f) / 256f));
+        this(reader.readVarInt(), reader.readUuid(),
+                new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
+                        (reader.readByte() * 360f) / 256f, (reader.readByte() * 360f) / 256f));
     }
 
     @Override

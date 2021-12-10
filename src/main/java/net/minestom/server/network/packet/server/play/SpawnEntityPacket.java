@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record SpawnEntityPacket(int entityId, UUID uuid, int type, Pos position, int data,
+public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
+                                @NotNull Pos position, int data,
                                 short velocityX, short velocityY, short velocityZ) implements ServerPacket {
     public SpawnEntityPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readUuid(), reader.readVarInt(),

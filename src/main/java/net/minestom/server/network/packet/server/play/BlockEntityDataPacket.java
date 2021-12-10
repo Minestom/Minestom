@@ -6,9 +6,11 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public record BlockEntityDataPacket(Point blockPosition, int action, NBTCompound data) implements ServerPacket {
+public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
+                                    @Nullable NBTCompound data) implements ServerPacket {
     public BlockEntityDataPacket(BinaryReader reader) {
         this(reader.readBlockPosition(), reader.readVarInt(), (NBTCompound) reader.readTag());
     }

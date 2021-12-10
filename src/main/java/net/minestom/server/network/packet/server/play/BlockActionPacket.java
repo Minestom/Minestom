@@ -8,8 +8,8 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public record BlockActionPacket(Point blockPosition, byte actionId, byte actionParam,
-                                int blockId) implements ServerPacket {
+public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
+                                byte actionParam, int blockId) implements ServerPacket {
     public BlockActionPacket(Point blockPosition, byte actionId, byte actionParam, Block block) {
         this(blockPosition, actionId, actionParam, block.id());
     }
