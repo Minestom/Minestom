@@ -1,16 +1,18 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
-public class AtomicCollectionView<T> implements Collection<T> {
-    private final Collection<AtomicReference<T>> original;
-
-    public AtomicCollectionView(Collection<AtomicReference<T>> original) {
-        this.original = original;
+@ApiStatus.Internal
+public record MappedCollection<O, R>(@NotNull Collection<O> original,
+                                     @NotNull Function<O, R> mapper) implements Collection<R> {
+    public static <O extends AtomicReference<R>, R> MappedCollection<O, R> plainReferences(@NotNull Collection<O> original) {
+        return new MappedCollection<>(original, AtomicReference::getPlain);
     }
 
     @Override
@@ -26,14 +28,13 @@ public class AtomicCollectionView<T> implements Collection<T> {
     @Override
     public boolean contains(Object o) {
         for (var entry : original) {
-            if (entry.get().equals(o)) return true;
+            if (mapper.apply(entry).equals(o)) return true;
         }
         return false;
     }
 
-    @NotNull
     @Override
-    public Iterator<T> iterator() {
+    public @NotNull Iterator<R> iterator() {
         var iterator = original.iterator();
         return new Iterator<>() {
             @Override
@@ -42,22 +43,20 @@ public class AtomicCollectionView<T> implements Collection<T> {
             }
 
             @Override
-            public T next() {
-                return iterator.next().get();
+            public R next() {
+                return mapper.apply(iterator.next());
             }
         };
     }
 
-    @NotNull
     @Override
-    public Object[] toArray() {
+    public @NotNull Object @NotNull [] toArray() {
         // TODO
         throw new UnsupportedOperationException("Unsupported array object");
     }
 
-    @NotNull
     @Override
-    public <T1> T1[] toArray(@NotNull T1[] a) {
+    public <T> @NotNull T @NotNull [] toArray(@NotNull T @NotNull [] a) {
         // TODO
         throw new UnsupportedOperationException("Unsupported array generic");
     }
@@ -72,7 +71,7 @@ public class AtomicCollectionView<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T t) {
+    public boolean add(R t) {
         throw new UnsupportedOperationException("Unmodifiable collection");
     }
 
@@ -82,7 +81,7 @@ public class AtomicCollectionView<T> implements Collection<T> {
     }
 
     @Override
-    public boolean addAll(@NotNull Collection<? extends T> c) {
+    public boolean addAll(@NotNull Collection<? extends R> c) {
         throw new UnsupportedOperationException("Unmodifiable collection");
     }
 

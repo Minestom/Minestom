@@ -40,6 +40,7 @@ import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.utils.MappedCollection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -1629,13 +1630,13 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
         }
 
         @Override
-        public @NotNull List<@NotNull PlayerSnapshot> viewers() {
-            return List.of(); // TODO map ids
+        public @NotNull Collection<@NotNull PlayerSnapshot> viewers() {
+            return new MappedCollection<>(viewersId, id -> instance().player(id));
         }
 
         @Override
-        public @NotNull List<@NotNull EntitySnapshot> passengers() {
-            return List.of(); // TODO map ids
+        public @NotNull Collection<@NotNull EntitySnapshot> passengers() {
+            return new MappedCollection<>(passengersId, id -> instance().entity(id));
         }
 
         @Override

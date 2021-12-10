@@ -7,7 +7,7 @@ import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 public interface EntitySnapshot extends Snapshot, TagReadable {
@@ -25,9 +25,9 @@ public interface EntitySnapshot extends Snapshot, TagReadable {
 
     @NotNull ChunkSnapshot chunk();
 
-    @NotNull List<@NotNull PlayerSnapshot> viewers();
+    @NotNull Collection<@NotNull PlayerSnapshot> viewers();
 
-    @NotNull List<@NotNull EntitySnapshot> passengers();
+    @NotNull Collection<@NotNull EntitySnapshot> passengers();
 
     @Nullable EntitySnapshot vehicle();
 }

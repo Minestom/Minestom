@@ -24,7 +24,7 @@ import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.AtomicCollectionView;
+import net.minestom.server.utils.MappedCollection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -649,9 +649,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
                                      Map<Integer, AtomicReference<PlayerSnapshot>> playersMap,
                                      TagReadable tagReadable) {
             this(dimensionType, worldAge, time,
-                    chunksMap, new AtomicCollectionView<>(chunksMap.values()),
-                    entitiesMap, new AtomicCollectionView<>(entitiesMap.values()),
-                    playersMap, new AtomicCollectionView<>(playersMap.values()),
+                    chunksMap, MappedCollection.plainReferences(chunksMap.values()),
+                    entitiesMap, MappedCollection.plainReferences(entitiesMap.values()),
+                    playersMap, MappedCollection.plainReferences(playersMap.values()),
                     tagReadable);
         }
 
@@ -664,6 +664,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         @Override
         public @UnknownNullability EntitySnapshot entity(int entityId) {
             return entitiesMap.get(entityId).getPlain();
+        }
+
+        @Override
+        public @UnknownNullability PlayerSnapshot player(int playerId) {
+            return playersMap.get(playerId).getPlain();
         }
 
         @Override
