@@ -71,7 +71,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                                 potionCompound.setByte("ShowParticles", (byte) (customPotionEffect.showParticles() ? 1 : 0));
                                 potionCompound.setByte("ShowIcon", (byte) (customPotionEffect.showIcon() ? 1 : 0));
                             }))
-                            .collect(Collectors.toList())
+                            .toList()
             );
             mutateNbt(compound -> compound.set("CustomPotionEffects", potionList));
 

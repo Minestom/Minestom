@@ -48,7 +48,7 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
                         NBTType.TAG_Compound,
                         effects.stream()
                                 .map(FireworkEffect::asCompound)
-                                .collect(Collectors.toList())
+                                .toList()
                 ));
             });
             return this;

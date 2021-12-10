@@ -80,7 +80,7 @@ public final class BiomeManager {
                     NBTType.TAG_Compound,
                     this.biomes.values().stream()
                             .map(Biome::toNbt)
-                            .collect(Collectors.toList())
+                            .toList()
                     )
             );
         });

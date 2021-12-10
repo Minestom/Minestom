@@ -108,7 +108,7 @@ public final class NBTUtils {
                                 n.setString("id", entry.getKey().name());
                             })
                         )
-                        .collect(Collectors.toList())
+                        .toList()
         ));
     }
 

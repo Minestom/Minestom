@@ -1566,7 +1566,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbtCompound.toCompound());
+        return tag.read(nbtCompound);
     }
 
     @Override

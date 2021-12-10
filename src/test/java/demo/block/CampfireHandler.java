@@ -54,7 +54,7 @@ public class CampfireHandler implements BlockHandler {
                                 nbt.setByte("Slot", (byte) 1);
                                 nbt.setString("id", item.getMaterial().name());
                             }))
-                            .collect(Collectors.toList())
+                            .toList()
             ));
         }
     });

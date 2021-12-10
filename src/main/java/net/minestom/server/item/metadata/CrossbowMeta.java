@@ -96,7 +96,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile1 = projectile;
             this.triple = false;
 
-            List<NBTCompound> chargedProjectiles = new LinkedList<>();
+            List<NBTCompound> chargedProjectiles = new ArrayList<>();
             if (!projectile.isAir()) {
                 chargedProjectiles.add(getItemCompound(projectile));
             }

@@ -69,7 +69,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
                     NBTType.TAG_String,
                     pages.stream()
                             .map(page -> new NBTString(LegacyComponentSerializer.legacySection().serialize(page)))
-                            .collect(Collectors.toList())
+                            .toList()
             ));
 
             return this;

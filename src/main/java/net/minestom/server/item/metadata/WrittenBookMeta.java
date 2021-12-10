@@ -120,7 +120,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
                     NBTType.TAG_String,
                     pages.stream()
                             .map(page -> new NBTString(GsonComponentSerializer.gson().serialize(page)))
-                            .collect(Collectors.toList())
+                            .toList()
             ));
 
             return this;

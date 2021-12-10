@@ -247,35 +247,6 @@ public class Metadata {
             return (Value<T>) value.withValue(reader);
         }
 
-        @NotNull
-        public Value<T> getMetaValue() {
-            return value;
-        }
-    }
-
-    private static <T> Value<T> getCorrespondingNewEmptyValue(int type) {
-        return switch (type) {
-            case TYPE_BYTE -> (Value<T>) Byte((byte) 0);
-            case TYPE_VARINT -> (Value<T>) VarInt(0);
-            case TYPE_FLOAT -> (Value<T>) Float(0);
-            case TYPE_STRING -> (Value<T>) String("");
-            case TYPE_CHAT -> (Value<T>) Chat(Component.empty());
-            case TYPE_OPTCHAT -> (Value<T>) OptChat(null);
-            case TYPE_SLOT -> (Value<T>) Slot(ItemStack.AIR);
-            case TYPE_BOOLEAN -> (Value<T>) Boolean(false);
-            case TYPE_ROTATION -> (Value<T>) Rotation(Vec.ZERO);
-            case TYPE_POSITION -> (Value<T>) Position(Vec.ZERO);
-            case TYPE_OPTPOSITION -> (Value<T>) OptPosition(null);
-            case TYPE_DIRECTION -> (Value<T>) Direction(Direction.DOWN);
-            case TYPE_OPTUUID -> (Value<T>) OptUUID(null);
-            case TYPE_OPTBLOCKID -> (Value<T>) OptBlockID(null);
-            case TYPE_NBT -> (Value<T>) NBT(NBTEnd.INSTANCE);
-            case TYPE_PARTICLE -> throw new UnsupportedOperationException();
-            case TYPE_VILLAGERDATA -> (Value<T>) VillagerData(0, 0, 0);
-            case TYPE_OPTVARINT -> (Value<T>) OptVarInt(null);
-            case TYPE_POSE -> (Value<T>) Pose(Entity.Pose.STANDING);
-            default -> throw new UnsupportedOperationException();
-        };
     }
 
     public record Value<T>(int type, @UnknownNullability T content,

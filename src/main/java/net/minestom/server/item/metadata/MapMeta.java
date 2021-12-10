@@ -104,7 +104,7 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
                                 decorationCompound.setByte("z", decoration.getZ());
                                 decorationCompound.setDouble("rot", decoration.getRotation());
                             }))
-                            .collect(Collectors.toList())
+                            .toList()
             );
             mutateNbt(compound -> compound.set("Decorations", decorationsList));
 

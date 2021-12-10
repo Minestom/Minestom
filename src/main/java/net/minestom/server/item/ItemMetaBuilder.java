@@ -90,7 +90,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
             final NBTList<NBTString> loreNBT = NBT.List(NBTType.TAG_String,
                     lore.stream()
                             .map(line -> new NBTString(GsonComponentSerializer.gson().serialize(line)))
-                            .collect(Collectors.toList())
+                            .toList()
             );
             nbtCompound.set("Lore", loreNBT);
         });
@@ -143,7 +143,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
                             nbt.setInt("Operation", itemAttribute.getOperation().getId());
                             nbt.setString("Name", itemAttribute.getInternalName());
                         }))
-                        .collect(Collectors.toList())
+                        .toList()
         ));
 
         return this;
@@ -163,7 +163,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
                 NBTType.TAG_String,
                 canPlaceOn.stream()
                         .map(block -> new NBTString(block.name()))
-                        .collect(Collectors.toList())
+                        .toList()
         ));
         return this;
     }
@@ -180,7 +180,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
                 NBTType.TAG_String,
                 canDestroy.stream()
                         .map(block -> new NBTString(block.name()))
-                        .collect(Collectors.toList())
+                        .toList()
         ));
         return this;
     }

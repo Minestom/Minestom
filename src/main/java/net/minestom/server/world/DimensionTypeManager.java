@@ -96,7 +96,7 @@ public final class DimensionTypeManager {
                     NBTType.TAG_Compound,
                     dimensionTypes.stream()
                             .map(DimensionType::toIndexedNBT)
-                            .collect(Collectors.toList())
+                            .toList()
             ));
         });
     }
