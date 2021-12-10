@@ -13,11 +13,8 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     static void invalidate(Snapshotable snapshotable) {
         synchronized (MONITOR) {
-            SnapshotReferences references = SNAPSHOT_REFERENCES.get(snapshotable);
-            if (references == null) {
-                references = new SnapshotReferences();
-                SNAPSHOT_REFERENCES.put(snapshotable, references);
-            }
+            SnapshotReferences references = SNAPSHOT_REFERENCES.computeIfAbsent(snapshotable,
+                    s -> new SnapshotReferences());
             references.invalidations.add(snapshotable); // Invalidate self
             // Invalidate snapshots referencing this snapshot
             Set<Snapshotable> interpreted = new HashSet<>();
@@ -83,14 +80,20 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     Snapshot update() {
         this.entries.drain(Runnable::run);
         synchronized (MONITOR) {
-            SnapshotReferences ref = SNAPSHOT_REFERENCES.computeIfAbsent(this.snapshotable, s -> new SnapshotReferences());
-            ref.requiredReferences.clear();
-            ref.requiredReferences.addAll(this.references); // Prevent duplicate from the array list
-            // Update all references to ensure proper invalidation
-            this.references.forEach(snap -> {
-                SNAPSHOT_REFERENCES.computeIfAbsent(snap, s -> new SnapshotReferences())
-                        .referencedBy.add(this.snapshotable);
+            SNAPSHOT_REFERENCES.compute(this.snapshotable, (s, ref) -> {
+                if (ref == null) ref = new SnapshotReferences();
+                ref.requiredReferences.clear();
+                ref.requiredReferences.addAll(this.references); // Prevent duplicate from the array list
+                return ref;
             });
+            // Update all references to ensure proper invalidation
+            for (Snapshotable snapshotable : this.references) {
+                SNAPSHOT_REFERENCES.compute(snapshotable, (s, ref) -> {
+                    if (ref == null) ref = new SnapshotReferences();
+                    ref.referencedBy.add(this.snapshotable);
+                    return ref;
+                });
+            }
         }
         return snapshotable.snapshot();
     }

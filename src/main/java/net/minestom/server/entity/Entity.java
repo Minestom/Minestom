@@ -1338,6 +1338,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
+        SnapshotUpdater.invalidateSnapshot(this);
         // Passengers update
         final Set<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
