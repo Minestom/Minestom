@@ -7,8 +7,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
-import net.minestom.server.snapshot.InstanceSnapshot;
-import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.snapshot.ServerSnapshot;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.PacketUtils;
@@ -216,7 +215,7 @@ public final class UpdateManager {
             this.threadDispatcher.shutdown();
         }
 
-        private InstanceSnapshot snapshot;
+        private ServerSnapshot snapshot;
 
         /**
          * Executes a server tick and returns only once all the futures are completed.
@@ -224,11 +223,12 @@ public final class UpdateManager {
          * @param tickStart the time of the tick in milliseconds
          */
         private void serverTick(long tickStart) {
-            // Tick all instances
+            // Tick all instancesRef
             for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
                 try {
                     instance.tick(tickStart);
-                    this.snapshot = SnapshotUpdater.update(instance); // TODO: remove before merging
+                    ServerSnapshot.update();
+                    this.snapshot = ServerSnapshot.get(); // TODO: remove before merging
                 } catch (Exception e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
