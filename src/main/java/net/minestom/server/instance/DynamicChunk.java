@@ -87,8 +87,6 @@ public class DynamicChunk extends Chunk {
         } else {
             this.tickableMap.remove(index);
         }
-
-        SnapshotUpdater.invalidateSnapshot(this);
     }
 
     @Override
@@ -254,7 +252,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public synchronized void updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public void updateSnapshot(@NotNull SnapshotUpdater updater) {
         this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
                 Arrays.stream(this.sections).map(Section::clone).toList(),
                 entries.clone(), updater.reference(instance),

@@ -855,7 +855,6 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
                     player.sendPacket(instance.createTimePacket());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
-                SnapshotUpdater.invalidateSnapshot(this);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -884,7 +883,6 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
-        SnapshotUpdater.invalidateSnapshot(this);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1341,7 +1339,6 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
-        SnapshotUpdater.invalidateSnapshot(this);
         // Passengers update
         final Set<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
@@ -1361,9 +1358,6 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            SnapshotUpdater.invalidateSnapshot(this);
-            SnapshotUpdater.invalidateSnapshot(newChunk);
-            SnapshotUpdater.invalidateSnapshot(currentChunk);
             if (this instanceof Player player) { // Update visible chunks
                 player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
                 ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
@@ -1595,18 +1589,16 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
     @Override
     public void updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Chunk chunk = currentChunk;
-        IntList passengersId;
+        IntList viewersId = new IntArrayList();
+        IntList passengersId = new IntArrayList();
         {
-            var passengers = this.passengers;
-            passengersId = new IntArrayList(passengers.size());
-            for (var passenger : passengers) {
-                passengersId.add(passenger.getEntityId());
-            }
+            this.viewers.forEach(player -> viewersId.add(player.getEntityId()));
+            this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
         }
         final Entity vehicle = this.vehicle;
         this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
-                null, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
+                viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 

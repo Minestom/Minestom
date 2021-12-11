@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * <p>
  * Implementations do not need to be thread-safe and cannot be re-used.
  */
-public interface SnapshotUpdater {
+public sealed interface SnapshotUpdater permits SnapshotUpdaterImpl {
     /**
      * Updates the snapshot of the given snapshotable.
      * <p>
@@ -30,32 +30,8 @@ public interface SnapshotUpdater {
      * @return the new updated snapshot
      */
     static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
-        return (T) new SnapshotUpdaterImpl(snapshotable).update();
+        return SnapshotUpdaterImpl.update(snapshotable);
     }
-
-    /**
-     * Invalidates a snapshot. Update will occur on next snapshot build using {@link #update(Snapshotable)}.
-     * <p>
-     * Invalidation can be expensive, as many references may be affected.
-     * Worth noting that only existing references will be updated,
-     * you may need to invalidate multiple snapshotable if the change requires adding or removing an element from a collection
-     * (e.g. a player switching chunk will require invalidating the player to update its chunk field, but also the chunk to create the player reference).
-     *
-     * @param snapshotable the snapshot container
-     */
-    static void invalidateSnapshot(@NotNull Snapshotable snapshotable) {
-        SnapshotUpdaterImpl.invalidate(snapshotable);
-    }
-
-    /**
-     * Retrieves all the snapshot holders that have been invalidated, requiring this snapshot to be potentially updated.
-     * Useful to avoid re-computing up-to-date fields.
-     * <p>
-     * The collection may be ignored if the snapshot has never been built yet.
-     *
-     * @return the collection of snapshot holders that have been invalidated
-     */
-    @NotNull Collection<@NotNull Snapshotable> invalidations();
 
     <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable);
 
