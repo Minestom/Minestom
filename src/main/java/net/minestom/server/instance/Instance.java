@@ -638,10 +638,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> playersChunk = new Long2ObjectOpenHashMap<>();
         {
             final Set<Entity> entities = entityTracker.entities();
-            for (Entity entity : entities) {
-                final int id = entity.getEntityId();
+            entities.forEach(entity -> {
                 final Chunk chunk = entity.getChunk();
-                if (chunk == null) continue;
+                if (chunk == null) return;
+                final int id = entity.getEntityId();
                 final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
                 AtomicReference<? extends EntitySnapshot> reference = updater.reference(entity);
                 entitiesMap.put(id, (AtomicReference<EntitySnapshot>) reference);
@@ -652,7 +652,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
                     playersChunk.computeIfAbsent(chunkIndex, k -> new ArrayList<>())
                             .add((AtomicReference<PlayerSnapshot>) reference);
                 }
-            }
+            });
             entitiesMap.trim();
             entitiesChunk.trim();
             playersMap.trim();
