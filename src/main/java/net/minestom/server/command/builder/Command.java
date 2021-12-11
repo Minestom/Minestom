@@ -135,75 +135,80 @@ public class Command {
      * <p>
      * A syntax is simply a list of arguments and an executor called when successfully parsed.
      *
-     * @param commandCondition the condition to use the syntax
+     * @param condition the condition to use the syntax
      * @param executor         the executor to call when the syntax is successfully received
      * @param args             all the arguments of the syntax, the length needs to be higher than 0
-     * @return the created {@link CommandSyntax syntaxes},
-     * there can be multiple of them when optional arguments are used
+     * @return the created {@link CommandSyntax syntaxes}. There can be multiple of them when optional arguments are
+     *         used, and it may be immutable based on the syntaxes that were added
      */
-    @NotNull
-    public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
+    public @NotNull Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition condition,
                                                           @NotNull CommandExecutor executor,
-                                                          @NotNull Argument<?>... args) {
-        // Check optional argument(s)
-        boolean hasOptional = false;
-        {
-            for (Argument<?> argument : args) {
-                if (argument.isOptional()) {
-                    hasOptional = true;
-                }
-                if (hasOptional && !argument.isOptional()) {
-                    LOGGER.warn("Optional arguments are followed by a non-optional one, the default values will be ignored.");
-                    hasOptional = false;
-                    break;
-                }
-            }
-        }
-
-        if (!hasOptional) {
-            final CommandSyntax syntax = new CommandSyntax(List.of(args), executor, commandCondition);
+                                                          @NotNull Argument<?> @NotNull ... args) {
+        // Quickly escape if there are no arguments
+        if (args.length == 0) {
+            final CommandSyntax syntax = new CommandSyntax(List.of(), executor, condition);
             this.syntaxes.add(syntax);
             return Collections.singleton(syntax);
-        } else {
-            List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
+        }
+        // If the last argument is not optional, we know there is only one valid syntax.
+        if (!args[args.length - 1].isOptional()) {
+            final CommandSyntax syntax = new CommandSyntax(List.of(args), executor, condition);
+            this.syntaxes.add(syntax);
 
-            // the 'args' array starts by all the required arguments, followed by the optional ones
-            List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
-            boolean optionalBranch = false;
-            int i = 0;
+            // Print warnings for arguments that are optional, since we know that the last one is not
             for (Argument<?> argument : args) {
-                final boolean isLast = ++i == args.length;
                 if (argument.isOptional()) {
-                    // Set default value
-                    //noinspection unchecked
-                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
-
-                    if (!optionalBranch && !requiredArguments.isEmpty()) {
-                        final CommandSyntax syntax = new CommandSyntax(requiredArguments, executor,
-                                commandCondition, defaultValuesMap);
-                        // First optional argument, create a syntax with current cached arguments
-                        optionalSyntaxes.add(syntax);
-                        optionalBranch = true;
-                    } else {
-                        // New optional argument, save syntax with current cached arguments and save default value
-                        final CommandSyntax syntax = new CommandSyntax(requiredArguments, executor,
-                                commandCondition, defaultValuesMap);
-                        optionalSyntaxes.add(syntax);
-                    }
-                }
-                requiredArguments.add(argument);
-                if (isLast) {
-                    // Create the last syntax
-                    final CommandSyntax syntax = new CommandSyntax(requiredArguments, executor,
-                            commandCondition, defaultValuesMap);
-                    optionalSyntaxes.add(syntax);
+                    LOGGER.warn("There is an optional argument (with id \"" + argument.getId() + "\") followed by a " +
+                            "non-optional one. The optional argument will be treated as non-optional.");
                 }
             }
-
-            this.syntaxes.addAll(optionalSyntaxes);
-            return optionalSyntaxes;
+            return Collections.singleton(syntax);
         }
+
+        int firstOptional = 0;
+        boolean shouldWarn = false;
+
+        for (int i = args.length - 1; i >= 0; i--) {
+            Argument<?> arg = args[i];
+
+            if (!arg.isOptional() && !shouldWarn) {
+                shouldWarn = true;
+                // We know that the argument after the current one is the last optional, since this is the first
+                // non-optional one from the right.
+                firstOptional = i + 1;
+            }
+            if (arg.isOptional() && shouldWarn) {
+                LOGGER.warn("There is an optional argument (with id \"" + arg.getId() + "\") followed by a " +
+                        "non-optional one. It will be treated as non-optional.");
+            }
+        }
+
+        List<Argument<?>> currentArguments = new ArrayList<>();
+        List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
+        Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
+
+        // Add a syntax that includes none of the optional ones.
+        optionalSyntaxes.add(new CommandSyntax(Arrays.asList(args).subList(0, firstOptional), executor, condition, null));
+
+        for (int i = 0; i < args.length; i++) {
+            Argument<?> arg = args[i];
+
+            currentArguments.add(arg);
+
+            if (i < firstOptional) {
+                continue;
+            }
+
+            // At this point, `arg` must be optional due to the check above
+            //noinspection unchecked
+            defaultValuesMap.put(arg.getId(), (Supplier<Object>) arg.getDefaultValue());
+
+            // It's safe to put them directly into this constructor because CommandSyntax copies them before saving
+            optionalSyntaxes.add(new CommandSyntax(currentArguments, executor, condition, defaultValuesMap));
+        }
+
+        this.syntaxes.addAll(optionalSyntaxes);
+        return optionalSyntaxes;
     }
 
     /**
