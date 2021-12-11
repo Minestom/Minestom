@@ -137,7 +137,7 @@ public final class NBTUtils {
         if (nbt.containsKey("display")) {
             final NBTCompound display = nbt.getCompound("display");
             if (display.containsKey("Name")) {
-                final String rawName = StringUtils.unescapeJavaString(display.getString("Name"));
+                final String rawName = display.getString("Name");
                 final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
                 metaBuilder.displayName(displayName);
             }
@@ -145,7 +145,7 @@ public final class NBTUtils {
                 NBTList<NBTString> loreList = display.getList("Lore");
                 List<Component> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
-                    final String rawLore = StringUtils.unescapeJavaString(s.getValue());
+                    final String rawLore = s.getValue();
                     lore.add(GsonComponentSerializer.gson().deserialize(rawLore));
                 }
                 metaBuilder.lore(lore);
