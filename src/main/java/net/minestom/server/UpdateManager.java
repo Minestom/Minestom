@@ -223,7 +223,7 @@ public final class UpdateManager {
          * @param tickStart the time of the tick in milliseconds
          */
         private void serverTick(long tickStart) {
-            // Tick all instancesRef
+            // Tick all instances
             for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
                 try {
                     instance.tick(tickStart);
