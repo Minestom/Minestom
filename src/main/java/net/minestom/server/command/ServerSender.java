@@ -1,15 +1,13 @@
 package net.minestom.server.command;
 
-import net.minestom.server.command.builder.CommandContext;
 import net.kyori.adventure.audience.Audience;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,7 +19,7 @@ import java.util.Set;
  */
 public class ServerSender implements CommandSender {
 
-    private final Set<Permission> permissions = Collections.unmodifiableSet(new HashSet<>());
+    private final Set<Permission> permissions = Set.of();
     private final NBTCompound nbtCompound = new NBTCompound();
 
     @NotNull
