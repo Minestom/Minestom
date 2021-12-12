@@ -231,10 +231,21 @@ public abstract class ItemMetaBuilder implements TagWritable {
     protected void handleCompound(@NotNull String key,
                                   @NotNull Consumer<@NotNull MutableNBTCompound> consumer) {
         mutateNbt(nbt -> {
-            MutableNBTCompound newCompound = new MutableNBTCompound();
-            consumer.accept(newCompound);
+            MutableNBTCompound compoundToModify;
+            if(nbt.contains(key)) {
+                assert nbt.getCompound(key) != null;
+                compoundToModify = new MutableNBTCompound(nbt.getCompound(key));
+            } else {
+                compoundToModify = new MutableNBTCompound();
+            }
 
-            nbt.set(key, newCompound.toCompound());
+            consumer.accept(compoundToModify);
+
+            if(compoundToModify.isEmpty()) {
+                nbt.remove(key);
+            } else {
+                nbt.set(key, compoundToModify.toCompound());
+            }
         });
     }
 
