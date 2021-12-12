@@ -1592,14 +1592,19 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
         IntList viewersId = new IntArrayList();
         IntList passengersId = new IntArrayList();
         {
-            this.viewers.forEach(player -> viewersId.add(player.getEntityId()));
+            // Viewers
+            var bitSet = viewEngine.viewableOption.bitSet;
+            for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i + 1)) {
+                viewersId.add(i);
+            }
+            // Passengers
             this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
         }
         final Entity vehicle = this.vehicle;
         this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
+                TagReadable.fromCompound(nbtCompound.deepClone()));
     }
 
     private record EntitySnapshotImpl(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
