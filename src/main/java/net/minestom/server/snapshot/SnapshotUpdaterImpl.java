@@ -2,13 +2,16 @@ package net.minestom.server.snapshot;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class SnapshotUpdaterImpl implements SnapshotUpdater {
     private static final Map<Snapshotable, AtomicReference<Snapshot>> REF_CACHE = new ConcurrentHashMap<>();
-    private List<Runnable> queue = new ArrayList<>();
+    private List<Entry> queue = new ArrayList<>();
 
     static synchronized <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
@@ -19,29 +22,30 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
+        //noinspection unchecked
         return (AtomicReference<T>) REF_CACHE.computeIfAbsent(snapshotable, snap -> {
             AtomicReference<Snapshot> ref = new AtomicReference<>();
-            queue.add(() -> {
-                snap.updateSnapshot(this);
-                ref.setPlain(Objects.requireNonNull((T) snap.snapshot()));
-            });
+            var entry = new Entry(snap, ref);
+            synchronized (this) {
+                this.queue.add(entry);
+            }
             return ref;
         });
     }
 
-    @Override
-    public <T extends Snapshot> @NotNull AtomicReference<List<T>> references(@NotNull Collection<? extends Snapshotable> snapshotables) {
-        // TODO
-        return null;
+    record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
     }
 
     void update() {
-        List<Runnable> test;
-        while (!(test = new ArrayList<>(queue)).isEmpty()) {
+        List<Entry> temp;
+        while (!(temp = new ArrayList<>(queue)).isEmpty()) {
             queue = new ArrayList<>();
-            test.parallelStream().forEach(Runnable::run);
+            temp.parallelStream().forEach(entry -> {
+                Snapshotable snap = entry.snapshotable;
+                snap.updateSnapshot(this);
+                entry.ref.setPlain(Objects.requireNonNull(snap.snapshot(), "Snapshot must not be null after an update!"));
+            });
         }
     }
 }
