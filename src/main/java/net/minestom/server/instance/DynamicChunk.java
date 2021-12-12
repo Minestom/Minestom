@@ -253,14 +253,16 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        Section[] clonedSections = new Section[sections.length];
+        for (int i = 0; i < clonedSections.length; i++)
+            clonedSections[i] = sections[i].clone();
         this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
-                Arrays.stream(this.sections).map(Section::clone).toList(),
-                entries.clone(), updater.reference(instance),
+                clonedSections, entries.clone(), updater.reference(instance),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 
     private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,
-                                     List<Section> sections,
+                                     Section[] sections,
                                      Int2ObjectOpenHashMap<Block> blockEntries,
                                      AtomicReference<InstanceSnapshot> instanceRef,
                                      TagReadable tagReadable) implements ChunkSnapshot {
@@ -275,7 +277,7 @@ public class DynamicChunk extends Chunk {
                 }
             }
             // Retrieve the block from state id
-            final Section section = sections.get(ChunkUtils.getSectionAt(y) + minSection);
+            final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
             final int blockStateId = section.blockPalette()
                     .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
             if (blockStateId == -1) return Block.AIR; // Section is empty
@@ -284,7 +286,7 @@ public class DynamicChunk extends Chunk {
 
         @Override
         public @NotNull Biome getBiome(int x, int y, int z) {
-            final Section section = sections.get(ChunkUtils.getSectionAt(y) + minSection);
+            final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
             final int id = section.biomePalette()
                     .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
             return MinecraftServer.getBiomeManager().getById(id);
