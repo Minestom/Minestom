@@ -1594,9 +1594,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
         {
             // Viewers
             var bitSet = viewEngine.viewableOption.bitSet;
-            for (int i = bitSet.nextSetBit(0); i >= 0; i = bitSet.nextSetBit(i + 1)) {
-                viewersId.add(i);
-            }
+            bitSet.forEach((int id) -> viewersId.add(id));
             // Passengers
             this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
         }

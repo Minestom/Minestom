@@ -128,8 +128,8 @@ dependencies {
 
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
 
-    // https://mvnrepository.com/artifact/com.zaxxer/SparseBitSet
-    implementation group: 'com.zaxxer', name: 'SparseBitSet', version: '1.2'
+    // https://mvnrepository.com/artifact/org.roaringbitmap/RoaringBitmap
+    implementation group: 'org.roaringbitmap', name: 'RoaringBitmap', version: '0.9.23'
 
     // https://mvnrepository.com/artifact/org.jctools/jctools-core
     implementation group: 'org.jctools', name: 'jctools-core', version: '3.3.0'
