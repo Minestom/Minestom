@@ -38,7 +38,7 @@ public abstract class Extension {
 
     /**
      * This callback runs when MinecraftServer#init is called, when everything are
-     * fresh (ex. no instance and command are loaded).
+     * fresh (e.g. no instance and command are loaded).
      */
     public void load() {
 
