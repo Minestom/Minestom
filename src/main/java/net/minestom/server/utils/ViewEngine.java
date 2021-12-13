@@ -1,6 +1,5 @@
 package net.minestom.server.utils;
 
-import com.zaxxer.sparsebits.SparseBitSet;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -9,6 +8,7 @@ import net.minestom.server.instance.EntityTracker;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.roaringbitmap.RoaringBitmap;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -125,7 +125,7 @@ public final class ViewEngine {
         // The consumers to be called when an entity is added/removed.
         public final Consumer<T> addition, removal;
         // Contains all the entity ids that are viewable by this option.
-        public final SparseBitSet bitSet = new SparseBitSet();
+        public final RoaringBitmap bitSet = new RoaringBitmap();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // References from the entity trackers.
@@ -149,15 +149,15 @@ public final class ViewEngine {
         }
 
         public boolean isRegistered(T entity) {
-            return bitSet.get(entity.getEntityId());
+            return bitSet.contains(entity.getEntityId());
         }
 
         public void register(T entity) {
-            this.bitSet.set(entity.getEntityId());
+            this.bitSet.add(entity.getEntityId());
         }
 
         public void unregister(T entity) {
-            this.bitSet.clear(entity.getEntityId());
+            this.bitSet.remove(entity.getEntityId());
         }
 
         public void updateAuto(boolean autoViewable) {
@@ -221,7 +221,7 @@ public final class ViewEngine {
         public int size() {
             synchronized (mutex) {
                 int size = manualViewers.size();
-                if (entity != null) return size + viewableOption.bitSet.cardinality();
+                if (entity != null) return size + viewableOption.bitSet.getCardinality();
                 // Non-entity fallback
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
                 if (auto != null) {
