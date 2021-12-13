@@ -63,7 +63,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
                         List.of(NBT.Compound(Map.of(
                                 "Value", NBT.String(value),
                                 "Signature", NBT.String(signature)))));
-                nbtCompound.set("Properties", NBT.Compound(n -> n.set("textures", textures)));
+                nbtCompound.set("Properties", NBT.Compound(Map.of("textures", textures)));
             });
             return this;
         }

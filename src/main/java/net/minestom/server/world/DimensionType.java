@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -109,11 +110,10 @@ public class DimensionType {
 
     @NotNull
     public NBTCompound toIndexedNBT() {
-        return NBT.Compound(nbt -> {
-            nbt.setString("name", name.toString());
-            nbt.setInt("id", id);
-            nbt.set("element", toNBT());
-        });
+        return NBT.Compound(Map.of(
+                "name", NBT.String(name.toString()),
+                "id", NBT.Int(id),
+                "element", toNBT()));
     }
 
     @NotNull

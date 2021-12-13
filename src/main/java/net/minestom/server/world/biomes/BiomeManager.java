@@ -3,15 +3,14 @@ package net.minestom.server.world.biomes;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.NamespaceID;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import static net.minestom.server.tag.Tag.NBT;
 
 /**
  * Allows servers to register custom dimensions. Also used during player joining to send the list of all existing dimensions.
@@ -74,15 +73,8 @@ public final class BiomeManager {
     }
 
     public synchronized NBTCompound toNBT() {
-        return org.jglrxavpok.hephaistos.nbt.NBT.Compound(biomes -> {
-            biomes.setString("type", "minecraft:worldgen/biome");
-            biomes.set("value", org.jglrxavpok.hephaistos.nbt.NBT.List(
-                    NBTType.TAG_Compound,
-                    this.biomes.values().stream()
-                            .map(Biome::toNbt)
-                            .toList()
-                    )
-            );
-        });
+        return NBT.Compound(Map.of(
+                "type", NBT.String("minecraft:worldgen/biome"),
+                "values", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(Biome::toNbt).toList())));
     }
 }
