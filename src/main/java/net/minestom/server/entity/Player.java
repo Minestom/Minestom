@@ -84,6 +84,7 @@ import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.nio.charset.StandardCharsets;
@@ -237,11 +238,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        NBTCompound nbt = new NBTCompound();
-        NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
-        NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
-        nbt.set("minecraft:dimension_type", dimensions);
-        nbt.set("minecraft:worldgen/biome", biomes);
+        NBTCompound nbt = NBT.Compound(n -> {
+            NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
+            NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
+            n.set("minecraft:dimension_type", dimensions);
+            n.set("minecraft:worldgen/biome", biomes);
+        });
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), gameMode.isHardcore(), gameMode, null,
                 List.of("minestom:world"), nbt, dimensionType.toNBT(), dimensionType.getName().asString(),

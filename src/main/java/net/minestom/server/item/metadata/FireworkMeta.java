@@ -4,15 +4,17 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.firework.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkMeta.Builder> {
 
@@ -42,11 +44,12 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
         public Builder effects(List<FireworkEffect> effects) {
             this.effects = effects;
             handleCompound("Fireworks", nbtCompound -> {
-                NBTList<NBTCompound> explosions = new NBTList<>(NBTTypes.TAG_Compound);
-                for (FireworkEffect effect : this.effects) {
-                    explosions.add(effect.asCompound());
-                }
-                nbtCompound.set("Explosions", explosions);
+                nbtCompound.set("Explosions", NBT.List(
+                        NBTType.TAG_Compound,
+                        effects.stream()
+                                .map(FireworkEffect::asCompound)
+                                .toList()
+                ));
             });
             return this;
         }

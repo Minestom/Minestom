@@ -9,6 +9,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.HashMap;
@@ -18,7 +19,6 @@ import java.util.Objects;
 public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
                         @NotNull Map<Integer, Block> blockEntities) implements Writeable {
     public ChunkData {
-        heightmaps = heightmaps.deepClone();
         data = data.clone();
         blockEntities = Map.copyOf(blockEntities);
     }
@@ -56,15 +56,16 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
             // Append handler tags
             final BlockHandler handler = block.handler();
             if (handler != null) {
-                resultNbt = new NBTCompound();
-                final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                for (Tag<?> tag : handler.getBlockEntityTags()) {
-                    final var value = tag.read(blockNbt);
-                    if (value != null) {
-                        // Tag is present and valid
-                        tag.writeUnsafe(resultNbt, value);
+                resultNbt = NBT.Compound(nbt -> {
+                    final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                    for (Tag<?> tag : handler.getBlockEntityTags()) {
+                        final var value = tag.read(blockNbt);
+                        if (value != null) {
+                            // Tag is present and valid
+                            tag.writeUnsafe(nbt, value);
+                        }
                     }
-                }
+                });
             } else {
                 // Complete nbt shall be sent if the block has no handler
                 // Necessary to support all vanilla blocks
