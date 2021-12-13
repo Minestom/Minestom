@@ -229,20 +229,13 @@ public class Tag<T> {
     public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
                 nbtCompound -> {
-                    final var compound = nbtCompound.getCompound(key);
-                    if (compound == null) {
-                        return null;
-                    }
+                    final NBTCompound compound = nbtCompound.getCompound(key);
+                    if (compound == null) return null;
                     return serializer.read(TagReadable.fromCompound(compound));
                 },
                 (nbtCompound, value) -> {
-                    var originalCompound = nbtCompound.getCompound(key);
-                    MutableNBTCompound mutableCopy;
-                    if (originalCompound == null) {
-                        mutableCopy = new MutableNBTCompound();
-                    } else {
-                        mutableCopy = new MutableNBTCompound(originalCompound);
-                    }
+                    MutableNBTCompound mutableCopy = nbtCompound.get(key) instanceof NBTCompound c ?
+                            c.toMutableCompound() : new MutableNBTCompound();
                     serializer.write(TagWritable.fromCompound(mutableCopy), value);
                     nbtCompound.set(key, mutableCopy.toCompound());
                 });
