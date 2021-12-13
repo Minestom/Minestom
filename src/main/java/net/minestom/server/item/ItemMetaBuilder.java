@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public abstract class ItemMetaBuilder implements TagWritable {
 
@@ -231,17 +230,11 @@ public abstract class ItemMetaBuilder implements TagWritable {
     protected void handleCompound(@NotNull String key,
                                   @NotNull Consumer<@NotNull MutableNBTCompound> consumer) {
         mutateNbt(nbt -> {
-            MutableNBTCompound compoundToModify;
-            if(nbt.contains(key)) {
-                assert nbt.getCompound(key) != null;
-                compoundToModify = new MutableNBTCompound(nbt.getCompound(key));
-            } else {
-                compoundToModify = new MutableNBTCompound();
-            }
+            MutableNBTCompound compoundToModify = nbt.get(key) instanceof NBTCompound compound ?
+                    compound.toMutableCompound() : new MutableNBTCompound();
 
             consumer.accept(compoundToModify);
-
-            if(compoundToModify.isEmpty()) {
+            if (compoundToModify.isEmpty()) {
                 nbt.remove(key);
             } else {
                 nbt.set(key, compoundToModify.toCompound());

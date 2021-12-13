@@ -246,7 +246,6 @@ public class Metadata {
             //noinspection unchecked
             return (Value<T>) value.withValue(reader);
         }
-
     }
 
     public record Value<T>(int type, @UnknownNullability T content,

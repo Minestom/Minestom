@@ -12,7 +12,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -96,10 +95,8 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile1 = projectile;
             this.triple = false;
 
-            List<NBTCompound> chargedProjectiles = new ArrayList<>();
-            if (!projectile.isAir()) {
-                chargedProjectiles.add(getItemCompound(projectile));
-            }
+            List<NBTCompound> chargedProjectiles =
+                    projectile.isAir() ? List.of() : List.of(getItemCompound(projectile));
             mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
 
             return this;
@@ -122,10 +119,8 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile3 = projectile3;
             this.triple = true;
 
-            List<NBTCompound> chargedProjectiles = new LinkedList<>();
-            chargedProjectiles.add(getItemCompound(projectile1));
-            chargedProjectiles.add(getItemCompound(projectile2));
-            chargedProjectiles.add(getItemCompound(projectile3));
+            List<NBTCompound> chargedProjectiles =
+                    List.of(getItemCompound(projectile1), getItemCompound(projectile2), getItemCompound(projectile3));
             mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
 
             return this;

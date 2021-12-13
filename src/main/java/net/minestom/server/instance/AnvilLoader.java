@@ -262,7 +262,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
-        List<NBTCompound> tileEntities = new LinkedList<>();
+        List<NBTCompound> tileEntities = new ArrayList<>();
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -277,7 +277,7 @@ public class AnvilLoader implements IChunkLoader {
                     var originalNBT = block.nbt();
                     if (originalNBT != null || handler != null) {
                         MutableNBTCompound nbt;
-                        if(originalNBT == null) {
+                        if (originalNBT == null) {
                             nbt = new MutableNBTCompound();
                         } else {
                             nbt = new MutableNBTCompound(originalNBT);

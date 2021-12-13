@@ -1,10 +1,14 @@
 package net.minestom.server.tag;
 
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
@@ -36,10 +40,9 @@ public class Tag<T> {
             if (!(updated instanceof NBTCompound updatedCompound))
                 throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
             original.clear();
-            updatedCompound.getKeys().forEach(s ->
-                    original.set(s, Objects.requireNonNull(updatedCompound.get(s))));
+            updatedCompound.forEach(original::set);
         } catch (NBTException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }, null);
 
@@ -49,9 +52,9 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, n -> n.toCompound(), (original, updated) -> {
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, (original, updated) -> {
         original.clear();
-        updated.getKeys().forEach(s -> original.set(s, Objects.requireNonNull(updated.get(s))));
+        updated.forEach(original::set);
     }, null);
 
     private final String key;
