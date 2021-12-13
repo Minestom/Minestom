@@ -119,7 +119,7 @@ dependencies {
     // Logging
     api 'org.apache.logging.log4j:log4j-core:2.15.0'
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
-    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
+    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.15.0'
 
     // https://mvnrepository.com/artifact/org.jline/jline
     implementation group: 'org.jline', name: 'jline', version: '3.20.0'
