@@ -75,6 +75,6 @@ public final class BiomeManager {
     public synchronized NBTCompound toNBT() {
         return NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:worldgen/biome"),
-                "values", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(Biome::toNbt).toList())));
+                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(Biome::toNbt).toList())));
     }
 }
