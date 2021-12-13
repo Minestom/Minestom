@@ -12,6 +12,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -58,10 +59,10 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
 
                 final String value = Objects.requireNonNullElse(this.playerSkin.textures(), "");
                 final String signature = Objects.requireNonNullElse(this.playerSkin.signature(), "");
-                NBTList<NBTCompound> textures = new NBTList<>(NBTType.TAG_Compound, List.of(NBT.Compound(n -> {
-                    n.setString("Value", value);
-                    n.setString("Signature", signature);
-                })));
+                NBTList<NBTCompound> textures = new NBTList<>(NBTType.TAG_Compound,
+                        List.of(NBT.Compound(Map.of(
+                                "Value", NBT.String(value),
+                                "Signature", NBT.String(signature)))));
                 nbtCompound.set("Properties", NBT.Compound(n -> n.set("textures", textures)));
             });
             return this;

@@ -134,14 +134,13 @@ public abstract class ItemMetaBuilder implements TagWritable {
         handleCollection(attributes, "AttributeModifiers", () -> NBT.List(
                 NBTType.TAG_Compound,
                 attributes.stream()
-                        .map(itemAttribute -> NBT.Compound(nbt -> {
-                            nbt.setIntArray("UUID", Utils.uuidToIntArray(itemAttribute.getUuid()));
-                            nbt.setDouble("Amount", itemAttribute.getValue());
-                            nbt.setString("Slot", itemAttribute.getSlot().name().toLowerCase());
-                            nbt.setString("AttributeName", itemAttribute.getAttribute().getKey());
-                            nbt.setInt("Operation", itemAttribute.getOperation().getId());
-                            nbt.setString("Name", itemAttribute.getInternalName());
-                        }))
+                        .map(itemAttribute -> NBT.Compound(Map.of(
+                                "UUID", NBT.IntArray(Utils.uuidToIntArray(itemAttribute.getUuid())),
+                                "Amount", NBT.Double(itemAttribute.getValue()),
+                                "Slot", NBT.String(itemAttribute.getSlot().name().toLowerCase()),
+                                "AttributeName", NBT.String(itemAttribute.getAttribute().getKey()),
+                                "Operation", NBT.Int(itemAttribute.getOperation().getId()),
+                                "Name", NBT.String(itemAttribute.getInternalName()))))
                         .toList()
         ));
 

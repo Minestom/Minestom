@@ -13,9 +13,9 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMeta.Builder> {
 
@@ -97,13 +97,12 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
             NBTList<NBTCompound> decorationsList = NBT.List(
                     NBTType.TAG_Compound,
                     decorations.stream()
-                            .map(decoration -> NBT.Compound(decorationCompound -> {
-                                decorationCompound.setString("id", decoration.getId());
-                                decorationCompound.setByte("type", decoration.getType());
-                                decorationCompound.setByte("x", decoration.getX());
-                                decorationCompound.setByte("z", decoration.getZ());
-                                decorationCompound.setDouble("rot", decoration.getRotation());
-                            }))
+                            .map(decoration -> NBT.Compound(Map.of(
+                                    "id", NBT.String(decoration.getId()),
+                                    "type", NBT.Byte(decoration.getType()),
+                                    "x", NBT.Byte(decoration.getX()),
+                                    "z", NBT.Byte(decoration.getZ()),
+                                    "rot", NBT.Double(decoration.getRotation()))))
                             .toList()
             );
             mutateNbt(compound -> compound.set("Decorations", decorationsList));

@@ -6,6 +6,7 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Locale;
+import java.util.Map;
 
 public record BiomeEffects(int fogColor, int skyColor, int waterColor, int waterFogColor, int foliageColor,
                            int grassColor,
@@ -48,32 +49,29 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
 
     public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {
         public @NotNull NBTCompound toNbt() {
-            return NBT.Compound(nbt -> {
-                nbt.setString("sound", sound.toString());
-                nbt.setInt("tick_delay", tickDelay);
-                nbt.setInt("block_search_extent", blockSearchExtent);
-                nbt.setDouble("offset", offset);
-            });
+            return NBT.Compound(Map.of(
+                    "sound", NBT.String(sound.toString()),
+                    "tick_delay", NBT.Int(tickDelay),
+                    "block_search_extent", NBT.Int(blockSearchExtent),
+                    "offset", NBT.Double(offset)));
         }
     }
 
     public record AdditionsSound(NamespaceID sound, double tickChance) {
         public @NotNull NBTCompound toNbt() {
-            return NBT.Compound(nbt -> {
-                nbt.setString("sound", sound.toString());
-                nbt.setDouble("tick_chance", tickChance);
-            });
+            return NBT.Compound(Map.of(
+                    "sound", NBT.String(sound.toString()),
+                    "tick_chance", NBT.Double(tickChance)));
         }
     }
 
     public record Music(NamespaceID sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
         public @NotNull NBTCompound toNbt() {
-            return NBT.Compound(nbt -> {
-                nbt.setString("sound", sound.toString());
-                nbt.setInt("min_delay", minDelay);
-                nbt.setInt("max_delay", maxDelay);
-                nbt.setByte("replace_current_music", replaceCurrentMusic ? (byte) 1 : (byte) 0);
-            });
+            return NBT.Compound(Map.of(
+                    "sound", NBT.String(sound.toString()),
+                    "min_delay", NBT.Int(minDelay),
+                    "max_delay", NBT.Int(maxDelay),
+                    "replace_current_music", NBT.Boolean(replaceCurrentMusic)));
         }
     }
 

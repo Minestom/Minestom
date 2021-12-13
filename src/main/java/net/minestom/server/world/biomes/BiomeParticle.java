@@ -3,7 +3,6 @@ package net.minestom.server.world.biomes;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -11,10 +10,9 @@ import java.util.Map;
 
 public record BiomeParticle(float probability, Option option) {
     public NBTCompound toNbt() {
-        return NBT.Compound(nbt -> {
-            nbt.setFloat("probability", probability);
-            nbt.set("options", option.toNbt());
-        });
+        return NBT.Compound(Map.of(
+                "probability", NBT.Float(probability),
+                "options", option.toNbt()));
     }
 
     public interface Option {
@@ -45,13 +43,12 @@ public record BiomeParticle(float probability, Option option) {
 
         @Override
         public NBTCompound toNbt() {
-            return NBT.Compound(nbtCompound -> {
-                nbtCompound.setString("type", type);
-                nbtCompound.setFloat("r", red);
-                nbtCompound.setFloat("g", green);
-                nbtCompound.setFloat("b", blue);
-                nbtCompound.setFloat("scale", scale);
-            });
+            return NBT.Compound(Map.of(
+                    "type", NBT.String(type),
+                    "r", NBT.Float(red),
+                    "g", NBT.Float(green),
+                    "b", NBT.Float(blue),
+                    "scale", NBT.Float(scale)));
         }
     }
 
@@ -71,9 +68,7 @@ public record BiomeParticle(float probability, Option option) {
     public record NormalOption(NamespaceID type) implements Option {
         @Override
         public NBTCompound toNbt() {
-            return NBT.Compound(nbt -> {
-                nbt.setString("type", type.toString());
-            });
+            return NBT.Compound(Map.of("type", NBT.String(type.toString())));
         }
     }
 }

@@ -186,10 +186,9 @@ public class DynamicChunk extends Chunk {
                 }
             }
             final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-            heightmapsNBT = NBT.Compound(nbt -> {
-                    nbt.setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight));
-                    nbt.setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
-            });
+            heightmapsNBT = NBT.Compound(Map.of(
+                    "MOTION_BLOCKING", NBT.LongArray(Utils.encodeBlocks(motionBlocking, bitsForHeight)),
+                    "WORLD_SURFACE", NBT.LongArray(Utils.encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
         final BinaryWriter writer = new BinaryWriter();
