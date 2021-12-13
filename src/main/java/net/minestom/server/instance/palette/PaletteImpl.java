@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
-final class PaletteImpl implements Palette {
+final class PaletteImpl implements Palette, Cloneable {
     // Magic values generated with "Integer.MAX_VALUE >> (31 - bitsPerIndex)" for bitsPerIndex between 1 and 16
     private static final int[] MAGIC_MASKS =
             {0, 1, 3, 7,
@@ -152,16 +152,10 @@ final class PaletteImpl implements Palette {
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            writer.writeVarInt(lastPaletteIndex);
-            for (int i = 0; i < lastPaletteIndex; i++) {
-                writer.writeVarInt(paletteToValueList.getInt(i));
-            }
+            writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
         }
         // Raw
-        writer.writeVarInt(values.length);
-        for (long datum : values) {
-            writer.writeLong(datum);
-        }
+        writer.writeLongArray(values);
     }
 
     private int fixBitsPerEntry(int bitsPerEntry) {

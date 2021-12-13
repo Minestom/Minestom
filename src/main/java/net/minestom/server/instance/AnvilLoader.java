@@ -73,7 +73,7 @@ public class AnvilLoader implements IChunkLoader {
         }
         try {
             return loadMCA(instance, chunkX, chunkZ);
-        } catch (IOException | AnvilException e) {
+        } catch (Exception e) {
             EXCEPTION_MANAGER.handleException(e);
         }
         return CompletableFuture.completedFuture(null);
