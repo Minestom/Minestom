@@ -6,10 +6,13 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -50,15 +53,17 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
             this.playerSkin = playerSkin;
             handleCompound("SkullOwner", nbtCompound -> {
                 if (playerSkin == null) {
-                    nbtCompound.removeTag("Properties");
+                    nbtCompound.remove("Properties");
                     return;
                 }
 
-                NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
                 final String value = Objects.requireNonNullElse(this.playerSkin.textures(), "");
                 final String signature = Objects.requireNonNullElse(this.playerSkin.signature(), "");
-                textures.add(new NBTCompound().setString("Value", value).setString("Signature", signature));
-                nbtCompound.set("Properties", new NBTCompound().set("textures", textures));
+                NBTList<NBTCompound> textures = new NBTList<>(NBTType.TAG_Compound,
+                        List.of(NBT.Compound(Map.of(
+                                "Value", NBT.String(value),
+                                "Signature", NBT.String(signature)))));
+                nbtCompound.set("Properties", NBT.Compound(Map.of("textures", textures)));
             });
             return this;
         }
@@ -74,7 +79,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
                 NBTCompound skullOwnerCompound = nbtCompound.getCompound("SkullOwner");
 
                 if (skullOwnerCompound.containsKey("Id")) {
-                    skullOwner(Utils.intArrayToUuid(skullOwnerCompound.getIntArray("Id")));
+                    skullOwner(Utils.intArrayToUuid(skullOwnerCompound.getIntArray("Id").copyArray()));
                 }
 
                 if (skullOwnerCompound.containsKey("Properties")) {

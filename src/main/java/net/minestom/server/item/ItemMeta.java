@@ -119,7 +119,7 @@ public class ItemMeta implements TagReadable, Writeable {
     }
 
     public @NotNull NBTCompound toNBT() {
-        return nbt.deepClone();
+        return nbt;
     }
 
     public @NotNull String toSNBT() {

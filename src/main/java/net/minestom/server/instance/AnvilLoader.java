@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +24,7 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -87,20 +88,31 @@ public class AnvilLoader implements IChunkLoader {
             return CompletableFuture.completedFuture(null);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
-        // TODO Biomes
+        // TODO: Parallelize block, block entities and biome loading
+
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
-            final int[] fileChunkBiomes = fileChunk.getBiomes();
-            for (int id : fileChunkBiomes) {
-                // ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3)
-                final Biome biome = Objects.requireNonNullElse(BIOME_MANAGER.getById(id), BIOME);
-                chunk.setBiome(0, 0, 0, biome);
+            HashMap<String, Biome> biomeCache = new HashMap<>();
+
+            for (ChunkSection section : fileChunk.getSections().values()) {
+                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                            int finalX = fileChunk.getX() * Chunk.CHUNK_SIZE_X + x;
+                            int finalZ = fileChunk.getZ() * Chunk.CHUNK_SIZE_Z + z;
+                            int finalY = section.getY() * Chunk.CHUNK_SECTION_SIZE + y;
+                            String biomeName = section.getBiome(x, y, z);
+                            Biome biome = biomeCache.computeIfAbsent(biomeName, n -> Objects.requireNonNullElse(BIOME_MANAGER.getByName(NamespaceID.from(n)), BIOME));
+                            chunk.setBiome(finalX, finalY, finalZ, biome);
+                        }
+                    }
+                }
             }
         }
         // Blocks
         loadBlocks(chunk, fileChunk);
         loadTileEntities(chunk, fileChunk);
         // Lights
-        for (var chunkSection : fileChunk.getSections()) {
+        for (var chunkSection : fileChunk.getSections().values()) {
             Section section = chunk.getSection(chunkSection.getY());
             section.setSkyLight(chunkSection.getSkyLights());
             section.setBlockLight(chunkSection.getBlockLights());
@@ -127,7 +139,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
-        for (var section : fileChunk.getSections()) {
+        for (var section : fileChunk.getSections().values()) {
             if (section.getEmpty()) continue;
             final int yOffset = Chunk.CHUNK_SECTION_SIZE * section.getY();
             for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
@@ -172,12 +184,15 @@ public class AnvilLoader implements IChunkLoader {
                 block = block.withHandler(handler);
             }
             // Remove anvil tags
-            te.removeTag("id")
-                    .removeTag("x").removeTag("y").removeTag("z")
-                    .removeTag("keepPacked");
+            MutableNBTCompound mutableCopy = te.toMutableCompound();
+            mutableCopy.remove("id");
+            mutableCopy.remove("x");
+            mutableCopy.remove("y");
+            mutableCopy.remove("z");
+            mutableCopy.remove("keepPacked");
             // Place block
-            final var finalBlock = te.getSize() > 0 ?
-                    block.withNbt(te) : block;
+            final var finalBlock = mutableCopy.getSize() > 0 ?
+                    block.withNbt(mutableCopy.toCompound()) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
         }
     }
@@ -247,7 +262,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
-        NBTList<NBTCompound> tileEntities = new NBTList<>(NBTTypes.TAG_Compound);
+        List<NBTCompound> tileEntities = new ArrayList<>();
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -255,13 +270,15 @@ public class AnvilLoader implements IChunkLoader {
                     final Block block = chunk.getBlock(x, y, z);
                     // Block
                     chunkColumn.setBlockState(x, y, z, new BlockState(block.name(), block.properties()));
-                    chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).id());
+                    chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).name().asString());
 
                     // Tile entity
-                    var nbt = block.nbt();
                     final BlockHandler handler = block.handler();
-                    if (nbt != null || handler != null) {
-                        nbt = Objects.requireNonNullElseGet(nbt, NBTCompound::new);
+                    var originalNBT = block.nbt();
+                    if (originalNBT != null || handler != null) {
+                        MutableNBTCompound nbt = originalNBT != null ?
+                                originalNBT.toMutableCompound() : new MutableNBTCompound();
+
                         if (handler != null) {
                             nbt.setString("id", handler.getNamespaceId().asString());
                         }
@@ -269,12 +286,12 @@ public class AnvilLoader implements IChunkLoader {
                         nbt.setInt("y", y);
                         nbt.setInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
                         nbt.setByte("keepPacked", (byte) 0);
-                        tileEntities.add(nbt);
+                        tileEntities.add(nbt.toCompound());
                     }
                 }
             }
         }
-        chunkColumn.setTileEntities(tileEntities);
+        chunkColumn.setTileEntities(NBT.List(NBTType.TAG_Compound, tileEntities));
     }
 
     @Override
