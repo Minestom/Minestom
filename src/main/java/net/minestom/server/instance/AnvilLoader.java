@@ -276,12 +276,8 @@ public class AnvilLoader implements IChunkLoader {
                     final BlockHandler handler = block.handler();
                     var originalNBT = block.nbt();
                     if (originalNBT != null || handler != null) {
-                        MutableNBTCompound nbt;
-                        if (originalNBT == null) {
-                            nbt = new MutableNBTCompound();
-                        } else {
-                            nbt = new MutableNBTCompound(originalNBT);
-                        }
+                        MutableNBTCompound nbt = originalNBT != null ?
+                                originalNBT.toMutableCompound() : new MutableNBTCompound();
 
                         if (handler != null) {
                             nbt.setString("id", handler.getNamespaceId().asString());
