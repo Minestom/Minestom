@@ -433,7 +433,7 @@ public class Team implements PacketGroupingAudience {
      */
     public void sendUpdatePacket() {
         final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
-                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix);
         PacketUtils.broadcastPacket(new TeamsPacket(teamName, info));
     }
 
