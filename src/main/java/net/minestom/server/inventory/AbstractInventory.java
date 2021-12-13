@@ -10,6 +10,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     private final Object nbtLock = new Object();
-    private final NBTCompound nbt = new NBTCompound();
+    private final MutableNBTCompound nbt = new MutableNBTCompound();
 
     protected AbstractInventory(int size) {
         this.size = size;

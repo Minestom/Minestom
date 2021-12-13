@@ -32,6 +32,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
@@ -84,7 +85,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     // instance custom data
     private final Object nbtLock = new Object();
-    private final NBTCompound nbt = new NBTCompound();
+    private final MutableNBTCompound nbt = new MutableNBTCompound();
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;

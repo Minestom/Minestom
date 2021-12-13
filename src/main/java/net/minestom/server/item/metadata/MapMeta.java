@@ -6,12 +6,14 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
@@ -92,17 +94,17 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
         public Builder decorations(List<MapDecoration> value) {
             this.decorations = new ArrayList<>(value);
 
-            NBTList<NBTCompound> decorationsList = new NBTList<>(NBTTypes.TAG_Compound);
-            for (MapDecoration decoration : decorations) {
-                NBTCompound decorationCompound = new NBTCompound();
-                decorationCompound.setString("id", decoration.getId());
-                decorationCompound.setByte("type", decoration.getType());
-                decorationCompound.setByte("x", decoration.getX());
-                decorationCompound.setByte("z", decoration.getZ());
-                decorationCompound.setDouble("rot", decoration.getRotation());
-
-                decorationsList.add(decorationCompound);
-            }
+            NBTList<NBTCompound> decorationsList = NBT.List(
+                    NBTType.TAG_Compound,
+                    decorations.stream()
+                            .map(decoration -> NBT.Compound(Map.of(
+                                    "id", NBT.String(decoration.getId()),
+                                    "type", NBT.Byte(decoration.getType()),
+                                    "x", NBT.Byte(decoration.getX()),
+                                    "z", NBT.Byte(decoration.getZ()),
+                                    "rot", NBT.Double(decoration.getRotation()))))
+                            .toList()
+            );
             mutateNbt(compound -> compound.set("Decorations", decorationsList));
 
             return this;
@@ -111,14 +113,7 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
         public Builder mapColor(Color value) {
             this.mapColor = value;
 
-            mutateNbt(nbt -> {
-                NBTCompound displayCompound;
-                if (nbt.containsKey("display")) {
-                    displayCompound = nbt.getCompound("display");
-                } else {
-                    displayCompound = new NBTCompound();
-                    nbt.set("display", displayCompound);
-                }
+            handleCompound("display", displayCompound -> {
                 displayCompound.setInt("MapColor", mapColor.asRGB());
             });
 
