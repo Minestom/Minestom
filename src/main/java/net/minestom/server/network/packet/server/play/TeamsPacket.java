@@ -87,17 +87,14 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
 
     public record UpdateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
-                                   NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   Collection<String> entities) implements Action {
-        public UpdateTeamAction {
-            entities = List.copyOf(entities);
-        }
+                                   NamedTextColor teamColor,
+                                   Component teamPrefix, Component teamSuffix) implements Action {
 
         public UpdateTeamAction(BinaryReader reader) {
             this(reader.readComponent(), reader.readByte(),
                     NameTagVisibility.fromIdentifier(reader.readSizedString()), CollisionRule.fromIdentifier(reader.readSizedString()),
-                    NamedTextColor.ofExact(reader.readVarInt()), reader.readComponent(), reader.readComponent(),
-                    reader.readVarIntList(BinaryReader::readSizedString));
+                    NamedTextColor.ofExact(reader.readVarInt()),
+                    reader.readComponent(), reader.readComponent());
         }
 
         @Override
@@ -109,7 +106,6 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(teamColor));
             writer.writeComponent(teamPrefix);
             writer.writeComponent(teamSuffix);
-            writer.writeVarIntList(entities, BinaryWriter::writeSizedString);
         }
 
         @Override
