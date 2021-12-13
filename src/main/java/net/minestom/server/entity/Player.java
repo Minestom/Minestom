@@ -238,13 +238,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        NBTCompound nbt = NBT.Compound(n -> {
-            NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
-            NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
-            n.set("minecraft:dimension_type", dimensions);
-            n.set("minecraft:worldgen/biome", biomes);
-        });
-
+        NBTCompound nbt = NBT.Compound(Map.of(
+                "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
+                "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), gameMode.isHardcore(), gameMode, null,
                 List.of("minestom:world"), nbt, dimensionType.toNBT(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
