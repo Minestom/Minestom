@@ -170,9 +170,11 @@ public final class MinecraftServer {
             e.printStackTrace();
         }
 
+        minecraftServer = new MinecraftServer();
+
         initialized = true;
 
-        minecraftServer = new MinecraftServer();
+        extensionManager.start();
 
         return minecraftServer;
     }
@@ -625,7 +627,6 @@ public final class MinecraftServer {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
-        extensionManager.start();
         extensionManager.gotoPreInit();
 
         MinecraftServer.started = true;

@@ -96,6 +96,7 @@ public class ExtensionManager {
         }
         Check.stateCondition(state != State.NOT_STARTED, "ExtensionManager has already been started");
         loadExtensions();
+        extensions.values().forEach(Extension::load);
         state = State.STARTED;
     }
 
@@ -673,8 +674,9 @@ public class ExtensionManager {
             return false;
         }
 
-        LOGGER.info("Load complete, firing preinit, init and then postinit callbacks");
-        // retrigger preinit, init and postinit
+        LOGGER.info("Load complete, firing load, preinit, init and then postinit callbacks");
+        // retrigger load, preinit, init and postinit
+        newExtensions.forEach(Extension::load);
         newExtensions.forEach(Extension::preInitialize);
         newExtensions.forEach(Extension::initialize);
         newExtensions.forEach(Extension::postInitialize);
