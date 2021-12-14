@@ -55,7 +55,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
@@ -1603,7 +1602,7 @@ public class Entity implements Viewable, Tickable, TagHandler, Snapshotable, Per
         this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
-                TagReadable.fromCompound(nbtCompound.deepClone()));
+                TagReadable.fromCompound(nbtCompound.toCompound()));
     }
 
     private record EntitySnapshotImpl(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
