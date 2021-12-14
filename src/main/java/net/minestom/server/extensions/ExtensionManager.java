@@ -136,14 +136,6 @@ public class ExtensionManager {
         state = State.INIT;
     }
 
-    @ApiStatus.Internal
-    public void gotoPostInit() {
-        if (state == State.DO_NOT_START) return;
-        Check.stateCondition(state != State.INIT, "Extensions have already done post initialization");
-        extensions.values().forEach(Extension::postInitialize);
-        state = State.POST_INIT;
-    }
-
     //
     // Loading
     //
@@ -679,7 +671,6 @@ public class ExtensionManager {
         // retrigger preinit, init and postinit
         newExtensions.forEach(Extension::preInitialize);
         newExtensions.forEach(Extension::initialize);
-        newExtensions.forEach(Extension::postInitialize);
         return true;
     }
 
@@ -721,14 +712,11 @@ public class ExtensionManager {
     }
 
     private void unload(@NotNull Extension ext) {
-        ext.preTerminate();
         ext.terminate();
 
         // Remove event node
         EventNode<Event> eventNode = ext.getEventNode();
         serverProcess.eventHandler().removeChild(eventNode);
-
-        ext.postTerminate();
 
         // remove from loaded extensions
         String id = ext.getOrigin().getName().toLowerCase();
