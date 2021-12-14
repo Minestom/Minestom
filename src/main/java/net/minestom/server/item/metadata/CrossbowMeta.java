@@ -6,9 +6,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,11 +95,9 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile1 = projectile;
             this.triple = false;
 
-            NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
-            if (!projectile.isAir()) {
-                chargedProjectiles.add(getItemCompound(projectile));
-            }
-            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
+            List<NBTCompound> chargedProjectiles =
+                    projectile.isAir() ? List.of() : List.of(getItemCompound(projectile));
+            mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
 
             return this;
         }
@@ -120,11 +119,9 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile3 = projectile3;
             this.triple = true;
 
-            NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
-            chargedProjectiles.add(getItemCompound(projectile1));
-            chargedProjectiles.add(getItemCompound(projectile2));
-            chargedProjectiles.add(getItemCompound(projectile3));
-            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
+            List<NBTCompound> chargedProjectiles =
+                    List.of(getItemCompound(projectile1), getItemCompound(projectile2), getItemCompound(projectile3));
+            mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
 
             return this;
         }
@@ -181,9 +178,10 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
 
         private @NotNull NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
             NBTCompound compound = itemStack.getMeta().toNBT();
-            compound.setByte("Count", (byte) itemStack.getAmount());
-            compound.setString("id", itemStack.getMaterial().name());
-            return compound;
+            return compound.modify(n -> {
+                n.setByte("Count", (byte) itemStack.getAmount());
+                n.setString("id", itemStack.getMaterial().name());
+            });
         }
     }
 }

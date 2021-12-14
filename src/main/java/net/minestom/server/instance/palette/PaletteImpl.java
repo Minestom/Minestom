@@ -152,16 +152,10 @@ final class PaletteImpl implements Palette, Cloneable {
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            writer.writeVarInt(lastPaletteIndex);
-            for (int i = 0; i < lastPaletteIndex; i++) {
-                writer.writeVarInt(paletteToValueList.getInt(i));
-            }
+            writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
         }
         // Raw
-        writer.writeVarInt(values.length);
-        for (long datum : values) {
-            writer.writeLong(datum);
-        }
+        writer.writeLongArray(values);
     }
 
     private int fixBitsPerEntry(int bitsPerEntry) {

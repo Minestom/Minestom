@@ -3,6 +3,7 @@ package permissions;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,9 +37,11 @@ public class TestPermissions {
         };
 
         permission1 = new Permission("perm.name",
-                new NBTCompound()
-                        .setString("name", "Minestom")
-                        .setInt("amount", 5));
+                NBT.Compound(nbt -> {
+                    nbt.setString("name", "Minestom");
+                    nbt.setInt("amount", 5);
+                })
+        );
 
         permission2 = new Permission("perm.name2");
     }

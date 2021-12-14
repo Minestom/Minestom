@@ -32,7 +32,7 @@ public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provid
                 if (color != null) {
                     nbtCompound.setInt("color", color.asRGB());
                 } else {
-                    nbtCompound.removeTag("color");
+                    nbtCompound.remove("color");
                 }
             });
             return this;

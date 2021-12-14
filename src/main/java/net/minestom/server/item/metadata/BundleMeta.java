@@ -5,9 +5,7 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +56,7 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
 
         private void updateItems() {
             mutateNbt(compound -> {
-                NBTList<NBTCompound> itemList = new NBTList<>(NBTTypes.TAG_Compound);
-                for (ItemStack item : items) {
-                    itemList.add(item.toItemNBT());
-                }
-                compound.set("Items", itemList);
+                compound.set("Items", NBT.List(NBTType.TAG_Compound, items.size(), i -> items.get(i).toItemNBT()));
             });
         }
 

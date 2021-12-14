@@ -470,7 +470,7 @@ public class ExtensionManager {
 
             // While there are entries with no more elements (no more dependencies)
             while (!(
-                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> isLoaded(entry.getValue())).collect(Collectors.toList())
+                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> isLoaded(entry.getValue())).toList()
             ).isEmpty()
             ) {
                 // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
