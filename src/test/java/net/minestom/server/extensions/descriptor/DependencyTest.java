@@ -3,8 +3,6 @@ package net.minestom.server.extensions.descriptor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.minestom.server.utils.PlatformUtil;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -69,10 +67,10 @@ public class DependencyTest {
 
     private static Stream<Arguments> dependencyTypesProvider() {
         return Stream.of(
-                of("\"LuckPerms\"", ExtensionDependency.class),
-                of("\"LuckPerms:5.0.0\"", ExtensionDependency.class),
-                of("{\"id\"=\"LuckPerms\"}", ExtensionDependency.class),
-                of("\"org.junit.jupiter:junit-jupiter-params:5.8.1\"", MavenDependency.class)
+                of("\"LuckPerms\"", Dependency.ExtensionDependency.class),
+                of("\"LuckPerms:5.0.0\"", Dependency.ExtensionDependency.class),
+                of("{\"id\"=\"LuckPerms\"}", Dependency.ExtensionDependency.class),
+                of("\"org.junit.jupiter:junit-jupiter-params:5.8.1\"", Dependency.MavenDependency.class)
         );
     }
 
