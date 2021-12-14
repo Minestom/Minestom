@@ -21,6 +21,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
@@ -46,7 +47,7 @@ public class DynamicChunk extends Chunk {
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
-        this.maxSection = instance.getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
+        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
         this.sections = new Section[maxSection - minSection];
         Arrays.setAll(sections, value -> new Section());
     }
@@ -120,7 +121,7 @@ public class DynamicChunk extends Chunk {
             }
         }
         // Retrieve the block from state id
-        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        final Section section = sections[ChunkUtils.getSectionAt(y) - minSection];
         final int blockStateId = section.blockPalette()
                 .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
         if (blockStateId == -1) return Block.AIR; // Section is empty
@@ -129,7 +130,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
-        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        final Section section = sections[ChunkUtils.getSectionAt(y) - minSection];
         final int id = section.biomePalette()
                 .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
@@ -185,9 +186,9 @@ public class DynamicChunk extends Chunk {
                 }
             }
             final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-            heightmapsNBT = new NBTCompound()
-                    .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
-                    .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+            heightmapsNBT = NBT.Compound(Map.of(
+                    "MOTION_BLOCKING", NBT.LongArray(Utils.encodeBlocks(motionBlocking, bitsForHeight)),
+                    "WORLD_SURFACE", NBT.LongArray(Utils.encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
         final BinaryWriter writer = new BinaryWriter();

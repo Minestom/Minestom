@@ -434,7 +434,7 @@ public class Sidebar implements Scoreboard {
          */
         private TeamsPacket updatePrefix(Component prefix) {
             final var action = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
-                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.of(entityName));
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix);
             return new TeamsPacket(teamName, action);
         }
 

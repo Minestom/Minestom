@@ -115,7 +115,7 @@ dependencies {
     // Logging
     api 'org.apache.logging.log4j:log4j-core:2.15.0'
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
-    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
+    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.15.0'
 
     // https://mvnrepository.com/artifact/org.jline/jline
     implementation group: 'org.jline', name: 'jline', version: '3.20.0'
@@ -124,8 +124,8 @@ dependencies {
 
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
 
-    // https://mvnrepository.com/artifact/com.zaxxer/SparseBitSet
-    implementation group: 'com.zaxxer', name: 'SparseBitSet', version: '1.2'
+    // https://mvnrepository.com/artifact/org.roaringbitmap/RoaringBitmap
+    implementation group: 'org.roaringbitmap', name: 'RoaringBitmap', version: '0.9.23'
 
     // https://mvnrepository.com/artifact/org.jctools/jctools-core
     implementation group: 'org.jctools', name: 'jctools-core', version: '3.3.0'
@@ -140,13 +140,13 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
 
     // NBT parsing/manipulation/saving
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}:gson")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}") {
+    api("io.github.jglrxavpok.hephaistos:common:${project.hephaistosVersion}")
+    api("io.github.jglrxavpok.hephaistos:gson:${project.hephaistosVersion}")
+/*    api("io.github.jglrxavpok.hephaistos:common:${project.hephaistosVersion}") {
         capabilities {
-            requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
+            requireCapability("io.github.jglrxavpok.hephaistos:Hephaistos-gson")
         }
-    }
+    }*/
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
     implementation 'com.github.Minestom:MinestomDataGenerator:801b8007cf'

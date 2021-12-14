@@ -10,13 +10,15 @@ import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CampfireHandler implements BlockHandler {
 
@@ -44,15 +46,16 @@ public class CampfireHandler implements BlockHandler {
                 writer.removeTag(internal);
                 return;
             }
-            NBTList<NBTCompound> items = new NBTList<>(NBTTypes.TAG_Compound);
-            for (var item : value) {
-                NBTCompound compound = new NBTCompound()
-                        .setByte("Count", (byte) item.getAmount())
-                        .setByte("Slot", (byte) 1)
-                        .setString("id", item.getMaterial().name());
-                items.add(compound);
-            }
-            writer.setTag(internal, items);
+            writer.setTag(internal, NBT.List(
+                    NBTType.TAG_Compound,
+                    value.stream()
+                            .map(item -> NBT.Compound(nbt -> {
+                                nbt.setByte("Count", (byte) item.getAmount());
+                                nbt.setByte("Slot", (byte) 1);
+                                nbt.setString("id", item.getMaterial().name());
+                            }))
+                            .toList()
+            ));
         }
     });
 
