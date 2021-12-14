@@ -3,11 +3,15 @@ package net.minestom.server.extensions.descriptor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minestom.server.utils.PlatformUtil;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public sealed interface Dependency permits ExtensionDependency, MavenDependency {
+import java.util.Locale;
+
+public sealed interface Dependency permits Dependency.ExtensionDependency, Dependency.MavenDependency {
     Logger LOGGER = LoggerFactory.getLogger(Dependency.class);
 
     /**
@@ -66,6 +70,33 @@ public sealed interface Dependency permits ExtensionDependency, MavenDependency 
     String id();
 
     boolean isOptional();
+
+    /**
+     * An extension dependency specified in an <code>extension.json</code> file.
+     */
+    record ExtensionDependency(
+            @NotNull String id,
+            @Nullable String version,
+            boolean isOptional
+    ) implements Dependency {
+        public ExtensionDependency {
+            Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
+            Check.argCondition(!id.matches(ExtensionDescriptor.NAME_REGEX), "Invalid extension name: " + id);
+            id = id.toLowerCase(Locale.ROOT);
+        }
+    }
+
+    record MavenDependency(
+            String groupId,
+            String artifactId,
+            String version,
+            boolean isOptional
+    ) implements Dependency {
+        @Override
+        public String id() {
+            return artifactId();
+        }
+    }
 
     /**
      * Checks if a dependency is applicable on the current platform. Currently this
