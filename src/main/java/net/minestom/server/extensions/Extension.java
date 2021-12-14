@@ -17,6 +17,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Extension {
+    public enum LoadStatus {
+        SUCCESS,
+        FAILED
+    }
+
     // Set by reflection
     @SuppressWarnings("unused")
     private DiscoveredExtension origin;
@@ -36,25 +41,13 @@ public abstract class Extension {
 
     }
 
-    public void preInitialize() {
-
+    public LoadStatus preInitialize() {
+        return LoadStatus.SUCCESS;
     }
 
     public abstract void initialize();
 
-    public void postInitialize() {
-
-    }
-
-    public void preTerminate() {
-
-    }
-
     public abstract void terminate();
-
-    public void postTerminate() {
-
-    }
 
     @NotNull
     public DiscoveredExtension origin() {
