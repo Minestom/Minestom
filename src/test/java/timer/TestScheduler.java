@@ -18,7 +18,7 @@ public class TestScheduler {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         Task task = scheduler.buildTask(() -> result.set(true))
-                .delay(TaskSchedule.tick(1))
+                .delay(TaskSchedule.nextTick())
                 .schedule();
         assertEquals(task.executionType(), ExecutionType.SYNC, "Tasks default execution type should be sync");
 
@@ -35,7 +35,6 @@ public class TestScheduler {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.buildTask(() -> result.set(true))
-                .executionType(ExecutionType.SYNC)
                 .delay(TaskSchedule.seconds(1))
                 .schedule();
         Thread.sleep(100);
@@ -51,7 +50,6 @@ public class TestScheduler {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         var task = scheduler.buildTask(() -> result.set(true))
-                .executionType(ExecutionType.SYNC)
                 .schedule();
         assertTrue(task.isAlive(), "Task should still be alive");
         task.cancel();
@@ -72,7 +70,6 @@ public class TestScheduler {
         // Unpark task
         AtomicBoolean result = new AtomicBoolean(false);
         var task = scheduler.buildTask(() -> result.set(true))
-                .executionType(ExecutionType.SYNC)
                 .delay(TaskSchedule.park())
                 .schedule();
         assertFalse(result.get(), "Task hasn't been unparked yet");
@@ -88,7 +85,6 @@ public class TestScheduler {
         CompletableFuture<Void> future = new CompletableFuture<>();
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.buildTask(() -> result.set(true))
-                .executionType(ExecutionType.SYNC)
                 .delay(TaskSchedule.future(future))
                 .schedule();
         assertFalse(result.get(), "Future is not completed yet");

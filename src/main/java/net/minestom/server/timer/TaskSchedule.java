@@ -43,6 +43,10 @@ public sealed interface TaskSchedule permits
         return duration(Duration.of(amount, unit));
     }
 
+    static @NotNull TaskSchedule nextTick() {
+        return TaskScheduleImpl.NEXT_TICK;
+    }
+
     static @NotNull TaskSchedule hours(long hours) {
         return duration(Duration.ofHours(hours));
     }

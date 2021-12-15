@@ -205,7 +205,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      * @param callback the task to execute during the next entity tick
      */
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.scheduler.buildTask(() -> callback.accept(this)).scheduleNextTick();
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     /**

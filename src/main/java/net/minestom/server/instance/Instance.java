@@ -120,7 +120,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      * @param callback the task to execute during the next instance tick
      */
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
-        this.scheduler.buildTask(() -> callback.accept(this)).scheduleNextTick();
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     @ApiStatus.Internal

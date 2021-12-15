@@ -27,13 +27,6 @@ public final class SchedulerManager implements Scheduler {
     }
 
     @Override
-    public @NotNull Task submitAfter(@NotNull TaskSchedule schedule,
-                                     @NotNull Supplier<TaskSchedule> task,
-                                     @NotNull ExecutionType executionType) {
-        return scheduler.submitAfter(schedule, task, executionType);
-    }
-
-    @Override
     public @NotNull Collection<@NotNull Task> scheduledTasks() {
         return scheduler.scheduledTasks();
     }

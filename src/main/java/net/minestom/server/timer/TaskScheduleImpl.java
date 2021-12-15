@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
 final class TaskScheduleImpl {
+    static TaskSchedule NEXT_TICK = new TickSchedule(1);
     static TaskSchedule PARK = new Park();
     static TaskSchedule STOP = new Stop();
     static TaskSchedule IMMEDIATE = new Immediate();
