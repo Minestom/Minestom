@@ -6,7 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.roaringbitmap.RoaringBitmap;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -20,7 +23,7 @@ final class SchedulerImpl implements Scheduler {
     });
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
-    private final Set<TaskImpl> tasks = ConcurrentHashMap.newKeySet();
+    private final Set<TaskImpl> tasks = new HashSet<>();
     private final RoaringBitmap bitSet = new RoaringBitmap();
 
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
@@ -64,11 +67,6 @@ final class SchedulerImpl implements Scheduler {
         final TaskImpl taskRef = register(task, executionType);
         handleStatus(taskRef, task.get());
         return taskRef;
-    }
-
-    @Override
-    public @NotNull Collection<@NotNull Task> scheduledTasks() {
-        return Collections.unmodifiableSet(tasks);
     }
 
     void unparkTask(TaskImpl task) {

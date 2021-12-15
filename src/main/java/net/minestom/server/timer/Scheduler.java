@@ -2,7 +2,6 @@ package net.minestom.server.timer;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
@@ -46,8 +45,6 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
         return new Task.Builder(this, task);
     }
-
-    @NotNull Collection<@NotNull Task> scheduledTasks();
 
     default @NotNull Task scheduleTask(@NotNull Runnable task,
                                        @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat,

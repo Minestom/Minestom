@@ -3,7 +3,6 @@ package net.minestom.server.timer;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.function.Supplier;
 
 public final class SchedulerManager implements Scheduler {
@@ -24,11 +23,6 @@ public final class SchedulerManager implements Scheduler {
     public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
                                     @NotNull ExecutionType executionType) {
         return scheduler.submitTask(task, executionType);
-    }
-
-    @Override
-    public @NotNull Collection<@NotNull Task> scheduledTasks() {
-        return scheduler.scheduledTasks();
     }
 
     public void shutdown() {
