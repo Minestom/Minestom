@@ -55,8 +55,8 @@ final class SchedulerImpl implements Scheduler {
         this.taskQueue.drain(task -> {
             if (!task.isAlive()) return;
             switch (task.executionType()) {
-                case SYNC -> handleStatus(task, task.task().get());
-                case ASYNC -> EXECUTOR.submit(() -> handleStatus(task, task.task().get()));
+                case SYNC -> handleTask(task);
+                case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
             }
         });
     }
@@ -65,7 +65,7 @@ final class SchedulerImpl implements Scheduler {
     public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
                                     @NotNull ExecutionType executionType) {
         final TaskImpl taskRef = register(task, executionType);
-        handleStatus(taskRef, task.get());
+        handleTask(taskRef);
         return taskRef;
     }
 
@@ -102,11 +102,12 @@ final class SchedulerImpl implements Scheduler {
         // By either adding the task to the execution queue or submitting it to the pool
         switch (task.executionType()) {
             case SYNC -> taskQueue.offer(task);
-            case ASYNC -> EXECUTOR.submit(() -> handleStatus(task, task.task().get()));
+            case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
         }
     }
 
-    private void handleStatus(TaskImpl task, TaskSchedule schedule) {
+    private void handleTask(TaskImpl task) {
+        final TaskSchedule schedule = task.task().get();
         if (schedule instanceof TaskScheduleImpl.DurationSchedule durationSchedule) {
             final Duration duration = durationSchedule.duration();
             SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);
