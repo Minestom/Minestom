@@ -30,8 +30,18 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
      */
     void processTick();
 
-    @NotNull Task submit(@NotNull Supplier<TaskSchedule> task,
-                         @NotNull ExecutionType executionType);
+    /**
+     * Submits a new task with custom scheduling logic.
+     * <p>
+     * This is the primitive method used by all scheduling shortcuts,
+     * {@code task} is immediately executed in the caller thread to retrieve its scheduling state
+     * and the task will stay alive as long as {@link TaskSchedule#stop()} is not returned (or {@link Task#cancel()} is called).
+     *
+     * @param task          the task to be directly executed in the caller thread
+     * @param executionType the execution type
+     * @return the created task
+     */
+    @NotNull Task submit(@NotNull Supplier<TaskSchedule> task, @NotNull ExecutionType executionType);
 
     default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
         return new Task.Builder(this, task);
@@ -45,8 +55,7 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
         return buildTask(task).delay(delay).repeat(repeat).executionType(executionType).schedule();
     }
 
-    default @NotNull Task scheduleTask(@NotNull Runnable task,
-                                       @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat) {
+    default @NotNull Task scheduleTask(@NotNull Runnable task, @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat) {
         return scheduleTask(task, delay, repeat, ExecutionType.SYNC);
     }
 
