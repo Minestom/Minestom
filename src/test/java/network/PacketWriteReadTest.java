@@ -24,6 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Ensures that packet can be written and read correctly.
@@ -69,7 +70,7 @@ public class PacketWriteReadTest {
             var createdPacket = readerConstructor.newInstance(reader);
             assertEquals(writeable, createdPacket);
         } catch (Exception e) {
-            e.printStackTrace();
+            fail(writeable.toString(), e);
         }
     }
 
