@@ -42,6 +42,10 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
      */
     @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task, @NotNull ExecutionType executionType);
 
+    default @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task) {
+        return submitTask(task, ExecutionType.SYNC);
+    }
+
     default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
         return new Task.Builder(this, task);
     }
