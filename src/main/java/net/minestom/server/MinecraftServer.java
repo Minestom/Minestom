@@ -54,7 +54,7 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.18";
+    public static final String VERSION_NAME = "1.18.1";
     public static final int PROTOCOL_VERSION = 757;
 
     // Threads
