@@ -1,203 +1,91 @@
 package net.minestom.server.timer;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
+import java.util.function.Supplier;
 
-/**
- * An Object that represents a task that is scheduled for execution on the application.
- * <p>
- * Tasks are built in {@link SchedulerManager} and scheduled by a {@link TaskBuilder}.
- */
-public class Task implements Runnable {
+public sealed interface Task permits TaskImpl {
+    int id();
 
-    // Manages all tasks
-    private final SchedulerManager schedulerManager;
-    // The task logic
-    private final Runnable runnable;
-    // Task identifier
-    private final int id;
-    // True if the task planned for the application shutdown
-    private final boolean shutdown;
-    // Delay value for the task execution
-    private final long delay;
-    // Repeat value for the task execution
-    private final long repeat;
+    @NotNull ExecutionType executionType();
 
-    /** Extension which owns this task, or null if none */
-    private final String owningExtension;
-    /**
-     * If this task is owned by an extension, should it survive the unloading of said extension?
-     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     *  reload of that extension.
-     */
-    private final boolean isTransient;
-
-    // Task completion/execution
-    private ScheduledFuture<?> future;
-    // The thread of the task
-    private volatile Thread currentThreadTask;
+    @NotNull Scheduler owner();
 
     /**
-     * Creates a task.
-     *
-     * @param schedulerManager The manager for the task
-     * @param runnable         The task to run when scheduled
-     * @param shutdown         Defines whether the task is a shutdown task
-     * @param delay            The time to delay
-     * @param repeat           The time until the repetition
+     * Unpark the tasks to be executed during next processing.
      */
-    public Task(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown, long delay, long repeat, boolean isTransient, @Nullable String owningExtension) {
-        this.schedulerManager = schedulerManager;
-        this.runnable = runnable;
-        this.shutdown = shutdown;
-        this.id = shutdown ? this.schedulerManager.getShutdownCounterIdentifier() : this.schedulerManager.getCounterIdentifier();
-        this.delay = delay;
-        this.repeat = repeat;
-        this.isTransient = isTransient;
-        this.owningExtension = owningExtension;
-    }
+    void unpark();
 
-    /**
-     * Executes the task.
-     */
-    @Override
-    public void run() {
-        this.schedulerManager.getBatchesPool().execute(() -> {
-            this.currentThreadTask = Thread.currentThread();
-            try {
-                this.runnable.run();
-            } catch (Exception e) {
-                System.err.printf(
-                        "An exception in %s task %s is occurred! (%s)%n",
-                        this.shutdown ? "shutdown" : "",
-                        this.id,
-                        e.getMessage()
-                );
-                MinecraftServer.getExceptionManager().handleException(e);
-            } finally {
-                if (this.repeat == 0) this.finish();
-                this.currentThreadTask = null;
-            }
-        });
-    }
+    boolean isParked();
 
-    /**
-     * Executes the internal runnable.
-     * <p>
-     * Should probably use {@link #schedule()} instead.
-     */
-    public void runRunnable() {
-        this.runnable.run();
-    }
+    void cancel();
 
-    /**
-     * Sets up the task for correct execution.
-     */
-    public void schedule() {
-        if(this.shutdown) {
-            Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
-            synchronized (shutdownTasks) {
-                shutdownTasks.put(getId(), this);
-            }
-            if (owningExtension != null) {
-                this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, this);
-            }
-        } else {
-            Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;
-            synchronized (tasks) {
-                tasks.put(getId(), this);
-            }
-            if (owningExtension != null) {
-                this.schedulerManager.onScheduleFromExtension(owningExtension, this);
-            }
-            this.future = this.repeat == 0L ?
-                    this.schedulerManager.getTimerExecutionService().schedule(this, this.delay, TimeUnit.MILLISECONDS) :
-                    this.schedulerManager.getTimerExecutionService().scheduleAtFixedRate(this, this.delay, this.repeat, TimeUnit.MILLISECONDS);
+    boolean isAlive();
+
+    final class Builder {
+        private final Scheduler scheduler;
+        private final Runnable runnable;
+        private ExecutionType executionType = ExecutionType.SYNC;
+        private TaskSchedule delay = TaskSchedule.immediate();
+        private TaskSchedule repeat = TaskSchedule.stop();
+
+        Builder(Scheduler scheduler, Runnable runnable) {
+            this.scheduler = scheduler;
+            this.runnable = runnable;
+        }
+
+        public @NotNull Builder executionType(@NotNull ExecutionType executionType) {
+            this.executionType = executionType;
+            return this;
+        }
+
+        public @NotNull Builder delay(@NotNull TaskSchedule schedule) {
+            this.delay = schedule;
+            return this;
+        }
+
+        public @NotNull Builder repeat(@NotNull TaskSchedule schedule) {
+            this.repeat = schedule;
+            return this;
+        }
+
+        public @NotNull Task schedule() {
+            var runnable = this.runnable;
+            var delay = this.delay;
+            var repeat = this.repeat;
+            var executionType = this.executionType;
+            return scheduler.submitTask(new Supplier<>() {
+                boolean first = true;
+
+                @Override
+                public TaskSchedule get() {
+                    if (first) {
+                        first = false;
+                        return delay;
+                    }
+                    runnable.run();
+                    return repeat;
+                }
+            }, executionType);
+        }
+
+        public @NotNull Builder delay(@NotNull Duration duration) {
+            return delay(TaskSchedule.duration(duration));
+        }
+
+        public @NotNull Builder delay(long time, @NotNull TemporalUnit unit) {
+            return delay(Duration.of(time, unit));
+        }
+
+        public @NotNull Builder repeat(@NotNull Duration duration) {
+            return repeat(TaskSchedule.duration(duration));
+        }
+
+        public @NotNull Builder repeat(long time, @NotNull TemporalUnit unit) {
+            return repeat(Duration.of(time, unit));
         }
     }
 
-    /**
-     * Gets the current status of the task.
-     *
-     * @return the current stats of the task
-     */
-    @NotNull
-    public TaskStatus getStatus() {
-        if (this.future == null) return TaskStatus.SCHEDULED;
-        if (this.future.isCancelled()) return TaskStatus.CANCELLED;
-        if (this.future.isDone()) return TaskStatus.FINISHED;
-        return TaskStatus.SCHEDULED;
-    }
-
-    /**
-     * Cancels this task. If the task is already running, the thread in which it is running is interrupted.
-     * If the task is not currently running, Minestom will safely terminate it.
-     */
-    public void cancel() {
-        if (this.future != null) {
-            this.future.cancel(false);
-
-            Thread current = this.currentThreadTask;
-            if (current != null) current.interrupt();
-
-            this.finish();
-        }
-    }
-
-    /**
-     * Gets the id of this task.
-     *
-     * @return the task id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Removes the task from the {@link SchedulerManager} map.
-     */
-    private void finish() {
-        Int2ObjectMap<Task> taskMap = shutdown ?
-                this.schedulerManager.shutdownTasks :
-                this.schedulerManager.tasks;
-
-        synchronized (taskMap) {
-            taskMap.remove(getId());
-        }
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Task task = (Task) object;
-        return id == task.id;
-    }
-
-    /**
-     * If this task is owned by an extension, should it survive the unloading of said extension?
-     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     *  reload of that extension.
-     */
-    public boolean isTransient() {
-        return isTransient;
-    }
-
-    /**
-     * Extension which owns this task, or null if none
-     */
-    public String getOwningExtension() {
-        return owningExtension;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

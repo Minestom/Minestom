@@ -62,7 +62,7 @@ public class UnloadCallbacksExtension extends Extension {
         // this callback will NOT be cancelled
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             tickedScheduledTransient = true;
-        }).repeat(100L, TimeUnit.MILLISECOND).makeTransient().schedule();
+        }).repeat(100L, TimeUnit.MILLISECOND).schedule();
 
         try {
             Assertions.assertNotNull(MinestomRootClassLoader.findExtensionObjectOwner(callback));
@@ -103,7 +103,7 @@ public class UnloadCallbacksExtension extends Extension {
         }).delay(100L, TimeUnit.MILLISECOND).schedule();
 
         // this shutdown tasks will not be executed because it is not transient
-        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> Assertions.fail("This shutdown task should be unloaded when the extension is")).schedule();
+        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> Assertions.fail("This shutdown task should be unloaded when the extension is"));
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             // Make sure callbacks are disabled
@@ -120,6 +120,6 @@ public class UnloadCallbacksExtension extends Extension {
                 e.printStackTrace();
             }
             MinecraftServer.stopCleanly(); // TODO: fix deadlock which happens because stopCleanly waits on completion of scheduler tasks
-        }).delay(1L, TimeUnit.SECOND).makeTransient().schedule();
+        }).delay(1L, TimeUnit.SECOND).schedule();
     }
 }
