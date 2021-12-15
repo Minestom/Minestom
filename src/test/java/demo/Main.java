@@ -57,7 +57,7 @@ public class Main {
 
         MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
-        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
+        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
