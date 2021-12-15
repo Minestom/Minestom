@@ -59,8 +59,8 @@ final class SchedulerImpl implements Scheduler {
     }
 
     @Override
-    public @NotNull Task submit(@NotNull Supplier<TaskSchedule> task,
-                                @NotNull ExecutionType executionType) {
+    public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
+                                    @NotNull ExecutionType executionType) {
         final TaskImpl taskRef = register(task, executionType);
         handleStatus(taskRef, task.get());
         return taskRef;
