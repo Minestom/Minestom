@@ -18,7 +18,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
     private String shortcut = "";
 
     public ArgumentCommand(@NotNull String id) {
-        super(id, true, true);
+        super(id);
     }
 
     @NotNull

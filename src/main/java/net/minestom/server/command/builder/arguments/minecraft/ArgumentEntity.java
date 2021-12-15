@@ -52,7 +52,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     private boolean onlyPlayers;
 
     public ArgumentEntity(@NotNull String id) {
-        super(id, true);
+        super(id);
     }
 
     public ArgumentEntity singleEntity(boolean singleEntity) {

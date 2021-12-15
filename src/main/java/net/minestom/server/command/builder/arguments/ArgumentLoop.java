@@ -19,7 +19,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
 
     @SafeVarargs
     public ArgumentLoop(@NotNull String id, @NotNull Argument<T>... arguments) {
-        super(id, true, true);
+        super(id);
         this.arguments = List.of(arguments);
     }
 

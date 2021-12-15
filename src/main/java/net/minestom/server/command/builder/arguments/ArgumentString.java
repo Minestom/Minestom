@@ -52,7 +52,7 @@ public class ArgumentString extends Argument<String> {
     private ReadType readType = ReadType.NORMAL;
 
     public ArgumentString(@NotNull String id) {
-        super(id, true);
+        super(id);
     }
 
     @Contract("_ -> this")

@@ -18,7 +18,7 @@ public class ArgumentGroup extends Argument<CommandContext> {
     private final List<Argument<?>> group;
 
     public ArgumentGroup(@NotNull String id, @NotNull List<Argument<?>> group) {
-        super(id, true, false);
+        super(id);
         this.group = List.copyOf(group);
     }
 

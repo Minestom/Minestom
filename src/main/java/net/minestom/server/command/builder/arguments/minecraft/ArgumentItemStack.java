@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -10,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.SNBTParser;
-
-import java.io.StringReader;
 
 /**
  * Argument which can be used to retrieve an {@link ItemStack} from its material and with NBT data.
@@ -27,7 +26,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static final int INVALID_MATERIAL = 3;
 
     public ArgumentItemStack(@NotNull String id) {
-        super(id, true);
+        super(id);
     }
 
     @NotNull
@@ -71,7 +70,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             NBTCompound compound;
             try {
-                compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
+                compound = (NBTCompound) new SNBTParser(new java.io.StringReader(sNBT)).parse();
             } catch (NBTException e) {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }

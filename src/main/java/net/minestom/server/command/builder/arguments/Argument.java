@@ -18,19 +18,15 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * An argument is meant to be parsed when added into a {@link Command}'s syntax with {@link Command#addSyntax(CommandExecutor, Argument[])}.
- * <p>
- * You can create your own with your own special conditions.
- * <p>
- * Arguments are parsed using {@link #parse(String)}.
- *
+ * An argument is meant to be parsed when added into a {@link Command}'s syntax with
+ * {@link Command#addSyntax(CommandExecutor, Argument[])}.<br>
+ * You can create your own with your own special conditions.<br>
+ * Arguments are parsed using {@link #parse(StringReader)}.
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
 
     private final String id;
-    protected final boolean allowSpace;
-    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
@@ -41,33 +37,10 @@ public abstract class Argument<T> {
     /**
      * Creates a new argument.
      *
-     * @param id           the id of the argument, used to retrieve the parsed value
-     * @param allowSpace   true if the argument can/should have spaces in it
-     * @param useRemaining true if the argument will always take the rest of the command arguments
-     */
-    public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
-        this.id = id;
-        this.allowSpace = allowSpace;
-        this.useRemaining = useRemaining;
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} sets to false.
-     *
-     * @param id         the id of the argument, used to retrieve the parsed value
-     * @param allowSpace true if the argument can/should have spaces in it
-     */
-    public Argument(@NotNull String id, boolean allowSpace) {
-        this(id, allowSpace, false);
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} and {@code allowSpace} sets to false.
-     *
      * @param id the id of the argument, used to retrieve the parsed value
      */
     public Argument(@NotNull String id) {
-        this(id, false, false);
+        this.id = id;
     }
 
     /**
@@ -80,7 +53,7 @@ public abstract class Argument<T> {
      */
     @ApiStatus.Experimental
     public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
-        return argument.parse(argument.getId());
+        return argument.parse(new StringReader(argument.getId()));
     }
 
     /**
@@ -139,27 +112,6 @@ public abstract class Argument<T> {
     @NotNull
     public String getId() {
         return id;
-    }
-
-    /**
-     * Gets if the argument can contain space.
-     *
-     * @return true if the argument allows space, false otherwise
-     */
-    public boolean allowSpace() {
-        return allowSpace;
-    }
-
-    /**
-     * Gets if the argument always use all the remaining characters.
-     * <p>
-     * ex: /help I am a test - will always give you "I am a test"
-     * if the first and single argument does use the remaining.
-     *
-     * @return true if the argument use all the remaining characters, false otherwise
-     */
-    public boolean useRemaining() {
-        return useRemaining;
     }
 
     /**
@@ -311,7 +263,7 @@ public abstract class Argument<T> {
         final Function<I, O> mapper;
 
         private ArgumentMap(@NotNull Argument<I> argument, @NotNull Function<I, O> mapper) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -341,7 +293,7 @@ public abstract class Argument<T> {
         final Predicate<T> predicate;
 
         private ArgumentFilter(@NotNull Argument<T> argument, @NotNull Predicate<T> predicate) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)

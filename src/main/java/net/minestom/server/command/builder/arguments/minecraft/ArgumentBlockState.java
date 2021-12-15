@@ -16,7 +16,7 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY_VALUE = 4;
 
     public ArgumentBlockState(@NotNull String id) {
-        super(id, true, false);
+        super(id);
     }
 
     @Override

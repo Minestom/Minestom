@@ -29,7 +29,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
     private boolean adjustIntegers;
 
     public ArgumentRelativeVec(@NotNull String id, int numberCount) {
-        super(id, true);
+        super(id);
         this.numberCount = numberCount;
     }
 

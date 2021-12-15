@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class ArgumentStringArray extends Argument<String[]> {
 
     public ArgumentStringArray(@NotNull String id) {
-        super(id, true, true);
+        super(id);
     }
 
     @Override

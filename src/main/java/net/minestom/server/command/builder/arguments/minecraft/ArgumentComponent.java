@@ -22,7 +22,7 @@ public class ArgumentComponent extends Argument<Component> {
     public static final int INVALID_JSON_ERROR = 1;
 
     public ArgumentComponent(@NotNull String id) {
-        super(id, true);
+        super(id);
     }
 
     @Override
