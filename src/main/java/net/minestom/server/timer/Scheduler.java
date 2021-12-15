@@ -5,6 +5,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.function.Supplier;
 
+/**
+ * Represents a scheduler that will execute tasks with a precision based on its ticking rate.
+ * If precision is important, consider using a JDK executor service or any third party library.
+ * <p>
+ * Tasks are by default executed in the caller thread.
+ */
 public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     /**
      * Process scheduled tasks based on time to increase scheduling precision.

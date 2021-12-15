@@ -131,7 +131,7 @@ final class SchedulerImpl implements Scheduler {
         } else if (schedule instanceof TaskScheduleImpl.Park) {
             this.parkedTasks.add(task);
         } else if (schedule instanceof TaskScheduleImpl.Stop) {
-            this.tasks.remove(task);
+            cancelTask(task);
         } else if (schedule instanceof TaskScheduleImpl.Immediate) {
             this.taskQueue.relaxedOffer(task);
         }
