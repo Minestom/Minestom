@@ -17,9 +17,7 @@ public class TestScheduler {
     public void tickTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
-        Task task = scheduler.buildTask(() -> result.set(true))
-                .delay(TaskSchedule.nextTick())
-                .schedule();
+        Task task = scheduler.scheduleNextTick(() -> result.set(true));
         assertEquals(task.executionType(), ExecutionType.SYNC, "Tasks default execution type should be sync");
 
         assertFalse(result.get(), "Tick task should not be executed after scheduling");
