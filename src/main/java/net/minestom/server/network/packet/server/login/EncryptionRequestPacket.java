@@ -18,10 +18,8 @@ public record EncryptionRequestPacket(@NotNull String serverId,
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(serverId);
-        writer.writeVarInt(publicKey.length);
-        writer.writeBytes(publicKey);
-        writer.writeVarInt(verifyToken.length);
-        writer.writeBytes(verifyToken);
+        writer.writeByteArray(publicKey);
+        writer.writeByteArray(verifyToken);
     }
 
     @Override
