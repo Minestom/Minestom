@@ -7,14 +7,16 @@ import java.util.function.Supplier;
 
 public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     /**
-     * Process scheduled tasks based on time.
+     * Process scheduled tasks based on time to increase scheduling precision.
      * <p>
-     * Can be used to increase scheduling precision.
+     * This method is not thread-safe.
      */
     void process();
 
     /**
      * Advance 1 tick and call {@link #process()}.
+     * <p>
+     * This method is not thread-safe.
      */
     void processTick();
 
