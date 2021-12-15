@@ -51,6 +51,18 @@ public sealed interface Task permits TaskImpl {
             return this;
         }
 
+        public @NotNull Task schedule() {
+            var runnable = this.runnable;
+            var delay = this.delay;
+            var repeat = this.repeat;
+            var executionType = this.executionType;
+            final Supplier<TaskSchedule> supplier = () -> {
+                runnable.run();
+                return repeat;
+            };
+            return scheduler.submitAfter(delay, supplier, executionType);
+        }
+
         public @NotNull Builder delay(@NotNull Duration duration) {
             return delay(TaskSchedule.duration(duration));
         }
@@ -67,16 +79,8 @@ public sealed interface Task permits TaskImpl {
             return repeat(Duration.of(time, unit));
         }
 
-        public @NotNull Task schedule() {
-            var runnable = this.runnable;
-            var delay = this.delay;
-            var repeat = this.repeat;
-            var executionType = this.executionType;
-            final Supplier<TaskSchedule> supplier = () -> {
-                runnable.run();
-                return repeat;
-            };
-            return scheduler.submitAfter(delay, supplier, executionType);
+        public @NotNull Task scheduleNextTick() {
+            return delay(TaskSchedule.tick(1)).schedule();
         }
     }
 

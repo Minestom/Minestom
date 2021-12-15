@@ -36,10 +36,8 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -206,12 +204,8 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      *
      * @param callback the task to execute during the next entity tick
      */
-    @Deprecated
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.scheduler.buildTask(() -> callback.accept(this))
-                .executionType(ExecutionType.SYNC)
-                .delay(TaskSchedule.tick(1))
-                .schedule();
+        this.scheduler.buildTask(() -> callback.accept(this)).scheduleNextTick();
     }
 
     /**

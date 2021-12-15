@@ -22,10 +22,8 @@ import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -121,12 +119,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      *
      * @param callback the task to execute during the next instance tick
      */
-    @Deprecated
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
-        this.scheduler.buildTask(() -> callback.accept(this))
-                .executionType(ExecutionType.SYNC)
-                .delay(TaskSchedule.tick(1))
-                .schedule();
+        this.scheduler.buildTask(() -> callback.accept(this)).scheduleNextTick();
     }
 
     @ApiStatus.Internal
