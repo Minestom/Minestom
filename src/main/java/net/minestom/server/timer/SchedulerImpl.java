@@ -27,22 +27,23 @@ final class SchedulerImpl implements Scheduler {
     private final MpscGrowableArrayQueue<TaskImpl> taskQueue = new MpscGrowableArrayQueue<>(64);
     private final Set<TaskImpl> parkedTasks = ConcurrentHashMap.newKeySet();
 
-    private final AtomicInteger tickState = new AtomicInteger();
+    private int tickState;
 
     @Override
     public void process() {
-        processTick(tickState.get());
+        processTick(0);
     }
 
     @Override
     public void processTick() {
-        processTick(tickState.incrementAndGet());
+        processTick(1);
     }
 
-    private void processTick(int tick) {
+    private void processTick(int tickDelta) {
         synchronized (this) {
+            this.tickState += tickDelta;
             int tickToProcess;
-            while ((tickToProcess = !tickTaskQueue.isEmpty() ? tickTaskQueue.firstIntKey() : Integer.MAX_VALUE) <= tick) {
+            while (!tickTaskQueue.isEmpty() && (tickToProcess = tickTaskQueue.firstIntKey()) <= tickState) {
                 final List<TaskImpl> tickScheduledTasks = tickTaskQueue.remove(tickToProcess);
                 if (tickScheduledTasks != null) tickScheduledTasks.forEach(taskQueue::relaxedOffer);
             }
@@ -121,8 +122,8 @@ final class SchedulerImpl implements Scheduler {
             final Duration duration = durationSchedule.duration();
             SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);
         } else if (schedule instanceof TaskScheduleImpl.TickSchedule tickSchedule) {
-            final int target = tickState.get() + tickSchedule.tick();
             synchronized (this) {
+                final int target = tickState + tickSchedule.tick();
                 this.tickTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
             }
         } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {
