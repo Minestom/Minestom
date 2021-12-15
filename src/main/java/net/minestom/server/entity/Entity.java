@@ -36,6 +36,8 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.timer.Schedulable;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -50,13 +52,15 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -67,7 +71,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -145,6 +149,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.removal.accept(player) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
     private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+    private final Scheduler scheduler = Scheduler.newScheduler();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -165,9 +170,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
-
-    // list of scheduled tasks to be executed during the next entity tick
-    protected final Queue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
 
     // Tick related
     private long ticks;
@@ -203,7 +205,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param callback the task to execute during the next entity tick
      */
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.nextTick.add(callback);
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     /**
@@ -531,13 +533,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
 
         // scheduled tasks
-        {
-            Consumer<Entity> callback;
-            while ((callback = nextTick.poll()) != null) {
-                callback.accept(this);
-            }
-            if (isRemoved()) return;
-        }
+        this.scheduler.processTick();
+        if (isRemoved()) return;
 
         // Entity tick
         {
@@ -1572,6 +1569,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
+    }
+
+    @Override
+    public @NotNull Scheduler scheduler() {
+        return scheduler;
     }
 
     /**
