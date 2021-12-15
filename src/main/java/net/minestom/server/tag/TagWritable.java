@@ -2,7 +2,6 @@ package net.minestom.server.tag;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 /**
@@ -24,7 +23,9 @@ public interface TagWritable {
     }
 
     /**
-     * Converts an nbt compound to a tag writer.
+     * Converts a nbt compound to a tag writer.
+     * <p>
+     * The returned tag writer is not thread-safe.
      *
      * @param compound the compound to convert
      * @return a {@link TagWritable} capable of writing {@code compound}
