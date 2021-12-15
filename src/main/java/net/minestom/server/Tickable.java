@@ -1,11 +1,9 @@
 package net.minestom.server;
 
-import net.minestom.server.timer.Schedulable;
-
 /**
  * Represents an element which is ticked at a regular interval.
  */
-public interface Tickable extends Schedulable {
+public interface Tickable {
 
     /**
      * Ticks this element.
