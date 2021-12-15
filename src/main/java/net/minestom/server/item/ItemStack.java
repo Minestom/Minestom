@@ -246,7 +246,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     public @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
                 this.amount,
-                NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
+                NBTUtils.asBinaryTagHolder(this.meta.toNBT()))));
     }
 
     /**
