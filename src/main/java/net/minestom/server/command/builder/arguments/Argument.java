@@ -73,9 +73,7 @@ public abstract class Argument<T> {
      * while reading the input into a {@code T}.<br>
      * <b>Note that this method is not abstract because the conversion to {@code StringReader}s is not complete.</b>
      */
-    public @NotNull T parse(@NotNull StringReader input) throws CommandException {
-        throw CommandException.COMMAND_EXCEPTION.generateException(input, input.all());
-    }
+    public abstract @NotNull T parse(@NotNull StringReader input) throws CommandException;
 
     /**
      * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
@@ -273,6 +271,12 @@ public abstract class Argument<T> {
         }
 
         @Override
+        public @NotNull O parse(@NotNull StringReader input) throws CommandException {
+            // FIXME: Complete
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+        }
+
+        @Override
         public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
             final I value = argument.parse(input);
             final O mappedValue = mapper.apply(value);
@@ -300,6 +304,12 @@ public abstract class Argument<T> {
                 this.setDefaultValue(argument.getDefaultValue());
             this.argument = argument;
             this.predicate = predicate;
+        }
+
+        @Override
+        public @NotNull T parse(@NotNull StringReader input) throws CommandException {
+            // FIXME: Complete
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
         }
 
         @Override

@@ -1,10 +1,12 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -34,6 +36,12 @@ public class ArgumentCommand extends Argument<CommandResult> {
             throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);
 
         return result;
+    }
+
+    @Override
+    public @NotNull CommandResult parse(@NotNull StringReader input) throws CommandException {
+        // FIXME: Complete
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
     @Override

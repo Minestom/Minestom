@@ -1,8 +1,10 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.block.BlockUtils;
@@ -22,6 +24,12 @@ public class ArgumentBlockState extends Argument<Block> {
     @Override
     public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
         return staticParse(input);
+    }
+
+    @Override
+    public @NotNull Block parse(@NotNull StringReader input) throws CommandException {
+        // FIXME: This has not been implemented because Hephaistos does not support reading select amounts of a reader yet.
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
     @Override

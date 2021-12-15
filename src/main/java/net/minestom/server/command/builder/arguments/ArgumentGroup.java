@@ -1,8 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
 import net.minestom.server.utils.StringUtils;
@@ -20,6 +22,12 @@ public class ArgumentGroup extends Argument<CommandContext> {
     public ArgumentGroup(@NotNull String id, @NotNull List<Argument<?>> group) {
         super(id);
         this.group = List.copyOf(group);
+    }
+
+    @Override
+    public @NotNull CommandContext parse(@NotNull StringReader input) throws CommandException {
+        // FIXME: Complete
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
     @NotNull

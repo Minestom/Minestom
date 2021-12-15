@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-public class ArgumentNumber<T extends Number> extends Argument<T> {
+public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
 
     public static final int NOT_NUMBER_ERROR = 1;
     public static final int TOO_LOW_ERROR = 2;

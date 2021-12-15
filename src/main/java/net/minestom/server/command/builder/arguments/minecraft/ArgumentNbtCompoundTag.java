@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -23,6 +24,12 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     public ArgumentNbtCompoundTag(@NotNull String id) {
         super(id);
+    }
+
+    @Override
+    public @NotNull NBTCompound parse(@NotNull net.minestom.server.command.StringReader input) throws CommandException {
+        // FIXME: This has not been implemented because Hephaistos does not support reading select amounts of a reader yet.
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
     @NotNull

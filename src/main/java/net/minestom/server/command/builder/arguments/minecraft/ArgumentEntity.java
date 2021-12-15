@@ -1,8 +1,10 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -63,6 +65,12 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     public ArgumentEntity onlyPlayers(boolean onlyPlayers) {
         this.onlyPlayers = onlyPlayers;
         return this;
+    }
+
+    @Override
+    public @NotNull EntityFinder parse(@NotNull StringReader input) throws CommandException {
+        // FIXME: Complete
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
     @NotNull
