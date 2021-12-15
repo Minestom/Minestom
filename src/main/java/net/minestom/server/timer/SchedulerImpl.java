@@ -1,9 +1,9 @@
 package net.minestom.server.timer;
 
-import com.zaxxer.sparsebits.SparseBitSet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import org.jctools.queues.MpscGrowableArrayQueue;
 import org.jetbrains.annotations.NotNull;
+import org.roaringbitmap.RoaringBitmap;
 
 import java.time.Duration;
 import java.util.*;
@@ -21,7 +21,7 @@ final class SchedulerImpl implements Scheduler {
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
     private final Set<TaskImpl> tasks = ConcurrentHashMap.newKeySet();
-    private final SparseBitSet bitSet = new SparseBitSet();
+    private final RoaringBitmap bitSet = new RoaringBitmap();
 
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
     private final MpscGrowableArrayQueue<TaskImpl> taskQueue = new MpscGrowableArrayQueue<>(64);
@@ -90,19 +90,19 @@ final class SchedulerImpl implements Scheduler {
     }
 
     synchronized void cancelTask(TaskImpl task) {
-        this.bitSet.clear(task.id());
+        this.bitSet.remove(task.id());
         if (!tasks.remove(task)) throw new IllegalStateException("Task is not scheduled");
     }
 
     synchronized boolean isTaskAlive(TaskImpl task) {
-        return bitSet.get(task.id());
+        return bitSet.contains(task.id());
     }
 
     private synchronized TaskImpl register(@NotNull Supplier<TaskSchedule> task,
                                            @NotNull ExecutionType executionType) {
         TaskImpl taskRef = new TaskImpl(TASK_COUNTER.getAndIncrement(), task,
                 executionType, this);
-        this.bitSet.set(taskRef.id());
+        this.bitSet.add(taskRef.id());
         this.tasks.add(taskRef);
         return taskRef;
     }
