@@ -44,7 +44,7 @@ public class Tag<T> {
         } catch (NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-    }, null);
+    });
 
     /**
      * Handles the complete tag holder compound.
@@ -55,7 +55,7 @@ public class Tag<T> {
     public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, (original, updated) -> {
         original.clear();
         updated.forEach(original::set);
-    }, null);
+    });
 
     private final String key;
     private final Function<NBTCompoundLike, T> readFunction;
