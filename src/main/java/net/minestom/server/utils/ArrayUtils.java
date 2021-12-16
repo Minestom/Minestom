@@ -48,13 +48,4 @@ public final class ArrayUtils {
         list.getElements(0, array, 0, array.length);
         return array;
     }
-
-    public static boolean empty(byte[] array) {
-        for (byte b : array) {
-            if (b != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

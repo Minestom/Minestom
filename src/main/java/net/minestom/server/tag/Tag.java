@@ -33,7 +33,7 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<String> SNBT = new Tag<>(null, n -> n.toCompound().toSNBT(), (original, snbt) -> {
+    public static final Tag<String> SNBT = new Tag<>(null, NBTCompoundLike::toSNBT, (original, snbt) -> {
         try {
             final var updated = new SNBTParser(new StringReader(snbt)).parse();
             if (!(updated instanceof NBTCompound updatedCompound))
