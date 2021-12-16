@@ -102,6 +102,12 @@ public sealed interface FixedStringReader permits StringReader {
      * @return true if the provided string is equal to the next readable characters in this reader
      */
     default boolean canRead(@NotNull String text) {
+        if (text.length() == 0) {
+            return true;
+        }
+        if (text.length() == 1) {
+            return canRead(1) && peek() == text.codePointAt(0);
+        }
         return canRead(text.length()) && all().regionMatches(position(), text, 0, text.length());
     }
 
@@ -110,7 +116,13 @@ public sealed interface FixedStringReader permits StringReader {
      * {@code ignoreCase} is true
      */
     default boolean canRead(@NotNull String text, boolean ignoreCase) {
-        return canRead(text.length()) && all().regionMatches(ignoreCase, position(), text, 0, text.length());
+        if (!ignoreCase) {
+            return canRead(text);
+        }
+        if (text.length() == 0) {
+            return true;
+        }
+        return canRead(text.length()) && all().regionMatches(true, position(), text, 0, text.length());
     }
 
     /**
