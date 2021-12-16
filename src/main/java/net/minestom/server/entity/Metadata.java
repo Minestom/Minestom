@@ -15,9 +15,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTEnd;
+import space.vectrix.flare.fastutil.Short2ObjectSyncMap;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -171,7 +171,7 @@ public class Metadata {
     }
 
     private final Entity entity;
-    private final Map<Byte, Entry<?>> metadataMap = new ConcurrentHashMap<>();
+    private final Short2ObjectSyncMap<Entry<?>> metadataMap = Short2ObjectSyncMap.hashmap();
 
     private volatile boolean notifyAboutChanges = true;
     private final Map<Byte, Entry<?>> notNotifiedChanges = new HashMap<>();
@@ -188,7 +188,7 @@ public class Metadata {
 
     public void setIndex(int index, @NotNull Value<?> value) {
         final Entry<?> entry = new Entry<>((byte) index, value);
-        this.metadataMap.put((byte) index, entry);
+        this.metadataMap.put((short) index, entry);
 
         // Send metadata packet to update viewers and self
         if (this.entity != null && this.entity.isActive()) {

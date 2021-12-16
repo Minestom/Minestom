@@ -104,6 +104,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.5.6'
+    implementation group: 'space.vectrix.flare', name: 'flare', version: '2.0.0'
+    implementation group: 'space.vectrix.flare', name: 'flare-fastutil', version: '2.0.0'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     api 'com.google.code.gson:gson:2.8.9'
