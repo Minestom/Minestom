@@ -471,9 +471,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Pos position = this.position;
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
-        // Clear all viewable entities
-        this.instance.getEntityTracker().visibleEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES,
-                trackingUpdate::remove);
         // Clear all viewable chunks
         ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(), chunkRemover);
         // Remove from the tab-list
