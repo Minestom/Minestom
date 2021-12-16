@@ -7,10 +7,11 @@ import org.roaringbitmap.RoaringBitmap;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
@@ -23,12 +24,12 @@ final class SchedulerImpl implements Scheduler {
     });
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
-    private final Set<TaskImpl> tasks = new HashSet<>();
-    private final RoaringBitmap bitSet = new RoaringBitmap();
-
-    private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
     private final MpscGrowableArrayQueue<TaskImpl> taskQueue = new MpscGrowableArrayQueue<>(64);
-    private final Set<TaskImpl> parkedTasks = ConcurrentHashMap.newKeySet();
+    private final RoaringBitmap registeredTasks = new RoaringBitmap();
+    private final RoaringBitmap parkedTasks = new RoaringBitmap();
+
+    // Tasks scheduled on a certain tick
+    private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
 
     private int tickState;
 
@@ -69,31 +70,29 @@ final class SchedulerImpl implements Scheduler {
         return taskRef;
     }
 
-    void unparkTask(TaskImpl task) {
-        if (parkedTasks.remove(task)) {
+    synchronized void unparkTask(TaskImpl task) {
+        if (parkedTasks.checkedRemove(task.id()))
             this.taskQueue.relaxedOffer(task);
-        }
     }
 
-    boolean isTaskParked(TaskImpl task) {
-        return parkedTasks.contains(task);
+    synchronized boolean isTaskParked(TaskImpl task) {
+        return parkedTasks.contains(task.id());
     }
 
     synchronized void cancelTask(TaskImpl task) {
-        this.bitSet.remove(task.id());
-        if (!tasks.remove(task)) throw new IllegalStateException("Task is not scheduled");
+        if (!registeredTasks.checkedRemove(task.id()))
+            throw new IllegalStateException("Task is not scheduled");
     }
 
     synchronized boolean isTaskAlive(TaskImpl task) {
-        return bitSet.contains(task.id());
+        return registeredTasks.contains(task.id());
     }
 
     private synchronized TaskImpl register(@NotNull Supplier<TaskSchedule> task,
                                            @NotNull ExecutionType executionType) {
         TaskImpl taskRef = new TaskImpl(TASK_COUNTER.getAndIncrement(), task,
                 executionType, this);
-        this.bitSet.add(taskRef.id());
-        this.tasks.add(taskRef);
+        this.registeredTasks.add(taskRef.id());
         return taskRef;
     }
 
@@ -119,7 +118,9 @@ final class SchedulerImpl implements Scheduler {
         } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {
             futureSchedule.future().thenRun(() -> safeExecute(task));
         } else if (schedule instanceof TaskScheduleImpl.Park) {
-            this.parkedTasks.add(task);
+            synchronized (this) {
+                this.parkedTasks.add(task.id());
+            }
         } else if (schedule instanceof TaskScheduleImpl.Stop) {
             cancelTask(task);
         } else if (schedule instanceof TaskScheduleImpl.Immediate) {
