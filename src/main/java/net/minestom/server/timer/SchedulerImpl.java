@@ -53,13 +53,15 @@ final class SchedulerImpl implements Scheduler {
             }
         }
         // Run all tasks lock-free, either in the current thread or pool
-        this.taskQueue.drain(task -> {
-            if (!task.isAlive()) return;
-            switch (task.executionType()) {
-                case SYNC -> handleTask(task);
-                case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
-            }
-        });
+        if (!taskQueue.isEmpty()) {
+            this.taskQueue.drain(task -> {
+                if (!task.isAlive()) return;
+                switch (task.executionType()) {
+                    case SYNC -> handleTask(task);
+                    case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
+                }
+            });
+        }
     }
 
     @Override
