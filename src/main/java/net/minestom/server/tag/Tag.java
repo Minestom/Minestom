@@ -38,8 +38,7 @@ public class Tag<T> {
             final var updated = new SNBTParser(new StringReader(snbt)).parse();
             if (!(updated instanceof NBTCompound updatedCompound))
                 throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
-            original.clear();
-            updatedCompound.forEach(original::set);
+            original.copyFrom(updatedCompound);
         } catch (NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
@@ -51,10 +50,7 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, (original, updated) -> {
-        original.clear();
-        updated.forEach(original::set);
-    });
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, MutableNBTCompound::copyFrom);
 
     private final String key;
     private final Function<NBTCompoundLike, T> readFunction;
