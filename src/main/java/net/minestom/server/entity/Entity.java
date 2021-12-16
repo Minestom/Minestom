@@ -58,6 +58,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
+import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -79,7 +80,7 @@ import java.util.function.UnaryOperator;
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
-    private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
+    private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
@@ -223,7 +224,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
      * @return the entity having the specified id, null if not found
      */
     public static @Nullable Entity getEntity(int id) {
-        return Entity.ENTITY_BY_ID.getOrDefault(id, null);
+        return Entity.ENTITY_BY_ID.get(id);
     }
 
     /**
