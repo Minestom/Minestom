@@ -82,8 +82,7 @@ final class SchedulerImpl implements Scheduler {
     }
 
     synchronized void cancelTask(TaskImpl task) {
-        if (!registeredTasks.checkedRemove(task.id()))
-            throw new IllegalStateException("Task is not scheduled");
+        this.registeredTasks.remove(task.id());
     }
 
     synchronized boolean isTaskAlive(TaskImpl task) {
