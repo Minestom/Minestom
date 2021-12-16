@@ -2,8 +2,6 @@ package net.minestom.server.tag;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTCompoundGetters;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 
 /**
@@ -31,7 +29,9 @@ public interface TagReadable {
     }
 
     /**
-     * Converts an nbt compound to a tag reader.
+     * Converts a nbt compound to a tag reader.
+     * <p>
+     * The returned tag reader is not thread-safe.
      *
      * @param compound the compound to convert
      * @return a {@link TagReadable} capable of reading {@code compound}

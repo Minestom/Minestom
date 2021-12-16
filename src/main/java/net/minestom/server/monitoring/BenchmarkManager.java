@@ -36,7 +36,6 @@ public final class BenchmarkManager {
 
     static {
         THREADS.add(THREAD_NAME_BLOCK_BATCH);
-        THREADS.add(THREAD_NAME_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK);
     }

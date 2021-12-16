@@ -10,6 +10,7 @@ import net.minestom.server.network.socket.Worker;
 import net.minestom.server.snapshot.ServerSnapshot;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
+import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -167,6 +168,7 @@ public final class UpdateManager {
         @Override
         public void run() {
             final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
             final List<Worker> workers = MinecraftServer.getServer().workers();
             while (!stopRequested) {
                 try {
@@ -175,6 +177,8 @@ public final class UpdateManager {
 
                     // Tick start callbacks
                     doTickCallback(tickStartCallbacks, tickStart);
+
+                    schedulerManager.processTick();
 
                     // Waiting players update (newly connected clients waiting to get into the server)
                     connectionManager.updateWaitingPlayers();

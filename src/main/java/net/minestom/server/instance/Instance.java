@@ -25,6 +25,8 @@ import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.timer.Schedulable;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.MappedCollection;
 import net.minestom.server.utils.PacketUtils;
@@ -59,7 +61,7 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, TagHandler, Snapshotable, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, Snapshotable, TagHandler, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -87,12 +89,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     // the uuid of this instance
     protected UUID uniqueId;
 
-    // list of scheduled tasks to be executed during the next instance tick
-    protected final Queue<Consumer<Instance>> nextTick = new ConcurrentLinkedQueue<>();
-
     // instance custom data
     private final Object nbtLock = new Object();
     private final MutableNBTCompound nbt = new MutableNBTCompound();
+
+    private final Scheduler scheduler = Scheduler.newScheduler();
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
@@ -128,7 +129,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      * @param callback the task to execute during the next instance tick
      */
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
-        this.nextTick.add(callback);
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     @ApiStatus.Internal
@@ -581,12 +582,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public void tick(long time) {
         // Scheduled tasks
-        {
-            Consumer<Instance> callback;
-            while ((callback = nextTick.poll()) != null) {
-                callback.accept(this);
-            }
-        }
+        this.scheduler.processTick();
         // Time
         {
             this.worldAge++;
@@ -620,6 +616,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         synchronized (nbtLock) {
             tag.write(nbt, value);
         }
+    }
+
+    @Override
+    public @NotNull Scheduler scheduler() {
+        return scheduler;
     }
 
     private InstanceSnapshotImpl snapshot;

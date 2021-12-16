@@ -13,7 +13,6 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.io.StringReader;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -44,7 +43,7 @@ public class Tag<T> {
         } catch (NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-    }, null);
+    });
 
     /**
      * Handles the complete tag holder compound.
@@ -55,28 +54,26 @@ public class Tag<T> {
     public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, (original, updated) -> {
         original.clear();
         updated.forEach(original::set);
-    }, null);
+    });
 
     private final String key;
     private final Function<NBTCompoundLike, T> readFunction;
     private final BiConsumer<MutableNBTCompound, T> writeConsumer;
-
     private final Supplier<T> defaultValue;
 
     protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompoundLike, T> readFunction,
-                  @Nullable BiConsumer<MutableNBTCompound, T> writeConsumer,
+                  @NotNull BiConsumer<MutableNBTCompound, T> writeConsumer,
                   @Nullable Supplier<T> defaultValue) {
         this.key = key;
         this.readFunction = readFunction;
-        this.writeConsumer = Objects.requireNonNullElse(writeConsumer, (compound, t) -> {
-        });
+        this.writeConsumer = writeConsumer;
         this.defaultValue = defaultValue;
     }
 
     protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompoundLike, T> readFunction,
-                  @Nullable BiConsumer<MutableNBTCompound, T> writeConsumer) {
+                  @NotNull BiConsumer<MutableNBTCompound, T> writeConsumer) {
         this(key, readFunction, writeConsumer, null);
     }
 
@@ -146,6 +143,7 @@ public class Tag<T> {
     }
 
     public void writeUnsafe(@NotNull MutableNBTCompound nbtCompound, @Nullable Object value) {
+        //noinspection unchecked
         write(nbtCompound, (T) value);
     }
 
@@ -198,11 +196,9 @@ public class Tag<T> {
     }
 
     public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
+        //noinspection unchecked
         return new Tag<>(key,
-                nbt -> {
-                    final var currentNBT = nbt.get(key);
-                    return (T) currentNBT;
-                },
+                nbt -> (T) nbt.get(key),
                 ((nbt, value) -> nbt.set(key, value)));
     }
 
