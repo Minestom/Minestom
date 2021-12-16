@@ -140,7 +140,7 @@ public final class ChunkUtils {
     }
 
     public static int getSectionAt(int y) {
-        return y / Chunk.CHUNK_SECTION_SIZE;
+        return (int) Math.floor((double)y / Chunk.CHUNK_SECTION_SIZE);
     }
 
     public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
