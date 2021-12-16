@@ -326,8 +326,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
                         final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
                         if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                            if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
-                                return;
                             PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                             EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                                 short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
