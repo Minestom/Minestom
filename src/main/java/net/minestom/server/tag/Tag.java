@@ -183,12 +183,6 @@ public class Tag<T> {
                 (nbtCompound, value) -> nbtCompound.setDouble(key, value));
     }
 
-    public static @NotNull Tag<byte[]> ByteArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getByteArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setByteArray(key, value));
-    }
-
     public static @NotNull Tag<String> String(@NotNull String key) {
         return new Tag<>(key,
                 nbtCompound -> nbtCompound.getString(key),
@@ -200,18 +194,6 @@ public class Tag<T> {
         return new Tag<>(key,
                 nbt -> (T) nbt.get(key),
                 ((nbt, value) -> nbt.set(key, value)));
-    }
-
-    public static @NotNull Tag<int[]> IntArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getIntArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setIntArray(key, value));
-    }
-
-    public static @NotNull Tag<long[]> LongArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getLongArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
     /**
@@ -241,6 +223,36 @@ public class Tag<T> {
         return new Tag<>(null,
                 nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
                 (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
+    }
+
+    /**
+     * @deprecated use {@link Tag#NBT(String)} with {@link NBT#ByteArray(byte...)}
+     */
+    @Deprecated
+    public static @NotNull Tag<byte[]> ByteArray(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> nbtCompound.getByteArray(key).copyArray(),
+                (nbtCompound, value) -> nbtCompound.setByteArray(key, value));
+    }
+
+    /**
+     * @deprecated use {@link Tag#NBT(String)} with {@link NBT#IntArray(int...)}
+     */
+    @Deprecated
+    public static @NotNull Tag<int[]> IntArray(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> nbtCompound.getIntArray(key).copyArray(),
+                (nbtCompound, value) -> nbtCompound.setIntArray(key, value));
+    }
+
+    /**
+     * @deprecated use {@link Tag#NBT(String)} with {@link NBT#LongArray(long...)}
+     */
+    @Deprecated
+    public static @NotNull Tag<long[]> LongArray(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> nbtCompound.getLongArray(key).copyArray(),
+                (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
     /**
