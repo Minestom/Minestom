@@ -124,7 +124,7 @@ public final class ViewEngine {
         private final Predicate<T> loopPredicate;
         // The consumers to be called when an entity is added/removed.
         public final Consumer<T> addition, removal;
-        // Contains all the entity ids that are viewable by this option.
+        // Contains all the auto-entity ids that are viewable by this option.
         public final RoaringBitmap bitSet = new RoaringBitmap();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
@@ -277,7 +277,12 @@ public final class ViewEngine {
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 if (!manualViewers.isEmpty()) manualViewers.forEach(action);
-                // Auto
+                if (entity != null) {
+                    viewableOption.bitSet.forEach((int id) ->
+                            action.accept((Player) Entity.getEntity(id)));
+                    return;
+                }
+                // Non-entity fallback
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
                 if (auto != null && viewableOption.isAuto()) {
                     for (List<Player> players : auto) {
