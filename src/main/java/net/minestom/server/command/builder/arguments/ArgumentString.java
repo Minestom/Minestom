@@ -21,11 +21,6 @@ public class ArgumentString extends Argument<String> {
     public enum ReadType {
 
         /**
-         * Reads a quoted string from the provided reader via {@link StringReader#readQuotedString()}.
-         */
-        QUOTED,
-
-        /**
          * Reads an unquoted string from the provided reader via {@link StringReader#readUnquotedString()} ()}.
          */
         UNQUOTED,
@@ -60,7 +55,6 @@ public class ArgumentString extends Argument<String> {
     @Override
     public @NotNull String parse(@NotNull StringReader input) throws CommandException {
         return switch(readType){
-            case QUOTED -> input.readQuotedString();
             case UNQUOTED -> input.readUnquotedString();
             case NORMAL -> input.readString();
             case GREEDY -> input.readAll();
@@ -72,9 +66,16 @@ public class ArgumentString extends Argument<String> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 
         argumentNode.parser = "brigadier:string";
-        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeVarInt(1); // Quotable phrase
-        });
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> packetWriter.writeVarInt(
+            switch(this.readType) {
+                // Single word
+                case UNQUOTED -> 0;
+                // Quotable phrase
+                case NORMAL -> 1;
+                // Greedy phrase
+                case GREEDY -> 2;
+            }
+        ));
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
