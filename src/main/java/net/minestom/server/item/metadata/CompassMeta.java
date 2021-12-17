@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
@@ -70,11 +71,10 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
             mutateNbt(compound -> {
                 if (lodestonePosition != null) {
-                    compound.set("LodestonePos", NBT.Compound(posCompound -> {
-                        posCompound.setInt("X", lodestonePosition.blockX());
-                        posCompound.setInt("Y", lodestonePosition.blockY());
-                        posCompound.setInt("Z", lodestonePosition.blockZ());
-                    }));
+                    compound.set("LodestonePos", NBT.Compound(Map.of(
+                            "X", NBT.Int(lodestonePosition.blockX()),
+                            "Y", NBT.Int(lodestonePosition.blockY()),
+                            "Z", NBT.Int(lodestonePosition.blockZ()))));
                 } else {
                     compound.remove("LodestonePos");
                 }
