@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.PooledBuffers;
@@ -28,12 +29,17 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
+import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuffer}
@@ -165,6 +171,61 @@ public final class PacketUtils {
             VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
                     entry.getValue().process(entry.getKey()));
         }
+    }
+
+    @ApiStatus.Internal
+    public static ReadResult readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
+                                         @NotNull Worker.Context context) throws DataFormatException {
+        List<PacketPayload> packets = new ArrayList<>();
+        BinaryBuffer remaining = null;
+        while (readBuffer.readableBytes() > 0) {
+            final var beginMark = readBuffer.mark();
+            try {
+                // Ensure that the buffer contains the full packet (or wait for next socket read)
+                final int packetLength = readBuffer.readVarInt();
+                final int readerStart = readBuffer.readerOffset();
+                if (!readBuffer.canRead(packetLength)) {
+                    // Integrity fail
+                    throw new BufferUnderflowException();
+                }
+                // Read packet https://wiki.vg/Protocol#Packet_format
+                BinaryBuffer content = readBuffer;
+                int decompressedSize = packetLength;
+                if (compressed) {
+                    final int dataLength = readBuffer.readVarInt();
+                    final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
+                    if (dataLength == 0) {
+                        // Data is too small to be compressed, payload is following
+                        decompressedSize = payloadLength;
+                    } else {
+                        // Decompress to content buffer
+                        content = context.contentBuffer.clear();
+                        decompressedSize = dataLength;
+                        Inflater inflater = context.inflater;
+                        inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
+                        inflater.inflate(content.asByteBuffer(0, dataLength));
+                        inflater.reset();
+                    }
+                }
+                // Slice packet
+                ByteBuffer payload = content.asByteBuffer(content.readerOffset(), decompressedSize);
+                final int packetId = Utils.readVarInt(payload);
+                packets.add(new PacketPayload(packetId, payload));
+                // Position buffer to read the next packet
+                readBuffer.readerOffset(readerStart + packetLength);
+            } catch (BufferUnderflowException e) {
+                readBuffer.reset(beginMark);
+                remaining = BinaryBuffer.copy(readBuffer);
+                break;
+            }
+        }
+        return new ReadResult(packets, remaining);
+    }
+
+    public record ReadResult(List<PacketPayload> packets, BinaryBuffer remaining) {
+    }
+
+    public record PacketPayload(int id, ByteBuffer payload) {
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
