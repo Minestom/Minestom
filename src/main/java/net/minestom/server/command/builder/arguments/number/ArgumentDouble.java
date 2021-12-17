@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class ArgumentDouble extends ArgumentNumber<Double> {
 
     public ArgumentDouble(@NotNull String id) {
-        super(id, "brigadier:double", Double::parseDouble, ((s, radix) -> (double) Long.parseLong(s, radix)), BinaryWriter::writeDouble, Double::compare);
+        super(id, "brigadier:double", BinaryWriter::writeDouble);
     }
 
     @Override

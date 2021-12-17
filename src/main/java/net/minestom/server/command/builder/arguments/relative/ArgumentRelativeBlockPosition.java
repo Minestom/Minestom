@@ -7,8 +7,6 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
-
 /**
  * Represents a block position with 3 integers (x;y;z) which can take relative coordinates.
  * <p>
@@ -38,13 +36,4 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelativeVec {
         return String.format("RelativeBlockPosition<%s>", getId());
     }
 
-    @Override
-    Function<String, ? extends Number> getRelativeNumberParser() {
-        return Double::parseDouble;
-    }
-
-    @Override
-    Function<String, ? extends Number> getAbsoluteNumberParser() {
-        return Integer::parseInt;
-    }
 }

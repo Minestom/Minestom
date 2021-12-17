@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class ArgumentLong extends ArgumentNumber<Long> {
 
     public ArgumentLong(@NotNull String id) {
-        super(id, "brigadier:long", Long::parseLong, Long::parseLong, BinaryWriter::writeLong, Long::compare);
+        super(id, "brigadier:long", BinaryWriter::writeLong);
     }
 
     @Override

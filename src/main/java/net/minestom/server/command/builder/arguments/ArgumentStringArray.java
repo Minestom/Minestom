@@ -27,11 +27,6 @@ public class ArgumentStringArray extends Argument<String[]> {
     }
 
     @Override
-    public @NotNull String @NotNull [] parse(@NotNull String input) {
-        return input.split(Pattern.quote(StringUtils.SPACE));
-    }
-
-    @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 

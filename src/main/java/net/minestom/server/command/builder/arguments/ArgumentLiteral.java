@@ -2,14 +2,11 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentLiteral extends Argument<String> {
-
-    public static final int INVALID_VALUE_ERROR = 1;
 
     public ArgumentLiteral(@NotNull String id) {
         super(id);
@@ -22,15 +19,6 @@ public class ArgumentLiteral extends Argument<String> {
             throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
         }
         return value;
-    }
-
-    @NotNull
-    @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (!input.equals(getId()))
-            throw new ArgumentSyntaxException("Invalid literal value", input, INVALID_VALUE_ERROR);
-
-        return input;
     }
 
     @Override

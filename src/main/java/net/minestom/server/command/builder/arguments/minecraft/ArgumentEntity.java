@@ -73,12 +73,6 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
     }
 
-    @NotNull
-    @Override
-    public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, onlySingleEntity, onlyPlayers);
-    }
-
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);

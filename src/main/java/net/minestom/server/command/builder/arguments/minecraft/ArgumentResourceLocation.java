@@ -3,16 +3,12 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentResourceLocation extends Argument<NamespaceID> {
-
-    public static final int SPACE_ERROR = 1;
 
     public ArgumentResourceLocation(@NotNull String id) {
         super(id);
@@ -21,15 +17,6 @@ public class ArgumentResourceLocation extends Argument<NamespaceID> {
     @Override
     public @NotNull NamespaceID parse(@NotNull StringReader input) throws CommandException {
         return input.readNamespaceID();
-    }
-
-    @NotNull
-    @Override
-    public NamespaceID parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (input.contains(StringUtils.SPACE))
-            throw new ArgumentSyntaxException("Resource location cannot contain space character", input, SPACE_ERROR);
-
-        return NamespaceID.from(input);
     }
 
     @Override

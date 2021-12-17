@@ -5,7 +5,6 @@ import net.kyori.adventure.text.format.Style;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
  * Example: red, white, reset
  */
 public class ArgumentColor extends Argument<Style> {
-
-    public static final int UNDEFINED_COLOR = -2;
 
     public ArgumentColor(@NotNull String id) {
         super(id);
@@ -38,24 +35,6 @@ public class ArgumentColor extends Argument<Style> {
         }
 
         throw CommandException.ARGUMENT_COLOR_INVALID.generateException(input, color);
-    }
-
-    @NotNull
-    @Override
-    public Style parse(@NotNull String input) throws ArgumentSyntaxException {
-
-        // check for colour
-        NamedTextColor color = NamedTextColor.NAMES.value(input);
-        if (color != null) {
-            return Style.style(color);
-        }
-
-        // check for reset
-        if (input.equals("reset")) {
-            return Style.empty();
-        }
-
-        throw new ArgumentSyntaxException("Undefined color", input, UNDEFINED_COLOR);
     }
 
     @Override

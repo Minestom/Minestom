@@ -7,7 +7,6 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +17,6 @@ import java.lang.reflect.Field;
 public class ArgumentComponent extends Argument<Component> {
 
     private static Field posField = null;
-
-    public static final int INVALID_JSON_ERROR = 1;
 
     public ArgumentComponent(@NotNull String id) {
         super(id);
@@ -47,16 +44,6 @@ public class ArgumentComponent extends Argument<Component> {
             return read;
         } catch (IllegalAccessException | IOException | JsonParseException exception) {
             throw CommandException.ARGUMENT_COMPONENT_INVALID.generateException(input, exception.getMessage());
-        }
-    }
-
-    @NotNull
-    @Override
-    public Component parse(@NotNull String input) throws ArgumentSyntaxException {
-        try {
-            return GsonComponentSerializer.gson().deserialize(input);
-        } catch (JsonParseException e) {
-            throw new ArgumentSyntaxException("Invalid JSON", input, INVALID_JSON_ERROR);
         }
     }
 

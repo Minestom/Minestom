@@ -8,8 +8,6 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
-
 /**
  * Represents a {@link Vec} with 3 floating numbers (x;y;z) which can take relative coordinates.
  * <p>
@@ -39,13 +37,4 @@ public class ArgumentRelativeVec3 extends ArgumentRelativeVec {
         return String.format("RelativeVec3<%s>", getId());
     }
 
-    @Override
-    Function<String, ? extends Number> getRelativeNumberParser() {
-        return Double::parseDouble;
-    }
-
-    @Override
-    Function<String, ? extends Number> getAbsoluteNumberParser() {
-        return Double::parseDouble;
-    }
 }

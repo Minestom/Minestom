@@ -3,27 +3,17 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentBlockState extends Argument<Block> {
 
-    public static final int NO_BLOCK = 1;
-    public static final int INVALID_BLOCK = 2;
-    public static final int INVALID_PROPERTY = 3;
-    public static final int INVALID_PROPERTY_VALUE = 4;
+    public static final char START_PROPERTIES = '[', END_PROPERTIES = ']';
 
     public ArgumentBlockState(@NotNull String id) {
         super(id);
-    }
-
-    @Override
-    public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
     }
 
     @Override

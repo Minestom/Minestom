@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class ArgumentFloat extends ArgumentNumber<Float> {
 
     public ArgumentFloat(@NotNull String id) {
-        super(id, "brigadier:float", Float::parseFloat, (s, radix) -> (float) Integer.parseInt(s, radix), BinaryWriter::writeFloat, Float::compare);
+        super(id, "brigadier:float", BinaryWriter::writeFloat);
     }
 
     @Override

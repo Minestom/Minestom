@@ -57,18 +57,6 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Parses the given input, and throw an {@link ArgumentSyntaxException}
-     * if the input cannot be converted to {@code T}
-     *
-     * @param input the argument to parse
-     * @return the parsed argument
-     * @throws ArgumentSyntaxException if {@code value} is not valid
-     */
-    public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-        throw new ArgumentSyntaxException("Arguments are currently being converted to using StringReaders.", input, -1);
-    }
-
-    /**
      * Reads from and parses the provided input, and throws a {@link CommandException} if there is an error
      * while reading the input into a {@code T}.<br>
      * <b>Note that this method is not abstract because the conversion to {@code StringReader}s is not complete.</b>
@@ -256,7 +244,6 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentMap<I, O> extends Argument<O> {
-        public static final int INVALID_MAP = 555;
         final Argument<I> argument;
         final Function<I, O> mapper;
 
@@ -272,16 +259,12 @@ public abstract class Argument<T> {
 
         @Override
         public @NotNull O parse(@NotNull StringReader input) throws CommandException {
-            // FIXME: Complete
-            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
-        }
-
-        @Override
-        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
             final I value = argument.parse(input);
             final O mappedValue = mapper.apply(value);
-            if (mappedValue == null)
-                throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
+            if (mappedValue == null) {
+                // TODO: Consider throwing a more accurate exception
+                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+            }
             return mappedValue;
         }
 
@@ -292,7 +275,6 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentFilter<T> extends Argument<T> {
-        public static final int INVALID_FILTER = 556;
         final Argument<T> argument;
         final Predicate<T> predicate;
 
@@ -308,15 +290,11 @@ public abstract class Argument<T> {
 
         @Override
         public @NotNull T parse(@NotNull StringReader input) throws CommandException {
-            // FIXME: Complete
-            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
-        }
-
-        @Override
-        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-            final T result = argument.parse(input);
-            if (!predicate.test(result))
-                throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
+            T result = argument.parse(input);
+            if (!predicate.test(result)) {
+                // TODO: Consider throwing a more accurate exception
+                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+            }
             return result;
         }
 

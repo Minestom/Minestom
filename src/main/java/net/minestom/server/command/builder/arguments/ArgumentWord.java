@@ -2,10 +2,8 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +17,6 @@ import org.jetbrains.annotations.Nullable;
  * Example: hey
  */
 public class ArgumentWord extends Argument<String> {
-
-    public static final int SPACE_ERROR = 1;
-    public static final int RESTRICTION_ERROR = 2;
 
     protected String[] restrictions;
 
@@ -69,24 +64,6 @@ public class ArgumentWord extends Argument<String> {
         return result;
     }
 
-    @NotNull
-    @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (input.contains(StringUtils.SPACE))
-            throw new ArgumentSyntaxException("Word cannot contain space character", input, SPACE_ERROR);
-
-        // Check restrictions (acting as literal)
-        if (hasRestrictions()) {
-            for (String r : restrictions) {
-                if (input.equals(r))
-                    return input;
-            }
-            throw new ArgumentSyntaxException("Word needs to be in the restriction list", input, RESTRICTION_ERROR);
-        }
-
-        return input;
-    }
-
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         if (restrictions != null) {
@@ -94,7 +71,7 @@ public class ArgumentWord extends Argument<String> {
             // Create a primitive array for mapping
             DeclareCommandsPacket.Node[] nodes = new DeclareCommandsPacket.Node[this.restrictions.length];
 
-            // Create a node for each restrictions as literal
+            // Create a node for each restriction as a literal
             for (int i = 0; i < nodes.length; i++) {
                 DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
 
