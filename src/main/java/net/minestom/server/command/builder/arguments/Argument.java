@@ -52,7 +52,7 @@ public abstract class Argument<T> {
      * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
      */
     @ApiStatus.Experimental
-    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
+    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws CommandException {
         return argument.parse(new StringReader(argument.getId()));
     }
 
