@@ -35,7 +35,7 @@ public class ArgumentStringArray extends Argument<String[]> {
             packetWriter.writeVarInt(2); // Greedy phrase
         });
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

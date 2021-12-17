@@ -42,7 +42,7 @@ public class ArgumentColor extends Argument<Style> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:color";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

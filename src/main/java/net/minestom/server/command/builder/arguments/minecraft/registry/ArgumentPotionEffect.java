@@ -32,7 +32,7 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:mob_effect";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

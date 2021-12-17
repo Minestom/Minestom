@@ -39,7 +39,7 @@ public class NodeMaker {
         return nodes.size();
     }
 
-    public void addNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
+    public void addNodes(@NotNull DeclareCommandsPacket.Node @NotNull ... nodes) {
         Options options = new Options();
         this.configuredNodes.add(ConfiguredNodes.of(nodes, options));
         this.nodes.add(nodes);

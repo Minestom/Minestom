@@ -39,7 +39,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
                 valueWriter.accept(packetWriter, getMax());
         });
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @NotNull

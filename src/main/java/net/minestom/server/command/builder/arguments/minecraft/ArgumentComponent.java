@@ -53,7 +53,7 @@ public class ArgumentComponent extends Argument<Component> {
 
         argumentNode.parser = "minecraft:component";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

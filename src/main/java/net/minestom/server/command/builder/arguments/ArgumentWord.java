@@ -89,7 +89,7 @@ public class ArgumentWord extends Argument<String> {
             argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
                 packetWriter.writeVarInt(0); // Single word
             });
-            nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+            nodeMaker.addNodes(argumentNode);
         }
     }
 

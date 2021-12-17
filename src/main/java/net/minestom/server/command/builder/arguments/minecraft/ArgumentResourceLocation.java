@@ -24,7 +24,7 @@ public class ArgumentResourceLocation extends Argument<NamespaceID> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:resource_location";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class ArgumentLiteral extends Argument<String> {
                 executable, false, false);
         literalNode.name = getId();
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{literalNode});
+        nodeMaker.addNodes(literalNode);
     }
 
     @Override

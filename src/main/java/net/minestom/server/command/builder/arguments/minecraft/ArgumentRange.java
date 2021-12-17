@@ -33,7 +33,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = parserName;
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     /**

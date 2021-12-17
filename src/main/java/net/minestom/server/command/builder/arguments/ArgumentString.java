@@ -77,7 +77,7 @@ public class ArgumentString extends Argument<String> {
             }
         ));
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
 

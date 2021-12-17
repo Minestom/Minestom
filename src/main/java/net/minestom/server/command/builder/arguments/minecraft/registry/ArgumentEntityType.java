@@ -34,7 +34,7 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
         argumentNode.parser = "minecraft:resource_location";
         argumentNode.suggestionsType = SuggestionType.SUMMONABLE_ENTITIES.getIdentifier();
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override
