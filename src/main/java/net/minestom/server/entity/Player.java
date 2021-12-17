@@ -649,13 +649,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
         final ServerPacket packet;
-
         if (emitter == Sound.Emitter.self()) {
             packet = AdventurePacketConvertor.createSoundPacket(sound, this);
         } else {
             packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
         }
-
         playerConnection.sendPacket(packet);
     }
 
@@ -936,11 +934,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Override
     public @NotNull Component getName() {
-        if (this.displayName != null) {
-            return this.displayName;
-        } else {
-            return this.usernameComponent;
-        }
+        return Objects.requireNonNullElse(displayName, usernameComponent);
     }
 
     /**
@@ -972,10 +966,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
     public boolean dropItem(@NotNull ItemStack item) {
-        if (item.isAir()) {
-            return false;
-        }
-
+        if (item.isAir()) return false;
         ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
         EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
