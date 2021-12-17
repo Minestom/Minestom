@@ -5,6 +5,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatPosition;
@@ -93,6 +94,18 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new EntityPositionPacket(5, (short) 0, (short) 0, (short) 0, true));
         SERVER_PACKETS.add(new EntityPropertiesPacket(5, List.of()));
         SERVER_PACKETS.add(new EntityRotationPacket(5, 45f, 45f, false));
+
+        SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
+                new PlayerInfoPacket.UpdateDisplayName(UUID.randomUUID(), COMPONENT)));
+        SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
+                new PlayerInfoPacket.UpdateDisplayName(UUID.randomUUID(), (Component) null)));
+        SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
+                new PlayerInfoPacket.UpdateGameMode(UUID.randomUUID(), GameMode.CREATIVE)));
+        SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
+                new PlayerInfoPacket.UpdateLatency(UUID.randomUUID(), 5)));
+        SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
+                new PlayerInfoPacket.AddPlayer(UUID.randomUUID(), "TheMode911", List.of(new PlayerInfoPacket.AddPlayer.Property("name", "value")), GameMode.CREATIVE, 5, COMPONENT)));
+        SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER, new PlayerInfoPacket.RemovePlayer(UUID.randomUUID())));
     }
 
     @BeforeAll
