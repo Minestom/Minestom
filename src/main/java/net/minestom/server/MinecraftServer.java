@@ -67,9 +67,6 @@ public final class MinecraftServer {
     public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
             Runtime.getRuntime().availableProcessors() / 2);
 
-    public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
-    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = getThreadCount("minestom.save-thread-count", 2);
-
     // Config
     // Can be modified at performance cost when increased
     public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
