@@ -55,6 +55,8 @@ public class Command {
     private CommandCondition condition;
 
     private final List<Command> subcommands;
+    private final List<Command> subcommandsView;
+
     private final List<CommandSyntax> syntaxes;
 
     /**
@@ -71,6 +73,8 @@ public class Command {
         this.formattedNames = names.stream().map(s -> s.toLowerCase(Locale.ROOT)).toList();
 
         this.subcommands = new ArrayList<>();
+        this.subcommandsView = Collections.unmodifiableList(subcommands);
+
         this.syntaxes = new ArrayList<>();
     }
 
@@ -127,7 +131,7 @@ public class Command {
 
     @NotNull
     public List<Command> getSubcommands() {
-        return Collections.unmodifiableList(subcommands);
+        return subcommandsView;
     }
 
     /**
