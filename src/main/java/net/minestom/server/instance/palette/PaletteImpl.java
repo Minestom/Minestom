@@ -46,10 +46,9 @@ final class PaletteImpl implements Palette, Cloneable {
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= maxBitsPerEntry;
 
-        final int initialCapacity = maxPaletteSize(bitsPerEntry) / 4;
-        this.paletteToValueList = new IntArrayList(initialCapacity);
+        this.paletteToValueList = new IntArrayList(1);
         this.paletteToValueList.add(0);
-        this.valueToPaletteMap = new Int2IntOpenHashMap(initialCapacity);
+        this.valueToPaletteMap = new Int2IntOpenHashMap(1);
         this.valueToPaletteMap.put(0, 0);
     }
 
