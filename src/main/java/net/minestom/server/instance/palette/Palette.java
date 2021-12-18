@@ -10,11 +10,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public sealed interface Palette extends Writeable permits PaletteImpl {
     static Palette blocks() {
-        return new PaletteImpl(16 * 16 * 16, 8, 6, 1);
+        return newPalette(16, 8, 6, 1);
     }
 
     static Palette biomes() {
-        return new PaletteImpl(4 * 4 * 4, 2, 2, 1);
+        return newPalette(4, 2, 2, 1);
+    }
+
+    static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitIncrement) {
+        return new PaletteImpl(dimension, maxBitsPerEntry, bitsPerEntry, bitIncrement);
     }
 
     int get(int x, int y, int z);
@@ -46,6 +50,8 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
      * Returns the maximum number of entries in this palette.
      */
     int maxSize();
+
+    int dimension();
 
     @NotNull Palette clone();
 }
