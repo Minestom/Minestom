@@ -279,7 +279,7 @@ public class ExtensionManager {
         try {
             jarClass = Class.forName(mainClass, true, loader);
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Could not find main class '{}' in extension '{}'. If it is, be sure to run your server using Bootstrap#bootstrap",
+            LOGGER.error("Could not find main class '{}' in extension '{}'.",
                     mainClass, extensionName, e);
             return null;
         }
