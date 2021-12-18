@@ -94,6 +94,7 @@ public class AnvilLoader implements IChunkLoader {
             HashMap<String, Biome> biomeCache = new HashMap<>();
 
             for (ChunkSection section : fileChunk.getSections().values()) {
+                if(section.getEmpty()) continue;
                 for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                     for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
