@@ -8,27 +8,42 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
 
-public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
-    private final Action action;
-    private final List<Entry> entries;
+public record PlayerInfoPacket(@NotNull Action action,
+                               @NotNull List<Entry> entries) implements ComponentHoldingServerPacket {
+    public PlayerInfoPacket {
+        entries = List.copyOf(entries);
+        for (Entry entry : entries) {
+            if (!entry.getClass().equals(action.getClazz()))
+                throw new IllegalArgumentException("Invalid entry class for action " + action);
+        }
+    }
 
-    public PlayerInfoPacket(@NotNull Action action, @NotNull List<Entry> entries) {
-        this.action = action;
-        this.entries = List.copyOf(entries);
+    public PlayerInfoPacket(@NotNull Action action, @NotNull Entry entry) {
+        this(action, List.of(entry));
     }
 
     public PlayerInfoPacket(BinaryReader reader) {
-        this.action = Action.values()[reader.readVarInt()];
+        this(read(reader));
+    }
+
+    private PlayerInfoPacket(PlayerInfoPacket packet) {
+        this(packet.action, packet.entries);
+    }
+
+    private static PlayerInfoPacket read(BinaryReader reader) {
+        var action = Action.values()[reader.readVarInt()];
         final int playerInfoCount = reader.readVarInt();
-        this.entries = new ArrayList<>(playerInfoCount);
+        List<Entry> entries = new ArrayList<>(playerInfoCount);
         for (int i = 0; i < playerInfoCount; i++) {
             final UUID uuid = reader.readUuid();
-            this.entries.add(switch (action) {
+            entries.add(switch (action) {
                 case ADD_PLAYER -> new AddPlayer(uuid, reader);
                 case UPDATE_GAMEMODE -> new UpdateGameMode(uuid, reader);
                 case UPDATE_LATENCY -> new UpdateLatency(uuid, reader);
@@ -36,43 +51,21 @@ public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
                 case REMOVE_PLAYER -> new RemovePlayer(uuid);
             });
         }
+        return new PlayerInfoPacket(action, entries);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
-        writer.writeVarInt(entries.size());
-        for (Entry entry : this.entries) {
-            if (!entry.getClass().equals(action.getClazz())) continue;
-            writer.writeUuid(entry.uuid());
-            entry.write(writer);
-        }
-    }
-
-    public Action action() {
-        return action;
-    }
-
-    public List<Entry> entries() {
-        return entries;
+        writer.writeVarIntList(entries, (w, entry) -> {
+            w.writeUuid(entry.uuid());
+            entry.write(w);
+        });
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.PLAYER_INFO;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PlayerInfoPacket)) return false;
-        PlayerInfoPacket that = (PlayerInfoPacket) o;
-        return action == that.action && entries.equals(that.entries);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(action, entries);
     }
 
     @Override
@@ -129,15 +122,17 @@ public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
         }
     }
 
-    public sealed interface Entry
+    public sealed interface Entry extends Writeable
             permits AddPlayer, UpdateGameMode, UpdateLatency, UpdateDisplayName, RemovePlayer {
-        void write(BinaryWriter writer);
-
         UUID uuid();
     }
 
     public record AddPlayer(UUID uuid, String name, List<Property> properties, GameMode gameMode, int ping,
                             Component displayName) implements Entry, ComponentHolder<AddPlayer> {
+        public AddPlayer {
+            properties = List.copyOf(properties);
+        }
+
         public AddPlayer(UUID uuid, BinaryReader reader) {
             this(uuid, reader.readSizedString(),
                     reader.readVarIntList(Property::new),
@@ -148,16 +143,11 @@ public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
         @Override
         public void write(BinaryWriter writer) {
             writer.writeSizedString(name);
-            writer.writeVarInt(properties.size());
-            for (Property property : properties) {
-                property.write(writer);
-            }
+            writer.writeVarIntList(properties, BinaryWriter::write);
             writer.writeVarInt(gameMode.getId());
             writer.writeVarInt(ping);
-
-            final boolean hasDisplayName = displayName != null;
-            writer.writeBoolean(hasDisplayName);
-            if (hasDisplayName) writer.writeComponent(displayName);
+            writer.writeBoolean(displayName != null);
+            if (displayName != null) writer.writeComponent(displayName);
         }
 
         @Override
@@ -171,22 +161,23 @@ public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
                     new AddPlayer(uuid, name, properties, gameMode, ping, operator.apply(displayName)) : this;
         }
 
-        public record Property(String name, String value, String signature) {
+        public record Property(@NotNull String name, @NotNull String value,
+                               @Nullable String signature) implements Writeable {
             public Property(String name, String value) {
                 this(name, value, null);
             }
 
             public Property(BinaryReader reader) {
-                this(reader.readSizedString(), reader.readSizedString(), reader.readBoolean() ? reader.readSizedString() : null);
+                this(reader.readSizedString(), reader.readSizedString(),
+                        reader.readBoolean() ? reader.readSizedString() : null);
             }
 
+            @Override
             public void write(BinaryWriter writer) {
                 writer.writeSizedString(name);
                 writer.writeSizedString(value);
-
-                final boolean signed = signature != null;
-                writer.writeBoolean(signed);
-                if (signed) writer.writeSizedString(signature);
+                writer.writeBoolean(signature != null);
+                if (signature != null) writer.writeSizedString(signature);
             }
         }
     }
@@ -213,17 +204,16 @@ public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
         }
     }
 
-    public record UpdateDisplayName(UUID uuid,
-                                    Component displayName) implements Entry, ComponentHolder<UpdateDisplayName> {
+    public record UpdateDisplayName(@NotNull UUID uuid,
+                                    @Nullable Component displayName) implements Entry, ComponentHolder<UpdateDisplayName> {
         public UpdateDisplayName(UUID uuid, BinaryReader reader) {
             this(uuid, reader.readBoolean() ? reader.readComponent() : null);
         }
 
         @Override
         public void write(BinaryWriter writer) {
-            final boolean hasDisplayName = displayName != null;
-            writer.writeBoolean(hasDisplayName);
-            if (hasDisplayName) writer.writeComponent(displayName);
+            writer.writeBoolean(displayName != null);
+            if (displayName != null) writer.writeComponent(displayName);
         }
 
         @Override
@@ -237,7 +227,7 @@ public final class PlayerInfoPacket implements ComponentHoldingServerPacket {
         }
     }
 
-    public record RemovePlayer(UUID uuid) implements Entry {
+    public record RemovePlayer(@NotNull UUID uuid) implements Entry {
         @Override
         public void write(BinaryWriter writer) {
         }

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.ClientPacketsHandler;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,36 +27,31 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
                 new ClientPacketsHandler.Play());
     }
 
-    public void process(@NotNull PlayerSocketConnection connection, int packetId, ByteBuffer body) {
+    public @NotNull ClientPacket create(@NotNull ConnectionState connectionState, int packetId, ByteBuffer body) {
+        BinaryReader binaryReader = new BinaryReader(body);
+        return switch (connectionState) {
+            case PLAY -> playHandler.create(packetId, binaryReader);
+            case LOGIN -> loginHandler.create(packetId, binaryReader);
+            case STATUS -> statusHandler.create(packetId, binaryReader);
+            case UNKNOWN -> {
+                assert packetId == 0;
+                yield new HandshakePacket(binaryReader);
+            }
+        };
+    }
+
+    public void process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
         if (MinecraftServer.getRateLimit() > 0) {
             // Increment packet count (checked in PlayerConnection#update)
             connection.getPacketCounter().incrementAndGet();
         }
-        BinaryReader binaryReader = new BinaryReader(body);
-        final ConnectionState connectionState = connection.getConnectionState();
-        if (connectionState == ConnectionState.UNKNOWN) {
-            // Should be handshake packet
-            if (packetId == 0) {
-                final HandshakePacket handshakePacket = new HandshakePacket(binaryReader);
-                handshakePacket.process(connection);
-            }
-            return;
-        }
-        switch (connectionState) {
-            case PLAY -> {
-                final Player player = connection.getPlayer();
-                ClientPacket playPacket = playHandler.create(packetId, binaryReader);
-                assert player != null;
-                player.addPacketToQueue(playPacket);
-            }
-            case LOGIN -> {
-                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginHandler.create(packetId, binaryReader);
-                loginPacket.process(connection);
-            }
-            case STATUS -> {
-                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusHandler.create(packetId, binaryReader);
-                statusPacket.process(connection);
-            }
+        var packet = create(connection.getConnectionState(), packetId, body);
+        if (packet instanceof ClientPreplayPacket prePlayPacket) {
+            prePlayPacket.process(connection);
+        } else {
+            final Player player = connection.getPlayer();
+            assert player != null;
+            player.addPacketToQueue(packet);
         }
     }
 }

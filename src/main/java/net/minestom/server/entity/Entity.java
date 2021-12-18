@@ -38,6 +38,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -156,8 +157,6 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
-    private boolean shouldRemove;
-    private long scheduledRemoveTime;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
@@ -509,29 +508,8 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      */
     @Override
     public void tick(long time) {
-        if (instance == null)
+        if (instance == null || isRemoved() || !ChunkUtils.isLoaded(currentChunk))
             return;
-
-        // Scheduled remove
-        if (scheduledRemoveTime != 0) {
-            final boolean finished = time >= scheduledRemoveTime;
-            if (finished) {
-                remove();
-                return;
-            }
-        }
-
-        // Instant remove
-        if (shouldRemove()) {
-            remove();
-            return;
-        }
-
-        // Check if the entity chunk is loaded
-        if (!ChunkUtils.isLoaded(currentChunk)) {
-            // No update for entities in unloaded chunk
-            return;
-        }
 
         // scheduled tasks
         this.scheduler.processTick();
@@ -559,9 +537,6 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             synchronizePosition(false);
-        }
-        if (shouldRemove() && !MinecraftServer.isStopping()) {
-            remove();
         }
     }
 
@@ -1442,7 +1417,6 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         if (vehicle != null) vehicle.removePassenger(this);
         MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
-        this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
         Instance currentInstance = this.instance;
@@ -1472,24 +1446,10 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     /**
      * Triggers {@link #remove()} after the specified time.
      *
-     * @param delay the time before removing the entity,
-     *              0 to cancel the removing
+     * @param delay the time before removing the entity
      */
     public void scheduleRemove(Duration delay) {
-        if (delay.isZero()) { // Cancel the scheduled remove
-            this.scheduledRemoveTime = 0;
-            return;
-        }
-        this.scheduledRemoveTime = System.currentTimeMillis() + delay.toMillis();
-    }
-
-    /**
-     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(Duration)}.
-     *
-     * @return true if the entity removal has been scheduled
-     */
-    public boolean isRemoveScheduled() {
-        return scheduledRemoveTime != 0;
+        this.scheduler.buildTask(this::remove).delay(TaskSchedule.duration(delay)).schedule();
     }
 
     protected @NotNull Vec getVelocityForPacket() {
@@ -1708,9 +1668,5 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         SPIN_ATTACK,
         SNEAKING,
         DYING
-    }
-
-    protected boolean shouldRemove() {
-        return shouldRemove;
     }
 }

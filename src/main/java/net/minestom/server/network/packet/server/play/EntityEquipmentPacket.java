@@ -15,6 +15,8 @@ public record EntityEquipmentPacket(int entityId,
                                     @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket {
     public EntityEquipmentPacket {
         equipments = Map.copyOf(equipments);
+        if (equipments.isEmpty())
+            throw new IllegalArgumentException("Equipments cannot be empty");
     }
 
     public EntityEquipmentPacket(BinaryReader reader) {
@@ -41,11 +43,11 @@ public record EntityEquipmentPacket(int entityId,
 
     private static Map<EquipmentSlot, ItemStack> readEquipments(BinaryReader reader) {
         Map<EquipmentSlot, ItemStack> equipments = new EnumMap<>(EquipmentSlot.class);
-        while (true) {
-            final byte slotEnum = reader.readByte();
-            if ((slotEnum & 0x80) != 0x80) break;
-            equipments.put(EquipmentSlot.values()[slotEnum & 0x7F], reader.readItemStack());
-        }
+        byte slot;
+        do {
+            slot = reader.readByte();
+            equipments.put(EquipmentSlot.values()[slot & 0x7F], reader.readItemStack());
+        } while ((slot & 0x80) == 0x80);
         return equipments;
     }
 }

@@ -13,7 +13,6 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -215,13 +214,17 @@ public class DynamicChunk extends Chunk {
             index++;
             final byte[] skyLight = section.getSkyLight();
             final byte[] blockLight = section.getBlockLight();
-            if (!ArrayUtils.empty(skyLight)) {
+            if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
+            } else {
+                emptySkyMask.set(index);
             }
-            if (!ArrayUtils.empty(blockLight)) {
+            if (blockLight.length != 0) {
                 blockLights.add(blockLight);
                 blockMask.set(index);
+            } else {
+                emptyBlockMask.set(index);
             }
         }
         return new LightData(true,

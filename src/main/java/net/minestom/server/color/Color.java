@@ -5,15 +5,19 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 /**
  * A general purpose class for representing colors.
+ * <p>
+ * Colors must be in the range of 0-255.
  */
-public class Color implements RGBLike {
+public record Color(int red, int green, int blue) implements RGBLike {
     private static final int BIT_MASK = 0xff;
 
-    private int red, green, blue;
+    public Color {
+        Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
+        Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
+        Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
+    }
 
     /**
      * Creates a color from an integer. This is done by reading each color component
@@ -31,82 +35,20 @@ public class Color implements RGBLike {
      *
      * @param rgbLike the color
      */
-    public Color(RGBLike rgbLike) {
+    public Color(@NotNull RGBLike rgbLike) {
         this(rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
-    /**
-     * Creates a color from red, green, and blue components.
-     *
-     * @param red   the red component
-     * @param green the green component
-     * @param blue  the blue component
-     * @throws IllegalArgumentException if any component value is not between 0-255 (inclusive)
-     */
-    public Color(int red, int green, int blue) {
-        Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
-        Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
-        Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+    public @NotNull Color withRed(int red) {
+        return new Color(red, green, blue);
     }
 
-    /**
-     * Gets the red component.
-     *
-     * @return red component, between 0-255 (inclusive)
-     */
-    public int getRed() {
-        return this.red;
+    public @NotNull Color withGreen(int green) {
+        return new Color(red, green, blue);
     }
 
-    /**
-     * Creates a new Color object with specified component
-     *
-     * @param red the red component, from 0 to 255
-     */
-    public void setRed(int red) {
-        Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
-        this.red = red;
-    }
-
-    /**
-     * Gets the green component
-     *
-     * @return green component, from 0 to 255
-     */
-    public int getGreen() {
-        return this.green;
-    }
-
-    /**
-     * Creates a new Color object with specified component
-     *
-     * @param green the red component, from 0 to 255
-     */
-    public void setGreen(int green) {
-        Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
-        this.green = green;
-    }
-
-    /**
-     * Gets the blue component
-     *
-     * @return blue component, from 0 to 255
-     */
-    public int getBlue() {
-        return this.blue;
-    }
-
-    /**
-     * Sets the blue component of this color.
-     *
-     * @param blue the red component, from 0 to 255
-     */
-    public void setBlue(int blue) {
-        Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
-        this.blue = blue;
+    public @NotNull Color withBlue(int blue) {
+        return new Color(red, green, blue);
     }
 
     /**
@@ -129,23 +71,25 @@ public class Color implements RGBLike {
      *
      * @param colors the colors
      */
-    public void mixWith(@NotNull RGBLike... colors) {
-        // store the current highest component
-        int max = Math.max(Math.max(this.red, this.green), this.blue);
+    public @NotNull Color mixWith(@NotNull RGBLike... colors) {
+        int r = red, g = green, b = blue;
 
-        // now combine all of the color components, adding to the max
+        // store the current highest component
+        int max = Math.max(Math.max(r, g), b);
+
+        // now combine all the color components, adding to the max
         for (RGBLike color : colors) {
-            this.red += color.red();
-            this.green += color.green();
-            this.blue += color.blue();
+            r += color.red();
+            g += color.green();
+            b += color.blue();
             max += Math.max(Math.max(color.red(), color.green()), color.blue());
         }
 
         // work out the averages
         float count = colors.length + 1;
-        float averageRed = this.red / count;
-        float averageGreen = this.green / count;
-        float averageBlue = this.blue / count;
+        float averageRed = r / count;
+        float averageGreen = g / count;
+        float averageBlue = b / count;
         float averageMax = max / count;
 
         // work out the scale factor
@@ -153,36 +97,24 @@ public class Color implements RGBLike {
         float gainFactor = averageMax / maximumOfAverages;
 
         // round and multiply
-        this.red = Math.round(averageRed * gainFactor);
-        this.blue = Math.round(averageBlue * gainFactor);
-        this.green = Math.round(averageGreen * gainFactor);
+        r = Math.round(averageRed * gainFactor);
+        g = Math.round(averageGreen * gainFactor);
+        b = Math.round(averageBlue * gainFactor);
+        return new Color(r, g, b);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Color color = (Color) o;
-        return red == color.red && green == color.green && blue == color.blue;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(red, green, blue);
-    }
-
-    @Override
-    public int red() {
+    @Deprecated
+    public int getRed() {
         return this.red;
     }
 
-    @Override
-    public int green() {
+    @Deprecated
+    public int getGreen() {
         return this.green;
     }
 
-    @Override
-    public int blue() {
+    @Deprecated
+    public int getBlue() {
         return this.blue;
     }
 }

@@ -33,13 +33,12 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<String> SNBT = new Tag<>(null, n -> n.toCompound().toSNBT(), (original, snbt) -> {
+    public static final Tag<String> SNBT = new Tag<>(null, NBTCompoundLike::toSNBT, (original, snbt) -> {
         try {
             final var updated = new SNBTParser(new StringReader(snbt)).parse();
             if (!(updated instanceof NBTCompound updatedCompound))
                 throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
-            original.clear();
-            updatedCompound.forEach(original::set);
+            original.copyFrom(updatedCompound);
         } catch (NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
@@ -51,10 +50,7 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, (original, updated) -> {
-        original.clear();
-        updated.forEach(original::set);
-    });
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, MutableNBTCompound::copyFrom);
 
     private final String key;
     private final Function<NBTCompoundLike, T> readFunction;
@@ -183,12 +179,6 @@ public class Tag<T> {
                 (nbtCompound, value) -> nbtCompound.setDouble(key, value));
     }
 
-    public static @NotNull Tag<byte[]> ByteArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getByteArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setByteArray(key, value));
-    }
-
     public static @NotNull Tag<String> String(@NotNull String key) {
         return new Tag<>(key,
                 nbtCompound -> nbtCompound.getString(key),
@@ -200,18 +190,6 @@ public class Tag<T> {
         return new Tag<>(key,
                 nbt -> (T) nbt.get(key),
                 ((nbt, value) -> nbt.set(key, value)));
-    }
-
-    public static @NotNull Tag<int[]> IntArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getIntArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setIntArray(key, value));
-    }
-
-    public static @NotNull Tag<long[]> LongArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getLongArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
     /**
@@ -241,6 +219,36 @@ public class Tag<T> {
         return new Tag<>(null,
                 nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
                 (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
+    }
+
+    /**
+     * @deprecated use {@link Tag#NBT(String)} with {@link NBT#ByteArray(byte...)}
+     */
+    @Deprecated
+    public static @NotNull Tag<byte[]> ByteArray(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> nbtCompound.getByteArray(key).copyArray(),
+                (nbtCompound, value) -> nbtCompound.setByteArray(key, value));
+    }
+
+    /**
+     * @deprecated use {@link Tag#NBT(String)} with {@link NBT#IntArray(int...)}
+     */
+    @Deprecated
+    public static @NotNull Tag<int[]> IntArray(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> nbtCompound.getIntArray(key).copyArray(),
+                (nbtCompound, value) -> nbtCompound.setIntArray(key, value));
+    }
+
+    /**
+     * @deprecated use {@link Tag#NBT(String)} with {@link NBT#LongArray(long...)}
+     */
+    @Deprecated
+    public static @NotNull Tag<long[]> LongArray(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> nbtCompound.getLongArray(key).copyArray(),
+                (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
     /**
