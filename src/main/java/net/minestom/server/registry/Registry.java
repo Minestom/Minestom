@@ -537,15 +537,14 @@ public final class Registry {
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
-                list.trimToSize();
-                yield list;
+                yield List.copyOf(list);
             }
             case BEGIN_OBJECT -> {
                 Map<String, Object> map = new HashMap<>();
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
                 reader.endObject();
-                yield map;
+                yield Map.copyOf(map);
             }
             case STRING -> reader.nextString().intern();
             case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);

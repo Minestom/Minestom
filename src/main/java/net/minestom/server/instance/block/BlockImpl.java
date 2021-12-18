@@ -20,7 +20,7 @@ final class BlockImpl implements Block {
     private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
-                final var stateObject = (Map<String, Object>) object.remove("states");
+                final var stateObject = (Map<String, Object>) object.get("states");
                 // Loop each state
                 var propertyEntry = new HashMap<Map<String, String>, Block>();
                 var unmodifiableEntries = Collections.unmodifiableMap(propertyEntry);
