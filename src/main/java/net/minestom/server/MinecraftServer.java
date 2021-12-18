@@ -316,6 +316,7 @@ public final class MinecraftServer {
      *
      * @return the storage manager
      */
+    @Deprecated
     public static StorageManager getStorageManager() {
         checkInitStatus(storageManager);
         return storageManager;
