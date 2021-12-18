@@ -2,8 +2,6 @@ package net.minestom.server.registry;
 
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
@@ -535,18 +533,19 @@ public final class Registry {
     private static Object readObject(JsonReader reader) throws IOException {
         return switch (reader.peek()) {
             case BEGIN_ARRAY -> {
-                ObjectArrayList<Object> list = new ObjectArrayList<>();
+                ArrayList<Object> list = new ArrayList<>();
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
-                yield new ObjectArrayList<>(list);
+                list.trimToSize();
+                yield list;
             }
             case BEGIN_OBJECT -> {
-                Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
+                Map<String, Object> map = new HashMap<>();
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
                 reader.endObject();
-                yield new Object2ObjectArrayMap<>(map);
+                yield map;
             }
             case STRING -> reader.nextString().intern();
             case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
