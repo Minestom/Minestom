@@ -7,6 +7,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
+import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
@@ -66,7 +67,7 @@ public final class UpdateManager {
      * @param instance the instance
      */
     public void signalInstanceCreate(Instance instance) {
-        this.threadDispatcher.onInstanceCreate(instance);
+        instance.getChunks().forEach(this::signalChunkLoad);
     }
 
     /**
@@ -77,7 +78,7 @@ public final class UpdateManager {
      * @param instance the instance
      */
     public void signalInstanceDelete(Instance instance) {
-        this.threadDispatcher.onInstanceDelete(instance);
+        instance.getChunks().forEach(this::signalChunkUnload);
     }
 
     /**
@@ -88,7 +89,7 @@ public final class UpdateManager {
      * @param chunk the loaded chunk
      */
     public void signalChunkLoad(@NotNull Chunk chunk) {
-        this.threadDispatcher.onChunkLoad(chunk);
+        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
     }
 
     /**
@@ -99,7 +100,7 @@ public final class UpdateManager {
      * @param chunk the unloaded chunk
      */
     public void signalChunkUnload(@NotNull Chunk chunk) {
-        this.threadDispatcher.onChunkUnload(chunk);
+        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
     }
 
     /**
