@@ -139,24 +139,23 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("resolved")) {
-                resolved(nbtCompound.getByte("resolved") == 1);
+            if (nbtCompound.get("resolved") instanceof NBTByte resolved) {
+                this.resolved = resolved.asBoolean();
             }
-            if (nbtCompound.containsKey("generation")) {
-                generation(WrittenBookGeneration.values()[nbtCompound.getInt("generation")]);
+            if (nbtCompound.get("generation") instanceof NBTInt generation) {
+                this.generation = WrittenBookGeneration.values()[generation.getValue()];
             }
-            if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
+            if (nbtCompound.get("author") instanceof NBTString author) {
+                this.author = author.getValue();
             }
-            if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
+            if (nbtCompound.get("title") instanceof NBTString title) {
+                this.title = title.getValue();
             }
-            if (nbtCompound.containsKey("pages")) {
-                final NBTList<NBTString> list = nbtCompound.getList("pages");
-                for (NBTString page : list) {
+            if (nbtCompound.get("pages") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_String) {
+                for (NBTString page : list.<NBTString>asListOf()) {
                     this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
                 }
-                pages(pages);
             }
         }
 

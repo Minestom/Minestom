@@ -4,10 +4,7 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.firework.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -65,20 +62,16 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Fireworks")) {
-                NBTCompound fireworksCompound = nbtCompound.getCompound("Fireworks");
-
-                if (fireworksCompound.containsKey("Flight")) {
-                    flightDuration(fireworksCompound.getAsByte("Flight"));
+            if (nbtCompound.get("Fireworks") instanceof NBTCompound fireworksCompound) {
+                if (fireworksCompound.get("Flight") instanceof NBTByte flight) {
+                    this.flightDuration = flight.getValue();
                 }
 
-                if (fireworksCompound.containsKey("Explosions")) {
-                    NBTList<NBTCompound> explosions = fireworksCompound.getList("Explosions");
-
-                    for (NBTCompound explosion : explosions) {
+                if (fireworksCompound.get("Explosions") instanceof NBTList<?> list &&
+                        list.getSubtagType() == NBTType.TAG_Compound) {
+                    for (NBTCompound explosion : list.<NBTCompound>asListOf()) {
                         this.effects.add(FireworkEffect.fromCompound(explosion));
                     }
-                    effects(effects);
                 }
             }
         }
