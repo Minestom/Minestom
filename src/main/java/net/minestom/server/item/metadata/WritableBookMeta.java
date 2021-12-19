@@ -79,18 +79,17 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
+            if (nbtCompound.get("author") instanceof NBTString author) {
+                this.author = author.getValue();
             }
-            if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
+            if (nbtCompound.get("title") instanceof NBTString title) {
+                this.title = title.getValue();
             }
-            if (nbtCompound.containsKey("pages")) {
-                final NBTList<NBTString> list = nbtCompound.getList("pages");
-                for (NBTString page : list) {
+            if (nbtCompound.get("pages") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_String) {
+                for (NBTString page : list.<NBTString>asListOf()) {
                     this.pages.add(LegacyComponentSerializer.legacySection().deserialize(page.getValue()));
                 }
-                pages(pages);
             }
         }
 

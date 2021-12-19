@@ -5,7 +5,10 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,16 +58,15 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
         }
 
         private void updateItems() {
-            mutateNbt(compound -> {
-                compound.set("Items", NBT.List(NBTType.TAG_Compound, items.size(), i -> items.get(i).toItemNBT()));
-            });
+            mutateNbt(compound -> compound.set("Items", NBT.List(NBTType.TAG_Compound,
+                    items.size(), i -> items.get(i).toItemNBT())));
         }
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Items")) {
-                final NBTList<NBTCompound> items = nbtCompound.getList("Items");
-                for (NBTCompound item : items) {
+            if (nbtCompound.get("Items") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_Compound) {
+                for (NBTCompound item : list.<NBTCompound>asListOf()) {
                     this.items.add(ItemStack.fromItemNBT(item));
                 }
             }

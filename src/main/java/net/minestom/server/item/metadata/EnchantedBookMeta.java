@@ -6,6 +6,8 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,8 +55,9 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("StoredEnchantments")) {
-                NBTUtils.loadEnchantments(nbtCompound.getList("StoredEnchantments"), this::enchantment);
+            if (nbtCompound.get("StoredEnchantments") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_Compound) {
+                NBTUtils.loadEnchantments(list.asListOf(), this::enchantment);
             }
         }
 
