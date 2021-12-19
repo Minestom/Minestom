@@ -15,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<PotionMeta.Builder> {
@@ -62,14 +63,13 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
             NBTList<NBTCompound> potionList = NBT.List(
                     NBTType.TAG_Compound,
                     customPotionEffects.stream()
-                            .map(customPotionEffect -> NBT.Compound(potionCompound -> {
-                                potionCompound.setByte("Id", customPotionEffect.getId());
-                                potionCompound.setByte("Amplifier", customPotionEffect.getAmplifier());
-                                potionCompound.setInt("Duration", customPotionEffect.getDuration());
-                                potionCompound.setByte("Ambient", (byte) (customPotionEffect.isAmbient() ? 1 : 0));
-                                potionCompound.setByte("ShowParticles", (byte) (customPotionEffect.showParticles() ? 1 : 0));
-                                potionCompound.setByte("ShowIcon", (byte) (customPotionEffect.showIcon() ? 1 : 0));
-                            }))
+                            .map(customPotionEffect -> NBT.Compound(Map.of(
+                                    "Id", NBT.Byte(customPotionEffect.getId()),
+                                    "Amplifier", NBT.Byte(customPotionEffect.getAmplifier()),
+                                    "Duration", NBT.Int(customPotionEffect.getDuration()),
+                                    "Ambient", NBT.Boolean(customPotionEffect.isAmbient()),
+                                    "ShowParticles", NBT.Boolean(customPotionEffect.showParticles()),
+                                    "ShowIcon", NBT.Boolean(customPotionEffect.showIcon()))))
                             .toList()
             );
             mutateNbt(compound -> compound.set("CustomPotionEffects", potionList));
