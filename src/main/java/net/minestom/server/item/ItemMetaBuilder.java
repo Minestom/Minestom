@@ -99,11 +99,8 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
         this.enchantmentMap = new HashMap<>(enchantments);
-        handleMap(enchantmentMap, "Enchantments", () -> {
-            MutableNBTCompound mutableCopy = nbt.toMutableCompound();
-            NBTUtils.writeEnchant(mutableCopy, "Enchantments", enchantmentMap);
-            return mutableCopy.get("Enchantments");
-        });
+        handleMap(enchantmentMap, "Enchantments",
+                (nbt) -> NBTUtils.writeEnchant(nbt, "Enchantments", enchantmentMap));
         return this;
     }
 
@@ -248,10 +245,10 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     protected void handleMap(@NotNull Map<?, ?> objects,
                              @NotNull String key,
-                             @NotNull Supplier<@NotNull NBT> supplier) {
+                             @NotNull Consumer<MutableNBTCompound> consumer) {
         mutateNbt(compound -> {
             if (!objects.isEmpty()) {
-                compound.set(key, supplier.get());
+                consumer.accept(compound);
             } else {
                 compound.remove(key);
             }
