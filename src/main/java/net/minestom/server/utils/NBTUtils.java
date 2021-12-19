@@ -125,22 +125,19 @@ public final class NBTUtils {
         return ItemStack.fromNBT(material, nbtCompound, count);
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static void loadDataIntoMeta(@NotNull ItemMetaBuilder metaBuilder, @NotNull NBTCompound nbt) {
-        if (nbt.containsKey("Damage")) metaBuilder.damage(nbt.getInt("Damage"));
-        if (nbt.containsKey("Unbreakable")) metaBuilder.unbreakable(nbt.getAsByte("Unbreakable") == 1);
-        if (nbt.containsKey("HideFlags")) metaBuilder.hideFlag(nbt.getInt("HideFlags"));
-        if (nbt.containsKey("display")) {
-            final NBTCompound display = nbt.getCompound("display");
-            if (display.containsKey("Name")) {
-                final String rawName = display.getString("Name");
-                final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
+        if (nbt.get("Damage") instanceof NBTInt damage) metaBuilder.damage(damage.getValue());
+        if (nbt.get("Unbreakable") instanceof NBTByte unbreakable) metaBuilder.unbreakable(unbreakable.asBoolean());
+        if (nbt.get("HideFlags") instanceof NBTInt hideFlags) metaBuilder.hideFlag(hideFlags.getValue());
+        if (nbt.get("display") instanceof NBTCompound display) {
+            if (display.get("Name") instanceof NBTString rawName) {
+                final Component displayName = GsonComponentSerializer.gson().deserialize(rawName.getValue());
                 metaBuilder.displayName(displayName);
             }
-            if (display.containsKey("Lore")) {
-                NBTList<NBTString> loreList = display.getList("Lore");
+            if (display.get("Lore") instanceof NBTList<?> loreList &&
+                    loreList.getSubtagType() == NBTType.TAG_String) {
                 List<Component> lore = new ArrayList<>();
-                for (NBTString s : loreList) {
+                for (NBTString s : loreList.<NBTString>asListOf()) {
                     final String rawLore = s.getValue();
                     lore.add(GsonComponentSerializer.gson().deserialize(rawLore));
                 }
@@ -149,15 +146,16 @@ public final class NBTUtils {
         }
 
         // Enchantments
-        if (nbt.containsKey("Enchantments")) {
-            loadEnchantments(nbt.getList("Enchantments"), metaBuilder::enchantment);
+        if (nbt.get("Enchantments") instanceof NBTList<?> nbtEnchants &&
+                nbtEnchants.getSubtagType() == NBTType.TAG_Compound) {
+            loadEnchantments(nbtEnchants.asListOf(), metaBuilder::enchantment);
         }
 
         // Attributes
-        if (nbt.containsKey("AttributeModifiers")) {
+        if (nbt.get("AttributeModifiers") instanceof NBTList<?> nbtAttributes &&
+                nbtAttributes.getSubtagType() == NBTType.TAG_Compound) {
             List<ItemAttribute> attributes = new ArrayList<>();
-            NBTList<NBTCompound> nbtAttributes = nbt.getList("AttributeModifiers");
-            for (NBTCompound attributeNBT : nbtAttributes) {
+            for (NBTCompound attributeNBT : nbtAttributes.<NBTCompound>asListOf()) {
                 final UUID uuid;
                 {
                     final int[] uuidArray = attributeNBT.getIntArray("UUID").copyArray();
@@ -197,10 +195,8 @@ public final class NBTUtils {
         }
 
         // Custom model data
-        {
-            if (nbt.containsKey("CustomModelData")) {
-                metaBuilder.customModelData(nbt.getInt("CustomModelData"));
-            }
+        if (nbt.get("CustomModelData") instanceof NBTInt customModelData) {
+            metaBuilder.customModelData(customModelData.getValue());
         }
 
         // Meta specific fields
