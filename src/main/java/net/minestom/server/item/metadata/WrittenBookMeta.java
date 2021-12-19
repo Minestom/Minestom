@@ -14,7 +14,6 @@ import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
 
