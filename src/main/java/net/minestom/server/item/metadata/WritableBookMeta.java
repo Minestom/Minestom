@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -26,7 +25,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         super(metaBuilder);
         this.author = author;
         this.title = title;
-        this.pages = new ArrayList<>(pages);
+        this.pages = List.copyOf(pages);
     }
 
     public @Nullable String getAuthor() {
@@ -38,7 +37,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
     }
 
     public @NotNull List<@NotNull Component> getPages() {
-        return Collections.unmodifiableList(pages);
+        return pages;
     }
 
     public static class Builder extends ItemMetaBuilder {
