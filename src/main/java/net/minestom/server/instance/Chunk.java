@@ -16,7 +16,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Set;
@@ -89,7 +88,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract @NotNull Section getSection(int section);
 
     public @NotNull Section getSectionAt(int blockY) {
-        return getSection(ChunkUtils.getSectionAt(blockY));
+        return getSection(ChunkUtils.getChunkCoordinate(blockY));
     }
 
     /**

@@ -28,15 +28,12 @@ public class CoordinateTest {
         assertEquals(1, ChunkUtils.getChunkCoordinate(16));
         assertEquals(-1, ChunkUtils.getChunkCoordinate(-16));
         assertEquals(3, ChunkUtils.getChunkCoordinate(48));
-    }
 
-    @Test
-    public void sectionCoordinate() {
-        assertEquals(4, ChunkUtils.getSectionAt(65));
-        assertEquals(4, ChunkUtils.getSectionAt(64));
-        assertEquals(3, ChunkUtils.getSectionAt(63));
-        assertEquals(-2, ChunkUtils.getSectionAt(-25));
-        assertEquals(23, ChunkUtils.getSectionAt(380));
+        assertEquals(4, ChunkUtils.getChunkCoordinate(65));
+        assertEquals(4, ChunkUtils.getChunkCoordinate(64));
+        assertEquals(3, ChunkUtils.getChunkCoordinate(63));
+        assertEquals(-2, ChunkUtils.getChunkCoordinate(-25));
+        assertEquals(23, ChunkUtils.getChunkCoordinate(380));
     }
 
     @Test
