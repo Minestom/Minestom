@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-final class MaterialImpl implements Material {
+record MaterialImpl(Registry.MaterialEntry registry) implements Material {
     private static final Registry.Container<Material> CONTAINER = new Registry.Container<>(Registry.Resource.ITEMS,
             (container, namespace, object) -> container.register(new MaterialImpl(Registry.material(namespace, object, null))));
 
@@ -23,17 +23,6 @@ final class MaterialImpl implements Material {
 
     static Collection<Material> values() {
         return CONTAINER.values();
-    }
-
-    private final Registry.MaterialEntry registry;
-
-    MaterialImpl(Registry.MaterialEntry registry) {
-        this.registry = registry;
-    }
-
-    @Override
-    public @NotNull Registry.MaterialEntry registry() {
-        return registry;
     }
 
     @Override
