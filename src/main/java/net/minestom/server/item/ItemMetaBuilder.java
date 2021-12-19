@@ -15,17 +15,11 @@ import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class ItemMetaBuilder implements TagWritable {
-
-    private static final AtomicReferenceFieldUpdater<ItemMetaBuilder, NBTCompound> NBT_UPDATER =
-            AtomicReferenceFieldUpdater.newUpdater(ItemMetaBuilder.class, NBTCompound.class, "nbt");
-
-    protected volatile boolean built = false;
-    private volatile NBTCompound nbt = new NBTCompound();
+    MutableNBTCompound nbt = new MutableNBTCompound();
 
     protected int damage;
     protected boolean unbreakable;
@@ -106,7 +100,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
         this.enchantmentMap = new HashMap<>(enchantments);
         handleMap(enchantmentMap, "Enchantments", () -> {
-            MutableNBTCompound mutableCopy = new MutableNBTCompound(nbt);
+            MutableNBTCompound mutableCopy = nbt.toMutableCompound();
             NBTUtils.writeEnchant(mutableCopy, "Enchantments", enchantmentMap);
             return mutableCopy.get("Enchantments");
         });
@@ -205,24 +199,11 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
 
-    protected synchronized void mutateNbt(Consumer<MutableNBTCompound> consumer) {
-        MutableNBTCompound copy = new MutableNBTCompound(nbt);
-        consumer.accept(copy);
-        if (built) {
-            built = false;
-            final var currentNbt = nbt;
-            NBT_UPDATER.compareAndSet(this, currentNbt, copy.toCompound());
-        } else {
-            nbt = copy.toCompound();
-        }
-    }
-
-    protected synchronized NBTCompound nbt() {
-        return nbt;
+    protected void mutateNbt(Consumer<MutableNBTCompound> consumer) {
+        consumer.accept(nbt);
     }
 
     protected @NotNull ItemMeta generate() {
-        this.built = true;
         return build();
     }
 
@@ -280,8 +261,8 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract(value = "_, _ -> new", pure = true)
     public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
         ItemMetaBuilder dest = src.getSupplier().get();
-        dest.nbt = nbtCompound;
-        NBTUtils.loadDataIntoMeta(dest, dest.nbt);
+        dest.nbt = nbtCompound.toMutableCompound();
+        NBTUtils.loadDataIntoMeta(dest, nbtCompound);
         return dest;
     }
 
