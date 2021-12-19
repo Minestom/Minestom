@@ -7,7 +7,6 @@ import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -18,7 +17,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
     protected EnchantedBookMeta(@NotNull ItemMetaBuilder metaBuilder, Map<Enchantment, Short> storedEnchantmentMap) {
         super(metaBuilder);
-        this.storedEnchantmentMap = new HashMap<>(storedEnchantmentMap);
+        this.storedEnchantmentMap = Map.copyOf(storedEnchantmentMap);
     }
 
     /**
@@ -28,7 +27,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
      * @return an unmodifiable map containing the item stored enchantments
      */
     public @NotNull Map<Enchantment, Short> getStoredEnchantmentMap() {
-        return Collections.unmodifiableMap(storedEnchantmentMap);
+        return storedEnchantmentMap;
     }
 
     public static class Builder extends ItemMetaBuilder {
