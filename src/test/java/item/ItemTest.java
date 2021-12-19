@@ -103,4 +103,14 @@ public class ItemTest {
         enchantments = item.getMeta().getEnchantmentMap();
         assertEquals(enchantments.get(Enchantment.EFFICIENCY), (short) 10);
     }
+
+    @Test
+    public void testBuilderReuse() {
+        var builder = ItemStack.builder(Material.DIAMOND);
+        var item1 = builder.build();
+        var item2 = builder.displayName(Component.text("Name")).build();
+        assertNull(item1.getDisplayName());
+        assertNotNull(item2.getDisplayName());
+        assertNotEquals(item1, item2, "Item builder should be reusable");
+    }
 }
