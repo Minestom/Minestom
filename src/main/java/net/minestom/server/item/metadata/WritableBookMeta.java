@@ -56,8 +56,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         public Builder title(@Nullable String title) {
             this.title = title;
-            handleNullable(title, "title",
-                    () -> new NBTString(Objects.requireNonNull(title)));
+            handleNullable(title, "title", () -> NBT.String(Objects.requireNonNull(title)));
             return this;
         }
 
