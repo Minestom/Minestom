@@ -7,7 +7,9 @@ import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTByte;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTString;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -90,18 +92,17 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("LodestoneTracked")) {
-                lodestoneTracked(nbtCompound.getByte("LodestoneTracked") == 1);
+            if (nbtCompound.get("LodestoneTracked") instanceof NBTByte tracked) {
+                this.lodestoneTracked = tracked.asBoolean();
             }
-            if (nbtCompound.containsKey("LodestoneDimension")) {
-                lodestoneDimension(nbtCompound.getString("LodestoneDimension"));
+            if (nbtCompound.get("LodestoneDimension") instanceof NBTString dimension) {
+                this.lodestoneDimension = dimension.getValue();
             }
-            if (nbtCompound.containsKey("LodestonePos")) {
-                final NBTCompound posCompound = nbtCompound.getCompound("LodestonePos");
+            if (nbtCompound.get("LodestonePos") instanceof NBTCompound posCompound) {
                 final int x = posCompound.getInt("X");
                 final int y = posCompound.getInt("Y");
                 final int z = posCompound.getInt("Z");
-                lodestonePosition(new Vec(x, y, z));
+                this.lodestonePosition = new Vec(x, y, z);
             }
         }
 
