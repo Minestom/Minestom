@@ -9,8 +9,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
@@ -23,12 +21,12 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
     protected FireworkMeta(@NotNull ItemMetaBuilder metaBuilder, List<FireworkEffect> effects,
                            byte flightDuration) {
         super(metaBuilder);
-        this.effects = new ArrayList<>(effects);
+        this.effects = List.copyOf(effects);
         this.flightDuration = flightDuration;
     }
 
     public List<FireworkEffect> getEffects() {
-        return Collections.unmodifiableList(effects);
+        return effects;
     }
 
     public byte getFlightDuration() {

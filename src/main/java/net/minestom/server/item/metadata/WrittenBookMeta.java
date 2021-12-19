@@ -12,7 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
@@ -32,7 +35,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         this.generation = generation;
         this.author = author;
         this.title = title;
-        this.pages = new ArrayList<>(pages);
+        this.pages = List.copyOf(pages);
     }
 
     public boolean isResolved() {
@@ -52,7 +55,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
     }
 
     public @NotNull List<@NotNull Component> getPages() {
-        return Collections.unmodifiableList(pages);
+        return pages;
     }
 
     public enum WrittenBookGeneration {

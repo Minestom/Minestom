@@ -29,7 +29,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                          Color color) {
         super(metaBuilder);
         this.potionType = potionType;
-        this.customPotionEffects = new ArrayList<>(customPotionEffects);
+        this.customPotionEffects = List.copyOf(customPotionEffects);
         this.color = color;
     }
 
