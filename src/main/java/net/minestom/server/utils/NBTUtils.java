@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 // for lack of a better name
 public final class NBTUtils {
@@ -102,12 +101,9 @@ public final class NBTUtils {
         nbt.set(listName, NBT.List(
                 NBTType.TAG_Compound,
                 enchantmentMap.entrySet().stream()
-                        .map(entry ->
-                            NBT.Compound(n -> {
-                                n.setShort("lvl", entry.getValue());
-                                n.setString("id", entry.getKey().name());
-                            })
-                        )
+                        .map(entry -> NBT.Compound(Map.of(
+                                "lvl", NBT.Short(entry.getValue()),
+                                "id", NBT.String(entry.getKey().name()))))
                         .toList()
         ));
     }
