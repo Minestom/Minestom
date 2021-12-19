@@ -533,7 +533,7 @@ public final class Registry {
     private static Object readObject(JsonReader reader) throws IOException {
         return switch (reader.peek()) {
             case BEGIN_ARRAY -> {
-                ArrayList<Object> list = new ArrayList<>();
+                List<Object> list = new ArrayList<>();
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
