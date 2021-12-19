@@ -42,7 +42,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder unbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
-        mutateNbt(compound -> compound.setByte("Unbreakable", (byte) (unbreakable ? 1 : 0)));
+        mutateNbt(compound -> compound.set("Unbreakable", NBT.Boolean(unbreakable)));
         return this;
     }
 
