@@ -58,8 +58,8 @@ final class PaletteImpl implements Palette, Cloneable {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
         if (values.length == 0) {
-            // Section is not loaded, can only be air
-            return -1;
+            // Section is not loaded, return default value
+            return 0;
         }
         x %= dimension;
         y %= dimension;

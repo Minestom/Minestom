@@ -124,7 +124,6 @@ public class DynamicChunk extends Chunk {
         final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
         final int blockStateId = section.blockPalette()
                 .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
-        if (blockStateId == -1) return Block.AIR; // Section is empty
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
