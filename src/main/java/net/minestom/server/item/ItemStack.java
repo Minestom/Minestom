@@ -189,12 +189,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
 
     @Contract(pure = true)
     public boolean isAir() {
-        return material.equals(Material.AIR);
+        return material == Material.AIR;
     }
 
     @Contract(pure = true)
     public boolean isSimilar(@NotNull ItemStack itemStack) {
-        return material.equals(itemStack.material) &&
+        return material == itemStack.material &&
                 meta.equals(itemStack.meta);
     }
 
