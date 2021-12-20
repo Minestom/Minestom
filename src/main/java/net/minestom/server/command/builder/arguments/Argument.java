@@ -3,9 +3,7 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -34,13 +32,26 @@ public abstract class Argument<T> {
 
     private SuggestionCallback suggestionCallback;
 
+    private final boolean shouldCache;
+
+    /**
+     * Creates a new argument
+     * @param id the id of the argument to use
+     * @param shouldCache true if results containing this argument should be cached. This should be used, for example,
+     *                    when arguments change how much they read based on outside factors
+     */
+    public Argument(@NotNull String id, boolean shouldCache) {
+        this.id = id;
+        this.shouldCache = shouldCache;
+    }
+
     /**
      * Creates a new argument.
      *
      * @param id the id of the argument, used to retrieve the parsed value
      */
     public Argument(@NotNull String id) {
-        this.id = id;
+        this(id, true);
     }
 
     /**
@@ -49,7 +60,7 @@ public abstract class Argument<T> {
      * @param argument the argument, with the input as id
      * @param <T>      the result type
      * @return the parsed result
-     * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
+     * @throws CommandException if the argument cannot be parsed due to a fault input (argument id)
      */
     @ApiStatus.Experimental
     public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws CommandException {
@@ -203,6 +214,16 @@ public abstract class Argument<T> {
      */
     public boolean hasSuggestion() {
         return suggestionCallback != null;
+    }
+
+    /**
+     * This boolean determines if commands that are executed that contain this should be cached. For example, if an
+     * argument reads different amounts of text based on values that may change, it is a good idea to initialize it with
+     * {@code shouldCache} as false. However, it's a bad idea to have arguments that behave like this.
+     * @return true if results should be cached.
+     */
+    public boolean shouldCache() {
+        return shouldCache;
     }
 
     /**
