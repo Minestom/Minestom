@@ -53,7 +53,7 @@ public class ItemMeta implements TagReadable, Writeable {
         this.canPlaceOn = Set.copyOf(metaBuilder.canPlaceOn);
 
         this.metaBuilder = metaBuilder;
-        this.nbt = metaBuilder.nbt();
+        this.nbt = metaBuilder.nbt.toCompound();
     }
 
     @Contract(value = "_, -> new", pure = true)

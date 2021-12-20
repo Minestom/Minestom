@@ -36,6 +36,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -776,7 +777,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
+        MinecraftServer.getUpdateManager().getThreadProvider().signalUpdate(new DispatchUpdate.EntityUpdate(this));
     }
 
     /**
@@ -1415,7 +1416,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
-        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
+        MinecraftServer.getUpdateManager().getThreadProvider().signalUpdate(new DispatchUpdate.EntityRemove(this));
         this.removed = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);

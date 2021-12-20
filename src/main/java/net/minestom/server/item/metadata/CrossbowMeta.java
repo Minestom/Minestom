@@ -6,10 +6,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,15 +156,17 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
                 }
 
                 if (projectiles.size() == 1) {
-                    projectile(projectiles.get(0));
+                    this.projectile1 = projectiles.get(0);
                 } else if (projectiles.size() == 3) {
-                    projectiles(projectiles.get(0), projectiles.get(1), projectiles.get(2));
+                    this.projectile1 = projectiles.get(0);
+                    this.projectile2 = projectiles.get(1);
+                    this.projectile3 = projectiles.get(2);
                 }
 
             }
 
-            if (nbtCompound.containsKey("Charged")) {
-                charged(nbtCompound.getByte("Charged") == 1);
+            if (nbtCompound.get("Charged") instanceof NBTByte charged) {
+                this.charged = charged.asBoolean();
             }
         }
 

@@ -7,16 +7,13 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<PotionMeta.Builder> {
 
@@ -29,7 +26,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                          Color color) {
         super(metaBuilder);
         this.potionType = potionType;
-        this.customPotionEffects = new ArrayList<>(customPotionEffects);
+        this.customPotionEffects = List.copyOf(customPotionEffects);
         this.color = color;
     }
 
@@ -63,14 +60,13 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
             NBTList<NBTCompound> potionList = NBT.List(
                     NBTType.TAG_Compound,
                     customPotionEffects.stream()
-                            .map(customPotionEffect -> NBT.Compound(potionCompound -> {
-                                potionCompound.setByte("Id", customPotionEffect.getId());
-                                potionCompound.setByte("Amplifier", customPotionEffect.getAmplifier());
-                                potionCompound.setInt("Duration", customPotionEffect.getDuration());
-                                potionCompound.setByte("Ambient", (byte) (customPotionEffect.isAmbient() ? 1 : 0));
-                                potionCompound.setByte("ShowParticles", (byte) (customPotionEffect.showParticles() ? 1 : 0));
-                                potionCompound.setByte("ShowIcon", (byte) (customPotionEffect.showIcon() ? 1 : 0));
-                            }))
+                            .map(customPotionEffect -> NBT.Compound(Map.of(
+                                    "Id", NBT.Byte(customPotionEffect.id()),
+                                    "Amplifier", NBT.Byte(customPotionEffect.amplifier()),
+                                    "Duration", NBT.Int(customPotionEffect.duration()),
+                                    "Ambient", NBT.Boolean(customPotionEffect.isAmbient()),
+                                    "ShowParticles", NBT.Boolean(customPotionEffect.showParticles()),
+                                    "ShowIcon", NBT.Boolean(customPotionEffect.showIcon()))))
                             .toList()
             );
             mutateNbt(compound -> compound.set("CustomPotionEffects", potionList));
@@ -91,13 +87,13 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Potion")) {
-                potionType(PotionType.fromNamespaceId(nbtCompound.getString("Potion")));
+            if (nbtCompound.get("Potion") instanceof NBTString potion) {
+                this.potionType = PotionType.fromNamespaceId(potion.getValue());
             }
 
-            if (nbtCompound.containsKey("CustomPotionEffects")) {
-                NBTList<NBTCompound> customEffectList = nbtCompound.getList("CustomPotionEffects");
-                for (NBTCompound potionCompound : customEffectList) {
+            if (nbtCompound.get("CustomPotionEffects") instanceof NBTList<?> customEffectList &&
+                    customEffectList.getSubtagType() == NBTType.TAG_Compound) {
+                for (NBTCompound potionCompound : customEffectList.<NBTCompound>asListOf()) {
                     final byte id = potionCompound.getAsByte("Id");
                     final byte amplifier = potionCompound.getAsByte("Amplifier");
                     final int duration = potionCompound.containsKey("Duration") ? potionCompound.getNumber("Duration").intValue() : (int) Duration.ofSeconds(30).toMillis();
@@ -105,14 +101,12 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                     final boolean showParticles = potionCompound.containsKey("ShowParticles") ? potionCompound.getAsByte("ShowParticles") == 1 : true;
                     final boolean showIcon = potionCompound.containsKey("ShowIcon") ? potionCompound.getAsByte("ShowIcon") == 1 : true;
 
-                    this.customPotionEffects.add(
-                            new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon));
+                    this.customPotionEffects.add(new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon));
                 }
-                effects(customPotionEffects);
             }
 
-            if (nbtCompound.containsKey("CustomPotionColor")) {
-                color(new Color(nbtCompound.getInt("CustomPotionColor")));
+            if (nbtCompound.get("CustomPotionColor") instanceof NBTInt color) {
+                this.color = new Color(color.getValue());
             }
         }
 

@@ -12,9 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
 
@@ -33,7 +35,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         this.generation = generation;
         this.author = author;
         this.title = title;
-        this.pages = new ArrayList<>(pages);
+        this.pages = List.copyOf(pages);
     }
 
     public boolean isResolved() {
@@ -53,7 +55,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
     }
 
     public @NotNull List<@NotNull Component> getPages() {
-        return Collections.unmodifiableList(pages);
+        return pages;
     }
 
     public enum WrittenBookGeneration {
@@ -137,24 +139,23 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("resolved")) {
-                resolved(nbtCompound.getByte("resolved") == 1);
+            if (nbtCompound.get("resolved") instanceof NBTByte resolved) {
+                this.resolved = resolved.asBoolean();
             }
-            if (nbtCompound.containsKey("generation")) {
-                generation(WrittenBookGeneration.values()[nbtCompound.getInt("generation")]);
+            if (nbtCompound.get("generation") instanceof NBTInt generation) {
+                this.generation = WrittenBookGeneration.values()[generation.getValue()];
             }
-            if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
+            if (nbtCompound.get("author") instanceof NBTString author) {
+                this.author = author.getValue();
             }
-            if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
+            if (nbtCompound.get("title") instanceof NBTString title) {
+                this.title = title.getValue();
             }
-            if (nbtCompound.containsKey("pages")) {
-                final NBTList<NBTString> list = nbtCompound.getList("pages");
-                for (NBTString page : list) {
+            if (nbtCompound.get("pages") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_String) {
+                for (NBTString page : list.<NBTString>asListOf()) {
                     this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
                 }
-                pages(pages);
             }
         }
 

@@ -39,8 +39,8 @@ public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Prov
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Explosion")) {
-                effect(FireworkEffect.fromCompound(nbtCompound.getCompound("Explosion")));
+            if (nbtCompound.get("Explosion") instanceof NBTCompound explosionCompound) {
+                this.fireworkEffect = FireworkEffect.fromCompound(explosionCompound);
             }
         }
 

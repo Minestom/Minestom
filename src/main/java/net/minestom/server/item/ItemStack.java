@@ -119,7 +119,8 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
 
     @Contract(value = "_, -> new", pure = true)
     public @NotNull ItemStack withAmount(int amount) {
-        return builder().amount(amount).build();
+        if (amount < 1) return AIR;
+        return new ItemStack(material, amount, meta, stackingRule);
     }
 
     @Contract(value = "_, -> new", pure = true)

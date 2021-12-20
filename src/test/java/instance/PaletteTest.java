@@ -24,25 +24,33 @@ public class PaletteTest {
     public void testPlacement() {
         for (Palette palette : palettes) {
             final int dimension = palette.dimension();
-            assertEquals(-1, palette.get(0, 0, 0), "Empty section should return -1");
+            assertEquals(0, palette.get(0, 0, 0), "Default value should be 0");
+            assertEquals(0, palette.size());
             palette.set(0, 0, 0, 64);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(64, palette.get(dimension, 0, 0), "Coordinate must be rounded to the palette dimension");
+            assertEquals(1, palette.size());
 
             palette.set(1, 0, 0, 65);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(65, palette.get(1, 0, 0));
+            assertEquals(2, palette.size());
 
             palette.set(0, 1, 0, 66);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(65, palette.get(1, 0, 0));
             assertEquals(66, palette.get(0, 1, 0));
+            assertEquals(3, palette.size());
 
             palette.set(0, 0, 1, 67);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(65, palette.get(1, 0, 0));
             assertEquals(66, palette.get(0, 1, 0));
             assertEquals(67, palette.get(0, 0, 1));
+            assertEquals(4, palette.size());
+
+            palette.set(0, 0, 1, 68);
+            assertEquals(4, palette.size());
         }
     }
 
