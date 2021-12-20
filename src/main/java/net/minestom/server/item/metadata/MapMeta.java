@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
 public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMeta.Builder> {
 
@@ -155,11 +154,6 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
                     this.mapColor = new Color(mapColor.getValue());
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 

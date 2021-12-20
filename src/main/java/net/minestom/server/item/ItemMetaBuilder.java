@@ -198,7 +198,15 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     public abstract void read(@NotNull NBTCompound nbtCompound);
 
-    protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
+    protected @NotNull ItemMetaBuilder createEmpty() {
+        try {
+            var constructor = getClass().getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected void mutateNbt(Consumer<MutableNBTCompound> consumer) {
         consumer.accept(nbt);

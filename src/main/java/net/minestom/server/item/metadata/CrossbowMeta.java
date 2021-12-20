@@ -10,7 +10,6 @@ import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<SpawnEggMeta.Builder> {
 
@@ -168,11 +167,6 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             if (nbtCompound.get("Charged") instanceof NBTByte charged) {
                 this.charged = charged.asBoolean();
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
 
         private @NotNull NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
