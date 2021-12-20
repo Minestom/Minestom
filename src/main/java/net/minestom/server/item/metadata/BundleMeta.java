@@ -57,8 +57,7 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
         }
 
         private void updateItems() {
-            mutateNbt(compound -> compound.set("Items", NBT.List(NBTType.TAG_Compound,
-                    items.size(), i -> items.get(i).toItemNBT())));
+            mutableNbt().set("Items", NBT.List(NBTType.TAG_Compound, items.size(), i -> items.get(i).toItemNBT()));
         }
 
         @Override

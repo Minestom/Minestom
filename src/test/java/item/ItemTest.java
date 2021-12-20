@@ -2,10 +2,7 @@ package item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.ItemHideFlag;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
+import net.minestom.server.item.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -102,6 +99,10 @@ public class ItemTest {
         item = item.withMeta(meta -> meta.enchantment(Enchantment.EFFICIENCY, (short) 10));
         enchantments = item.getMeta().getEnchantmentMap();
         assertEquals(enchantments.get(Enchantment.EFFICIENCY), (short) 10);
+
+        item = item.withMeta(ItemMetaBuilder::clearEnchantment);
+        enchantments = item.getMeta().getEnchantmentMap();
+        assertTrue(enchantments.isEmpty());
     }
 
     @Test
