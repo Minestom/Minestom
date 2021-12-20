@@ -35,11 +35,11 @@ public class WeightedRandom<E extends WeightedRandomItem> {
     /**
      * Gets a random element from this set.
      *
-     * @param rng Random Number Generator to generate random numbers with
+     * @param random a random number in range 0-1, e.g. output of {@link Random#nextDouble()}
      * @return a random element from this set
      */
-    public E get(Random rng) {
-        final double p = rng.nextDouble() * totalWeight;
+    public E get(double random) {
+        final double p = random * totalWeight;
         for (int i = 0; i < entries.size(); i++) {
             final double weightSum = weightSums.getDouble(i);
             if (weightSum >= p) {

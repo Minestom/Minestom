@@ -421,11 +421,13 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    @Deprecated
     public ChunkGenerator getChunkGenerator() {
         return chunkGenerator;
     }
 
     @Override
+    @Deprecated
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
         this.chunkGenerator = chunkGenerator;
     }

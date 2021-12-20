@@ -28,6 +28,7 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -138,7 +139,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
 
     /**
-     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
+     * Forces the generation of a {@link Chunk}, even if no file and {@link net.minestom.server.world.generator.WorldGenerator} are defined.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -252,18 +253,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Gets the instance {@link ChunkGenerator}.
+     * Gets the instance {@link WorldGenerator}.
      *
-     * @return the {@link ChunkGenerator} of the instance
+     * @return the {@link WorldGenerator} of the instance
      */
-    public abstract @Nullable ChunkGenerator getChunkGenerator();
+    public abstract @Nullable WorldGenerator getWorldGenerator();
 
     /**
-     * Changes the instance {@link ChunkGenerator}.
+     * Changes the instance {@link WorldGenerator}.
      *
-     * @param chunkGenerator the new {@link ChunkGenerator} of the instance
+     * @param worldGenerator the new {@link WorldGenerator} of the instance
      */
-    public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
+    public abstract void setWorldGenerator(@Nullable WorldGenerator worldGenerator);
 
     /**
      * Gets all the instance's loaded chunks.

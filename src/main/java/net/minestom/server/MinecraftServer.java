@@ -63,6 +63,7 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_TICK_SCHEDULER = "Ms-TickScheduler";
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
+    //TODO: Maybe deprecate?
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
             Runtime.getRuntime().availableProcessors() / 2);
@@ -73,6 +74,9 @@ public final class MinecraftServer {
 
     public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
     public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = getThreadCount("minestom.save-thread-count", 2);
+
+    public static final String THREAD_NAME_WORLD_GEN = "Ms-WorldGen";
+    public static final int THREAD_COUNT_WORLD_GEN = getThreadCount("minestom.save-thread-count", 2);
 
     // Config
     // Can be modified at performance cost when increased
