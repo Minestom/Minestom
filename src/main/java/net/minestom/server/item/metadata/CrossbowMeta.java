@@ -90,11 +90,8 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
         public Builder projectile(@NotNull ItemStack projectile) {
             this.projectile1 = projectile;
             this.triple = false;
-
-            List<NBTCompound> chargedProjectiles =
-                    projectile.isAir() ? List.of() : List.of(getItemCompound(projectile));
-            mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
-
+            mutableNbt().set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound,
+                    projectile.isAir() ? List.of() : List.of(getItemCompound(projectile))));
             return this;
         }
 
@@ -109,16 +106,13 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             Check.argCondition(projectile1.isAir(), "the projectile1 of your crossbow isn't visible");
             Check.argCondition(projectile2.isAir(), "the projectile2 of your crossbow isn't visible");
             Check.argCondition(projectile3.isAir(), "the projectile3 of your crossbow isn't visible");
-
             this.projectile1 = projectile1;
             this.projectile2 = projectile2;
             this.projectile3 = projectile3;
             this.triple = true;
-
             List<NBTCompound> chargedProjectiles =
                     List.of(getItemCompound(projectile1), getItemCompound(projectile2), getItemCompound(projectile3));
-            mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
-
+            mutableNbt().set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles));
             return this;
         }
 
@@ -129,7 +123,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
          */
         public Builder charged(boolean charged) {
             this.charged = charged;
-            mutateNbt(compound -> compound.setByte("Charged", (byte) (charged ? 1 : 0)));
+            mutableNbt().set("Charged", NBT.Boolean(charged));
             return this;
         }
 

@@ -37,7 +37,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
         public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
             this.enchantments = enchantments;
-            mutateNbt(compound -> NBTUtils.writeEnchant(compound, "StoredEnchantments", enchantments));
+            NBTUtils.writeEnchant(mutableNbt(), "StoredEnchantments", enchantments);
             return this;
         }
 

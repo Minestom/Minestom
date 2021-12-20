@@ -49,38 +49,30 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
         public Builder lodestoneTracked(boolean lodestoneTracked) {
             this.lodestoneTracked = lodestoneTracked;
-            mutateNbt(compound -> compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0)));
+            mutableNbt().setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
             return this;
         }
 
         public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
             this.lodestoneDimension = lodestoneDimension;
-
-            mutateNbt(compound -> {
-                if (lodestoneDimension != null) {
-                    compound.setString("LodestoneDimension", lodestoneDimension);
-                } else {
-                    compound.remove("LodestoneDimension");
-                }
-            });
-
+            if (lodestoneDimension != null) {
+                mutableNbt().setString("LodestoneDimension", lodestoneDimension);
+            } else {
+                mutableNbt().remove("LodestoneDimension");
+            }
             return this;
         }
 
         public Builder lodestonePosition(@Nullable Point lodestonePosition) {
             this.lodestonePosition = lodestonePosition;
-
-            mutateNbt(compound -> {
-                if (lodestonePosition != null) {
-                    compound.set("LodestonePos", NBT.Compound(Map.of(
-                            "X", NBT.Int(lodestonePosition.blockX()),
-                            "Y", NBT.Int(lodestonePosition.blockY()),
-                            "Z", NBT.Int(lodestonePosition.blockZ()))));
-                } else {
-                    compound.remove("LodestonePos");
-                }
-            });
-
+            if (lodestonePosition != null) {
+                mutableNbt().set("LodestonePos", NBT.Compound(Map.of(
+                        "X", NBT.Int(lodestonePosition.blockX()),
+                        "Y", NBT.Int(lodestonePosition.blockY()),
+                        "Z", NBT.Int(lodestonePosition.blockZ()))));
+            } else {
+                mutableNbt().remove("LodestonePos");
+            }
             return this;
         }
 

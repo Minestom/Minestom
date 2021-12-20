@@ -89,7 +89,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         public Builder resolved(boolean resolved) {
             this.resolved = resolved;
-            mutateNbt(compound -> compound.setByte("resolved", (byte) (resolved ? 1 : 0)));
+            mutableNbt().set("resolved", NBT.Boolean(resolved));
             return this;
         }
 
