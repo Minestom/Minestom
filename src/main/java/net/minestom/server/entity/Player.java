@@ -1243,6 +1243,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setGameMode(@NotNull GameMode gameMode) {
         this.gameMode = gameMode;
+
+        // The client will automatically update its ability to fly when the gamemode changes.
+        isAllowFlying = (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR);
+        
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
