@@ -8,8 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTInt;
 
-import java.util.function.Supplier;
-
 public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provider<LeatherArmorMeta.Builder> {
 
     private final Color color;
@@ -51,11 +49,6 @@ public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provid
                     this.color = new Color(colorInt.getValue());
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

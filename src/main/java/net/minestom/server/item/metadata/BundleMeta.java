@@ -12,7 +12,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @ApiStatus.Experimental
 public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<BundleMeta.Builder> {
@@ -70,11 +69,6 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
                     this.items.add(ItemStack.fromItemNBT(item));
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }
