@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Objects;
+
 public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkEffectMeta.Builder> {
 
     private final FireworkEffect fireworkEffect;
@@ -26,7 +28,7 @@ public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Prov
 
         public Builder effect(@Nullable FireworkEffect fireworkEffect) {
             this.fireworkEffect = fireworkEffect;
-            mutateNbt(compound -> compound.set("Explosion", this.fireworkEffect.asCompound()));
+            handleNullable(fireworkEffect, "Explosion", () -> Objects.requireNonNull(fireworkEffect).asCompound());
             return this;
         }
 

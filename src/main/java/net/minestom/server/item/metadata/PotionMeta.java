@@ -49,15 +49,13 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
 
         public Builder potionType(@NotNull PotionType potionType) {
             this.potionType = potionType;
-            mutateNbt(compound -> compound.setString("Potion", potionType.name()));
+            mutableNbt().setString("Potion", potionType.name());
             return this;
         }
 
         public Builder effects(@NotNull List<CustomPotionEffect> customPotionEffects) {
             this.customPotionEffects = customPotionEffects;
-
-            NBTList<NBTCompound> potionList = NBT.List(
-                    NBTType.TAG_Compound,
+            mutableNbt().set("CustomPotionEffects", NBT.List(NBTType.TAG_Compound,
                     customPotionEffects.stream()
                             .map(customPotionEffect -> NBT.Compound(Map.of(
                                     "Id", NBT.Byte(customPotionEffect.id()),
@@ -67,15 +65,13 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                                     "ShowParticles", NBT.Boolean(customPotionEffect.showParticles()),
                                     "ShowIcon", NBT.Boolean(customPotionEffect.showIcon()))))
                             .toList()
-            );
-            mutateNbt(compound -> compound.set("CustomPotionEffects", potionList));
-
+            ));
             return this;
         }
 
         public Builder color(@NotNull Color color) {
             this.color = color;
-            mutateNbt(compound -> compound.setInt("CustomPotionColor", color.asRGB()));
+            mutableNbt().setInt("CustomPotionColor", color.asRGB());
             return this;
         }
 
