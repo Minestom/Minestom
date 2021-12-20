@@ -58,6 +58,7 @@ public class Command {
     private final List<Command> subcommandsView;
 
     private final List<CommandSyntax> syntaxes;
+    private final List<CommandSyntax> syntaxesView;
 
     /**
      * Creates a {@link Command} with a name and one or multiple aliases.
@@ -76,6 +77,7 @@ public class Command {
         this.subcommandsView = Collections.unmodifiableList(subcommands);
 
         this.syntaxes = new ArrayList<>();
+        this.syntaxesView = Collections.unmodifiableList(syntaxes);
     }
 
     /**
@@ -301,11 +303,11 @@ public class Command {
     /**
      * Gets all the syntaxes of this command.
      *
-     * @return a collection containing all this command syntaxes
+     * @return a list containing all this command syntaxes
      * @see #addSyntax(CommandExecutor, Argument[])
      */
-    public @NotNull Collection<CommandSyntax> getSyntaxes() {
-        return syntaxes;
+    public @NotNull List<CommandSyntax> getSyntaxes() {
+        return syntaxesView;
     }
 
     /**
@@ -416,15 +418,6 @@ public class Command {
         JsonObject jsonObject = new JsonObject();
         processNode(commandNode, jsonObject);
         return jsonObject.toString();
-    }
-
-    public static boolean isValidName(@NotNull Command command, @NotNull String name) {
-        for (String commandName : command.getNames()) {
-            if (commandName.equals(name)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void processNode(@NotNull Node node, @NotNull JsonObject jsonObject) {
