@@ -147,7 +147,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return builder().meta(meta).build();
+        return new ItemStack(material, amount, meta, stackingRule);
     }
 
     @Contract(pure = true)
