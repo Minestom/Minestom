@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-final class PotionTypeImpl implements PotionType {
+record PotionTypeImpl(NamespaceID namespace, int id) implements PotionType {
     private static final Registry.Container<PotionType> CONTAINER = new Registry.Container<>(Registry.Resource.POTION_TYPES,
             (loader, namespace, object) -> {
-                final int id = object.get("id").getAsInt();
+                final int id = ((Number) object.get("id")).intValue();
                 loader.register(new PotionTypeImpl(NamespaceID.from(namespace), id));
             });
 
@@ -27,24 +27,6 @@ final class PotionTypeImpl implements PotionType {
 
     static Collection<PotionType> values() {
         return CONTAINER.values();
-    }
-
-    private final NamespaceID namespaceID;
-    private final int id;
-
-    PotionTypeImpl(NamespaceID namespaceID, int id) {
-        this.namespaceID = namespaceID;
-        this.id = id;
-    }
-
-    @Override
-    public @NotNull NamespaceID namespace() {
-        return namespaceID;
-    }
-
-    @Override
-    public int id() {
-        return id;
     }
 
     @Override

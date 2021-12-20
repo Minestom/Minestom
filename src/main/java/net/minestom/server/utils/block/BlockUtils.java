@@ -1,12 +1,12 @@
 package net.minestom.server.utils.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.coordinate.Point;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class BlockUtils {
@@ -61,7 +61,7 @@ public class BlockUtils {
             return Collections.emptyMap();
         }
         final int capacity = StringUtils.countMatches(query, ',') + 1;
-        Map<String, String> result = new HashMap<>(capacity);
+        Object2ObjectArrayMap<String, String> result = new Object2ObjectArrayMap<>(capacity);
         final String propertiesString = query.substring(1);
         StringBuilder keyBuilder = new StringBuilder();
         StringBuilder valueBuilder = new StringBuilder();

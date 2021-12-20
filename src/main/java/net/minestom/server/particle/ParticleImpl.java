@@ -9,7 +9,7 @@ import java.util.Collection;
 final class ParticleImpl implements Particle {
     private static final Registry.Container<Particle> CONTAINER = new Registry.Container<>(Registry.Resource.PARTICLES,
             (loader, namespace, object) -> {
-                final int id = object.get("id").getAsInt();
+                final int id = ((Number) object.get("id")).intValue();
                 loader.register(new ParticleImpl(NamespaceID.from(namespace), id));
             });
 

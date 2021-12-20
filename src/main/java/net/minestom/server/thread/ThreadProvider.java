@@ -1,14 +1,34 @@
 package net.minestom.server.thread;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @FunctionalInterface
 @ApiStatus.Experimental
 public interface ThreadProvider {
-    ThreadProvider PER_CHUNk = Object::hashCode;
-    ThreadProvider PER_INSTANCE = chunk -> chunk.getInstance().hashCode();
+    ThreadProvider PER_CHUNk = new ThreadProvider() {
+        private final AtomicInteger counter = new AtomicInteger();
+
+        @Override
+        public int findThread(@NotNull Chunk chunk) {
+            return counter.getAndIncrement();
+        }
+    };
+    ThreadProvider PER_INSTANCE = new ThreadProvider() {
+        private final Cache<Instance, Integer> cache = Caffeine.newBuilder().weakKeys().build();
+        private final AtomicInteger counter = new AtomicInteger();
+
+        @Override
+        public int findThread(@NotNull Chunk chunk) {
+            return cache.get(chunk.getInstance(), i -> counter.getAndIncrement());
+        }
+    };
     ThreadProvider SINGLE = chunk -> 0;
 
     /**

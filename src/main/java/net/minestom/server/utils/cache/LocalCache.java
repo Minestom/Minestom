@@ -37,8 +37,8 @@ public final class LocalCache<T> {
 
     public T get() {
         Thread current = Thread.currentThread();
-        if (current instanceof MinestomThread) {
-            return ((MinestomThread) current).localCache(tickIndex, supplier);
+        if (current instanceof MinestomThread minestomThread) {
+            return minestomThread.localCache(tickIndex, supplier);
         }
         return fallback.get();
     }

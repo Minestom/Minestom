@@ -1,5 +1,6 @@
 package net.minestom.server.storage;
 
+@Deprecated
 public class StorageOptions {
 
     private boolean compression;

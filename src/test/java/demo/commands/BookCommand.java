@@ -19,7 +19,7 @@ public class BookCommand extends Command {
     }
 
     private void execute(CommandSender sender, CommandContext context) {
-        Player player = sender.asPlayer();
+        Player player = (Player) sender;
 
         player.openBook(Book.builder()
                 .author(Component.text(player.getUsername()))

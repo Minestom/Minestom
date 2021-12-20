@@ -2,14 +2,13 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.network.packet.CachedPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.utils.ArrayUtils;
@@ -90,7 +89,7 @@ public class DynamicChunk extends Chunk {
     @Override
     public void tick(long time) {
         if (tickableMap.isEmpty()) return;
-        Int2ObjectMaps.fastForEach(tickableMap, entry -> {
+        tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
             final int index = entry.getIntKey();
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
@@ -126,16 +125,14 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
-        player.sendPacket(lightCache.retrieve());
-        player.sendPacket(chunkCache.retrieve());
+        player.sendPackets(lightCache, chunkCache);
     }
 
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
         if (getViewers().isEmpty()) return;
-        sendPacketToViewers(lightCache.retrieve());
-        sendPacketToViewers(chunkCache.retrieve());
+        sendPacketsToViewers(lightCache, chunkCache);
     }
 
     @NotNull

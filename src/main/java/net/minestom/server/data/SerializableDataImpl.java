@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * {@link SerializableData} implementation based on {@link DataImpl}.
  */
+@Deprecated
 public class SerializableDataImpl extends SerializableData {
 
     protected static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();

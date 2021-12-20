@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.location.RelativeVec;
 
@@ -28,15 +27,14 @@ public class TeleportCommand extends Command {
     private void onPlayerTeleport(CommandSender sender, CommandContext context) {
         final String playerName = context.get("player");
         Player pl = MinecraftServer.getConnectionManager().getPlayer(playerName);
-        if (pl != null && sender.isPlayer()) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             player.teleport(pl.getPosition());
         }
         sender.sendMessage(Component.text("Teleported to player " + playerName));
     }
 
     private void onPositionTeleport(CommandSender sender, CommandContext context) {
-        final Player player = sender.asPlayer();
+        final Player player = (Player) sender;
 
         final RelativeVec relativeVec = context.get("pos");
         final Pos position = player.getPosition().withCoord(relativeVec.from(player));

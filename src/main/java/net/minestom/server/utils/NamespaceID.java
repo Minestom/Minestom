@@ -1,17 +1,18 @@
 package net.minestom.server.utils;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a namespaced ID
  * https://minecraft.gamepedia.com/Namespaced_ID
  */
-public class NamespaceID implements CharSequence, Key {
-    private static final Int2ObjectOpenHashMap<NamespaceID> cache = new Int2ObjectOpenHashMap<>();
+public final class NamespaceID implements CharSequence, Key {
+    private static final Map<Integer, NamespaceID> cache = new ConcurrentHashMap<>();
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
     private static final String legalPathLetters = "[0123456789abcdefghijklmnopqrstuvwxyz./_-]+";
 
@@ -26,8 +27,7 @@ public class NamespaceID implements CharSequence, Key {
      * @param namespaceID the namespace id to get the domain from
      * @return the domain of the namespace ID
      */
-    @NotNull
-    public static String getDomain(@NotNull String namespaceID) {
+    public static @NotNull String getDomain(@NotNull String namespaceID) {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return "minecraft";
@@ -42,7 +42,7 @@ public class NamespaceID implements CharSequence, Key {
      * @param namespaceID the namespace id to get the path from
      * @return the path of the namespace ID
      */
-    public static String getPath(@NotNull String namespaceID) {
+    public static @NotNull String getPath(@NotNull String namespaceID) {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return namespaceID;
@@ -65,19 +65,6 @@ public class NamespaceID implements CharSequence, Key {
 
     public static NamespaceID from(Key key) {
         return from(key.asString());
-    }
-
-    private NamespaceID(@NotNull String path) {
-        final int index = path.indexOf(':');
-        if (index < 0) {
-            this.domain = "minecraft";
-            this.path = path;
-        } else {
-            this.domain = path.substring(0, index);
-            this.path = path.substring(index + 1);
-        }
-        this.full = toString();
-        validate();
     }
 
     private NamespaceID(String domain, String path) {
@@ -124,13 +111,12 @@ public class NamespaceID implements CharSequence, Key {
     }
 
     @Override
-    public CharSequence subSequence(int start, int end) {
+    public @NotNull CharSequence subSequence(int start, int end) {
         return full.subSequence(start, end);
     }
 
-    @NotNull
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return domain + ":" + path;
     }
 
