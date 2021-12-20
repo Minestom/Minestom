@@ -129,10 +129,5 @@ public final class ItemStackBuilder {
         public void read(@NotNull NBTCompound nbtCompound) {
             // Empty
         }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return DefaultMeta::new;
-        }
     }
 }
