@@ -11,7 +11,6 @@ import org.jglrxavpok.hephaistos.nbt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
 
@@ -91,11 +90,6 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
                     this.pages.add(LegacyComponentSerializer.legacySection().deserialize(page.getValue()));
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return WritableBookMeta.Builder::new;
         }
     }
 }

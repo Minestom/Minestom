@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
 
@@ -157,11 +156,6 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
                     this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

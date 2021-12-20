@@ -7,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.function.Supplier;
-
 public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkEffectMeta.Builder> {
 
     private final FireworkEffect fireworkEffect;
@@ -42,11 +40,6 @@ public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Prov
             if (nbtCompound.get("Explosion") instanceof NBTCompound explosionCompound) {
                 this.fireworkEffect = FireworkEffect.fromCompound(explosionCompound);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

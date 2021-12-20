@@ -13,7 +13,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<PotionMeta.Builder> {
 
@@ -108,11 +107,6 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
             if (nbtCompound.get("CustomPotionColor") instanceof NBTInt color) {
                 this.color = new Color(color.getValue());
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }
