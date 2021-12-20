@@ -66,4 +66,22 @@ public class PaletteTest {
             assertThrows(IllegalArgumentException.class, () -> palette.get(0, 0, -1));
         }
     }
+
+    @Test
+    public void testResize() {
+        Palette palette = Palette.newPalette(16, 5, 2, 1);
+        palette.set(0, 0, 0, 1);
+        assertEquals(2, palette.bitsPerEntry());
+        palette.set(0, 0, 1, 2);
+        assertEquals(2, palette.bitsPerEntry());
+        palette.set(0, 0, 2, 3);
+        assertEquals(2, palette.bitsPerEntry());
+
+        palette.set(0, 0, 3, 4);
+        assertEquals(3, palette.bitsPerEntry());
+        assertEquals(1, palette.get(0, 0, 0));
+        assertEquals(2, palette.get(0, 0, 1));
+        assertEquals(3, palette.get(0, 0, 2));
+        assertEquals(4, palette.get(0, 0, 3));
+    }
 }
