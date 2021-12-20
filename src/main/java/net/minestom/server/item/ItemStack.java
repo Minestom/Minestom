@@ -69,12 +69,9 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
 
     @Contract(value = "_, _, _ -> new", pure = true)
     public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
-        var itemBuilder = ItemStack.builder(material)
-                .amount(amount);
-        if (nbtCompound != null) {
-            itemBuilder.meta(metaBuilder -> ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound));
-        }
-        return itemBuilder.build();
+        ItemMetaBuilder builder = ItemStackBuilder.getMetaBuilder(material);
+        if (nbtCompound != null) ItemMetaBuilder.resetMeta(builder, nbtCompound);
+        return new ItemStack(material, amount, builder.build(), null);
     }
 
     @Contract(value = "_, _ -> new", pure = true)

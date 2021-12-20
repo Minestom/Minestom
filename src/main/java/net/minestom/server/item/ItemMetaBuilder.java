@@ -11,6 +11,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.Utils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -258,16 +259,14 @@ public abstract class ItemMetaBuilder implements TagWritable {
         });
     }
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
-        ItemMetaBuilder dest = src.getSupplier().get();
-        dest.nbt = nbtCompound.toMutableCompound();
-        appendDefaultMeta(dest, nbtCompound);
-        return dest;
+    @ApiStatus.Internal
+    public static void resetMeta(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
+        src.nbt = nbtCompound.toMutableCompound();
+        appendMeta(src, nbtCompound);
     }
 
-    private static void appendDefaultMeta(@NotNull ItemMetaBuilder metaBuilder,
-                                          @NotNull NBTCompound nbt) {
+    private static void appendMeta(@NotNull ItemMetaBuilder metaBuilder,
+                                   @NotNull NBTCompound nbt) {
         if (nbt.get("Damage") instanceof NBTInt damage) metaBuilder.damage = damage.getValue();
         if (nbt.get("Unbreakable") instanceof NBTByte unbreakable) metaBuilder.unbreakable = unbreakable.asBoolean();
         if (nbt.get("HideFlags") instanceof NBTInt hideFlags) metaBuilder.hideFlag = hideFlags.getValue();

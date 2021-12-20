@@ -152,7 +152,9 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
-        return ItemMetaBuilder.fromNBT(metaBuilder, nbt);
+        ItemMetaBuilder result = metaBuilder.getSupplier().get();
+        ItemMetaBuilder.resetMeta(result, nbt);
+        return result;
     }
 
     @Override
