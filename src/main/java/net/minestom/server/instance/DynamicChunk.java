@@ -45,8 +45,8 @@ public class DynamicChunk extends Chunk {
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
-        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
-        this.maxSection = instance.getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
+        this.minSection = instance.getSectionMinY();
+        this.maxSection = instance.getSectionMaxY();
         this.sections = new Section[maxSection - minSection];
         Arrays.setAll(sections, value -> new Section());
     }

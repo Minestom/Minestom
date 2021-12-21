@@ -41,6 +41,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
+
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
  * <p>
@@ -680,5 +682,13 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    public int getSectionMinY() {
+        return getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+    }
+
+    public int getSectionMaxY() {
+        return getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
     }
 }

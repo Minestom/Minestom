@@ -11,7 +11,6 @@ import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -25,6 +24,7 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,8 +44,7 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    // the chunk generator used, can be null
-    private ChunkGenerator chunkGenerator;
+    @Nullable private WorldGenerator worldGenerator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
@@ -250,6 +249,16 @@ public class InstanceContainer extends Instance {
         return chunkLoader.saveChunks(getChunks());
     }
 
+    @Override
+    public @Nullable WorldGenerator getWorldGenerator() {
+        return worldGenerator;
+    }
+
+    @Override
+    public void setWorldGenerator(@Nullable WorldGenerator worldGenerator) {
+        this.worldGenerator = worldGenerator;
+    }
+
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         synchronized (loadingChunks) {
@@ -281,15 +290,21 @@ public class InstanceContainer extends Instance {
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
-        final ChunkGenerator generator = this.chunkGenerator;
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
-        if (generator != null && chunk.shouldGenerate()) {
-            // Execute the chunk generator to populate the chunk
-            final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
-            return chunkBatch.generate(generator);
+
+        if (getWorldGenerator() != null && chunk.shouldGenerate()) {
+            CompletableFuture<?>[] futures = new CompletableFuture[getSectionMaxY()-getSectionMinY()];
+            int i = 0;
+            for (int y = getSectionMinY(); y < getSectionMaxY(); y++) {
+                final Section section = chunk.getSection(i++);
+                futures[i++] = getWorldGenerator().generateSection(this, section.blockPalette(), section.biomePalette(), chunkX, y, chunkZ);
+            }
+            final CompletableFuture<Chunk> future = new CompletableFuture<>();
+            CompletableFuture.allOf(futures).whenComplete((r, t) -> future.complete(chunk));
+            return future;
         } else {
-            // No chunk generator, execute the callback with the empty chunk
+            // No generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);
         }
     }
@@ -418,18 +433,6 @@ public class InstanceContainer extends Instance {
      */
     public void refreshLastBlockChangeTime() {
         this.lastBlockChangeTime = System.currentTimeMillis();
-    }
-
-    @Override
-    @Deprecated
-    public ChunkGenerator getChunkGenerator() {
-        return chunkGenerator;
-    }
-
-    @Override
-    @Deprecated
-    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        this.chunkGenerator = chunkGenerator;
     }
 
     /**
