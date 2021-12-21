@@ -9,6 +9,7 @@ import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
@@ -303,7 +304,7 @@ public class BinaryWriter extends OutputStream {
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {
         if (nbtWriter == null) {
-            this.nbtWriter = new NBTWriter(this, false);
+            this.nbtWriter = new NBTWriter(this, CompressedProcesser.NONE);
         }
         try {
             nbtWriter.writeNamed(name, tag);

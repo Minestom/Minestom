@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Locale;
@@ -61,22 +62,22 @@ public final class Biome {
         Check.notNull(name, "The biome namespace cannot be null");
         Check.notNull(effects, "The biome effects cannot be null");
 
-        NBTCompound nbt = new NBTCompound();
-        nbt.setString("name", name.toString());
-        nbt.setInt("id", id());
+        return NBT.Compound(nbt -> {
+            nbt.setString("name", name.toString());
+            nbt.setInt("id", id());
 
-        NBTCompound element = new NBTCompound();
-        element.setFloat("depth", depth);
-        element.setFloat("temperature", temperature);
-        element.setFloat("scale", scale);
-        element.setFloat("downfall", downfall);
-        element.setString("category", category.name().toLowerCase(Locale.ROOT));
-        element.setString("precipitation", precipitation.name().toLowerCase(Locale.ROOT));
-        if (temperatureModifier != TemperatureModifier.NONE)
-            element.setString("temperature_modifier", temperatureModifier.name().toLowerCase(Locale.ROOT));
-        element.set("effects", effects.toNbt());
-        nbt.set("element", element);
-        return nbt;
+            nbt.set("element", NBT.Compound(element -> {
+                element.setFloat("depth", depth);
+                element.setFloat("temperature", temperature);
+                element.setFloat("scale", scale);
+                element.setFloat("downfall", downfall);
+                element.setString("category", category.name().toLowerCase(Locale.ROOT));
+                element.setString("precipitation", precipitation.name().toLowerCase(Locale.ROOT));
+                if (temperatureModifier != TemperatureModifier.NONE)
+                    element.setString("temperature_modifier", temperatureModifier.name().toLowerCase(Locale.ROOT));
+                element.set("effects", effects.toNbt());
+            }));
+        });
     }
 
     public int id() {

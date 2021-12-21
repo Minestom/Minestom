@@ -7,8 +7,10 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
+import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
+import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +67,7 @@ public final class UpdateManager {
      * @param instance the instance
      */
     public void signalInstanceCreate(Instance instance) {
-        this.threadDispatcher.onInstanceCreate(instance);
+        instance.getChunks().forEach(this::signalChunkLoad);
     }
 
     /**
@@ -76,7 +78,7 @@ public final class UpdateManager {
      * @param instance the instance
      */
     public void signalInstanceDelete(Instance instance) {
-        this.threadDispatcher.onInstanceDelete(instance);
+        instance.getChunks().forEach(this::signalChunkUnload);
     }
 
     /**
@@ -87,7 +89,7 @@ public final class UpdateManager {
      * @param chunk the loaded chunk
      */
     public void signalChunkLoad(@NotNull Chunk chunk) {
-        this.threadDispatcher.onChunkLoad(chunk);
+        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
     }
 
     /**
@@ -98,7 +100,7 @@ public final class UpdateManager {
      * @param chunk the unloaded chunk
      */
     public void signalChunkUnload(@NotNull Chunk chunk) {
-        this.threadDispatcher.onChunkUnload(chunk);
+        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
     }
 
     /**
@@ -166,6 +168,7 @@ public final class UpdateManager {
         @Override
         public void run() {
             final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
             final List<Worker> workers = MinecraftServer.getServer().workers();
             while (!stopRequested) {
                 try {
@@ -174,6 +177,8 @@ public final class UpdateManager {
 
                     // Tick start callbacks
                     doTickCallback(tickStartCallbacks, tickStart);
+
+                    schedulerManager.processTick();
 
                     // Waiting players update (newly connected clients waiting to get into the server)
                     connectionManager.updateWaitingPlayers();

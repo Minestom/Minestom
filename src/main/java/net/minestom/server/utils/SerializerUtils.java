@@ -15,7 +15,7 @@ public final class SerializerUtils {
 
     public static Point longToBlockPosition(long value) {
         final int x = (int) (value >> 38);
-        final int y = (int) (value & 0xFFF);
+        final int y = (int) (value << 52 >> 52);
         final int z = (int) (value << 26 >> 38);
         return new Vec(x, y, z);
     }

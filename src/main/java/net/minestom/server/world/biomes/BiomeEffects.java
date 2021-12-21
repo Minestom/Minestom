@@ -2,9 +2,11 @@ package net.minestom.server.world.biomes;
 
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Locale;
+import java.util.Map;
 
 public record BiomeEffects(int fogColor, int skyColor, int waterColor, int waterFogColor, int foliageColor,
                            int grassColor,
@@ -17,26 +19,28 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
     }
 
     public NBTCompound toNbt() {
-        NBTCompound nbt = new NBTCompound();
-        nbt.setInt("fog_color", fogColor);
-        if (foliageColor != -1) nbt.setInt("foliage_color", foliageColor);
-        if (grassColor != -1) nbt.setInt("grass_color", grassColor);
-        nbt.setInt("sky_color", skyColor);
-        nbt.setInt("water_color", waterColor);
-        nbt.setInt("water_fog_color", waterFogColor);
-        if (grassColorModifier != null)
-            nbt.setString("grass_color_modifier", grassColorModifier.name().toLowerCase(Locale.ROOT));
-        if (biomeParticle != null)
-            nbt.set("particle", biomeParticle.toNbt());
-        if (ambientSound != null)
-            nbt.setString("ambient_sound", ambientSound.toString());
-        if (moodSound != null)
-            nbt.set("mood_sound", moodSound.toNbt());
-        if (additionsSound != null)
-            nbt.set("additions_sound", additionsSound.toNbt());
-        if (music != null)
-            nbt.set("music", music.toNbt());
-        return nbt;
+        return NBT.Compound(nbt -> {
+            nbt.setInt("fog_color", fogColor);
+            if (foliageColor != -1)
+                nbt.setInt("foliage_color", foliageColor);
+            if (grassColor != -1)
+                nbt.setInt("grass_color", grassColor);
+            nbt.setInt("sky_color", skyColor);
+            nbt.setInt("water_color", waterColor);
+            nbt.setInt("water_fog_color", waterFogColor);
+            if (grassColorModifier != null)
+                nbt.setString("grass_color_modifier", grassColorModifier.name().toLowerCase(Locale.ROOT));
+            if (biomeParticle != null)
+                nbt.set("particle", biomeParticle.toNbt());
+            if (ambientSound != null)
+                nbt.setString("ambient_sound", ambientSound.toString());
+            if (moodSound != null)
+                nbt.set("mood_sound", moodSound.toNbt());
+            if (additionsSound != null)
+                nbt.set("additions_sound", additionsSound.toNbt());
+            if (music != null)
+                nbt.set("music", music.toNbt());
+        });
     }
 
     public enum GrassColorModifier {
@@ -45,32 +49,29 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
 
     public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {
         public @NotNull NBTCompound toNbt() {
-            NBTCompound nbt = new NBTCompound();
-            nbt.setString("sound", sound.toString());
-            nbt.setInt("tick_delay", tickDelay);
-            nbt.setInt("block_search_extent", blockSearchExtent);
-            nbt.setDouble("offset", offset);
-            return nbt;
+            return NBT.Compound(Map.of(
+                    "sound", NBT.String(sound.toString()),
+                    "tick_delay", NBT.Int(tickDelay),
+                    "block_search_extent", NBT.Int(blockSearchExtent),
+                    "offset", NBT.Double(offset)));
         }
     }
 
     public record AdditionsSound(NamespaceID sound, double tickChance) {
         public @NotNull NBTCompound toNbt() {
-            NBTCompound nbt = new NBTCompound();
-            nbt.setString("sound", sound.toString());
-            nbt.setDouble("tick_chance", tickChance);
-            return nbt;
+            return NBT.Compound(Map.of(
+                    "sound", NBT.String(sound.toString()),
+                    "tick_chance", NBT.Double(tickChance)));
         }
     }
 
     public record Music(NamespaceID sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
         public @NotNull NBTCompound toNbt() {
-            NBTCompound nbt = new NBTCompound();
-            nbt.setString("sound", sound.toString());
-            nbt.setInt("min_delay", minDelay);
-            nbt.setInt("max_delay", maxDelay);
-            nbt.setByte("replace_current_music", replaceCurrentMusic ? (byte) 1 : (byte) 0);
-            return nbt;
+            return NBT.Compound(Map.of(
+                    "sound", NBT.String(sound.toString()),
+                    "min_delay", NBT.Int(minDelay),
+                    "max_delay", NBT.Int(maxDelay),
+                    "replace_current_music", NBT.Boolean(replaceCurrentMusic)));
         }
     }
 

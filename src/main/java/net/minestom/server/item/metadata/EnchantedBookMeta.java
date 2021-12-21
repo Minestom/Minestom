@@ -6,11 +6,11 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<EnchantedBookMeta.Builder> {
 
@@ -18,7 +18,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
     protected EnchantedBookMeta(@NotNull ItemMetaBuilder metaBuilder, Map<Enchantment, Short> storedEnchantmentMap) {
         super(metaBuilder);
-        this.storedEnchantmentMap = new HashMap<>(storedEnchantmentMap);
+        this.storedEnchantmentMap = Map.copyOf(storedEnchantmentMap);
     }
 
     /**
@@ -28,7 +28,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
      * @return an unmodifiable map containing the item stored enchantments
      */
     public @NotNull Map<Enchantment, Short> getStoredEnchantmentMap() {
-        return Collections.unmodifiableMap(storedEnchantmentMap);
+        return storedEnchantmentMap;
     }
 
     public static class Builder extends ItemMetaBuilder {
@@ -37,7 +37,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
         public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
             this.enchantments = enchantments;
-            mutateNbt(compound -> NBTUtils.writeEnchant(compound, "StoredEnchantments", enchantments));
+            NBTUtils.writeEnchant(mutableNbt(), "StoredEnchantments", enchantments);
             return this;
         }
 
@@ -54,14 +54,10 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("StoredEnchantments")) {
-                NBTUtils.loadEnchantments(nbtCompound.getList("StoredEnchantments"), this::enchantment);
+            if (nbtCompound.get("StoredEnchantments") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_Compound) {
+                NBTUtils.loadEnchantments(list.asListOf(), this::enchantment);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

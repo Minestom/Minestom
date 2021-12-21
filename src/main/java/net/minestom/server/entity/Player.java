@@ -84,6 +84,7 @@ import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.nio.charset.StandardCharsets;
@@ -237,12 +238,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        NBTCompound nbt = new NBTCompound();
-        NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
-        NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
-        nbt.set("minecraft:dimension_type", dimensions);
-        nbt.set("minecraft:worldgen/biome", biomes);
-
+        NBTCompound nbt = NBT.Compound(Map.of(
+                "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
+                "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), gameMode.isHardcore(), gameMode, null,
                 List.of("minestom:world"), nbt, dimensionType.toNBT(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
@@ -328,8 +326,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
                         final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
                         if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                            if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
-                                return;
                             PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                             EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                                 short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
@@ -473,9 +469,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Pos position = this.position;
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
-        // Clear all viewable entities
-        this.instance.getEntityTracker().visibleEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES,
-                trackingUpdate::remove);
         // Clear all viewable chunks
         ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(), chunkRemover);
         // Remove from the tab-list
@@ -656,13 +649,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
         final ServerPacket packet;
-
         if (emitter == Sound.Emitter.self()) {
             packet = AdventurePacketConvertor.createSoundPacket(sound, this);
         } else {
             packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
         }
-
         playerConnection.sendPacket(packet);
     }
 
@@ -863,8 +854,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        final List<PlayerInfoPacket.Entry> entry = List.of(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME, entry));
+        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
+                new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName)));
     }
 
     /**
@@ -932,7 +923,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setEnableRespawnScreen(boolean enableRespawnScreen) {
         this.enableRespawnScreen = enableRespawnScreen;
-        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.ENABLE_RESPAWN_SCREEN, enableRespawnScreen ? 0 : 1);
+        sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.ENABLE_RESPAWN_SCREEN, enableRespawnScreen ? 0 : 1));
     }
 
     /**
@@ -943,11 +934,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Override
     public @NotNull Component getName() {
-        if (this.displayName != null) {
-            return this.displayName;
-        } else {
-            return this.usernameComponent;
-        }
+        return Objects.requireNonNullElse(displayName, usernameComponent);
     }
 
     /**
@@ -970,10 +957,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.usernameComponent = Component.text(username);
     }
 
-    private void sendChangeGameStatePacket(@NotNull ChangeGameStatePacket.Reason reason, float value) {
-        playerConnection.sendPacket(new ChangeGameStatePacket(reason, value));
-    }
-
     /**
      * Calls an {@link ItemDropEvent} with a specified item.
      * <p>
@@ -983,10 +966,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
     public boolean dropItem(@NotNull ItemStack item) {
-        if (item.isAir()) {
-            return false;
-        }
-
+        if (item.isAir()) return false;
         ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
         EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
@@ -1227,9 +1207,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
-            sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
-            final List<PlayerInfoPacket.Entry> entry = List.of(new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode));
-            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE, entry));
+            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId()));
+            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
+                    new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
         }
     }
 
@@ -1692,8 +1672,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        final List<PlayerInfoPacket.Entry> entry = List.of(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY, entry));
+        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
+                new PlayerInfoPacket.UpdateLatency(getUuid(), latency)));
     }
 
     public void refreshOnGround(boolean onGround) {
@@ -1818,8 +1798,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 Collections.emptyList();
-        final PlayerInfoPacket.Entry entry = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName);
-        return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER, List.of(entry));
+        return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName));
     }
 
     /**
@@ -1828,8 +1808,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return a {@link PlayerInfoPacket} to remove the player
      */
     protected @NotNull PlayerInfoPacket getRemovePlayerToList() {
-        return new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER,
-                List.of(new PlayerInfoPacket.RemovePlayer(getUuid())));
+        return new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER, new PlayerInfoPacket.RemovePlayer(getUuid()));
     }
 
     /**

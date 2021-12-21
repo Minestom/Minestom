@@ -48,7 +48,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
 
         String address = serverAddress;
         // Bungee support (IP forwarding)
-        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection) {
+        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection && nextState == 2) {
             if (address != null) {
                 final String[] split = address.split("\00");
 

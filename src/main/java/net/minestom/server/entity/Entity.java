@@ -36,6 +36,10 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.thread.DispatchUpdate;
+import net.minestom.server.timer.Schedulable;
+import net.minestom.server.timer.Scheduler;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -50,12 +54,16 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
+import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -66,9 +74,9 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
-    private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
+    private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
@@ -143,14 +151,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.removal.accept(player) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
-    private final NBTCompound nbtCompound = new NBTCompound();
+    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+    private final Scheduler scheduler = Scheduler.newScheduler();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
-    private boolean shouldRemove;
-    private long scheduledRemoveTime;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
@@ -164,9 +171,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
-
-    // list of scheduled tasks to be executed during the next entity tick
-    protected final Queue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
 
     // Tick related
     private long ticks;
@@ -202,7 +206,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param callback the task to execute during the next entity tick
      */
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.nextTick.add(callback);
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     /**
@@ -214,7 +218,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return the entity having the specified id, null if not found
      */
     public static @Nullable Entity getEntity(int id) {
-        return Entity.ENTITY_BY_ID.getOrDefault(id, null);
+        return Entity.ENTITY_BY_ID.get(id);
     }
 
     /**
@@ -505,38 +509,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @Override
     public void tick(long time) {
-        if (instance == null)
+        if (instance == null || isRemoved() || !ChunkUtils.isLoaded(currentChunk))
             return;
-
-        // Scheduled remove
-        if (scheduledRemoveTime != 0) {
-            final boolean finished = time >= scheduledRemoveTime;
-            if (finished) {
-                remove();
-                return;
-            }
-        }
-
-        // Instant remove
-        if (shouldRemove()) {
-            remove();
-            return;
-        }
-
-        // Check if the entity chunk is loaded
-        if (!ChunkUtils.isLoaded(currentChunk)) {
-            // No update for entities in unloaded chunk
-            return;
-        }
 
         // scheduled tasks
-        {
-            Consumer<Entity> callback;
-            while ((callback = nextTick.poll()) != null) {
-                callback.accept(this);
-            }
-            if (isRemoved()) return;
-        }
+        this.scheduler.processTick();
+        if (isRemoved()) return;
 
         // Entity tick
         {
@@ -560,9 +538,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             synchronizePosition(false);
-        }
-        if (shouldRemove() && !MinecraftServer.isStopping()) {
-            remove();
         }
     }
 
@@ -802,7 +777,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
+        MinecraftServer.getUpdateManager().getThreadProvider().signalUpdate(new DispatchUpdate.EntityUpdate(this));
     }
 
     /**
@@ -1441,9 +1416,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
-        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
+        MinecraftServer.getUpdateManager().getThreadProvider().signalUpdate(new DispatchUpdate.EntityRemove(this));
         this.removed = true;
-        this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
         Instance currentInstance = this.instance;
@@ -1473,24 +1447,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Triggers {@link #remove()} after the specified time.
      *
-     * @param delay the time before removing the entity,
-     *              0 to cancel the removing
+     * @param delay the time before removing the entity
      */
     public void scheduleRemove(Duration delay) {
-        if (delay.isZero()) { // Cancel the scheduled remove
-            this.scheduledRemoveTime = 0;
-            return;
-        }
-        this.scheduledRemoveTime = System.currentTimeMillis() + delay.toMillis();
-    }
-
-    /**
-     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(Duration)}.
-     *
-     * @return true if the entity removal has been scheduled
-     */
-    public boolean isRemoveScheduled() {
-        return scheduledRemoveTime != 0;
+        this.scheduler.buildTask(this::remove).delay(TaskSchedule.duration(delay)).schedule();
     }
 
     protected @NotNull Vec getVelocityForPacket() {
@@ -1571,6 +1531,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
+    }
+
+    @Override
+    public @NotNull Scheduler scheduler() {
+        return scheduler;
     }
 
     /**
@@ -1704,9 +1669,5 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         SPIN_ATTACK,
         SNEAKING,
         DYING
-    }
-
-    protected boolean shouldRemove() {
-        return shouldRemove;
     }
 }

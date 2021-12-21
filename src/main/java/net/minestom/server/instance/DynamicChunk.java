@@ -13,7 +13,6 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -21,6 +20,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
@@ -86,8 +86,10 @@ public class DynamicChunk extends Chunk {
     public void setBiome(int x, int y, int z, @NotNull Biome biome) {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
-        section.biomePalette()
-                .set(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4, biome.id());
+        section.biomePalette().set(
+                toChunkRelativeCoordinate(x) / 4,
+                toChunkRelativeCoordinate(y) / 4,
+                toChunkRelativeCoordinate(z) / 4, biome.id());
     }
 
     @Override
@@ -120,16 +122,15 @@ public class DynamicChunk extends Chunk {
             }
         }
         // Retrieve the block from state id
-        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
         final int blockStateId = section.blockPalette()
                 .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
-        if (blockStateId == -1) return Block.AIR; // Section is empty
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
-        final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+        final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
         final int id = section.biomePalette()
                 .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
@@ -185,9 +186,9 @@ public class DynamicChunk extends Chunk {
                 }
             }
             final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-            heightmapsNBT = new NBTCompound()
-                    .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, bitsForHeight))
-                    .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, bitsForHeight));
+            heightmapsNBT = NBT.Compound(Map.of(
+                    "MOTION_BLOCKING", NBT.LongArray(Utils.encodeBlocks(motionBlocking, bitsForHeight)),
+                    "WORLD_SURFACE", NBT.LongArray(Utils.encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
         final BinaryWriter writer = new BinaryWriter();
@@ -214,13 +215,17 @@ public class DynamicChunk extends Chunk {
             index++;
             final byte[] skyLight = section.getSkyLight();
             final byte[] blockLight = section.getBlockLight();
-            if (!ArrayUtils.empty(skyLight)) {
+            if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
+            } else {
+                emptySkyMask.set(index);
             }
-            if (!ArrayUtils.empty(blockLight)) {
+            if (blockLight.length != 0) {
                 blockLights.add(blockLight);
                 blockMask.set(index);
+            } else {
+                emptyBlockMask.set(index);
             }
         }
         return new LightData(true,

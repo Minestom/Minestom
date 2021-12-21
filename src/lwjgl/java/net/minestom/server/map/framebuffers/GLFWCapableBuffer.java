@@ -66,7 +66,8 @@ public abstract class GLFWCapableBuffer {
 
         synchronized(GLFWCapableBuffer.class) {
             if(threadBindingPool == null) {
-                threadBindingPool = new ThreadBindingExecutor(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
+                threadBindingPool = new ThreadBindingExecutor(Runtime.getRuntime().availableProcessors()/2,
+                       "GLFWCapableBuffer-ThreadBindingPool");
             }
         }
     }

@@ -139,10 +139,6 @@ public final class ChunkUtils {
         return (int) index;
     }
 
-    public static int getSectionAt(int y) {
-        return y / Chunk.CHUNK_SECTION_SIZE;
-    }
-
     public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
                                                  int oldChunkX, int oldChunkZ,
                                                  int range, @NotNull IntegerBiConsumer callback) {

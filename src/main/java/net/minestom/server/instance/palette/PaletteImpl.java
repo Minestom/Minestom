@@ -7,9 +7,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
-
-final class PaletteImpl implements Palette {
+final class PaletteImpl implements Palette, Cloneable {
     // Magic values generated with "Integer.MAX_VALUE >> (31 - bitsPerIndex)" for bitsPerIndex between 1 and 16
     private static final int[] MAGIC_MASKS =
             {0, 1, 3, 7,
@@ -18,11 +16,12 @@ final class PaletteImpl implements Palette {
                     8191, 16383, 32767};
 
     // Specific to this palette type
+    private final int dimension;
     private final int size;
     private final int maxBitsPerEntry;
+    private final int bitsIncrement;
 
     private int bitsPerEntry;
-    private final int bitsIncrement;
 
     private int valuesPerLong;
     private boolean hasPalette;
@@ -36,29 +35,35 @@ final class PaletteImpl implements Palette {
     // value = palette index
     private Int2IntOpenHashMap valueToPaletteMap;
 
-    PaletteImpl(int size, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
-        this.size = size;
+    PaletteImpl(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
+        this.dimension = dimension;
+        this.size = dimension * dimension * dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
+        this.bitsIncrement = bitsIncrement;
 
         this.bitsPerEntry = bitsPerEntry;
-        this.bitsIncrement = bitsIncrement;
 
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= maxBitsPerEntry;
 
-        final int initialCapacity = maxPaletteSize(bitsPerEntry) / 4;
-        this.paletteToValueList = new IntArrayList(initialCapacity);
+        this.paletteToValueList = new IntArrayList(1);
         this.paletteToValueList.add(0);
-        this.valueToPaletteMap = new Int2IntOpenHashMap(initialCapacity);
+        this.valueToPaletteMap = new Int2IntOpenHashMap(1);
         this.valueToPaletteMap.put(0, 0);
     }
 
     @Override
     public int get(int x, int y, int z) {
-        if (values.length == 0) {
-            // Section is not loaded, can only be air
-            return -1;
+        if (x < 0 || y < 0 || z < 0) {
+            throw new IllegalArgumentException("Coordinates must be positive");
         }
+        if (values.length == 0) {
+            // Section is not loaded, return default value
+            return 0;
+        }
+        x %= dimension;
+        y %= dimension;
+        z %= dimension;
         final int sectionIdentifier = getSectionIndex(x, y, z);
         final int index = sectionIdentifier / valuesPerLong;
         final int bitIndex = sectionIdentifier % valuesPerLong * bitsPerEntry;
@@ -69,6 +74,9 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void set(int x, int y, int z, int value) {
+        if (x < 0 || y < 0 || z < 0) {
+            throw new IllegalArgumentException("Coordinates must be positive");
+        }
         final boolean placedAir = value == 0;
         if (values.length == 0) {
             if (placedAir) {
@@ -78,6 +86,9 @@ final class PaletteImpl implements Palette {
             // Initialize the section
             this.values = new long[(size + valuesPerLong - 1) / valuesPerLong];
         }
+        x %= dimension;
+        y %= dimension;
+        z %= dimension;
         // Change to palette value
         value = getPaletteIndex(value);
         final int sectionIndex = getSectionIndex(x, y, z);
@@ -127,6 +138,11 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public int dimension() {
+        return dimension;
+    }
+
+    @Override
     public long[] data() {
         return values;
     }
@@ -152,16 +168,10 @@ final class PaletteImpl implements Palette {
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            writer.writeVarInt(lastPaletteIndex);
-            for (int i = 0; i < lastPaletteIndex; i++) {
-                writer.writeVarInt(paletteToValueList.getInt(i));
-            }
+            writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
         }
         // Raw
-        writer.writeVarInt(values.length);
-        for (long datum : values) {
-            writer.writeLong(datum);
-        }
+        writer.writeLongArray(values);
     }
 
     private int fixBitsPerEntry(int bitsPerEntry) {
@@ -170,7 +180,7 @@ final class PaletteImpl implements Palette {
 
     private void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
-        PaletteImpl palette = new PaletteImpl(size, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
+        PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -179,16 +189,16 @@ final class PaletteImpl implements Palette {
             }
         }
 
-        this.paletteToValueList = palette.paletteToValueList;
-        this.lastPaletteIndex = palette.lastPaletteIndex;
-
         this.bitsPerEntry = palette.bitsPerEntry;
 
         this.valuesPerLong = palette.valuesPerLong;
         this.hasPalette = palette.hasPalette;
+        this.lastPaletteIndex = palette.lastPaletteIndex;
+        this.count = palette.count;
 
         this.values = palette.values;
-        this.count = palette.count;
+        this.paletteToValueList = palette.paletteToValueList;
+        this.valueToPaletteMap = palette.valueToPaletteMap;
     }
 
     private int getPaletteIndex(int value) {
@@ -199,7 +209,7 @@ final class PaletteImpl implements Palette {
         if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
             resize(bitsPerEntry + bitsIncrement);
-            if (!hasPalette) return value;
+            return getPaletteIndex(value);
         }
         final int paletteIndex = lastPaletteIndex++;
         this.paletteToValueList.add(value);
@@ -207,9 +217,9 @@ final class PaletteImpl implements Palette {
         return paletteIndex;
     }
 
-    static int getSectionIndex(int x, int y, int z) {
-        y = Math.floorMod(y, CHUNK_SECTION_SIZE);
-        return y << 8 | z << 4 | x;
+    int getSectionIndex(int x, int y, int z) {
+        y = Math.floorMod(y, dimension);
+        return y << (dimension / 2) | z << (dimension / 4) | x;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {

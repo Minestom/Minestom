@@ -16,10 +16,6 @@ public record LoginDisconnectPacket(@NotNull Component kickMessage) implements C
         this(reader.readComponent());
     }
 
-    public LoginDisconnectPacket(@NotNull Component kickMessage) {
-        this.kickMessage = kickMessage;
-    }
-
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeComponent(kickMessage);

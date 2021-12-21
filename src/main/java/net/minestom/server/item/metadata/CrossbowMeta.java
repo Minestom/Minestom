@@ -6,13 +6,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<SpawnEggMeta.Builder> {
 
@@ -93,13 +90,8 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
         public Builder projectile(@NotNull ItemStack projectile) {
             this.projectile1 = projectile;
             this.triple = false;
-
-            NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
-            if (!projectile.isAir()) {
-                chargedProjectiles.add(getItemCompound(projectile));
-            }
-            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
-
+            mutableNbt().set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound,
+                    projectile.isAir() ? List.of() : List.of(getItemCompound(projectile))));
             return this;
         }
 
@@ -114,18 +106,13 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             Check.argCondition(projectile1.isAir(), "the projectile1 of your crossbow isn't visible");
             Check.argCondition(projectile2.isAir(), "the projectile2 of your crossbow isn't visible");
             Check.argCondition(projectile3.isAir(), "the projectile3 of your crossbow isn't visible");
-
             this.projectile1 = projectile1;
             this.projectile2 = projectile2;
             this.projectile3 = projectile3;
             this.triple = true;
-
-            NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
-            chargedProjectiles.add(getItemCompound(projectile1));
-            chargedProjectiles.add(getItemCompound(projectile2));
-            chargedProjectiles.add(getItemCompound(projectile3));
-            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
-
+            List<NBTCompound> chargedProjectiles =
+                    List.of(getItemCompound(projectile1), getItemCompound(projectile2), getItemCompound(projectile3));
+            mutableNbt().set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles));
             return this;
         }
 
@@ -136,7 +123,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
          */
         public Builder charged(boolean charged) {
             this.charged = charged;
-            mutateNbt(compound -> compound.setByte("Charged", (byte) (charged ? 1 : 0)));
+            mutableNbt().set("Charged", NBT.Boolean(charged));
             return this;
         }
 
@@ -162,28 +149,26 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
                 }
 
                 if (projectiles.size() == 1) {
-                    projectile(projectiles.get(0));
+                    this.projectile1 = projectiles.get(0);
                 } else if (projectiles.size() == 3) {
-                    projectiles(projectiles.get(0), projectiles.get(1), projectiles.get(2));
+                    this.projectile1 = projectiles.get(0);
+                    this.projectile2 = projectiles.get(1);
+                    this.projectile3 = projectiles.get(2);
                 }
 
             }
 
-            if (nbtCompound.containsKey("Charged")) {
-                charged(nbtCompound.getByte("Charged") == 1);
+            if (nbtCompound.get("Charged") instanceof NBTByte charged) {
+                this.charged = charged.asBoolean();
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
 
         private @NotNull NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
             NBTCompound compound = itemStack.getMeta().toNBT();
-            compound.setByte("Count", (byte) itemStack.getAmount());
-            compound.setString("id", itemStack.getMaterial().name());
-            return compound;
+            return compound.modify(n -> {
+                n.setByte("Count", (byte) itemStack.getAmount());
+                n.setString("id", itemStack.getMaterial().name());
+            });
         }
     }
 }

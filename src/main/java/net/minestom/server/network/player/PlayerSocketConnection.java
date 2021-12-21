@@ -12,7 +12,6 @@ import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.validate.Check;
@@ -28,7 +27,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
@@ -36,7 +34,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
 
 /**
  * Represents a socket connection.
@@ -102,61 +99,27 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
         }
         // Read all packets
-        while (readBuffer.readableBytes() > 0) {
-            final var beginMark = readBuffer.mark();
-            try {
-                // Ensure that the buffer contains the full packet (or wait for next socket read)
-                final int packetLength = readBuffer.readVarInt();
-                final int readerStart = readBuffer.readerOffset();
-                if (!readBuffer.canRead(packetLength)) {
-                    // Integrity fail
-                    throw new BufferUnderflowException();
-                }
-                // Read packet https://wiki.vg/Protocol#Packet_format
-                BinaryBuffer content = readBuffer;
-                int decompressedSize = packetLength;
-                if (compressed) {
-                    final int dataLength = readBuffer.readVarInt();
-                    final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
-                    if (dataLength == 0) {
-                        // Data is too small to be compressed, payload is following
-                        decompressedSize = payloadLength;
-                    } else {
-                        // Decompress to content buffer
-                        content = workerContext.contentBuffer.clear();
-                        decompressedSize = dataLength;
-                        Inflater inflater = workerContext.inflater;
-                        inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
-                        inflater.inflate(content.asByteBuffer(0, dataLength));
-                        inflater.reset();
-                    }
-                }
-                // Process packet
-                ByteBuffer payload = content.asByteBuffer(content.readerOffset(), decompressedSize);
-                final int packetId = Utils.readVarInt(payload);
+        try {
+            var result = PacketUtils.readPackets(readBuffer, compressed, workerContext);
+            this.cacheBuffer = result.remaining();
+            for (var packet : result.packets()) {
+                var id = packet.id();
+                var payload = packet.payload();
                 try {
-                    packetProcessor.process(this, packetId, payload);
+                    packetProcessor.process(this, id, payload);
                 } catch (Exception e) {
                     // Error while reading the packet
                     MinecraftServer.getExceptionManager().handleException(e);
                     break;
                 } finally {
                     if (payload.position() != payload.limit()) {
-                        LOGGER.warn("WARNING: Packet 0x{} not fully read ({}), {}",
-                                Integer.toHexString(packetId), payload, this);
+                        LOGGER.warn("WARNING: Packet 0x{} not fully read ({})", Integer.toHexString(id), payload);
                     }
                 }
-                // Position buffer to read the next packet
-                readBuffer.readerOffset(readerStart + packetLength);
-            } catch (BufferUnderflowException e) {
-                readBuffer.reset(beginMark);
-                this.cacheBuffer = BinaryBuffer.copy(readBuffer);
-                break;
-            } catch (DataFormatException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                disconnect();
-                return;
             }
+        } catch (DataFormatException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            disconnect();
         }
     }
 

@@ -9,9 +9,11 @@ import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 final class BlockImpl implements Block {
@@ -19,19 +21,20 @@ final class BlockImpl implements Block {
     private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
-                final var stateObject = (Map<String, Object>) object.remove("states");
+                final var stateObject = (Map<String, Object>) object.get("states");
                 // Loop each state
                 var propertyEntry = new HashMap<Map<String, String>, Block>();
-                var unmodifiableEntries = Collections.unmodifiableMap(propertyEntry);
+                AtomicReference<Map<Map<String, String>, Block>> ref = new AtomicReference<>();
                 for (var stateEntry : stateObject.entrySet()) {
                     final String query = stateEntry.getKey();
                     final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                     final var propertyMap = BlockUtils.parseProperties(query);
                     final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
-                            unmodifiableEntries, propertyMap, null, null);
+                            ref, propertyMap, null, null);
                     BLOCK_STATE_MAP.set(block.stateId(), block);
                     propertyEntry.put(propertyMap, block);
                 }
+                ref.setPlain(Map.copyOf(propertyEntry));
                 // Register default state
                 final int defaultState = ((Number) object.get("defaultStateId")).intValue();
                 container.register(getState(defaultState));
@@ -66,7 +69,7 @@ final class BlockImpl implements Block {
     }
 
     private final Registry.BlockEntry registry;
-    private final Map<Map<String, String>, Block> propertyEntry;
+    private final AtomicReference<Map<Map<String, String>, Block>> possibleProperties;
     private final Map<String, String> properties;
     private final NBTCompound nbt;
     private final BlockHandler handler;
@@ -74,12 +77,12 @@ final class BlockImpl implements Block {
     private int hashCode; // Cache
 
     BlockImpl(@NotNull Registry.BlockEntry registry,
-              @NotNull Map<Map<String, String>, Block> propertyEntry,
+              @NotNull AtomicReference<Map<Map<String, String>, Block>> possibleProperties,
               @NotNull Map<String, String> properties,
               @Nullable NBTCompound nbt,
               @Nullable BlockHandler handler) {
         this.registry = registry;
-        this.propertyEntry = propertyEntry;
+        this.possibleProperties = possibleProperties;
         this.properties = properties;
         this.nbt = nbt;
         this.handler = handler;
@@ -105,15 +108,15 @@ final class BlockImpl implements Block {
 
     @Override
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var temporaryNbt = nbt != null ? nbt.deepClone() : new NBTCompound();
+        var temporaryNbt = new MutableNBTCompound(Objects.requireNonNullElse(nbt, NBTCompound.EMPTY));
         tag.write(temporaryNbt, value);
-        final var finalNbt = temporaryNbt.getSize() > 0 ? NBT_CACHE.get(temporaryNbt, Function.identity()) : null;
-        return new BlockImpl(registry, propertyEntry, properties, finalNbt, handler);
+        final var finalNbt = temporaryNbt.getSize() > 0 ? NBT_CACHE.get(temporaryNbt.toCompound(), Function.identity()) : null;
+        return new BlockImpl(registry, possibleProperties, properties, finalNbt, handler);
     }
 
     @Override
     public @NotNull Block withHandler(@Nullable BlockHandler handler) {
-        return new BlockImpl(registry, propertyEntry, properties, nbt, handler);
+        return new BlockImpl(registry, possibleProperties, properties, nbt, handler);
     }
 
     @Override
@@ -133,7 +136,7 @@ final class BlockImpl implements Block {
 
     @Override
     public @NotNull Collection<@NotNull Block> possibleStates() {
-        return propertyEntry.values();
+        return possibleProperties().values();
     }
 
     @Override
@@ -144,6 +147,10 @@ final class BlockImpl implements Block {
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return nbt != null ? tag.read(nbt) : null;
+    }
+
+    private Map<Map<String, String>, Block> possibleProperties() {
+        return possibleProperties.getPlain();
     }
 
     @Override
@@ -177,10 +184,10 @@ final class BlockImpl implements Block {
 
     private Block compute(Map<String, String> properties) {
         if (this.properties.equals(properties)) return this;
-        Block block = propertyEntry.get(properties);
+        Block block = possibleProperties().get(properties);
         if (block == null)
             throw new IllegalArgumentException("Invalid properties: " + properties + " for block " + this);
         return nbt == null && handler == null ? block :
-                new BlockImpl(block.registry(), propertyEntry, block.properties(), nbt, handler);
+                new BlockImpl(block.registry(), possibleProperties, block.properties(), nbt, handler);
     }
 }
