@@ -271,7 +271,7 @@ public final class NBTUtils {
      */
     // TODO: Remove when/if https://github.com/jglrxavpok/Hephaistos/issues/13 is completed
     @Deprecated(forRemoval = true)
-    public static @Nullable NBT readNBT(@NotNull StringReader reader) throws RuntimeException {
+    public static @Nullable NBT readSNBT(@NotNull StringReader reader) {
         if (!reader.canRead()) {
             return null;
         }
