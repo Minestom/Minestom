@@ -13,12 +13,13 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
 
     @Override
     public @NotNull Double parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         double value = input.readDouble();
         if (hasMin() && value < min){
-            throw CommandException.ARGUMENT_DOUBLE_LOW.generateException(input, min.toString(), Double.toString(value));
+            throw CommandException.ARGUMENT_DOUBLE_LOW.generateException(input.all(), pos, min.toString(), Double.toString(value));
         }
         if (hasMax() && value > max){
-            throw CommandException.ARGUMENT_DOUBLE_BIG.generateException(input, max.toString(), Double.toString(value));
+            throw CommandException.ARGUMENT_DOUBLE_BIG.generateException(input.all(), pos, max.toString(), Double.toString(value));
         }
         return value;
     }

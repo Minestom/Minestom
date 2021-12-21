@@ -20,7 +20,7 @@ public class ArgumentGroup extends Argument<CommandContext> {
     @Override
     public @NotNull CommandContext parse(@NotNull StringReader input) throws CommandException {
         // FIXME: Complete
-        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
     }
 
     @Override

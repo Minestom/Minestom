@@ -30,11 +30,11 @@ public class ArgumentTime extends Argument<Long> {
 
     @Override
     public @NotNull Long parse(@NotNull StringReader input) throws CommandException {
-
+        int pos = input.position();
         double amount = input.readDouble();
 
         if (amount < 0){
-            throw CommandException.ARGUMENT_TIME_INVALID_TICK_COUNT.generateException(input);
+            throw CommandException.ARGUMENT_TIME_INVALID_TICK_COUNT.generateException(input.all(), pos);
         }
 
         String stringUnit = input.readUnquotedString();
@@ -43,7 +43,7 @@ public class ArgumentTime extends Argument<Long> {
             case "d" -> Math.round(TICKS_PER_DAY * amount);
             case "s" -> Math.round(MinecraftServer.TICK_PER_SECOND * amount);
             case "t", "" -> Math.round(amount);
-            default -> throw CommandException.ARGUMENT_TIME_INVALID_UNIT.generateException(input);
+            default -> throw CommandException.ARGUMENT_TIME_INVALID_UNIT.generateException(input.all(), pos);
         };
     }
 

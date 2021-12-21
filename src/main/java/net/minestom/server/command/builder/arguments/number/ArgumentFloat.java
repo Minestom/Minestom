@@ -13,12 +13,13 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
 
     @Override
     public @NotNull Float parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         float value = input.readFloat();
         if (hasMin() && value < min){
-            throw CommandException.ARGUMENT_FLOAT_LOW.generateException(input, min.toString(), Float.toString(value));
+            throw CommandException.ARGUMENT_FLOAT_LOW.generateException(input.all(), pos, min.toString(), Float.toString(value));
         }
         if (hasMax() && value > max){
-            throw CommandException.ARGUMENT_FLOAT_BIG.generateException(input, max.toString(), Float.toString(value));
+            throw CommandException.ARGUMENT_FLOAT_BIG.generateException(input.all(), pos, max.toString(), Float.toString(value));
         }
         return value;
     }

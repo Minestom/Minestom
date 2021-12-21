@@ -21,12 +21,21 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
 
     @Override
     public @NotNull List<T> parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         List<T> result = new ArrayList<>();
 
         for (int i = 0; i < this.arguments.size(); i++) {
-            result.add(arguments.get(i).parse(input));
+            try {
+                result.add(arguments.get(i).parse(input));
+            } catch (CommandException exception) {
+                input.position(pos);
+                throw exception;
+            }
             if (i != this.arguments.size() - 1) {
-                input.assureWhitespace();
+                if (!input.canRead() || !StringReader.isValidWhitespace(input.peek())) {
+                    throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(input.all(), pos);
+                }
+                input.skipWhitespace();
             }
         }
 

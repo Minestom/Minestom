@@ -48,19 +48,20 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
      * @param reader the reader that the relative vector will be read from
      */
     public static @NotNull RelativeVec readRelativeBlockPos(@NotNull StringReader reader) {
+        int startingPosition = reader.position();
         if (reader.canRead() && reader.peek() == LOCAL_CHAR) {
-            return readLocalVec(reader, true);
+            return readLocalVec(reader, true, startingPosition);
         }
 
-        boolean ra = startsWithRelative(reader);
+        boolean ra = startsWithRelative(reader, startingPosition);
         int a = reader.canRead() && !StringReader.isValidWhitespace(reader.peek()) ? reader.readInteger() : 0;
-        skipSingularWhitespace(reader, true);
+        skipSingularWhitespace(reader, true, startingPosition);
 
-        boolean rb = startsWithRelative(reader);
+        boolean rb = startsWithRelative(reader, startingPosition);
         int b = reader.canRead() && !StringReader.isValidWhitespace(reader.peek()) ? reader.readInteger() : 0;
-        skipSingularWhitespace(reader, true);
+        skipSingularWhitespace(reader, true, startingPosition);
 
-        boolean rc = startsWithRelative(reader);
+        boolean rc = startsWithRelative(reader, startingPosition);
         int c = reader.canRead() && !StringReader.isValidWhitespace(reader.peek()) ? reader.readInteger() : 0;
 
         if (ra || rb || rc) {
@@ -79,15 +80,18 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
      *                       5.0, -4 -> -3.5).
      */
     public static @NotNull RelativeVec readRelativeVec(@NotNull StringReader reader, boolean useY, boolean adjustIntegers) throws CommandException {
-        return reader.canRead() && reader.peek() == LOCAL_CHAR ? readLocalVec(reader, useY) : readOnlyRelativeVec(reader, useY, adjustIntegers);
+        return reader.canRead() && reader.peek() == LOCAL_CHAR ?
+                readLocalVec(reader, useY, reader.position()) :
+                readOnlyRelativeVec(reader, useY, adjustIntegers, reader.position());
     }
 
-    private static @NotNull RelativeVec readOnlyRelativeVec(@NotNull StringReader reader, boolean useY, boolean adjustIntegers) {
-        boolean ra = startsWithRelative(reader);
+    private static @NotNull RelativeVec readOnlyRelativeVec(@NotNull StringReader reader, boolean useY,
+                                                            boolean adjustIntegers, int startingPosition) {
+        boolean ra = startsWithRelative(reader, startingPosition);
         double a = readRelativeValue(reader, adjustIntegers, ra);
-        skipSingularWhitespace(reader, useY);
+        skipSingularWhitespace(reader, useY, startingPosition);
 
-        boolean rb = startsWithRelative(reader);
+        boolean rb = startsWithRelative(reader, startingPosition);
         double b = readRelativeValue(reader, adjustIntegers, rb);
 
         if (!useY) {
@@ -97,9 +101,9 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
             return new RelativeVec(new Vec(a, b), RelativeVec.CoordinateType.ABSOLUTE, false, false, false);
         }
 
-        skipSingularWhitespace(reader, true);
+        skipSingularWhitespace(reader, true, startingPosition);
 
-        boolean rc = startsWithRelative(reader);
+        boolean rc = startsWithRelative(reader, startingPosition);
         double c = readRelativeValue(reader, adjustIntegers, rc);
 
         if (ra || rb || rc) {
@@ -108,12 +112,12 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         return new RelativeVec(new Vec(a, b, c), RelativeVec.CoordinateType.ABSOLUTE, false, false, false);
     }
 
-    private static boolean startsWithRelative(@NotNull StringReader reader) {
+    private static boolean startsWithRelative(@NotNull StringReader reader, int startingPosition) {
         if (!reader.canRead()) {
-            throw CommandException.ARGUMENT_POS_MISSING_DOUBLE.generateException(reader);
+            throw CommandException.ARGUMENT_POS_MISSING_DOUBLE.generateException(reader.all(), startingPosition);
         }
         if (reader.peek() == LOCAL_CHAR) {
-            throw CommandException.ARGUMENT_POS_MIXED.generateException(reader);
+            throw CommandException.ARGUMENT_POS_MIXED.generateException(reader.all(), startingPosition);
         }
         if (reader.peek() == RELATIVE_CHAR) {
             reader.skip();
@@ -142,35 +146,35 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         return value;
     }
 
-    private static @NotNull RelativeVec readLocalVec(@NotNull StringReader reader, boolean useY) {
-        double a = readLocalValue(reader);
-        skipSingularWhitespace(reader, useY);
+    private static @NotNull RelativeVec readLocalVec(@NotNull StringReader reader, boolean useY, int startingPosition) {
+        double a = readLocalValue(reader, startingPosition);
+        skipSingularWhitespace(reader, useY, startingPosition);
 
-        double b = readLocalValue(reader);
+        double b = readLocalValue(reader, startingPosition);
 
         if (!useY) {
             return new RelativeVec(new Vec(a, b), RelativeVec.CoordinateType.LOCAL, false, false, false);
         }
 
-        skipSingularWhitespace(reader, true);
-        double c = readLocalValue(reader);
+        skipSingularWhitespace(reader, true, startingPosition);
+        double c = readLocalValue(reader, startingPosition);
 
         return new RelativeVec(new Vec(a, b, c), RelativeVec.CoordinateType.LOCAL, false, false, false);
     }
 
-    private static void skipSingularWhitespace(@NotNull StringReader reader, boolean useY) {
+    private static void skipSingularWhitespace(@NotNull StringReader reader, boolean useY, int startingPosition) {
         if (!reader.canRead() || !StringReader.isValidWhitespace(reader.peek())) {
-            throw (useY ? CommandException.ARGUMENT_POS3D_INCOMPLETE : CommandException.ARGUMENT_POS2D_INCOMPLETE).generateException(reader);
+            throw (useY ? CommandException.ARGUMENT_POS3D_INCOMPLETE : CommandException.ARGUMENT_POS2D_INCOMPLETE).generateException(reader.all(), startingPosition);
         }
-        reader.skip();
+        reader.skipWhitespace();
     }
 
-    private static double readLocalValue(@NotNull StringReader reader) {
+    private static double readLocalValue(@NotNull StringReader reader, int startingPosition) {
         if (!reader.canRead()) {
-            throw CommandException.ARGUMENT_POS_MISSING_DOUBLE.generateException(reader);
+            throw CommandException.ARGUMENT_POS_MISSING_DOUBLE.generateException(reader.all(), startingPosition);
         }
         if (reader.peek() != LOCAL_CHAR) {
-            throw CommandException.ARGUMENT_POS_MIXED.generateException(reader);
+            throw CommandException.ARGUMENT_POS_MIXED.generateException(reader.all(), startingPosition);
         }
         reader.skip();
         if (!reader.canRead() || StringReader.isValidWhitespace(reader.peek())) {

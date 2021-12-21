@@ -24,6 +24,7 @@ public class ArgumentComponent extends Argument<Component> {
 
     @Override
     public @NotNull Component parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
 
         JsonReader reader = new JsonReader(new java.io.StringReader(input.unread()));
 
@@ -31,7 +32,7 @@ public class ArgumentComponent extends Argument<Component> {
             try {
                 posField = JsonReader.class.getDeclaredField("pos");
             } catch (NoSuchFieldException exception) {
-                throw CommandException.ARGUMENT_COMPONENT_INVALID.generateException(input, exception.getMessage());
+                throw CommandException.ARGUMENT_COMPONENT_INVALID.generateException(input.all(), pos, exception.getMessage());
             }
             posField.setAccessible(true);
         }
@@ -43,7 +44,7 @@ public class ArgumentComponent extends Argument<Component> {
             input.position(input.position() + posField.getInt(reader));
             return read;
         } catch (IllegalAccessException | IOException | JsonParseException exception) {
-            throw CommandException.ARGUMENT_COMPONENT_INVALID.generateException(input, exception.getMessage());
+            throw CommandException.ARGUMENT_COMPONENT_INVALID.generateException(input.all(), pos, exception.getMessage());
         }
     }
 

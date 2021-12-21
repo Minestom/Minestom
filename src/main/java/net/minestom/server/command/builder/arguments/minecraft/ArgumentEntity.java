@@ -70,7 +70,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     @Override
     public @NotNull EntityFinder parse(@NotNull StringReader input) throws CommandException {
         // FIXME: Complete
-        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
     }
 
     @Override

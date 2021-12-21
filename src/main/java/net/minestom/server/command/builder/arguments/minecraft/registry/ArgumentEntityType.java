@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
-import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.CommandException;
@@ -24,8 +23,8 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
     }
 
     @Override
-    public @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id) {
-        return CommandException.ENTITY_NOTFOUND.generateException(input, id);
+    public @NotNull CommandException createException(@NotNull String input, int position, @NotNull String id) {
+        return CommandException.ENTITY_NOTFOUND.generateException(input, position, id);
     }
 
     @Override

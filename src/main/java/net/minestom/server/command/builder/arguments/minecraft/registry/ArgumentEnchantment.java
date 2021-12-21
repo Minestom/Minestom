@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
-import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.item.Enchantment;
@@ -23,8 +22,8 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
     }
 
     @Override
-    public @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id) {
-        return CommandException.ENCHANTMENT_UNKNOWN.generateException(input, id);
+    public @NotNull CommandException createException(@NotNull String input, int position, @NotNull String id) {
+        return CommandException.ENCHANTMENT_UNKNOWN.generateException(input, position, id);
     }
 
     @Override

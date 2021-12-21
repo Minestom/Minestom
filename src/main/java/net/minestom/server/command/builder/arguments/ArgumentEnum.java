@@ -29,13 +29,14 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
     @Override
     public @NotNull E parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         String next = input.readString();
         for (E value : this.values){
             if (this.format.formatter.apply(value.name()).equals(next)){
                 return value;
             }
         }
-        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
     }
 
     @Override

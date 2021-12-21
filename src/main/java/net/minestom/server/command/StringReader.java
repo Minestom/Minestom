@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -161,7 +162,7 @@ public final class StringReader implements FixedStringReader {
         int start = position;
         skipWhitespace();
         if (start == position) {
-            throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
+            throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(all(), start);
         }
     }
 
@@ -171,7 +172,7 @@ public final class StringReader implements FixedStringReader {
      */
     public void assureWhitespaceCharacter() throws CommandException {
         if (!canRead() || !isValidWhitespace(peek())) {
-            throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(this);
+            throw CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(all(), position());
         }
         skip();
     }
@@ -185,17 +186,17 @@ public final class StringReader implements FixedStringReader {
             skip();
         }
         if (position == start) {
-            throw CommandException.PARSING_INT_EXPECTED.generateException(this);
+            throw CommandException.PARSING_INT_EXPECTED.generateException(all(), start);
         }
         String number = all().substring(start, position);
         if (number.isBlank()) {
-            throw CommandException.PARSING_INT_EXPECTED.generateException(this);
+            throw CommandException.PARSING_INT_EXPECTED.generateException(all(), start);
         }
         try {
             return Integer.parseInt(number);
         } catch (NumberFormatException exception) {
             position = start;
-            throw CommandException.PARSING_INT_INVALID.generateException(this, number);
+            throw CommandException.PARSING_INT_INVALID.generateException(all(), start, number);
         }
     }
 
@@ -208,17 +209,17 @@ public final class StringReader implements FixedStringReader {
             skip();
         }
         if (position == start) {
-            throw CommandException.PARSING_LONG_EXPECTED.generateException(this);
+            throw CommandException.PARSING_LONG_EXPECTED.generateException(all(), start);
         }
         String number = all().substring(start, position);
         if (number.isBlank()) {
-            throw CommandException.PARSING_LONG_EXPECTED.generateException(this);
+            throw CommandException.PARSING_LONG_EXPECTED.generateException(all(), start);
         }
         try {
             return Long.parseLong(number);
         } catch (NumberFormatException exception) {
             position = start;
-            throw CommandException.PARSING_LONG_INVALID.generateException(this, number);
+            throw CommandException.PARSING_LONG_INVALID.generateException(all(), start, number);
         }
     }
 
@@ -231,17 +232,17 @@ public final class StringReader implements FixedStringReader {
             skip();
         }
         if (position == start) {
-            throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(this);
+            throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(all(), start);
         }
         String number = all().substring(start, position);
         if (number.isBlank()) {
-            throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(this);
+            throw CommandException.PARSING_DOUBLE_EXPECTED.generateException(all(), start);
         }
         try {
             return Double.parseDouble(number);
         } catch (NumberFormatException exception) {
             position = start;
-            throw CommandException.PARSING_DOUBLE_INVALID.generateException(this, number);
+            throw CommandException.PARSING_DOUBLE_INVALID.generateException(all(), start, number);
         }
     }
 
@@ -254,17 +255,17 @@ public final class StringReader implements FixedStringReader {
             skip();
         }
         if (position == start) {
-            throw CommandException.PARSING_FLOAT_EXPECTED.generateException(this);
+            throw CommandException.PARSING_FLOAT_EXPECTED.generateException(all(), start);
         }
         String number = all().substring(start, position);
         if (number.isBlank()) {
-            throw CommandException.PARSING_FLOAT_EXPECTED.generateException(this);
+            throw CommandException.PARSING_FLOAT_EXPECTED.generateException(all(), start);
         }
         try {
             return Float.parseFloat(number);
         } catch (NumberFormatException exception) {
             position = start;
-            throw CommandException.PARSING_FLOAT_INVALID.generateException(this, number);
+            throw CommandException.PARSING_FLOAT_INVALID.generateException(all(), start, number);
         }
     }
 
@@ -275,14 +276,14 @@ public final class StringReader implements FixedStringReader {
         int start = position;
         String next = readString();
         if (next.isEmpty() || next.isBlank()) {
-            throw CommandException.PARSING_BOOL_EXPECTED.generateException(this);
+            throw CommandException.PARSING_BOOL_EXPECTED.generateException(all(), start);
         } else if (next.equals("true")) {
             return true;
         } else if (next.equals("false")) {
             return false;
         } else {
             position = start;
-            throw CommandException.PARSING_BOOL_INVALID.generateException(this, next);
+            throw CommandException.PARSING_BOOL_INVALID.generateException(all(), start, next);
         }
     }
 
@@ -290,27 +291,7 @@ public final class StringReader implements FixedStringReader {
      * @return the rest of the string or until there is a character equal to the {@code terminatorCodePoint} parameter
      */
     public @NotNull String readStringUntil(int terminatorCodePoint) throws CommandException {
-        final StringBuilder result = new StringBuilder();
-        boolean escaped = false;
-        while (canRead()) {
-            final int c = next();
-            if (escaped) {
-                if (c == terminatorCodePoint || c == ESCAPE) {
-                    result.append(c);
-                    escaped = false;
-                } else {
-                    position--;
-                    throw CommandException.PARSING_QUOTE_ESCAPE.generateException(this, String.valueOf(c));
-                }
-            } else if (c == ESCAPE) {
-                escaped = true;
-            } else if (c == terminatorCodePoint) {
-                return result.toString();
-            } else {
-                result.append(c);
-            }
-        }
-        throw CommandException.PARSING_QUOTE_EXPECTED_END.generateException(this);
+        return INTERNAL_readStringUntil(terminatorCodePoint, position());
     }
 
     /**
@@ -323,7 +304,7 @@ public final class StringReader implements FixedStringReader {
         final int next = peek();
         if (isValidQuote(next)) {
             skip();
-            return readStringUntil(next);
+            return INTERNAL_readStringUntil(next, position() - 1);
         }
         return readUnquotedString();
     }
@@ -332,11 +313,12 @@ public final class StringReader implements FixedStringReader {
      * @return the next NamespaceID in the input
      */
     public @NotNull NamespaceID readNamespaceID() throws CommandException {
+        int start = position;
         String next = readUnquotedString();
         try {
             return NamespaceID.from(next);
         } catch (AssertionError error) {
-            throw CommandException.ARGUMENT_ID_INVALID.generateException(this);
+            throw CommandException.ARGUMENT_ID_INVALID.generateException(all(), start);
         }
     }
 
@@ -350,10 +332,10 @@ public final class StringReader implements FixedStringReader {
         }
         final int next = peek();
         if (!isValidQuote(next)) {
-            throw CommandException.PARSING_QUOTE_EXPECTED_START.generateException(this);
+            throw CommandException.PARSING_QUOTE_EXPECTED_START.generateException(all(), position());
         }
         skip();
-        return readStringUntil(next);
+        return INTERNAL_readStringUntil(next, position() - 1);
     }
 
     /**
@@ -371,7 +353,7 @@ public final class StringReader implements FixedStringReader {
         try {
             return UUID.fromString(all().substring(start, position));
         } catch (IllegalArgumentException exception) {
-            throw CommandException.ARGUMENT_UUID_INVALID.generateException(this);
+            throw CommandException.ARGUMENT_UUID_INVALID.generateException(all(), start);
         }
     }
 
@@ -380,7 +362,7 @@ public final class StringReader implements FixedStringReader {
      */
     public void expect(int codePoint) throws CommandException {
         if (!canRead() || codePoint != peek()) {
-            throw CommandException.PARSING_EXPECTED.generateException(this, Character.toString(codePoint));
+            throw CommandException.PARSING_EXPECTED.generateException(all(), position(), Character.toString(codePoint));
         }
         skip();
     }
@@ -401,5 +383,31 @@ public final class StringReader implements FixedStringReader {
     @Override
     public int hashCode() {
         return all.hashCode() * 31 + position * 7;
+    }
+
+    // Intended for other methods in this class to be able to determine the starting point
+    @ApiStatus.Internal
+    private @NotNull String INTERNAL_readStringUntil(int terminatorCodePoint, int start) throws CommandException {
+        final StringBuilder result = new StringBuilder();
+        boolean escaped = false;
+        while (canRead()) {
+            final int c = next();
+            if (escaped) {
+                if (c == terminatorCodePoint || c == ESCAPE) {
+                    result.append(c);
+                    escaped = false;
+                } else {
+                    position--;
+                    throw CommandException.PARSING_QUOTE_ESCAPE.generateException(all(), start, String.valueOf(c));
+                }
+            } else if (c == ESCAPE) {
+                escaped = true;
+            } else if (c == terminatorCodePoint) {
+                return result.toString();
+            } else {
+                result.append(c);
+            }
+        }
+        throw CommandException.PARSING_QUOTE_EXPECTED_END.generateException(all(), start);
     }
 }

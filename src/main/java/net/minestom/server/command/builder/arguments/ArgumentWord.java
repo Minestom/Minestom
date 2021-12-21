@@ -50,6 +50,7 @@ public class ArgumentWord extends Argument<String> {
 
     @Override
     public @NotNull String parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         String result = input.readUnquotedString();
 
         if (hasRestrictions()){
@@ -58,7 +59,7 @@ public class ArgumentWord extends Argument<String> {
                     return result;
                 }
             }
-            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
         }
 
         return result;

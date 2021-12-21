@@ -13,12 +13,13 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     @Override
     public @NotNull Integer parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         int value = input.readInteger();
         if (hasMin() && value < min){
-            throw CommandException.ARGUMENT_INTEGER_LOW.generateException(input, min.toString(), Integer.toString(value));
+            throw CommandException.ARGUMENT_INTEGER_LOW.generateException(input.all(), pos, min.toString(), Integer.toString(value));
         }
         if (hasMax() && value > max){
-            throw CommandException.ARGUMENT_INTEGER_BIG.generateException(input, max.toString(), Integer.toString(value));
+            throw CommandException.ARGUMENT_INTEGER_BIG.generateException(input.all(), pos, max.toString(), Integer.toString(value));
         }
         return value;
     }

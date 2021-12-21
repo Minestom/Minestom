@@ -13,12 +13,13 @@ public class ArgumentLong extends ArgumentNumber<Long> {
 
     @Override
     public @NotNull Long parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         long value = input.readLong();
         if (hasMin() && value < min){
-            throw CommandException.ARGUMENT_LONG_LOW.generateException(input, min.toString(), Long.toString(value));
+            throw CommandException.ARGUMENT_LONG_LOW.generateException(input.all(), pos, min.toString(), Long.toString(value));
         }
         if (hasMax() && value > max){
-            throw CommandException.ARGUMENT_LONG_BIG.generateException(input, max.toString(), Long.toString(value));
+            throw CommandException.ARGUMENT_LONG_BIG.generateException(input.all(), pos, max.toString(), Long.toString(value));
         }
         return value;
     }

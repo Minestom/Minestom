@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder.exception;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.command.FixedStringReader;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -170,78 +170,101 @@ public class CommandException extends RuntimeException {
     public static final @NotNull A0ExceptionGenerator COMMAND_UNKNOWN_ARGUMENT = new A0ExceptionGenerator("command.unknown.argument", 143, "Incorrect argument for command");
     public static final @NotNull A0ExceptionGenerator COMMAND_EXPECTED_SEPARATOR = new A0ExceptionGenerator("command.expected.separator", 144, "Expected whitespace to end one argument, but found trailing data");
 
+    private final @NotNull String text;
+    private final int position;
     private final int errorCode;
-    private final @NotNull FixedStringReader stringReader;
     private final @Nullable Component component;
 
     /**
-     * Creates a new CommandException
-     * @param reader the string reader that will be used mostly for displaying information to the player
-     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
-     *                  unless custom error callbacks are being used
+     * Creates a new CommandException. The cause, error message, and component are all assumed to be null.
+     * @param text the text or command that caused this exception
+     * @param position the position in the {@code text} parameter that has been read to
+     * @param errorCode the error code that this exception is
      */
-    public CommandException(@NotNull FixedStringReader reader, int errorCode){
-        this(reader, errorCode, null, null, null);
+    public CommandException(@NotNull String text, int position, int errorCode) {
+        this(text, position, errorCode, null, null, null);
     }
 
     /**
-     * Creates a new CommandException
-     * @param reader the string reader that will be used mostly for displaying information to the player
-     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
-     *                  unless custom error callbacks are being used
-     * @param message the message, as a string, that will be displayed. because minecraft usually uses components, this
-     *                will likely only be used for displaying errors to the console or as a way to display error
-     *                messages in non-Minecraft formats
+     * Creates a new CommandException. The cause is assumed to be null and the component is set to
+     * {@code Component.text(errorMessage)} or null if the message is null.
+     * @param text the text or command that caused this exception
+     * @param position the position in the {@code text} parameter that has been read to
+     * @param errorCode the error code that this exception is
      */
-    public CommandException(@NotNull FixedStringReader reader, int errorCode, @Nullable String message){
-        this(reader, errorCode, message, null, null);
+    public CommandException(@NotNull String text, int position, int errorCode, @Nullable String errorMessage) {
+        this(text, position, errorCode, errorMessage == null ? null : Component.text(errorCode), errorMessage, null);
     }
 
     /**
-     * Creates a new CommandException
-     * @param reader the string reader that will be used mostly for displaying information to the player
-     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
-     *                  unless custom error callbacks are being used
-     * @param message the message, as a string, that will be displayed. because minecraft usually uses components, this
-     *                will likely only be used for displaying errors to the console or as a way to display error
-     *                messages in non-Minecraft formats
-     * @param component the component that should be displayed to the player
+     * Creates a new CommandException. The cause is assumed to be null and the error message is set to the plaintext
+     * serialization of the provided component, or null if the component is null.
+     * @param text the text or command that caused this exception
+     * @param position the position in the {@code text} parameter that has been read to
+     * @param errorCode the error code that this exception is
+     * @param component the component that should be displayed to players
      */
-    public CommandException(@NotNull FixedStringReader reader, int errorCode, @Nullable String message, @Nullable Component component){
-        this(reader, errorCode, message, component, null);
+    public CommandException(@NotNull String text, int position, int errorCode, @Nullable Component component) {
+        this(text, position, errorCode, component, component == null ? null : PlainTextComponentSerializer.plainText().serialize(component), null);
     }
 
     /**
-     * Creates a new CommandException
-     * @param reader the string reader that will be used mostly for displaying information to the player
-     * @param errorCode the error code that will be used for this exception. the value of this likely doesn't matter
-     *                  unless custom error callbacks are being used
-     * @param message the message, as a string, that will be displayed. because minecraft usually uses components, this
-     *                will likely only be used for displaying errors to the console or as a way to display error
-     *                messages in non-Minecraft formats
-     * @param component the component that should be displayed to the player
-     * @param cause the cause of this CommandException. this parameter will likely only be used when this exception is
-     *              being printed to the console
+     * Creates a new CommandException. The cause is assumed to be null.
+     * @param text the text or command that caused this exception
+     * @param position the position in the {@code text} parameter that has been read to
+     * @param errorCode the error code that this exception is
+     * @param component the component that should be displayed to players
+     * @param errorMessage the error message that should be displayed
      */
-    public CommandException(@NotNull FixedStringReader reader, int errorCode, @Nullable String message, @Nullable Component component, @Nullable Throwable cause){
-        super(message, cause);
+    public CommandException(@NotNull String text, int position, int errorCode, @Nullable Component component,
+                            @NotNull String errorMessage) {
+        this(text, position, errorCode, component, errorMessage, null);
+    }
+
+    /**
+     * Creates a new CommandException.
+     * @param text the text or command that caused this exception
+     * @param position the position in the {@code text} parameter that has been read to
+     * @param errorCode the error code that this exception is
+     * @param component the component that should be displayed to players
+     * @param errorMessage the error message that should be displayed
+     * @param cause the throwable that was the cause of this exception
+     */
+    public CommandException(@NotNull String text, int position, int errorCode, @Nullable Component component,
+                            @Nullable String errorMessage, @Nullable Throwable cause) {
+        super(errorMessage, cause);
+        this.text = text;
+        this.position = position;
         this.errorCode = errorCode;
-        this.stringReader = reader;
         this.component = component;
+    }
+
+    /**
+     * @return the string that this exception was created from
+     */
+    public @NotNull String getText() {
+        return text;
+    }
+
+    /**
+     * @return the position in the text that has been read to
+     */
+    public int getPosition() {
+        return position;
     }
 
     /**
      * @return this exception's error code
      */
-    public int errorCode() {
+    public int getErrorCode() {
         return errorCode;
     }
 
     /**
-     * @return this exception's string reader
+     * @return the component that this exception contains (may be null)
      */
-    public @NotNull FixedStringReader stringReader() {
-        return stringReader;
+    public @Nullable Component getComponent() {
+        return component;
     }
 
     /**

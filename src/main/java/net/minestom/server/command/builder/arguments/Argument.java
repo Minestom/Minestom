@@ -280,11 +280,12 @@ public abstract class Argument<T> {
 
         @Override
         public @NotNull O parse(@NotNull StringReader input) throws CommandException {
+            int pos = input.position();
             final I value = argument.parse(input);
             final O mappedValue = mapper.apply(value);
             if (mappedValue == null) {
                 // TODO: Consider throwing a more accurate exception
-                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
             }
             return mappedValue;
         }
@@ -311,10 +312,11 @@ public abstract class Argument<T> {
 
         @Override
         public @NotNull T parse(@NotNull StringReader input) throws CommandException {
+            int pos = input.position();
             T result = argument.parse(input);
             if (!predicate.test(result)) {
                 // TODO: Consider throwing a more accurate exception
-                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
             }
             return result;
         }

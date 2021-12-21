@@ -26,7 +26,7 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange, Float> {
         try {
             return Float.parseFloat(input);
         } catch (NumberFormatException exception) {
-            throw CommandException.PARSING_FLOAT_INVALID.generateException(context, input);
+            throw CommandException.PARSING_FLOAT_INVALID.generateException(context.all(), context.position(), input);
         }
     }
 

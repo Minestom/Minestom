@@ -54,21 +54,26 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
                                                                                     @NotNull BiFunction<N, N, T> rangeConstructor,
                                                                                     @NotNull BiPredicate<N, N> minGreaterThanMax)
                                                                                     throws CommandException {
+        int pos = reader.position();
         if (!reader.canRead()) {
-            throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader);
+            throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader.all(), pos);
         }
 
         N min = null, max = null;
 
         if (!hasSeparator(reader)) {
-            min = numberReader.apply(readNumberString(reader), reader);
+            String number = readNumberString(reader);
+            int newPos = reader.position();
+            reader.position(pos);
+            min = numberReader.apply(number, reader);
+            reader.position(newPos);
         }
 
         // If there is no more to read, we know that the string must have just a single number, which is equivalent to
         // a range with the same min and max.
         if (!reader.canRead() || StringReader.isValidWhitespace(reader.peek())) {
             if (min == null) {
-                throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader);
+                throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader.all(), pos);
             }
             return rangeConstructor.apply(min, min);
         }
@@ -79,7 +84,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
             // If there isn't a separator, it means that there's some argument after it, which means we can just return
             // a value right here.
             if (min == null) {
-                throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader);
+                throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader.all(), pos);
             }
             return rangeConstructor.apply(min, min);
         }
@@ -91,14 +96,17 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
         // Test if the string is empty to prevent bugs when the format ends with the number separator
         String readString = readNumberString(reader);
         if (!readString.isEmpty()) {
+            int newPos = reader.position();
+            reader.position(pos);
             max = numberReader.apply(readString, reader);
+            reader.position(newPos);
         }
 
         if (min == null && max == null) {
-            throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader);
+            throw CommandException.ARGUMENT_RANGE_EMPTY.generateException(reader.all(), pos);
         } else if (min != null && max != null) {
             if (minGreaterThanMax.test(min, max)) {
-                throw CommandException.ARGUMENT_RANGE_SWAPPED.generateException(reader);
+                throw CommandException.ARGUMENT_RANGE_SWAPPED.generateException(reader.all(), pos);
             }
         }
         return rangeConstructor.apply(min, max);

@@ -24,12 +24,12 @@ public class ArgumentIntRange extends ArgumentRange<IntRange, Integer> {
 
     private static @NotNull Integer parseIntegerFrom(@NotNull String input, @NotNull FixedStringReader context) {
         if (input.contains(".")) {
-            throw CommandException.ARGUMENT_RANGE_INTS.generateException(context);
+            throw CommandException.ARGUMENT_RANGE_INTS.generateException(context.all(), context.position());
         }
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException exception) {
-            throw CommandException.PARSING_INT_INVALID.generateException(context, input);
+            throw CommandException.PARSING_INT_INVALID.generateException(context.all(), context.position(), input);
         }
     }
 

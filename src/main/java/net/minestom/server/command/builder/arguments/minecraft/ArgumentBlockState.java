@@ -19,7 +19,7 @@ public class ArgumentBlockState extends Argument<Block> {
     @Override
     public @NotNull Block parse(@NotNull StringReader input) throws CommandException {
         // FIXME: This has not been implemented because Hephaistos does not support reading select amounts of a reader yet.
-        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
     }
 
     @Override

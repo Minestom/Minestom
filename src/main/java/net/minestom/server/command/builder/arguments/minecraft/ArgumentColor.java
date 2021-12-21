@@ -23,6 +23,7 @@ public class ArgumentColor extends Argument<Style> {
 
     @Override
     public @NotNull Style parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         String color = input.readUnquotedString();
 
         NamedTextColor value = NamedTextColor.NAMES.value(color);
@@ -34,7 +35,7 @@ public class ArgumentColor extends Argument<Style> {
             return Style.empty();
         }
 
-        throw CommandException.ARGUMENT_COLOR_INVALID.generateException(input, color);
+        throw CommandException.ARGUMENT_COLOR_INVALID.generateException(input.all(), pos, color);
     }
 
     @Override

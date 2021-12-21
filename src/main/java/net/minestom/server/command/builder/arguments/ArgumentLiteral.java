@@ -14,9 +14,10 @@ public class ArgumentLiteral extends Argument<String> {
 
     @Override
     public @NotNull String parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         String value = input.readUnquotedString();
         if (!value.equals(getId())) {
-            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input);
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
         }
         return value;
     }

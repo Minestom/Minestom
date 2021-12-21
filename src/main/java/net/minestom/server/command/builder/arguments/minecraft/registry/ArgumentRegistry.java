@@ -15,15 +15,16 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
 
     public abstract @Nullable T getRegistry(@NotNull String key);
 
-    public abstract @NotNull CommandException createException(@NotNull StringReader input, @NotNull String id);
+    public abstract @NotNull CommandException createException(@NotNull String input, int position, @NotNull String id);
 
     @Override
     public @NotNull T parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
         NamespaceID id = input.readNamespaceID();
         T value = getRegistry(id.asString());
 
         if (value == null) {
-            throw createException(input, id.asString());
+            throw createException(input.all(), pos, id.asString());
         }
         return value;
     }
