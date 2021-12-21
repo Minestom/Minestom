@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 public enum FireworkEffectType {
 
     SMALL_BALL((byte) 0),
-    LARGE_BAR((byte) 1),
+    LARGE_BALL((byte) 1),
     STAR_SHAPED((byte) 2),
     CREEPER_SHAPED((byte) 3),
     BURST((byte) 4),

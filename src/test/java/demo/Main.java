@@ -50,6 +50,7 @@ public class Main {
         commandManager.register(new RemoveCommand());
         commandManager.register(new GiveCommand());
         commandManager.register(new SetBlockCommand());
+        commandManager.register(new AutoViewCommand());
 
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));

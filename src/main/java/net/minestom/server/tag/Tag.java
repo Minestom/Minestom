@@ -34,9 +34,8 @@ public class Tag<T> {
     public static final Tag<String> SNBT = new Tag<>(null, NBTCompound::toSNBT, (original, snbt) -> {
         try {
             final var updated = new SNBTParser(new StringReader(snbt)).parse();
-            if (!(updated instanceof NBTCompound))
+            if (!(updated instanceof NBTCompound updatedCompound))
                 throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
-            NBTCompound updatedCompound = (NBTCompound) updated;
             original.clear();
             updatedCompound.getKeys().forEach(s ->
                     original.set(s, Objects.requireNonNull(updatedCompound.get(s))));

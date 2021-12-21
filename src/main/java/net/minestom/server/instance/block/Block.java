@@ -19,8 +19,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-@ApiStatus.NonExtendable
-public interface Block extends ProtocolObject, TagReadable, Blocks {
+public sealed interface Block extends ProtocolObject, TagReadable, Blocks permits BlockImpl {
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
@@ -119,6 +118,10 @@ public interface Block extends ProtocolObject, TagReadable, Blocks {
     default String getProperty(@NotNull String property) {
         return properties().get(property);
     }
+
+    @Contract(pure = true)
+    @ApiStatus.Experimental
+    @NotNull Collection<@NotNull Block> possibleStates();
 
     /**
      * Returns the block registry.

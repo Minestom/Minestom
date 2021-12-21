@@ -15,7 +15,7 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
@@ -200,32 +200,21 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-
-            final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            for (Entity entity : entities) {
-                if (entity instanceof ItemEntity) {
-                    // Do not pick up if not visible
-                    if (this instanceof Player && !entity.isViewer((Player) this))
-                        continue;
-
-                    final ItemEntity itemEntity = (ItemEntity) entity;
-                    if (!itemEntity.isPickable())
-                        continue;
-
-                    final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
-                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
-                            continue;
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                        EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                            final ItemStack item = itemEntity.getItemStack();
-                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
-                            entity.remove();
-                        });
-                    }
-                }
-            }
+            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.getWidth(),
+                    EntityTracker.Target.ITEMS, itemEntity -> {
+                        if (this instanceof Player player && !itemEntity.isViewer(player)) return;
+                        if (!itemEntity.isPickable()) return;
+                        final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
+                        if (expandedBoundingBox.intersect(itemBoundingBox)) {
+                            if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled()) return;
+                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                                final ItemStack item = itemEntity.getItemStack();
+                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
+                                itemEntity.remove();
+                            });
+                        }
+                    });
         }
     }
 
@@ -355,8 +344,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
 
             // Additional hearts support
-            if (this instanceof Player) {
-                final Player player = (Player) this;
+            if (this instanceof Player player) {
                 final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
                     if (remainingDamage > additionalHearts) {
@@ -477,8 +465,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
         if (attributeInstance.getAttribute().isShared()) {
             boolean self = false;
-            if (this instanceof Player) {
-                Player player = (Player) this;
+            if (this instanceof Player player) {
                 PlayerConnection playerConnection = player.playerConnection;
                 // connection null during Player initialization (due to #super call)
                 self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
@@ -531,17 +518,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        if (!super.addViewer0(player)) {
-            return false;
-        }
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEquipmentsPacket());
-        playerConnection.sendPacket(getPropertiesPacket());
-        if (getTeam() != null) {
-            playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
-        }
-        return true;
+    public void updateNewViewer(@NotNull Player player) {
+        super.updateNewViewer(player);
+        player.sendPacket(getEquipmentsPacket());
+        player.sendPacket(getPropertiesPacket());
+        if (getTeam() != null) player.sendPacket(getTeam().createTeamsCreationPacket());
     }
 
     @Override
@@ -685,20 +666,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setTeam(Team team) {
         if (this.team == team) return;
-
-        String member;
-
-        if (this instanceof Player) {
-            Player player = (Player) this;
-            member = player.getUsername();
-        } else {
-            member = this.uuid.toString();
-        }
-
+        String member = this instanceof Player player ? player.getUsername() : uuid.toString();
         if (this.team != null) {
             this.team.removeMember(member);
         }
-
         this.team = team;
         if (team != null) {
             team.addMember(member);

@@ -34,20 +34,13 @@ public enum EquipmentSlot {
     }
 
     public static EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
-        switch (attributeSlot) {
-            case MAINHAND:
-                return MAIN_HAND;
-            case OFFHAND:
-                return OFF_HAND;
-            case FEET:
-                return BOOTS;
-            case LEGS:
-                return LEGGINGS;
-            case CHEST:
-                return CHESTPLATE;
-            case HEAD:
-                return HELMET;
-        }
-        throw new IllegalStateException("Something weird happened");
+        return switch (attributeSlot) {
+            case MAINHAND -> MAIN_HAND;
+            case OFFHAND -> OFF_HAND;
+            case FEET -> BOOTS;
+            case LEGS -> LEGGINGS;
+            case CHEST -> CHESTPLATE;
+            case HEAD -> HELMET;
+        };
     }
 }

@@ -4,8 +4,8 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
+import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,6 +115,10 @@ public final class ChunkUtils {
         return getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
     }
 
+    public static long getChunkIndex(@NotNull Point point) {
+        return getChunkIndex(point.chunkX(), point.chunkZ());
+    }
+
     /**
      * Converts a chunk index to its chunk X position.
      *
@@ -139,27 +143,38 @@ public final class ChunkUtils {
         return y / Chunk.CHUNK_SECTION_SIZE;
     }
 
-    /**
-     * Gets the chunks in range of a position.
-     *
-     * @param chunkX the initial chunk X
-     * @param chunkZ the initial chunk Z
-     * @param range  how far should it retrieves chunk
-     * @return an array containing chunks index
-     */
-    public static long @NotNull [] getChunksInRange(int chunkX, int chunkZ, int range) {
-        long[] array = new long[MathUtils.square(range * 2 + 1)];
-        int i = 0;
-        for (int x = -range; x <= range; ++x) {
-            for (int z = -range; z <= range; ++z) {
-                array[i++] = getChunkIndex(chunkX + x, chunkZ + z);
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
+                                                 int oldChunkX, int oldChunkZ,
+                                                 int range, @NotNull IntegerBiConsumer callback) {
+        for (int x = newChunkX - range; x <= newChunkX + range; x++) {
+            for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
+                if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
+                    callback.accept(x, z);
+                }
             }
         }
-        return array;
     }
 
-    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
-        return getChunksInRange(point.chunkX(), point.chunkZ(), range);
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
+                                                 int oldChunkX, int oldChunkZ,
+                                                 int range,
+                                                 @NotNull IntegerBiConsumer newCallback, @NotNull IntegerBiConsumer oldCallback) {
+        // Find the new chunks
+        forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
+        // Find the old chunks
+        forDifferingChunksInRange(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
+    }
+
+    public static void forChunksInRange(int chunkX, int chunkZ, int range, IntegerBiConsumer consumer) {
+        for (int x = -range; x <= range; ++x) {
+            for (int z = -range; z <= range; ++z) {
+                consumer.accept(chunkX + x, chunkZ + z);
+            }
+        }
+    }
+
+    public static void forChunksInRange(@NotNull Point point, int range, IntegerBiConsumer consumer) {
+        forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
     }
 
     /**

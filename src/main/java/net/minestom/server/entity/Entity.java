@@ -21,15 +21,18 @@ import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
+import net.minestom.server.event.instance.AddEntityToInstanceEvent;
+import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
@@ -38,11 +41,13 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
+import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -59,7 +64,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 /**
  * Could be a player, a monster, or an object.
@@ -73,6 +77,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     private final BoundingBox sleepingBoundingBox = new BoundingBox(this, 0.2, 0.2, 0.2);
+
+    private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
     protected Instance instance;
     protected Chunk currentChunk;
@@ -104,10 +110,46 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
-    private boolean autoViewable;
     private final int id;
-    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    // Players must be aware of all surrounding entities
+    // General entities should only be aware of surrounding players to update their viewing list
+    private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
+            EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
+    protected final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
+        @Override
+        public void add(@NotNull Entity entity) {
+            viewEngine.handleAutoViewAddition(entity);
+        }
+
+        @Override
+        public void remove(@NotNull Entity entity) {
+            viewEngine.handleAutoViewRemoval(entity);
+        }
+
+        @Override
+        public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
+            viewEngine.updateTracker(point, tracker);
+        }
+    };
+
+    protected final ViewEngine viewEngine = new ViewEngine(this,
+            player -> {
+                // Add viewable
+                if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
+                        !player.viewEngine.viewerOption.predicate(this)) return;
+                Entity.this.viewEngine.viewableOption.register(player);
+                player.viewEngine.viewerOption.register(this);
+                updateNewViewer(player);
+            },
+            player -> {
+                // Remove viewable
+                Entity.this.viewEngine.viewableOption.unregister(player);
+                player.viewEngine.viewerOption.unregister(this);
+                updateOldViewer(player);
+            },
+            this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
+            this instanceof Player player ? entity -> entity.viewEngine.viewableOption.removal.accept(player) : null);
+    protected final Set<Player> viewers = viewEngine.asSet();
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
@@ -150,13 +192,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
-        setAutoViewable(true);
-
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        this.gravityAcceleration = EntityTypeImpl.getAcceleration(entityType.name());
-        this.gravityDragPerTick = EntityTypeImpl.getDrag(entityType.name());
+        this.gravityAcceleration = entityType.registry().acceleration();
+        this.gravityDragPerTick = entityType.registry().drag();
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -249,8 +289,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
+            this.previousPosition = this.position;
             this.position = position;
-            this.previousPosition = position;
             refreshCoordinate(position);
             synchronizePosition(true);
         };
@@ -287,80 +327,153 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
-     * When set to true, the entity will automatically get new viewers when they come too close.
-     * This can be use to have complete control over which player can see it, without having to deal with
-     * raw packets.
-     * <p>
-     * True by default for all entities.
-     * When set to false, it is important to mention that the players will not be removed automatically from its viewers
-     * list, you would have to do that manually using {@link #addViewer(Player)} and {@link #removeViewer(Player)}..
+     * Changes the view of the entity so that it looks in a direction to the given position.
+     *
+     * @param position the position to look at.
+     */
+    public void lookAt(@NotNull Pos position) {
+        Vec delta = position.sub(getPosition()).asVec().normalize();
+        setView(
+                PositionUtils.getLookYaw(delta.x(), delta.z()),
+                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
+        );
+    }
+
+    /**
+     * Changes the view of the entity so that it looks in a direction to the given entity.
+     *
+     * @param entity the entity to look at.
+     */
+    public void lookAt(@NotNull Entity entity) {
+        Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
+        lookAt(entity.position);
+    }
+
+    /**
+     * Gets if this entity is automatically sent to surrounding players.
+     * True by default.
      *
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
     public boolean isAutoViewable() {
-        return autoViewable;
+        return viewEngine.viewableOption.isAuto();
     }
 
     /**
-     * Makes the entity auto viewable or only manually.
+     * Decides if this entity should be auto-viewable by nearby players.
      *
-     * @param autoViewable should the entity be automatically viewable for close players
+     * @param autoViewable true to add surrounding players, false to remove
      * @see #isAutoViewable()
      */
     public void setAutoViewable(boolean autoViewable) {
-        this.autoViewable = autoViewable;
+        this.viewEngine.viewableOption.updateAuto(autoViewable);
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
+        this.viewEngine.viewableOption.updateRule(predicate);
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewableRule() {
+        this.viewEngine.viewableOption.updateRule();
+    }
+
+    /**
+     * Gets if surrounding entities are automatically visible by this.
+     * True by default.
+     *
+     * @return true if surrounding entities are visible by this
+     */
+    @ApiStatus.Experimental
+    public boolean autoViewEntities() {
+        return viewEngine.viewerOption.isAuto();
+    }
+
+    /**
+     * Decides if surrounding entities must be visible.
+     *
+     * @param autoViewer true to add view surrounding entities, false to remove
+     */
+    @ApiStatus.Experimental
+    public void setAutoViewEntities(boolean autoViewer) {
+        this.viewEngine.viewerOption.updateAuto(autoViewer);
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
+        this.viewEngine.viewerOption.updateRule(predicate);
+    }
+
+    @ApiStatus.Experimental
+    public void updateViewerRule() {
+        this.viewEngine.viewerOption.updateRule();
     }
 
     @Override
     public final boolean addViewer(@NotNull Player player) {
-        if (player == this) return false;
-        return addViewer0(player);
-    }
-
-    protected boolean addViewer0(@NotNull Player player) {
-        if (!this.viewers.add(player)) {
-            return false;
-        }
-        player.viewableEntities.add(this);
-
-        PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
-        if (hasVelocity()) {
-            playerConnection.sendPacket(getVelocityPacket());
-        }
-        playerConnection.sendPacket(getMetadataPacket());
-        // Passenger
-        final Set<Entity> passengers = this.passengers;
-        if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                passenger.addViewer(player);
-            }
-            playerConnection.sendPacket(getPassengersPacket());
-        }
-        // Head position
-        playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        if (!viewEngine.manualAdd(player)) return false;
+        updateNewViewer(player);
         return true;
     }
 
     @Override
     public final boolean removeViewer(@NotNull Player player) {
-        if (player == this) return false;
-        return removeViewer0(player);
-    }
-
-    protected boolean removeViewer0(@NotNull Player player) {
-        if (!viewers.remove(player)) {
-            return false;
-        }
-        player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
-        player.viewableEntities.remove(this);
+        if (!viewEngine.manualRemove(player)) return false;
+        updateOldViewer(player);
         return true;
     }
 
-    @NotNull
+    /**
+     * Called when a new viewer must be shown.
+     * Method can be subject to deadlocking if the target's viewers are also accessed.
+     *
+     * @param player the player to send the packets to
+     */
+    @ApiStatus.Internal
+    public void updateNewViewer(@NotNull Player player) {
+        player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        if (hasVelocity()) player.sendPacket(getVelocityPacket());
+        player.sendPacket(getMetadataPacket());
+        // Passengers
+        final Set<Entity> passengers = this.passengers;
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                if (passenger != player) passenger.viewEngine.viewableOption.addition.accept(player);
+            }
+            player.sendPacket(getPassengersPacket());
+        }
+        // Head position
+        player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+    }
+
+    /**
+     * Called when a viewer must be destroyed.
+     * Method can be subject to deadlocking if the target's viewers are also accessed.
+     *
+     * @param player the player to send the packets to
+     */
+    @ApiStatus.Internal
+    public void updateOldViewer(@NotNull Player player) {
+        final Set<Entity> passengers = this.passengers;
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                if (passenger != player) passenger.viewEngine.viewableOption.removal.accept(player);
+            }
+        }
+        player.sendPacket(destroyPacketCache);
+    }
+
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull Set<Player> getViewers() {
+        return viewers;
+    }
+
+    /**
+     * Gets if this entity's viewers (surrounding players) can be predicted from surrounding chunks.
+     */
+    public boolean hasPredictableViewers() {
+        return viewEngine.hasPredictableViewers();
     }
 
     /**
@@ -380,8 +493,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
         Set<Player> viewers = new HashSet<>(getViewers());
-        getViewers().forEach(this::removeViewer0);
-        viewers.forEach(this::addViewer0);
+        getViewers().forEach(this::updateOldViewer);
+        viewers.forEach(this::updateNewViewer);
     }
 
     @NotNull
@@ -417,11 +530,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             return;
         }
 
-        // Fix current chunk being null if the entity has been spawned before
-        if (currentChunk == null) {
-            refreshCurrentChunk(instance.getChunkAt(position));
-        }
-
         // Check if the entity chunk is loaded
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
@@ -429,11 +537,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
 
         // scheduled tasks
-        if (!nextTick.isEmpty()) {
+        {
             Consumer<Entity> callback;
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);
             }
+            if (isRemoved()) return;
         }
 
         // Entity tick
@@ -466,17 +575,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private void velocityTick() {
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-
-        final boolean isSocketClient = PlayerUtils.isSocketClient(this);
-        if (isSocketClient) {
-            if (position.samePoint(previousPosition))
-                return; // Didn't move since last tick
-            // Calculate velocity from client
-            velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
-            previousPosition = position;
-            return;
-        }
-
+        if (PlayerUtils.isSocketClient(this)) return;
         if (vehicle != null) return;
 
         final boolean noGravity = hasNoGravity();
@@ -521,6 +620,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         if (this instanceof ItemEntity) {
             // TODO find other exceptions
+            this.previousPosition = this.position;
             this.position = finalVelocityPosition;
             refreshCoordinate(finalVelocityPosition);
         } else {
@@ -764,19 +864,33 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
-        if (previousInstance != null) {
-            previousInstance.UNSAFE_removeEntity(this);
+        if (Objects.equals(previousInstance, instance)) {
+            return teleport(spawnPosition); // Already in the instance, teleport to spawn point
         }
+        AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
+        EventDispatcher.call(event);
+        if (event.isCancelled()) return null; // TODO what to return?
+
+        if (previousInstance != null) removeFromInstance(previousInstance);
+
+        this.isActive = true;
         this.position = spawnPosition;
         this.previousPosition = spawnPosition;
-        this.isActive = true;
         this.instance = instance;
-        return instance.loadOptionalChunk(position).thenAccept(chunk -> {
-            Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
-            refreshCurrentChunk(chunk);
-            instance.UNSAFE_addEntity(this);
-            spawn();
-            EventDispatcher.call(new EntitySpawnEvent(this, instance));
+        return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
+            try {
+                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+                refreshCurrentChunk(chunk);
+                if (this instanceof Player player) {
+                    instance.getWorldBorder().init(player);
+                    player.sendPacket(instance.createTimePacket());
+                }
+                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                spawn();
+                EventDispatcher.call(new EntitySpawnEvent(this, instance));
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
         });
     }
 
@@ -795,6 +909,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
         return setInstance(instance, this.position);
+    }
+
+    private void removeFromInstance(Instance instance) {
+        EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
+        instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        this.viewEngine.forManuals(this::removeViewer);
     }
 
     /**
@@ -910,16 +1030,16 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @throws IllegalStateException if {@link #getInstance()} returns null or the passenger cannot be added
      */
     public void addPassenger(@NotNull Entity entity) {
-        Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+        final Instance currentInstance = this.instance;
+        Check.stateCondition(currentInstance == null, "You need to set an instance using Entity#setInstance");
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
         final Entity vehicle = entity.getVehicle();
-        if (vehicle != null) {
-            vehicle.removePassenger(entity);
-        }
+        if (vehicle != null) vehicle.removePassenger(entity);
+        if (!currentInstance.equals(entity.getInstance()))
+            entity.setInstance(currentInstance, position).join();
         this.passengers.add(entity);
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
-
         // Updates the position of the new passenger, and then teleports the passenger
         updatePassengerPosition(position, entity);
         entity.synchronizePosition(false);
@@ -1194,31 +1314,37 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
         this.position = position;
+        this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
+            // Update player velocity
+            if (PlayerUtils.isSocketClient(this)) {
+                // Calculate from client
+                this.velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
+            }
         }
+        // Update viewers
         final boolean viewChange = !position.sameView(lastSyncedPosition);
         final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
         final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
         final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
-        final Player player = this instanceof Player ? (Player) this : null;
         final Chunk chunk = getChunk();
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
+            this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         } else if (positionChange && viewChange) {
             PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, isOnGround()), player);
+                    lastSyncedPosition, isOnGround()), this);
             // Fix head rotation
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), player);
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), this);
         } else if (viewChange) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), player);
-            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), player);
+            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
         }
-        this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
     }
 
@@ -1244,8 +1370,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
      * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     *
      * @param newPosition The X,Y,Z position of this vehicle
-     * @param passenger The passenger to be moved
+     * @param passenger   The passenger to be moved
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
@@ -1268,30 +1395,31 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
-        if (hasPassenger()) {
-            for (Entity passenger : getPassengers()) {
+        // Passengers update
+        final Set<Entity> passengers = getPassengers();
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
                 updatePassengerPosition(newPosition, passenger);
             }
         }
+        // Handle chunk switch
         final Instance instance = getInstance();
-        if (instance != null) {
-            final int lastChunkX = currentChunk.getChunkX();
-            final int lastChunkZ = currentChunk.getChunkZ();
-            final int newChunkX = newPosition.chunkX();
-            final int newChunkZ = newPosition.chunkZ();
-            if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
-                // Entity moved in a new chunk
-                final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
-                Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
-                if (this instanceof Player) {
-                    // Refresh player view
-                    final Player player = (Player) this;
-                    player.refreshVisibleChunks(newChunk);
-                    player.refreshVisibleEntities(newChunk);
-                }
-                refreshCurrentChunk(newChunk);
+        assert instance != null;
+        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingTarget, trackingUpdate);
+        final int lastChunkX = currentChunk.getChunkX();
+        final int lastChunkZ = currentChunk.getChunkZ();
+        final int newChunkX = newPosition.chunkX();
+        final int newChunkZ = newPosition.chunkZ();
+        if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
+            // Entity moved in a new chunk
+            final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
+            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
+            if (this instanceof Player player) { // Update visible chunks
+                player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
+                ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
+                        MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
             }
+            refreshCurrentChunk(newChunk);
         }
     }
 
@@ -1371,21 +1499,17 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public void remove() {
         if (isRemoved()) return;
         // Remove passengers if any (also done with LivingEntity#kill)
-        if (hasPassenger()) {
-            getPassengers().forEach(this::removePassenger);
-        }
-        var vehicle = this.vehicle;
-        if (vehicle != null) {
-            vehicle.removePassenger(this);
-        }
+        Set<Entity> passengers = getPassengers();
+        if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
+        final Entity vehicle = this.vehicle;
+        if (vehicle != null) vehicle.removePassenger(this);
         MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
-        if (instance != null) {
-            instance.UNSAFE_removeEntity(this);
-        }
+        Instance currentInstance = this.instance;
+        if (currentInstance != null) removeFromInstance(currentInstance);
     }
 
     /**
@@ -1461,7 +1585,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected void synchronizePosition(boolean includeSelf) {
         final Pos posCache = this.position;
         final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
-        PacketUtils.prepareViewablePacket(currentChunk, packet, this instanceof Player ? (Player) this : null);
+        PacketUtils.prepareViewablePacket(currentChunk, packet, this);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = posCache;
     }
@@ -1599,8 +1723,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Vec end = start.add(position.direction().mul(range));
 
         List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e))
-                .collect(Collectors.toList());
+                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e)).toList();
         if (nearby.isEmpty()) {
             return null;
         }

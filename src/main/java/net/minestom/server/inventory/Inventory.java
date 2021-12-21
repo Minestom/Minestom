@@ -12,7 +12,6 @@ import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public class Inventory extends AbstractInventory implements Viewable {
+public non-sealed class Inventory extends AbstractInventory implements Viewable {
 
     // incremented each time an inventory is created (used in the window packets)
     private static byte LAST_INVENTORY_ID;
@@ -130,8 +129,8 @@ public class Inventory extends AbstractInventory implements Viewable {
      */
     @Override
     public void update() {
-        for(Player player : viewers) {
-            player.getPlayerConnection().sendPacket(createNewWindowItemsPacket(player));
+        for (Player player : viewers) {
+            player.sendPacket(createNewWindowItemsPacket(player));
         }
     }
 
@@ -143,11 +142,8 @@ public class Inventory extends AbstractInventory implements Viewable {
      * @param player the player to update the inventory
      */
     public void update(@NotNull Player player) {
-        if (!getViewers().contains(player))
-            return;
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(createNewWindowItemsPacket(player));
+        if (!isViewer(player)) return;
+        player.sendPacket(createNewWindowItemsPacket(player));
     }
 
     @NotNull
@@ -204,7 +200,7 @@ public class Inventory extends AbstractInventory implements Viewable {
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
         if (!currentCursorItem.isSimilar(cursorItem)) {
-            player.getPlayerConnection().sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
+            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
         }
         if (!cursorItem.isAir()) {
             this.cursorPlayersItem.put(player, cursorItem);

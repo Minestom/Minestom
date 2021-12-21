@@ -309,8 +309,8 @@ public final class ConnectionManager {
             }
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
-            if (playerConnection instanceof PlayerSocketConnection) {
-                ((PlayerSocketConnection) playerConnection).writeAndFlush(loginSuccessPacket);
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                socketConnection.writeAndFlush(loginSuccessPacket);
             } else {
                 playerConnection.sendPacket(loginSuccessPacket);
             }

@@ -291,49 +291,28 @@ public class Metadata {
     }
 
     private static <T> Value<T> getCorrespondingNewEmptyValue(int type) {
-        switch (type) {
-            case TYPE_BYTE:
-                return (Value<T>) Byte((byte) 0);
-            case TYPE_VARINT:
-                return (Value<T>) VarInt(0);
-            case TYPE_FLOAT:
-                return (Value<T>) Float(0);
-            case TYPE_STRING:
-                return (Value<T>) String("");
-            case TYPE_CHAT:
-                return (Value<T>) Chat(Component.empty());
-            case TYPE_OPTCHAT:
-                return (Value<T>) OptChat(null);
-            case TYPE_SLOT:
-                return (Value<T>) Slot(ItemStack.AIR);
-            case TYPE_BOOLEAN:
-                return (Value<T>) Boolean(false);
-            case TYPE_ROTATION:
-                return (Value<T>) Rotation(Vec.ZERO);
-            case TYPE_POSITION:
-                return (Value<T>) Position(Vec.ZERO);
-            case TYPE_OPTPOSITION:
-                return (Value<T>) OptPosition(null);
-            case TYPE_DIRECTION:
-                return (Value<T>) Direction(Direction.DOWN);
-            case TYPE_OPTUUID:
-                return (Value<T>) OptUUID(null);
-            case TYPE_OPTBLOCKID:
-                return (Value<T>) OptBlockID(null);
-            case TYPE_NBT:
-                return (Value<T>) NBT(new NBTEnd());
-            case TYPE_PARTICLE:
-                throw new UnsupportedOperationException();
-            case TYPE_VILLAGERDATA:
-                return (Value<T>) VillagerData(0, 0, 0);
-            case TYPE_OPTVARINT:
-                return (Value<T>) OptVarInt(null);
-            case TYPE_POSE:
-                return (Value<T>) Pose(Entity.Pose.STANDING);
-
-            default:
-                throw new UnsupportedOperationException();
-        }
+        return switch (type) {
+            case TYPE_BYTE -> (Value<T>) Byte((byte) 0);
+            case TYPE_VARINT -> (Value<T>) VarInt(0);
+            case TYPE_FLOAT -> (Value<T>) Float(0);
+            case TYPE_STRING -> (Value<T>) String("");
+            case TYPE_CHAT -> (Value<T>) Chat(Component.empty());
+            case TYPE_OPTCHAT -> (Value<T>) OptChat(null);
+            case TYPE_SLOT -> (Value<T>) Slot(ItemStack.AIR);
+            case TYPE_BOOLEAN -> (Value<T>) Boolean(false);
+            case TYPE_ROTATION -> (Value<T>) Rotation(Vec.ZERO);
+            case TYPE_POSITION -> (Value<T>) Position(Vec.ZERO);
+            case TYPE_OPTPOSITION -> (Value<T>) OptPosition(null);
+            case TYPE_DIRECTION -> (Value<T>) Direction(Direction.DOWN);
+            case TYPE_OPTUUID -> (Value<T>) OptUUID(null);
+            case TYPE_OPTBLOCKID -> (Value<T>) OptBlockID(null);
+            case TYPE_NBT -> (Value<T>) NBT(new NBTEnd());
+            case TYPE_PARTICLE -> throw new UnsupportedOperationException();
+            case TYPE_VILLAGERDATA -> (Value<T>) VillagerData(0, 0, 0);
+            case TYPE_OPTVARINT -> (Value<T>) OptVarInt(null);
+            case TYPE_POSE -> (Value<T>) Pose(Entity.Pose.STANDING);
+            default -> throw new UnsupportedOperationException();
+        };
     }
 
     private static <T> Value<T> read(int type, BinaryReader reader) {

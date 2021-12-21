@@ -40,11 +40,13 @@ public final class BinaryBuffer {
         return new BinaryBuffer(temp);
     }
 
+    public void write(ByteBuffer buffer, int index, int length) {
+        this.nioBuffer.put(writerOffset, buffer, index, length);
+        this.writerOffset += length;
+    }
+
     public void write(ByteBuffer buffer) {
-        final int size = buffer.remaining();
-        // TODO jdk 13 put with index
-        this.nioBuffer.position(writerOffset).put(buffer);
-        this.writerOffset += size;
+        write(buffer, buffer.position(), buffer.remaining());
     }
 
     public void write(BinaryBuffer buffer) {
@@ -107,13 +109,13 @@ public final class BinaryBuffer {
     }
 
     public void writeBytes(byte[] bytes) {
-        this.nioBuffer.position(writerOffset).put(bytes);
+        this.nioBuffer.put(writerOffset, bytes);
         this.writerOffset += bytes.length;
     }
 
     public byte[] readBytes(int length) {
         byte[] bytes = new byte[length];
-        this.nioBuffer.position(readerOffset).get(bytes, 0, length);
+        this.nioBuffer.get(readerOffset, bytes);
         this.readerOffset += length;
         return bytes;
     }
@@ -125,15 +127,23 @@ public final class BinaryBuffer {
     public BinaryBuffer clear() {
         this.readerOffset = 0;
         this.writerOffset = 0;
+        this.nioBuffer.limit(capacity);
         return this;
     }
 
     public ByteBuffer asByteBuffer(int reader, int writer) {
-        return nioBuffer.position(reader).slice().limit(writer);
+        return nioBuffer.slice(reader, writer);
+    }
+
+    @ApiStatus.Internal
+    public ByteBuffer asByteBuffer() {
+        return nioBuffer;
     }
 
     public boolean writeChannel(WritableByteChannel channel) throws IOException {
-        var writeBuffer = asByteBuffer(readerOffset, writerOffset - readerOffset);
+        if (readerOffset == writerOffset)
+            return true; // Nothing to write
+        var writeBuffer = nioBuffer.slice(readerOffset, writerOffset - readerOffset);
         final int count = channel.write(writeBuffer);
         if (count == -1) {
             // EOS
@@ -144,7 +154,7 @@ public final class BinaryBuffer {
     }
 
     public void readChannel(ReadableByteChannel channel) throws IOException {
-        final int count = channel.read(nioBuffer.position(readerOffset));
+        final int count = channel.read(nioBuffer.slice(readerOffset, capacity - readerOffset));
         if (count == -1) {
             // EOS
             throw new IOException("Disconnected");
@@ -161,28 +171,6 @@ public final class BinaryBuffer {
                 '}';
     }
 
-    public static final class Marker {
-        private final int readerOffset, writerOffset;
-
-        private Marker(int readerOffset, int writerOffset) {
-            this.readerOffset = readerOffset;
-            this.writerOffset = writerOffset;
-        }
-
-        public int readerOffset() {
-            return readerOffset;
-        }
-
-        public int writerOffset() {
-            return writerOffset;
-        }
-
-        @Override
-        public String toString() {
-            return "Marker{" +
-                    "readerOffset=" + readerOffset +
-                    ", writerOffset=" + writerOffset +
-                    '}';
-        }
+    public record Marker(int readerOffset, int writerOffset) {
     }
 }

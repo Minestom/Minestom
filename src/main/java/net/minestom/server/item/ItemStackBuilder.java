@@ -73,8 +73,9 @@ public class ItemStackBuilder {
     }
 
     @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder meta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> itemMetaConsumer) {
-        this.metaBuilder = itemMetaConsumer.apply(metaBuilder);
+    public <T extends ItemMetaBuilder> @NotNull ItemStackBuilder meta(@NotNull UnaryOperator<@NotNull T> itemMetaConsumer) {
+        //noinspection unchecked
+        this.metaBuilder = itemMetaConsumer.apply((T) metaBuilder);
         return this;
     }
 

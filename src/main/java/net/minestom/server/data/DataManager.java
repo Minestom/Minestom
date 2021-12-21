@@ -23,6 +23,7 @@ import java.util.UUID;
  * A lot of types are already registered by default so you do not have to add all of them manually,
  * you can verify if {@link #getDataType(Class)} returns null for the desired type, if it is then you will need to register it.
  */
+@Deprecated
 public final class DataManager {
 
     private final Map<Class, DataType> dataTypeMap = new HashMap<>();

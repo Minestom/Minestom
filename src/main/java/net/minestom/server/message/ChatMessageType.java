@@ -55,11 +55,11 @@ public enum ChatMessageType {
      * @return the chat message type
      */
     public static @NotNull ChatMessageType fromPacketID(int id) {
-        switch (id) {
-            case 0: return FULL;
-            case 1: return SYSTEM;
-            case 2: return NONE;
-            default: throw new IllegalArgumentException("id must be between 0-2 (inclusive)");
-        }
+        return switch (id) {
+            case 0 -> FULL;
+            case 1 -> SYSTEM;
+            case 2 -> NONE;
+            default -> throw new IllegalArgumentException("id must be between 0-2 (inclusive)");
+        };
     }
 }

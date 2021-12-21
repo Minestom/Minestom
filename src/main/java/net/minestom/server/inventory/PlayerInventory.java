@@ -18,7 +18,7 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public class PlayerInventory extends AbstractInventory implements EquipmentHandler {
+public non-sealed class PlayerInventory extends AbstractInventory implements EquipmentHandler {
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 

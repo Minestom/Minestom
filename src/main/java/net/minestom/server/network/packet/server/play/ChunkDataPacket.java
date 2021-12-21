@@ -96,7 +96,7 @@ public class ChunkDataPacket implements ServerPacket {
                 final Block block = entry.getValue();
                 final String blockEntity = block.registry().blockEntity();
                 if (blockEntity == null) continue; // Only send block entities to client
-                final NBTCompound resultNbt = new NBTCompound();
+                NBTCompound resultNbt = new NBTCompound();
                 // Append handler tags
                 final BlockHandler handler = block.handler();
                 if (handler != null) {
@@ -108,6 +108,11 @@ public class ChunkDataPacket implements ServerPacket {
                             tag.writeUnsafe(resultNbt, value);
                         }
                     }
+                } else {
+                    // Complete nbt shall be sent if the block has no handler
+                    // Necessary to support all vanilla blocks
+                    final NBTCompound blockNbt = block.nbt();
+                    if (blockNbt != null) resultNbt = blockNbt;
                 }
                 // Add block entity
                 final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
