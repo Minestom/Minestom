@@ -69,12 +69,9 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
 
     @Contract(value = "_, _, _ -> new", pure = true)
     public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
-        var itemBuilder = ItemStack.builder(material)
-                .amount(amount);
-        if (nbtCompound != null) {
-            itemBuilder.meta(metaBuilder -> ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound));
-        }
-        return itemBuilder.build();
+        ItemMetaBuilder builder = ItemStackBuilder.getMetaBuilder(material);
+        if (nbtCompound != null) ItemMetaBuilder.resetMeta(builder, nbtCompound);
+        return new ItemStack(material, amount, builder.build(), null);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -147,7 +144,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return builder().meta(meta).build();
+        return new ItemStack(material, amount, meta, stackingRule);
     }
 
     @Contract(pure = true)
@@ -192,12 +189,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
 
     @Contract(pure = true)
     public boolean isAir() {
-        return material.equals(Material.AIR);
+        return material == Material.AIR;
     }
 
     @Contract(pure = true)
     public boolean isSimilar(@NotNull ItemStack itemStack) {
-        return material.equals(itemStack.material) &&
+        return material == itemStack.material &&
                 meta.equals(itemStack.meta);
     }
 

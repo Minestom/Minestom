@@ -11,6 +11,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.Utils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,30 +39,28 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder damage(int damage) {
         this.damage = damage;
-        mutateNbt(compound -> compound.setInt("Damage", damage));
+        this.nbt.setInt("Damage", damage);
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder unbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
-        mutateNbt(compound -> compound.set("Unbreakable", NBT.Boolean(unbreakable)));
+        this.nbt.set("Unbreakable", NBT.Boolean(unbreakable));
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder hideFlag(int hideFlag) {
         this.hideFlag = hideFlag;
-        mutateNbt(compound -> compound.setInt("HideFlags", hideFlag));
+        this.nbt.setInt("HideFlags", hideFlag);
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder hideFlag(@NotNull ItemHideFlag... hideFlags) {
         int result = 0;
-        for (ItemHideFlag hideFlag : hideFlags) {
-            result |= hideFlag.getBitFieldPart();
-        }
+        for (ItemHideFlag hideFlag : hideFlags) result |= hideFlag.getBitFieldPart();
         return hideFlag(result);
     }
 
@@ -70,8 +69,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.displayName = displayName;
         handleCompound("display", nbtCompound -> {
             if (displayName != null) {
-                final String name = GsonComponentSerializer.gson().serialize(displayName);
-                nbtCompound.setString("Name", name);
+                nbtCompound.setString("Name", GsonComponentSerializer.gson().serialize(displayName));
             } else {
                 nbtCompound.remove("Name");
             }
@@ -117,16 +115,14 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("-> this")
     public @NotNull ItemMetaBuilder clearEnchantment() {
         this.enchantmentMap = new HashMap<>();
-        enchantments(enchantmentMap);
+        this.nbt.remove("Enchantments");
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
         this.attributes = new ArrayList<>(attributes);
-
-        handleCollection(attributes, "AttributeModifiers", () -> NBT.List(
-                NBTType.TAG_Compound,
+        handleCollection(attributes, "AttributeModifiers", () -> NBT.List(NBTType.TAG_Compound,
                 attributes.stream()
                         .map(itemAttribute -> NBT.Compound(Map.of(
                                 "UUID", NBT.IntArray(Utils.uuidToIntArray(itemAttribute.getUuid())),
@@ -137,14 +133,13 @@ public abstract class ItemMetaBuilder implements TagWritable {
                                 "Name", NBT.String(itemAttribute.getInternalName()))))
                         .toList()
         ));
-
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder customModelData(int customModelData) {
         this.customModelData = customModelData;
-        mutateNbt(compound -> compound.setInt("CustomModelData", customModelData));
+        this.nbt.setInt("CustomModelData", customModelData);
         return this;
     }
 
@@ -184,7 +179,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        mutateNbt(compound -> tag.write(compound, value));
+        tag.write(nbt, value);
     }
 
     public <T> @NotNull ItemMetaBuilder set(@NotNull Tag<T> tag, @Nullable T value) {
@@ -197,77 +192,74 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     public abstract void read(@NotNull NBTCompound nbtCompound);
 
-    protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
+    protected @NotNull ItemMetaBuilder createEmpty() {
+        try {
+            var constructor = getClass().getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected MutableNBTCompound mutableNbt() {
+        return nbt;
+    }
 
     protected void mutateNbt(Consumer<MutableNBTCompound> consumer) {
         consumer.accept(nbt);
     }
 
-    protected @NotNull ItemMeta generate() {
-        return build();
-    }
-
     protected void handleCompound(@NotNull String key,
                                   @NotNull Consumer<@NotNull MutableNBTCompound> consumer) {
-        mutateNbt(nbt -> {
-            MutableNBTCompound compoundToModify = nbt.get(key) instanceof NBTCompound compound ?
-                    compound.toMutableCompound() : new MutableNBTCompound();
-
-            consumer.accept(compoundToModify);
-            if (compoundToModify.isEmpty()) {
-                nbt.remove(key);
-            } else {
-                nbt.set(key, compoundToModify.toCompound());
-            }
-        });
+        MutableNBTCompound compoundToModify = nbt.get(key) instanceof NBTCompound compound ?
+                compound.toMutableCompound() : new MutableNBTCompound();
+        consumer.accept(compoundToModify);
+        if (compoundToModify.isEmpty()) {
+            this.nbt.remove(key);
+        } else {
+            this.nbt.set(key, compoundToModify.toCompound());
+        }
     }
 
     protected void handleNullable(@Nullable Object value,
                                   @NotNull String key,
                                   @NotNull Supplier<@NotNull NBT> supplier) {
-        mutateNbt(compound -> {
-            if (value != null) {
-                compound.set(key, supplier.get());
-            } else {
-                compound.remove(key);
-            }
-        });
+        if (value != null) {
+            this.nbt.set(key, supplier.get());
+        } else {
+            this.nbt.remove(key);
+        }
     }
 
     protected void handleCollection(@NotNull Collection<?> objects,
                                     @NotNull String key,
                                     @NotNull Supplier<@NotNull NBT> supplier) {
-        mutateNbt(compound -> {
-            if (!objects.isEmpty()) {
-                compound.set(key, supplier.get());
-            } else {
-                compound.remove(key);
-            }
-        });
+        if (!objects.isEmpty()) {
+            this.nbt.set(key, supplier.get());
+        } else {
+            this.nbt.remove(key);
+        }
     }
 
     protected void handleMap(@NotNull Map<?, ?> objects,
                              @NotNull String key,
                              @NotNull Consumer<MutableNBTCompound> consumer) {
-        mutateNbt(compound -> {
-            if (!objects.isEmpty()) {
-                consumer.accept(compound);
-            } else {
-                compound.remove(key);
-            }
-        });
+        if (!objects.isEmpty()) {
+            consumer.accept(nbt);
+        } else {
+            nbt.remove(key);
+        }
     }
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
-        ItemMetaBuilder dest = src.getSupplier().get();
-        dest.nbt = nbtCompound.toMutableCompound();
-        appendDefaultMeta(dest, nbtCompound);
-        return dest;
+    @ApiStatus.Internal
+    public static void resetMeta(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
+        src.nbt.copyFrom(nbtCompound);
+        appendMeta(src, nbtCompound);
     }
 
-    private static void appendDefaultMeta(@NotNull ItemMetaBuilder metaBuilder,
-                                          @NotNull NBTCompound nbt) {
+    private static void appendMeta(@NotNull ItemMetaBuilder metaBuilder,
+                                   @NotNull NBTCompound nbt) {
         if (nbt.get("Damage") instanceof NBTInt damage) metaBuilder.damage = damage.getValue();
         if (nbt.get("Unbreakable") instanceof NBTByte unbreakable) metaBuilder.unbreakable = unbreakable.asBoolean();
         if (nbt.get("HideFlags") instanceof NBTInt hideFlags) metaBuilder.hideFlag = hideFlags.getValue();
@@ -332,8 +324,6 @@ public abstract class ItemMetaBuilder implements TagWritable {
         if (nbt.get("CustomModelData") instanceof NBTInt customModelData) {
             metaBuilder.customModelData = customModelData.getValue();
         }
-        // Meta specific fields
-        metaBuilder.read(nbt);
         // CanPlaceOn
         if (nbt.get("CanPlaceOn") instanceof NBTList<?> canPlaceOn &&
                 canPlaceOn.getSubtagType() == NBTType.TAG_String) {
@@ -350,6 +340,8 @@ public abstract class ItemMetaBuilder implements TagWritable {
                 metaBuilder.canDestroy.add(block);
             }
         }
+        // Meta specific fields
+        metaBuilder.read(nbt);
     }
 
     public interface Provider<T extends ItemMetaBuilder> {

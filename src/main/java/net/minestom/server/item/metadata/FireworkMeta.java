@@ -8,7 +8,6 @@ import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
 public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkMeta.Builder> {
 
@@ -74,11 +73,6 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
                     }
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

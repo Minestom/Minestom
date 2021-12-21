@@ -11,7 +11,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<EnchantedBookMeta.Builder> {
 
@@ -38,7 +37,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
         public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
             this.enchantments = enchantments;
-            mutateNbt(compound -> NBTUtils.writeEnchant(compound, "StoredEnchantments", enchantments));
+            NBTUtils.writeEnchant(mutableNbt(), "StoredEnchantments", enchantments);
             return this;
         }
 
@@ -59,11 +58,6 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
                     list.getSubtagType() == NBTType.TAG_Compound) {
                 NBTUtils.loadEnchantments(list.asListOf(), this::enchantment);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

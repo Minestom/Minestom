@@ -9,7 +9,6 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,12 +23,6 @@ public class ItemMetaBuilderRegressions {
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
             // don't care
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            // don't care
-            return () -> this;
         }
 
         @Override

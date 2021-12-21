@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
 public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMeta.Builder> {
 
@@ -76,21 +75,19 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
 
         public Builder mapId(int value) {
             this.mapId = value;
-            mutateNbt(compound -> compound.setInt("map", mapId));
+            mutableNbt().setInt("map", mapId);
             return this;
         }
 
         public Builder mapScaleDirection(int value) {
             this.mapScaleDirection = value;
-            mutateNbt(compound -> compound.setInt("map_scale_direction", value));
+            mutableNbt().setInt("map_scale_direction", value);
             return this;
         }
 
         public Builder decorations(List<Decoration> value) {
             this.decorations = new ArrayList<>(value);
-
-            mutateNbt(compound -> compound.set("Decorations", NBT.List(
-                    NBTType.TAG_Compound,
+            mutableNbt().set("Decorations", NBT.List(NBTType.TAG_Compound,
                     decorations.stream()
                             .map(decoration -> NBT.Compound(Map.of(
                                     "id", NBT.String(decoration.id()),
@@ -99,7 +96,7 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
                                     "z", NBT.Byte(decoration.z()),
                                     "rot", NBT.Double(decoration.rotation()))))
                             .toList()
-            )));
+            ));
             return this;
         }
 
@@ -155,11 +152,6 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
                     this.mapColor = new Color(mapColor.getValue());
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 
