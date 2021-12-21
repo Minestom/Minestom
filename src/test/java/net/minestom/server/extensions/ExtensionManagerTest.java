@@ -35,8 +35,8 @@ public class ExtensionManagerTest {
                 .thenReturn(exceptionManager);
 
         // Create ExtensionManager
-        extensionManager = new ExtensionManager();
-        extensionManager.setExtensionDataRoot(dataRoot);
+//        extensionManager = new ExtensionManager();
+//        extensionManager.setExtensionDataRoot(dataRoot);
     }
 
     @AfterEach
