@@ -1,12 +1,9 @@
-package net.minestom.server.world.generator.stages;
+package net.minestom.server.world.generator.stages.pregeneration;
 
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.noise.Noise2D;
 import net.minestom.server.world.generator.GenerationContext;
-import net.minestom.server.world.generator.WorldGenerationStage;
 
-public class BiomeLayout2DStage implements WorldGenerationStage {
-    public static final Tag<int[]> BIOME_DATA = Tag.IntArray("BiomeData");
+public class BiomeLayout2DStage implements PreGenerationStage {
     private final Noise2D biomeTemperatureNoise;
     private final Noise2D biomeHumidityNoise;
     private final float biomeSize;
@@ -18,13 +15,13 @@ public class BiomeLayout2DStage implements WorldGenerationStage {
     }
 
     @Override
-    public void lookAround(GenerationContext context, int chunkX, int chunkZ) {
+    public void process(GenerationContext context, int sectionX, int sectionY, int sectionZ) {
         // FIXME: 2021. 12. 19. POC! - Needs to be properly implemented, currently it decides between the first two
         //  biomes based on the temperature noise
     }
 
     @Override
-    public int getLookAroundRange() {
+    public int getRange() {
         return 10;
     }
 }

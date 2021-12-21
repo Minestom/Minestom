@@ -15,9 +15,9 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.generator.BiomeGenerator;
 import net.minestom.server.world.generator.BlockPool;
 import net.minestom.server.world.generator.WorldGenerator;
-import net.minestom.server.world.generator.stages.BiomeLayout2DStage;
-import net.minestom.server.world.generator.stages.FinalStage;
-import net.minestom.server.world.generator.stages.HeightMapStage;
+import net.minestom.server.world.generator.stages.pregeneration.BiomeLayout2DStage;
+import net.minestom.server.world.generator.stages.generation.TerrainStage;
+import net.minestom.server.world.generator.stages.pregeneration.HeightMapStage;
 
 import java.util.List;
 import java.util.Random;
@@ -69,8 +69,10 @@ public class MainDemo {
                 ),
                 List.of(
                         new BiomeLayout2DStage(tempNoise::getNoise, null, 1),
-                        new HeightMapStage(),
-                        new FinalStage()
+                        new HeightMapStage()
+                ),
+                List.of(
+                        new TerrainStage()
                 )
         ));
 
