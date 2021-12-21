@@ -1,7 +1,5 @@
 package demo;
 
-import demo.generator.ChunkGeneratorDemo;
-import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
@@ -117,11 +115,8 @@ public class PlayerInit {
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));

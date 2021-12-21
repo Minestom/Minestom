@@ -28,7 +28,7 @@ public class WorldGenerator {
     private final List<GenerationStage> generationStages;
 
     public WorldGenerator(Set<BiomeGenerator> biomeGenerators, List<PreGenerationStage> preGenerationStages, List<GenerationStage> generationStages) {
-        Check.argCondition(biomeGenerators.size() > 0, "At least one BiomeGenerator is required!");
+        Check.argCondition(biomeGenerators.size() == 0, "At least one BiomeGenerator is required!");
         Map<Integer, BiomeGenerator> bgs = new HashMap<>();
         for (BiomeGenerator biomeGenerator : biomeGenerators) {
             if (bgs.put(biomeGenerator.getId(), biomeGenerator) != null) {
