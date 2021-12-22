@@ -270,7 +270,7 @@ public final class NBTUtils {
      * Note: This method allocates two objects per character that was read.
      */
     // TODO: Remove when/if https://github.com/jglrxavpok/Hephaistos/issues/13 is completed
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static @Nullable NBT readSNBT(@NotNull StringReader reader) {
         if (!reader.canRead()) {
             return null;

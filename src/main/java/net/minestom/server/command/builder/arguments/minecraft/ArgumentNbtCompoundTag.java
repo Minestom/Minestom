@@ -5,7 +5,9 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
@@ -21,8 +23,14 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     @Override
     public @NotNull NBTCompound parse(@NotNull StringReader input) throws CommandException {
-        // FIXME: This has not been implemented because Hephaistos does not support reading select amounts of a reader yet.
-        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
+        NBT nbt = NBTUtils.readSNBT(input);
+
+        // FIXME: Throw an exception that's more accurate (ideally once Hephaistos adds partial reading)
+        if (!(nbt instanceof NBTCompound compound)) {
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
+        }
+
+        return compound;
     }
 
     @Override
