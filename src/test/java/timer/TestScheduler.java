@@ -44,6 +44,20 @@ public class TestScheduler {
     }
 
     @Test
+    public void immediateTask() {
+        Scheduler scheduler = Scheduler.newScheduler();
+        AtomicBoolean result = new AtomicBoolean(false);
+        scheduler.scheduleNextProcess(() -> result.set(true));
+        assertFalse(result.get());
+        scheduler.process();
+        assertTrue(result.get());
+
+        result.set(false);
+        scheduler.process();
+        assertFalse(result.get());
+    }
+
+    @Test
     public void cancelTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
