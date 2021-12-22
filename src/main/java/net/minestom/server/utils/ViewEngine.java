@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -8,7 +10,6 @@ import net.minestom.server.instance.EntityTracker;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.roaringbitmap.RoaringBitmap;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -125,7 +126,7 @@ public final class ViewEngine {
         // The consumers to be called when an entity is added/removed.
         public final Consumer<T> addition, removal;
         // Contains all the auto-entity ids that are viewable by this option.
-        public final RoaringBitmap bitSet = new RoaringBitmap();
+        public final IntSet bitSet = new IntOpenHashSet();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // References from the entity trackers.
@@ -221,7 +222,7 @@ public final class ViewEngine {
         public int size() {
             synchronized (mutex) {
                 int size = manualViewers.size();
-                if (entity != null) return size + viewableOption.bitSet.getCardinality();
+                if (entity != null) return size + viewableOption.bitSet.size();
                 // Non-entity fallback
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
                 if (auto != null) {
