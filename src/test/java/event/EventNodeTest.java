@@ -1,10 +1,15 @@
 package event;
 
 import net.minestom.server.event.Event;
+import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -129,4 +134,33 @@ public class EventNodeTest {
         assertEquals(0, result.get(), "The event should not be called after the removal");
     }
 
+    @Test
+    public void testFiltering() {
+        record ItemTestEvent(ItemStack item) implements ItemEvent {
+            @Override
+            public @NotNull ItemStack getItemStack() {
+                return item;
+            }
+        }
+        AtomicBoolean result = new AtomicBoolean(false);
+        AtomicBoolean childResult = new AtomicBoolean(false);
+
+        var node = EventNode.type("item_node", EventFilter.ITEM,
+                (event, item) -> item.getMaterial() == Material.DIAMOND);
+        var child = EventNode.type("item_node2", EventFilter.ITEM)
+                .addListener(ItemTestEvent.class, event -> childResult.set(true));
+        node.addChild(child);
+
+        var listener = EventListener.of(ItemTestEvent.class, event -> fail("The event should not be called"));
+        node.addListener(listener);
+        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_BLOCK)));
+        assertFalse(childResult.get());
+
+        node.removeListener(listener);
+        listener = EventListener.of(ItemTestEvent.class, event -> result.set(true));
+        node.addListener(listener);
+        node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
+        assertTrue(result.get(), "The event should be called");
+        assertTrue(childResult.get(), "The child event should be called");
+    }
 }
