@@ -19,6 +19,7 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
@@ -514,8 +515,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void updateNewViewer(@NotNull Player player) {
         super.updateNewViewer(player);
-        player.sendPacket(getEquipmentsPacket());
-        player.sendPacket(getPropertiesPacket());
+        player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
+        player.sendPacket(new LazyPacket(this::getPropertiesPacket));
         if (getTeam() != null) player.sendPacket(getTeam().createTeamsCreationPacket());
     }
 

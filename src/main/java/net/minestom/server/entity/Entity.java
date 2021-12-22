@@ -27,6 +27,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
@@ -431,7 +432,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     public void updateNewViewer(@NotNull Player player) {
         player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
-        player.sendPacket(getMetadataPacket());
+        player.sendPacket(new LazyPacket(this::getMetadataPacket));
         // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
