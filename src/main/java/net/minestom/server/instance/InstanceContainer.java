@@ -36,6 +36,7 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -311,7 +312,8 @@ public class InstanceContainer extends Instance {
                 chunk.sendChunk();
                 refreshLastBlockChangeTime();
                 future.complete(chunk);
-                LOGGER.trace("Finished generating {}", chunk);});
+                LOGGER.trace("Finished generating {}", chunk);
+            });
             return future;
         } else {
             // No generator, execute the callback with the empty chunk
