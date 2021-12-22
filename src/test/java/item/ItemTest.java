@@ -39,6 +39,10 @@ public class ItemTest {
         var item2 = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(item1, item2);
         assertNotEquals(item1.withAmount(5), item2.withAmount(2));
+
+        assertTrue(item1.isSimilar(item2));
+        assertTrue(item1.withAmount(5).isSimilar(item2.withAmount(2)));
+        assertFalse(item1.isSimilar(item2.withDisplayName(Component.text("Hey!"))));
     }
 
     @Test
