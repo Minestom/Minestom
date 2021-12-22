@@ -3,8 +3,6 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
-import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -167,11 +165,6 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         }
         // Refresh slot
         sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
-    }
-
-    @Override
-    protected void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
-        GlobalHandles.PLAYER_INVENTORY_ITEM_CHANGE_EVENT.call(new PlayerInventoryItemChangeEvent(player, slot, previous, current));
     }
 
     /**
