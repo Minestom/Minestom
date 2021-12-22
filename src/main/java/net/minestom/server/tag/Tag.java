@@ -50,7 +50,14 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound, MutableNBTCompound::copyFrom);
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound,
+            (original, updated) -> {
+                if (updated == null) {
+                    original.clear();
+                    return;
+                }
+                original.copyFrom(updated);
+            });
 
     private final String key;
     private final Function<NBTCompoundLike, T> readFunction;

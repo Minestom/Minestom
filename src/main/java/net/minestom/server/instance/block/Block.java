@@ -93,7 +93,9 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
     }
 
     @Contract(pure = true)
-    boolean hasNbt();
+    default boolean hasNbt() {
+        return nbt() != null;
+    }
 
     /**
      * Returns the block handler.

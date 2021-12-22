@@ -82,13 +82,13 @@ public class VillagerInventory extends Inventory {
     public void update() {
         super.update();
         this.tradeCache.invalidate();
-        sendPacketToViewers(tradeCache.retrieve());
+        sendPacketToViewers(tradeCache);
     }
 
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = super.addViewer(player);
-        if (result) player.sendPacket(tradeCache.retrieve());
+        if (result) player.sendPacket(tradeCache);
         return result;
     }
 

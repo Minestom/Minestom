@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -84,6 +85,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
+
+    public abstract @NotNull List<Section> getSections();
 
     public abstract @NotNull Section getSection(int section);
 
