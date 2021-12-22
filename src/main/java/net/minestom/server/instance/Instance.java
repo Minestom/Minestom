@@ -689,6 +689,6 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     public int getSectionMaxY() {
-        return getDimensionType().getHeight() / CHUNK_SECTION_SIZE;
+        return (getDimensionType().getMinY() + getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
     }
 }
