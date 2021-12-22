@@ -298,12 +298,13 @@ public class InstanceContainer extends Instance {
             CompletableFuture<?>[] futures = new CompletableFuture[getSectionMaxY()-getSectionMinY()];
             for (int y = getSectionMinY(); y < getSectionMaxY(); y++) {
                 final Section section = chunk.getSection(y);
-                LOGGER.trace("Requesting future of section {} in {}", y, chunk);
                 final SectionBlockCache sectionBlockCache = new SectionBlockCache();
                 int finalY = y;
                 futures[y-getSectionMinY()] = getWorldGenerator().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
-                        .thenAccept(ignored -> sectionBlockCache.apply(chunk, finalY));
-                LOGGER.trace("Got future of section {} in {}", y, chunk);
+                        .thenAccept(ignored -> {
+                            sectionBlockCache.apply(chunk, finalY);
+                            LOGGER.trace("Section {} has been generated for {}", finalY, chunk);
+                        });
             }
             final CompletableFuture<Chunk> future = new CompletableFuture<>();
             CompletableFuture.allOf(futures).whenComplete((r, t) -> {

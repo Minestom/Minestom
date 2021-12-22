@@ -32,6 +32,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
+import net.minestom.server.utils.Debug;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.math.IntRange;
@@ -169,24 +170,31 @@ public class PlayerInit {
                         )
                 ),
                 List.of(
-                        new BiomeLayout2DStage(tempNoise::getNoise, null, 1),
-                        new HeightMapStage()
+//                        new BiomeLayout2DStage(tempNoise::getNoise, null, 1),
+//                        new HeightMapStage()
                 ),
                 List.of(
                         new TerrainStage()
                 )
         ));
 
-        int r = 10;
-        final int total = MathUtils.square(r * 2);
+        int r = 0;
+        final int total = MathUtils.square((r+1) * 2);
         final CountDownLatch latch = new CountDownLatch(total);
-        for (int x = -r; x < r; x++) {
-            for (int z = -r; z < r; z++) {
+        for (int x = -r; x <= r; x++) {
+            for (int z = -r; z <= r; z++) {
                 instanceContainer.loadChunk(x,z).whenComplete((c,t) -> {
                     latch.countDown();
                     LOGGER.info("Generating spawn region {}%", (total- latch.getCount())/(double)total*100);
                 });
             }
+        }
+
+        try {
+            latch.await();
+            Debug.noop();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));

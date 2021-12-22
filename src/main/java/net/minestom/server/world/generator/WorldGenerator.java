@@ -7,6 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.thread.MinestomThreadPool;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.generator.stages.generation.GenerationStage;
@@ -23,6 +24,7 @@ import java.util.concurrent.ExecutorService;
 public class WorldGenerator {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
     private final static ExecutorService WORLD_GEN_POOL = new MinestomThreadPool(MinecraftServer.THREAD_COUNT_WORLD_GEN, MinecraftServer.THREAD_NAME_WORLD_GEN);
+
     private final Map<StageKey, CompletableFuture<Void>> preGenStages = new ConcurrentHashMap<>();
     private final Map<SectionKey, CompletableFuture<Void>> sectionGens = new ConcurrentHashMap<>();
     private final Map<Integer, BiomeGenerator> biomeGenerators;
@@ -61,12 +63,14 @@ public class WorldGenerator {
         sectionGens.put(key, completableFuture);
         final GenerationContext generationContext = new GenerationContext(this, key.instance());
         for (PreGenerationStage preGenerationStage : preGenerationStages) {
-            CompletableFuture<?>[] futures = new CompletableFuture[(int) Math.pow(preGenerationStage.getRange()*2, 3)];
+            int min = Math.max(sectionY-preGenerationStage.getRange(), key.instance.getSectionMinY());
+            int max = Math.min(sectionY+preGenerationStage.getRange(), key.instance.getSectionMaxY());
+            CompletableFuture<?>[] futures = new CompletableFuture[MathUtils.square(preGenerationStage.getRange()*2) + (max-min)];
             int i = 0;
             for (int x = -preGenerationStage.getRange(); x < preGenerationStage.getRange(); x++) {
-                for (int y = -preGenerationStage.getRange(); y < preGenerationStage.getRange(); y++) {
+                for (int y = min; y < max; y++) {
                     for (int z = -preGenerationStage.getRange(); z < preGenerationStage.getRange(); z++) {
-                        futures[i++] = executePreGenerationStage(generationContext, sectionX, sectionY, sectionZ, preGenerationStage);
+                        futures[i++] = executePreGenerationStage(generationContext, sectionX+x, y, sectionZ+z, preGenerationStage);
                     }
                 }
             }
