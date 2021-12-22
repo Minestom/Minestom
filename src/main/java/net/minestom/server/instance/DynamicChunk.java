@@ -33,7 +33,7 @@ import java.util.*;
 public class DynamicChunk extends Chunk {
 
     private final int minSection, maxSection;
-    private final Section[] sections;
+    private List<Section> sections;
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -47,8 +47,9 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
-        this.sections = new Section[maxSection - minSection];
-        Arrays.setAll(sections, value -> new Section());
+        var sectionsTemp = new Section[maxSection - minSection];
+        Arrays.setAll(sectionsTemp, value -> new Section());
+        this.sections = List.of(sectionsTemp);
     }
 
     @Override
@@ -93,9 +94,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
+    public @NotNull List<Section> getSections() {
+        return sections;
+    }
+
+    @Override
     public @NotNull Section getSection(int section) {
-        final int index = section - minSection;
-        return sections[index];
+        return sections.get(section - minSection);
     }
 
     @Override
@@ -122,7 +127,7 @@ public class DynamicChunk extends Chunk {
             }
         }
         // Retrieve the block from state id
-        final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
+        final Section section = getSectionAt(y);
         final int blockStateId = section.blockPalette()
                 .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
@@ -130,7 +135,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
-        final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
+        final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
@@ -157,10 +162,7 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
-        Arrays.setAll(dynamicChunk.sections, value -> {
-            final Section s = sections[value];
-            return s != null ? s.clone() : null;
-        });
+        dynamicChunk.sections = sections.stream().map(Section::clone).toList();
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
