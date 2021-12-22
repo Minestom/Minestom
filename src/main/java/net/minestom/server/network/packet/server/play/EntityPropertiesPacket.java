@@ -38,15 +38,9 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
         writer.writeVarInt(properties.size());
         for (AttributeInstance instance : properties) {
             final Attribute attribute = instance.getAttribute();
-            double value = instance.getValue();
-
-            float maxValue = attribute.getMaxValue();
-
-            // Bypass vanilla limit client-side if needed (by sending the max value allowed)
-            final double v = value > maxValue ? maxValue : value;
 
             writer.writeSizedString(attribute.getKey());
-            writer.writeDouble(v);
+            writer.writeDouble(instance.getBaseValue());
 
             {
                 Collection<AttributeModifier> modifiers = instance.getModifiers();
