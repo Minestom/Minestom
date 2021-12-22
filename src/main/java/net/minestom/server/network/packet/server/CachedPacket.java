@@ -3,8 +3,10 @@ package net.minestom.server.network.packet.server;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.SoftReference;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Supplier;
 
@@ -51,7 +53,7 @@ public final class CachedPacket implements SendablePacket {
      * Retrieves the packet object without allocating a buffer.
      * <p>
      * This method can be useful in case the payload is not important (e.g. for packet listening),
-     * but {@link #retrieve()} should be privileged otherwise.
+     * but {@link #toBuffer()} and {@link #toFramedPacket()} should be privileged otherwise.
      */
     public @NotNull ServerPacket packet() {
         FramedPacket cache;
@@ -60,17 +62,19 @@ public final class CachedPacket implements SendablePacket {
         return packetSupplier.get();
     }
 
-    /**
-     * Retrieves the packet content. May be recomputed if the packet is invalidated or
-     * if there is memory demand (handled by a soft reference).
-     * <p>
-     * {@link FramedPacket#body()} will contain a buffer allocated by this method.
-     */
-    public @NotNull FramedPacket retrieve() {
-        if (!PacketUtils.CACHED_PACKET) {
-            // TODO: Using a local buffer may be possible
-            return PacketUtils.allocateTrimmedPacket(packet());
-        }
+    public @NotNull ByteBuffer toBuffer() {
+        FramedPacket cache = updatedCache();
+        return cache != null ? cache.body() : PacketUtils.createFramedPacket(packet());
+    }
+
+    public @NotNull FramedPacket toFramedPacket() {
+        FramedPacket cache = updatedCache();
+        return cache != null ? cache : PacketUtils.allocateTrimmedPacket(packet());
+    }
+
+    private @Nullable FramedPacket updatedCache() {
+        if (!PacketUtils.CACHED_PACKET)
+            return null;
         SoftReference<FramedPacket> ref;
         FramedPacket cache;
         if (updated == 0 ||
