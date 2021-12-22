@@ -25,6 +25,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 
+import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
+
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
  * <p>
@@ -65,7 +67,7 @@ public class DynamicChunk extends Chunk {
         }
         Section section = getSectionAt(y);
         section.blockPalette()
-                .set(ChunkUtils.toSectionRelativeCoordinate(x), ChunkUtils.toSectionRelativeCoordinate(y), ChunkUtils.toSectionRelativeCoordinate(z), block.stateId());
+                .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -88,9 +90,9 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
         section.biomePalette().set(
-                ChunkUtils.toSectionRelativeCoordinate(x) / 4,
-                ChunkUtils.toSectionRelativeCoordinate(y) / 4,
-                ChunkUtils.toSectionRelativeCoordinate(z) / 4, biome.id());
+                toSectionRelativeCoordinate(x) / 4,
+                toSectionRelativeCoordinate(y) / 4,
+                toSectionRelativeCoordinate(z) / 4, biome.id());
     }
 
     @Override
@@ -129,7 +131,7 @@ public class DynamicChunk extends Chunk {
         // Retrieve the block from state id
         final Section section = getSectionAt(y);
         final int blockStateId = section.blockPalette()
-                .get(ChunkUtils.toSectionRelativeCoordinate(x), y, ChunkUtils.toSectionRelativeCoordinate(z));
+                .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
@@ -137,7 +139,7 @@ public class DynamicChunk extends Chunk {
     public @NotNull Biome getBiome(int x, int y, int z) {
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
-                .get(ChunkUtils.toSectionRelativeCoordinate(x) / 4, y / 4, ChunkUtils.toSectionRelativeCoordinate(z) / 4);
+                .get(toSectionRelativeCoordinate(x) / 4, y / 4, toSectionRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
     }
 
