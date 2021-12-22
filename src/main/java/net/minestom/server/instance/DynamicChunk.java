@@ -66,7 +66,7 @@ public class DynamicChunk extends Chunk {
         }
         Section section = getSectionAt(y);
         section.blockPalette()
-                .set(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z), block.stateId());
+                .set(ChunkUtils.toSectionRelativeCoordinate(x), ChunkUtils.toSectionRelativeCoordinate(y), ChunkUtils.toSectionRelativeCoordinate(z), block.stateId());
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -89,9 +89,9 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
         section.biomePalette().set(
-                toChunkRelativeCoordinate(x) / 4,
-                toChunkRelativeCoordinate(y) / 4,
-                toChunkRelativeCoordinate(z) / 4, biome.id());
+                ChunkUtils.toSectionRelativeCoordinate(x) / 4,
+                ChunkUtils.toSectionRelativeCoordinate(y) / 4,
+                ChunkUtils.toSectionRelativeCoordinate(z) / 4, biome.id());
     }
 
     @Override
@@ -130,7 +130,7 @@ public class DynamicChunk extends Chunk {
         // Retrieve the block from state id
         final Section section = getSectionAt(y);
         final int blockStateId = section.blockPalette()
-                .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
+                .get(ChunkUtils.toSectionRelativeCoordinate(x), y, ChunkUtils.toSectionRelativeCoordinate(z));
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
@@ -138,7 +138,7 @@ public class DynamicChunk extends Chunk {
     public @NotNull Biome getBiome(int x, int y, int z) {
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
-                .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
+                .get(ChunkUtils.toSectionRelativeCoordinate(x) / 4, y / 4, ChunkUtils.toSectionRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
     }
 
@@ -237,11 +237,4 @@ public class DynamicChunk extends Chunk {
                 skyLights, blockLights);
     }
 
-    private static int toChunkRelativeCoordinate(int xz) {
-        xz %= 16;
-        if (xz < 0) {
-            xz += Chunk.CHUNK_SECTION_SIZE;
-        }
-        return xz;
-    }
 }
