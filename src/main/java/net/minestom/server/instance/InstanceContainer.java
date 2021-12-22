@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -28,6 +29,8 @@ import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
@@ -41,6 +44,7 @@ import java.util.function.Supplier;
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
 public class InstanceContainer extends Instance {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -289,16 +293,24 @@ public class InstanceContainer extends Instance {
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
-
+        LOGGER.trace("Creating {}", chunk);
         if (getWorldGenerator() != null && chunk.shouldGenerate()) {
             CompletableFuture<?>[] futures = new CompletableFuture[getSectionMaxY()-getSectionMinY()];
-            int i = 0;
             for (int y = getSectionMinY(); y < getSectionMaxY(); y++) {
-                final Section section = chunk.getSection(i++);
-                futures[i++] = getWorldGenerator().generateSection(this, section.blockPalette(), section.biomePalette(), chunkX, y, chunkZ);
+                final Section section = chunk.getSection(y);
+                LOGGER.trace("Requesting future of section {} in {}", y, chunk);
+                final SectionBlockCache sectionBlockCache = new SectionBlockCache();
+                int finalY = y;
+                futures[y-getSectionMinY()] = getWorldGenerator().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
+                        .thenAccept(ignored -> sectionBlockCache.apply(chunk, finalY));
+                LOGGER.trace("Got future of section {} in {}", y, chunk);
             }
             final CompletableFuture<Chunk> future = new CompletableFuture<>();
-            CompletableFuture.allOf(futures).whenComplete((r, t) -> future.complete(chunk));
+            CompletableFuture.allOf(futures).whenComplete((r, t) -> {
+                chunk.sendChunk();
+                refreshLastBlockChangeTime();
+                future.complete(chunk);
+                LOGGER.trace("Finished generating {}", chunk);});
             return future;
         } else {
             // No generator, execute the callback with the empty chunk
@@ -529,5 +541,12 @@ public class InstanceContainer extends Instance {
         final long index = ChunkUtils.getChunkIndex(chunk);
         this.chunks.put(index, chunk);
         UPDATE_MANAGER.signalChunkLoad(chunk);
+    }
+
+    @Override
+    public String toString() {
+        return "InstanceContainer{" +
+                "uniqueId=" + uniqueId +
+                '}';
     }
 }

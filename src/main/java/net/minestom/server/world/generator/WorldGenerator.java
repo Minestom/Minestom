@@ -4,8 +4,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.thread.MinestomThreadPool;
+import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.generator.stages.generation.GenerationStage;
 import net.minestom.server.world.generator.stages.pregeneration.PreGenerationStage;
@@ -47,13 +49,14 @@ public class WorldGenerator {
         */
     }
 
-    public CompletableFuture<Void> generateSection(Instance instance, Palette blockPalette, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
+    public CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
         final SectionKey key = new SectionKey(instance, new Vec(sectionX, sectionY, sectionZ));
+        LOGGER.trace("Generation request for {}", key);
         final CompletableFuture<Void> future = sectionGens.get(key);
-        return Objects.requireNonNullElseGet(future, () -> generateSection_0(key, blockPalette, biomePalette, sectionX, sectionY, sectionZ));
+        return Objects.requireNonNullElseGet(future, () -> generateSection_0(key, blockCache, biomePalette, sectionX, sectionY, sectionZ));
     }
 
-    private CompletableFuture<Void> generateSection_0(SectionKey key, Palette blockPalette, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
+    private CompletableFuture<Void> generateSection_0(SectionKey key, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
         final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         sectionGens.put(key, completableFuture);
         final GenerationContext generationContext = new GenerationContext(this, key.instance());
@@ -76,9 +79,11 @@ public class WorldGenerator {
         }
 
         WORLD_GEN_POOL.execute(() -> {
+            LOGGER.trace("Executing generation stages {}", key);
             for (GenerationStage generationStage : generationStages) {
-                generationStage.process(generationContext, blockPalette, biomePalette, sectionX, sectionY, sectionZ);
+                generationStage.process(generationContext, blockCache, biomePalette, sectionX, sectionY, sectionZ);
             }
+            LOGGER.trace("Finished generation stages {}", key);
             completableFuture.complete(null);
             sectionGens.remove(key);
         });
@@ -95,7 +100,9 @@ public class WorldGenerator {
             final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
             preGenStages.put(key, completableFuture);
             WORLD_GEN_POOL.execute(() -> {
+                LOGGER.trace("Executing pre-gen stage {}", key);
                 stage.process(context, x, y, z);
+                LOGGER.trace("Finished pre-gen stage {}", key);
                 completableFuture.complete(null);
                 preGenStages.remove(key);
             });

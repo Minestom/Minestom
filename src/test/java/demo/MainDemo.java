@@ -9,6 +9,7 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.world.biomes.Biome;
@@ -18,12 +19,16 @@ import net.minestom.server.world.generator.WorldGenerator;
 import net.minestom.server.world.generator.stages.pregeneration.BiomeLayout2DStage;
 import net.minestom.server.world.generator.stages.generation.TerrainStage;
 import net.minestom.server.world.generator.stages.pregeneration.HeightMapStage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 public class MainDemo {
+    private final static Logger LOGGER = LoggerFactory.getLogger(MainDemo.class);
 
     public static void main(String[] args) {
         // Initialization
@@ -75,6 +80,24 @@ public class MainDemo {
                         new TerrainStage()
                 )
         ));
+
+        int r = 10;
+        final int total = MathUtils.square(r * 2);
+        final CountDownLatch latch = new CountDownLatch(total);
+        for (int x = -r; x < r; x++) {
+            for (int z = -r; z < r; z++) {
+                instanceContainer.loadChunk(x,z).whenComplete((c,t) -> {
+                    latch.countDown();
+                    LOGGER.info("Generating spawn region {}%", (total- latch.getCount())/(double)total*100);
+                });
+            }
+        }
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // Add an event callback to specify the spawning instance (and the spawn position)
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
