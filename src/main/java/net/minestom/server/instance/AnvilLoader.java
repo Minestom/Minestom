@@ -102,8 +102,8 @@ public class AnvilLoader implements IChunkLoader {
                             int finalZ = fileChunk.getZ() * Chunk.CHUNK_SIZE_Z + z;
                             int finalY = section.getY() * Chunk.CHUNK_SECTION_SIZE + y;
                             String biomeName = section.getBiome(x, y, z);
-                            Biome biome = biomeCache.computeIfAbsent(biomeName, n -> Objects.requireNonNullElse(BIOME_MANAGER.getByName(NamespaceID.from(n)), BIOME));
-                            chunk.setBiome(finalX, finalY, finalZ, biome);
+                            //Biome biome = biomeCache.computeIfAbsent(biomeName, n -> Objects.requireNonNullElse(BIOME_MANAGER.getByName(NamespaceID.from(n)), BIOME));
+                            chunk.setBiome(finalX, finalY, finalZ, Biome.PLAINS);
                         }
                     }
                 }
