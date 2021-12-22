@@ -67,4 +67,12 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     default @NotNull Task scheduleNextTick(@NotNull Runnable task) {
         return scheduleNextTick(task, ExecutionType.SYNC);
     }
+
+    default @NotNull Task scheduleNextProcess(@NotNull Runnable task, @NotNull ExecutionType executionType) {
+        return buildTask(task).delay(TaskSchedule.immediate()).executionType(executionType).schedule();
+    }
+
+    default @NotNull Task scheduleNextProcess(@NotNull Runnable task) {
+        return scheduleNextProcess(task, ExecutionType.SYNC);
+    }
 }
