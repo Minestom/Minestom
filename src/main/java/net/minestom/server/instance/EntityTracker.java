@@ -56,17 +56,6 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     }
 
     /**
-     * Gets the entities present in the specified chunk.
-     */
-    <T extends Entity> void chunkEntities(int chunkX, int chunkZ,
-                                          @NotNull Target<T> target, @NotNull Query<T> query);
-
-    default <T extends Entity> void chunkEntities(@NotNull Point point,
-                                                  @NotNull Target<T> target, @NotNull Query<T> query) {
-        chunkEntities(point.chunkX(), point.chunkZ(), target, query);
-    }
-
-    /**
      * Returns a copy of the entities present in the specified chunk.
      */
     @ApiStatus.Experimental

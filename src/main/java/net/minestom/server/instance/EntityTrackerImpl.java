@@ -116,14 +116,6 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public <T extends Entity> void chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
-        final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
-        if (entities == null || entities.isEmpty()) return;
-        for (Entity entity : entities) query.consume((T) entity);
-    }
-
-    @Override
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = entries[target.ordinal()];
         //noinspection unchecked
@@ -157,12 +149,14 @@ final class EntityTrackerImpl implements EntityTracker {
     public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
         final int chunkRange = Math.abs((int) (range / Chunk.CHUNK_SECTION_SIZE)) + 1;
         final double squaredRange = range * range;
-        ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) ->
-                chunkEntities(chunkX, chunkZ, target, entity -> {
-                    if (point.distanceSquared(entity.getPosition()) < squaredRange) {
-                        query.consume(entity);
-                    }
-                }));
+        ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+            var chunkEntities = chunkEntities(chunkX, chunkZ, target);
+            chunkEntities.forEach(entity -> {
+                if (point.distanceSquared(entity.getPosition()) < squaredRange) {
+                    query.consume(entity);
+                }
+            });
+        });
     }
 
     @Override
