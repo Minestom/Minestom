@@ -126,11 +126,60 @@ public class ExtensionDescriptorTest {
                             "version": "1.0.0"
                         }
                         """),
-                of("missing entrypoint", "Extensions must provide an entrypoint", """
+                of("repositories as non-array", "Repositories must be an array, not: {}", """
                         {
                             "name": "Test",
                             "version": "1.0.0",
-                            "entrypoint": "abc"
+                            "entrypoint": "abc",
+                            "repositories": {}
+                        }
+                        """),
+                of("repository as non-object", "Repository definitions must be objects, not: []", """
+                        {
+                            "name": "Test",
+                            "version": "1.0.0",
+                            "entrypoint": "abc",
+                            "repositories": [
+                                []
+                            ]
+                        }
+                        """),
+                of("repository missing name", "Repository must have a name", """
+                        {
+                            "name": "Test",
+                            "version": "1.0.0",
+                            "entrypoint": "abc",
+                            "repositories": [
+                                {}
+                            ]
+                        }
+                        """),
+                of("repository missing url", "Repository must have a url", """
+                        {
+                            "name": "Test",
+                            "version": "1.0.0",
+                            "entrypoint": "abc",
+                            "repositories": [
+                                {
+                                    "name": "Maven Central"
+                                }
+                            ]
+                        }
+                        """),
+                of("dependencies as non-array", "Dependencies must be an array, not: {}", """
+                        {
+                            "name": "Test",
+                            "version": "1.0.0",
+                            "entrypoint": "abc",
+                            "dependencies": {}
+                        }
+                        """),
+                of("meta as non-object", "Extension meta must be an object, not: []", """
+                        {
+                            "name": "Test",
+                            "version": "1.0.0",
+                            "entrypoint": "abc",
+                            "meta": []
                         }
                         """)
         );
