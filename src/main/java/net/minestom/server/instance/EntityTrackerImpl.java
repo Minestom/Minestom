@@ -119,7 +119,8 @@ final class EntityTrackerImpl implements EntityTracker {
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = entries[target.ordinal()];
         //noinspection unchecked
-        return (Collection<T>) entry.chunkEntities.computeIfAbsent(getChunkIndex(chunkX, chunkZ), i -> LIST_SUPPLIER.get());
+        var chunkEntities = (List<T>) entry.chunkEntities.computeIfAbsent(getChunkIndex(chunkX, chunkZ), i -> LIST_SUPPLIER.get());
+        return Collections.unmodifiableList(chunkEntities);
     }
 
     @Override
