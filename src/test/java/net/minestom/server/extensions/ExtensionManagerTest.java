@@ -1,53 +1,36 @@
 package net.minestom.server.extensions;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.exception.ExceptionManager;
-import org.junit.jupiter.api.AfterEach;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-
+@ExtendWith(MockitoExtension.class)
 public class ExtensionManagerTest {
-    // MinecraftServer mocking to avoid calling MinecraftServer.init()
-    private final ExceptionManager exceptionManager = new ExceptionManager();
-    private MockedStatic<MinecraftServer> mockedMinecraftServer;
-
-    private ExtensionManager extensionManager;
     private @TempDir Path dataRoot;
-
+    private EventNode<Event> globalNode = EventNode.all("global");
+    private ExtensionManager extensionManager;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
-
-        // Mock ExceptionHandler in MinecraftServer
-        exceptionManager.setExceptionHandler(ignored -> {});
-        mockedMinecraftServer = Mockito.mockStatic(MinecraftServer.class);
-        //noinspection ResultOfMethodCallIgnored
-        mockedMinecraftServer.when(MinecraftServer::getExceptionManager)
-                .thenReturn(exceptionManager);
-
-        // Create ExtensionManager
-//        extensionManager = new ExtensionManager();
-//        extensionManager.setExtensionDataRoot(dataRoot);
-    }
-
-    @AfterEach
-    public void teardown() {
-        mockedMinecraftServer.close();
+        extensionManager = new ExtensionManager(TestUtil.IGNORING_EXTENSION_MANAGER, globalNode);
+        extensionManager.setExtensionDataRoot(dataRoot);
     }
 
     @Test
-    public void validateMock() {
-        ExceptionManager actual = MinecraftServer.getExceptionManager();
-        assertSame(exceptionManager, actual);
+    public void testingwoo() {
+        System.out.println(dataRoot.toAbsolutePath());
+        System.out.println(globalNode.getChildren());
+        TestUtil.IGNORING_EXTENSION_MANAGER.setExceptionHandler(ignored -> {});
+
+//        assertThat(IGNORING_EXTENSION_MANAGER)
+//                .hasReceived(IllegalStateException.class)
     }
 
 
