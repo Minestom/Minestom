@@ -19,7 +19,7 @@ public class EnderDragonMeta extends MobMeta {
     }
 
     public void setPhase(@NotNull Phase value) {
-        super.metadata.getIndex(OFFSET, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(value.ordinal()));
     }
 
     public enum Phase {
