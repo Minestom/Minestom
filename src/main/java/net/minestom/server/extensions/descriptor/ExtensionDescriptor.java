@@ -1,5 +1,6 @@
 package net.minestom.server.extensions.descriptor;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minestom.server.extensions.DiscoveredExtension;
@@ -14,6 +15,7 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,8 +51,7 @@ public record ExtensionDescriptor(
         repositories = List.copyOf(repositories);
         dependencies = List.copyOf(dependencies);
 
-        //todo files
-        //todo file
+        // meta
 
         dataDirectory = dataDirectory.toAbsolutePath();
         //todo classloader
@@ -64,15 +65,50 @@ public record ExtensionDescriptor(
 
     @NotNull
     public static ExtensionDescriptor fromJson(@NotNull JsonObject json, @NotNull Path parentDirectory, @NotNull URL... classpath) {
+        Check.argCondition(!json.has("name"), "Extensions must provide a name");
         String name = json.get("name").getAsString();
+
+        Check.argCondition(!json.has("version"), "Extensions must provide a version");
+        String version = json.get("version").getAsString();
+
+        List<String> authors = new ArrayList<>();
+        if (json.has("authors")) {
+            JsonElement authorsElement = json.get("authors");
+            if (authorsElement.isJsonArray()) {
+                for (JsonElement author : authorsElement.getAsJsonArray()) {
+                    Check.argCondition(!author.isJsonPrimitive(), "Authors must be strings, not: " + author);
+                    authors.add(author.getAsString());
+                }
+            } else if (authorsElement.isJsonPrimitive()) {
+                authors.add(authorsElement.getAsString());
+            } else throw new IllegalArgumentException("Extension authors must be an array or single String.");
+        }
+
+        Check.argCondition(!json.has("entrypoint"), "Extensions must provide an entrypoint");
+        String entrypoint = json.get("entrypoint").getAsString();
+
+        List<Repository> repositories = new ArrayList<>();
+        if (json.has("repositories")) {
+
+        }
+
+        List<Dependency> dependencies = new ArrayList<>();
+        if (json.has("dependencies")) {
+
+        }
+
+        JsonObject meta = new JsonObject();
+        if (json.has("meta")) {
+            JsonElement metaElement = json.get("meta");
+            Check.argCondition(metaElement.isJsonObject(), "Extension meta must be an object");
+            meta = metaElement.getAsJsonObject();
+        }
+
+        //todo classloader
+
         return new ExtensionDescriptor(
-                name,
-                "1.2.3",
-                List.of(),
-                "entrypoint",
-                List.of(),
-                List.of(),
-                new JsonObject(),
+                name, version, authors, entrypoint,
+                repositories, dependencies, meta,
                 parentDirectory.resolve(name),
                 null
         );
