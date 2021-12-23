@@ -1,16 +1,17 @@
 package net.minestom.server.extensions;
 
+import com.google.gson.JsonParser;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
+import net.minestom.server.utils.PropertyUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,10 +36,16 @@ import java.util.zip.ZipFile;
 interface ExtensionDiscoverer {
     Logger LOGGER = LoggerFactory.getLogger(ExtensionDiscoverer.class);
 
+    String INDEV_CLASSES_PROPERTY = "minestom.extension.indevfolder.classes";
+    String INDEV_RESOURCES_PROPERTY = "minestom.extension.indevfolder.resources";
+
+    String AUTOSCAN_ENABLED_PROPERTY = "minestom.extension.autoscan";
+    String AUTOSCAN_TARGETS_PROPERTY = "minestom.extension.autoscan.targets";
+
     List<ExtensionDescriptor> discover(@NotNull Path extensionDirectory);
 
     ExtensionDiscoverer FILESYSTEM = (extensionDirectory) -> {
-        List<ExtensionDescriptor> extensions = new ArrayList<>();
+        List<ExtensionDescriptor> discovered = new ArrayList<>();
         try {
             for (Path file : Files.list(extensionDirectory).toList()) {
                 String filename = file.getFileName().toString();
@@ -51,14 +58,16 @@ interface ExtensionDiscoverer {
                 // Manifest validation
                 String name = filename.substring(0, filename.length() - 4);
                 try (ZipFile zip = new ZipFile(file.toFile())) {
-                    ZipEntry manifest = findExtensionManifest(name, zip::getEntry, Objects::nonNull);
+                    ZipEntry manifest = findExtensionManifest(
+                            name, "extension.json",
+                            zip::getEntry, Objects::nonNull);
                     if (manifest == null) {
                         LOGGER.error("Missing extension.json in extension {}.", name);
                         continue;
                     }
 
                     try (Reader reader = new InputStreamReader(zip.getInputStream(manifest))) {
-                        extensions.add(ExtensionDescriptor.fromReader(
+                        discovered.add(ExtensionDescriptor.fromReader(
                                 reader,
                                 extensionDirectory,
                                 file.toUri().toURL()
@@ -75,12 +84,12 @@ interface ExtensionDiscoverer {
             //todo
 //            MinecraftServer.getExceptionManager().handleException(e);
         }
-        return Collections.unmodifiableList(extensions);
+        return Collections.unmodifiableList(discovered);
     };
 
     ExtensionDiscoverer INDEV = (extensionDirectory) -> {
-        String indevclasses = System.getProperty("minestom.extension.indevfolder.classes");
-        String indevresources = System.getProperty("minestom.extension.indevfolder.resources");
+        String indevclasses = System.getProperty(INDEV_CLASSES_PROPERTY);
+        String indevresources = System.getProperty(INDEV_RESOURCES_PROPERTY);
 
         if (indevclasses != null && indevresources == null) {
             LOGGER.warn("Found indev classes folder, but not indev resources folder. This is likely a mistake.");
@@ -96,7 +105,8 @@ interface ExtensionDiscoverer {
                 return Collections.emptyList();
             }
 
-            Path manifest = findExtensionManifest("<indev>",
+            Path manifest = findExtensionManifest(
+                    "<indev>", "extension.json",
                     resources::resolve, Files::exists);
             if (manifest == null) {
                 LOGGER.error("Missing extension.json in extension <indev>.");
@@ -121,6 +131,36 @@ interface ExtensionDiscoverer {
     };
 
     ExtensionDiscoverer AUTOSCAN = (extensionDirectory) -> {
+        boolean enabled = PropertyUtil.getBoolean(AUTOSCAN_ENABLED_PROPERTY, true);
+        if (enabled) {
+            List<ExtensionDescriptor> discovered = new ArrayList<>();
+            ClassLoader rootClassLoader = MinecraftServer.class.getClassLoader();
+
+            String targets = System.getProperty(AUTOSCAN_TARGETS_PROPERTY, "extension.json");
+            for (String target : targets.split(",")) {
+                try {
+                    URL extensionManifest = findExtensionManifest(
+                            "<autoscan:" + target + ">", target,
+                            rootClassLoader::getResource, Objects::nonNull);
+                    if (extensionManifest == null) {
+                        LOGGER.error("Missing extension.json in extension <autoscan:{}>.", target);
+                        continue;
+                    }
+
+                    LOGGER.info("Autoscan found {}. Adding to list of discovered extensions.", target);
+                    try (Reader reader = new InputStreamReader(extensionManifest.openStream())) {
+                        discovered.add(ExtensionDescriptor.fromReader(
+                                reader, extensionDirectory
+                                // No files, the classloader will exclusively load from the root classloader.
+                        ));
+                    }
+                } catch (Exception e) {
+                    // todo
+//                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+            return Collections.unmodifiableList(discovered);
+        } else LOGGER.trace("Autoscan disabled");
         return Collections.emptyList();
     };
 
@@ -133,11 +173,11 @@ interface ExtensionDiscoverer {
     };
 
     @Nullable
-    private static <T> T findExtensionManifest(String name, Function<String, T> getEntry, Predicate<T> validator) {
-        T entry = getEntry.apply("META-INF/extension.json");
+    private static <T> T findExtensionManifest(String name, String filename, Function<String, T> getEntry, Predicate<T> validator) {
+        T entry = getEntry.apply("META-INF/" + filename);
         if (!validator.test(entry)) {
             // Legacy location
-            entry = getEntry.apply("extension.json");
+            entry = getEntry.apply(filename);
             if (validator.test(entry)) {
                 LOGGER.warn("The extension.json for {} is in the root of the extension, it should be in META-INF.", name);
             } else return null;
