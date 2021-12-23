@@ -2,7 +2,6 @@ package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
-    private final ObjectArraySet<Player> manualViewers = new ObjectArraySet<>();
+    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
 
     private EntityTracker tracker;
     private Point lastTrackingPoint;
@@ -112,6 +112,10 @@ public final class ViewEngine {
         return entity == null || viewableOption.isRegistered(player);
     }
 
+    public Object mutex() {
+        return mutex;
+    }
+
     public Set<Player> asSet() {
         return set;
     }
@@ -192,17 +196,15 @@ public final class ViewEngine {
                             Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             if (tracker == null || references == null) return;
-            tracker.synchronize(lastTrackingPoint, () -> {
-                for (List<T> entities : references) {
-                    if (entities.isEmpty()) continue;
-                    for (T entity : entities) {
-                        if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
-                        if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                        if (entity.getVehicle() != null) continue;
-                        action.accept(entity);
-                    }
+            for (List<T> entities : references) {
+                if (entities.isEmpty()) continue;
+                for (T entity : entities) {
+                    if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
+                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
+                    if (entity.getVehicle() != null) continue;
+                    action.accept(entity);
                 }
-            });
+            }
         }
     }
 
