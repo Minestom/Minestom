@@ -127,11 +127,6 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         public void remove(@NotNull Entity entity) {
             viewEngine.handleAutoViewRemoval(entity);
         }
-
-        @Override
-        public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
-            viewEngine.updateTracker(point, tracker);
-        }
     };
 
     protected final ViewEngine viewEngine = new ViewEngine(this,
