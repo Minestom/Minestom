@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
@@ -16,22 +18,26 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.function.LongFunction;
+import java.util.function.Supplier;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.forDifferingChunksInRange;
 import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
 
 final class EntityTrackerImpl implements EntityTracker {
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
-    private static final LongFunction<List<Entity>> LIST_SUPPLIER = l -> new CopyOnWriteArrayList<>();
+    private static final Supplier<List<Entity>> LIST_SUPPLIER = CopyOnWriteArrayList::new;
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
     private final TargetEntry<Entity>[] entries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
 
+    private final Int2ObjectMap<Point> entityPositions = new Int2ObjectOpenHashMap<>();
+
     @Override
     public synchronized <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
                                                          @NotNull Target<T> target, @Nullable Update<T> update) {
+        var prevPoint = entityPositions.putIfAbsent(entity.getEntityId(), point);
+        if (prevPoint != null) return;
         final long index = getChunkIndex(point);
         for (TargetEntry<Entity> entry : entries) {
             if (entry.target.type().isInstance(entity)) {
@@ -48,8 +54,10 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
+    public synchronized <T extends Entity> void unregister(@NotNull Entity entity,
                                                            @NotNull Target<T> target, @Nullable Update<T> update) {
+        final Point point = entityPositions.remove(entity.getEntityId());
+        if (point == null) return;
         final long index = getChunkIndex(point);
         for (TargetEntry<Entity> entry : entries) {
             if (entry.target.type().isInstance(entity)) {
@@ -63,32 +71,30 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public <T extends Entity> void move(@NotNull Entity entity,
-                                        @NotNull Point oldPoint, @NotNull Point newPoint,
-                                        @NotNull Target<T> target, @Nullable Update<T> update) {
-        if (oldPoint.sameChunk(newPoint)) return;
-        synchronized (this) {
-            final long oldIndex = getChunkIndex(oldPoint);
-            final long newIndex = getChunkIndex(newPoint);
-            for (TargetEntry<Entity> entry : entries) {
-                if (entry.target.type().isInstance(entity)) {
-                    entry.addToChunk(newIndex, entity);
-                    entry.removeFromChunk(oldIndex, entity);
+    public synchronized <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
+                                                     @NotNull Target<T> target, @Nullable Update<T> update) {
+        Point oldPoint = entityPositions.put(entity.getEntityId(), newPoint);
+        if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
+        final long oldIndex = getChunkIndex(oldPoint);
+        final long newIndex = getChunkIndex(newPoint);
+        for (TargetEntry<Entity> entry : entries) {
+            if (entry.target.type().isInstance(entity)) {
+                entry.addToChunk(newIndex, entity);
+                entry.removeFromChunk(oldIndex, entity);
+            }
+        }
+        if (update != null) {
+            difference(oldPoint, newPoint, target, new Update<>() {
+                @Override
+                public void add(@NotNull T added) {
+                    if (entity != added) update.add(added);
                 }
-            }
-            if (update != null) {
-                difference(oldPoint, newPoint, target, new Update<>() {
-                    @Override
-                    public void add(@NotNull T added) {
-                        if (entity != added) update.add(added);
-                    }
 
-                    @Override
-                    public void remove(@NotNull T removed) {
-                        if (entity != removed) update.remove(removed);
-                    }
-                });
-            }
+                @Override
+                public void remove(@NotNull T removed) {
+                    if (entity != removed) update.remove(removed);
+                }
+            });
         }
     }
 
@@ -144,7 +150,7 @@ final class EntityTrackerImpl implements EntityTracker {
                     List<List<T>> entities = new ArrayList<>();
                     ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex),
                             MinecraftServer.getEntityViewDistance(),
-                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.apply(i))));
+                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.get())));
                     return List.copyOf(entities);
                 });
     }
@@ -163,6 +169,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
+        //noinspection unchecked
         return (Set<T>) entries[target.ordinal()].entitiesView;
     }
 
@@ -185,7 +192,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
 
         void addToChunk(long index, T entity) {
-            this.chunkEntities.computeIfAbsent(index, i -> (List<T>) LIST_SUPPLIER.apply(i)).add(entity);
+            this.chunkEntities.computeIfAbsent(index, i -> (List<T>) LIST_SUPPLIER.get()).add(entity);
         }
 
         void removeFromChunk(long index, T entity) {

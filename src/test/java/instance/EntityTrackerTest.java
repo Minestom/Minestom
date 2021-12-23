@@ -36,7 +36,7 @@ public class EntityTrackerTest {
         chunkEntities = tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES);
         assertEquals(1, chunkEntities.size());
 
-        tracker.unregister(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
+        tracker.unregister(ent1, EntityTracker.Target.ENTITIES, updater);
         chunkEntities = tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES);
         assertEquals(0, chunkEntities.size());
     }
@@ -61,7 +61,7 @@ public class EntityTrackerTest {
         tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
         assertEquals(1, tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES).size());
 
-        tracker.move(ent1, Vec.ZERO, new Vec(32, 0, 32), EntityTracker.Target.ENTITIES, updater);
+        tracker.move(ent1, new Vec(32, 0, 32), EntityTracker.Target.ENTITIES, updater);
         assertEquals(0, tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES).size());
         assertEquals(1, tracker.chunkEntities(new Vec(32, 0, 32), EntityTracker.Target.ENTITIES).size());
     }
@@ -97,7 +97,7 @@ public class EntityTrackerTest {
             }
         });
 
-        tracker.move(ent1, Vec.ZERO, new Vec(Integer.MAX_VALUE, 0, 0), EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
+        tracker.move(ent1, new Vec(Integer.MAX_VALUE, 0, 0), EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
             public void add(@NotNull Entity entity) {
                 assertNotSame(ent1, entity);
@@ -111,7 +111,7 @@ public class EntityTrackerTest {
             }
         });
 
-        tracker.move(ent1, new Vec(Integer.MAX_VALUE, 0, 0), Vec.ZERO, EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
+        tracker.move(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
             public void add(@NotNull Entity entity) {
                 assertNotSame(ent1, entity);

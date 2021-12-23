@@ -847,7 +847,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
 
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
-        instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1314,7 +1314,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
