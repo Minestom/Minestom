@@ -75,7 +75,11 @@ public class ExtensionDiscovererTest {
     @Test
     public void testIgnoreFilesWithoutExtensionManifest() throws IOException {
         //todo i need to be a real zip file so it doesnt fail to open!
-        Files.createFile(extensionDirectory.resolve("no_extension_manifest.jar"));
+        Path file = extensionDirectory.resolve("no_extension_manifest.jar");
+        Files.createFile(file);
+        try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(file))) {
+            // Just need to write zip header
+        }
         var result = FILESYSTEM.discover(extensionDirectory);
 
         assertEquals(0, result.size());
