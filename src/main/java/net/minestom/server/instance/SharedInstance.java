@@ -4,6 +4,8 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.world.generator.GenerationContext;
+import net.minestom.server.world.generator.WorldGenDataLoader;
 import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,6 +105,16 @@ public class SharedInstance extends Instance {
     @Override
     public boolean isInVoid(@NotNull Point point) {
         return instanceContainer.isInVoid(point);
+    }
+
+    @Override
+    public GenerationContext getGenerationContext() {
+        return instanceContainer.getGenerationContext();
+    }
+
+    @Override
+    public @NotNull WorldGenDataLoader getWorldGenDataLoader() {
+        return instanceContainer.getWorldGenDataLoader();
     }
 
     /**

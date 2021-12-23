@@ -26,6 +26,8 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.generator.GenerationContext;
+import net.minestom.server.world.generator.WorldGenDataLoader;
 import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +64,10 @@ public class InstanceContainer extends Instance {
 
     // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
+
+    //World gen
+    private WorldGenDataLoader worldGenDataLoader = WorldGenDataLoader.dummy();
+    private GenerationContext generationContext;
 
     // used to automatically enable the chunk loading or not
     private boolean autoChunkLoad = true;
@@ -260,6 +266,7 @@ public class InstanceContainer extends Instance {
     @Override
     public void setWorldGenerator(@Nullable WorldGenerator worldGenerator) {
         this.worldGenerator = worldGenerator;
+        this.generationContext = worldGenerator == null ? null : worldGenerator.createGenerationContext(this);
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
@@ -542,6 +549,19 @@ public class InstanceContainer extends Instance {
         final long index = ChunkUtils.getChunkIndex(chunk);
         this.chunks.put(index, chunk);
         UPDATE_MANAGER.signalChunkLoad(chunk);
+    }
+
+    public void setWorldGenDataLoader(WorldGenDataLoader worldGenDataLoader) {
+        this.worldGenDataLoader = worldGenDataLoader;
+    }
+
+    public @NotNull WorldGenDataLoader getWorldGenDataLoader() {
+        return worldGenDataLoader;
+    }
+
+    @Override
+    public GenerationContext getGenerationContext() {
+        return generationContext;
     }
 
     @Override

@@ -30,6 +30,8 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.generator.GenerationContext;
+import net.minestom.server.world.generator.WorldGenDataLoader;
 import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -691,4 +693,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public int getSectionMaxY() {
         return (getDimensionType().getMinY() + getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
     }
+
+    public abstract GenerationContext getGenerationContext();
+    public abstract @NotNull WorldGenDataLoader getWorldGenDataLoader();
 }

@@ -32,7 +32,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
-import net.minestom.server.utils.Debug;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.math.IntRange;
@@ -42,18 +41,15 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.generator.BiomeGenerator;
 import net.minestom.server.world.generator.BlockPool;
 import net.minestom.server.world.generator.WorldGenerator;
+import net.minestom.server.world.generator.stages.generation.BedrockStage;
+import net.minestom.server.world.generator.stages.generation.BiomeFillStage;
 import net.minestom.server.world.generator.stages.generation.TerrainStage;
-import net.minestom.server.world.generator.stages.pregeneration.BiomeLayout2DStage;
 import net.minestom.server.world.generator.stages.pregeneration.HeightMapStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
@@ -145,7 +141,7 @@ public class PlayerInit {
                 Set.of(
                         new BiomeGenerator(
                                 Biome.PLAINS,
-                                null,
+                                Collections.emptySet(),
                                 new BlockPool((x, y, z) -> random.nextFloat()) {{
                                     addBlock(Block.TALL_GRASS, .5f, new IntRange(0));
                                     addBlock(Block.AIR, .5f, new IntRange(0));
@@ -161,7 +157,7 @@ public class PlayerInit {
                                         .temperature(2)
                                         .depth(.05f)
                                         .build(),
-                                null,
+                                Collections.emptySet(),
                                 new BlockPool(hotDeepBlock::getNoise) {{
                                     addBlock(Block.LAVA, .3f, new IntRange(-5, 0));
                                     addBlock(Block.NETHERRACK, .5f, new IntRange(Integer.MIN_VALUE, 0));
@@ -172,10 +168,12 @@ public class PlayerInit {
                 ),
                 List.of(
 //                        new BiomeLayout2DStage(tempNoise::getNoise, null, 1),
-//                        new HeightMapStage()
+                        new HeightMapStage()
                 ),
                 List.of(
-                        new TerrainStage()
+                        new TerrainStage(),
+                        new BedrockStage(),
+                        new BiomeFillStage()
                 )
         ));
 
