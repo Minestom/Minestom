@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -16,6 +18,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -46,13 +51,13 @@ interface ExtensionDiscoverer {
                 // Manifest validation
                 String name = filename.substring(0, filename.length() - 4);
                 try (ZipFile zip = new ZipFile(file.toFile())) {
-                    ZipEntry manifest = findExtensionManifest(name, zip);
+                    ZipEntry manifest = findExtensionManifest(name, zip::getEntry, Objects::nonNull);
                     if (manifest == null) {
                         LOGGER.error("Missing extension.json in extension {}.", name);
                         continue;
                     }
 
-                    try (InputStreamReader reader = new InputStreamReader(zip.getInputStream(manifest))) {
+                    try (Reader reader = new InputStreamReader(zip.getInputStream(manifest))) {
                         extensions.add(ExtensionDescriptor.fromReader(
                                 reader,
                                 extensionDirectory,
@@ -84,15 +89,32 @@ interface ExtensionDiscoverer {
         } else if (indevclasses != null) try {
             LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
 
-            DiscoveredExtension extension = discoverDynamic(Paths.get(indevresources, "extension.json"),
-                    new URL("file://" + indevclasses),
-                    new URL("file://" + indevresources));
-
-            if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                extensions.add(extension);
+            Path classes = Paths.get(indevclasses).toAbsolutePath();
+            Path resources = Paths.get(indevresources).toAbsolutePath();
+            if (!Files.exists(classes) || !Files.exists(resources)) {
+                LOGGER.error("Failed to load <indev>: Classes or resources directory does not exist.");
+                return Collections.emptyList();
             }
-        } catch (MalformedURLException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+
+            Path manifest = findExtensionManifest("<indev>",
+                    resources::resolve, Files::exists);
+            if (manifest == null) {
+                LOGGER.error("Missing extension.json in extension <indev>.");
+                return Collections.emptyList();
+            }
+
+            try (Reader reader = Files.newBufferedReader(manifest)) {
+                return List.of(ExtensionDescriptor.fromReader(
+                        reader, extensionDirectory,
+                        new URL("file://" + indevclasses),
+                        new URL("file://" + indevresources)
+                ));
+            }
+        } catch (IllegalArgumentException e) {
+            LOGGER.error("Unable to load <indev>: {}", e.getMessage());
+        } catch (Exception e) {
+            // todo
+//            MinecraftServer.getExceptionManager().handleException(e);
         }
 
         return Collections.emptyList();
@@ -111,14 +133,14 @@ interface ExtensionDiscoverer {
     };
 
     @Nullable
-    private static ZipEntry findExtensionManifest(String name, ZipFile zipFile) {
-        ZipEntry entry = zipFile.getEntry("META-INF/extension.json");
-        if (entry == null) {
+    private static <T> T findExtensionManifest(String name, Function<String, T> getEntry, Predicate<T> validator) {
+        T entry = getEntry.apply("META-INF/extension.json");
+        if (!validator.test(entry)) {
             // Legacy location
-            entry = zipFile.getEntry("extension.json");
-            if (entry != null) {
+            entry = getEntry.apply("extension.json");
+            if (validator.test(entry)) {
                 LOGGER.warn("The extension.json for {} is in the root of the extension, it should be in META-INF.", name);
-            }
+            } else return null;
         }
         return entry;
     }
