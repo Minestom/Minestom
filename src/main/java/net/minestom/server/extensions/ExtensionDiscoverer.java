@@ -1,6 +1,5 @@
 package net.minestom.server.extensions;
 
-import com.google.gson.JsonParser;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
 import net.minestom.server.utils.PropertyUtil;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
