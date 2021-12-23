@@ -31,13 +31,9 @@ public class EntityTrackerTest {
         assertTrue(chunkEntities.isEmpty());
 
         tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
-        assertTrue(chunkEntities.isEmpty());
-
-        chunkEntities = tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES);
         assertEquals(1, chunkEntities.size());
 
         tracker.unregister(ent1, EntityTracker.Target.ENTITIES, updater);
-        chunkEntities = tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES);
         assertEquals(0, chunkEntities.size());
     }
 
@@ -123,5 +119,36 @@ public class EntityTrackerTest {
                 fail("no entity to remove");
             }
         });
+    }
+
+    @Test
+    public void collectionView() {
+        var ent1 = new Entity(EntityType.ZOMBIE);
+        var updater = new EntityTracker.Update<>() {
+            @Override
+            public void add(@NotNull Entity entity) {
+                assertNotSame(ent1, entity);
+                fail("No other entity should be registered yet");
+            }
+
+            @Override
+            public void remove(@NotNull Entity entity) {
+                assertNotSame(ent1, entity);
+                fail("No other entity should be registered yet");
+            }
+        };
+
+        EntityTracker tracker = EntityTracker.newTracker();
+        var entities = tracker.entities();
+        var chunkEntities = tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES);
+
+        assertTrue(entities.isEmpty());
+        assertTrue(chunkEntities.isEmpty());
+        tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
+        assertEquals(1, entities.size());
+        assertEquals(1, chunkEntities.size());
+
+        assertThrows(Exception.class, () -> entities.add(new Entity(EntityType.ZOMBIE)));
+        assertThrows(Exception.class, () -> chunkEntities.add(new Entity(EntityType.ZOMBIE)));
     }
 }
