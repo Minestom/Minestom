@@ -31,15 +31,13 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     /**
      * Unregister an entity tracking.
      */
-    <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
-                                       @NotNull Target<T> target, @Nullable Update<T> update);
+    <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
-    <T extends Entity> void move(@NotNull Entity entity,
-                                 @NotNull Point oldPoint, @NotNull Point newPoint,
+    <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                  @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
