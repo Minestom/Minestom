@@ -40,7 +40,10 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         }
         if (update != null) {
-            visibleEntities(point, target, update::add);
+            visibleEntities(point, target, newEntity -> {
+                if (newEntity == entity) return;
+                update.add(newEntity);
+            });
             update.updateTracker(point, this);
         }
     }

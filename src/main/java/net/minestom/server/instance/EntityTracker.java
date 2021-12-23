@@ -18,6 +18,9 @@ import java.util.Set;
  */
 @ApiStatus.Experimental
 public sealed interface EntityTracker permits EntityTrackerImpl {
+    static @NotNull EntityTracker newTracker() {
+        return new EntityTrackerImpl();
+    }
 
     /**
      * Register an entity to be tracked.
