@@ -162,8 +162,6 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
         void add(@NotNull E entity);
 
         void remove(@NotNull E entity);
-
-        void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker);
     }
 
     /**
