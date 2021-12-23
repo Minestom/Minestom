@@ -132,16 +132,28 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     protected final ViewEngine viewEngine = new ViewEngine(this,
             player -> {
                 // Add viewable
-                if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
-                        !player.viewEngine.viewerOption.predicate(this)) return;
-                Entity.this.viewEngine.viewableOption.register(player);
-                player.viewEngine.viewerOption.register(this);
+                var lock1 = player.getEntityId() < getEntityId() ? player : this;
+                var lock2 = lock1 == this ? player : this;
+                synchronized (lock1.viewEngine.mutex()) {
+                    synchronized (lock2.viewEngine.mutex()) {
+                        if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
+                                !player.viewEngine.viewerOption.predicate(this)) return;
+                        Entity.this.viewEngine.viewableOption.register(player);
+                        player.viewEngine.viewerOption.register(this);
+                    }
+                }
                 updateNewViewer(player);
             },
             player -> {
                 // Remove viewable
-                Entity.this.viewEngine.viewableOption.unregister(player);
-                player.viewEngine.viewerOption.unregister(this);
+                var lock1 = player.getEntityId() < getEntityId() ? player : this;
+                var lock2 = lock1 == this ? player : this;
+                synchronized (lock1.viewEngine.mutex()) {
+                    synchronized (lock2.viewEngine.mutex()) {
+                        Entity.this.viewEngine.viewableOption.unregister(player);
+                        player.viewEngine.viewerOption.unregister(this);
+                    }
+                }
                 updateOldViewer(player);
             },
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
