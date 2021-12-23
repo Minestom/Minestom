@@ -89,28 +89,38 @@ public record ExtensionDescriptor(
 
         List<Repository> repositories = new ArrayList<>();
         if (json.has("repositories")) {
-
+            JsonElement repositoriesElement = json.get("repositories");
+            Check.argCondition(!repositoriesElement.isJsonArray(), "Repositories must be an array, not: " + repositoriesElement);
+            for (JsonElement repositoryElement : repositoriesElement.getAsJsonArray()) {
+                Check.argCondition(!repositoryElement.isJsonObject(), "Repository definitions must be objects, not: " + repositoryElement);
+                JsonObject repository = repositoryElement.getAsJsonObject();
+                Check.argCondition(!repository.has("name"), "Repository must have a name");
+                Check.argCondition(!repository.has("url"), "Repository must have a url");
+                //todo actually create repository object
+            }
         }
 
         List<Dependency> dependencies = new ArrayList<>();
         if (json.has("dependencies")) {
-
+            JsonElement dependenciesElement = json.get("dependencies");
+            Check.argCondition(!dependenciesElement.isJsonArray(), "Dependencies must be an array, not: " + dependenciesElement);
+            for (JsonElement dependencyElement : dependenciesElement.getAsJsonArray()) {
+                dependencies.add(Dependency.fromJson(dependencyElement));
+            }
         }
 
         JsonObject meta = new JsonObject();
         if (json.has("meta")) {
             JsonElement metaElement = json.get("meta");
-            Check.argCondition(metaElement.isJsonObject(), "Extension meta must be an object");
+            Check.argCondition(!metaElement.isJsonObject(), "Extension meta must be an object, not: " + metaElement);
             meta = metaElement.getAsJsonObject();
         }
-
-        //todo classloader
 
         return new ExtensionDescriptor(
                 name, version, authors, entrypoint,
                 repositories, dependencies, meta,
                 parentDirectory.resolve(name),
-                null
+                new ExtensionClassLoader("Ext_" + name, classpath)
         );
     }
 }
