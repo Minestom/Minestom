@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.utils.Debug;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.SectionBlockCache;
@@ -307,14 +308,11 @@ public class InstanceContainer extends Instance {
                             LOGGER.trace("Section {} has been generated for {}", finalY, chunk);
                         });
             }
-            final CompletableFuture<Chunk> future = new CompletableFuture<>();
-            CompletableFuture.allOf(futures).whenComplete((r, t) -> {
+            return CompletableFuture.allOf(futures).whenComplete((r, t) -> {
                 chunk.sendChunk();
                 refreshLastBlockChangeTime();
-                future.complete(chunk);
                 LOGGER.trace("Finished generating {}", chunk);
-            });
-            return future;
+            }).thenCompose(v -> CompletableFuture.completedFuture(chunk));
         } else {
             // No generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);

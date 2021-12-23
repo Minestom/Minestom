@@ -53,6 +53,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
@@ -178,23 +179,16 @@ public class PlayerInit {
                 )
         ));
 
-        int r = 0;
-        final int total = MathUtils.square((r+1) * 2);
+        int r = 9;
+        final int total = 100;
         final CountDownLatch latch = new CountDownLatch(total);
         for (int x = -r; x <= r; x++) {
             for (int z = -r; z <= r; z++) {
-                instanceContainer.loadChunk(x,z).whenComplete((c,t) -> {
+                instanceContainer.loadChunk(x, z).thenRun(() -> {
                     latch.countDown();
-                    LOGGER.info("Generating spawn region {}%", (total- latch.getCount())/(double)total*100);
+                    LOGGER.info("Generating spawn region {}%", (total - latch.getCount()) / (double) total * 100);
                 });
             }
-        }
-
-        try {
-            latch.await();
-            Debug.noop();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
