@@ -2,7 +2,6 @@ package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
-    private final ObjectArraySet<Player> manualViewers = new ObjectArraySet<>();
+    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
 
     private EntityTracker tracker;
     private Point lastTrackingPoint;
@@ -110,6 +110,10 @@ public final class ViewEngine {
 
     private boolean validAutoViewer(Player player) {
         return entity == null || viewableOption.isRegistered(player);
+    }
+
+    public Object mutex() {
+        return mutex;
     }
 
     public Set<Player> asSet() {
