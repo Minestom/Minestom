@@ -126,8 +126,8 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = entries[target.ordinal()];
-        final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
-        return entities != null ? (Collection<T>) List.copyOf(entities) : List.of();
+        //noinspection unchecked
+        return (Collection<T>) entry.chunkEntities.computeIfAbsent(getChunkIndex(chunkX, chunkZ), i -> LIST_SUPPLIER.get());
     }
 
     @Override
@@ -169,11 +169,6 @@ final class EntityTrackerImpl implements EntityTracker {
     public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
         //noinspection unchecked
         return (Set<T>) entries[target.ordinal()].entitiesView;
-    }
-
-    @Override
-    public void synchronize(@NotNull Point point, @NotNull Runnable runnable) {
-        runnable.run();
     }
 
     private static final class TargetEntry<T extends Entity> {

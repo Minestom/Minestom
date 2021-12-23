@@ -196,17 +196,15 @@ public final class ViewEngine {
                             Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             if (tracker == null || references == null) return;
-            tracker.synchronize(lastTrackingPoint, () -> {
-                for (List<T> entities : references) {
-                    if (entities.isEmpty()) continue;
-                    for (T entity : entities) {
-                        if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
-                        if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                        if (entity.getVehicle() != null) continue;
-                        action.accept(entity);
-                    }
+            for (List<T> entities : references) {
+                if (entities.isEmpty()) continue;
+                for (T entity : entities) {
+                    if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
+                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
+                    if (entity.getVehicle() != null) continue;
+                    action.accept(entity);
                 }
-            });
+            }
         }
     }
 

@@ -5,7 +5,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.List;
@@ -67,10 +70,10 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      * Returns a copy of the entities present in the specified chunk.
      */
     @ApiStatus.Experimental
-    @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
+    @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
 
     @ApiStatus.Experimental
-    @Unmodifiable
+    @UnmodifiableView
     default <T extends Entity> @NotNull Collection<T> chunkEntities(@NotNull Point point, @NotNull Target<T> target) {
         return chunkEntities(point.chunkX(), point.chunkZ(), target);
     }
@@ -113,11 +116,6 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     default @NotNull Set<@NotNull Entity> entities() {
         return entities(Target.ENTITIES);
     }
-
-    /**
-     * Run {@code runnable} and ensure that the tracking state is locked during execution.
-     */
-    void synchronize(@NotNull Point point, @NotNull Runnable runnable);
 
     /**
      * Represents the type of entity you want to retrieve.
