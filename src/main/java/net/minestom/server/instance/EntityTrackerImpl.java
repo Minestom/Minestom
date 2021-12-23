@@ -44,7 +44,6 @@ final class EntityTrackerImpl implements EntityTracker {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
-            update.updateTracker(point, this);
         }
     }
 
@@ -60,7 +59,6 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             visibleEntities(point, target, update::remove);
-            update.updateTracker(point, null);
         }
     }
 
@@ -79,8 +77,17 @@ final class EntityTrackerImpl implements EntityTracker {
                 }
             }
             if (update != null) {
-                difference(oldPoint, newPoint, target, update);
-                update.updateTracker(newPoint, this);
+                difference(oldPoint, newPoint, target, new Update<>() {
+                    @Override
+                    public void add(@NotNull T added) {
+                        if (entity != added) update.add(added);
+                    }
+
+                    @Override
+                    public void remove(@NotNull T removed) {
+                        if (entity != removed) update.remove(removed);
+                    }
+                });
             }
         }
     }
