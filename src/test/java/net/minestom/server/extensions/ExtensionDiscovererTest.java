@@ -4,17 +4,23 @@ import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static net.minestom.server.extensions.ExtensionDiscoverer.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 public class ExtensionDiscovererTest {
     @TempDir
@@ -99,29 +105,30 @@ public class ExtensionDiscovererTest {
     //
 
     @Test
-    public void testIgnoreIndevIfMissingOneOrBoth() {
+    public void testIgnoreIndevIfMissingOneOrBoth() throws IOException {
+        addTestIndevDirs(false);
         String classes = Paths.get("classes").toAbsolutePath().toString();
         String resources = Paths.get("resources").toAbsolutePath().toString();
 
         {   // classes set, resources missing
-            System.setProperty("minestom.extension.indevfolder.classes", classes);
-            System.clearProperty("minestom.extension.indevfolder.resources");
+            System.setProperty(INDEV_CLASSES_PROPERTY, classes);
+            System.clearProperty(INDEV_RESOURCES_PROPERTY);
 
             var result = INDEV.discover(extensionDirectory);
             assertEquals(0, result.size());
         }
 
         {   // classes set, resources missing
-            System.clearProperty("minestom.extension.indevfolder.classes");
-            System.setProperty("minestom.extension.indevfolder.resources", resources);
+            System.clearProperty(INDEV_CLASSES_PROPERTY);
+            System.setProperty(INDEV_RESOURCES_PROPERTY, resources);
 
             var result = INDEV.discover(extensionDirectory);
             assertEquals(0, result.size());
         }
 
         {   // neither set
-            System.clearProperty("minestom.extension.indevfolder.classes");
-            System.clearProperty("minestom.extension.indevfolder.resources");
+            System.clearProperty(INDEV_CLASSES_PROPERTY);
+            System.clearProperty(INDEV_RESOURCES_PROPERTY);
 
             var result = INDEV.discover(extensionDirectory);
             assertEquals(0, result.size());
@@ -135,8 +142,8 @@ public class ExtensionDiscovererTest {
         addTestIndevDirs(false);
         Files.delete(classes);
 
-        System.setProperty("minestom.extension.indevfolder.classes", classes.toString());
-        System.setProperty("minestom.extension.indevfolder.resources", resources.toString());
+        System.setProperty(INDEV_CLASSES_PROPERTY, classes.toString());
+        System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
         var result = INDEV.discover(extensionDirectory);
 
         assertEquals(0, result.size());
@@ -148,8 +155,8 @@ public class ExtensionDiscovererTest {
         Path resources = extensionDirectory.resolve("resources").toAbsolutePath();
         Files.createDirectories(classes);
 
-        System.setProperty("minestom.extension.indevfolder.classes", classes.toString());
-        System.setProperty("minestom.extension.indevfolder.resources", resources.toString());
+        System.setProperty(INDEV_CLASSES_PROPERTY, classes.toString());
+        System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
         var result = INDEV.discover(extensionDirectory);
 
         assertEquals(0, result.size());
@@ -162,8 +169,8 @@ public class ExtensionDiscovererTest {
         Path resources = extensionDirectory.resolve("resources").toAbsolutePath();
         addTestIndevDirs(legacy);
 
-        System.setProperty("minestom.extension.indevfolder.classes", classes.toString());
-        System.setProperty("minestom.extension.indevfolder.resources", resources.toString());
+        System.setProperty(INDEV_CLASSES_PROPERTY, classes.toString());
+        System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
         var result = INDEV.discover(extensionDirectory);
 
         assertEquals(1, result.size());
@@ -196,4 +203,35 @@ public class ExtensionDiscovererTest {
     //
     // Autoscan
     //
+
+    @Test
+    public void testAutoscanDisabled() {
+        System.setProperty(AUTOSCAN_ENABLED_PROPERTY, "false");
+        System.setProperty(AUTOSCAN_TARGETS_PROPERTY, "ext_discoverer_test1.json");
+        var result = AUTOSCAN.discover(extensionDirectory);
+
+        assertEquals(0, result.size());
+    }
+
+    @ParameterizedTest(name = "{1} exts loaded from {0}")
+    @MethodSource("autoscanTargetCasesProvider")
+    public void testAutoscanTargetCases(List<String> targets, int expectedLoaded) {
+        System.setProperty(AUTOSCAN_ENABLED_PROPERTY, "true");
+        System.setProperty(AUTOSCAN_TARGETS_PROPERTY,
+                targets.stream()
+                        .map(target -> "ext_discoverer_" + target + ".json")
+                        .collect(Collectors.joining(",")));
+        var result = AUTOSCAN.discover(extensionDirectory);
+
+        assertEquals(expectedLoaded, result.size());
+    }
+
+    public static Stream<Arguments> autoscanTargetCasesProvider() {
+        return Stream.of(
+                of(List.of("test1"), 1),
+                of(List.of("test1", "test2"), 2),
+                of(List.of("test1", "missing", "test2"), 2),
+                of(List.of("test3"), 1) // Legacy
+        );
+    }
 }
