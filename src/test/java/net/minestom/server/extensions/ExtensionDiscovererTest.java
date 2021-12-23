@@ -74,6 +74,7 @@ public class ExtensionDiscovererTest {
 
     @Test
     public void testIgnoreFilesWithoutExtensionManifest() throws IOException {
+        //todo i need to be a real zip file so it doesnt fail to open!
         Files.createFile(extensionDirectory.resolve("no_extension_manifest.jar"));
         var result = FILESYSTEM.discover(extensionDirectory);
 
@@ -178,6 +179,20 @@ public class ExtensionDiscovererTest {
         assertEquals("test", descriptor.name());
 
         //todo ensure the classpath makes sense.
+    }
+
+    @Test
+    public void testIndevMissingManifest() throws IOException {
+        Path classes = extensionDirectory.resolve("classes").toAbsolutePath();
+        Files.createDirectories(classes);
+        Path resources = extensionDirectory.resolve("resources").toAbsolutePath();
+        Files.createDirectories(resources);
+
+        System.setProperty(INDEV_CLASSES_PROPERTY, classes.toString());
+        System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
+        var result = INDEV.discover(extensionDirectory);
+
+        assertEquals(0, result.size());
     }
 
     private void addTestIndevDirs(boolean legacy) throws IOException {
