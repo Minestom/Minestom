@@ -48,7 +48,7 @@ public final class CachedPacket implements SendablePacket {
 
     public @NotNull ByteBuffer body() {
         FramedPacket cache = updatedCache();
-        return cache != null ? cache.body() : PacketUtils.createFramedPacket(packet());
+        return cache != null ? cache.body() : PacketUtils.createFramedPacket(packetSupplier.get());
     }
 
     private @Nullable FramedPacket updatedCache() {
@@ -57,7 +57,7 @@ public final class CachedPacket implements SendablePacket {
         SoftReference<FramedPacket> ref;
         FramedPacket cache;
         if (updated == 0 || ((ref = packet) == null || (cache = ref.get()) == null)) {
-            cache = PacketUtils.allocateTrimmedPacket(packet());
+            cache = PacketUtils.allocateTrimmedPacket(packetSupplier.get());
             this.packet = new SoftReference<>(cache);
             UPDATER.compareAndSet(this, 0, 1);
         }
