@@ -6,15 +6,15 @@ import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import com.extollit.gaming.ai.path.model.IInstanceSpace;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 
-public class PFColumnarSpace implements IColumnarSpace {
-
+@ApiStatus.Internal
+public final class PFColumnarSpace implements IColumnarSpace {
     private final ColumnarOcclusionFieldList occlusionFieldList = new ColumnarOcclusionFieldList(this);
     private final PFInstanceSpace instanceSpace;
     private final Chunk chunk;
 
-
-    public PFColumnarSpace(PFInstanceSpace instanceSpace, Chunk chunk) {
+    PFColumnarSpace(PFInstanceSpace instanceSpace, Chunk chunk) {
         this.instanceSpace = instanceSpace;
         this.chunk = chunk;
     }
