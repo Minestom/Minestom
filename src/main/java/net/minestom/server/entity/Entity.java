@@ -29,6 +29,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
@@ -39,6 +40,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.MappedCollection;
 import net.minestom.server.timer.Schedulable;
@@ -131,26 +133,33 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
         public void remove(@NotNull Entity entity) {
             viewEngine.handleAutoViewRemoval(entity);
         }
-
-        @Override
-        public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
-            viewEngine.updateTracker(point, tracker);
-        }
     };
 
     protected final ViewEngine viewEngine = new ViewEngine(this,
             player -> {
                 // Add viewable
-                if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
-                        !player.viewEngine.viewerOption.predicate(this)) return;
-                Entity.this.viewEngine.viewableOption.register(player);
-                player.viewEngine.viewerOption.register(this);
+                var lock1 = player.getEntityId() < getEntityId() ? player : this;
+                var lock2 = lock1 == this ? player : this;
+                synchronized (lock1.viewEngine.mutex()) {
+                    synchronized (lock2.viewEngine.mutex()) {
+                        if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
+                                !player.viewEngine.viewerOption.predicate(this)) return;
+                        Entity.this.viewEngine.viewableOption.register(player);
+                        player.viewEngine.viewerOption.register(this);
+                    }
+                }
                 updateNewViewer(player);
             },
             player -> {
                 // Remove viewable
-                Entity.this.viewEngine.viewableOption.unregister(player);
-                player.viewEngine.viewerOption.unregister(this);
+                var lock1 = player.getEntityId() < getEntityId() ? player : this;
+                var lock2 = lock1 == this ? player : this;
+                synchronized (lock1.viewEngine.mutex()) {
+                    synchronized (lock2.viewEngine.mutex()) {
+                        Entity.this.viewEngine.viewableOption.unregister(player);
+                        player.viewEngine.viewerOption.unregister(this);
+                    }
+                }
                 updateOldViewer(player);
             },
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
@@ -436,7 +445,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
     public void updateNewViewer(@NotNull Player player) {
         player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
-        player.sendPacket(getMetadataPacket());
+        player.sendPacket(new LazyPacket(this::getMetadataPacket));
         // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
@@ -782,7 +791,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
+        MinecraftServer.getUpdateManager().getThreadProvider().signalUpdate(new DispatchUpdate.EntityUpdate(this));
     }
 
     /**
@@ -856,7 +865,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
 
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
-        instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1323,7 +1332,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
@@ -1421,7 +1430,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
-        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
+        MinecraftServer.getUpdateManager().getThreadProvider().signalUpdate(new DispatchUpdate.EntityRemove(this));
         this.removed = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);

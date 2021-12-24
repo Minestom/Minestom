@@ -3,12 +3,12 @@ package net.minestom.server.thread;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Phaser;
 
 /**
@@ -25,21 +25,16 @@ public final class ThreadDispatcher {
     private final ArrayDeque<Chunk> chunkUpdateQueue = new ArrayDeque<>();
 
     // Requests consumed at the end of each tick
-    private final Queue<Chunk> chunkLoadRequests = new ConcurrentLinkedQueue<>();
-    private final Queue<Chunk> chunkUnloadRequests = new ConcurrentLinkedQueue<>();
-    private final Queue<Entity> entityUpdateRequests = new ConcurrentLinkedQueue<>();
-    private final Queue<Entity> entityRemovalRequests = new ConcurrentLinkedQueue<>();
+    private final MessagePassingQueue<DispatchUpdate> updates = new MpscUnboundedArrayQueue<>(1024);
 
     private final Phaser phaser = new Phaser(1);
 
     private ThreadDispatcher(ThreadProvider provider, int threadCount) {
         this.provider = provider;
-        this.threads = new ArrayList<>(threadCount);
-        for (int i = 0; i < threadCount; i++) {
-            final TickThread tickThread = new TickThread(phaser, i);
-            this.threads.add(tickThread);
-            tickThread.start();
-        }
+        TickThread[] threads = new TickThread[threadCount];
+        Arrays.setAll(threads, i -> new TickThread(phaser, i));
+        this.threads = List.of(threads);
+        this.threads.forEach(Thread::start);
     }
 
     public static @NotNull ThreadDispatcher of(@NotNull ThreadProvider provider, int threadCount) {
@@ -85,10 +80,22 @@ public final class ThreadDispatcher {
      * @param time the tick time in milliseconds
      */
     public void updateAndAwait(long time) {
-        for (TickThread thread : threads) {
-            thread.startTick(time);
-        }
+        for (TickThread thread : threads) thread.startTick(time);
         this.phaser.arriveAndAwaitAdvance();
+        // Update dispatcher
+        this.updates.drain(update -> {
+            if (update instanceof DispatchUpdate.ChunkLoad chunkUpdate) {
+                processLoadedChunk(chunkUpdate.chunk());
+            } else if (update instanceof DispatchUpdate.ChunkUnload chunkUnload) {
+                processUnloadedChunk(chunkUnload.chunk());
+            } else if (update instanceof DispatchUpdate.EntityUpdate entityUpdate) {
+                processUpdatedEntity(entityUpdate.entity());
+            } else if (update instanceof DispatchUpdate.EntityRemove entityRemove) {
+                processRemovedEntity(entityRemove.entity());
+            } else {
+                throw new IllegalStateException("Unknown update type: " + update.getClass().getSimpleName());
+            }
+        });
     }
 
     /**
@@ -99,11 +106,8 @@ public final class ThreadDispatcher {
      *                 used to ensure that the refresh does not take more time than the tick itself
      */
     public void refreshThreads(long tickTime) {
-        processLoadedChunks();
-        processUnloadedChunks();
-        processUpdatedEntities();
-        processRemovedEntities();
-        if (provider.getChunkRefreshType() == ThreadProvider.RefreshType.NEVER)
+        final ThreadProvider.RefreshType refreshType = provider.getChunkRefreshType();
+        if (refreshType == ThreadProvider.RefreshType.NEVER)
             return;
 
         final int timeOffset = MathUtils.clamp((int) ((double) tickTime * getRefreshPercentage()),
@@ -123,6 +127,10 @@ public final class ThreadDispatcher {
         }
     }
 
+    public void signalUpdate(@NotNull DispatchUpdate update) {
+        this.updates.relaxedOffer(update);
+    }
+
     /**
      * Shutdowns all the {@link TickThread tick threads}.
      * <p>
@@ -132,86 +140,50 @@ public final class ThreadDispatcher {
         this.threads.forEach(TickThread::shutdown);
     }
 
-    public void onInstanceCreate(@NotNull Instance instance) {
-        instance.getChunks().forEach(this::onChunkLoad);
-    }
-
-    public void onInstanceDelete(@NotNull Instance instance) {
-        instance.getChunks().forEach(this::onChunkUnload);
-    }
-
-    public void onChunkLoad(Chunk chunk) {
-        this.chunkLoadRequests.add(chunk);
-    }
-
-    public void onChunkUnload(Chunk chunk) {
-        this.chunkUnloadRequests.add(chunk);
-    }
-
-    public void updateEntity(@NotNull Entity entity) {
-        this.entityUpdateRequests.add(entity);
-    }
-
-    public void removeEntity(@NotNull Entity entity) {
-        this.entityRemovalRequests.add(entity);
-    }
-
     private TickThread retrieveThread(Chunk chunk) {
         final int threadId = Math.abs(provider.findThread(chunk)) % threads.size();
         return threads.get(threadId);
     }
 
-    private void processLoadedChunks() {
-        Chunk chunk;
-        while ((chunk = chunkLoadRequests.poll()) != null) {
-            final TickThread thread = retrieveThread(chunk);
-            final ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
-            thread.entries().add(chunkEntry);
-            this.chunkEntryMap.put(chunk, chunkEntry);
-            this.chunkUpdateQueue.add(chunk);
+    private void processLoadedChunk(Chunk chunk) {
+        final TickThread thread = retrieveThread(chunk);
+        final ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
+        thread.entries().add(chunkEntry);
+        this.chunkEntryMap.put(chunk, chunkEntry);
+        this.chunkUpdateQueue.add(chunk);
+    }
+
+    private void processUnloadedChunk(Chunk chunk) {
+        final ChunkEntry chunkEntry = chunkEntryMap.remove(chunk);
+        if (chunkEntry != null) {
+            TickThread thread = chunkEntry.thread;
+            thread.entries().remove(chunkEntry);
+        }
+        this.chunkUpdateQueue.remove(chunk);
+    }
+
+    private void processRemovedEntity(Entity entity) {
+        var acquirableEntity = entity.getAcquirable();
+        ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
+        if (chunkEntry != null) {
+            chunkEntry.entities.remove(entity);
         }
     }
 
-    private void processUnloadedChunks() {
-        Chunk chunk;
-        while ((chunk = chunkUnloadRequests.poll()) != null) {
-            final ChunkEntry chunkEntry = chunkEntryMap.remove(chunk);
-            if (chunkEntry != null) {
-                TickThread thread = chunkEntry.thread;
-                thread.entries().remove(chunkEntry);
-            }
-            this.chunkUpdateQueue.remove(chunk);
+    private void processUpdatedEntity(Entity entity) {
+        ChunkEntry chunkEntry;
+
+        var acquirableEntity = entity.getAcquirable();
+        chunkEntry = acquirableEntity.getHandler().getChunkEntry();
+        // Remove from previous list
+        if (chunkEntry != null) {
+            chunkEntry.entities.remove(entity);
         }
-    }
-
-    private void processRemovedEntities() {
-        Entity entity;
-        while ((entity = entityRemovalRequests.poll()) != null) {
-            var acquirableEntity = entity.getAcquirable();
-            ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
-            if (chunkEntry != null) {
-                chunkEntry.entities.remove(entity);
-            }
-        }
-    }
-
-    private void processUpdatedEntities() {
-        Entity entity;
-        while ((entity = entityUpdateRequests.poll()) != null) {
-            ChunkEntry chunkEntry;
-
-            var acquirableEntity = entity.getAcquirable();
-            chunkEntry = acquirableEntity.getHandler().getChunkEntry();
-            // Remove from previous list
-            if (chunkEntry != null) {
-                chunkEntry.entities.remove(entity);
-            }
-            // Add to new list
-            chunkEntry = chunkEntryMap.get(entity.getChunk());
-            if (chunkEntry != null) {
-                chunkEntry.entities.add(entity);
-                acquirableEntity.getHandler().refreshChunkEntry(chunkEntry);
-            }
+        // Add to new list
+        chunkEntry = chunkEntryMap.get(entity.getChunk());
+        if (chunkEntry != null) {
+            chunkEntry.entities.add(entity);
+            acquirableEntity.getHandler().refreshChunkEntry(chunkEntry);
         }
     }
 

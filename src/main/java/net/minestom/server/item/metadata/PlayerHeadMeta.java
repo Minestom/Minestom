@@ -6,16 +6,12 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider<PlayerHeadMeta.Builder> {
 
@@ -75,31 +71,19 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("SkullOwner")) {
-                NBTCompound skullOwnerCompound = nbtCompound.getCompound("SkullOwner");
-
-                if (skullOwnerCompound.containsKey("Id")) {
-                    skullOwner(Utils.intArrayToUuid(skullOwnerCompound.getIntArray("Id").copyArray()));
+            if (nbtCompound.get("SkullOwner") instanceof NBTCompound skullOwnerCompound) {
+                if (skullOwnerCompound.get("Id") instanceof NBTIntArray id) {
+                    this.skullOwner = Utils.intArrayToUuid(id.getValue().copyArray());
                 }
 
-                if (skullOwnerCompound.containsKey("Properties")) {
-                    NBTCompound propertyCompound = skullOwnerCompound.getCompound("Properties");
-
-                    if (propertyCompound.containsKey("textures")) {
-                        NBTList<NBTCompound> textures = propertyCompound.getList("textures");
-                        if (textures != null) {
-                            NBTCompound nbt = textures.get(0);
-                            playerSkin(new PlayerSkin(nbt.getString("Value"), nbt.getString("Signature")));
-                        }
+                if (skullOwnerCompound.get("Properties") instanceof NBTCompound propertyCompound) {
+                    if (propertyCompound.get("textures") instanceof NBTList<?> textures &&
+                            textures.getSubtagType() == NBTType.TAG_Compound) {
+                        NBTCompound nbt = (NBTCompound) textures.get(0);
+                        this.playerSkin = new PlayerSkin(nbt.getString("Value"), nbt.getString("Signature"));
                     }
-
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

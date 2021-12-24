@@ -19,9 +19,9 @@ final class PaletteImpl implements Palette, Cloneable {
     private final int dimension;
     private final int size;
     private final int maxBitsPerEntry;
+    private final int bitsIncrement;
 
     private int bitsPerEntry;
-    private final int bitsIncrement;
 
     private int valuesPerLong;
     private boolean hasPalette;
@@ -39,17 +39,16 @@ final class PaletteImpl implements Palette, Cloneable {
         this.dimension = dimension;
         this.size = dimension * dimension * dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
+        this.bitsIncrement = bitsIncrement;
 
         this.bitsPerEntry = bitsPerEntry;
-        this.bitsIncrement = bitsIncrement;
 
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= maxBitsPerEntry;
 
-        final int initialCapacity = maxPaletteSize(bitsPerEntry) / 4;
-        this.paletteToValueList = new IntArrayList(initialCapacity);
+        this.paletteToValueList = new IntArrayList(1);
         this.paletteToValueList.add(0);
-        this.valueToPaletteMap = new Int2IntOpenHashMap(initialCapacity);
+        this.valueToPaletteMap = new Int2IntOpenHashMap(1);
         this.valueToPaletteMap.put(0, 0);
     }
 
@@ -59,8 +58,8 @@ final class PaletteImpl implements Palette, Cloneable {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
         if (values.length == 0) {
-            // Section is not loaded, can only be air
-            return -1;
+            // Section is not loaded, return default value
+            return 0;
         }
         x %= dimension;
         y %= dimension;
@@ -181,7 +180,7 @@ final class PaletteImpl implements Palette, Cloneable {
 
     private void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
-        PaletteImpl palette = new PaletteImpl(size, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
+        PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -190,16 +189,16 @@ final class PaletteImpl implements Palette, Cloneable {
             }
         }
 
-        this.paletteToValueList = palette.paletteToValueList;
-        this.lastPaletteIndex = palette.lastPaletteIndex;
-
         this.bitsPerEntry = palette.bitsPerEntry;
 
         this.valuesPerLong = palette.valuesPerLong;
         this.hasPalette = palette.hasPalette;
+        this.lastPaletteIndex = palette.lastPaletteIndex;
+        this.count = palette.count;
 
         this.values = palette.values;
-        this.count = palette.count;
+        this.paletteToValueList = palette.paletteToValueList;
+        this.valueToPaletteMap = palette.valueToPaletteMap;
     }
 
     private int getPaletteIndex(int value) {
@@ -210,7 +209,7 @@ final class PaletteImpl implements Palette, Cloneable {
         if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
             resize(bitsPerEntry + bitsIncrement);
-            if (!hasPalette) return value;
+            return getPaletteIndex(value);
         }
         final int paletteIndex = lastPaletteIndex++;
         this.paletteToValueList.add(value);

@@ -2,10 +2,7 @@ package item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.ItemHideFlag;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
+import net.minestom.server.item.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -42,6 +39,10 @@ public class ItemTest {
         var item2 = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(item1, item2);
         assertNotEquals(item1.withAmount(5), item2.withAmount(2));
+
+        assertTrue(item1.isSimilar(item2));
+        assertTrue(item1.withAmount(5).isSimilar(item2.withAmount(2)));
+        assertFalse(item1.isSimilar(item2.withDisplayName(Component.text("Hey!"))));
     }
 
     @Test
@@ -102,5 +103,19 @@ public class ItemTest {
         item = item.withMeta(meta -> meta.enchantment(Enchantment.EFFICIENCY, (short) 10));
         enchantments = item.getMeta().getEnchantmentMap();
         assertEquals(enchantments.get(Enchantment.EFFICIENCY), (short) 10);
+
+        item = item.withMeta(ItemMetaBuilder::clearEnchantment);
+        enchantments = item.getMeta().getEnchantmentMap();
+        assertTrue(enchantments.isEmpty());
+    }
+
+    @Test
+    public void testBuilderReuse() {
+        var builder = ItemStack.builder(Material.DIAMOND);
+        var item1 = builder.build();
+        var item2 = builder.displayName(Component.text("Name")).build();
+        assertNull(item1.getDisplayName());
+        assertNotNull(item2.getDisplayName());
+        assertNotEquals(item1, item2, "Item builder should be reusable");
     }
 }

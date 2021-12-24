@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -8,9 +9,9 @@ import net.minestom.server.instance.EntityTracker;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.roaringbitmap.RoaringBitmap;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
-    private final ObjectArraySet<Player> manualViewers = new ObjectArraySet<>();
+    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
 
     private EntityTracker tracker;
     private Point lastTrackingPoint;
@@ -97,8 +98,6 @@ public final class ViewEngine {
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
-        if (this.entity == entity)
-            return; // Ensure that self isn't added or removed as viewer
         if (entity.getVehicle() != null)
             return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
@@ -113,6 +112,10 @@ public final class ViewEngine {
         return entity == null || viewableOption.isRegistered(player);
     }
 
+    public Object mutex() {
+        return mutex;
+    }
+
     public Set<Player> asSet() {
         return set;
     }
@@ -125,7 +128,7 @@ public final class ViewEngine {
         // The consumers to be called when an entity is added/removed.
         public final Consumer<T> addition, removal;
         // Contains all the auto-entity ids that are viewable by this option.
-        public final RoaringBitmap bitSet = new RoaringBitmap();
+        public final IntSet bitSet = new IntOpenHashSet();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // References from the entity trackers.
@@ -193,17 +196,15 @@ public final class ViewEngine {
                             Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             if (tracker == null || references == null) return;
-            tracker.synchronize(lastTrackingPoint, () -> {
-                for (List<T> entities : references) {
-                    if (entities.isEmpty()) continue;
-                    for (T entity : entities) {
-                        if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
-                        if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                        if (entity.getVehicle() != null) continue;
-                        action.accept(entity);
-                    }
+            for (List<T> entities : references) {
+                if (entities.isEmpty()) continue;
+                for (T entity : entities) {
+                    if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
+                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
+                    if (entity.getVehicle() != null) continue;
+                    action.accept(entity);
                 }
-            });
+            }
         }
     }
 
@@ -221,7 +222,7 @@ public final class ViewEngine {
         public int size() {
             synchronized (mutex) {
                 int size = manualViewers.size();
-                if (entity != null) return size + viewableOption.bitSet.getCardinality();
+                if (entity != null) return size + viewableOption.bitSet.size();
                 // Non-entity fallback
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
                 if (auto != null) {

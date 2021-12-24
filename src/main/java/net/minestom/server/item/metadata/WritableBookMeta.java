@@ -9,11 +9,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
 
@@ -27,7 +24,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         super(metaBuilder);
         this.author = author;
         this.title = title;
-        this.pages = new ArrayList<>(pages);
+        this.pages = List.copyOf(pages);
     }
 
     public @Nullable String getAuthor() {
@@ -39,7 +36,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
     }
 
     public @NotNull List<@NotNull Component> getPages() {
-        return Collections.unmodifiableList(pages);
+        return pages;
     }
 
     public static class Builder extends ItemMetaBuilder {
@@ -57,8 +54,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         public Builder title(@Nullable String title) {
             this.title = title;
-            handleNullable(title, "title",
-                    () -> new NBTString(Objects.requireNonNull(title)));
+            handleNullable(title, "title", () -> NBT.String(Objects.requireNonNull(title)));
             return this;
         }
 
@@ -82,24 +78,18 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
+            if (nbtCompound.get("author") instanceof NBTString author) {
+                this.author = author.getValue();
             }
-            if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
+            if (nbtCompound.get("title") instanceof NBTString title) {
+                this.title = title.getValue();
             }
-            if (nbtCompound.containsKey("pages")) {
-                final NBTList<NBTString> list = nbtCompound.getList("pages");
-                for (NBTString page : list) {
+            if (nbtCompound.get("pages") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_String) {
+                for (NBTString page : list.<NBTString>asListOf()) {
                     this.pages.add(LegacyComponentSerializer.legacySection().deserialize(page.getValue()));
                 }
-                pages(pages);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return WritableBookMeta.Builder::new;
         }
     }
 }

@@ -33,6 +33,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
+
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
  * <p>
@@ -41,7 +43,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DynamicChunk extends Chunk {
 
     private final int minSection, maxSection;
-    private final Section[] sections;
+    private List<Section> sections;
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -55,8 +57,9 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
-        this.sections = new Section[maxSection - minSection];
-        Arrays.setAll(sections, value -> new Section());
+        var sectionsTemp = new Section[maxSection - minSection];
+        Arrays.setAll(sectionsTemp, value -> new Section());
+        this.sections = List.of(sectionsTemp);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class DynamicChunk extends Chunk {
         }
         Section section = getSectionAt(y);
         section.blockPalette()
-                .set(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z), block.stateId());
+                .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -94,14 +97,20 @@ public class DynamicChunk extends Chunk {
     public void setBiome(int x, int y, int z, @NotNull Biome biome) {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
-        section.biomePalette()
-                .set(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4, biome.id());
+        section.biomePalette().set(
+                toSectionRelativeCoordinate(x) / 4,
+                toSectionRelativeCoordinate(y) / 4,
+                toSectionRelativeCoordinate(z) / 4, biome.id());
+    }
+
+    @Override
+    public @NotNull List<Section> getSections() {
+        return sections;
     }
 
     @Override
     public @NotNull Section getSection(int section) {
-        final int index = section - minSection;
-        return sections[index];
+        return sections.get(section - minSection);
     }
 
     @Override
@@ -128,18 +137,17 @@ public class DynamicChunk extends Chunk {
             }
         }
         // Retrieve the block from state id
-        final Section section = sections[ChunkUtils.getSectionAt(y) - minSection];
+        final Section section = getSectionAt(y);
         final int blockStateId = section.blockPalette()
-                .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
-        if (blockStateId == -1) return Block.AIR; // Section is empty
+                .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
-        final Section section = sections[ChunkUtils.getSectionAt(y) - minSection];
+        final Section section = getSectionAt(y);
         final int id = section.biomePalette()
-                .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
+                .get(toSectionRelativeCoordinate(x) / 4, y / 4, toSectionRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
     }
 
@@ -164,10 +172,7 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
-        Arrays.setAll(dynamicChunk.sections, value -> {
-            final Section s = sections[value];
-            return s != null ? s.clone() : null;
-        });
+        dynamicChunk.sections = sections.stream().map(Section::clone).toList();
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
