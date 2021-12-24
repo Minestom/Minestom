@@ -16,4 +16,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Minestom"
 include("code-generators")
+include("jmh-benchmarks")
 include("demo")
