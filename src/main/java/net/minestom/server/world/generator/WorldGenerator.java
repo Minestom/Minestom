@@ -22,33 +22,25 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-public class WorldGenerator implements SectionSupplier {
+public class WorldGenerator implements Generator {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
-    private final static ExecutorService WORLD_GEN_POOL = new MinestomThreadPool(MinecraftServer.THREAD_COUNT_WORLD_GEN, MinecraftServer.THREAD_NAME_WORLD_GEN);
+    private final static ExecutorService WORLD_GEN_POOL = /*ForkJoinPool.commonPool();*/ new MinestomThreadPool(MinecraftServer.THREAD_COUNT_WORLD_GEN, MinecraftServer.THREAD_NAME_WORLD_GEN);
     private final Cache<StageKey, CompletableFuture<Void>> preGenStages = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(30))
             .build();
     private final Cache<SectionKey, CompletableFuture<Void>> sectionGens = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(30))
             .build();
-    private final Map<Integer, BiomeGenerator> biomeGenerators;
     private final List<PreGenerationStage<?>> preGenerationStages;
     private final List<GenerationStage> generationStages;
-    private final GenerationContext.Factory<WorldGenerator> generationContextFactory;
+    private final GenerationContext.Factory generationContextFactory;
 
     public WorldGenerator(List<GenerationStage> generationStages) {
-        this(Collections.emptySet(), Collections.emptyList(), generationStages, null);
+        this(Collections.emptyList(), generationStages, null);
     }
 
-    public WorldGenerator(Set<BiomeGenerator> biomeGenerators, List<PreGenerationStage<?>> preGenerationStages, List<GenerationStage> generationStages, GenerationContext.Factory<WorldGenerator> generationContextFactory) {
-        Map<Integer, BiomeGenerator> bgs = new HashMap<>();
-        for (BiomeGenerator biomeGenerator : biomeGenerators) {
-            if (bgs.put(biomeGenerator.getId(), biomeGenerator) != null) {
-                LOGGER.warn("Multiple generators for biome id {}, overriding previous generator.", biomeGenerator.getId());
-            }
-        }
+    public WorldGenerator(List<PreGenerationStage<?>> preGenerationStages, List<GenerationStage> generationStages, GenerationContext.Factory generationContextFactory) {
         this.generationContextFactory = generationContextFactory;
-        this.biomeGenerators = Collections.unmodifiableMap(bgs);
         this.preGenerationStages = Collections.unmodifiableList(preGenerationStages);
         this.generationStages = Collections.unmodifiableList(generationStages);
         /*
@@ -65,8 +57,8 @@ public class WorldGenerator implements SectionSupplier {
     }
 
     @Override
-    public GenerationContext<WorldGenerator> createGenerationContext(Instance instance) {
-        return generationContextFactory == null ? null : generationContextFactory.newInstance(this, instance, preGenerationStages);
+    public GenerationContext createGenerationContext(Instance instance) {
+        return generationContextFactory == null ? null : generationContextFactory.newInstance(instance, preGenerationStages);
     }
 
     @Override
@@ -134,7 +126,7 @@ public class WorldGenerator implements SectionSupplier {
         });
     }
 
-    private CompletableFuture<Void> executePreGenerationStage(GenerationContext<?> context, int x, int y, int z, PreGenerationStage<?> stage) {
+    private CompletableFuture<Void> executePreGenerationStage(GenerationContext context, int x, int y, int z, PreGenerationStage<?> stage) {
         final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
 
         WORLD_GEN_POOL.execute(() -> {
@@ -142,10 +134,6 @@ public class WorldGenerator implements SectionSupplier {
             completableFuture.complete(null);
         });
         return completableFuture;
-    }
-
-    public Map<Integer, BiomeGenerator> getBiomeGenerators() {
-        return biomeGenerators;
     }
 
     private record StageKey(Instance instance, Point loc, PreGenerationStage<?> stage) {}

@@ -26,8 +26,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.generator.GenerationContext;
-import net.minestom.server.world.generator.SectionSupplier;
-import net.minestom.server.world.generator.WorldGenerator;
+import net.minestom.server.world.generator.Generator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +50,7 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    @Nullable private SectionSupplier sectionSupplier;
+    @Nullable private Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -64,7 +63,7 @@ public class InstanceContainer extends Instance {
     private IChunkLoader chunkLoader;
 
     //World gen
-    private GenerationContext<?> generationContext;
+    private GenerationContext generationContext;
 
     // used to automatically enable the chunk loading or not
     private boolean autoChunkLoad = true;
@@ -256,14 +255,14 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @Nullable SectionSupplier getSectionSupplier() {
-        return sectionSupplier;
+    public @Nullable Generator getSectionSupplier() {
+        return generator;
     }
 
     @Override
-    public void setSectionSupplier(@Nullable SectionSupplier sectionSupplier) {
-        this.sectionSupplier = sectionSupplier;
-        this.generationContext = sectionSupplier == null ? null : sectionSupplier.createGenerationContext(this);
+    public void setSectionSupplier(@Nullable Generator generator) {
+        this.generator = generator;
+        this.generationContext = generator == null ? null : generator.createGenerationContext(this);
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
@@ -549,7 +548,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public GenerationContext<?> getGenerationContext() {
+    public GenerationContext getGenerationContext() {
         return generationContext;
     }
 

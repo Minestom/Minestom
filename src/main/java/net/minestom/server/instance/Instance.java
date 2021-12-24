@@ -31,7 +31,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.generator.GenerationContext;
-import net.minestom.server.world.generator.SectionSupplier;
+import net.minestom.server.world.generator.Generator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -256,18 +256,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Gets the instance {@link SectionSupplier}.
+     * Gets the instance {@link Generator}.
      *
-     * @return the {@link SectionSupplier} of the instance
+     * @return the {@link Generator} of the instance
      */
-    public abstract @Nullable SectionSupplier getSectionSupplier();
+    public abstract @Nullable Generator getSectionSupplier();
 
     /**
-     * Changes the instance {@link SectionSupplier}.
+     * Changes the instance {@link Generator}.
      *
-     * @param sectionSupplier the new {@link SectionSupplier} of the instance
+     * @param generator the new {@link Generator} of the instance
      */
-    public abstract void setSectionSupplier(@Nullable SectionSupplier sectionSupplier);
+    public abstract void setSectionSupplier(@Nullable Generator generator);
 
     /**
      * Gets all the instance's loaded chunks.
@@ -693,5 +693,5 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         return (getDimensionType().getMinY() + getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
     }
 
-    public abstract GenerationContext<?> getGenerationContext();
+    public abstract GenerationContext getGenerationContext();
 }

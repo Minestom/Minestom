@@ -13,8 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryGenerationContext<G extends SectionSupplier> implements GenerationContext<G> {
-    private final G generator;
+public class InMemoryGenerationContext implements GenerationContext {
     private final Instance instance;
     private final Map<Class<? extends PreGenerationStage<?>>, PreGenerationStage<? extends StageData>> preGenerationStageMap;
 
@@ -22,20 +21,19 @@ public class InMemoryGenerationContext<G extends SectionSupplier> implements Gen
     private final Map<PreGenerationStage<?>, Cache<Long, StageData>> chunkStageDataMap;
     private final Map<PreGenerationStage<?>, Cache<SectionKey, StageData>> sectionStageDataMap;
 
-    public static <T extends SectionSupplier> GenerationContext.Factory<T> factory() {
+    public static GenerationContext.Factory factory() {
         return factoryWithCacheExpirationOf(Duration.ofSeconds(120));
     }
 
-    public static <T extends SectionSupplier> GenerationContext.Factory<T> factoryWithCacheExpirationOf(Duration global) {
+    public static GenerationContext.Factory factoryWithCacheExpirationOf(Duration global) {
         return factoryWithCacheExpirationOf(global, global, global);
     }
 
-    public static <T extends SectionSupplier> GenerationContext.Factory<T> factoryWithCacheExpirationOf(Duration instanceDuration, Duration chunkDuration, Duration sectionDuration) {
-        return (generator, instance, preGenerationStages) -> new InMemoryGenerationContext<>(generator, instance, preGenerationStages, instanceDuration, chunkDuration, sectionDuration);
+    public static GenerationContext.Factory factoryWithCacheExpirationOf(Duration instanceDuration, Duration chunkDuration, Duration sectionDuration) {
+        return (instance, preGenerationStages) -> new InMemoryGenerationContext(instance, preGenerationStages, instanceDuration, chunkDuration, sectionDuration);
     }
 
-    private InMemoryGenerationContext(G generator, Instance instance, List<PreGenerationStage<?>> preGenerationStages, Duration instanceDuration, Duration chunkDuration, Duration sectionDuration) {
-        this.generator = generator;
+    private InMemoryGenerationContext(Instance instance, List<PreGenerationStage<?>> preGenerationStages, Duration instanceDuration, Duration chunkDuration, Duration sectionDuration) {
         this.instance = instance;
         preGenerationStageMap = new HashMap<>();
         chunkStageDataMap = new HashMap<>();
@@ -85,11 +83,6 @@ public class InMemoryGenerationContext<G extends SectionSupplier> implements Gen
     @Override
     public Instance getInstance() {
         return instance;
-    }
-
-    @Override
-    public G getGenerator() {
-        return generator;
     }
 
     private record SectionKey(int x, int y, int z) {}

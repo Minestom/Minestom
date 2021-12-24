@@ -5,7 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.world.generator.GenerationContext;
-import net.minestom.server.world.generator.SectionSupplier;
+import net.minestom.server.world.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,13 +76,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @Nullable SectionSupplier getSectionSupplier() {
+    public @Nullable Generator getSectionSupplier() {
         return instanceContainer.getSectionSupplier();
     }
 
     @Override
-    public void setSectionSupplier(@Nullable SectionSupplier sectionSupplier) {
-        instanceContainer.setSectionSupplier(sectionSupplier);
+    public void setSectionSupplier(@Nullable Generator generator) {
+        instanceContainer.setSectionSupplier(generator);
     }
 
     @NotNull
@@ -107,7 +107,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public GenerationContext<?> getGenerationContext() {
+    public GenerationContext getGenerationContext() {
         return instanceContainer.getGenerationContext();
     }
 

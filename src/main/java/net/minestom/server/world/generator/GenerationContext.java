@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface GenerationContext<G extends SectionSupplier> {
+public interface GenerationContext {
     <T extends StageData.Instance> @Nullable T getInstanceData(Class<? extends PreGenerationStage<T>> stage);
 
     <T extends StageData.Chunk> @Nullable T getChunkData(Class<? extends PreGenerationStage<T>> stage, int chunkX, int chunkZ);
@@ -22,9 +22,7 @@ public interface GenerationContext<G extends SectionSupplier> {
 
     Instance getInstance();
 
-    G getGenerator();
-
-    interface Factory<G extends SectionSupplier> {
-        GenerationContext<G> newInstance(G generator, Instance instance, List<PreGenerationStage<?>> preGenerationStages);
+    interface Factory {
+        GenerationContext newInstance(Instance instance, List<PreGenerationStage<?>> preGenerationStages);
     }
 }

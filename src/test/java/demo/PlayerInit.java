@@ -133,42 +133,41 @@ public class PlayerInit {
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
 
-        final Random random = new Random(1);
-        final JNoise plainsHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.5).build();
-        final JNoise hotDeepBlock = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.2).build();
-        final JNoise hotDeepHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.1).build();
-        final JNoise tempNoise = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.45).build();
+//        final Random random = new Random(1);
+//        final JNoise plainsHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.5).build();
+//        final JNoise hotDeepBlock = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.2).build();
+//        final JNoise hotDeepHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.1).build();
+//        final JNoise tempNoise = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.45).build();
+//        Set.of(
+//                new BiomeGenerator(
+//                        Biome.PLAINS,
+//                        Collections.emptySet(),
+//                        new BlockPool((x, y, z) -> random.nextFloat()) {{
+//                            addBlock(Block.TALL_GRASS, .5f, new IntRange(0));
+//                            addBlock(Block.AIR, .5f, new IntRange(0));
+//                            addBlock(Block.GRASS, 1, new IntRange(-1));
+//                            addBlock(Block.DIRT, 1, new IntRange(-3, -2));
+//                            addBlock(Block.STONE, 1, new IntRange(Integer.MIN_VALUE, -4));
+//                        }},
+//                        plainsHeight::getNoise
+//                ),
+//                new BiomeGenerator(
+//                        Biome.builder()
+//                                .name(NamespaceID.from("custom:hot_deep"))
+//                                .temperature(2)
+//                                .depth(.05f)
+//                                .build(),
+//                        Collections.emptySet(),
+//                        new BlockPool(hotDeepBlock::getNoise) {{
+//                            addBlock(Block.LAVA, .3f, new IntRange(-5, 0));
+//                            addBlock(Block.NETHERRACK, .5f, new IntRange(Integer.MIN_VALUE, 0));
+//                            addBlock(Block.NETHER_QUARTZ_ORE, .05f, new IntRange(-20, -9));
+//                        }},
+//                        hotDeepHeight::getNoise
+//                )
+//        );
         instanceContainer.setSectionSupplier(new WorldGenerator(
-                Set.of(
-                        new BiomeGenerator(
-                                Biome.PLAINS,
-                                Collections.emptySet(),
-                                new BlockPool((x, y, z) -> random.nextFloat()) {{
-                                    addBlock(Block.TALL_GRASS, .5f, new IntRange(0));
-                                    addBlock(Block.AIR, .5f, new IntRange(0));
-                                    addBlock(Block.GRASS, 1, new IntRange(-1));
-                                    addBlock(Block.DIRT, 1, new IntRange(-3, -2));
-                                    addBlock(Block.STONE, 1, new IntRange(Integer.MIN_VALUE, -4));
-                                }},
-                                plainsHeight::getNoise
-                        ),
-                        new BiomeGenerator(
-                                Biome.builder()
-                                        .name(NamespaceID.from("custom:hot_deep"))
-                                        .temperature(2)
-                                        .depth(.05f)
-                                        .build(),
-                                Collections.emptySet(),
-                                new BlockPool(hotDeepBlock::getNoise) {{
-                                    addBlock(Block.LAVA, .3f, new IntRange(-5, 0));
-                                    addBlock(Block.NETHERRACK, .5f, new IntRange(Integer.MIN_VALUE, 0));
-                                    addBlock(Block.NETHER_QUARTZ_ORE, .05f, new IntRange(-20, -9));
-                                }},
-                                hotDeepHeight::getNoise
-                        )
-                ),
                 List.of(
-//                        new BiomeLayout2DStage(tempNoise::getNoise, null, 1),
                         new HeightMapStage()
                 ),
                 List.of(
