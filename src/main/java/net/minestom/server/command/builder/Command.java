@@ -193,24 +193,23 @@ public class Command {
         List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
         Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
 
-        // Add a syntax that includes none of the optional ones.
-        optionalSyntaxes.add(new CommandSyntax(Arrays.asList(args).subList(0, firstOptional), executor, condition, null));
+        for (int i = firstOptional; i < args.length; i++) {
+            //noinspection unchecked
+            defaultValuesMap.put(args[i].getId(), (Supplier<Object>) args[i].getDefaultValue());
+        }
+
+        // Turn defaultValuesMap into an immutable copy so that the optional syntaxes instantiated later in this code
+        // don't need to create their own copy of the map. This could theoretically be improved by making
+        // defaultValuesMap an array of entries and then directly creating a copy of it
+        defaultValuesMap = Map.copyOf(defaultValuesMap);
 
         for (int i = 0; i < args.length; i++) {
-            Argument<?> arg = args[i];
-
-            currentArguments.add(arg);
-
-            if (i < firstOptional) {
-                continue;
+            currentArguments.add(args[i]);
+            // Subtract one to include the syntax with none of the optional arguments
+            if (i >= firstOptional - 1) {
+                // It's safe to put them directly into this constructor because CommandSyntax copies them before saving
+                optionalSyntaxes.add(new CommandSyntax(currentArguments, executor, condition, defaultValuesMap));
             }
-
-            // At this point, `arg` must be optional due to the check above
-            //noinspection unchecked
-            defaultValuesMap.put(arg.getId(), (Supplier<Object>) arg.getDefaultValue());
-
-            // It's safe to put them directly into this constructor because CommandSyntax copies them before saving
-            optionalSyntaxes.add(new CommandSyntax(currentArguments, executor, condition, defaultValuesMap));
         }
 
         this.syntaxes.addAll(optionalSyntaxes);
