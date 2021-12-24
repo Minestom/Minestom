@@ -128,7 +128,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
                                 "UUID", NBT.IntArray(Utils.uuidToIntArray(itemAttribute.getUuid())),
                                 "Amount", NBT.Double(itemAttribute.getValue()),
                                 "Slot", NBT.String(itemAttribute.getSlot().name().toLowerCase()),
-                                "AttributeName", NBT.String(itemAttribute.getAttribute().getKey()),
+                                "AttributeName", NBT.String(itemAttribute.getAttribute().key()),
                                 "Operation", NBT.Int(itemAttribute.getOperation().getId()),
                                 "Name", NBT.String(itemAttribute.getInternalName()))))
                         .toList()
