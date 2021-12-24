@@ -196,7 +196,7 @@ public class PlayerInit {
 //        ));
 
         int r = 9;
-        final int total = 100;
+        final int total = MathUtils.square(r*2+1);
         final CountDownLatch latch = new CountDownLatch(total);
         for (int x = -r; x <= r; x++) {
             for (int z = -r; z <= r; z++) {
