@@ -39,7 +39,7 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
         for (AttributeInstance instance : properties) {
             final Attribute attribute = instance.getAttribute();
 
-            writer.writeSizedString(attribute.getKey());
+            writer.writeSizedString(attribute.key());
             writer.writeDouble(instance.getBaseValue());
 
             {

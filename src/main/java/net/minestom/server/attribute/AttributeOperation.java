@@ -18,8 +18,7 @@ public enum AttributeOperation {
         return this.id;
     }
 
-    @Nullable
-    public static AttributeOperation fromId(int id) {
+    public static @Nullable AttributeOperation fromId(int id) {
         if (id >= 0 && id < VALUES.length) {
             return VALUES[id];
         }
