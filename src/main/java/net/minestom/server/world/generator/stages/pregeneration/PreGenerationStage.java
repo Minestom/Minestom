@@ -2,9 +2,9 @@ package net.minestom.server.world.generator.stages.pregeneration;
 
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.world.generator.GenerationContext;
+import net.minestom.server.world.generator.SectionSupplier;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface PreGenerationStage<T extends StageData> {
     int INTERNAL_STAGE_ID_OFFSET = 1000;
@@ -16,7 +16,7 @@ public interface PreGenerationStage<T extends StageData> {
      * @param sectionY section's Y coordinate
      * @param sectionZ section's Z coordinate
      */
-    void process(GenerationContext context, int sectionX, int sectionY, int sectionZ);
+    void process(GenerationContext<? extends SectionSupplier> context, int sectionX, int sectionY, int sectionZ);
 
     /**
      * The range in what the generator should look around, e.g. for generating structures

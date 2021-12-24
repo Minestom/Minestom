@@ -2,12 +2,10 @@ package net.minestom.server.world.generator;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.utils.MathUtils;
@@ -21,13 +19,10 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-public class WorldGenerator {
+public class WorldGenerator implements SectionSupplier {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
     private final static ExecutorService WORLD_GEN_POOL = new MinestomThreadPool(MinecraftServer.THREAD_COUNT_WORLD_GEN, MinecraftServer.THREAD_NAME_WORLD_GEN);
     private final Cache<StageKey, CompletableFuture<Void>> preGenStages = Caffeine.newBuilder()
@@ -39,15 +34,21 @@ public class WorldGenerator {
     private final Map<Integer, BiomeGenerator> biomeGenerators;
     private final List<PreGenerationStage<?>> preGenerationStages;
     private final List<GenerationStage> generationStages;
+    private final GenerationContext.Factory<WorldGenerator> generationContextFactory;
 
-    public WorldGenerator(Set<BiomeGenerator> biomeGenerators, List<PreGenerationStage<?>> preGenerationStages, List<GenerationStage> generationStages) {
-        Check.argCondition(biomeGenerators.size() == 0, "At least one BiomeGenerator is required!");
+
+    public WorldGenerator(List<GenerationStage> generationStages) {
+        this(Collections.emptySet(), Collections.emptyList(), generationStages, null);
+    }
+
+    public WorldGenerator(Set<BiomeGenerator> biomeGenerators, List<PreGenerationStage<?>> preGenerationStages, List<GenerationStage> generationStages, GenerationContext.Factory<WorldGenerator> generationContextFactory) {
         Map<Integer, BiomeGenerator> bgs = new HashMap<>();
         for (BiomeGenerator biomeGenerator : biomeGenerators) {
             if (bgs.put(biomeGenerator.getId(), biomeGenerator) != null) {
                 LOGGER.warn("Multiple generators for biome id {}, overriding previous generator.", biomeGenerator.getId());
             }
         }
+        this.generationContextFactory = generationContextFactory;
         this.biomeGenerators = Collections.unmodifiableMap(bgs);
         this.preGenerationStages = Collections.unmodifiableList(preGenerationStages);
         this.generationStages = Collections.unmodifiableList(generationStages);
@@ -64,10 +65,12 @@ public class WorldGenerator {
                 "Colliding stage IDs!");
     }
 
-    public GenerationContext createGenerationContext(Instance instance) {
-        return new GenerationContext(this, instance, preGenerationStages);
+    @Override
+    public GenerationContext<WorldGenerator> createGenerationContext(Instance instance) {
+        return generationContextFactory == null ? null : generationContextFactory.newInstance(this, instance, preGenerationStages);
     }
 
+    @Override
     public CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
         return sectionGens.get(new SectionKey(instance, new Vec(sectionX, sectionY, sectionZ)), k -> {
             final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
@@ -132,8 +135,9 @@ public class WorldGenerator {
         });
     }
 
-    private CompletableFuture<Void> executePreGenerationStage(GenerationContext context, int x, int y, int z, PreGenerationStage<?> stage) {
+    private CompletableFuture<Void> executePreGenerationStage(GenerationContext<?> context, int x, int y, int z, PreGenerationStage<?> stage) {
         final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+
         WORLD_GEN_POOL.execute(() -> {
             stage.process(context, x, y, z);
             completableFuture.complete(null);

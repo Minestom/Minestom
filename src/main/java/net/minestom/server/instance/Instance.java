@@ -31,8 +31,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.generator.GenerationContext;
-import net.minestom.server.world.generator.WorldGenDataLoader;
-import net.minestom.server.world.generator.WorldGenerator;
+import net.minestom.server.world.generator.SectionSupplier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -257,18 +256,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Gets the instance {@link WorldGenerator}.
+     * Gets the instance {@link SectionSupplier}.
      *
-     * @return the {@link WorldGenerator} of the instance
+     * @return the {@link SectionSupplier} of the instance
      */
-    public abstract @Nullable WorldGenerator getWorldGenerator();
+    public abstract @Nullable SectionSupplier getSectionSupplier();
 
     /**
-     * Changes the instance {@link WorldGenerator}.
+     * Changes the instance {@link SectionSupplier}.
      *
-     * @param worldGenerator the new {@link WorldGenerator} of the instance
+     * @param sectionSupplier the new {@link SectionSupplier} of the instance
      */
-    public abstract void setWorldGenerator(@Nullable WorldGenerator worldGenerator);
+    public abstract void setSectionSupplier(@Nullable SectionSupplier sectionSupplier);
 
     /**
      * Gets all the instance's loaded chunks.
@@ -694,6 +693,5 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         return (getDimensionType().getMinY() + getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
     }
 
-    public abstract GenerationContext getGenerationContext();
-    public abstract @NotNull WorldGenDataLoader getWorldGenDataLoader();
+    public abstract GenerationContext<?> getGenerationContext();
 }

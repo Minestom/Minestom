@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
     @Override
-    public void process(GenerationContext context, int sectionX, int sectionY, int sectionZ) {
+    public void process(GenerationContext<?> context, int sectionX, int sectionY, int sectionZ) {
         final Data data = new Data(0);
         if (sectionX % 3 == 0 && sectionZ % 3 == 0) {
             data.setHeight(60);

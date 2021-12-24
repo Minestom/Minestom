@@ -40,6 +40,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.generator.BiomeGenerator;
 import net.minestom.server.world.generator.BlockPool;
+import net.minestom.server.world.generator.InMemoryGenerationContext;
 import net.minestom.server.world.generator.WorldGenerator;
 import net.minestom.server.world.generator.stages.generation.BedrockStage;
 import net.minestom.server.world.generator.stages.generation.BiomeFillStage;
@@ -137,7 +138,7 @@ public class PlayerInit {
         final JNoise hotDeepBlock = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.2).build();
         final JNoise hotDeepHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.1).build();
         final JNoise tempNoise = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.45).build();
-        instanceContainer.setWorldGenerator(new WorldGenerator(
+        instanceContainer.setSectionSupplier(new WorldGenerator(
                 Set.of(
                         new BiomeGenerator(
                                 Biome.PLAINS,
@@ -174,8 +175,25 @@ public class PlayerInit {
                         new TerrainStage(),
                         new BedrockStage(),
                         new BiomeFillStage()
-                )
+                ),
+                InMemoryGenerationContext.factory()
         ));
+
+//        instanceContainer.setSectionSupplier(new WorldGenerator(
+//                List.of((context, blockCache, biomePalette, sectionX, sectionY, sectionZ) -> {
+//                    int absHeight = 35;
+//                    if (Math.ceil(absHeight / 16d) >= sectionY) {
+//                        int h = Math.floor(absHeight / 16d) > sectionY * 16 ? 16 : absHeight - sectionY * 16;
+//                            for (int x = 0; x < 16; x++) {
+//                                for (int y = 0; y < h; y++) {
+//                                    for (int z = 0; z < 16; z++) {
+//                                        blockCache.setBlock(x, y, z, Block.STONE);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                })
+//        ));
 
         int r = 9;
         final int total = 100;

@@ -18,7 +18,6 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.utils.Debug;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.SectionBlockCache;
@@ -27,7 +26,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.generator.GenerationContext;
-import net.minestom.server.world.generator.WorldGenDataLoader;
+import net.minestom.server.world.generator.SectionSupplier;
 import net.minestom.server.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,6 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -53,7 +51,7 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    @Nullable private WorldGenerator worldGenerator;
+    @Nullable private SectionSupplier sectionSupplier;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -66,8 +64,7 @@ public class InstanceContainer extends Instance {
     private IChunkLoader chunkLoader;
 
     //World gen
-    private WorldGenDataLoader worldGenDataLoader = WorldGenDataLoader.dummy();
-    private GenerationContext generationContext;
+    private GenerationContext<?> generationContext;
 
     // used to automatically enable the chunk loading or not
     private boolean autoChunkLoad = true;
@@ -259,14 +256,14 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @Nullable WorldGenerator getWorldGenerator() {
-        return worldGenerator;
+    public @Nullable SectionSupplier getSectionSupplier() {
+        return sectionSupplier;
     }
 
     @Override
-    public void setWorldGenerator(@Nullable WorldGenerator worldGenerator) {
-        this.worldGenerator = worldGenerator;
-        this.generationContext = worldGenerator == null ? null : worldGenerator.createGenerationContext(this);
+    public void setSectionSupplier(@Nullable SectionSupplier sectionSupplier) {
+        this.sectionSupplier = sectionSupplier;
+        this.generationContext = sectionSupplier == null ? null : sectionSupplier.createGenerationContext(this);
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
@@ -303,13 +300,13 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         LOGGER.trace("Creating {}", chunk);
-        if (getWorldGenerator() != null && chunk.shouldGenerate()) {
+        if (getSectionSupplier() != null && chunk.shouldGenerate()) {
             CompletableFuture<?>[] futures = new CompletableFuture[getSectionMaxY()-getSectionMinY()];
             for (int y = getSectionMinY(); y < getSectionMaxY(); y++) {
                 final Section section = chunk.getSection(y);
                 final SectionBlockCache sectionBlockCache = new SectionBlockCache();
                 int finalY = y;
-                futures[y-getSectionMinY()] = getWorldGenerator().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
+                futures[y-getSectionMinY()] = getSectionSupplier().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
                         .thenAccept(ignored -> {
                             sectionBlockCache.apply(chunk, finalY);
                             LOGGER.trace("Section {} has been generated for {}", finalY, chunk);
@@ -551,16 +548,8 @@ public class InstanceContainer extends Instance {
         UPDATE_MANAGER.signalChunkLoad(chunk);
     }
 
-    public void setWorldGenDataLoader(WorldGenDataLoader worldGenDataLoader) {
-        this.worldGenDataLoader = worldGenDataLoader;
-    }
-
-    public @NotNull WorldGenDataLoader getWorldGenDataLoader() {
-        return worldGenDataLoader;
-    }
-
     @Override
-    public GenerationContext getGenerationContext() {
+    public GenerationContext<?> getGenerationContext() {
         return generationContext;
     }
 
