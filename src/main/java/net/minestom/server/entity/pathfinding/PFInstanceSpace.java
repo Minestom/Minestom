@@ -10,8 +10,7 @@ import net.minestom.server.instance.block.Block;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PFInstanceSpace implements IInstanceSpace {
-
+public final class PFInstanceSpace implements IInstanceSpace {
     private final Instance instance;
     private final Map<Chunk, PFColumnarSpace> chunkSpaceMap = new ConcurrentHashMap<>();
 
@@ -28,9 +27,7 @@ public class PFInstanceSpace implements IInstanceSpace {
     @Override
     public IColumnarSpace columnarSpaceAt(int cx, int cz) {
         final Chunk chunk = instance.getChunk(cx, cz);
-        if (chunk == null) {
-            return null;
-        }
+        if (chunk == null) return null;
         return chunkSpaceMap.computeIfAbsent(chunk, c -> {
             final PFColumnarSpace cs = new PFColumnarSpace(this, c);
             c.setColumnarSpace(cs);
