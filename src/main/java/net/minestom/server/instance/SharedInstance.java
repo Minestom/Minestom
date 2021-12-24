@@ -76,13 +76,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @Nullable Generator getSectionSupplier() {
-        return instanceContainer.getSectionSupplier();
+    public @Nullable Generator getGenerator() {
+        return instanceContainer.getGenerator();
     }
 
     @Override
-    public void setSectionSupplier(@Nullable Generator generator) {
-        instanceContainer.setSectionSupplier(generator);
+    public void setGenerator(@Nullable Generator generator) {
+        instanceContainer.setGenerator(generator);
     }
 
     @NotNull

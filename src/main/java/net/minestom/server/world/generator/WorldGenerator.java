@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-public class WorldGenerator implements Generator {
+public class WorldGenerator implements Generator, GenerationContext.Provider {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
     private final static ExecutorService WORLD_GEN_POOL = /*ForkJoinPool.commonPool();*/ new MinestomThreadPool(MinecraftServer.THREAD_COUNT_WORLD_GEN, MinecraftServer.THREAD_NAME_WORLD_GEN);
     private final Cache<StageKey, CompletableFuture<Void>> preGenStages = Caffeine.newBuilder()
@@ -54,11 +54,6 @@ public class WorldGenerator implements Generator {
                         .map(PreGenerationStage::getUniqueId)
                         .collect(Collectors.toSet()).size() != preGenerationStages.size(),
                 "Colliding stage IDs!");
-    }
-
-    @Override
-    public GenerationContext createGenerationContext(Instance instance) {
-        return generationContextFactory == null ? null : generationContextFactory.newInstance(instance, preGenerationStages);
     }
 
     @Override
@@ -134,6 +129,11 @@ public class WorldGenerator implements Generator {
             completableFuture.complete(null);
         });
         return completableFuture;
+    }
+
+    @Override
+    public GenerationContext getContext(Instance instance) {
+        return generationContextFactory == null ? null : generationContextFactory.newInstance(instance, preGenerationStages);
     }
 
     private record StageKey(Instance instance, Point loc, PreGenerationStage<?> stage) {}

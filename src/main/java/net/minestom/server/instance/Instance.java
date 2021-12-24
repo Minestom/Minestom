@@ -260,14 +260,14 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      *
      * @return the {@link Generator} of the instance
      */
-    public abstract @Nullable Generator getSectionSupplier();
+    public abstract @Nullable Generator getGenerator();
 
     /**
      * Changes the instance {@link Generator}.
      *
      * @param generator the new {@link Generator} of the instance
      */
-    public abstract void setSectionSupplier(@Nullable Generator generator);
+    public abstract void setGenerator(@Nullable Generator generator);
 
     /**
      * Gets all the instance's loaded chunks.

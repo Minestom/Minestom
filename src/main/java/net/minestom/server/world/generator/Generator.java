@@ -6,8 +6,7 @@ import net.minestom.server.utils.block.SectionBlockCache;
 
 import java.util.concurrent.CompletableFuture;
 
+@FunctionalInterface
 public interface Generator {
-    GenerationContext createGenerationContext(Instance instance);
-
     CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ);
 }

@@ -22,7 +22,13 @@ public interface GenerationContext {
 
     Instance getInstance();
 
+    @FunctionalInterface
     interface Factory {
         GenerationContext newInstance(Instance instance, List<PreGenerationStage<?>> preGenerationStages);
+    }
+
+    @FunctionalInterface
+    interface Provider {
+        GenerationContext getContext(Instance instance);
     }
 }

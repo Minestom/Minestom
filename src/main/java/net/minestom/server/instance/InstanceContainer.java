@@ -255,14 +255,16 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @Nullable Generator getSectionSupplier() {
+    public @Nullable Generator getGenerator() {
         return generator;
     }
 
     @Override
-    public void setSectionSupplier(@Nullable Generator generator) {
+    public void setGenerator(@Nullable Generator generator) {
         this.generator = generator;
-        this.generationContext = generator == null ? null : generator.createGenerationContext(this);
+        if (generator != null && GenerationContext.Provider.class.isAssignableFrom(generator.getClass())) {
+            this.generationContext = ((GenerationContext.Provider) generator).getContext(this);
+        }
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
@@ -299,13 +301,13 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         LOGGER.trace("Creating {}", chunk);
-        if (getSectionSupplier() != null && chunk.shouldGenerate()) {
+        if (getGenerator() != null && chunk.shouldGenerate()) {
             CompletableFuture<?>[] futures = new CompletableFuture[getSectionMaxY()-getSectionMinY()];
             for (int y = getSectionMinY(); y < getSectionMaxY(); y++) {
                 final Section section = chunk.getSection(y);
                 final SectionBlockCache sectionBlockCache = new SectionBlockCache();
                 int finalY = y;
-                futures[y-getSectionMinY()] = getSectionSupplier().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
+                futures[y-getSectionMinY()] = getGenerator().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
                         .thenAccept(ignored -> {
                             sectionBlockCache.apply(chunk, finalY);
                             LOGGER.trace("Section {} has been generated for {}", finalY, chunk);

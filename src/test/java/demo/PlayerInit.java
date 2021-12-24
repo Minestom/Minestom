@@ -1,7 +1,5 @@
 package demo;
 
-import de.articdive.jnoise.JNoise;
-import de.articdive.jnoise.noise.opensimplex.FastSimplexBuilder;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
@@ -33,13 +31,8 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.generator.BiomeGenerator;
-import net.minestom.server.world.generator.BlockPool;
 import net.minestom.server.world.generator.InMemoryGenerationContext;
 import net.minestom.server.world.generator.WorldGenerator;
 import net.minestom.server.world.generator.stages.generation.BedrockStage;
@@ -166,7 +159,7 @@ public class PlayerInit {
 //                        hotDeepHeight::getNoise
 //                )
 //        );
-        instanceContainer.setSectionSupplier(new WorldGenerator(
+        instanceContainer.setGenerator(new WorldGenerator(
                 List.of(
                         new HeightMapStage()
                 ),
