@@ -18,7 +18,6 @@ import net.minestom.server.snapshot.InstanceSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -263,9 +262,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void updateSnapshot(@NotNull SnapshotUpdater updater) {
-        Section[] clonedSections = new Section[sections.length];
+        Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
-            clonedSections[i] = sections[i].clone();
+            clonedSections[i] = sections.get(i).clone();
         this.snapshot = new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), updater.reference(instance),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
@@ -287,7 +286,7 @@ public class DynamicChunk extends Chunk {
                 }
             }
             // Retrieve the block from state id
-            final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+            final Section section = sections[ChunkUtils.getChunkCoordinate(y) + minSection];
             final int blockStateId = section.blockPalette()
                     .get(toChunkRelativeCoordinate(x), y, toChunkRelativeCoordinate(z));
             if (blockStateId == -1) return Block.AIR; // Section is empty
@@ -296,7 +295,7 @@ public class DynamicChunk extends Chunk {
 
         @Override
         public @NotNull Biome getBiome(int x, int y, int z) {
-            final Section section = sections[ChunkUtils.getSectionAt(y) + minSection];
+            final Section section = sections[ChunkUtils.getChunkCoordinate(y) + minSection];
             final int id = section.biomePalette()
                     .get(toChunkRelativeCoordinate(x) / 4, y / 4, toChunkRelativeCoordinate(z) / 4);
             return MinecraftServer.getBiomeManager().getById(id);
