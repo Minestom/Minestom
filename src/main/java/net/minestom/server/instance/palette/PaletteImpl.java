@@ -36,6 +36,9 @@ final class PaletteImpl implements Palette, Cloneable {
     private Int2IntOpenHashMap valueToPaletteMap;
 
     PaletteImpl(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
+        if (dimension < 1 || dimension % 2 != 0)
+            throw new IllegalArgumentException("Dimension must be positive and power of 2");
+
         this.dimension = dimension;
         this.size = dimension * dimension * dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
@@ -218,7 +221,6 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     int getSectionIndex(int x, int y, int z) {
-        y = Math.floorMod(y, dimension);
         return y << (dimension / 2) | z << (dimension / 4) | x;
     }
 

@@ -1,27 +1,18 @@
 package instance;
 
 import net.minestom.server.instance.palette.Palette;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PaletteTest {
-    private List<Palette> palettes = new ArrayList<>();
-
-    @BeforeEach
-    public void reset() {
-        for (int i = 4; i < 16; i++) {
-            palettes.add(Palette.newPalette(i, 5, 3, 1));
-        }
-    }
 
     @Test
-    public void testPlacement() {
+    public void placement() {
+        var palettes = testPalettes();
         for (Palette palette : palettes) {
             final int dimension = palette.dimension();
             assertEquals(0, palette.get(0, 0, 0), "Default value should be 0");
@@ -55,7 +46,8 @@ public class PaletteTest {
     }
 
     @Test
-    public void testPlacementNeg() {
+    public void negPlacement() {
+        var palettes = testPalettes();
         for (Palette palette : palettes) {
             assertThrows(IllegalArgumentException.class, () -> palette.set(-1, 0, 0, 64));
             assertThrows(IllegalArgumentException.class, () -> palette.set(0, -1, 0, 64));
@@ -68,7 +60,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void testResize() {
+    public void resize() {
         Palette palette = Palette.newPalette(16, 5, 2, 1);
         palette.set(0, 0, 0, 1);
         assertEquals(2, palette.bitsPerEntry());
@@ -83,5 +75,22 @@ public class PaletteTest {
         assertEquals(2, palette.get(0, 0, 1));
         assertEquals(3, palette.get(0, 0, 2));
         assertEquals(4, palette.get(0, 0, 3));
+    }
+
+    @Test
+    public void dimension() {
+        assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3, 1));
+        assertThrows(Exception.class, () -> Palette.newPalette(1, 5, 3, 1));
+        assertDoesNotThrow(() -> Palette.newPalette(2, 5, 3, 1));
+        assertThrows(Exception.class, () -> Palette.newPalette(3, 5, 3, 1));
+        assertDoesNotThrow(() -> Palette.newPalette(4, 5, 3, 1));
+    }
+
+    private static List<Palette> testPalettes() {
+        List<Palette> palettes = new ArrayList<>();
+        for (int i = 4; i < 16; i += 2) {
+            palettes.add(Palette.newPalette(i, 5, 3, 1));
+        }
+        return palettes;
     }
 }
