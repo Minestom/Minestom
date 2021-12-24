@@ -36,7 +36,6 @@ public class WorldGenerator implements SectionSupplier {
     private final List<GenerationStage> generationStages;
     private final GenerationContext.Factory<WorldGenerator> generationContextFactory;
 
-
     public WorldGenerator(List<GenerationStage> generationStages) {
         this(Collections.emptySet(), Collections.emptyList(), generationStages, null);
     }

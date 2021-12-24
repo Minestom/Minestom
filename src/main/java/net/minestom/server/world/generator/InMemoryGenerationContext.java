@@ -31,7 +31,7 @@ public class InMemoryGenerationContext<G extends SectionSupplier> implements Gen
     }
 
     public static <T extends SectionSupplier> GenerationContext.Factory<T> factoryWithCacheExpirationOf(Duration instanceDuration, Duration chunkDuration, Duration sectionDuration) {
-        return (generator, instance, preGenerationStages) -> new InMemoryGenerationContext<T>(generator, instance, preGenerationStages, instanceDuration, chunkDuration, sectionDuration);
+        return (generator, instance, preGenerationStages) -> new InMemoryGenerationContext<>(generator, instance, preGenerationStages, instanceDuration, chunkDuration, sectionDuration);
     }
 
     private InMemoryGenerationContext(G generator, Instance instance, List<PreGenerationStage<?>> preGenerationStages, Duration instanceDuration, Duration chunkDuration, Duration sectionDuration) {
@@ -42,6 +42,7 @@ public class InMemoryGenerationContext<G extends SectionSupplier> implements Gen
         sectionStageDataMap = new HashMap<>();
         instanceStageDataMap = Caffeine.newBuilder().expireAfterAccess(instanceDuration).build();
         for (PreGenerationStage<?> stage : preGenerationStages) {
+            //noinspection unchecked
             preGenerationStageMap.put((Class<? extends PreGenerationStage<? extends StageData>>) stage.getClass(), stage);
             chunkStageDataMap.put(stage, Caffeine.newBuilder().expireAfterAccess(chunkDuration).build());
             sectionStageDataMap.put(stage, Caffeine.newBuilder().expireAfterAccess(sectionDuration).build());
@@ -50,16 +51,19 @@ public class InMemoryGenerationContext<G extends SectionSupplier> implements Gen
 
     @Override
     public <T extends StageData.Instance> @Nullable T getInstanceData(Class<? extends PreGenerationStage<T>> stage) {
+        //noinspection unchecked
         return (T) instanceStageDataMap.getIfPresent(preGenerationStageMap.get(stage));
     }
 
     @Override
     public <T extends StageData.Chunk> @Nullable T getChunkData(Class<? extends PreGenerationStage<T>> stage, int chunkX, int chunkZ) {
+        //noinspection unchecked
         return (T) chunkStageDataMap.get(preGenerationStageMap.get(stage)).getIfPresent(ChunkUtils.getChunkIndex(chunkX, chunkZ));
     }
 
     @Override
     public <T extends StageData.Section> @Nullable T getSectionData(Class<? extends PreGenerationStage<T>> stage, int sectionX, int sectionY, int sectionZ) {
+        //noinspection unchecked
         return (T) sectionStageDataMap.get(preGenerationStageMap.get(stage)).getIfPresent(new SectionKey(sectionX, sectionY, sectionZ));
     }
 
