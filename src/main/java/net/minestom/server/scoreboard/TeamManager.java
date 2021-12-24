@@ -41,8 +41,7 @@ public final class TeamManager {
      */
     protected void registerNewTeam(@NotNull Team team) {
         this.teams.add(team);
-
-        PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), team.createTeamsCreationPacket());
+        PacketUtils.broadcastPacket(team.createTeamsCreationPacket());
     }
 
     /**
@@ -65,7 +64,7 @@ public final class TeamManager {
      */
     public boolean deleteTeam(@NotNull Team team) {
         // Sends to all online players a team destroy packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), team.createTeamDestructionPacket());
+        PacketUtils.broadcastPacket(team.createTeamDestructionPacket());
         return this.teams.remove(team);
     }
 
