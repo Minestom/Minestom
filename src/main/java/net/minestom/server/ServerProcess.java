@@ -10,6 +10,7 @@ import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -34,50 +35,111 @@ public interface ServerProcess {
         return new ServerProcessImpl();
     }
 
+    /**
+     * Handles incoming connections/players.
+     */
     @NotNull ConnectionManager connection();
 
+    /**
+     * Handles registered instances.
+     */
     @NotNull InstanceManager instance();
 
+    /**
+     * Handles {@link net.minestom.server.instance.block.BlockHandler block handlers}
+     * and {@link BlockPlacementRule placement rules}.
+     */
     @NotNull BlockManager block();
 
+    /**
+     * Handles registered commands.
+     */
     @NotNull CommandManager command();
 
+    /**
+     * Handles registered recipes shown to clients.
+     */
     @NotNull RecipeManager recipe();
 
-    @NotNull StorageManager storage();
-
-    @NotNull DataManager data();
-
+    /**
+     * Handles registered teams.
+     */
     @NotNull TeamManager team();
 
+    /**
+     * Gets the global event handler.
+     * <p>
+     * Used to register event callback at a global scale.
+     */
     @NotNull GlobalEventHandler eventHandler();
 
+    /**
+     * Main scheduler ticked at the server rate.
+     */
     @NotNull SchedulerManager scheduler();
 
     @NotNull BenchmarkManager benchmark();
 
+    /**
+     * Handles registered dimensions.
+     */
     @NotNull DimensionTypeManager dimension();
 
+    /**
+     * Handles registered biomes.
+     */
     @NotNull BiomeManager biome();
 
+    /**
+     * Handles registered advancements.
+     */
     @NotNull AdvancementManager advancement();
 
+    /**
+     * Handles registered boss bars.
+     */
     @NotNull BossBarManager bossBar();
 
+    /**
+     * Loads and handle extensions.
+     */
     @NotNull ExtensionManager extension();
 
+    /**
+     * Handles registry tags.
+     */
     @NotNull TagManager tag();
 
+    /**
+     * Handles all thrown exceptions from the server.
+     */
     @NotNull ExceptionManager exception();
 
+    /**
+     * Handles incoming packets.
+     */
     @NotNull PacketListenerManager packetListener();
 
+    /**
+     * Gets the object handling the client packets processing.
+     * <p>
+     * Can be used if you want to convert a buffer to a client packet object.
+     */
     @NotNull PacketProcessor packetProcessor();
 
+    /**
+     * Exposed socket server.
+     */
     @NotNull Server server();
 
+    /**
+     * Dispatcher for tickable game objects.
+     */
     @NotNull ThreadDispatcher dispatcher();
 
+    /**
+     * Handles the server ticks.
+     */
     @NotNull Ticker ticker();
 
     void start(@NotNull SocketAddress socketAddress);
@@ -89,4 +151,10 @@ public interface ServerProcess {
     @ApiStatus.NonExtendable
     interface Ticker extends Tickable {
     }
+
+    @Deprecated
+    @NotNull StorageManager storage();
+
+    @Deprecated
+    @NotNull DataManager data();
 }

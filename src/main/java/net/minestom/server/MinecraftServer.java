@@ -4,16 +4,12 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
-import net.minestom.server.data.DataType;
-import net.minestom.server.data.SerializableData;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -181,97 +177,44 @@ public final class MinecraftServer {
         return serverProcess;
     }
 
-    /**
-     * Gets the global event handler.
-     * <p>
-     * Used to register event callback at a global scale.
-     *
-     * @return the global event handler
-     */
     public static @NotNull GlobalEventHandler getGlobalEventHandler() {
         return serverProcess.eventHandler();
     }
 
-    /**
-     * Gets the manager handling all incoming packets
-     *
-     * @return the packet listener manager
-     */
     public static PacketListenerManager getPacketListenerManager() {
         return serverProcess.packetListener();
     }
 
-    /**
-     * Gets the manager handling all registered instances.
-     *
-     * @return the instance manager
-     */
     public static InstanceManager getInstanceManager() {
         return serverProcess.instance();
     }
 
-    /**
-     * Gets the manager handling {@link net.minestom.server.instance.block.BlockHandler block handlers}
-     * and {@link BlockPlacementRule placement rules}.
-     *
-     * @return the block manager
-     */
     public static BlockManager getBlockManager() {
         return serverProcess.block();
     }
 
-    /**
-     * Gets the manager handling commands.
-     *
-     * @return the command manager
-     */
     public static CommandManager getCommandManager() {
         return serverProcess.command();
     }
 
-    /**
-     * Gets the manager handling recipes show to the clients.
-     *
-     * @return the recipe manager
-     */
     public static RecipeManager getRecipeManager() {
         return serverProcess.recipe();
     }
 
-    /**
-     * Gets the manager handling storage.
-     *
-     * @return the storage manager
-     */
     @Deprecated
     public static StorageManager getStorageManager() {
         return serverProcess.storage();
     }
 
-    /**
-     * Gets the manager handling {@link DataType} used by {@link SerializableData}.
-     *
-     * @return the data manager
-     */
     @Deprecated
     public static DataManager getDataManager() {
         return serverProcess.data();
     }
 
-    /**
-     * Gets the manager handling teams.
-     *
-     * @return the team manager
-     */
     public static TeamManager getTeamManager() {
         return serverProcess.team();
     }
 
-    /**
-     * Gets the manager handling scheduled tasks.
-     *
-     * @return the scheduler manager
-     */
     public static SchedulerManager getSchedulerManager() {
         return serverProcess.scheduler();
     }
@@ -285,40 +228,18 @@ public final class MinecraftServer {
         return serverProcess.benchmark();
     }
 
-    /**
-     * Gets the exception manager for exception handling.
-     *
-     * @return the exception manager
-     */
     public static ExceptionManager getExceptionManager() {
         return serverProcess.exception();
     }
 
-    /**
-     * Gets the manager handling server connections.
-     *
-     * @return the connection manager
-     */
     public static ConnectionManager getConnectionManager() {
         return serverProcess.connection();
     }
 
-    /**
-     * Gets the boss bar manager.
-     *
-     * @return the boss bar manager
-     */
     public static BossBarManager getBossBarManager() {
         return serverProcess.bossBar();
     }
 
-    /**
-     * Gets the object handling the client packets processing.
-     * <p>
-     * Can be used if you want to convert a buffer to a client packet object.
-     *
-     * @return the packet processor
-     */
     public static PacketProcessor getPacketProcessor() {
         return serverProcess.packetProcessor();
     }
@@ -441,47 +362,22 @@ public final class MinecraftServer {
         return responseDataConsumer;
     }
 
-    /**
-     * Gets the manager handling dimensions.
-     *
-     * @return the dimension manager
-     */
     public static DimensionTypeManager getDimensionTypeManager() {
         return serverProcess.dimension();
     }
 
-    /**
-     * Gets the manager handling biomes.
-     *
-     * @return the biome manager
-     */
     public static BiomeManager getBiomeManager() {
         return serverProcess.biome();
     }
 
-    /**
-     * Gets the manager handling advancements.
-     *
-     * @return the advancement manager
-     */
     public static AdvancementManager getAdvancementManager() {
         return serverProcess.advancement();
     }
 
-    /**
-     * Get the manager handling {@link Extension}.
-     *
-     * @return the extension manager
-     */
     public static ExtensionManager getExtensionManager() {
         return serverProcess.extension();
     }
 
-    /**
-     * Gets the manager handling tags.
-     *
-     * @return the tag manager
-     */
     public static TagManager getTagManager() {
         return serverProcess.tag();
     }
