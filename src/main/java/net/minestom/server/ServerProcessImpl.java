@@ -43,7 +43,7 @@ import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 final class ServerProcessImpl implements ServerProcess {
-    public final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
 
     private final ExceptionManager exception;
     private final ExtensionManager extension;
@@ -283,7 +283,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
-            final long msTIme = (long) (nanoTime / 1e6);
+            final long msTime = System.currentTimeMillis();
 
             scheduler().processTick();
 
@@ -291,10 +291,10 @@ final class ServerProcessImpl implements ServerProcess {
             connection().updateWaitingPlayers();
 
             // Keep Alive Handling
-            connection().handleKeepAlive(msTIme);
+            connection().handleKeepAlive(msTime);
 
             // Server tick (chunks/entities)
-            serverTick(msTIme);
+            serverTick(msTime);
 
             // Flush all waiting packets
             PacketUtils.flush();
