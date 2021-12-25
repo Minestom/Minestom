@@ -257,9 +257,8 @@ final class ServerProcessImpl implements ServerProcess {
 
     @Override
     public void stop() {
-        if (!stopped.compareAndSet(false, true)) {
-            throw new IllegalStateException("Server already stopped");
-        }
+        if (!stopped.compareAndSet(false, true))
+            return;
         LOGGER.info("Stopping Minestom server.");
         extension.unloadAllExtensions();
         scheduler.shutdown();
@@ -272,6 +271,7 @@ final class ServerProcessImpl implements ServerProcess {
         benchmark.disable();
         MinestomTerminal.stop();
         MinestomThreadPool.shutdownAll();
+        dispatcher.shutdown();
         LOGGER.info("Minestom server stopped successfully.");
     }
 

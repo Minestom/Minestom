@@ -19,7 +19,6 @@ public class ServerProcessTest {
         assertDoesNotThrow(() -> process.get().start(new InetSocketAddress("localhost", 25565)));
         assertThrows(Exception.class, () -> process.get().start(new InetSocketAddress("localhost", 25566)));
         assertDoesNotThrow(() -> process.get().stop());
-        assertThrows(Exception.class, () -> process.get().stop());
     }
 
     @Test

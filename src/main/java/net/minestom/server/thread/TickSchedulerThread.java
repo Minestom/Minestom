@@ -27,6 +27,5 @@ public final class TickSchedulerThread extends MinestomThread {
             final long tickTime = System.nanoTime() - tickStart;
             LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
         }
-        serverProcess.dispatcher().shutdown();
     }
 }
