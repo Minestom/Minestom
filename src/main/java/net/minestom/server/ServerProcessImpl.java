@@ -30,7 +30,6 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 final class ServerProcessImpl implements ServerProcess {
@@ -71,8 +71,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final Ticker ticker;
 
     private boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
-    private boolean started;
-    private volatile boolean stopping;
+    private final AtomicBoolean started = new AtomicBoolean();
+    private final AtomicBoolean stopped = new AtomicBoolean();
 
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
@@ -218,15 +218,16 @@ final class ServerProcessImpl implements ServerProcess {
 
     @Override
     public void start(@NotNull SocketAddress socketAddress) {
-        Check.stateCondition(started, "The server is already started");
-        this.started = true;
+        if (!started.compareAndSet(false, true)) {
+            throw new IllegalStateException("Server already started");
+        }
         LOGGER.info("Starting Minestom server.");
-        //update.start();
         // Init server
         try {
             server.init(socketAddress);
         } catch (IOException e) {
-            e.printStackTrace();
+            exception.handleException(e);
+            throw new RuntimeException(e);
         }
         if (extension.shouldLoadOnStartup()) {
             final long loadStartTime = System.nanoTime();
@@ -250,15 +251,15 @@ final class ServerProcessImpl implements ServerProcess {
         if (terminalEnabled) {
             MinestomTerminal.start();
         }
-
         // Stop the server on SIGINT
         Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
     @Override
     public void stop() {
-        if (stopping) return;
-        stopping = true;
+        if (!stopped.compareAndSet(false, true)) {
+            throw new IllegalStateException("Server already stopped");
+        }
         LOGGER.info("Stopping Minestom server.");
         extension.unloadAllExtensions();
         scheduler.shutdown();
@@ -276,7 +277,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     @Override
     public boolean isAlive() {
-        return started && !stopping;
+        return started.get() && !stopped.get();
     }
 
     private final class TickerImpl implements Ticker {

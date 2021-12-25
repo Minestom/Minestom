@@ -22,10 +22,12 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
 
+@ApiStatus.NonExtendable
 public interface ServerProcess {
     static @NotNull ServerProcess newProcess() throws Exception {
         return new ServerProcessImpl();
@@ -83,6 +85,7 @@ public interface ServerProcess {
 
     boolean isAlive();
 
+    @ApiStatus.NonExtendable
     interface Ticker extends Tickable {
     }
 }
