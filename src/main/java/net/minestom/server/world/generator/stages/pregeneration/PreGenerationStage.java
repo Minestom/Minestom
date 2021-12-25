@@ -2,9 +2,17 @@ package net.minestom.server.world.generator.stages.pregeneration;
 
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.world.generator.GenerationContext;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+/**
+ * Pre-generation stages are responsible for building a context around the requested section, this allows
+ * the generation of large structures or just simple trees that span multiple sections.
+ *
+ * @param <T> the type of the data this stage provides
+ */
 public interface PreGenerationStage<T extends StageData> {
     int INTERNAL_STAGE_ID_OFFSET = 1000;
     /**
@@ -36,10 +44,22 @@ public interface PreGenerationStage<T extends StageData> {
      */
     int getVersion();
 
-    Function<BinaryReader, T> getDataReader();
+    /**
+     * Reader used to load back saved generation data
+     * @return the reader or {@code null} if this stage doesn't support saving data
+     */
+    @Nullable Function<BinaryReader, T> getDataReader();
 
-    Class<T> getDataClass();
+    /**
+     * This is used by {@link #getType()} to define the scope of this stage.
+     * @return the data class this stage provides
+     */
+    @NotNull Class<T> getDataClass();
 
+    /**
+     * Used to find the scope of the stage
+     * @return the {@link Type} of the stage
+     */
     default Type getType() {
         if (StageData.Instance.class.isAssignableFrom(getDataClass())) {
             return Type.INSTANCE;
