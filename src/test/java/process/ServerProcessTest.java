@@ -1,5 +1,6 @@
 package process;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ public class ServerProcessTest {
     @Test
     public void init() {
         AtomicReference<ServerProcess> process = new AtomicReference<>();
-        assertDoesNotThrow(() -> process.set(ServerProcess.newProcess()));
+        assertDoesNotThrow(() -> process.set(MinecraftServer.updateProcess()));
         assertDoesNotThrow(() -> process.get().start(new InetSocketAddress("localhost", 25565)));
         assertThrows(Exception.class, () -> process.get().start(new InetSocketAddress("localhost", 25566)));
         assertDoesNotThrow(() -> process.get().stop());
@@ -22,8 +23,8 @@ public class ServerProcessTest {
     }
 
     @Test
-    public void tick() throws Exception {
-        var process = ServerProcess.newProcess();
+    public void tick() {
+        var process = MinecraftServer.updateProcess();
         process.start(new InetSocketAddress("localhost", 25567));
         var ticker = process.ticker();
         assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));

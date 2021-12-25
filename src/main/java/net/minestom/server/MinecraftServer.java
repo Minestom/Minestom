@@ -29,6 +29,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -87,13 +88,21 @@ public final class MinecraftServer {
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
+        updateProcess();
+        return new MinecraftServer();
+    }
+
+    @ApiStatus.Internal
+    public static ServerProcess updateProcess() {
+        ServerProcess process;
         try {
+            process = new ServerProcessImpl();
             serverProcess = new ServerProcessImpl();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         initialized = true;
-        return new MinecraftServer();
+        return process;
     }
 
     /**
