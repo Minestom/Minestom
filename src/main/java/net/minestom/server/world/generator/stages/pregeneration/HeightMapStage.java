@@ -10,12 +10,7 @@ import java.util.function.Function;
 public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
     @Override
     public void process(GenerationContext context, int sectionX, int sectionY, int sectionZ) {
-        final Data data = new Data(0);
-        if (sectionX % 3 == 0 && sectionZ % 3 == 0) {
-            data.setHeight(60);
-        } else {
-            data.setHeight(14);
-        }
+        final Data data = new Data(30);
         context.setChunkData(HeightMapStage.class, data, sectionX, sectionZ);
     }
 
@@ -35,7 +30,7 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
     }
 
     @Override
-    public Class<Data> getDataClass() {
+    public @NotNull Class<Data> getDataClass() {
         return Data.class;
     }
 
@@ -44,7 +39,7 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
         return Data::new;
     }
 
-    public static class Data extends StageData.Chunk {
+    public static class Data implements StageData.Chunk {
         public Data(int height) {
             this.height = height;
         }
@@ -64,7 +59,7 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
         }
 
         @Override
-        public boolean generated() {
+        public boolean supportsSaving() {
             return true;
         }
 
