@@ -6,6 +6,8 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
@@ -38,9 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 final class ServerProcessImpl implements ServerProcess {
     public final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
@@ -304,15 +304,12 @@ final class ServerProcessImpl implements ServerProcess {
             // the time that the tick took in nanoseconds
             final long tickTime = System.nanoTime() - currentTime;
 
-            // Monitoring FIXME
-            var tickMonitors = new ArrayList<Consumer<TickMonitor>>();
-            if (!tickMonitors.isEmpty()) {
+            // Monitoring
+            {
                 final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
                 final double tickTimeMs = tickTime / 1e6D;
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
-                for (Consumer<TickMonitor> consumer : tickMonitors) {
-                    consumer.accept(tickMonitor);
-                }
+                GlobalHandles.SERVER_TICK_MONITOR_HANDLE.call(new ServerTickMonitorEvent(tickMonitor));
                 Acquirable.resetAcquiringTime();
             }
         }

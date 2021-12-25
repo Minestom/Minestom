@@ -21,6 +21,7 @@ import net.minestom.server.event.player.PlayerDeathEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -133,7 +134,7 @@ public class PlayerInit {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
 
-        //MinecraftServer.getUpdateManager().addTickMonitor(LAST_TICK::set);
+        eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.setPlain(event.getTickMonitor()));
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
@@ -145,7 +146,6 @@ public class PlayerInit {
             ramUsage /= 1e6; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
-            if(tickMonitor == null) return;
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
                     .append(Component.newline())
                     .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
