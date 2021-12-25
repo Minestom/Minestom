@@ -77,8 +77,6 @@ public final class MinecraftServer {
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
 
-    private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
-
     // Data
     private static boolean initialized;
     private static boolean started;
@@ -191,7 +189,7 @@ public final class MinecraftServer {
      * @return the global event handler
      */
     public static @NotNull GlobalEventHandler getGlobalEventHandler() {
-        return GLOBAL_EVENT_HANDLER;
+        return serverProcess.eventHandler();
     }
 
     /**
