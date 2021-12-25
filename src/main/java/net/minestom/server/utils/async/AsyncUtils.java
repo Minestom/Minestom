@@ -29,13 +29,16 @@ public final class AsyncUtils {
     }
 
     public static <T> CompletableFuture<List<T>> allOf(CompletableFuture<T>[] futures) {
-        final List<CompletableFuture<T>> f = List.of(futures);
+        return allOf(List.of(futures));
+    }
+
+    public static <T> CompletableFuture<List<T>> allOf(List<CompletableFuture<T>> futures) {
         final CompletableFuture<List<T>> future = new CompletableFuture<>();
-        CompletableFuture.allOf(futures).whenComplete((unused, throwable) -> {
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).whenComplete((unused, throwable) -> {
             if (throwable != null) {
                 future.completeExceptionally(throwable);
             } else {
-                future.complete(f.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+                future.complete(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
             }
         });
         return future;
