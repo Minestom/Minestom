@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LocalThreadCache {
+public class LocalThreadCacheTest {
 
     @Test
     public void testLocalThreadCache() throws InterruptedException {
@@ -18,18 +18,15 @@ public class LocalThreadCache {
             public void run() {
                 final int dummy = -1;
 
-                var value = localCache(1, () -> 7);
-                assertEquals(7, value);
-
-                value = localCache(0, () -> 5);
-                assertEquals(5, value);
+                assertEquals(7, localCache(1, () -> 7));
                 assertEquals(7, localCache(1, () -> dummy));
 
-                value = localCache(0, () -> dummy);
-                assertEquals(5, value);
+                assertEquals(5, localCache(0, () -> 5));
+                assertEquals(7, localCache(1, () -> dummy));
 
-                value = localCache(2, () -> 5);
-                assertEquals(5, value);
+                assertEquals(5, localCache(0, () -> dummy));
+
+                assertEquals(5, localCache(2, () -> 5));
                 assertEquals(7, localCache(1, () -> dummy));
                 assertEquals(5, localCache(0, () -> dummy));
 
