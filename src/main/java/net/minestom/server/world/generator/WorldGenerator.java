@@ -19,12 +19,14 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class WorldGenerator implements Generator, GenerationContext.Provider {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
     private final Cache<StageKey, CompletableFuture<Void>> preGenStages = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(30))
             .build();
+    //TODO Do we need to care about de-duplicating section requests?
     private final Cache<SectionKey, CompletableFuture<Void>> sectionGens = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(30))
             .build();
@@ -38,11 +40,12 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
 
     public WorldGenerator(List<PreGenerationStage<?>> preGenerationStages, List<GenerationStage> generationStages, GenerationContext.Factory generationContextFactory) {
         this.generationContextFactory = generationContextFactory;
-        this.preGenerationStages = Collections.unmodifiableList(preGenerationStages);
         this.generationStages = Collections.unmodifiableList(generationStages);
-        for (int i = 1; i < preGenerationStages.size(); i++) {
-            Check.argCondition(preGenerationStages.get(i-1).getRange() < preGenerationStages.get(i).getRange(),
-                    "Generator stages must be ordered by range!");
+        final Comparator<PreGenerationStage<?>> type = Comparator.comparing(PreGenerationStage::getType);
+        final Comparator<PreGenerationStage<?>> range = Comparator.comparing(PreGenerationStage::getRange);
+        this.preGenerationStages = preGenerationStages.stream().sorted(type.thenComparing(range)).toList();
+        if (!this.preGenerationStages.equals(preGenerationStages)) {
+            LOGGER.warn("Supplied pre-generation stages were not ordered, they have been automatically rearranged!");
         }
         Check.argCondition(preGenerationStages.stream()
                         .map(PreGenerationStage::getUniqueId)
@@ -53,8 +56,7 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
     @Override
     public List<CompletableFuture<SectionResult>> generateSections(Instance instance, List<Vec> sections) {
         final ArrayList<CompletableFuture<SectionResult>> futures = new ArrayList<>(sections.size());
-        for (int i = 0; i < sections.size(); i++) {
-            final Vec pos = sections.get(i);
+        for (final Vec pos : sections) {
             final SectionResult result = new SectionResult(new SectionData(new SectionBlockCache(), Palette.biomes()), pos);
             futures.add(generateSection(instance, result.sectionData().blockCache(), result.sectionData().biomePalette(), (int) pos.x(), (int) pos.y(), (int) pos.z())
                     .thenCompose(unused -> CompletableFuture.completedFuture(result)));
