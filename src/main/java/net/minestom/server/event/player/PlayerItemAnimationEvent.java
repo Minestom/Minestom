@@ -14,13 +14,13 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerItemAnimationEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
 
     private final Player player;
-    private final ItemAnimationType armAnimationType;
+    private final ItemAnimationType itemAnimationType;
 
     private boolean cancelled;
 
-    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType armAnimationType) {
+    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType itemAnimationType) {
         this.player = player;
-        this.armAnimationType = armAnimationType;
+        this.itemAnimationType = itemAnimationType;
     }
 
     /**
@@ -28,9 +28,8 @@ public class PlayerItemAnimationEvent implements PlayerEvent, EntityInstanceEven
      *
      * @return the animation
      */
-    @NotNull
-    public ItemAnimationType getArmAnimationType() {
-        return armAnimationType;
+    public @NotNull ItemAnimationType getItemAnimationType() {
+        return itemAnimationType;
     }
 
     @Override

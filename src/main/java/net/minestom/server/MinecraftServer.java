@@ -188,8 +188,7 @@ public final class MinecraftServer {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-
-        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), PluginMessagePacket.getBrandPacket());
+        PacketUtils.broadcastPacket(PluginMessagePacket.getBrandPacket());
     }
 
     /**
@@ -245,8 +244,7 @@ public final class MinecraftServer {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        // Send the packet to all online players
-        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), new ServerDifficultyPacket(difficulty, true));
+        PacketUtils.broadcastPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     /**

@@ -76,4 +76,17 @@ public class CoordinateTest {
         assertEquals(0, temp.y());
         assertEquals(0, temp.z());
     }
+
+    @Test
+    public void toSectionRelativeCoordinate() {
+        assertEquals(8, ChunkUtils.toSectionRelativeCoordinate(-40));
+        assertEquals(12, ChunkUtils.toSectionRelativeCoordinate(-20));
+        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(0));
+        assertEquals(5, ChunkUtils.toSectionRelativeCoordinate(5));
+        assertEquals(15, ChunkUtils.toSectionRelativeCoordinate(15));
+        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(16));
+        assertEquals(4, ChunkUtils.toSectionRelativeCoordinate(20));
+        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(32));
+        assertEquals(1, ChunkUtils.toSectionRelativeCoordinate(33));
+    }
 }

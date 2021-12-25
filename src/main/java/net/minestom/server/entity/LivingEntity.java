@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -35,7 +34,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
@@ -51,7 +53,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
+    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
 
     // Abilities
     protected boolean invulnerable;
@@ -423,7 +425,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attributes#MAX_HEALTH}.
+     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}.
      *
      * @return the entity max health
      */
@@ -434,7 +436,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
         setHealth(getAttributeValue(Attribute.MAX_HEALTH));
@@ -446,9 +448,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute instance to get
      * @return the attribute instance
      */
-    @NotNull
-    public AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        return attributeModifiers.computeIfAbsent(attribute.getKey(),
+    public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
+        return attributeModifiers.computeIfAbsent(attribute.key(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
@@ -458,19 +459,17 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attributeInstance the modified attribute instance
      */
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
-        if (attributeInstance.getAttribute().isShared()) {
-            boolean self = false;
-            if (this instanceof Player player) {
-                PlayerConnection playerConnection = player.playerConnection;
-                // connection null during Player initialization (due to #super call)
-                self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
-            }
-            EntityPropertiesPacket propertiesPacket = getPropertiesPacket(Collections.singleton(attributeInstance));
-            if (self) {
-                sendPacketToViewersAndSelf(propertiesPacket);
-            } else {
-                sendPacketToViewers(propertiesPacket);
-            }
+        boolean self = false;
+        if (this instanceof Player player) {
+            PlayerConnection playerConnection = player.playerConnection;
+            // connection null during Player initialization (due to #super call)
+            self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
+        }
+        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket(getEntityId(), List.of(attributeInstance));
+        if (self) {
+            sendPacketToViewersAndSelf(propertiesPacket);
+        } else {
+            sendPacketToViewers(propertiesPacket);
         }
     }
 
@@ -481,8 +480,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the attribute value
      */
     public float getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.getKey());
-        return (instance != null) ? instance.getValue() : attribute.getDefaultValue();
+        AttributeInstance instance = attributeModifiers.get(attribute.key());
+        return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
 
     /**
@@ -575,22 +574,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return an {@link EntityPropertiesPacket} linked to this entity
      */
-    @NotNull
-    protected EntityPropertiesPacket getPropertiesPacket() {
-        return getPropertiesPacket(attributeModifiers.values());
-    }
-
-    /**
-     * Gets an {@link EntityPropertiesPacket} for this entity with the specified attribute values.
-     *
-     * @param attributes the attributes to include in the packet
-     * @return an {@link EntityPropertiesPacket} linked to this entity
-     */
-    protected @NotNull EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
-        // Get all the attributes which should be sent to the client
-        final List<AttributeInstance> properties = attributes.stream()
-                .filter(i -> i.getAttribute().isShared()).toList();
-        return new EntityPropertiesPacket(getEntityId(), properties);
+    protected @NotNull EntityPropertiesPacket getPropertiesPacket() {
+        return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
     }
 
     @Override

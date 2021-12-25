@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -486,9 +487,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        Set<Entity> result = new HashSet<>();
-        this.entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES, result::add);
-        return result;
+        var chunkEntities = entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES);
+        return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
     }
 
     /**

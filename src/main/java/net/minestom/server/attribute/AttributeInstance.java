@@ -12,8 +12,7 @@ import java.util.function.Consumer;
 /**
  * Represents an instance of an attribute and its modifiers.
  */
-public class AttributeInstance {
-
+public final class AttributeInstance {
     private final Attribute attribute;
     private final Map<UUID, AttributeModifier> modifiers = new HashMap<>();
     private final Consumer<AttributeInstance> propertyChangeListener;
@@ -23,7 +22,7 @@ public class AttributeInstance {
     public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
         this.attribute = attribute;
         this.propertyChangeListener = listener;
-        this.baseValue = attribute.getDefaultValue();
+        this.baseValue = attribute.defaultValue();
         refreshCachedValue();
     }
 
@@ -32,8 +31,7 @@ public class AttributeInstance {
      *
      * @return the associated attribute
      */
-    @NotNull
-    public Attribute getAttribute() {
+    public @NotNull Attribute getAttribute() {
         return attribute;
     }
 
@@ -104,7 +102,7 @@ public class AttributeInstance {
     /**
      * Recalculate the value of this attribute instance using the modifiers.
      */
-    protected void refreshCachedValue() {
+    private void refreshCachedValue() {
         final Collection<AttributeModifier> modifiers = getModifiers();
         float base = getBaseValue();
 
@@ -121,7 +119,7 @@ public class AttributeInstance {
             result *= (1.0f + modifier.getAmount());
         }
 
-        this.cachedValue = Math.min(result, getAttribute().getMaxValue());
+        this.cachedValue = Math.min(result, getAttribute().maxValue());
 
         // Signal entity
         if (propertyChangeListener != null) {
