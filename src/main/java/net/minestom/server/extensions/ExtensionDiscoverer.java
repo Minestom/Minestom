@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -40,7 +41,7 @@ interface ExtensionDiscoverer {
     String AUTOSCAN_ENABLED_PROPERTY = "minestom.extension.autoscan";
     String AUTOSCAN_TARGETS_PROPERTY = "minestom.extension.autoscan.targets";
 
-    List<ExtensionDescriptor> discover(@NotNull Path extensionDirectory);
+    Stream<ExtensionDescriptor> discover(@NotNull Path extensionDirectory);
 
     ExtensionDiscoverer FILESYSTEM = (extensionDirectory) -> {
         List<ExtensionDescriptor> discovered = new ArrayList<>();
@@ -82,7 +83,7 @@ interface ExtensionDiscoverer {
             //todo
 //            MinecraftServer.getExceptionManager().handleException(e);
         }
-        return Collections.unmodifiableList(discovered);
+        return discovered.stream();
     };
 
     ExtensionDiscoverer INDEV = (extensionDirectory) -> {
@@ -100,7 +101,7 @@ interface ExtensionDiscoverer {
             Path resources = Paths.get(indevresources).toAbsolutePath();
             if (!Files.exists(classes) || !Files.exists(resources)) {
                 LOGGER.error("Failed to load <indev>: Classes or resources directory does not exist.");
-                return Collections.emptyList();
+                return Stream.empty();
             }
 
             Path manifest = findExtensionManifest(
@@ -108,11 +109,11 @@ interface ExtensionDiscoverer {
                     resources::resolve, Files::exists);
             if (manifest == null) {
                 LOGGER.error("Missing extension.json in extension <indev>.");
-                return Collections.emptyList();
+                return Stream.empty();
             }
 
             try (Reader reader = Files.newBufferedReader(manifest)) {
-                return List.of(ExtensionDescriptor.fromReader(
+                return Stream.of(ExtensionDescriptor.fromReader(
                         reader, extensionDirectory,
                         new URL("file://" + indevclasses),
                         new URL("file://" + indevresources)
@@ -125,7 +126,7 @@ interface ExtensionDiscoverer {
 //            MinecraftServer.getExceptionManager().handleException(e);
         }
 
-        return Collections.emptyList();
+        return Stream.empty();
     };
 
     ExtensionDiscoverer AUTOSCAN = (extensionDirectory) -> {
@@ -157,18 +158,13 @@ interface ExtensionDiscoverer {
 //                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
-            return Collections.unmodifiableList(discovered);
+            return discovered.stream();
         } else LOGGER.trace("Autoscan disabled");
-        return Collections.emptyList();
+        return Stream.empty();
     };
 
-    ExtensionDiscoverer DEFAULT = (extensionDirectory) -> {
-        List<ExtensionDescriptor> combined = new ArrayList<>();
-        combined.addAll(FILESYSTEM.discover(extensionDirectory));
-        combined.addAll(INDEV.discover(extensionDirectory));
-        combined.addAll(AUTOSCAN.discover(extensionDirectory));
-        return Collections.unmodifiableList(combined);
-    };
+    ExtensionDiscoverer DEFAULT = (extensionDirectory) -> Stream.of(FILESYSTEM, INDEV, AUTOSCAN)
+            .flatMap(discoverer -> discoverer.discover(extensionDirectory));
 
     @Nullable
     private static <T> T findExtensionManifest(String name, String filename, Function<String, T> getEntry, Predicate<T> validator) {
