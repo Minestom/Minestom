@@ -4,7 +4,10 @@ import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 @ApiStatus.Internal
 public final class AsyncUtils {
@@ -23,5 +26,18 @@ public final class AsyncUtils {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         });
+    }
+
+    public static <T> CompletableFuture<List<T>> allOf(CompletableFuture<T>[] futures) {
+        final List<CompletableFuture<T>> f = List.of(futures);
+        final CompletableFuture<List<T>> future = new CompletableFuture<>();
+        CompletableFuture.allOf(futures).whenComplete((unused, throwable) -> {
+            if (throwable != null) {
+                future.completeExceptionally(throwable);
+            } else {
+                future.complete(f.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+            }
+        });
+        return future;
     }
 }
