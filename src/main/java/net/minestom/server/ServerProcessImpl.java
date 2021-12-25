@@ -300,13 +300,10 @@ final class ServerProcessImpl implements ServerProcess {
             PacketUtils.flush();
             server().workers().forEach(Worker::flush);
 
-            // the time that the tick took in nanoseconds
-            final long tickTime = System.nanoTime() - nanoTime;
-
             // Monitoring
             {
                 final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
-                final double tickTimeMs = tickTime / 1e6D;
+                final double tickTimeMs = (System.nanoTime() - nanoTime) / 1e6D;
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                 GlobalHandles.SERVER_TICK_MONITOR_HANDLE.call(new ServerTickMonitorEvent(tickMonitor));
                 Acquirable.resetAcquiringTime();
@@ -319,7 +316,7 @@ final class ServerProcessImpl implements ServerProcess {
                 try {
                     instance.tick(tickStart);
                 } catch (Exception e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
+                    exception().handleException(e);
                 }
             }
             // Tick all chunks (and entities inside)
