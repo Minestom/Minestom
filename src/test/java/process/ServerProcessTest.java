@@ -12,7 +12,9 @@ public class ServerProcessTest {
     }
 
     @Test
-    public void start() throws Exception {
+    public void tick() throws Exception {
         var process = ServerProcess.newProcess();
+        var ticker = process.ticker();
+        Assertions.assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));
     }
 }
