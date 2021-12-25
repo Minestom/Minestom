@@ -4,15 +4,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minestom.server.extensions.DiscoveredExtension;
-import net.minestom.server.extensions.ExtensionClassLoader;
+import net.minestom.server.extensions.HierarchyClassLoader;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Reader;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public record ExtensionDescriptor(
         @NotNull JsonObject meta,
 
         @NotNull Path dataDirectory,
-        @NotNull ExtensionClassLoader classLoader
+        @NotNull HierarchyClassLoader classLoader
 ) {
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
 
@@ -120,7 +118,7 @@ public record ExtensionDescriptor(
                 name, version, authors, entrypoint,
                 repositories, dependencies, meta,
                 parentDirectory.resolve(name),
-                new ExtensionClassLoader("Ext_" + name, classpath)
+                new HierarchyClassLoader("Ext_" + name, classpath)
         );
     }
 }

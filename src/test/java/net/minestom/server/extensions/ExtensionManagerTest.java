@@ -123,7 +123,7 @@ public class ExtensionManagerTest {
                     // Single letter extension names are not valid, so we do A > AA
                     stub.name + stub.name, "1.0.0", List.of(), "entrypoint",
                     List.of(), dependencies, new JsonObject(), Paths.get("."),
-                    new ExtensionClassLoader("Ext_" + stub.name, new URL[0])
+                    new HierarchyClassLoader("Ext_" + stub.name, new URL[0])
             );
             extensionsByName.put(descriptor.name().toLowerCase(), descriptor);
         }

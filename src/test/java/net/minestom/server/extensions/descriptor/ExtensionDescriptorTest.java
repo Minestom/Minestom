@@ -2,7 +2,7 @@ package net.minestom.server.extensions.descriptor;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minestom.server.extensions.ExtensionClassLoader;
+import net.minestom.server.extensions.HierarchyClassLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.*;
 
 public class ExtensionDescriptorTest {
-    private final ExtensionClassLoader EMPTY_CLASS_LOADER = new ExtensionClassLoader("<test>", new URL[0]);
+    private final HierarchyClassLoader EMPTY_CLASS_LOADER = new HierarchyClassLoader("<test>", new URL[0]);
 
     //
     // Validation Tests

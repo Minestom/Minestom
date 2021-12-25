@@ -85,7 +85,7 @@ public final class DiscoveredExtension {
     /**
      * The class loader that powers it.
      */
-    private transient ExtensionClassLoader classLoader;
+    private transient HierarchyClassLoader classLoader;
 
     /**
      * @return The name of the extension. Unique for all extensions.
@@ -136,14 +136,14 @@ public final class DiscoveredExtension {
     }
 
     @NotNull
-    public ExtensionClassLoader classLoader() {
+    public HierarchyClassLoader classLoader() {
         return classLoader;
     }
 
     void createClassLoader() {
         Check.stateCondition(classLoader != null, "Extension classloader has already been created");
         final URL[] urls = this.files.toArray(new URL[0]);
-        classLoader = new ExtensionClassLoader(this.getName(), urls);
+        classLoader = new HierarchyClassLoader(this.getName(), urls);
     }
 
     /**
@@ -356,7 +356,7 @@ public final class DiscoveredExtension {
      */
     @Deprecated
     @NotNull
-    public ExtensionClassLoader getClassLoader() {
+    public HierarchyClassLoader getClassLoader() {
         return classLoader;
     }
 }

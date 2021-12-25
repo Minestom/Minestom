@@ -9,14 +9,14 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ExtensionClassLoader extends URLClassLoader {
-    private final List<ExtensionClassLoader> children = new ArrayList<>();
+public final class HierarchyClassLoader extends URLClassLoader {
+    private final List<HierarchyClassLoader> children = new ArrayList<>();
 
-    public ExtensionClassLoader(String name, URL[] urls) {
+    public HierarchyClassLoader(String name, URL[] urls) {
         super("Ext_" + name, urls, MinecraftServer.class.getClassLoader());
     }
 
-    public ExtensionClassLoader(String name, URL[] urls, ClassLoader parent) {
+    public HierarchyClassLoader(String name, URL[] urls, ClassLoader parent) {
         super("Ext_" + name, urls, parent);
     }
 
@@ -25,7 +25,7 @@ public final class ExtensionClassLoader extends URLClassLoader {
         super.addURL(url);
     }
 
-    public void addChild(@NotNull ExtensionClassLoader loader) {
+    public void addChild(@NotNull HierarchyClassLoader loader) {
         children.add(loader);
     }
 
@@ -34,7 +34,7 @@ public final class ExtensionClassLoader extends URLClassLoader {
         try {
             return super.loadClass(name, resolve);
         } catch (ClassNotFoundException e) {
-            for (ExtensionClassLoader child : children) {
+            for (HierarchyClassLoader child : children) {
                 try {
                     return child.loadClass(name, resolve);
                 } catch (ClassNotFoundException ignored) {}
@@ -47,7 +47,7 @@ public final class ExtensionClassLoader extends URLClassLoader {
         InputStream in = getResourceAsStream(name);
         if (in != null) return in;
 
-        for (ExtensionClassLoader child : children) {
+        for (HierarchyClassLoader child : children) {
             InputStream childInput = child.getResourceAsStreamWithChildren(name);
             if (childInput != null)
                 return childInput;
