@@ -17,6 +17,7 @@ import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageManager;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -71,7 +72,16 @@ public interface ServerProcess {
 
     @NotNull Server server();
 
+    @NotNull ThreadDispatcher dispatcher();
+
+    @NotNull Ticker ticker();
+
     void start(@NotNull SocketAddress socketAddress);
 
     void stop();
+
+    boolean isAlive();
+
+    interface Ticker extends Tickable {
+    }
 }

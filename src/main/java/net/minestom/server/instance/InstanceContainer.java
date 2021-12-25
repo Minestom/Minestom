@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -19,6 +20,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -223,7 +225,8 @@ public class InstanceContainer extends Instance {
         // Clear cache
         this.chunks.remove(index);
         chunk.unload();
-        UPDATE_MANAGER.signalChunkUnload(chunk);
+        var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+        dispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
     }
 
     @Override
@@ -523,6 +526,7 @@ public class InstanceContainer extends Instance {
     private void cacheChunk(@NotNull Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk);
         this.chunks.put(index, chunk);
-        UPDATE_MANAGER.signalChunkLoad(chunk);
+        var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+        dispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
     }
 }

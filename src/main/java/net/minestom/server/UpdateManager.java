@@ -60,50 +60,6 @@ public final class UpdateManager {
     }
 
     /**
-     * Signals the {@link ThreadDispatcher} that an instance has been created.
-     * <p>
-     * WARNING: should be automatically done by the {@link InstanceManager}.
-     *
-     * @param instance the instance
-     */
-    public void signalInstanceCreate(Instance instance) {
-        instance.getChunks().forEach(this::signalChunkLoad);
-    }
-
-    /**
-     * Signals the {@link ThreadDispatcher} that an instance has been deleted.
-     * <p>
-     * WARNING: should be automatically done by the {@link InstanceManager}.
-     *
-     * @param instance the instance
-     */
-    public void signalInstanceDelete(Instance instance) {
-        instance.getChunks().forEach(this::signalChunkUnload);
-    }
-
-    /**
-     * Signals the {@link ThreadDispatcher} that a chunk has been loaded.
-     * <p>
-     * WARNING: should be automatically done by the {@link Instance} implementation.
-     *
-     * @param chunk the loaded chunk
-     */
-    public void signalChunkLoad(@NotNull Chunk chunk) {
-        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
-    }
-
-    /**
-     * Signals the {@link ThreadDispatcher} that a chunk has been unloaded.
-     * <p>
-     * WARNING: should be automatically done by the {@link Instance} implementation.
-     *
-     * @param chunk the unloaded chunk
-     */
-    public void signalChunkUnload(@NotNull Chunk chunk) {
-        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
-    }
-
-    /**
      * Adds a callback executed at the start of the next server tick.
      * <p>
      * The long in the consumer represents the starting time (in ms) of the tick.

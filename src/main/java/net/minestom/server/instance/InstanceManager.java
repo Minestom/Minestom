@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -118,7 +119,8 @@ public final class InstanceManager {
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            MinecraftServer.getUpdateManager().signalInstanceDelete(instance);
+            var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+            instance.getChunks().forEach(chunk -> dispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk)));
         }
     }
 
@@ -155,6 +157,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
-        MinecraftServer.getUpdateManager().signalInstanceCreate(instance);
+        var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+        instance.getChunks().forEach(chunk -> dispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk)));
     }
 }

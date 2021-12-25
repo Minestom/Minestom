@@ -56,7 +56,6 @@ import java.util.stream.Collectors;
 public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
 
     private boolean registered;
 

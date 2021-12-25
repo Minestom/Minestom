@@ -145,6 +145,7 @@ public class PlayerInit {
             ramUsage /= 1e6; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
+            if(tickMonitor == null) return;
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
                     .append(Component.newline())
                     .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))

@@ -25,6 +25,7 @@ import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageManager;
+import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -34,6 +35,7 @@ import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,6 +177,10 @@ public final class MinecraftServer {
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
         PacketUtils.broadcastPacket(new ServerDifficultyPacket(difficulty, true));
+    }
+
+    public static @UnknownNullability ServerProcess getServerProcess() {
+        return serverProcess;
     }
 
     /**
@@ -523,6 +529,7 @@ public final class MinecraftServer {
      */
     public void start(@NotNull String address, int port) {
         serverProcess.start(new InetSocketAddress(address, port));
+        new TickSchedulerThread(serverProcess).start();
     }
 
     /**
