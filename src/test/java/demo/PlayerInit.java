@@ -38,6 +38,7 @@ import net.minestom.server.world.generator.WorldGenerator;
 import net.minestom.server.world.generator.stages.generation.BedrockStage;
 import net.minestom.server.world.generator.stages.generation.BiomeFillStage;
 import net.minestom.server.world.generator.stages.generation.TerrainStage;
+import net.minestom.server.world.generator.stages.pregeneration.GeneratorSettingsStage;
 import net.minestom.server.world.generator.stages.pregeneration.HeightMapStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInit {
@@ -171,30 +173,20 @@ public class PlayerInit {
                 InMemoryGenerationContext.factory()
         ));
 
-//        instanceContainer.setSectionSupplier(new WorldGenerator(
-//                List.of((context, blockCache, biomePalette, sectionX, sectionY, sectionZ) -> {
-//                    int absHeight = 35;
-//                    if (Math.ceil(absHeight / 16d) >= sectionY) {
-//                        int h = Math.floor(absHeight / 16d) > sectionY * 16 ? 16 : absHeight - sectionY * 16;
-//                            for (int x = 0; x < 16; x++) {
-//                                for (int y = 0; y < h; y++) {
-//                                    for (int z = 0; z < 16; z++) {
-//                                        blockCache.setBlock(x, y, z, Block.STONE);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                })
-//        ));
-
         int r = 9;
         final int total = MathUtils.square(r*2+1);
-        final CountDownLatch latch = new CountDownLatch(total);
+        final long start = System.nanoTime();
+        final AtomicInteger atomicInteger = new AtomicInteger();
         for (int x = -r; x <= r; x++) {
             for (int z = -r; z <= r; z++) {
-                instanceContainer.loadChunk(x, z).thenRun(() -> {
-                    latch.countDown();
-                    LOGGER.info("Generating spawn region {}%", (total - latch.getCount()) / (double) total * 100);
+                instanceContainer.loadChunk(x, z).thenAccept(c -> {
+                    final int done = atomicInteger.incrementAndGet();
+                    LOGGER.info("Generating spawn region {}%", done / (double) total * 100);
+                    if (done == total) {
+                        final long diff = System.nanoTime() - start;
+                        final double totalSec = diff/1E9d;
+                        LOGGER.info("Spawn region done in {} seconds, total chunks generated: {}, avg. generation speed: {}c/s", totalSec, total, total/totalSec);
+                    }
                 });
             }
         }
