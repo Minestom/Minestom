@@ -18,15 +18,15 @@ public class LocalThreadCache {
             public void run() {
                 final int dummy = -1;
 
-                var value = localCache(0, () -> 5);
+                var value = localCache(1, () -> 7);
+                assertEquals(7, value);
+
+                value = localCache(0, () -> 5);
                 assertEquals(5, value);
+                assertEquals(7, localCache(1, () -> dummy));
 
                 value = localCache(0, () -> dummy);
                 assertEquals(5, value);
-
-                value = localCache(1, () -> 7);
-                assertEquals(7, value);
-                assertEquals(5, localCache(0, () -> dummy));
 
                 value = localCache(2, () -> 5);
                 assertEquals(5, value);
