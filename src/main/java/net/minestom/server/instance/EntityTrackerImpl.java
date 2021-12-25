@@ -153,7 +153,8 @@ final class EntityTrackerImpl implements EntityTracker {
         ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
             var chunkEntities = chunkEntities(chunkX, chunkZ, target);
             chunkEntities.forEach(entity -> {
-                if (point.distanceSquared(entity.getPosition()) < squaredRange) {
+                final Point position = entityPositions.get(entity.getEntityId());
+                if (point.distanceSquared(position) <= squaredRange) {
                     query.consume(entity);
                 }
             });
