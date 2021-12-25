@@ -2,12 +2,10 @@ package net.minestom.server.world.generator;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.utils.validate.Check;
@@ -24,7 +22,6 @@ import java.util.stream.Collectors;
 
 public class WorldGenerator implements Generator, GenerationContext.Provider {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
-    private final static ExecutorService WORLD_GEN_POOL = /*ForkJoinPool.commonPool();*/ new MinestomThreadPool(MinecraftServer.THREAD_COUNT_WORLD_GEN, MinecraftServer.THREAD_NAME_WORLD_GEN);
     private final Cache<StageKey, CompletableFuture<Void>> preGenStages = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(30))
             .build();
@@ -43,13 +40,10 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         this.generationContextFactory = generationContextFactory;
         this.preGenerationStages = Collections.unmodifiableList(preGenerationStages);
         this.generationStages = Collections.unmodifiableList(generationStages);
-        /*
-        TODO Do we need to enforce this?
-        for (int i = 1; i < generationStages.size(); i++) {
-            Check.argCondition(generationStages.get(i-1).getLookAroundRange() < generationStages.get(i).getLookAroundRange(),
-                    "Generator stages must be ordered by look around range!");
+        for (int i = 1; i < preGenerationStages.size(); i++) {
+            Check.argCondition(preGenerationStages.get(i-1).getRange() < preGenerationStages.get(i).getRange(),
+                    "Generator stages must be ordered by range!");
         }
-        */
         Check.argCondition(preGenerationStages.stream()
                         .map(PreGenerationStage::getUniqueId)
                         .collect(Collectors.toSet()).size() != preGenerationStages.size(),
@@ -57,7 +51,18 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
     }
 
     @Override
-    public CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
+    public List<CompletableFuture<SectionResult>> generateSections(Instance instance, List<Vec> sections) {
+        final ArrayList<CompletableFuture<SectionResult>> futures = new ArrayList<>(sections.size());
+        for (int i = 0; i < sections.size(); i++) {
+            final Vec pos = sections.get(i);
+            final SectionResult result = new SectionResult(new SectionData(new SectionBlockCache(), Palette.biomes()), pos);
+            futures.add(generateSection(instance, result.sectionData().blockCache(), result.sectionData().biomePalette(), (int) pos.x(), (int) pos.y(), (int) pos.z())
+                    .thenCompose(unused -> CompletableFuture.completedFuture(result)));
+        }
+        return futures;
+    }
+
+    private CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
         return sectionGens.get(new SectionKey(instance, new Vec(sectionX, sectionY, sectionZ)), k -> {
             final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
 

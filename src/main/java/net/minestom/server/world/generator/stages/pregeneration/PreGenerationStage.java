@@ -8,12 +8,12 @@ import java.util.function.Function;
 public interface PreGenerationStage<T extends StageData> {
     int INTERNAL_STAGE_ID_OFFSET = 1000;
     /**
-     * Called for sections in the {@link #getRange() look around} range around the generated section<br>
-     * NOTE: This will be called for each section in a cubical radius instead of a spherical one!
+     * Called for sections in the {@link #getRange() look around} range around the generated sectionData<br>
+     * NOTE: This will be called for each sectionData in a cubical radius instead of a spherical one!
      * @param context the generator, used to get results of previous stages and save results of this stage
-     * @param sectionX section's X coordinate
-     * @param sectionY section's Y coordinate
-     * @param sectionZ section's Z coordinate
+     * @param sectionX sectionData's X coordinate
+     * @param sectionY sectionData's Y coordinate
+     * @param sectionZ sectionData's Z coordinate
      */
     void process(GenerationContext context, int sectionX, int sectionY, int sectionZ);
 

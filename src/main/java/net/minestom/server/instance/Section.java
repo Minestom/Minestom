@@ -32,6 +32,10 @@ public final class Section implements Writeable {
         return biomePalette;
     }
 
+    public void setBiomePalette(Palette biomePalette) {
+        this.biomePalette = biomePalette;
+    }
+
     public byte[] getSkyLight() {
         return skyLight;
     }

@@ -14,6 +14,7 @@ import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
@@ -191,11 +192,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     /**
-     * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}.
+     * Gets if this chunk will or had been loaded with a {@link net.minestom.server.world.generator.Generator}.
      * <p>
      * If false, the chunk will be entirely empty when loaded.
      *
-     * @return true if this chunk is affected by a {@link ChunkGenerator}
+     * @return true if this chunk is affected by a {@link net.minestom.server.world.generator.Generator}
      */
     public boolean shouldGenerate() {
         return shouldGenerate;
@@ -205,7 +206,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Gets if this chunk is read-only.
      * <p>
      * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link ChunkGenerator}.
+     * It does not affect {@link IChunkLoader} and {@link net.minestom.server.world.generator.Generator}.
      *
      * @return true if the chunk is read-only
      */
@@ -217,7 +218,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Changes the read state of the chunk.
      * <p>
      * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link ChunkGenerator}.
+     * It does not affect {@link IChunkLoader} and {@link net.minestom.server.world.generator.Generator}.
      *
      * @param readOnly true to make the chunk read-only, false otherwise
      */
@@ -291,4 +292,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     protected void unload() {
         this.loaded = false;
     }
+
+    public abstract void setSection(Generator.SectionData section, int y);
 }

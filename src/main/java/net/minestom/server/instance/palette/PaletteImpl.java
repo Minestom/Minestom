@@ -83,7 +83,7 @@ final class PaletteImpl implements Palette, Cloneable {
                 // Section is empty and method is trying to place an air block, stop unnecessary computation
                 return;
             }
-            // Initialize the section
+            // Initialize the sectionData
             this.values = new long[(size + valuesPerLong - 1) / valuesPerLong];
         }
         x %= dimension;

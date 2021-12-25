@@ -18,6 +18,7 @@ import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -173,6 +174,16 @@ public class DynamicChunk extends Chunk {
     public void reset() {
         for (Section section : sections) section.clear();
         this.entries.clear();
+    }
+
+    @Override
+    public void setSection(Generator.SectionData sectionData, int y) {
+        this.lastChange = System.currentTimeMillis();
+        this.chunkCache.invalidate();
+        this.lightCache.invalidate();
+        final Section section = getSection(y);
+        section.setBiomePalette(sectionData.biomePalette());
+        sectionData.blockCache().apply(this, y);
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {

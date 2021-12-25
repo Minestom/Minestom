@@ -203,7 +203,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param chunk The chunk to apply the change
      * @param index the block position computed using {@link ChunkUtils#getBlockIndex(int, int, int)}
      * @param block the block to place
-     * @return The chunk section which the block was placed
+     * @return The chunk sectionData which the block was placed
      */
     private int apply(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
         final int x = ChunkUtils.blockIndexToChunkPositionX(index);

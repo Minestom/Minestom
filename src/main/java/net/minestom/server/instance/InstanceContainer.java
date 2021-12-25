@@ -20,7 +20,6 @@ import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -181,7 +180,7 @@ public class InstanceContainer extends Instance {
         final int y = blockPosition.blockY();
         final int z = blockPosition.blockZ();
         if (block.isAir()) {
-            // The player probably have a wrong version of this chunk section, send it
+            // The player probably have a wrong version of this chunk sectionData, send it
             chunk.sendChunk(player);
             return false;
         }
@@ -302,22 +301,20 @@ public class InstanceContainer extends Instance {
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         LOGGER.trace("Creating {}", chunk);
         if (getGenerator() != null && chunk.shouldGenerate()) {
-            CompletableFuture<?>[] futures = new CompletableFuture[getSectionMaxY()-getSectionMinY()];
+            final List<Vec> sectionsToGenerate = new ArrayList<>();
             for (int y = getSectionMinY(); y < getSectionMaxY(); y++) {
-                final Section section = chunk.getSection(y);
-                final SectionBlockCache sectionBlockCache = new SectionBlockCache();
-                int finalY = y;
-                futures[y-getSectionMinY()] = getGenerator().generateSection(this, sectionBlockCache, section.biomePalette(), chunkX, y, chunkZ)
-                        .thenAccept(ignored -> {
-                            sectionBlockCache.apply(chunk, finalY);
-                            LOGGER.trace("Section {} has been generated for {}", finalY, chunk);
-                        });
+                sectionsToGenerate.add(new Vec(chunkX, y, chunkZ));
             }
-            return CompletableFuture.allOf(futures).whenComplete((r, t) -> {
-                chunk.sendChunk();
-                refreshLastBlockChangeTime();
-                LOGGER.trace("Finished generating {}", chunk);
-            }).thenCompose(v -> CompletableFuture.completedFuture(chunk));
+            return AsyncUtils.allOf(getGenerator().generateSections(this, sectionsToGenerate))
+                    .thenAccept(result -> {
+                        for (Generator.SectionResult sectionResult : result) {
+                            chunk.setSection(sectionResult.sectionData(), (int) sectionResult.location().y());
+                        }
+                        chunk.sendChunk();
+                        refreshLastBlockChangeTime();
+                        LOGGER.trace("Finished generating {}", chunk);
+                    })
+                    .thenCompose(v -> CompletableFuture.completedFuture(chunk));
         } else {
             // No generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);

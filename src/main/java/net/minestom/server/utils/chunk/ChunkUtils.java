@@ -235,10 +235,10 @@ public final class ChunkUtils {
     }
 
     /**
-     * Converts a global coordinate value to a section coordinate
+     * Converts a global coordinate value to a sectionData coordinate
      *
      * @param xyz global coordinate
-     * @return section coordinate
+     * @return sectionData coordinate
      */
     public static int toSectionRelativeCoordinate(int xyz) {
         xyz %= 16;
