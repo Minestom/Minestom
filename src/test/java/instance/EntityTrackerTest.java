@@ -7,6 +7,9 @@ import net.minestom.server.instance.EntityTracker;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EntityTrackerTest {
@@ -119,6 +122,53 @@ public class EntityTrackerTest {
                 fail("no entity to remove");
             }
         });
+    }
+
+    @Test
+    public void nearby() {
+        var ent1 = new Entity(EntityType.ZOMBIE);
+        var ent2 = new Entity(EntityType.ZOMBIE);
+        var ent3 = new Entity(EntityType.ZOMBIE);
+        var updater = new EntityTracker.Update<>() {
+            @Override
+            public void add(@NotNull Entity entity) {
+                // Empty
+            }
+
+            @Override
+            public void remove(@NotNull Entity entity) {
+                // Empty
+            }
+        };
+
+        EntityTracker tracker = EntityTracker.newTracker();
+        tracker.register(ent2, new Vec(5, 0, 0), EntityTracker.Target.ENTITIES, updater);
+        tracker.register(ent3, new Vec(50, 0, 0), EntityTracker.Target.ENTITIES, updater);
+
+        tracker.nearbyEntities(Vec.ZERO, 4, EntityTracker.Target.ENTITIES, entity -> fail("No entity should be nearby"));
+
+        tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
+
+        Set<Entity> entities = new HashSet<>();
+
+        entities.add(ent1);
+        tracker.nearbyEntities(Vec.ZERO, 4, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+
+        entities.add(ent1);
+        tracker.nearbyEntities(Vec.ZERO, 4.99, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+
+        entities.add(ent1);
+        entities.add(ent2);
+        tracker.nearbyEntities(Vec.ZERO, 5, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+
+        entities.add(ent1);
+        entities.add(ent2);
+        entities.add(ent3);
+        tracker.nearbyEntities(Vec.ZERO, 50, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
     }
 
     @Test
