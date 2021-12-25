@@ -3,6 +3,7 @@ package net.minestom.server.network;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
@@ -54,6 +55,9 @@ public final class ConnectionManager {
     private PlayerProvider playerProvider;
 
     private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
+
+    public ConnectionManager(ServerProcess process) {
+    }
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.

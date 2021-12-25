@@ -10,7 +10,6 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
-import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -25,10 +24,7 @@ import net.minestom.server.network.socket.Server;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
-import net.minestom.server.terminal.MinestomTerminal;
-import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -75,35 +71,11 @@ public final class MinecraftServer {
     // Network monitoring
     private static int rateLimit = 300;
     private static int maxPacketSize = 30_000;
-    // Network
-    private static PacketListenerManager packetListenerManager;
-    private static PacketProcessor packetProcessor;
-    private static Server server;
-
-    private static ExceptionManager exceptionManager;
 
     // In-Game Manager
-    private static ConnectionManager connectionManager;
-    private static InstanceManager instanceManager;
-    private static BlockManager blockManager;
-    private static CommandManager commandManager;
-    private static RecipeManager recipeManager;
-    private static StorageManager storageManager;
-    private static DataManager dataManager;
-    private static TeamManager teamManager;
-    private static SchedulerManager schedulerManager;
-    private static BenchmarkManager benchmarkManager;
-    private static DimensionTypeManager dimensionTypeManager;
-    private static BiomeManager biomeManager;
-    private static AdvancementManager advancementManager;
-    private static BossBarManager bossBarManager;
-
-    private static ExtensionManager extensionManager;
+    private static volatile ServerProcess serverProcess;
 
     private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
-
-    private static UpdateManager updateManager;
-    private static MinecraftServer minecraftServer;
 
     // Data
     private static boolean initialized;
@@ -117,57 +89,15 @@ public final class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
-    private static TagManager tagManager;
 
     public static MinecraftServer init() {
-        if (minecraftServer != null) // don't init twice
-            return minecraftServer;
-
-        // Initialize the ExceptionManager at first
-        exceptionManager = new ExceptionManager();
-
-        extensionManager = new ExtensionManager();
-
-        // warmup/force-init registries
-        // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
-        // That can happen with PotionType for instance, if no code tries to access a PotionType field
-        // TODO: automate (probably with code generation)
-        Fluid.values();
-
-        connectionManager = new ConnectionManager();
-        // Networking
-        packetProcessor = new PacketProcessor();
-        packetListenerManager = new PacketListenerManager();
-
-        instanceManager = new InstanceManager();
-        blockManager = new BlockManager();
-        commandManager = new CommandManager();
-        recipeManager = new RecipeManager();
-        storageManager = new StorageManager();
-        dataManager = new DataManager();
-        teamManager = new TeamManager();
-        schedulerManager = new SchedulerManager();
-        benchmarkManager = new BenchmarkManager();
-        dimensionTypeManager = new DimensionTypeManager();
-        biomeManager = new BiomeManager();
-        advancementManager = new AdvancementManager();
-        bossBarManager = new BossBarManager();
-
-        updateManager = new UpdateManager();
-
-        tagManager = new TagManager();
-
         try {
-            server = new Server(packetProcessor);
+            serverProcess = new ServerProcessImpl();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
         initialized = true;
-
-        minecraftServer = new MinecraftServer();
-
-        return minecraftServer;
+        return new MinecraftServer();
     }
 
     /**
@@ -264,8 +194,7 @@ public final class MinecraftServer {
      * @return the packet listener manager
      */
     public static PacketListenerManager getPacketListenerManager() {
-        checkInitStatus(packetListenerManager);
-        return packetListenerManager;
+        return serverProcess.packetListener();
     }
 
     /**
@@ -274,8 +203,7 @@ public final class MinecraftServer {
      * @return the instance manager
      */
     public static InstanceManager getInstanceManager() {
-        checkInitStatus(instanceManager);
-        return instanceManager;
+        return serverProcess.instance();
     }
 
     /**
@@ -285,8 +213,7 @@ public final class MinecraftServer {
      * @return the block manager
      */
     public static BlockManager getBlockManager() {
-        checkInitStatus(blockManager);
-        return blockManager;
+        return serverProcess.block();
     }
 
     /**
@@ -295,8 +222,7 @@ public final class MinecraftServer {
      * @return the command manager
      */
     public static CommandManager getCommandManager() {
-        checkInitStatus(commandManager);
-        return commandManager;
+        return serverProcess.command();
     }
 
     /**
@@ -305,8 +231,7 @@ public final class MinecraftServer {
      * @return the recipe manager
      */
     public static RecipeManager getRecipeManager() {
-        checkInitStatus(recipeManager);
-        return recipeManager;
+        return serverProcess.recipe();
     }
 
     /**
@@ -316,8 +241,7 @@ public final class MinecraftServer {
      */
     @Deprecated
     public static StorageManager getStorageManager() {
-        checkInitStatus(storageManager);
-        return storageManager;
+        return serverProcess.storage();
     }
 
     /**
@@ -327,8 +251,7 @@ public final class MinecraftServer {
      */
     @Deprecated
     public static DataManager getDataManager() {
-        checkInitStatus(dataManager);
-        return dataManager;
+        return serverProcess.data();
     }
 
     /**
@@ -337,8 +260,7 @@ public final class MinecraftServer {
      * @return the team manager
      */
     public static TeamManager getTeamManager() {
-        checkInitStatus(teamManager);
-        return teamManager;
+        return serverProcess.team();
     }
 
     /**
@@ -347,8 +269,7 @@ public final class MinecraftServer {
      * @return the scheduler manager
      */
     public static SchedulerManager getSchedulerManager() {
-        checkInitStatus(schedulerManager);
-        return schedulerManager;
+        return serverProcess.scheduler();
     }
 
     /**
@@ -357,8 +278,7 @@ public final class MinecraftServer {
      * @return the benchmark manager
      */
     public static BenchmarkManager getBenchmarkManager() {
-        checkInitStatus(benchmarkManager);
-        return benchmarkManager;
+        return serverProcess.benchmark();
     }
 
     /**
@@ -367,8 +287,7 @@ public final class MinecraftServer {
      * @return the exception manager
      */
     public static ExceptionManager getExceptionManager() {
-        checkInitStatus(exceptionManager);
-        return exceptionManager;
+        return serverProcess.exception();
     }
 
     /**
@@ -377,8 +296,7 @@ public final class MinecraftServer {
      * @return the connection manager
      */
     public static ConnectionManager getConnectionManager() {
-        checkInitStatus(connectionManager);
-        return connectionManager;
+        return serverProcess.connection();
     }
 
     /**
@@ -387,8 +305,7 @@ public final class MinecraftServer {
      * @return the boss bar manager
      */
     public static BossBarManager getBossBarManager() {
-        checkInitStatus(bossBarManager);
-        return bossBarManager;
+        return serverProcess.bossBar();
     }
 
     /**
@@ -399,8 +316,7 @@ public final class MinecraftServer {
      * @return the packet processor
      */
     public static PacketProcessor getPacketProcessor() {
-        checkInitStatus(packetProcessor);
-        return packetProcessor;
+        return serverProcess.packetProcessor();
     }
 
     /**
@@ -518,7 +434,6 @@ public final class MinecraftServer {
      */
     @Deprecated
     public static ResponseDataConsumer getResponseDataConsumer() {
-        checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
     }
 
@@ -528,8 +443,7 @@ public final class MinecraftServer {
      * @return the dimension manager
      */
     public static DimensionTypeManager getDimensionTypeManager() {
-        checkInitStatus(dimensionTypeManager);
-        return dimensionTypeManager;
+        return serverProcess.dimension();
     }
 
     /**
@@ -538,8 +452,7 @@ public final class MinecraftServer {
      * @return the biome manager
      */
     public static BiomeManager getBiomeManager() {
-        checkInitStatus(biomeManager);
-        return biomeManager;
+        return serverProcess.biome();
     }
 
     /**
@@ -548,8 +461,7 @@ public final class MinecraftServer {
      * @return the advancement manager
      */
     public static AdvancementManager getAdvancementManager() {
-        checkInitStatus(advancementManager);
-        return advancementManager;
+        return serverProcess.advancement();
     }
 
     /**
@@ -558,8 +470,7 @@ public final class MinecraftServer {
      * @return the extension manager
      */
     public static ExtensionManager getExtensionManager() {
-        checkInitStatus(extensionManager);
-        return extensionManager;
+        return serverProcess.extension();
     }
 
     /**
@@ -568,8 +479,7 @@ public final class MinecraftServer {
      * @return the tag manager
      */
     public static TagManager getTagManager() {
-        checkInitStatus(tagManager);
-        return tagManager;
+        return serverProcess.tag();
     }
 
     /**
@@ -578,13 +488,11 @@ public final class MinecraftServer {
      * @return the update manager
      */
     public static UpdateManager getUpdateManager() {
-        checkInitStatus(updateManager);
-        return updateManager;
+        return serverProcess.update();
     }
 
     public static Server getServer() {
-        checkInitStatus(server);
-        return server;
+        return serverProcess.server();
     }
 
     /**
@@ -614,76 +522,14 @@ public final class MinecraftServer {
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
     public void start(@NotNull String address, int port) {
-        Check.stateCondition(!initialized, "#start can only be called after #init");
-        Check.stateCondition(started, "The server is already started");
-
-        MinecraftServer.started = true;
-
-        LOGGER.info("Starting Minestom server.");
-
-        updateManager.start();
-
-        // Init server
-        try {
-            server.init(new InetSocketAddress(address, port));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (extensionManager.shouldLoadOnStartup()) {
-            final long loadStartTime = System.nanoTime();
-            // Load extensions
-            extensionManager.loadExtensions();
-            // Init extensions
-            extensionManager.getExtensions().forEach(Extension::preInitialize);
-            extensionManager.getExtensions().forEach(Extension::initialize);
-            extensionManager.getExtensions().forEach(Extension::postInitialize);
-
-            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
-            LOGGER.info("Extensions loaded in {}ms", loadTime);
-        } else {
-            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
-        }
-
-        // Start server
-        server.start();
-
-        LOGGER.info("Minestom server started successfully.");
-
-        if (terminalEnabled) {
-            MinestomTerminal.start();
-        }
-
-        // Stop the server on SIGINT
-        Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
+        serverProcess.start(new InetSocketAddress(address, port));
     }
 
     /**
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
     public static void stopCleanly() {
-        if (stopping) return;
-        stopping = true;
-        LOGGER.info("Stopping Minestom server.");
-        extensionManager.unloadAllExtensions();
-        updateManager.stop();
-        schedulerManager.shutdown();
-        connectionManager.shutdown();
-        server.stop();
-        storageManager.getLoadedLocations().forEach(StorageLocation::close);
-        LOGGER.info("Unloading all extensions.");
-        extensionManager.shutdown();
-        LOGGER.info("Shutting down all thread pools.");
-        benchmarkManager.disable();
-        MinestomTerminal.stop();
-        MinestomThreadPool.shutdownAll();
-        LOGGER.info("Minestom server stopped successfully.");
-    }
-
-    private static void checkInitStatus(@Nullable Object object) {
-        /*Check.stateCondition(Objects.isNull(object),
-                "You cannot access the manager before MinecraftServer#init, " +
-                        "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
+        serverProcess.stop();
     }
 
     private static int getThreadCount(@NotNull String property, int count) {
