@@ -44,7 +44,7 @@ import java.util.function.Supplier;
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
 public class InstanceContainer extends Instance {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
