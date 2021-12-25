@@ -97,7 +97,7 @@ public final class MinecraftServer {
         ServerProcess process;
         try {
             process = new ServerProcessImpl();
-            serverProcess = new ServerProcessImpl();
+            serverProcess = process;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
