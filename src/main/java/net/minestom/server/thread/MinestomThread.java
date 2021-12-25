@@ -33,7 +33,7 @@ public class MinestomThread extends Thread {
         final int requiredLength = index + 1;
         if (array.length < requiredLength) {
             Object[] temp = new Object[requiredLength];
-            System.arraycopy(temp, 0, temp, 0, array.length);
+            System.arraycopy(array, 0, temp, 0, array.length);
             array = temp;
             this.locals = array;
         }
