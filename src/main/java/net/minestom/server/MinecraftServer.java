@@ -68,7 +68,7 @@ public final class MinecraftServer {
             Runtime.getRuntime().availableProcessors() / 2);
 
     public static final String THREAD_NAME_WORLD_GEN = "Ms-WorldGen";
-    public static final int THREAD_COUNT_WORLD_GEN = getThreadCount("minestom.save-thread-count", 2);
+    public static final int THREAD_COUNT_WORLD_GEN = getThreadCount("minestom.world-gen-thread-count", 2);
 
     // Config
     // Can be modified at performance cost when increased

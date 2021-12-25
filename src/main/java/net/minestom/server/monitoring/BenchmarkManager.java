@@ -35,6 +35,7 @@ public final class BenchmarkManager {
     private static final List<String> THREADS = new ArrayList<>();
 
     static {
+        THREADS.add(THREAD_NAME_WORLD_GEN);
         THREADS.add(THREAD_NAME_BLOCK_BATCH);
         THREADS.add(THREAD_NAME_TICK_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK);
