@@ -14,13 +14,15 @@ public class ServerProcessTest {
         AtomicReference<ServerProcess> process = new AtomicReference<>();
         Assertions.assertDoesNotThrow(() -> process.set(ServerProcess.newProcess()));
         Assertions.assertDoesNotThrow(() -> process.get().start(new InetSocketAddress("localhost", 25565)));
+        Assertions.assertDoesNotThrow(() -> process.get().stop());
     }
 
     @Test
     public void tick() throws Exception {
         var process = ServerProcess.newProcess();
-        process.start(new InetSocketAddress("localhost", 25565));
+        process.start(new InetSocketAddress("localhost", 25566));
         var ticker = process.ticker();
         Assertions.assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));
+        Assertions.assertDoesNotThrow(process::stop);
     }
 }
