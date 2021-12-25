@@ -173,7 +173,7 @@ public final class MinecraftServer {
         PacketUtils.broadcastPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
-    public static @UnknownNullability ServerProcess getServerProcess() {
+    public static @UnknownNullability ServerProcess process() {
         return serverProcess;
     }
 

@@ -225,7 +225,7 @@ public class InstanceContainer extends Instance {
         // Clear cache
         this.chunks.remove(index);
         chunk.unload();
-        var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+        var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
     }
 
@@ -526,7 +526,7 @@ public class InstanceContainer extends Instance {
     private void cacheChunk(@NotNull Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk);
         this.chunks.put(index, chunk);
-        var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+        var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
     }
 }

@@ -119,7 +119,7 @@ public final class InstanceManager {
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+            var dispatcher = MinecraftServer.process().dispatcher();
             instance.getChunks().forEach(chunk -> dispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk)));
         }
     }
@@ -157,7 +157,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
-        var dispatcher = MinecraftServer.getServerProcess().dispatcher();
+        var dispatcher = MinecraftServer.process().dispatcher();
         instance.getChunks().forEach(chunk -> dispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk)));
     }
 }
