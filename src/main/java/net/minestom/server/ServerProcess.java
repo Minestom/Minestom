@@ -29,6 +29,7 @@ import java.net.SocketAddress;
 
 @ApiStatus.NonExtendable
 public interface ServerProcess {
+    @ApiStatus.Internal
     static @NotNull ServerProcess newProcess() throws Exception {
         return new ServerProcessImpl();
     }
