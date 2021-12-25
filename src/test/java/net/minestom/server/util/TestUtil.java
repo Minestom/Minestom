@@ -13,8 +13,8 @@ public final class TestUtil {
     static {
         IGNORING_EXTENSION_MANAGER = Mockito.mock(ExceptionManager.class);
         IGNORING_EXTENSION_MANAGER.setExceptionHandler(ignored -> {});
-        doThrow(new UnsupportedOperationException("Cannot replace exception handler in tests."))
-                .when(IGNORING_EXTENSION_MANAGER).setExceptionHandler(any());
+//        doThrow(new UnsupportedOperationException("Cannot replace exception handler in tests."))
+//                .when(IGNORING_EXTENSION_MANAGER).setExceptionHandler(any());
 
     }
 

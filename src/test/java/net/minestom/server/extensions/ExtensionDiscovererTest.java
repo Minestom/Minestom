@@ -34,14 +34,14 @@ public class ExtensionDiscovererTest {
     public void testHandleMissingExtensionDirectory() {
         var result = FILESYSTEM.discover(Paths.get("./does/not/exist"));
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     @Test
     public void testHandleEmptyExtensionDirectory() {
         var result = FILESYSTEM.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     @Test
@@ -49,14 +49,14 @@ public class ExtensionDiscovererTest {
         addTestJarFile("test.jar", "test", false);
         var result = FILESYSTEM.discover(extensionDirectory);
 
-        assertEquals(1, result.size());
+        assertEquals(1, result.count());
     }
 
     @Test
     public void testHandleMultipleFiles() throws IOException {
         addTestJarFile("test1.jar", "test1", false);
         addTestJarFile("test2.jar", "test2", false);
-        var result = FILESYSTEM.discover(extensionDirectory);
+        var result = FILESYSTEM.discover(extensionDirectory).toList();
 
         assertEquals(2, result.size());
         assertEquals("test1", result.get(0).name());
@@ -69,7 +69,7 @@ public class ExtensionDiscovererTest {
         addTestJarFile(filename, "test", false);
         var result = FILESYSTEM.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ExtensionDiscovererTest {
         }
         var result = FILESYSTEM.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     private void addTestJarFile(String filename, String name, boolean legacy) throws IOException {
@@ -120,7 +120,7 @@ public class ExtensionDiscovererTest {
             System.clearProperty(INDEV_RESOURCES_PROPERTY);
 
             var result = INDEV.discover(extensionDirectory);
-            assertEquals(0, result.size());
+            assertEquals(0, result.count());
         }
 
         {   // classes set, resources missing
@@ -128,7 +128,7 @@ public class ExtensionDiscovererTest {
             System.setProperty(INDEV_RESOURCES_PROPERTY, resources);
 
             var result = INDEV.discover(extensionDirectory);
-            assertEquals(0, result.size());
+            assertEquals(0, result.count());
         }
 
         {   // neither set
@@ -136,7 +136,7 @@ public class ExtensionDiscovererTest {
             System.clearProperty(INDEV_RESOURCES_PROPERTY);
 
             var result = INDEV.discover(extensionDirectory);
-            assertEquals(0, result.size());
+            assertEquals(0, result.count());
         }
     }
 
@@ -151,7 +151,7 @@ public class ExtensionDiscovererTest {
         System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
         var result = INDEV.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class ExtensionDiscovererTest {
         System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
         var result = INDEV.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     @ParameterizedTest
@@ -176,7 +176,7 @@ public class ExtensionDiscovererTest {
 
         System.setProperty(INDEV_CLASSES_PROPERTY, classes.toString());
         System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
-        var result = INDEV.discover(extensionDirectory);
+        var result = INDEV.discover(extensionDirectory).toList();
 
         assertEquals(1, result.size());
         ExtensionDescriptor descriptor = result.get(0);
@@ -196,7 +196,7 @@ public class ExtensionDiscovererTest {
         System.setProperty(INDEV_RESOURCES_PROPERTY, resources.toString());
         var result = INDEV.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     private void addTestIndevDirs(boolean legacy) throws IOException {
@@ -229,7 +229,7 @@ public class ExtensionDiscovererTest {
         System.setProperty(AUTOSCAN_TARGETS_PROPERTY, "ext_discoverer_test1.json");
         var result = AUTOSCAN.discover(extensionDirectory);
 
-        assertEquals(0, result.size());
+        assertEquals(0, result.count());
     }
 
     @ParameterizedTest(name = "{1} exts loaded from {0}")
@@ -242,7 +242,7 @@ public class ExtensionDiscovererTest {
                         .collect(Collectors.joining(",")));
         var result = AUTOSCAN.discover(extensionDirectory);
 
-        assertEquals(expectedLoaded, result.size());
+        assertEquals(expectedLoaded, result.count());
     }
 
     public static Stream<Arguments> autoscanTargetCasesProvider() {

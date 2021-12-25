@@ -82,7 +82,6 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
         public ExtensionDependency {
             Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
             Check.argCondition(!id.matches(ExtensionDescriptor.NAME_REGEX), "Invalid extension name: " + id);
-            id = id.toLowerCase(Locale.ROOT);
         }
     }
 
