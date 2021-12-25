@@ -133,7 +133,7 @@ public class PlayerInit {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
 
-        MinecraftServer.getUpdateManager().addTickMonitor(LAST_TICK::set);
+        //MinecraftServer.getUpdateManager().addTickMonitor(LAST_TICK::set);
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {

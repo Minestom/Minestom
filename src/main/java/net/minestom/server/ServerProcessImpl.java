@@ -5,6 +5,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
@@ -56,13 +57,13 @@ final class ServerProcessImpl implements ServerProcess {
     private final StorageManager storage;
     private final DataManager data;
     private final TeamManager team;
+    private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
     private final BenchmarkManager benchmark;
     private final DimensionTypeManager dimension;
     private final BiomeManager biome;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
-    private final UpdateManager update;
     private final TagManager tag;
     private final Server server;
 
@@ -75,7 +76,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
-        this.extension = new ExtensionManager();
+        this.extension = new ExtensionManager(this);
         this.connection = new ConnectionManager(this);
         this.packetProcessor = new PacketProcessor();
         this.packetListener = new PacketListenerManager(this);
@@ -86,13 +87,13 @@ final class ServerProcessImpl implements ServerProcess {
         this.storage = new StorageManager();
         this.data = new DataManager();
         this.team = new TeamManager(this);
+        this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
         this.benchmark = new BenchmarkManager();
         this.dimension = new DimensionTypeManager();
         this.biome = new BiomeManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
-        this.update = new UpdateManager();
         this.tag = new TagManager();
         this.server = new Server(packetProcessor);
 
@@ -141,6 +142,11 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public @NotNull GlobalEventHandler eventHandler() {
+        return eventHandler;
+    }
+
+    @Override
     public @NotNull SchedulerManager scheduler() {
         return scheduler;
     }
@@ -173,11 +179,6 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull ExtensionManager extension() {
         return extension;
-    }
-
-    @Override
-    public @NotNull UpdateManager update() {
-        return update;
     }
 
     @Override
@@ -260,7 +261,6 @@ final class ServerProcessImpl implements ServerProcess {
         stopping = true;
         LOGGER.info("Stopping Minestom server.");
         extension.unloadAllExtensions();
-        update.stop();
         scheduler.shutdown();
         connection.shutdown();
         server.stop();

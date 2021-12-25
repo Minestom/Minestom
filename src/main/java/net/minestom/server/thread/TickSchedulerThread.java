@@ -9,6 +9,7 @@ import java.util.concurrent.locks.LockSupport;
 @ApiStatus.Internal
 public final class TickSchedulerThread extends MinestomThread {
     private final ServerProcess serverProcess;
+
     public TickSchedulerThread(ServerProcess serverProcess) {
         super(MinecraftServer.THREAD_NAME_TICK_SCHEDULER);
         this.serverProcess = serverProcess;
@@ -19,10 +20,9 @@ public final class TickSchedulerThread extends MinestomThread {
         while (serverProcess.isAlive()) {
             long currentTime = System.nanoTime();
             final long tickStart = System.currentTimeMillis();
-            System.out.println("tick "+tickStart);
             try {
                 serverProcess.ticker().tick(tickStart);
-            }catch (Exception e){
+            } catch (Exception e) {
                 serverProcess.exception().handleException(e);
             }
             final long tickTime = System.nanoTime() - currentTime;

@@ -488,15 +488,6 @@ public final class MinecraftServer {
         return serverProcess.tag();
     }
 
-    /**
-     * Gets the manager handling the server ticks.
-     *
-     * @return the update manager
-     */
-    public static UpdateManager getUpdateManager() {
-        return serverProcess.update();
-    }
-
     public static Server getServer() {
         return serverProcess.server();
     }

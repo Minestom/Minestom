@@ -4,6 +4,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
@@ -46,6 +47,8 @@ public interface ServerProcess {
 
     @NotNull TeamManager team();
 
+    @NotNull GlobalEventHandler eventHandler();
+
     @NotNull SchedulerManager scheduler();
 
     @NotNull BenchmarkManager benchmark();
@@ -59,8 +62,6 @@ public interface ServerProcess {
     @NotNull BossBarManager bossBar();
 
     @NotNull ExtensionManager extension();
-
-    @NotNull UpdateManager update();
 
     @NotNull TagManager tag();
 
