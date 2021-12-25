@@ -282,9 +282,8 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final class TickerImpl implements Ticker {
         @Override
-        public void tick(long time) {
-            long currentTime = System.nanoTime();
-            final long tickStart = System.currentTimeMillis();
+        public void tick(long nanoTime) {
+            final long msTIme = (long) (nanoTime / 1e6);
 
             scheduler().processTick();
 
@@ -292,17 +291,17 @@ final class ServerProcessImpl implements ServerProcess {
             connection().updateWaitingPlayers();
 
             // Keep Alive Handling
-            connection().handleKeepAlive(tickStart);
+            connection().handleKeepAlive(msTIme);
 
             // Server tick (chunks/entities)
-            serverTick(tickStart);
+            serverTick(msTIme);
 
             // Flush all waiting packets
             PacketUtils.flush();
             server().workers().forEach(Worker::flush);
 
             // the time that the tick took in nanoseconds
-            final long tickTime = System.nanoTime() - currentTime;
+            final long tickTime = System.nanoTime() - nanoTime;
 
             // Monitoring
             {

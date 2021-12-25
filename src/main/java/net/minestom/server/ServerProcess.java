@@ -149,7 +149,8 @@ public interface ServerProcess {
     boolean isAlive();
 
     @ApiStatus.NonExtendable
-    interface Ticker extends Tickable {
+    interface Ticker {
+        void tick(long nanoTime);
     }
 
     @Deprecated
