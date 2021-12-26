@@ -9,16 +9,15 @@ import net.minestom.server.utils.NamespaceID;
 
 public class BlockPlaceMechanicWall {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(update(event.getBlock(), event.getBlockPosition(), event.getInstance()));
     }
 
-    public static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
+    static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
         event.setBlock(update(event.getBlock(), event.getBlockPosition(), event.getInstance()));
         event.setShouldUpdateNeighbors(true);
     }
 
-    private static final NamespaceID MINECRAFT_WALLS = NamespaceID.from("minecraft:walls");
     private static Block update(Block block, Point position, Instance instance) {
         boolean northNeighbor = instance.getBlock(position.blockX(), position.blockY(), position.blockZ()-1).isSolid();
         boolean southNeighbor = instance.getBlock(position.blockX(), position.blockY(), position.blockZ()+1).isSolid();

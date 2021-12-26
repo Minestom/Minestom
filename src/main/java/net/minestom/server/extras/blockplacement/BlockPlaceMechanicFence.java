@@ -8,11 +8,11 @@ import net.minestom.server.instance.block.Block;
 
 public class BlockPlaceMechanicFence {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(update(event.getBlock(), event.getInstance(), event.getBlockPosition()));
     }
 
-    public static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
+    static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
         event.setBlock(update(event.getBlock(), event.getInstance(), event.getBlockPosition()));
     }
 
