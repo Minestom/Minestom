@@ -11,10 +11,12 @@ import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.listener.BlockPlacementListener;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -191,6 +193,42 @@ public class InstanceContainer extends Instance {
                     new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, resultBlock.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
+
+            // Update neighbors
+            Set<Point> updatedNeighbors = new HashSet<>();
+            Set<Point> toUpdate = new HashSet<>();
+
+            toUpdate.add(blockPosition);
+            updatedNeighbors.add(blockPosition); //Don't update the block we just placed
+
+            for(int i = 0; i< BlockPlacementListener.MAX_NEIGHBOR_UPDATE_LENGTH; i++) {
+                Set<Point> toUpdateCopy = new HashSet<>(toUpdate);
+                toUpdate.clear();
+
+                for (Point pos : toUpdateCopy) {
+                    for (Vec dir : BlockPlacementListener.DIRS) {
+                        Point position = pos.add(dir);
+
+                        if (updatedNeighbors.contains(position)) continue;
+                        updatedNeighbors.add(position);
+
+                        Block neighbor = getBlock(position);
+
+                        if (neighbor.isAir()) continue;
+
+                        PlayerBlockUpdateNeighborEvent playerBlockUpdateNeighborEvent = new PlayerBlockUpdateNeighborEvent(player, neighbor, position);
+                        EventDispatcher.call(playerBlockUpdateNeighborEvent);
+
+                        if (playerBlockUpdateNeighborEvent.getBlock() != neighbor) {
+                            setBlock(position, playerBlockUpdateNeighborEvent.getBlock());
+                        }
+
+                        if (playerBlockUpdateNeighborEvent.isShouldUpdateNeighbors()) {
+                            toUpdate.add(position);
+                        }
+                    }
+                }
+            }
         }
         return allowed;
     }

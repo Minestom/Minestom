@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -10,6 +11,7 @@ import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
+import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -27,10 +29,15 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
+    public static final int MAX_NEIGHBOR_UPDATE_LENGTH = 4;
+    public static final Vec[] DIRS = { new Vec(1, 0, 0), new Vec(-1, 0, 0),
+            new Vec(0, 1, 0), new Vec(0, -1, 0),
+            new Vec(0, 0, 1), new Vec(0, 0, -1)};
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
@@ -87,10 +94,15 @@ public class BlockPlacementListener {
             canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(interactedBlock);
         }
 
-        // Get the newly placed block position
-        final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
-        final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
-        final int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
+        // If the block is air, don't offset in order to mimic vanilla's "replace" function
+        // when players break and replace blocks during the same tick
+        int offsetX = 0, offsetY = 0, offsetZ = 0;
+        if(!instance.getBlock(blockPosition).isAir()) {
+            // Get the newly placed block position
+            offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
+            offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
+            offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
+        }
         final Point placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
@@ -134,7 +146,8 @@ public class BlockPlacementListener {
             return;
         }
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition,
+                new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
@@ -154,13 +167,52 @@ public class BlockPlacementListener {
             return;
         }
         // Place the block
-        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()));
+        if (!instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
+                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()))) {
+            refresh(player, chunk);
+            return;
+        }
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
             final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
             playerInventory.setItemInHand(hand, newUsedItem);
+        }
+
+        // Update neighbors
+        Set<Point> updatedNeighbors = new HashSet<>();
+        Set<Point> toUpdate = new HashSet<>();
+
+        toUpdate.add(placementPosition);
+        updatedNeighbors.add(placementPosition); //Don't update the block we just placed
+
+        for(int i=0; i<MAX_NEIGHBOR_UPDATE_LENGTH; i++) {
+            Set<Point> toUpdateCopy = new HashSet<>(toUpdate);
+            toUpdate.clear();
+
+            for(Point pos : toUpdateCopy) {
+                for(Vec dir : DIRS) {
+                    Point position = pos.add(dir);
+
+                    if(updatedNeighbors.contains(position)) continue;
+                    updatedNeighbors.add(position);
+
+                    Block block = instance.getBlock(position);
+
+                    if(block.isAir()) continue;
+
+                    PlayerBlockUpdateNeighborEvent playerBlockUpdateNeighborEvent = new PlayerBlockUpdateNeighborEvent(player, block, position);
+                    EventDispatcher.call(playerBlockUpdateNeighborEvent);
+
+                    if (playerBlockUpdateNeighborEvent.getBlock() != block) {
+                        instance.setBlock(position, playerBlockUpdateNeighborEvent.getBlock());
+                    }
+
+                    if (playerBlockUpdateNeighborEvent.isShouldUpdateNeighbors()) {
+                        toUpdate.add(position);
+                    }
+                }
+            }
         }
     }
 
