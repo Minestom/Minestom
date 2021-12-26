@@ -1,7 +1,6 @@
 package net.minestom.server.world.generator.stages.pregeneration;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.generator.GenerationContext;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Function;
 
 public class BiomeProviderStage implements PreGenerationStage<BiomeProviderStage.Data> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BiomeProviderStage.class);
@@ -41,21 +39,6 @@ public class BiomeProviderStage implements PreGenerationStage<BiomeProviderStage
     @Override
     public int getRange() {
         return 0;
-    }
-
-    @Override
-    public int getUniqueId() {
-        return INTERNAL_STAGE_ID_OFFSET;
-    }
-
-    @Override
-    public int getVersion() {
-        return 0;
-    }
-
-    @Override
-    public Function<BinaryReader, Data> getDataReader() {
-        return null;
     }
 
     @Override

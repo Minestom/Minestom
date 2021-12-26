@@ -2,14 +2,12 @@ package net.minestom.server.world.generator;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.SectionBlockCache;
-import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.generator.stages.generation.GenerationStage;
 import net.minestom.server.world.generator.stages.pregeneration.PreGenerationStage;
 import net.minestom.server.world.generator.stages.pregeneration.StageData;
@@ -23,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 public class WorldGenerator implements Generator, GenerationContext.Provider {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
@@ -52,10 +49,6 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         if (!this.preGenerationStages.equals(preGenerationStages)) {
             LOGGER.warn("Supplied pre-generation stages were not ordered, they have been automatically rearranged!");
         }
-        Check.argCondition(preGenerationStages.stream()
-                        .map(PreGenerationStage::getUniqueId)
-                        .collect(Collectors.toSet()).size() != preGenerationStages.size(),
-                "Colliding stage IDs!");
     }
 
     @Override

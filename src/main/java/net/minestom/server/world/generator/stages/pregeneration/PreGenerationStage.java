@@ -1,12 +1,8 @@
 package net.minestom.server.world.generator.stages.pregeneration;
 
-import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.world.generator.GenerationContext;
 import net.minestom.server.world.generator.stages.StageDataDependent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Function;
 
 /**
  * Pre-generation stages are responsible for building a context around the requested section, this allows
@@ -15,7 +11,6 @@ import java.util.function.Function;
  * @param <T> the type of the data this stage provides
  */
 public interface PreGenerationStage<T extends StageData> extends StageDataDependent {
-    int INTERNAL_STAGE_ID_OFFSET = 1000;
     /**
      * Called for sections in the {@link #getRange() look around} range around the generated sectionData<br>
      * NOTE: This will be called for each sectionData in a cubical radius instead of a spherical one!
@@ -31,25 +26,6 @@ public interface PreGenerationStage<T extends StageData> extends StageDataDepend
      * @return range > 0
      */
     int getRange();
-
-    /**
-     * This id is used to save/retrieve generation data<br>
-     * <b>WARNING: id range 1000-1500 is reserved for Minestom defined stages</b>
-     * @return generator level unique id
-     */
-    int getUniqueId();
-
-    /**
-     * Used to handle old generation data, should be bumped if the data type changes
-     * @return version number of the stage
-     */
-    int getVersion();
-
-    /**
-     * Reader used to load back saved generation data
-     * @return the reader or {@code null} if this stage doesn't support saving data
-     */
-    @Nullable Function<BinaryReader, T> getDataReader();
 
     /**
      * This is used by {@link #getType()} to define the scope of this stage.
