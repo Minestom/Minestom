@@ -20,12 +20,13 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -39,7 +40,7 @@ public final class ConnectionManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
-    private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
+    private final MessagePassingQueue<Player> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -316,7 +317,7 @@ public final class ConnectionManager {
             }
             playerConnection.setConnectionState(ConnectionState.PLAY);
             // Add the player to the waiting list
-            this.waitingPlayers.add(player);
+            this.waitingPlayers.relaxedOffer(player);
             if (register) {
                 registerPlayer(player);
             }
@@ -358,15 +359,14 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+        this.waitingPlayers.drain(waitingPlayer -> {
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             EventDispatcher.call(loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
             // Spawn the player at Player#getRespawnPoint
             waitingPlayer.UNSAFE_init(spawningInstance);
-        }
+        });
     }
 
     /**
