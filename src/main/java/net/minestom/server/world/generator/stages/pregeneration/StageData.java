@@ -23,7 +23,10 @@ public sealed interface StageData extends Writeable permits StageData.Chunk, Sta
         }
     }
 
-    non-sealed interface Instance extends StageData {}
+    non-sealed interface Instance extends StageData {
+        default boolean supportsSaving() {return false;}
+        default boolean generated() {return true;}
+    }
     non-sealed interface Chunk extends StageData {}
     non-sealed interface Section extends StageData {}
 }
