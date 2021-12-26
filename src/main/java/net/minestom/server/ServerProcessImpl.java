@@ -77,7 +77,7 @@ final class ServerProcessImpl implements ServerProcess {
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
         this.extension = new ExtensionManager(this);
-        this.connection = new ConnectionManager(this);
+        this.connection = new ConnectionManager();
         this.packetProcessor = new PacketProcessor();
         this.packetListener = new PacketListenerManager(this);
         this.instance = new InstanceManager();
