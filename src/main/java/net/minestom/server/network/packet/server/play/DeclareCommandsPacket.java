@@ -57,22 +57,22 @@ public class DeclareCommandsPacket implements ServerPacket {
             }
             writer.writeVarIntArray(children);
 
-            if ((flags & 0x08) != 0) {
+            if (hasRedirect()) {
                 writer.writeVarInt(redirectedNode);
             }
 
-            if (isLiteral() || isArgument()) {
+            if (is(NodeType.LITERAL) || is(NodeType.ARGUMENT)) {
                 writer.writeSizedString(name);
             }
 
-            if (isArgument()) {
+            if (is(NodeType.ARGUMENT)) {
                 writer.writeSizedString(parser);
                 if (properties != null) {
                     writer.writeBytes(properties);
                 }
             }
 
-            if ((flags & 0x10) != 0) {
+            if (hasSuggestionsType()) {
                 writer.writeSizedString(suggestionsType);
             }
         }
@@ -81,20 +81,20 @@ public class DeclareCommandsPacket implements ServerPacket {
         public void read(@NotNull BinaryReader reader) {
             flags = reader.readByte();
             children = reader.readVarIntArray();
-            if ((flags & 0x08) != 0) {
+            if (hasRedirect()) {
                 redirectedNode = reader.readVarInt();
             }
 
-            if (isLiteral() || isArgument()) {
+            if (is(NodeType.LITERAL) || is(NodeType.ARGUMENT)) {
                 name = reader.readSizedString();
             }
 
-            if (isArgument()) {
+            if (is(NodeType.ARGUMENT)) {
                 parser = reader.readSizedString();
                 properties = getProperties(reader, parser);
             }
 
-            if ((flags & 0x10) != 0) {
+            if (hasSuggestionsType()) {
                 suggestionsType = reader.readSizedString();
             }
         }
@@ -126,12 +126,20 @@ public class DeclareCommandsPacket implements ServerPacket {
             };
         }
 
-        private boolean isLiteral() {
-            return (flags & 0b1) != 0;
+        public boolean is(@NotNull NodeType type) {
+            return (flags & type.mask) != 0;
         }
 
-        private boolean isArgument() {
-            return (flags & 0b10) != 0;
+        public boolean isExecutable() {
+            return (flags & 0x04) != 0;
+        }
+
+        public boolean hasRedirect() {
+            return (flags & 0x08) != 0;
+        }
+
+        public boolean hasSuggestionsType() {
+            return (flags & 0x10) != 0;
         }
 
     }
