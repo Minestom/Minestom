@@ -6,42 +6,34 @@ import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-class BlockPlaceMechanicPointedDripstone {
-
+final class BlockPlaceMechanicPointedDripstone {
     static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
         String direction = block.getProperty("vertical_direction");
-        if(direction == null) return;
+        if (direction == null) return;
 
         Instance instance = event.getInstance();
         Point position = event.getBlockPosition();
 
-        Block aboveState = instance.getBlock(position.blockX(), position.blockY()+(direction.equals("down") ? -1 : 1), position.blockZ());
+        Block aboveState = instance.getBlock(position.blockX(), position.blockY() + (direction.equals("down") ? -1 : 1), position.blockZ());
 
-        if(Block.POINTED_DRIPSTONE.compare(aboveState, Block.Comparator.ID)) {
+        if (Block.POINTED_DRIPSTONE.compare(aboveState, Block.Comparator.ID)) {
             String thickness = aboveState.getProperty("thickness");
 
-            if(aboveState.getProperty("vertical_direction").equals(direction)) {
-                switch(thickness) {
-                    case "tip":
-                    case "tip_merge":
-                        block = block.withProperty("thickness", "frustum");
-                        break;
-                    case "frustum":
-                    case "middle":
-                        Block blockOpposite = instance.getBlock(position.blockX(), position.blockY()+(direction.equals("down") ? 1 : -1), position.blockZ());
-                        if(!Block.POINTED_DRIPSTONE.compare(blockOpposite, Block.Comparator.ID)) {
+            if (aboveState.getProperty("vertical_direction").equals(direction)) {
+                switch (thickness) {
+                    case "tip", "tip_merge" -> block = block.withProperty("thickness", "frustum");
+                    case "frustum", "middle" -> {
+                        Block blockOpposite = instance.getBlock(position.blockX(), position.blockY() + (direction.equals("down") ? 1 : -1), position.blockZ());
+                        if (!Block.POINTED_DRIPSTONE.compare(blockOpposite, Block.Comparator.ID)) {
                             block = block.withProperty("thickness", "base");
                         } else {
                             block = block.withProperty("thickness", "middle");
                         }
-                        break;
+                    }
                 }
             } else {
-                switch(thickness) {
-                    case "tip":
-                    case "tip_merge":
-                        block = block.withProperty("thickness", "tip_merge");
-                        break;
+                switch (thickness) {
+                    case "tip", "tip_merge" -> block = block.withProperty("thickness", "tip_merge");
                 }
             }
         } else {
@@ -57,27 +49,23 @@ class BlockPlaceMechanicPointedDripstone {
         block = event.getBlock();
 
         String direction = block.getProperty("vertical_direction");
-        if(direction == null) return;
+        if (direction == null) return;
 
         Instance instance = event.getInstance();
         Point position = event.getBlockPosition();
 
-        Block aboveState = instance.getBlock(position.blockX(), position.blockY()+(direction.equals("down") ? -1 : 1), position.blockZ());
+        Block aboveState = instance.getBlock(position.blockX(), position.blockY() + (direction.equals("down") ? -1 : 1), position.blockZ());
 
-        if(Block.POINTED_DRIPSTONE.compare(aboveState, Block.Comparator.ID)) {
+        if (Block.POINTED_DRIPSTONE.compare(aboveState, Block.Comparator.ID)) {
             String thickness = aboveState.getProperty("thickness");
 
-            if(!aboveState.getProperty("vertical_direction").equals(direction)) {
-                switch(thickness) {
-                    case "tip":
-                    case "tip_merge":
-                        block = block.withProperty("thickness", "tip_merge");
-                        break;
+            if (!aboveState.getProperty("vertical_direction").equals(direction)) {
+                switch (thickness) {
+                    case "tip", "tip_merge" -> block = block.withProperty("thickness", "tip_merge");
                 }
             }
         }
 
         event.setBlock(block);
     }
-
 }

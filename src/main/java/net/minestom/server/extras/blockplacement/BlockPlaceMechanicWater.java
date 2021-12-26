@@ -6,8 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Direction;
 
-class BlockPlaceMechanicWater {
-
+final class BlockPlaceMechanicWater {
     static void onInteract(ItemStack itemStack, PlayerUseItemOnBlockEvent event) {
         Block block = event.getInstance().getBlock(event.getPosition());
 
@@ -16,20 +15,18 @@ class BlockPlaceMechanicWater {
                 event.getInstance().setBlock(event.getPosition(), Block.WATER_CAULDRON.withProperty("level", "3"));
                 return;
             } else {
-                String waterlogged = block.getProperty("waterlogged");
-                if ("false".equals(waterlogged)) {
+                if (!Boolean.parseBoolean(block.getProperty("waterlogged"))) {
                     event.getInstance().setBlock(event.getPosition(), block.withProperty("waterlogged", "true"));
                     return;
                 }
             }
         }
 
-        Direction dir = event.getBlockFace();
-        Point pos = event.getPosition().add(dir.normalX(), dir.normalY(), dir.normalZ());
+        final Direction dir = event.getBlockFace();
+        final Point pos = event.getPosition().add(dir.normalX(), dir.normalY(), dir.normalZ());
         block = event.getInstance().getBlock(pos);
         if (block.isAir()) {
             event.getInstance().setBlock(pos, Block.WATER);
         }
     }
-
 }

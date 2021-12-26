@@ -9,17 +9,16 @@ import net.minestom.server.utils.NamespaceID;
 import java.util.HashSet;
 import java.util.Set;
 
-class BlockPlaceMechanicRotation {
-
+final class BlockPlaceMechanicRotation {
     static void updateDataFromBlock(Block block) {
         String facing = block.getProperty("facing");
-        if(facing != null) {
-            if(facing.equals("up") || facing.equals("down")) {
+        if (facing != null) {
+            if (facing.equals("up") || facing.equals("down")) {
                 ROTATION_VERTICAL.add(block.id());
             }
         }
 
-        if(PlacementRules.isWallSign(block)) {
+        if (PlacementRules.isWallSign(block)) {
             USE_BLOCK_FACING.add(block.namespace());
         }
     }
@@ -33,21 +32,21 @@ class BlockPlaceMechanicRotation {
 
         Vec playerDir = event.getPlayer().getPosition().direction();
 
-        if(usePlayerFacing) {
+        if (usePlayerFacing) {
             double absX = Math.abs(playerDir.x());
             double absY = Math.abs(playerDir.y());
             double absZ = Math.abs(playerDir.z());
 
             // Thanks Mojang
             if (block.compare(Block.ANVIL) || block.compare(Block.CHIPPED_ANVIL) || block.compare(Block.DAMAGED_ANVIL)) {
-                if(absX > absZ) {
-                    if(playerDir.x() > 0 == invert) {
+                if (absX > absZ) {
+                    if (playerDir.x() > 0 == invert) {
                         block = block.withProperty("facing", "north");
                     } else {
                         block = block.withProperty("facing", "south");
                     }
                 } else {
-                    if(playerDir.z() > 0 == invert) {
+                    if (playerDir.z() > 0 == invert) {
                         block = block.withProperty("facing", "east");
                     } else {
                         block = block.withProperty("facing", "west");
@@ -57,20 +56,20 @@ class BlockPlaceMechanicRotation {
                 return;
             }
 
-            if(!horizontalOnly && absY > absX && absY > absZ) {
-                if(playerDir.y() > 0 == invert) {
+            if (!horizontalOnly && absY > absX && absY > absZ) {
+                if (playerDir.y() > 0 == invert) {
                     block = block.withProperty("facing", "down");
                 } else {
                     block = block.withProperty("facing", "up");
                 }
-            } else if(absX > absZ) {
-                if(playerDir.x() > 0 == invert) {
+            } else if (absX > absZ) {
+                if (playerDir.x() > 0 == invert) {
                     block = block.withProperty("facing", "west");
                 } else {
                     block = block.withProperty("facing", "east");
                 }
             } else {
-                if(playerDir.z() > 0 == invert) {
+                if (playerDir.z() > 0 == invert) {
                     block = block.withProperty("facing", "north");
                 } else {
                     block = block.withProperty("facing", "south");
@@ -79,19 +78,19 @@ class BlockPlaceMechanicRotation {
         } else {
             BlockFace face = event.getBlockFace();
 
-            if(invert) {
+            if (invert) {
                 face = face.getOppositeFace();
             }
 
-            if(horizontalOnly && (face == BlockFace.BOTTOM || face == BlockFace.TOP)) {
-                if(Math.abs(playerDir.x()) > Math.abs(playerDir.z())) {
-                    if(playerDir.x() > 0 == invert) {
+            if (horizontalOnly && (face == BlockFace.BOTTOM || face == BlockFace.TOP)) {
+                if (Math.abs(playerDir.x()) > Math.abs(playerDir.z())) {
+                    if (playerDir.x() > 0 == invert) {
                         block = block.withProperty("facing", "west");
                     } else {
                         block = block.withProperty("facing", "east");
                     }
                 } else {
-                    if(playerDir.z() > 0 == invert) {
+                    if (playerDir.z() > 0 == invert) {
                         block = block.withProperty("facing", "north");
                     } else {
                         block = block.withProperty("facing", "south");
@@ -99,11 +98,12 @@ class BlockPlaceMechanicRotation {
                 }
                 event.setBlock(block);
                 return;
+
             }
 
             String faceName = face.name().toLowerCase();
-            if(face == BlockFace.BOTTOM) faceName = "down";
-            if(face == BlockFace.TOP) faceName = "up";
+            if (face == BlockFace.BOTTOM) faceName = "down";
+            if (face == BlockFace.TOP) faceName = "up";
 
             block = block.withProperty("facing", faceName);
         }
@@ -112,7 +112,7 @@ class BlockPlaceMechanicRotation {
     }
 
     private static final Set<Integer> ROTATION_VERTICAL = new HashSet<>();
-    private static Set<NamespaceID> ROTATION_INVERT = Set.of(
+    private static final Set<NamespaceID> ROTATION_INVERT = Set.of(
             NamespaceID.from("minecraft:barrel"),
             NamespaceID.from("minecraft:command_block"),
             NamespaceID.from("minecraft:repeating_command_block"),
@@ -129,7 +129,7 @@ class BlockPlaceMechanicRotation {
             NamespaceID.from("minecraft:comparator"),
             NamespaceID.from("minecraft:repeater")
     );
-    private static Set<NamespaceID> USE_BLOCK_FACING = new HashSet<>(Set.of(
+    private static final Set<NamespaceID> USE_BLOCK_FACING = new HashSet<>(Set.of(
             NamespaceID.from("minecraft:glow_lichen"),
             NamespaceID.from("minecraft:cocoa"),
             NamespaceID.from("minecraft:dead_tube_coral_wall_fan"),
@@ -158,5 +158,4 @@ class BlockPlaceMechanicRotation {
             NamespaceID.from("minecraft:dragon_wall_head"),
             NamespaceID.from("minecraft:bell")
     ));
-
 }

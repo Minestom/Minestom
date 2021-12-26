@@ -6,26 +6,25 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-class BlockPlaceMechanicSlab {
-
+final class BlockPlaceMechanicSlab {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockPlaceMechanicHalf.onPlace(block, event, "type");
         block = event.getBlock();
 
-        BlockFace face = event.getBlockFace();
-        Point position = event.getBlockPosition();
-        Instance instance = event.getInstance();
+        final BlockFace face = event.getBlockFace();
+        final Point position = event.getBlockPosition();
+        final Instance instance = event.getInstance();
 
-        if(face == BlockFace.TOP || face == BlockFace.BOTTOM) {
-            Point placedOn = position.add(0, face == BlockFace.BOTTOM ? 1 : -1, 0);
+        if (face == BlockFace.TOP || face == BlockFace.BOTTOM) {
+            final Point placedOn = position.add(0, face == BlockFace.BOTTOM ? 1 : -1, 0);
 
             Block placedOnState = instance.getBlock(placedOn);
 
-            if(placedOnState.compare(block)) {
-                String oldType = placedOnState.getProperty("type");
-                String newType = block.getProperty("type");
+            if (placedOnState.compare(block)) {
+                final String oldType = placedOnState.getProperty("type");
+                final String newType = block.getProperty("type");
 
-                if(!oldType.equalsIgnoreCase("double") &&
+                if (!oldType.equalsIgnoreCase("double") &&
                         oldType.equalsIgnoreCase(newType)) {
                     placedOnState = placedOnState.withProperty("type", "double");
                     instance.setBlock(placedOn, placedOnState);
@@ -36,10 +35,8 @@ class BlockPlaceMechanicSlab {
         }
 
         Block blockAt = instance.getBlock(position);
-        if(blockAt.compare(block)) {
+        if (blockAt.compare(block)) {
             event.setBlock(block.withProperty("type", "double"));
         }
-
     }
-
 }

@@ -12,8 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-class BlockPlaceMechanicStairShape {
-
+final class BlockPlaceMechanicStairShape {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(update(block, event.getInstance(), event.getBlockPosition()));
     }
@@ -23,10 +22,9 @@ class BlockPlaceMechanicStairShape {
     }
 
     private static Block update(Block block, Instance instance, Point position) {
-        String facingStr = block.getProperty("facing");
-        Facing facing = getFacing(facingStr);
-        Shape shape = getShape(instance, position, facing);
-
+        final String facingStr = block.getProperty("facing");
+        final Facing facing = getFacing(facingStr);
+        final Shape shape = getShape(instance, position, facing);
         return block.withProperty("shape", shape.toString().toLowerCase());
     }
 
@@ -39,12 +37,12 @@ class BlockPlaceMechanicStairShape {
     }
 
     private static Facing getFacing(String facing) {
-        switch(facing.toLowerCase()) {
-            case "east": return Facing.EAST;
-            case "west": return Facing.WEST;
-            case "south": return Facing.SOUTH;
-            default: return Facing.NORTH;
-        }
+        return switch (facing.toLowerCase()) {
+            case "east" -> Facing.EAST;
+            case "west" -> Facing.WEST;
+            case "south" -> Facing.SOUTH;
+            default -> Facing.NORTH;
+        };
     }
 
     private enum Facing {
@@ -132,5 +130,4 @@ class BlockPlaceMechanicStairShape {
         }
         return null;
     }
-
 }

@@ -5,22 +5,21 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-class BlockPlaceMechanicVine {
-
+final class BlockPlaceMechanicVine {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace().getOppositeFace();
-        Vec playerDir = event.getPlayer().getPosition().direction();
+        final Vec playerDir = event.getPlayer().getPosition().direction();
 
         // Find direction if placed on bottom
-        if(face == BlockFace.BOTTOM) {
-            if(Math.abs(playerDir.x()) > Math.abs(playerDir.z())) {
-                if(playerDir.x() > 0) {
+        if (face == BlockFace.BOTTOM) {
+            if (Math.abs(playerDir.x()) > Math.abs(playerDir.z())) {
+                if (playerDir.x() > 0) {
                     face = BlockFace.EAST;
                 } else {
                     face = BlockFace.WEST;
                 }
             } else {
-                if(playerDir.z() > 0) {
+                if (playerDir.z() > 0) {
                     face = BlockFace.SOUTH;
                 } else {
                     face = BlockFace.NORTH;
@@ -28,12 +27,11 @@ class BlockPlaceMechanicVine {
             }
         }
 
-        String faceName = face.name().toLowerCase();
-        if(face == BlockFace.TOP) faceName = "up";
+        final String faceName = face == BlockFace.TOP ? "top" : face.name().toLowerCase();
 
         // Combine with previous vine states
         Block oldBlock = event.getInstance().getBlock(event.getBlockPosition());
-        if(oldBlock.compare(block)) {
+        if (oldBlock.compare(block)) {
             block = block.withProperties(oldBlock.properties());
         }
 
@@ -41,5 +39,4 @@ class BlockPlaceMechanicVine {
 
         event.setBlock(block);
     }
-
 }

@@ -9,8 +9,7 @@ import net.minestom.server.instance.block.Block;
 import java.util.HashMap;
 import java.util.Map;
 
-class BlockPlaceMechanicVerticalPlant {
-
+final class BlockPlaceMechanicVerticalPlant {
     static BlockPlaceMechanicVerticalPlant TWISTING_VINES =
             new BlockPlaceMechanicVerticalPlant(1, Block.TWISTING_VINES, Block.TWISTING_VINES_PLANT);
     static BlockPlaceMechanicVerticalPlant WEEPING_VINES =
@@ -37,7 +36,7 @@ class BlockPlaceMechanicVerticalPlant {
     }
 
     private Block update(Block block, Point position, Instance instance) {
-        Block checkBlock = instance.getBlock(position.blockX(), position.blockY()+offset, position.blockZ());
+        Block checkBlock = instance.getBlock(position.blockX(), position.blockY() + offset, position.blockZ());
 
         if (checkBlock.compare(mainBlock) || checkBlock.compare(stemBlock)) {
             return block.compare(stemBlock) ? block : cloneProperties(block, stemBlock);
@@ -51,5 +50,4 @@ class BlockPlaceMechanicVerticalPlant {
         properties.keySet().retainAll(to.properties().keySet());
         return to.withProperties(properties);
     }
-
 }

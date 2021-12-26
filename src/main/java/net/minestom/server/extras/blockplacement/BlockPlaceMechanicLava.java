@@ -6,8 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Direction;
 
-class BlockPlaceMechanicLava {
-
+final class BlockPlaceMechanicLava {
     static void onInteract(ItemStack itemStack, PlayerUseItemOnBlockEvent event) {
         Block block = event.getInstance().getBlock(event.getPosition());
 
@@ -16,12 +15,11 @@ class BlockPlaceMechanicLava {
             return;
         }
 
-        Direction dir = event.getBlockFace();
-        Point pos = event.getPosition().add(dir.normalX(), dir.normalY(), dir.normalZ());
+        final Direction dir = event.getBlockFace();
+        final Point pos = event.getPosition().add(dir.normalX(), dir.normalY(), dir.normalZ());
         block = event.getInstance().getBlock(pos);
         if (block.isAir()) {
             event.getInstance().setBlock(pos, Block.LAVA);
         }
     }
-
 }

@@ -6,8 +6,9 @@ import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-class BlockPlaceMechanicFence {
+import java.util.Map;
 
+final class BlockPlaceMechanicFence {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(update(event.getBlock(), event.getInstance(), event.getBlockPosition()));
     }
@@ -17,16 +18,15 @@ class BlockPlaceMechanicFence {
     }
 
     private static Block update(Block state, Instance instance, Point position) {
-        boolean northNeighbor = instance.getBlock(position.blockX(), position.blockY(), position.blockZ()-1).isSolid();
-        boolean southNeighbor = instance.getBlock(position.blockX(), position.blockY(), position.blockZ()+1).isSolid();
-        boolean eastNeighbor = instance.getBlock(position.blockX()+1, position.blockY(), position.blockZ()).isSolid();
-        boolean westNeighbor = instance.getBlock(position.blockX()-1, position.blockY(), position.blockZ()).isSolid();
-
-        state = state.withProperty("north", northNeighbor ? "true" : "false");
-        state = state.withProperty("south", southNeighbor ? "true" : "false");
-        state = state.withProperty("east", eastNeighbor ? "true" : "false");
-        state = state.withProperty("west", westNeighbor ? "true" : "false");
-
-        return state;
+        final boolean northNeighbor = instance.getBlock(position.blockX(), position.blockY(), position.blockZ() - 1).isSolid();
+        final boolean southNeighbor = instance.getBlock(position.blockX(), position.blockY(), position.blockZ() + 1).isSolid();
+        final boolean eastNeighbor = instance.getBlock(position.blockX() + 1, position.blockY(), position.blockZ()).isSolid();
+        final boolean westNeighbor = instance.getBlock(position.blockX() - 1, position.blockY(), position.blockZ()).isSolid();
+        return state.withProperties(Map.of(
+                "north", String.valueOf(northNeighbor),
+                "south", String.valueOf(southNeighbor),
+                "east", String.valueOf(eastNeighbor),
+                "west", String.valueOf(westNeighbor)
+        ));
     }
 }

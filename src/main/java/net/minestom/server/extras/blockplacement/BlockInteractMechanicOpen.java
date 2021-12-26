@@ -4,16 +4,13 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.instance.block.Block;
 
-class BlockInteractMechanicOpen {
-
+final class BlockInteractMechanicOpen {
     static void onInteract(Block block, PlayerBlockInteractEvent event) {
         if (event.getPlayer().isSneaking()) return;
-
         block = event.getBlock();
 
-        boolean open = "true".equals(block.getProperty("open"));
-
-        String value = open ? "false" : "true";
+        final boolean open = Boolean.parseBoolean(block.getProperty("open"));
+        final String value = open ? "false" : "true";
 
         event.setBlock(block.withProperty("open", value));
         event.setBlockingItemUse(true);
@@ -32,5 +29,4 @@ class BlockInteractMechanicOpen {
             }
         }
     }
-
 }

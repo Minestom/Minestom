@@ -2,15 +2,14 @@ package net.minestom.server.extras.blockplacement;
 
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.NamespaceID;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class BlockPlaceMechanicWallReplacement {
-
+final class BlockPlaceMechanicWallReplacement {
     private static final Map<NamespaceID, Block> WALL_REPLACEMENTS = new HashMap<>();
+
     static {
         WALL_REPLACEMENTS.put(NamespaceID.from("minecraft:dead_tube_coral_fan"), Block.DEAD_TUBE_CORAL_WALL_FAN);
         WALL_REPLACEMENTS.put(NamespaceID.from("minecraft:dead_brain_coral_fan"), Block.DEAD_BRAIN_CORAL_WALL_FAN);
@@ -48,10 +47,8 @@ class BlockPlaceMechanicWallReplacement {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         Block replacement = WALL_REPLACEMENTS.get(block.namespace());
-
-        if(replacement != null && event.getBlockFace().toDirection().normalY() == 0) {
+        if (replacement != null && event.getBlockFace().toDirection().normalY() == 0) {
             event.setBlock(replacement);
         }
     }
-
 }

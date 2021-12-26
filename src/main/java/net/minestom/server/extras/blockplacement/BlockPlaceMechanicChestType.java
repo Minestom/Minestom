@@ -8,8 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-class BlockPlaceMechanicChestType {
-
+final class BlockPlaceMechanicChestType {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(updateFromNeighbors(event.getBlock(), event.getInstance(), event.getBlockPosition()));
     }
@@ -19,10 +18,10 @@ class BlockPlaceMechanicChestType {
     }
 
     private static @NotNull Block updateFromNeighbors(Block state, Instance instance, Point position) {
-        String oldState = state.getProperty("type");
-        boolean isSingle = "single".equals(oldState);
-        boolean isLeft = "left".equals(oldState);
-        boolean isRight = "right".equals(oldState);
+        final String oldState = state.getProperty("type");
+        final boolean isSingle = "single".equals(oldState);
+        final boolean isLeft = "left".equals(oldState);
+        final boolean isRight = "right".equals(oldState);
 
         state = state.withProperty("type", "single");
 
@@ -31,28 +30,24 @@ class BlockPlaceMechanicChestType {
         Point left;
         Point right;
 
-        switch(facing) {
-            case "east": {
+        switch (facing) {
+            case "east" -> {
                 left = new Vec(0, 0, 1);
                 right = new Vec(0, 0, -1);
-                break;
             }
-            case "west": {
+            case "west" -> {
                 left = new Vec(0, 0, -1);
                 right = new Vec(0, 0, 1);
-                break;
             }
-            case "north": {
+            case "north" -> {
                 left = new Vec(1, 0, 0);
                 right = new Vec(-1, 0, 0);
-                break;
             }
-            case "south": {
+            case "south" -> {
                 left = new Vec(-1, 0, 0);
                 right = new Vec(1, 0, 0);
-                break;
             }
-            default: {
+            default -> {
                 return state;
             }
         }
@@ -63,16 +58,16 @@ class BlockPlaceMechanicChestType {
                 position.blockZ() + left.blockZ()
         );
 
-        if(leftBlock.compare(state)) {
-            if(isSingle || isLeft) {
+        if (leftBlock.compare(state)) {
+            if (isSingle || isLeft) {
                 String leftType = leftBlock.getProperty("type");
 
-                if("single".equals(leftType) || "right".equals(leftType)) {
+                if ("single".equals(leftType) || "right".equals(leftType)) {
                     state = state.withProperty("type", "left");
                     return state;
                 }
             }
-        } else if(isLeft) {
+        } else if (isLeft) {
             state = state.withProperty("type", "single");
             return state;
         }
@@ -83,21 +78,20 @@ class BlockPlaceMechanicChestType {
                 position.blockZ() + right.blockZ()
         );
 
-        if(rightBlock.compare(state)) {
-            if(isSingle || isRight) {
+        if (rightBlock.compare(state)) {
+            if (isSingle || isRight) {
                 String rightLeft = rightBlock.getProperty("type");
 
-                if("single".equals(rightLeft) || "left".equals(rightLeft)) {
+                if ("single".equals(rightLeft) || "left".equals(rightLeft)) {
                     state = state.withProperty("type", "right");
                     return state;
                 }
             }
-        } else if(isRight) {
+        } else if (isRight) {
             state = state.withProperty("type", "single");
             return state;
         }
 
         return state;
     }
-
 }

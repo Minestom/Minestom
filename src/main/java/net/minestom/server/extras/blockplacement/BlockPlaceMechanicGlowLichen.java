@@ -4,17 +4,18 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-class BlockPlaceMechanicGlowLichen {
-
+final class BlockPlaceMechanicGlowLichen {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
-        BlockFace face = event.getBlockFace().getOppositeFace();
+        final BlockFace face = event.getBlockFace().getOppositeFace();
 
-        String faceName = face.name().toLowerCase();
-        if(face == BlockFace.TOP) faceName = "up";
-        if(face == BlockFace.BOTTOM) faceName = "down";
+        final String faceName = switch (face) {
+            case TOP -> "up";
+            case BOTTOM -> "down";
+            default -> face.name().toLowerCase();
+        };
 
         Block oldBlock = event.getInstance().getBlock(event.getBlockPosition());
-        if(oldBlock.compare(block)) {
+        if (oldBlock.compare(block)) {
             block = block.withProperties(oldBlock.properties());
         }
 
@@ -22,5 +23,4 @@ class BlockPlaceMechanicGlowLichen {
 
         event.setBlock(block);
     }
-
 }
