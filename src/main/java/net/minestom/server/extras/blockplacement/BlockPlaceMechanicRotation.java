@@ -9,7 +9,7 @@ import net.minestom.server.utils.NamespaceID;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BlockPlaceMechanicRotation {
+class BlockPlaceMechanicRotation {
 
     static void updateDataFromBlock(Block block) {
         String facing = block.getProperty("facing");
@@ -124,7 +124,8 @@ public class BlockPlaceMechanicRotation {
             NamespaceID.from("minecraft:observer"),
             NamespaceID.from("minecraft:beehive"),
             NamespaceID.from("minecraft:bee_nest"),
-            NamespaceID.from("minecraft:piston")
+            NamespaceID.from("minecraft:piston"),
+            NamespaceID.from("minecraft:bell")
     );
     private static Set<NamespaceID> USE_BLOCK_FACING = new HashSet<>(Set.of(
             NamespaceID.from("minecraft:glow_lichen"),
@@ -152,7 +153,8 @@ public class BlockPlaceMechanicRotation {
             NamespaceID.from("minecraft:zombie_wall_head"),
             NamespaceID.from("minecraft:player_wall_head"),
             NamespaceID.from("minecraft:creeper_wall_head"),
-            NamespaceID.from("minecraft:dragon_wall_head")
+            NamespaceID.from("minecraft:dragon_wall_head"),
+            NamespaceID.from("minecraft:bell")
     ));
 
 }

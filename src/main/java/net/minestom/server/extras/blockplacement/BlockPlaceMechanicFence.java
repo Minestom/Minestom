@@ -6,7 +6,7 @@ import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-public class BlockPlaceMechanicFence {
+class BlockPlaceMechanicFence {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(update(event.getBlock(), event.getInstance(), event.getBlockPosition()));

@@ -6,7 +6,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-public class BlockPlaceMechanicSlab {
+class BlockPlaceMechanicSlab {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockPlaceMechanicHalf.onPlace(block, event, "type");

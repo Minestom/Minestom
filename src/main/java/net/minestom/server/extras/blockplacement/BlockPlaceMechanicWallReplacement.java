@@ -8,7 +8,7 @@ import net.minestom.server.utils.NamespaceID;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockPlaceMechanicWallReplacement {
+class BlockPlaceMechanicWallReplacement {
 
     private static final Map<NamespaceID, Block> WALL_REPLACEMENTS = new HashMap<>();
     static {

@@ -199,7 +199,7 @@ public class InstanceContainer extends Instance {
             Set<Point> toUpdate = new HashSet<>();
 
             toUpdate.add(blockPosition);
-            updatedNeighbors.add(blockPosition); //Don't update the block we just placed
+            updatedNeighbors.add(blockPosition); //Don't update the block we just broke
 
             for(int i = 0; i< BlockPlacementListener.MAX_NEIGHBOR_UPDATE_LENGTH; i++) {
                 Set<Point> toUpdateCopy = new HashSet<>(toUpdate);

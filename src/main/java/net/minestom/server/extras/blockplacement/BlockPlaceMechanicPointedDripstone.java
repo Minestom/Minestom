@@ -6,7 +6,7 @@ import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-public class BlockPlaceMechanicPointedDripstone {
+class BlockPlaceMechanicPointedDripstone {
 
     static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
         String direction = block.getProperty("vertical_direction");
