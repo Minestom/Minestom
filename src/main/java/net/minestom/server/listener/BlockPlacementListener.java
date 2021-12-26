@@ -23,7 +23,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
@@ -37,7 +36,6 @@ public class BlockPlacementListener {
         final Player.Hand hand = packet.hand();
         final BlockFace blockFace = packet.blockFace();
         final Point blockPosition = packet.blockPosition();
-        final Direction direction = blockFace.toDirection();
 
         final Instance instance = player.getInstance();
         if (instance == null)
@@ -72,7 +70,7 @@ public class BlockPlacementListener {
         final Material useMaterial = usedItem.getMaterial();
         if (!useMaterial.isBlock()) {
             // Player didn't try to place a block but interacted with one
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, direction);
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace);
             EventDispatcher.call(event);
             return;
         }
