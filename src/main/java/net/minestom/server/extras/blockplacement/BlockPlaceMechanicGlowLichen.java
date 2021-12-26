@@ -6,7 +6,7 @@ import net.minestom.server.instance.block.BlockFace;
 
 public class BlockPlaceMechanicGlowLichen {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace().getOppositeFace();
 
         String faceName = face.name().toLowerCase();

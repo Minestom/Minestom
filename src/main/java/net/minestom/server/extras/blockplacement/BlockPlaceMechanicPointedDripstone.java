@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.Block;
 
 public class BlockPlaceMechanicPointedDripstone {
 
-    public static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
+    static void onNeighbor(Block block, PlayerBlockUpdateNeighborEvent event) {
         String direction = block.getProperty("vertical_direction");
         if(direction == null) return;
 
@@ -52,7 +52,7 @@ public class BlockPlaceMechanicPointedDripstone {
         event.setBlock(block);
     }
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockPlaceMechanicHalf.onPlace(block, event, "vertical_direction", "down", "up");
         block = event.getBlock();
 

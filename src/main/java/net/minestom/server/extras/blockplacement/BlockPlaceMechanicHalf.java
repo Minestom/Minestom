@@ -6,16 +6,16 @@ import net.minestom.server.instance.block.BlockFace;
 
 public class BlockPlaceMechanicHalf {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         onPlace(block, event, "half", "top", "bottom");
     }
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event,
+    static void onPlace(Block block, PlayerBlockPlaceEvent event,
                                String propertyName) {
         onPlace(block, event, propertyName, "top", "bottom");
     }
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event,
+    static void onPlace(Block block, PlayerBlockPlaceEvent event,
                                String propertyName, String propertyValTop, String propertyValBot) {
         block = event.getBlock();
 

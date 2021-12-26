@@ -9,7 +9,7 @@ import net.minestom.server.instance.block.BlockFace;
 
 public class BlockPlaceMechanicVine {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace().getOppositeFace();
         Vec playerDir = event.getPlayer().getPosition().direction();
 

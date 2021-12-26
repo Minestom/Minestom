@@ -117,7 +117,7 @@ public final class PlacementRules {
     }
 
     private static Set<NamespaceID> MINECRAFT_WALL_SIGNS;
-    public static boolean isWallSign(Block block) {
+    static boolean isWallSign(Block block) {
         return MINECRAFT_WALL_SIGNS.contains(block.namespace());
     }
 
@@ -140,10 +140,6 @@ public final class PlacementRules {
 
     private static boolean isVine(Block block) {
         return block.compare(Block.VINE);
-    }
-
-    private static boolean isLever(Block block) {
-        return block.compare(Block.LEVER);
     }
 
     private static boolean hasRotation(Block block) {

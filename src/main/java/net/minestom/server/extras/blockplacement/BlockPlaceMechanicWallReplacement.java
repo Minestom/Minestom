@@ -42,11 +42,11 @@ public class BlockPlaceMechanicWallReplacement {
         WALL_REPLACEMENTS.put(NamespaceID.from("minecraft:spruce_sign"), Block.SPRUCE_WALL_SIGN);
     }
 
-    public static boolean shouldReplace(Block block) {
+    static boolean shouldReplace(Block block) {
         return WALL_REPLACEMENTS.containsKey(block.namespace());
     }
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         Block replacement = WALL_REPLACEMENTS.get(block.namespace());
 
         if(replacement != null && event.getBlockFace().toDirection().normalY() == 0) {

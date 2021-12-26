@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.BlockFace;
 
 public class BlockPlaceMechanicSlab {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockPlaceMechanicHalf.onPlace(block, event, "type");
         block = event.getBlock();
 

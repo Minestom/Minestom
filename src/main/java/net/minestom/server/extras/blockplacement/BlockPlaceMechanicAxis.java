@@ -5,7 +5,7 @@ import net.minestom.server.instance.block.Block;
 
 public class BlockPlaceMechanicAxis {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         block = event.getBlock();
 
         switch(event.getBlockFace()) {

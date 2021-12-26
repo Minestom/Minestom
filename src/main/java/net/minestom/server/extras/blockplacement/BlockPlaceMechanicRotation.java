@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class BlockPlaceMechanicRotation {
 
-    public static void updateDataFromBlock(Block block) {
+    static void updateDataFromBlock(Block block) {
         String facing = block.getProperty("facing");
         if(facing != null) {
             if(facing.equals("up") || facing.equals("down")) {
@@ -24,7 +24,7 @@ public class BlockPlaceMechanicRotation {
         }
     }
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         block = event.getBlock();
 
         boolean horizontalOnly = !ROTATION_VERTICAL.contains(event.getBlock().id());

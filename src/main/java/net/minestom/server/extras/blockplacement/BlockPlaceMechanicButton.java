@@ -10,7 +10,7 @@ import net.minestom.server.instance.block.BlockFace;
  */
 public class BlockPlaceMechanicButton {
 
-    public static void onPlace(Block block, PlayerBlockPlaceEvent event) {
+    static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace();
 
         if(face == BlockFace.BOTTOM) {
