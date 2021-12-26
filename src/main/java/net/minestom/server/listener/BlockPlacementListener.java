@@ -64,15 +64,23 @@ public class BlockPlacementListener {
         // FIXME: onUseOnBlock
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, blockFace);
         EventDispatcher.call(playerBlockInteractEvent);
-        boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
+        boolean cancelBlockPlacement = playerBlockInteractEvent.isBlockingItemUse();
+        boolean refreshBlock = cancelBlockPlacement;
         if (!playerBlockInteractEvent.isCancelled()) {
             final var handler = interactedBlock.handler();
             if (handler != null) {
-                blockUse |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockPosition, player, hand));
+                cancelBlockPlacement |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockPosition, player, hand));
+                refreshBlock = cancelBlockPlacement;
+            }
+            if (playerBlockInteractEvent.getBlock() != interactedBlock) {
+                instance.setBlock(blockPosition, playerBlockInteractEvent.getBlock());
+                refreshBlock = false;
             }
         }
-        if (blockUse) {
-            refresh(player, interactedChunk);
+        if (refreshBlock) {
+            player.getPlayerConnection().sendPacket(new BlockChangePacket(blockPosition, interactedBlock));
+        }
+        if (cancelBlockPlacement) {
             return;
         }
 

@@ -125,7 +125,9 @@ class BlockPlaceMechanicRotation {
             NamespaceID.from("minecraft:beehive"),
             NamespaceID.from("minecraft:bee_nest"),
             NamespaceID.from("minecraft:piston"),
-            NamespaceID.from("minecraft:bell")
+            NamespaceID.from("minecraft:bell"),
+            NamespaceID.from("minecraft:comparator"),
+            NamespaceID.from("minecraft:repeater")
     );
     private static Set<NamespaceID> USE_BLOCK_FACING = new HashSet<>(Set.of(
             NamespaceID.from("minecraft:glow_lichen"),

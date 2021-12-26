@@ -1,17 +1,18 @@
 package net.minestom.server.extras.blockplacement;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.Event;
 import net.minestom.server.event.EventBinding;
 import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.player.PlayerBlockPlaceEvent;
-import net.minestom.server.event.player.PlayerBlockUpdateNeighborEvent;
-import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.client.play.ClientPickItemPacket;
 import net.minestom.server.utils.NamespaceID;
 
 import java.util.Set;
@@ -25,6 +26,7 @@ import java.util.Set;
  *  <li> Not enforcing "place on" requirements (eg. saplings on dirt/grass)
  *  <li> Many "block breaking" mechanics are not implemented, eg. breaking the lower half of a sunflower won't break the top
  *  <li> Placing water/lava will not update the held item to an empty bucket
+ *  <li> Iron trapdoors/doors can be toggled with right-click
  *  <li> A number of mechanics (or small nuances of mechanics) that have yet to be implemented
  * </ul>
  */
@@ -33,8 +35,11 @@ public final class PlacementRules {
     //TODO (implement execution of secondary place events only if event isn't cancelled):
     // BlockPlaceMechanicUpper
 
-    //TODO (remove Instance#setBlock)
+    //TODO (remove Instance#setBlock or make sure event isnt cancelled)
     // BlockPlaceMechanicSlab
+    // BlockPlaceMechanicWater
+    // BlockPlaceMechanicLava
+    // BlockInteractMechanicOpen
 
     //TODO (new mechanics):
     // Candles (stacking)
@@ -42,11 +47,18 @@ public final class PlacementRules {
     // Snow layer (stacking)
     // Beds (place 2nd block)
     // Tripwire
+    // Hoppers
+    // Rails
 
     //TODO (fix mechanics):
     // bell neighbor update
     // water/lava buckets consume in survival
     // BlockPlaceMechanicDoorHinge check for neighboring doors/blocks for overriding hinge
+
+    //TODO (interactions):
+    // Comparator
+    // Repeater
+    // Redstone dust (dot toggle)
 
     /* Filters */
 
@@ -139,15 +151,27 @@ public final class PlacementRules {
             .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicWallReplacement::onPlace)
             .build();
 
+    // Fluids
+
     private static final EventBinding<ItemEvent> WATER_BUCKET_BINDING =
             EventBinding.filtered(EventFilter.ITEM, PlacementRules::isWaterBucket)
-                    .map(PlayerUseItemOnBlockEvent.class, BlockPlaceMechanicWater::onInteract)
-                    .build();
+            .map(PlayerUseItemOnBlockEvent.class, BlockPlaceMechanicWater::onInteract)
+            .build();
 
     private static final EventBinding<ItemEvent> LAVA_BUCKET_BINDING =
             EventBinding.filtered(EventFilter.ITEM, PlacementRules::isLavaBucket)
-                    .map(PlayerUseItemOnBlockEvent.class, BlockPlaceMechanicLava::onInteract)
-                    .build();
+            .map(PlayerUseItemOnBlockEvent.class, BlockPlaceMechanicLava::onInteract)
+            .build();
+
+    // Interactions
+
+    private static final EventBinding<BlockEvent> OPEN_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::hasOpen)
+            .map(PlayerBlockInteractEvent.class, BlockInteractMechanicOpen::onInteract)
+            .build();
+
+    private static final EventBinding<BlockEvent> LEVER_TOGGLE_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::isLever)
+            .map(PlayerBlockInteractEvent.class, BlockInteractMechanicLever::onInteract)
+            .build();
 
     /* Checks */
 
@@ -196,8 +220,7 @@ public final class PlacementRules {
 
     private static Set<NamespaceID> MINECRAFT_TALL_FLOWERS;
     private static boolean isUpper(Block block) {
-        NamespaceID id = block.namespace();
-        return MINECRAFT_TALL_FLOWERS.contains(id) || MINECRAFT_DOORS.contains(id) ||
+        return MINECRAFT_TALL_FLOWERS.contains(block.namespace()) || isDoor(block) ||
                 block.compare(Block.SMALL_DRIPLEAF) || block.compare(Block.LARGE_FERN);
     }
 
@@ -209,16 +232,16 @@ public final class PlacementRules {
         return block.compare(Block.POINTED_DRIPSTONE);
     }
 
-    private static boolean isSmallDripleaf(Block block) {
-        return block.compare(Block.SMALL_DRIPLEAF);
-    }
-
     private static boolean isGlowLichen(Block block) {
         return block.compare(Block.GLOW_LICHEN);
     }
 
     private static boolean isVine(Block block) {
         return block.compare(Block.VINE);
+    }
+
+    private static boolean isLever(Block block) {
+        return block.compare(Block.LEVER);
     }
 
     private static boolean isBell(Block block) {
@@ -253,12 +276,17 @@ public final class PlacementRules {
         return block.getProperty("half") != null && !isUpper(block);
     }
 
+    private static boolean hasOpen(Block block) {
+        return block.getProperty("open") != null;
+    }
+
     /* Init */
 
-    public static void registerAll() {
+    public static void registerAll(EventNode<Event> eventNode) {
         init();
-        registerBucketFluids();
-        registerPlacements();
+        registerBucketFluids(eventNode);
+        registerPlacements(eventNode);
+        registerInteractions(eventNode);
     }
 
     private static void init() {
@@ -292,38 +320,44 @@ public final class PlacementRules {
         }
     }
 
-    public static void registerBucketFluids() {
+    public static void registerBucketFluids(EventNode<Event> eventNode) {
         // Fluids
-        MinecraftServer.getGlobalEventHandler().register(WATER_BUCKET_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(LAVA_BUCKET_BINDING);
+        eventNode.register(WATER_BUCKET_BINDING);
+        eventNode.register(LAVA_BUCKET_BINDING);
     }
 
-    public static void registerPlacements() {
+    public static void registerInteractions(EventNode<Event> eventNode) {
+        // Interactions
+        eventNode.register(OPEN_BINDING);
+        eventNode.register(LEVER_TOGGLE_BINDING);
+    }
+
+    public static void registerPlacements(EventNode<Event> eventNode) {
         // Replacements (setting to a different block type)
-        MinecraftServer.getGlobalEventHandler().register(WALL_REPLACEMENT_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(TWISTING_VINES_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(WEEPING_VINES_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(BIG_DRIPLEAF_BINDING);
+        eventNode.register(WALL_REPLACEMENT_BINDING);
+        eventNode.register(TWISTING_VINES_BINDING);
+        eventNode.register(WEEPING_VINES_BINDING);
+        eventNode.register(BIG_DRIPLEAF_BINDING);
 
         // Blockstates
-        MinecraftServer.getGlobalEventHandler().register(ROTATION_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(ROTATION8_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(AXIS_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(HALF_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(UPPER_BINDING);
+        eventNode.register(ROTATION_BINDING);
+        eventNode.register(ROTATION8_BINDING);
+        eventNode.register(AXIS_BINDING);
+        eventNode.register(HALF_BINDING);
+        eventNode.register(UPPER_BINDING);
 
         // Specific blocks
-        MinecraftServer.getGlobalEventHandler().register(STAIRS_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(WALLS_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(SLAB_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(BUTTON_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(CHEST_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(FENCE_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(GLOW_LICHEN_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(VINE_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(BELL_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(POINTED_DRIPSTONE_BINDING);
-        MinecraftServer.getGlobalEventHandler().register(DOOR_HINGE_BINDING);
+        eventNode.register(STAIRS_BINDING);
+        eventNode.register(WALLS_BINDING);
+        eventNode.register(SLAB_BINDING);
+        eventNode.register(BUTTON_BINDING);
+        eventNode.register(CHEST_BINDING);
+        eventNode.register(FENCE_BINDING);
+        eventNode.register(GLOW_LICHEN_BINDING);
+        eventNode.register(VINE_BINDING);
+        eventNode.register(BELL_BINDING);
+        eventNode.register(POINTED_DRIPSTONE_BINDING);
+        eventNode.register(DOOR_HINGE_BINDING);
     }
 
 }
