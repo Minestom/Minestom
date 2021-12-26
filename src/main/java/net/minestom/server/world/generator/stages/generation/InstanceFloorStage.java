@@ -5,13 +5,19 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.world.generator.GenerationContext;
 
-public class BedrockStage implements GenerationStage {
+public class InstanceFloorStage implements GenerationStage {
+    private final Block floor;
+
+    public InstanceFloorStage(Block floor) {
+        this.floor = floor;
+    }
+
     @Override
     public void process(GenerationContext context, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
         if (sectionY > context.getInstance().getSectionMinY()) return;
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                blockCache.setBlock(x, 0, z, Block.BEDROCK);
+                blockCache.setBlock(x, 0, z, floor);
             }
         }
     }
