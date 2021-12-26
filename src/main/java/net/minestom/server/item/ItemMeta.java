@@ -159,6 +159,10 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Override
     public synchronized void write(@NotNull BinaryWriter writer) {
+        if (nbt.isEmpty()) {
+            writer.writeByte((byte) 0);
+            return;
+        }
         if (cachedBuffer == null) {
             BinaryWriter w = new BinaryWriter();
             w.writeNBT("", nbt);
