@@ -216,7 +216,7 @@ public class EventNodeTest {
         assertFalse(result.get());
 
         result.set(false);
-        node.unmap(item);
+        assertTrue(node.unmap(item));
         node.call(new ItemTestEvent(item));
         assertFalse(result.get());
     }
