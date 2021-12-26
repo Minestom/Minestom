@@ -23,7 +23,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
