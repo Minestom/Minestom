@@ -409,24 +409,24 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                 final Handle<E> handle = handlers.get(handler);
                 if (handle != null) handle.call(event);
             };
-            if (filterList.length == 1) {
-                final var firstFilter = filterList[0];
-                // Common case where there is only one filter
-                return event -> mapper.accept(firstFilter, event);
-            } else if (filterList.length == 2) {
-                final var firstFilter = filterList[0];
-                final var secondFilter = filterList[1];
-                return event -> {
-                    mapper.accept(firstFilter, event);
-                    mapper.accept(secondFilter, event);
+            // Specialize the consumer depending on the number of filters to avoid looping
+            return switch (filterList.length) {
+                case 1 -> event -> mapper.accept(filterList[0], event);
+                case 2 -> event -> {
+                    mapper.accept(filterList[0], event);
+                    mapper.accept(filterList[1], event);
                 };
-            } else {
-                return event -> {
+                case 3 -> event -> {
+                    mapper.accept(filterList[0], event);
+                    mapper.accept(filterList[1], event);
+                    mapper.accept(filterList[2], event);
+                };
+                default -> event -> {
                     for (var filter : filterList) {
                         mapper.accept(filter, event);
                     }
                 };
-            }
+            };
         }
 
         void callListener(@NotNull EventListener<E> listener, E event) {
