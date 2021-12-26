@@ -1,13 +1,11 @@
 package net.minestom.server.extras.blockplacement;
 
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-public class BlockPlaceMechanicVine {
+class BlockPlaceMechanicVine {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace().getOppositeFace();

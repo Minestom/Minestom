@@ -8,7 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockPlaceMechanicChestType {
+class BlockPlaceMechanicChestType {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(updateFromNeighbors(event.getBlock(), event.getInstance(), event.getBlockPosition()));

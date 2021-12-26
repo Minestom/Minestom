@@ -3,7 +3,7 @@ package net.minestom.server.extras.blockplacement;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 
-public class BlockPlaceMechanicAxis {
+class BlockPlaceMechanicAxis {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         block = event.getBlock();

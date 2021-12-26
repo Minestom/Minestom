@@ -4,7 +4,7 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-public class BlockPlaceMechanicHalf {
+class BlockPlaceMechanicHalf {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         onPlace(block, event, "half", "top", "bottom");

@@ -12,10 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-/**
- * Block mechanic for setting the shape for stairs
- */
-public class BlockPlaceMechanicStairShape {
+class BlockPlaceMechanicStairShape {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         event.setBlock(update(block, event.getInstance(), event.getBlockPosition()));

@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.BlockFace;
 /**
  * Block mechanic for levers
  */
-public class BlockPlaceMechanicButton {
+class BlockPlaceMechanicButton {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace();

@@ -4,7 +4,7 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-public class BlockPlaceMechanicGlowLichen {
+class BlockPlaceMechanicGlowLichen {
 
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {
         BlockFace face = event.getBlockFace().getOppositeFace();
