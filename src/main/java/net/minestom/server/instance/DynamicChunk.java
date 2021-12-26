@@ -102,7 +102,11 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Section getSection(int section) {
-        return sections.get(section - minSection);
+        try {
+            return sections.get(section - minSection);
+        }catch (IndexOutOfBoundsException exp) { // sections.get can throw an index oob exception, in the scenario that it does- return an empty section instead
+			return new Section();
+		}
     }
 
     @Override
