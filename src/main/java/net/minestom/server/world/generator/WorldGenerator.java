@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.SectionBlockCache;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.generator.stages.generation.GenerationStage;
@@ -16,10 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class WorldGenerator implements Generator, GenerationContext.Provider {
     private final static Logger LOGGER = LoggerFactory.getLogger(WorldGenerator.class);
@@ -43,6 +47,7 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         this.generationStages = Collections.unmodifiableList(generationStages);
         final Comparator<PreGenerationStage<?>> type = Comparator.comparing(PreGenerationStage::getType);
         final Comparator<PreGenerationStage<?>> range = Comparator.comparing(PreGenerationStage::getRange);
+        //TODO Handle dependencies
         this.preGenerationStages = preGenerationStages.stream().sorted(type.thenComparing(range)).toList();
         if (!this.preGenerationStages.equals(preGenerationStages)) {
             LOGGER.warn("Supplied pre-generation stages were not ordered, they have been automatically rearranged!");
@@ -58,13 +63,16 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         final ArrayList<CompletableFuture<SectionResult>> futures = new ArrayList<>(sections.size());
         for (final Vec pos : sections) {
             final SectionResult result = new SectionResult(new SectionData(new SectionBlockCache(), Palette.biomes()), pos);
-            futures.add(generateSection(instance, result.sectionData().blockCache(), result.sectionData().biomePalette(), (int) pos.x(), (int) pos.y(), (int) pos.z())
+            futures.add(generateSection(instance, result.sectionData().blockCache(), result.sectionData().biomePalette(),
+                    (int) pos.x(), (int) pos.y(), (int) pos.z())
                     .thenCompose(unused -> CompletableFuture.completedFuture(result)));
         }
         return futures;
     }
 
-    private CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette, int sectionX, int sectionY, int sectionZ) {
+    @SuppressWarnings("unchecked")
+    private CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette,
+                                                    int sectionX, int sectionY, int sectionZ) {
         return sectionGens.get(new SectionKey(instance, new Vec(sectionX, sectionY, sectionZ)), k -> {
             final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
 
@@ -73,17 +81,29 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
             for (PreGenerationStage<? extends StageData> preGenerationStage : preGenerationStages) {
                 final StageKey key = new StageKey(instance, new Vec(sectionX, sectionY, sectionZ), preGenerationStage);
                 CompletableFuture<?>[] futures = switch (preGenerationStage.getType()) {
-                    case INSTANCE -> new CompletableFuture<?>[] {
-                            preGenStages.get(key, kk -> executePreGenerationStage(instance.getGenerationContext(), 0,0,0, preGenerationStage))
-                    };
+                    case INSTANCE -> {
+                        final StageData.Instance data = instance.getGenerationContext()
+                                .getInstanceData(((Class<? extends PreGenerationStage<StageData.Instance>>) preGenerationStage.getClass()));
+                        yield new CompletableFuture[]{data != null && data.generated() ? AsyncUtils.VOID_FUTURE :
+                                preGenStages.get(key, kk -> executePreGenerationStage(instance.getGenerationContext(),
+                                        0, 0, 0, preGenerationStage))};
+                    }
                     case CHUNK -> {
                         CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(preGenerationStage.getRange()*2+1)];
                         int i = 0;
                         for (int x = -preGenerationStage.getRange(); x <= preGenerationStage.getRange(); x++) {
                             for (int z = -preGenerationStage.getRange(); z <= preGenerationStage.getRange(); z++) {
-                                int finalX = x;
-                                int finalZ = z;
-                                f[i++] = preGenStages.get(key, kk -> executePreGenerationStage(instance.getGenerationContext(), sectionX+ finalX, 0, sectionZ+ finalZ, preGenerationStage));
+                                final StageData.Chunk data = instance.getGenerationContext()
+                                        .getChunkData(((Class<? extends PreGenerationStage<StageData.Chunk>>) preGenerationStage.getClass()), x, z);
+                                if (data != null && data.generated()) {
+                                    f[i++] = AsyncUtils.VOID_FUTURE;
+                                } else {
+                                    int finalX = x;
+                                    int finalZ = z;
+                                    f[i++] = preGenStages.get(key, kk ->
+                                            executePreGenerationStage(instance.getGenerationContext(), sectionX + finalX,
+                                                    0, sectionZ + finalZ, preGenerationStage));
+                                }
                             }
                         }
                         yield f;
@@ -96,10 +116,19 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
                         for (int x = -preGenerationStage.getRange(); x <= preGenerationStage.getRange(); x++) {
                             for (int y = min; y < max; y++) {
                                 for (int z = -preGenerationStage.getRange(); z <= preGenerationStage.getRange(); z++) {
-                                    int finalX = x;
-                                    int finalY = y;
-                                    int finalZ = z;
-                                    f[i++] = preGenStages.get(key, kk -> executePreGenerationStage(instance.getGenerationContext(), sectionX+ finalX, finalY, sectionZ+ finalZ, preGenerationStage));
+                                    final StageData.Section data = instance.getGenerationContext()
+                                            .getSectionData(((Class<? extends PreGenerationStage<StageData.Section>>)
+                                                    preGenerationStage.getClass()), x, y, z);
+                                    if (data != null && data.generated()) {
+                                        f[i++] = AsyncUtils.VOID_FUTURE;
+                                    } else {
+                                        int finalX = x;
+                                        int finalY = y;
+                                        int finalZ = z;
+                                        f[i++] = preGenStages.get(key, kk ->
+                                                executePreGenerationStage(instance.getGenerationContext(),
+                                                        sectionX + finalX, finalY, sectionZ + finalZ, preGenerationStage));
+                                    }
                                 }
                             }
                         }
