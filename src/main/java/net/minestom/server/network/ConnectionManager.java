@@ -4,14 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
-import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
@@ -29,7 +27,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -50,9 +47,9 @@ public final class ConnectionManager {
     // All the consumers to call once a packet is sent
     private final List<ServerPacketConsumer> sendClientPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
-    private UuidProvider uuidProvider;
+    private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
     // The player provider to have your own Player implementation
-    private PlayerProvider playerProvider;
+    private volatile PlayerProvider playerProvider = Player::new;
 
     private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
 
@@ -191,7 +188,7 @@ public final class ConnectionManager {
      * @see #getPlayerConnectionUuid(PlayerConnection, String)
      */
     public void setUuidProvider(@Nullable UuidProvider uuidProvider) {
-        this.uuidProvider = uuidProvider;
+        this.uuidProvider = uuidProvider != null ? uuidProvider : (playerConnection, username) -> UUID.randomUUID();
     }
 
     /**
@@ -205,8 +202,6 @@ public final class ConnectionManager {
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
     public @NotNull UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
-        if (uuidProvider == null)
-            return UUID.randomUUID();
         return uuidProvider.provide(playerConnection, username);
     }
 
@@ -216,7 +211,7 @@ public final class ConnectionManager {
      * @param playerProvider the new {@link PlayerProvider}, can be set to null to apply the default provider
      */
     public void setPlayerProvider(@Nullable PlayerProvider playerProvider) {
-        this.playerProvider = playerProvider;
+        this.playerProvider = playerProvider != null ? playerProvider : Player::new;
     }
 
     /**
@@ -225,7 +220,7 @@ public final class ConnectionManager {
      * @return the current {@link PlayerProvider}
      */
     public @NotNull PlayerProvider getPlayerProvider() {
-        return playerProvider == null ? playerProvider = Player::new : playerProvider;
+        return playerProvider;
     }
 
     /**
@@ -247,14 +242,6 @@ public final class ConnectionManager {
         this.shutdownText = shutdownText;
     }
 
-    /**
-     * Adds a new {@link Player} in the players list.
-     * Is currently used at
-     * {@link LoginStartPacket#process(PlayerConnection)}
-     * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}.
-     *
-     * @param player the player to add
-     */
     public synchronized void registerPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
@@ -269,11 +256,9 @@ public final class ConnectionManager {
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
     public synchronized void removePlayer(@NotNull PlayerConnection connection) {
-        final Player player = this.connectionPlayerMap.get(connection);
-        if (player == null)
-            return;
+        final Player player = this.connectionPlayerMap.remove(connection);
+        if (player == null) return;
         this.players.remove(player);
-        this.connectionPlayerMap.remove(connection);
     }
 
     /**
@@ -316,11 +301,8 @@ public final class ConnectionManager {
                 playerConnection.sendPacket(loginSuccessPacket);
             }
             playerConnection.setConnectionState(ConnectionState.PLAY);
-            // Add the player to the waiting list
+            if (register) registerPlayer(player);
             this.waitingPlayers.relaxedOffer(player);
-            if (register) {
-                registerPlayer(player);
-            }
         });
     }
 
@@ -334,7 +316,7 @@ public final class ConnectionManager {
     public @NotNull Player startPlayState(@NotNull PlayerConnection connection,
                                           @NotNull UUID uuid, @NotNull String username,
                                           boolean register) {
-        final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
+        final Player player = playerProvider.createPlayer(uuid, username, connection);
         startPlayState(player, register);
         return player;
     }
