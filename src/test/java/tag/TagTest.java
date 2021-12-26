@@ -7,7 +7,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TagTest {
 
@@ -33,5 +33,20 @@ public class TagTest {
         var reader = TagReadable.fromCompound(mutable);
         final String snbt = reader.getTag(Tag.SNBT);
         assertEquals(snbt, mutable.toCompound().toSNBT(), "SNBT is not the same");
+    }
+
+    @Test
+    public void testDefault() {
+        var nullable = Tag.String("key");
+        var notNull = nullable.defaultValue("Hey");
+        assertNotSame(nullable, notNull);
+
+        var handler = TagHandler.fromCompound(new MutableNBTCompound());
+        assertFalse(handler.hasTag(nullable));
+        assertTrue(handler.hasTag(notNull)); // default value is set
+        assertFalse(handler.hasTag(nullable));
+
+        assertNull(handler.getTag(nullable));
+        assertEquals("Hey", handler.getTag(notNull));
     }
 }
