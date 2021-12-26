@@ -154,7 +154,7 @@ public class DeclareCommandsPacket implements ServerPacket {
     }
 
     public enum NodeType {
-        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
+        ROOT(0b0), LITERAL(0b1), ARGUMENT(0b10), NONE(0b11);
 
         private final int mask;
 
