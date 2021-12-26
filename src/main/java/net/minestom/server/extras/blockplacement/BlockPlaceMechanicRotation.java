@@ -38,6 +38,25 @@ public class BlockPlaceMechanicRotation {
             double absY = Math.abs(playerDir.y());
             double absZ = Math.abs(playerDir.z());
 
+            // Thanks Mojang
+            if (block.compare(Block.ANVIL) || block.compare(Block.CHIPPED_ANVIL) || block.compare(Block.DAMAGED_ANVIL)) {
+                if(absX > absZ) {
+                    if(playerDir.x() > 0 == invert) {
+                        block = block.withProperty("facing", "north");
+                    } else {
+                        block = block.withProperty("facing", "south");
+                    }
+                } else {
+                    if(playerDir.z() > 0 == invert) {
+                        block = block.withProperty("facing", "east");
+                    } else {
+                        block = block.withProperty("facing", "west");
+                    }
+                }
+                event.setBlock(block);
+                return;
+            }
+
             if(!horizontalOnly && absY > absX && absY > absZ) {
                 if(playerDir.y() > 0 == invert) {
                     block = block.withProperty("facing", "down");
