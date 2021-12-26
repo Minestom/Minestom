@@ -324,7 +324,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final boolean hasListeners = listenersArray.length > 0;
             final boolean hasMap = mappedListener != null;
             final boolean hasChildren = childrenListeners.length > 0;
-            if (listenersArray.length == 0 && mappedListener == null && childrenListeners.length == 0) {
+            if (!hasListeners && !hasMap && !hasChildren) {
                 // No listener
                 return null;
             }
