@@ -5,9 +5,8 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.generator.GenerationContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProcessorStage.Data> {
     @Override
@@ -19,14 +18,14 @@ public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProces
         final float maxPrecipitation = biomeData.biomes().stream().map(Biome::downfall).max(Float::compareTo).orElse(1f);
         final float slopeTemp = 2 / (maxTemp - minTemp);
         final float slopePrecipitation = 2 / (maxPrecipitation - minPrecipitation);
-        final BiomeWithMappedTemperatureAndPrecipitationValues[] biomeWithMappedTemperatureAndPrecipitationValues = new BiomeWithMappedTemperatureAndPrecipitationValues[biomeData.biomes().size()];
+        final BiomeWithTemperatureAndPrecipitationValues[] biomeWithTemperatureAndPrecipitationValues = new BiomeWithTemperatureAndPrecipitationValues[biomeData.biomes().size()];
         int i = 0;
         for (Biome biome : biomeData.biomes()) {
-            biomeWithMappedTemperatureAndPrecipitationValues[i++] = new BiomeWithMappedTemperatureAndPrecipitationValues(biome,
+            biomeWithTemperatureAndPrecipitationValues[i++] = new BiomeWithTemperatureAndPrecipitationValues(biome,
                     -1 + slopeTemp * (biome.temperature() - minTemp),
                     -1 + slopePrecipitation * (biome.downfall() - minPrecipitation));
         }
-        context.setInstanceData(new Data(biomeWithMappedTemperatureAndPrecipitationValues));
+        context.setInstanceData(new Data(biomeWithTemperatureAndPrecipitationValues));
     }
 
     @Override
@@ -45,45 +44,34 @@ public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProces
     }
 
     public static class Data implements StageData.Instance {
-        private final BiomeWithMappedTemperatureAndPrecipitationValues[] biomeWithMappedTemperatureAndPrecipitationValues;
+        private final BiomeWithTemperatureAndPrecipitationValues[] biomeWithTemperatureAndPrecipitationValues;
 
-        public Data(BiomeWithMappedTemperatureAndPrecipitationValues[] biomeWithMappedTemperatureAndPrecipitationValues) {
-            this.biomeWithMappedTemperatureAndPrecipitationValues = biomeWithMappedTemperatureAndPrecipitationValues;
+        public Data(BiomeWithTemperatureAndPrecipitationValues[] biomeWithTemperatureAndPrecipitationValues) {
+            this.biomeWithTemperatureAndPrecipitationValues = biomeWithTemperatureAndPrecipitationValues;
         }
 
         public Map<Biome, Float> getBiomesInfluence(float temperature, float precipitation, float blending) {
-            //TODO Verify math
-            final float targetMin = -blending;
-            final float targetMax = blending;
-            final float[] avgAbsDistances = new float[biomeWithMappedTemperatureAndPrecipitationValues.length];
-            final HashMap<Biome, Float> result = new HashMap<>();
-            for (int i = 0; i < biomeWithMappedTemperatureAndPrecipitationValues.length; i++) {
-                final BiomeWithMappedTemperatureAndPrecipitationValues biome = biomeWithMappedTemperatureAndPrecipitationValues[i];
-                avgAbsDistances[i] = Math.abs(((biome.temperature - temperature) + (biome.precipitation - precipitation)) / 2);
+            List<BiomeWithTemperatureAndPrecipitationValues> list = new ArrayList<>();
+            for (BiomeWithTemperatureAndPrecipitationValues b : biomeWithTemperatureAndPrecipitationValues) {
+                list.add(new BiomeWithTemperatureAndPrecipitationValues(b.biome, Math.abs(b.temperature - temperature), Math.abs(b.precipitation - precipitation)));
             }
-            for (int i = 0; i < avgAbsDistances.length; i++) {
-                if (MathUtils.isBetween(avgAbsDistances[i], targetMin, targetMax)) {
-                    result.put(biomeWithMappedTemperatureAndPrecipitationValues[i].biome, avgAbsDistances[i]);
+            list.sort((a, b) -> Float.compare(Math.abs(a.temperature-a.precipitation), Math.abs(b.temperature-b.precipitation)));
+            final List<BiomeWithTemperatureAndPrecipitationValues> results = list.stream().filter(x -> MathUtils.isBetween(x.temperature, 0, blending) && MathUtils.isBetween(x.precipitation, 0, blending)).toList();
+            final HashMap<Biome, Float> map = new HashMap<>();
+            if (results.isEmpty()) {
+                final BiomeWithTemperatureAndPrecipitationValues closestMatch = list.stream().findFirst().get();
+                map.put(closestMatch.biome, 1f);
+            } else {
+                final Set<Float> distanceDistances = results.stream().map(a -> Math.abs(a.temperature - a.precipitation)).collect(Collectors.toSet());
+                final Float min = distanceDistances.stream().min(Float::compareTo).get();
+                final Float max = distanceDistances.stream().max(Float::compareTo).get();
+                final float slope = 1 / (max-min);
+                for (BiomeWithTemperatureAndPrecipitationValues result : results) {
+                    map.put(result.biome, slope * Math.abs(result.temperature - result.precipitation));
                 }
             }
-            if (result.isEmpty()) {
-                int closestToZeroIndex = 0;
-                float closestToZeroValue = 1000;
-                for (int i = 0; i < avgAbsDistances.length; i++) {
-                    if (avgAbsDistances[i] < closestToZeroValue) {
-                        closestToZeroValue =avgAbsDistances[i];
-                        closestToZeroIndex = i;
-                    }
-                }
-                result.put(biomeWithMappedTemperatureAndPrecipitationValues[closestToZeroIndex].biome, 1f);
-                return result;
-            }
-            final float min = result.values().stream().min(Float::compareTo).orElse(0f);
-            final float max = result.values().stream().max(Float::compareTo).orElse(0f);
-            final float slope = 1 / (max-min);
-            result.replaceAll((biome, value) -> slope * (value-min));
-            return result;
+            return map;
         }
     }
-    private record BiomeWithMappedTemperatureAndPrecipitationValues(Biome biome, float temperature, float precipitation) {}
+    private record BiomeWithTemperatureAndPrecipitationValues(Biome biome, float temperature, float precipitation) {}
 }
