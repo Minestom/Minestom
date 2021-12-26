@@ -8,17 +8,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface GenerationContext {
-    <T extends StageData.Instance> @Nullable T getInstanceData(Class<? extends PreGenerationStage<T>> stage);
+    <T extends StageData.Instance> @Nullable T getInstanceData(Class<T> stageData);
 
-    <T extends StageData.Chunk> @Nullable T getChunkData(Class<? extends PreGenerationStage<T>> stage, int chunkX, int chunkZ);
+    <T extends StageData.Chunk> @Nullable T getChunkData(Class<T> stageData, int chunkX, int chunkZ);
 
-    <T extends StageData.Section> @Nullable T getSectionData(Class<? extends PreGenerationStage<T>> stage, int sectionX, int sectionY, int sectionZ);
+    <T extends StageData.Section> @Nullable T getSectionData(Class<T> stageData, int sectionX, int sectionY, int sectionZ);
 
-    <T extends StageData.Instance> void setInstanceData(Class<? extends PreGenerationStage<T>> stage, T data);
+    <T extends StageData.Instance> void setInstanceData(T data);
 
-    <T extends StageData.Chunk> void setChunkData(Class<? extends PreGenerationStage<T>> stage, T data, int chunkX, int chunkZ);
+    <T extends StageData.Chunk> void setChunkData(T data, int chunkX, int chunkZ);
 
-    <T extends StageData.Section> void setSectionData(Class<? extends PreGenerationStage<T>> stage, T data, int sectionX, int sectionY, int sectionZ);
+    <T extends StageData.Section> void setSectionData(T data, int sectionX, int sectionY, int sectionZ);
 
     Instance getInstance();
 

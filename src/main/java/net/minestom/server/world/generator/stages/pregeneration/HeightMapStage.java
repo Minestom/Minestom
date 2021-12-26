@@ -11,7 +11,7 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
     @Override
     public void process(GenerationContext context, int sectionX, int sectionY, int sectionZ) {
         final Data data = new Data(30);
-        context.setChunkData(HeightMapStage.class, data, sectionX, sectionZ);
+        context.setChunkData(data, sectionX, sectionZ);
     }
 
     @Override
@@ -61,6 +61,11 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
         @Override
         public boolean supportsSaving() {
             return true;
+        }
+
+        @Override
+        public boolean generated() {
+            return false;
         }
 
         @Override

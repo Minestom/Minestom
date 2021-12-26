@@ -73,61 +73,55 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
     @SuppressWarnings("unchecked")
     private CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette,
                                                     int sectionX, int sectionY, int sectionZ) {
-        return sectionGens.get(new SectionKey(instance, new Vec(sectionX, sectionY, sectionZ)), k -> {
+        return sectionGens.get(new SectionKey(instance, new P(sectionX, sectionY, sectionZ)), key -> {
+            final GenerationContext context = instance.getGenerationContext();
             final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
 
             // Pre Gen
 
-            for (PreGenerationStage<? extends StageData> preGenerationStage : preGenerationStages) {
-                final StageKey key = new StageKey(instance, new Vec(sectionX, sectionY, sectionZ), preGenerationStage);
-                CompletableFuture<?>[] futures = switch (preGenerationStage.getType()) {
+            for (PreGenerationStage<? extends StageData> stage : preGenerationStages) {
+                CompletableFuture<?>[] futures = switch (stage.getType()) {
                     case INSTANCE -> {
-                        final StageData.Instance data = instance.getGenerationContext()
-                                .getInstanceData(((Class<? extends PreGenerationStage<StageData.Instance>>) preGenerationStage.getClass()));
+                        final StageData.Instance data = context
+                                .getInstanceData(((Class<? extends StageData.Instance>) stage.getDataClass()));
                         yield new CompletableFuture[]{data != null && data.generated() ? AsyncUtils.VOID_FUTURE :
-                                preGenStages.get(key, kk -> executePreGenerationStage(instance.getGenerationContext(),
-                                        0, 0, 0, preGenerationStage))};
+                                preGenStages.get(new StageKey(instance, null, stage), kk -> executePreGenerationStage(context,0, 0, 0, stage))};
                     }
                     case CHUNK -> {
-                        CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(preGenerationStage.getRange()*2+1)];
+                        CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(stage.getRange()*2+1)];
                         int i = 0;
-                        for (int x = -preGenerationStage.getRange(); x <= preGenerationStage.getRange(); x++) {
-                            for (int z = -preGenerationStage.getRange(); z <= preGenerationStage.getRange(); z++) {
-                                final StageData.Chunk data = instance.getGenerationContext()
-                                        .getChunkData(((Class<? extends PreGenerationStage<StageData.Chunk>>) preGenerationStage.getClass()), x, z);
+                        for (int x = -stage.getRange(); x <= stage.getRange(); x++) {
+                            for (int z = -stage.getRange(); z <= stage.getRange(); z++) {
+                                final P loc = new P(sectionX + x, 0, sectionZ + z);
+                                final StageData.Chunk data = context
+                                        .getChunkData(((Class<? extends StageData.Chunk>) stage.getDataClass()), loc.x(), loc.z());
                                 if (data != null && data.generated()) {
                                     f[i++] = AsyncUtils.VOID_FUTURE;
                                 } else {
-                                    int finalX = x;
-                                    int finalZ = z;
-                                    f[i++] = preGenStages.get(key, kk ->
-                                            executePreGenerationStage(instance.getGenerationContext(), sectionX + finalX,
-                                                    0, sectionZ + finalZ, preGenerationStage));
+                                    f[i++] = preGenStages.get(new StageKey(instance, loc, stage), k ->
+                                            executePreGenerationStage(context, k.loc.x(),0, k.loc.z(), stage));
                                 }
                             }
                         }
                         yield f;
                     }
                     case SECTION -> {
-                        int min = Math.max(sectionY-preGenerationStage.getRange(), instance.getSectionMinY());
-                        int max = Math.min(sectionY+preGenerationStage.getRange(), instance.getSectionMaxY());
-                        CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(preGenerationStage.getRange()*2+1) + (max-min)];
+                        int min = Math.max(sectionY-stage.getRange(), instance.getSectionMinY());
+                        int max = Math.min(sectionY+stage.getRange(), instance.getSectionMaxY());
+                        CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(stage.getRange()*2+1) + (max-min)];
                         int i = 0;
-                        for (int x = -preGenerationStage.getRange(); x <= preGenerationStage.getRange(); x++) {
+                        for (int x = -stage.getRange(); x <= stage.getRange(); x++) {
                             for (int y = min; y < max; y++) {
-                                for (int z = -preGenerationStage.getRange(); z <= preGenerationStage.getRange(); z++) {
-                                    final StageData.Section data = instance.getGenerationContext()
-                                            .getSectionData(((Class<? extends PreGenerationStage<StageData.Section>>)
-                                                    preGenerationStage.getClass()), x, y, z);
+                                for (int z = -stage.getRange(); z <= stage.getRange(); z++) {
+                                    final P loc = new P(sectionX + x, y, sectionZ + z);
+                                    final StageData.Section data = context
+                                            .getSectionData(((Class<? extends StageData.Section>)
+                                                    stage.getDataClass()), loc.x(), loc.y(), loc.z());
                                     if (data != null && data.generated()) {
                                         f[i++] = AsyncUtils.VOID_FUTURE;
                                     } else {
-                                        int finalX = x;
-                                        int finalY = y;
-                                        int finalZ = z;
-                                        f[i++] = preGenStages.get(key, kk ->
-                                                executePreGenerationStage(instance.getGenerationContext(),
-                                                        sectionX + finalX, finalY, sectionZ + finalZ, preGenerationStage));
+                                        f[i++] = preGenStages.get(new StageKey(instance, loc, stage), k ->
+                                                executePreGenerationStage(context, k.loc.x(), k.loc.y(), k.loc.z(), stage));
                                     }
                                 }
                             }
@@ -148,7 +142,7 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
 
             WORLD_GEN_POOL.execute(() -> {
                 for (GenerationStage generationStage : generationStages) {
-                    generationStage.process(instance.getGenerationContext(), blockCache, biomePalette, sectionX, sectionY, sectionZ);
+                    generationStage.process(context, blockCache, biomePalette, sectionX, sectionY, sectionZ);
                 }
                 completableFuture.complete(null);
             });
@@ -172,6 +166,7 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         return generationContextFactory == null ? null : generationContextFactory.newInstance(instance, preGenerationStages);
     }
 
-    private record StageKey(Instance instance, Point loc, PreGenerationStage<?> stage) {}
-    private record SectionKey(Instance instance, Point loc) {}
+    private record StageKey(Instance instance, P loc, PreGenerationStage<?> stage) {}
+    private record SectionKey(Instance instance, P loc) {}
+    private record P(int x, int y, int z) {}
 }

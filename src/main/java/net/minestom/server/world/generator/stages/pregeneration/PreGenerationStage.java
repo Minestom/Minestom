@@ -2,6 +2,7 @@ package net.minestom.server.world.generator.stages.pregeneration;
 
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.world.generator.GenerationContext;
+import net.minestom.server.world.generator.stages.StageDataDependent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ import java.util.function.Function;
  *
  * @param <T> the type of the data this stage provides
  */
-public interface PreGenerationStage<T extends StageData> {
+public interface PreGenerationStage<T extends StageData> extends StageDataDependent {
     int INTERNAL_STAGE_ID_OFFSET = 1000;
     /**
      * Called for sections in the {@link #getRange() look around} range around the generated sectionData<br>

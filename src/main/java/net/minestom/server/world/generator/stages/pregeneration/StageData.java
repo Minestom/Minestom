@@ -8,6 +8,12 @@ public sealed interface StageData extends Writeable permits StageData.Chunk, Sta
     //TODO Default implementation returning false?
     boolean supportsSaving();
 
+    /**
+     * Used to check if the data is present because it's overflown or because it is generated for that specific location
+     * @return {@code true} if it is generated
+     */
+    boolean generated();
+
     @Override
     default void write(@NotNull BinaryWriter writer) {
         if (supportsSaving()) {
