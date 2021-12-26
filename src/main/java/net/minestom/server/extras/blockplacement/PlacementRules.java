@@ -77,6 +77,16 @@ public final class PlacementRules {
             .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicVine::onPlace)
             .build();
 
+    private static final EventBinding<BlockEvent> TWISTING_VINES_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::isTwistingVine)
+            .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicTwistingVines::onPlace)
+            .map(PlayerBlockUpdateNeighborEvent.class, BlockPlaceMechanicTwistingVines::onNeighbor)
+            .build();
+
+    private static final EventBinding<BlockEvent> WEEPING_VINES_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::isWeepingVine)
+            .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicWeepingVines::onPlace)
+            .map(PlayerBlockUpdateNeighborEvent.class, BlockPlaceMechanicWeepingVines::onNeighbor)
+            .build();
+
     private static final EventBinding<BlockEvent> ROTATION_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::hasRotation)
             .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicRotation::onPlace)
             .build();
@@ -142,6 +152,14 @@ public final class PlacementRules {
         return block.compare(Block.VINE);
     }
 
+    private static boolean isTwistingVine(Block block) {
+        return block.compare(Block.TWISTING_VINES);
+    }
+
+    private static boolean isWeepingVine(Block block) {
+        return block.compare(Block.WEEPING_VINES);
+    }
+
     private static boolean hasRotation(Block block) {
         return block.getProperty("facing") != null;
     }
@@ -199,6 +217,8 @@ public final class PlacementRules {
         MinecraftServer.getGlobalEventHandler().register(FENCE_BINDING);
         MinecraftServer.getGlobalEventHandler().register(GLOW_LICHEN_BINDING);
         MinecraftServer.getGlobalEventHandler().register(VINE_BINDING);
+        MinecraftServer.getGlobalEventHandler().register(TWISTING_VINES_BINDING);
+        MinecraftServer.getGlobalEventHandler().register(WEEPING_VINES_BINDING);
         MinecraftServer.getGlobalEventHandler().register(POINTED_DRIPSTONE_BINDING);
 	}
 
