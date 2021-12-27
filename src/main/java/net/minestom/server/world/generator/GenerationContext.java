@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+//TODO Maybe return optional?
 public interface GenerationContext {
     <T extends StageData.Instance> @Nullable T getInstanceData(Class<T> stageData);
 
