@@ -13,4 +13,7 @@ public interface Noise2D {
     static Noise2D scaleY(Noise2D base, double factor) {
         return ((x, y) -> base.getValue(x, y*factor));
     }
+    static Noise2D combine(Noise2D noiseA, Noise2D noiseB) {
+        return ((x, y) -> (noiseA.getValue(x,y)+ noiseB.getValue(x,y))/2);
+    }
 }
