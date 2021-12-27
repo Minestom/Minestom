@@ -1,5 +1,8 @@
 package demo;
 
+import de.articdive.jnoise.JNoise;
+import de.articdive.jnoise.noise.opensimplex.FastSimplexBuilder;
+import de.articdive.jnoise.noise.perlin.PerlinNoiseBuilder;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
@@ -31,21 +34,27 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.noise.Noise2D;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeEffects;
 import net.minestom.server.world.generator.InMemoryGenerationContext;
 import net.minestom.server.world.generator.WorldGenerator;
-import net.minestom.server.world.generator.stages.generation.BedrockStage;
+import net.minestom.server.world.generator.stages.generation.InstanceFloorStage;
 import net.minestom.server.world.generator.stages.generation.BiomeFillStage;
-import net.minestom.server.world.generator.stages.generation.TerrainStage;
-import net.minestom.server.world.generator.stages.pregeneration.GeneratorSettingsStage;
-import net.minestom.server.world.generator.stages.pregeneration.HeightMapStage;
+import net.minestom.server.world.generator.stages.pregeneration.BiomeLayout2DStage;
+import net.minestom.server.world.generator.stages.pregeneration.BiomePreProcessorStage;
+import net.minestom.server.world.generator.stages.pregeneration.BiomeProviderStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.CountDownLatch;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -128,9 +137,7 @@ public class PlayerInit {
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
 
-//        final Random random = new Random(1);
-//        final JNoise plainsHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.5).build();
-//        final JNoise hotDeepBlock = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.2).build();
+        final Random random = new Random(1);
 //        final JNoise hotDeepHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.1).build();
 //        final JNoise tempNoise = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.45).build();
 //        Set.of(
@@ -163,17 +170,34 @@ public class PlayerInit {
 //        );
         instanceContainer.setGenerator(new WorldGenerator(
                 List.of(
-                        new HeightMapStage()
+                        new BiomeProviderStage(Set.of(
+                                Biome.PLAINS,
+                                Biome.builder()
+                                        .name(NamespaceID.from("test:desert"))
+                                        .precipitation(Biome.Precipitation.NONE)
+                                        .temperature(1)
+                                        .downfall(0)
+                                        .effects(BiomeEffects.builder()
+                                                .grassColor(0xFF0000)
+                                                .build())
+                                        .build()
+                        ), true),
+                        new BiomePreProcessorStage(),
+                        new BiomeLayout2DStage(
+                                new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.01).build()::getNoise,
+                                new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.015).build()::getNoise,
+                                .5f, 0)
                 ),
                 List.of(
-                        new TerrainStage(),
-                        new BedrockStage(),
-                        new BiomeFillStage()
+                        new BiomeFillStage(),
+//                        new TerrainStage(),
+                        new InstanceFloorStage(Block.GRASS_BLOCK)
+//                        new BiomeFillStage()
                 ),
                 InMemoryGenerationContext.factory()
         ));
 
-        int r = 9;
+        int r = 10;
         final int total = MathUtils.square(r*2+1);
         final long start = System.nanoTime();
         final AtomicInteger atomicInteger = new AtomicInteger();
