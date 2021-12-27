@@ -34,9 +34,9 @@ public interface Framebuffer {
         }
         return new MapDataPacket(mapId, (byte) 0, false,
                 false, List.of(),
-                (byte) width, (byte) height,
-                (byte) minX, (byte) minY,
-                colors);
+                new MapDataPacket.ColorContent((byte) width, (byte) height,
+                        (byte) minX, (byte) minY,
+                        colors));
     }
 
     static int index(int x, int z) {
