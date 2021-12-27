@@ -38,14 +38,14 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
                 int globalX = sectionX * Chunk.CHUNK_SIZE_X + x;
                 int globalZ = sectionZ * Chunk.CHUNK_SIZE_Z + z;
                 final Set<Map.Entry<Noise2D, Float>> noiseWeightEntrySet = chunkData.biomes()
-                        .get(i++ / 4)
+                        .get((x/4)*4+(z/4))
                         .entrySet()
                         .stream()
                         .map(e -> Map.entry(biomeHeightNoises.getOrDefault(e.getKey(), defaultNoise), e.getValue()))
                         .collect(Collectors.toSet());
                 final double sum = noiseWeightEntrySet.stream().map(e -> e.getKey().getValue(globalX, globalZ)).reduce(Double::sum).orElse(0d);
                 final float sumWeight = noiseWeightEntrySet.stream().map(Map.Entry::getValue).reduce(Float::sum).orElse(1f);
-                height[i-1] = (int) (sum/sumWeight);
+                height[i++] = (int) (sum/sumWeight);
             }
         }
         context.setChunkData(new Data(height), sectionX, sectionZ);
