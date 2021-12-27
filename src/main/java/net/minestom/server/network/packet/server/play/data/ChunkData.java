@@ -19,7 +19,11 @@ import java.util.Objects;
 public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
                         @NotNull Map<Integer, Block> blockEntities) implements Writeable {
     public ChunkData {
-        blockEntities = Map.copyOf(blockEntities);
+        blockEntities = Map.copyOf(blockEntities.entrySet()
+				.stream()
+				.filter((block) -> block.getValue().registry().isBlockEntity())  // filter out map to not include non-block
+				.collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()))); // entities. see below for explanation
+				
     }
 
     public ChunkData(BinaryReader reader) {
@@ -36,7 +40,9 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
         writer.writeVarInt(data.length);
         writer.writeBytes(data);
         // Block entities
-        writer.writeVarInt(blockEntities.size());
+        writer.writeVarInt(blockEntities.size()); // causes issues with blocks w/ custom handlers that aren't block
+												  // entities. solution: filter out these "fake" block entities prior
+												  // to this when the map is created
         for (var entry : blockEntities.entrySet()) {
             final int index = entry.getKey();
             final Block block = entry.getValue();
