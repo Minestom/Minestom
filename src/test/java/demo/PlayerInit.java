@@ -1,8 +1,6 @@
 package demo;
 
-import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.noise.opensimplex.FastSimplexBuilder;
-import de.articdive.jnoise.noise.perlin.PerlinNoiseBuilder;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
@@ -35,26 +33,23 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.noise.Noise2D;
+import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeEffects;
+import net.minestom.server.world.generator.BlockPool;
 import net.minestom.server.world.generator.InMemoryGenerationContext;
 import net.minestom.server.world.generator.WorldGenerator;
 import net.minestom.server.world.generator.stages.generation.InstanceFloorStage;
 import net.minestom.server.world.generator.stages.generation.BiomeFillStage;
-import net.minestom.server.world.generator.stages.pregeneration.BiomeLayout2DStage;
-import net.minestom.server.world.generator.stages.pregeneration.BiomePreProcessorStage;
-import net.minestom.server.world.generator.stages.pregeneration.BiomeProviderStage;
+import net.minestom.server.world.generator.stages.generation.TerrainStage;
+import net.minestom.server.world.generator.stages.pregeneration.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -138,61 +133,49 @@ public class PlayerInit {
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
 
         final Random random = new Random(1);
-//        final JNoise hotDeepHeight = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.1).build();
-//        final JNoise tempNoise = new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.45).build();
-//        Set.of(
-//                new BiomeGenerator(
-//                        Biome.PLAINS,
-//                        Collections.emptySet(),
-//                        new BlockPool((x, y, z) -> random.nextFloat()) {{
-//                            addBlock(Block.TALL_GRASS, .5f, new IntRange(0));
-//                            addBlock(Block.AIR, .5f, new IntRange(0));
-//                            addBlock(Block.GRASS, 1, new IntRange(-1));
-//                            addBlock(Block.DIRT, 1, new IntRange(-3, -2));
-//                            addBlock(Block.STONE, 1, new IntRange(Integer.MIN_VALUE, -4));
-//                        }},
-//                        plainsHeight::getNoise
-//                ),
-//                new BiomeGenerator(
-//                        Biome.builder()
-//                                .name(NamespaceID.from("custom:hot_deep"))
-//                                .temperature(2)
-//                                .depth(.05f)
-//                                .build(),
-//                        Collections.emptySet(),
-//                        new BlockPool(hotDeepBlock::getNoise) {{
-//                            addBlock(Block.LAVA, .3f, new IntRange(-5, 0));
-//                            addBlock(Block.NETHERRACK, .5f, new IntRange(Integer.MIN_VALUE, 0));
-//                            addBlock(Block.NETHER_QUARTZ_ORE, .05f, new IntRange(-20, -9));
-//                        }},
-//                        hotDeepHeight::getNoise
-//                )
-//        );
+        final Biome plains = Biome.PLAINS;
+        final Biome desert = Biome.builder()
+                .name(NamespaceID.from("test:desert"))
+                .precipitation(Biome.Precipitation.NONE)
+                .temperature(1)
+                .downfall(0)
+                .effects(BiomeEffects.builder()
+                        .grassColor(0xFF0000)
+                        .build())
+                .build();
         instanceContainer.setGenerator(new WorldGenerator(
                 List.of(
-                        new BiomeProviderStage(Set.of(
-                                Biome.PLAINS,
-                                Biome.builder()
-                                        .name(NamespaceID.from("test:desert"))
-                                        .precipitation(Biome.Precipitation.NONE)
-                                        .temperature(1)
-                                        .downfall(0)
-                                        .effects(BiomeEffects.builder()
-                                                .grassColor(0xFF0000)
-                                                .build())
-                                        .build()
-                        ), true),
+                        new BiomeProviderStage(Set.of(plains, desert), true),
                         new BiomePreProcessorStage(),
                         new BiomeLayout2DStage(
                                 new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.01).build()::getNoise,
                                 new FastSimplexBuilder().setSeed(random.nextLong()).setFrequency(.015).build()::getNoise,
-                                .5f, 0)
+                                .4f, 0),
+                        new DominantBiomeLayout2DStage(),
+                        new HeightMapStage(Map.of(
+                                plains, ((x, y) -> 50),
+                                desert, ((x, y) -> 75)
+                        ), null)
                 ),
                 List.of(
                         new BiomeFillStage(),
-//                        new TerrainStage(),
-                        new InstanceFloorStage(Block.GRASS_BLOCK)
-//                        new BiomeFillStage()
+                        new TerrainStage(Map.of(
+                                plains, new BlockPool((x, y, z) -> new Random(random.nextLong()).nextFloat()) {{
+                                    addBlock(Block.GRASS, .5f, new IntRange(0));
+                                    addBlock(Block.AIR, .5f, new IntRange(0));
+                                    addBlock(Block.GRASS_BLOCK, 1, new IntRange(-1));
+                                    addBlock(Block.DIRT, 1, new IntRange(-3, -2));
+                                    addBlock(Block.STONE, 1, new IntRange(Integer.MIN_VALUE, -4));
+                                }},
+                                desert, new BlockPool((x, y, z) -> new Random(random.nextLong()).nextFloat()) {{
+                                    addBlock(Block.DEAD_BUSH, .05f, new IntRange(0));
+                                    addBlock(Block.AIR, .5f, new IntRange(0));
+                                    addBlock(Block.SAND, 1, new IntRange(-4, -1));
+                                    addBlock(Block.SANDSTONE, 1, new IntRange(-50, -5));
+                                    addBlock(Block.STONE, 1, new IntRange(Integer.MIN_VALUE, -50));
+                                }}
+                        ), null),
+                        new InstanceFloorStage(Block.BEDROCK)
                 ),
                 InMemoryGenerationContext.factory()
         ));
