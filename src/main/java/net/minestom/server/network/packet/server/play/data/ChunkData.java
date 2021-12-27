@@ -15,15 +15,15 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
-        @NotNull Map<Integer, Block> blockEntities) implements Writeable {
+                        @NotNull Map<Integer, Block> blockEntities) implements Writeable {
     public ChunkData {
-        blockEntities = Map.copyOf(blockEntities.entrySet()
+        blockEntities = blockEntities.entrySet()
                 .stream()
-                .filter((block) -> block.getValue().registry().isBlockEntity()) // filter out map to not include
-                                                                                // non-block
-                .collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()))); // entities. see below for explanation
+                .filter((block) -> block.getValue().registry().isBlockEntity())
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public ChunkData(BinaryReader reader) {
@@ -40,15 +40,11 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
         writer.writeVarInt(data.length);
         writer.writeBytes(data);
         // Block entities
-        writer.writeVarInt(blockEntities.size()); // causes issues with blocks w/ custom handlers that aren't block
-                                                  // entities. solution: filter out these "fake" block entities prior
-                                                  // to this when the map is created
+        writer.writeVarInt(blockEntities.size());
         for (var entry : blockEntities.entrySet()) {
             final int index = entry.getKey();
             final Block block = entry.getValue();
             final var registry = block.registry();
-            if (!registry.isBlockEntity())
-                continue;
 
             final Point point = ChunkUtils.getBlockPosition(index, 0, 0);
 
