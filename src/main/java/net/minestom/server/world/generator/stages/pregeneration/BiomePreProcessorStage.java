@@ -56,29 +56,43 @@ public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProces
          *
          * @param temperature range -1.0 - 1.0
          * @param precipitation range -1.0 - 1.0
-         * @param blending range 0.0-8.0
+         * @param threshold range 0.0 - 1.0, defines the minimum influence of a biome in order to be included in the result
          * @return
          */
-        public @NotNull Map<Biome, Float> getBiomesInfluence(float temperature, float precipitation, float blending) {
+        public @NotNull Map<Biome, Float> getBiomesInfluence(float temperature, float precipitation, float threshold) {
+            if (biomes.size() == 0) return new HashMap<>();
             final Vec target = new Vec(temperature, precipitation, 0);
-            final Set<Map.Entry<Biome, Float>> biomesDistance = biomes.entrySet().stream().map(x -> Map.entry(x.getKey(), (float)x.getValue().distanceSquared(target))).collect(Collectors.toSet());
-            final Map<Biome, Float> result = biomesDistance.stream().filter(x -> x.getValue() < blending).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            if (!result.isEmpty()) {
-                final float min = result.values().stream().min(Float::compareTo).get();
-                final float max = result.values().stream().max(Float::compareTo).get();
-                final float slope = 1 / (max - min);
-                result.replaceAll((key, value) -> slope * value);
-                return result;
+            final Map<Biome, Float> distances = biomes.entrySet().stream().map(x -> Map.entry(x.getKey(), (float)x.getValue().distanceSquared(target))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            // Find min max
+            float min = Float.MAX_VALUE, max = Float.MIN_VALUE;
+            for (Map.Entry<Biome, Float> entry : distances.entrySet()) {
+                if (entry.getValue() > max) {max = entry.getValue();continue;}
+                if (entry.getValue() < min) min = entry.getValue();
+            }
+            final float slope = 1 / (max - min);
+
+            if (slope == Float.POSITIVE_INFINITY) {
+                distances.replaceAll((k, v) -> 1f);
+                return distances;
+            }
+
+            final HashMap<Biome, Float> result = new HashMap<>();
+            if (threshold == 1f) {
+                for (Map.Entry<Biome, Float> entry : distances.entrySet()) {
+                    if (entry.getValue() == min) {
+                        result.put(entry.getKey(), 1f);
+                        break;
+                    }
+                }
             } else {
-                final Optional<Biome> biome = biomesDistance.stream().min((a, b) -> Float.compare(a.getValue(), b.getValue())).map(Map.Entry::getKey);
-                if (biome.isPresent()) {
-                    final HashMap<Biome, Float> map = new HashMap<>();
-                    map.put(biome.get(), 1f);
-                    return map;
-                } else {
-                    return new HashMap<>();
+                for (Map.Entry<Biome, Float> entry : distances.entrySet()) {
+                    float influence = 1 - slope * entry.getValue();
+                    if (influence >= threshold) {
+                        result.put(entry.getKey(), influence);
+                    }
                 }
             }
+            return result;
         }
     }
 }
