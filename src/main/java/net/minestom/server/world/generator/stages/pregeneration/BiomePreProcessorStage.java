@@ -59,7 +59,7 @@ public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProces
          * @param blending range 0.0-8.0
          * @return
          */
-        public Map<Biome, Float> getBiomesInfluence(float temperature, float precipitation, float blending) {
+        public @NotNull Map<Biome, Float> getBiomesInfluence(float temperature, float precipitation, float blending) {
             final Vec target = new Vec(temperature, precipitation, 0);
             final Set<Map.Entry<Biome, Float>> biomesDistance = biomes.entrySet().stream().map(x -> Map.entry(x.getKey(), (float)x.getValue().distanceSquared(target))).collect(Collectors.toSet());
             final Map<Biome, Float> result = biomesDistance.stream().filter(x -> x.getValue() < blending).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -68,6 +68,7 @@ public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProces
                 final float max = result.values().stream().max(Float::compareTo).get();
                 final float slope = 1 / (max - min);
                 result.replaceAll((key, value) -> slope * value);
+                return result;
             } else {
                 final Optional<Biome> biome = biomesDistance.stream().min((a, b) -> Float.compare(a.getValue(), b.getValue())).map(Map.Entry::getKey);
                 if (biome.isPresent()) {
@@ -78,7 +79,6 @@ public class BiomePreProcessorStage implements PreGenerationStage<BiomePreProces
                     return new HashMap<>();
                 }
             }
-            return null;
         }
     }
 }
