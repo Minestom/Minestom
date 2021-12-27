@@ -511,14 +511,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (InstanceUtils.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, null, false, false, false);
+            spawnPlayer(instance, spawnPosition, false, false, false);
             return AsyncUtils.VOID_FUTURE;
         }
         // Must update the player chunks
         final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
         final Thread runThread = Thread.currentThread();
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
-                currentInstance,
                 currentInstance == null, dimensionChange, true);
         // Wait for all surrounding chunks to load
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
@@ -562,24 +561,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * UNSAFE: only called with {@link #setInstance(Instance, Pos)}.
      *
-     * @param spawnPosition    the position to teleport the player
-     * @param previousInstance the previous player instance, null if first spawn
-     * @param firstSpawn       true if this is the player first spawn
-     * @param updateChunks     true if chunks should be refreshed, false if the new instance shares the same
-     *                         chunks
+     * @param spawnPosition the position to teleport the player
+     * @param firstSpawn    true if this is the player first spawn
+     * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
+     *                      chunks
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
-                             @Nullable Instance previousInstance,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
                 ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkRemover);
-
-        }
-        if (previousInstance != null) {
-            previousInstance.getEntityTracker().visibleEntities(position,
-                    EntityTracker.Target.ENTITIES, trackingUpdate::remove);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType());
