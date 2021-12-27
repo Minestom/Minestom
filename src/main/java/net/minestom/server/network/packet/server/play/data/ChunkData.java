@@ -22,7 +22,7 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
     public ChunkData {
         blockEntities = blockEntities.entrySet()
                 .stream()
-                .filter((block) -> block.getValue().registry().isBlockEntity())
+                .filter((entry) -> entry.getValue().registry().isBlockEntity())
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
