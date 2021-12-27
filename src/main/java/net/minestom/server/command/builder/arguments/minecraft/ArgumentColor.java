@@ -9,6 +9,8 @@ import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 /**
  * Represents an argument which will give you a {@link Style} containing the colour or no
  * colour if the argument was {@code reset}.
@@ -24,14 +26,14 @@ public class ArgumentColor extends Argument<Style> {
     @Override
     public @NotNull Style parse(@NotNull StringReader input) throws CommandException {
         int pos = input.position();
-        String color = input.readUnquotedString();
+        String color = input.readUnquotedString().toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
 
         NamedTextColor value = NamedTextColor.NAMES.value(color);
-        if (value != null){
+        if (value != null) {
             return Style.style(value);
         }
 
-        if (color.equals("reset")){
+        if (color.equals("reset")) {
             return Style.empty();
         }
 
