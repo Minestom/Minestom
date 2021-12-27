@@ -178,7 +178,9 @@ public class EntityProjectile extends Entity {
                     .findAny();
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
-                victim.setArrowCount(victim.getArrowCount() + 1);
+                if(entityType == EntityTypes.ARROW || entityType == EntityTypes.SPECTRAL_ARROW) {
+                    victim.setArrowCount(victim.getArrowCount() + 1);
+                }
                 EventDispatcher.call(new EntityAttackEvent(this, victim));
                 remove();
                 return super.onGround;
