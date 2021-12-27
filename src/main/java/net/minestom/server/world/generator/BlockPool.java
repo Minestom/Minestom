@@ -44,9 +44,11 @@ public class BlockPool implements BlockProvider {
      */
     @Override
     public Block getBlock(int x, int y, int z, int heightXZ) {
+        if (blockPoolEntrySet.isEmpty()) return Block.VOID_AIR;
         final int relativeLevel = y - heightXZ;
-        return new WeightedRandom<>(blockPoolEntrySet.stream().filter(b -> b.level.isInRange(relativeLevel)).collect(Collectors.toSet()))
-                .get(valueNoise.getValue(x, y, z)).block;
+        final Set<BlockPoolEntry> collect = blockPoolEntrySet.stream().filter(b -> b.level.isInRange(relativeLevel)).collect(Collectors.toSet());
+        if(collect.isEmpty()) return Block.VOID_AIR;
+        return new WeightedRandom<>(collect).get(valueNoise.getValue(x, y, z)).block;
     }
 
     private record BlockPoolEntry(Block block, float weight, IntRange level) implements WeightedRandomItem {
