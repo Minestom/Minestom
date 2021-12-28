@@ -72,12 +72,7 @@ public final class MinecraftServer {
     private static int maxPacketSize = 30_000;
 
     // In-Game Manager
-    private static volatile ServerProcess serverProcess;
-
-    // Data
-    private static boolean initialized;
-    private static boolean started;
-    private static volatile boolean stopping;
+    private static volatile ServerProcess serverProcess = updateProcess();
 
     private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
     private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
@@ -101,7 +96,6 @@ public final class MinecraftServer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        initialized = true;
         return process;
     }
 
@@ -254,24 +248,6 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets if the server is up and running.
-     *
-     * @return true if the server is started
-     */
-    public static boolean isStarted() {
-        return started;
-    }
-
-    /**
-     * Gets if the server is currently being shutdown using {@link #stopCleanly()}.
-     *
-     * @return true if the server is being stopped
-     */
-    public static boolean isStopping() {
-        return stopping;
-    }
-
-    /**
      * Gets the chunk view distance of the server.
      *
      * @return the chunk view distance
@@ -289,7 +265,7 @@ public final class MinecraftServer {
      */
     @Deprecated
     public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.stateCondition(started, "You cannot change the chunk view distance after the server has been started.");
+        Check.stateCondition(serverProcess.isAlive(), "You cannot change the chunk view distance after the server has been started.");
         Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
@@ -313,7 +289,7 @@ public final class MinecraftServer {
      */
     @Deprecated
     public static void setEntityViewDistance(int entityViewDistance) {
-        Check.stateCondition(started, "You cannot change the entity view distance after the server has been started.");
+        Check.stateCondition(serverProcess.isAlive(), "You cannot change the entity view distance after the server has been started.");
         Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
@@ -337,7 +313,7 @@ public final class MinecraftServer {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(started, "The compression threshold cannot be changed after the server has been started.");
+        Check.stateCondition(serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
@@ -356,7 +332,7 @@ public final class MinecraftServer {
      * @param enabled true to enable, false to disable
      */
     public static void setTerminalEnabled(boolean enabled) {
-        Check.stateCondition(started, "Terminal settings may not be changed after starting the server.");
+        Check.stateCondition(serverProcess.isAlive(), "Terminal settings may not be changed after starting the server.");
         MinecraftServer.terminalEnabled = enabled;
     }
 
