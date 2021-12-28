@@ -29,6 +29,10 @@ public final class PooledBuffers {
         POOLED_BUFFERS.relaxedOffer(new SoftReference<>(buffer.clear()));
     }
 
+    public static void clear() {
+        POOLED_BUFFERS.clear();
+    }
+
     public static int count() {
         return POOLED_BUFFERS.size();
     }
