@@ -2,6 +2,7 @@ package net.minestom.server.extensions;
 
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -24,18 +25,13 @@ public abstract class Extension {
 
     // Set by reflection
     @SuppressWarnings("unused")
-    private DiscoveredExtension origin;
+    private ExtensionDescriptor descriptor;
     // Set by reflection
     @SuppressWarnings("unused")
     private Logger logger;
     // Set by reflection
     @SuppressWarnings("unused")
     private EventNode<Event> eventNode;
-
-    /**
-     * List of extensions that depend on this extension.
-     */
-    protected final Set<String> dependents = new HashSet<>();
 
     protected Extension() {
 
@@ -50,8 +46,8 @@ public abstract class Extension {
     public abstract void terminate();
 
     @NotNull
-    public DiscoveredExtension origin() {
-        return origin;
+    public ExtensionDescriptor descriptor() {
+        return descriptor;
     }
 
     @NotNull
@@ -64,15 +60,7 @@ public abstract class Extension {
     }
 
     public @NotNull Path dataDirectory() {
-        return origin().dataDirectory();
-    }
-
-    /**
-     * @return A modifiable list of dependents.
-     */
-    public Set<String> getDependents() {
-        //TODO(mattw): This should not be publicly modifiable.
-        return dependents;
+        return descriptor().dataDirectory();
     }
 
     /**
@@ -184,12 +172,12 @@ public abstract class Extension {
     }
 
     /**
-     * @see #origin()
+     * @see #descriptor()
      */
     @Deprecated
     @NotNull
-    public DiscoveredExtension getOrigin() {
-        return origin;
+    public ExtensionDescriptor getOrigin() {
+        return descriptor();
     }
 
     /**

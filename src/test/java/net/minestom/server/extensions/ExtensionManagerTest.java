@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -23,12 +24,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 @ExtendWith(MockitoExtension.class)
 public class ExtensionManagerTest {
-    private @TempDir
-    Path dataRoot;
+    private @TempDir Path dataRoot;
     private EventNode<Event> globalNode = EventNode.all("global");
     private ExtensionManager extensionManager;
 
@@ -129,4 +130,28 @@ public class ExtensionManagerTest {
         }
         return extensionsByName;
     }
+
+    //
+    // Create Extension Impl
+    //
+
+    @Test
+    public void testCreateExtensionImplFromClassloader() throws Exception {
+        //todo This should test loading a class from a HierarchyClassLoader,
+        // however I am unsure how to do so. If it is included here in the test
+        // module then it will be loaded from the test module classpath, which
+        // is not what we want. I think that we need to have a compiled extension
+        // class somewhere to use.
+        assumeTrue(false);
+    }
+
+    @Test
+    public void testCreateExtensionImpl() {
+        // Set autoscan
+        
+        // load
+
+        // assert on loaded
+    }
+
 }
