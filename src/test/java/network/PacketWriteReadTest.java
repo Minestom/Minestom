@@ -26,6 +26,8 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +82,12 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
         SERVER_PACKETS.add(new CraftRecipeResponse((byte) 2, "recipe"));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, 5, COMPONENT));
+        SERVER_PACKETS.add(new DeclareRecipesPacket(
+                List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
+                        "minecraft:sticks",
+                        "sticks",
+                        List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
+                        ItemStack.of(Material.STICK)))));
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
         SERVER_PACKETS.add(new DisplayScoreboardPacket((byte) 5, "scoreboard"));
