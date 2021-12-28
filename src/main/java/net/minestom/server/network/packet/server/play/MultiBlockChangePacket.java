@@ -17,7 +17,7 @@ public record MultiBlockChangePacket(long chunkSectionPosition,
     }
 
     public MultiBlockChangePacket(BinaryReader reader) {
-        this(reader.readLong(), reader.readBoolean(), reader.readLongArray());
+        this(reader.readLong(), reader.readBoolean(), reader.readVarLongArray());
     }
 
     @Override
