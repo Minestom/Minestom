@@ -1,0 +1,5 @@
+{
+  "name": "CreateExtensionImpl",
+  "version": "1.0.0",
+  "entrypoint": "net.minestom.server.extensions.mock.ValidExtensionMain"
+}

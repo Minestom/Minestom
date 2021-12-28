@@ -125,9 +125,9 @@ public class FullQueryResponse implements Writeable {
 
         if (!MinecraftServer.getExtensionManager().getExtensions().isEmpty()) {
             for (Extension extension : MinecraftServer.getExtensionManager().getExtensions()) {
-                builder.append(extension.origin().name())
+                builder.append(extension.descriptor().name())
                         .append(' ')
-                        .append(extension.origin().version())
+                        .append(extension.descriptor().version())
                         .append("; ");
             }
 
