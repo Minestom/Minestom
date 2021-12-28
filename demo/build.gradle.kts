@@ -1,6 +1,7 @@
 plugins {
     application
     id("minestom.common-conventions")
+    id("minestom.native-conventions")
 }
 
 application {
