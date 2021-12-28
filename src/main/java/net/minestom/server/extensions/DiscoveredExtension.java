@@ -113,7 +113,7 @@ public final class DiscoveredExtension {
         this.dataDirectory = dataDirectory;
     }
 
-    public void createClassLoader() {
+    void createClassLoader() {
         Check.stateCondition(classLoader != null, "Extension classloader has already been created");
         final URL[] urls = this.files.toArray(new URL[0]);
         classLoader = new ExtensionClassLoader(this.getName(), urls);
