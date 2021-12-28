@@ -1,12 +1,10 @@
 package net.minestom.server.utils.block;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.StringUtils;
 
-import java.util.Collections;
 import java.util.Map;
 
 public class BlockUtils {
@@ -58,29 +56,70 @@ public class BlockUtils {
     public static Map<String, String> parseProperties(String query) {
         if (!query.startsWith("[") || !query.endsWith("]") ||
                 query.equals("[]")) {
-            return Collections.emptyMap();
+            return Map.of();
         }
-        final int capacity = StringUtils.countMatches(query, ',') + 1;
-        Object2ObjectArrayMap<String, String> result = new Object2ObjectArrayMap<>(capacity);
-        final String propertiesString = query.substring(1);
-        StringBuilder keyBuilder = new StringBuilder();
-        StringBuilder valueBuilder = new StringBuilder();
-        StringBuilder builder = keyBuilder;
-        for (int i = 0; i < propertiesString.length(); i++) {
-            final char c = propertiesString.charAt(i);
-            if (c == '=') {
-                // Switch to value builder
-                builder = valueBuilder;
-            } else if (c == ',' || c == ']') {
-                // Append current text
-                result.put(keyBuilder.toString().intern(), valueBuilder.toString().intern());
-                keyBuilder = new StringBuilder();
-                valueBuilder = new StringBuilder();
-                builder = keyBuilder;
-            } else if (c != ' ') {
-                builder.append(c);
+        final String propertiesString = query.substring(1, query.length() - 1).trim();
+        if (propertiesString.isEmpty()) {
+            return Map.of();
+        }
+
+        final int capacity = StringUtils.countMatches(propertiesString, ',') + 1;
+        String[] entries = new String[capacity * 2];
+        int entryIndex = 0;
+
+        final int length = propertiesString.length();
+        int start = 0;
+        int end;
+        int index = 0;
+        while (index < length) {
+            if (propertiesString.charAt(index) == ',' || index == length - 1) {
+                if (index + 1 == length) index++;
+                end = index;
+                final String property = propertiesString.substring(start, end);
+                final int equalIndex = property.indexOf('=');
+                if (equalIndex != -1) {
+                    final String key = property.substring(0, equalIndex).trim();
+                    final String value = property.substring(equalIndex + 1).trim();
+                    entries[entryIndex++] = key;
+                    entries[entryIndex++] = value;
+                }
+                start = end + 1;
             }
+            index++;
         }
-        return result;
+        return switch (entryIndex / 2) {
+            case 0 -> Map.of();
+            case 1 -> Map.of(entries[0], entries[1]);
+            case 2 -> Map.of(entries[0], entries[1], entries[2], entries[3]);
+            case 3 -> Map.of(entries[0], entries[1],
+                    entries[2], entries[3], entries[4], entries[5]);
+            case 4 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7]);
+            case 5 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7],
+                    entries[8], entries[9]);
+            case 6 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7],
+                    entries[8], entries[9], entries[10], entries[11]);
+            case 7 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7],
+                    entries[8], entries[9], entries[10], entries[11],
+                    entries[12], entries[13]);
+            case 8 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7],
+                    entries[8], entries[9], entries[10], entries[11],
+                    entries[12], entries[13], entries[14], entries[15]);
+            case 9 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7],
+                    entries[8], entries[9], entries[10], entries[11],
+                    entries[12], entries[13], entries[14], entries[15],
+                    entries[16], entries[17]);
+            case 10 -> Map.of(entries[0], entries[1], entries[2], entries[3],
+                    entries[4], entries[5], entries[6], entries[7],
+                    entries[8], entries[9], entries[10], entries[11],
+                    entries[12], entries[13], entries[14], entries[15],
+                    entries[16], entries[17], entries[18], entries[19]);
+            default -> throw new IllegalArgumentException("Too many properties: " + (entryIndex / 2));
+        };
     }
 }
