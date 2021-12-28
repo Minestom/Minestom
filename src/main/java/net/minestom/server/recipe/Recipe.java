@@ -24,7 +24,7 @@ public abstract class Recipe {
         return recipeId;
     }
 
-    protected enum RecipeType {
+    public enum RecipeType {
         SHAPELESS,
         SHAPED,
         SMELTING,

@@ -61,6 +61,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeSizedString(group);
             writer.writeVarIntList(ingredients, BinaryWriter::write);
@@ -88,6 +89,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeVarInt(width);
             writer.writeVarInt(height);
@@ -113,6 +115,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeSizedString(group);
             writer.write(ingredient);
@@ -138,6 +141,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeSizedString(group);
             writer.write(ingredient);
@@ -163,6 +167,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeSizedString(group);
             writer.write(ingredient);
@@ -188,6 +193,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeSizedString(group);
             writer.write(ingredient);
@@ -211,6 +217,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.writeSizedString(group);
             writer.write(ingredient);
@@ -231,6 +238,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeSizedString(type());
             writer.writeSizedString(recipeId);
             writer.write(base);
             writer.write(addition);

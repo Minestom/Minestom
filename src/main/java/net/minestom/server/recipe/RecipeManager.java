@@ -12,18 +12,20 @@ public class RecipeManager {
     private DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket(List.of());
     private final Set<Recipe> recipes = new CopyOnWriteArraySet<>();
 
+    public void addRecipes(@NotNull Recipe... recipe) {
+        if (recipes.addAll(List.of(recipe))){
+            refreshRecipesPacket();
+        }
+    }
+
     public void addRecipe(@NotNull Recipe recipe) {
         if (this.recipes.add(recipe)) {
-            // TODO add to all players
-
             refreshRecipesPacket();
         }
     }
 
     public void removeRecipe(@NotNull Recipe recipe) {
         if (this.recipes.remove(recipe)) {
-            // TODO remove to all players
-
             refreshRecipesPacket();
         }
     }
@@ -144,6 +146,7 @@ public class RecipeManager {
         }
 
         declareRecipesPacket = new DeclareRecipesPacket(recipesCache);
+        // TODO add to all players
     }
 
 }
