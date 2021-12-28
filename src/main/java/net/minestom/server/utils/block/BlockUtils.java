@@ -5,6 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class BlockUtils {
@@ -54,18 +55,14 @@ public class BlockUtils {
     }
 
     public static Map<String, String> parseProperties(String query) {
-        if (!query.startsWith("[") || !query.endsWith("]") ||
-                query.equals("[]")) {
-            return Map.of();
-        }
+        if (!query.startsWith("[") || !query.endsWith("]")) return Map.of();
         final String propertiesString = query.substring(1, query.length() - 1).trim();
-        if (propertiesString.isEmpty()) {
-            return Map.of();
-        }
+        if (propertiesString.isEmpty()) return Map.of();
 
-        final int capacity = StringUtils.countMatches(propertiesString, ',') + 1;
-        String[] entries = new String[capacity * 2];
-        int entryIndex = 0;
+        final int entries = StringUtils.countMatches(propertiesString, ',') + 1;
+        String[] keys = new String[entries];
+        String[] values = new String[entries];
+        int entryCount = 0;
 
         final int length = propertiesString.length();
         int start = 0;
@@ -80,46 +77,53 @@ public class BlockUtils {
                 if (equalIndex != -1) {
                     final String key = property.substring(0, equalIndex).trim();
                     final String value = property.substring(equalIndex + 1).trim();
-                    entries[entryIndex++] = key.intern();
-                    entries[entryIndex++] = value.intern();
+                    keys[entryCount] = key.intern();
+                    values[entryCount++] = value.intern();
                 }
                 start = end + 1;
             }
             index++;
         }
-        return switch (entryIndex / 2) {
+        assert entryCount == entries;
+        return switch (entryCount) {
             case 0 -> Map.of();
-            case 1 -> Map.of(entries[0], entries[1]);
-            case 2 -> Map.of(entries[0], entries[1], entries[2], entries[3]);
-            case 3 -> Map.of(entries[0], entries[1],
-                    entries[2], entries[3], entries[4], entries[5]);
-            case 4 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7]);
-            case 5 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7],
-                    entries[8], entries[9]);
-            case 6 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7],
-                    entries[8], entries[9], entries[10], entries[11]);
-            case 7 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7],
-                    entries[8], entries[9], entries[10], entries[11],
-                    entries[12], entries[13]);
-            case 8 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7],
-                    entries[8], entries[9], entries[10], entries[11],
-                    entries[12], entries[13], entries[14], entries[15]);
-            case 9 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7],
-                    entries[8], entries[9], entries[10], entries[11],
-                    entries[12], entries[13], entries[14], entries[15],
-                    entries[16], entries[17]);
-            case 10 -> Map.of(entries[0], entries[1], entries[2], entries[3],
-                    entries[4], entries[5], entries[6], entries[7],
-                    entries[8], entries[9], entries[10], entries[11],
-                    entries[12], entries[13], entries[14], entries[15],
-                    entries[16], entries[17], entries[18], entries[19]);
-            default -> throw new IllegalArgumentException("Too many properties: " + (entryIndex / 2));
+            case 1 -> Map.of(keys[0], values[0]);
+            case 2 -> Map.of(keys[0], values[0], keys[1], values[1]);
+            case 3 -> Map.of(keys[0], values[0],
+                    keys[1], values[1], keys[2], values[2]);
+            case 4 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3]);
+            case 5 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3],
+                    keys[4], values[4]);
+            case 6 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3],
+                    keys[4], values[4], keys[5], values[5]);
+            case 7 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3],
+                    keys[4], values[4], keys[5], values[5],
+                    keys[6], values[6]);
+            case 8 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3],
+                    keys[4], values[4], keys[5], values[5],
+                    keys[6], values[6], keys[7], values[7]);
+            case 9 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3],
+                    keys[4], values[4], keys[5], values[5],
+                    keys[6], values[6], keys[7], values[7],
+                    keys[8], values[8]);
+            case 10 -> Map.of(keys[0], values[0], keys[1], values[1],
+                    keys[2], values[2], keys[3], values[3],
+                    keys[4], values[4], keys[5], values[5],
+                    keys[6], values[6], keys[7], values[7],
+                    keys[8], values[8], keys[9], values[9]);
+            default -> {
+                Map<String, String> map = new HashMap<>(entryCount);
+                for (int i = 0; i < entryCount; i++) {
+                    map.put(keys[i], values[i]);
+                }
+                yield Map.copyOf(map);
+            }
         };
     }
 }
