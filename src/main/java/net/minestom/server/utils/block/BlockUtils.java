@@ -105,18 +105,7 @@ public class BlockUtils {
             case 10 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
                     keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6],
                     values[6], keys[7], values[7], keys[8], values[8], keys[9], values[9]);
-            default -> {
-                if (entryCount == keys.length) {
-                    yield Map.copyOf(new Object2ObjectArrayMap<>(keys, values));
-                } else {
-                    // Arrays must be resized
-                    final String[] newKeys = new String[entryCount];
-                    final String[] newValues = new String[entryCount];
-                    System.arraycopy(keys, 0, newKeys, 0, entryCount);
-                    System.arraycopy(values, 0, newValues, 0, entryCount);
-                    yield Map.copyOf(new Object2ObjectArrayMap<>(newKeys, newValues));
-                }
-            }
+            default -> Map.copyOf(new Object2ObjectArrayMap<>(keys, values, entryCount));
         };
     }
 }
