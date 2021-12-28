@@ -18,7 +18,10 @@ import java.util.function.Function;
 /**
  * Represents a group of items, blocks, fluids, entity types or function.
  * Immutable by design
+ *
+ * @deprecated for removal, replace with {@link net.minestom.server.tags.GameTag}
  */
+@Deprecated(forRemoval = true)
 public final class Tag {
     private final NamespaceID name;
     private final Set<NamespaceID> values;
@@ -65,6 +68,10 @@ public final class Tag {
         return name;
     }
 
+    /**
+     * @deprecated for removal, replace with {@link net.minestom.server.tags.GameTagType}
+     */
+    @Deprecated(forRemoval = true)
     public enum BasicType {
         BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
                 name -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),

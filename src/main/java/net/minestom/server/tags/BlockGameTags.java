@@ -1,0 +1,135 @@
+package net.minestom.server.tags;
+
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.NotNull;
+
+// TODO: This could probably be auto-generated
+public final class BlockGameTags {
+
+    public static final @NotNull GameTag<@NotNull Block> ACACIA_LOGS = get("acacia_logs");
+    public static final @NotNull GameTag<@NotNull Block> ANVILS = get("anvil");
+    public static final @NotNull GameTag<@NotNull Block> BAMBOO_PLANTABLE_ON = get("bamboo_plantable_on");
+    public static final @NotNull GameTag<@NotNull Block> BANNERS = get("banners");
+    public static final @NotNull GameTag<@NotNull Block> BASE_STONE_NETHER = get("base_stone_nether");
+    public static final @NotNull GameTag<@NotNull Block> BASE_STONE_OVERWORLD = get("base_stone_overworld");
+    public static final @NotNull GameTag<@NotNull Block> BEACON_BASE_BLOCKS = get("beacon_base_blocks");
+    public static final @NotNull GameTag<@NotNull Block> BEDS = get("beds");
+    public static final @NotNull GameTag<@NotNull Block> BEEHIVES = get("beehives");
+    public static final @NotNull GameTag<@NotNull Block> BEE_GROWABLES = get("bee_growables");
+    public static final @NotNull GameTag<@NotNull Block> BIRCH_LOGS = get("birch_logs");
+    public static final @NotNull GameTag<@NotNull Block> BUTTONS = get("buttons");
+    public static final @NotNull GameTag<@NotNull Block> CAMPFIRES = get("campfires");
+    public static final @NotNull GameTag<@NotNull Block> CANDLE_CAKES = get("candle_cakes");
+    public static final @NotNull GameTag<@NotNull Block> CANDLES = get("candles");
+    public static final @NotNull GameTag<@NotNull Block> CARPETS = get("carpets");
+    public static final @NotNull GameTag<@NotNull Block> CAULDRONS = get("cauldrons");
+    public static final @NotNull GameTag<@NotNull Block> CAVE_VINES = get("cave_vines");
+    public static final @NotNull GameTag<@NotNull Block> CLIMBABLE = get("climbable");
+    public static final @NotNull GameTag<@NotNull Block> COAL_ORES = get("coal_ores");
+    public static final @NotNull GameTag<@NotNull Block> COPPER_ORES = get("copper_ores");
+    public static final @NotNull GameTag<@NotNull Block> CORALS = get("corals");
+    public static final @NotNull GameTag<@NotNull Block> CORAL_BLOCKS = get("coral_blocks");
+    public static final @NotNull GameTag<@NotNull Block> CORAL_PLANTS = get("coral_plants");
+    public static final @NotNull GameTag<@NotNull Block> CRIMSON_STEMS = get("crimson_stems");
+    public static final @NotNull GameTag<@NotNull Block> CROPS = get("crops");
+    public static final @NotNull GameTag<@NotNull Block> CRYSTAL_SOUND_BLOCKS = get("crystal_sound_blocks");
+    public static final @NotNull GameTag<@NotNull Block> DARK_OAK_LOGS = get("dark_oak_logs");
+    public static final @NotNull GameTag<@NotNull Block> DEEPSLATE_ORE_REPLACEABLES = get("deepslate_ore_replaceables");
+    public static final @NotNull GameTag<@NotNull Block> DIAMOND_ORES = get("diamond_ores");
+    public static final @NotNull GameTag<@NotNull Block> DIRT = get("dirt");
+    public static final @NotNull GameTag<@NotNull Block> DOORS = get("doors");
+    public static final @NotNull GameTag<@NotNull Block> DRAGON_IMMUNE = get("dragon_immune");
+    public static final @NotNull GameTag<@NotNull Block> DRIPSTONE_REPLACEABLE_BLOCKS = get("dripstone_replaceable_blocks");
+    public static final @NotNull GameTag<@NotNull Block> EMERALD_ORES = get("emerald_ores");
+    public static final @NotNull GameTag<@NotNull Block> ENDERMAN_HOLDABLE = get("enderman_holdable");
+    public static final @NotNull GameTag<@NotNull Block> FEATURES_CANNOT_REPLACE = get("features_cannot_replace");
+    public static final @NotNull GameTag<@NotNull Block> FENCE_GATES = get("fence_gates");
+    public static final @NotNull GameTag<@NotNull Block> FENCES = get("fences");
+    public static final @NotNull GameTag<@NotNull Block> FIRE = get("fire");
+    public static final @NotNull GameTag<@NotNull Block> FLOWER_POTS = get("flower_pots");
+    public static final @NotNull GameTag<@NotNull Block> FLOWERS = get("flowers");
+    public static final @NotNull GameTag<@NotNull Block> GEODE_INVALID_BLOCKS = get("geode_invalid_blocks");
+    public static final @NotNull GameTag<@NotNull Block> GOLD_ORES = get("gold_ores");
+    public static final @NotNull GameTag<@NotNull Block> GUARDED_BY_PIGLINS = get("guarded_by_piglins");
+    public static final @NotNull GameTag<@NotNull Block> HOGLIN_REPELLENTS = get("hoglin_repellents");
+    public static final @NotNull GameTag<@NotNull Block> ICE = get("ice");
+    public static final @NotNull GameTag<@NotNull Block> IMPERMEABLE = get("impermeable");
+    public static final @NotNull GameTag<@NotNull Block> INFINIBURN_END = get("infiniburn_end");
+    public static final @NotNull GameTag<@NotNull Block> INFINIBURN_NETHER = get("infiniburn_nether");
+    public static final @NotNull GameTag<@NotNull Block> INFINIBURN_OVERWORLD = get("infiniburn_overworld");
+    public static final @NotNull GameTag<@NotNull Block> INSIDE_STEP_SOUND_BLOCKS = get("inside_step_sound_blocks");
+    public static final @NotNull GameTag<@NotNull Block> IRON_ORES = get("iron_ores");
+    public static final @NotNull GameTag<@NotNull Block> JUNGLE_LOGS = get("jungle_logs");
+    public static final @NotNull GameTag<@NotNull Block> LAPIS_ORES = get("lapis_ores");
+    public static final @NotNull GameTag<@NotNull Block> LAVA_POOL_STONE_REPLACEABLES = get("lava_pool_stone_replaceables");
+    public static final @NotNull GameTag<@NotNull Block> LEAVES = get("leaves");
+    public static final @NotNull GameTag<@NotNull Block> LOGS = get("logs");
+    public static final @NotNull GameTag<@NotNull Block> LOGS_THAT_BURN = get("logs_that_burn");
+    public static final @NotNull GameTag<@NotNull Block> LUSH_GROUND_REPLACEABLE = get("lush_ground_replaceable");
+    public static final @NotNull GameTag<@NotNull Block> MINEABLE_AXE = get("mineable/axe");
+    public static final @NotNull GameTag<@NotNull Block> MINEABLE_HOE = get("mineable/hoe");
+    public static final @NotNull GameTag<@NotNull Block> MINEABLE_PICKAXE = get("mineable/pickaxe");
+    public static final @NotNull GameTag<@NotNull Block> MINEABLE_SHOVEL = get("mineable/shovel");
+    public static final @NotNull GameTag<@NotNull Block> MOSS_REPLACEABLE = get("moss_replaceable");
+    public static final @NotNull GameTag<@NotNull Block> MUSHROOM_GROW_BLOCK = get("mushroom_grow_block");
+    public static final @NotNull GameTag<@NotNull Block> NEEDS_DIAMOND_TOOL = get("needs_diamond_tool");
+    public static final @NotNull GameTag<@NotNull Block> NEEDS_IRON_TOOL = get("needs_iron_tool");
+    public static final @NotNull GameTag<@NotNull Block> NEEDS_STONE_TOOL = get("needs_stone_tool");
+    public static final @NotNull GameTag<@NotNull Block> NON_FLAMMABLE_WOOD = get("non_flammable_wood");
+    public static final @NotNull GameTag<@NotNull Block> NYLIUM = get("nylium");
+    public static final @NotNull GameTag<@NotNull Block> OAK_LOGS = get("oak_logs");
+    public static final @NotNull GameTag<@NotNull Block> OCCLUDES_VIBRATION_SIGNALS = get("occludes_vibration_signals");
+    public static final @NotNull GameTag<@NotNull Block> PIGLIN_REPELLENTS = get("piglin_repellents");
+    public static final @NotNull GameTag<@NotNull Block> PLANKS = get("planks");
+    public static final @NotNull GameTag<@NotNull Block> PORTALS = get("portals");
+    public static final @NotNull GameTag<@NotNull Block> PRESSURE_PLATES = get("pressure_plates");
+    public static final @NotNull GameTag<@NotNull Block> PREVENT_MOB_SPAWNING_INSIDE = get("prevent_mob_spawning_inside");
+    public static final @NotNull GameTag<@NotNull Block> RAILS = get("rails");
+    public static final @NotNull GameTag<@NotNull Block> REDSTONE_ORES = get("redstone_ores");
+    public static final @NotNull GameTag<@NotNull Block> SAND = get("sand");
+    public static final @NotNull GameTag<@NotNull Block> SAPLINGS = get("saplings");
+    public static final @NotNull GameTag<@NotNull Block> SHULKER_BOXES = get("shulker_boxes");
+    public static final @NotNull GameTag<@NotNull Block> SIGNS = get("signs");
+    public static final @NotNull GameTag<@NotNull Block> SLABS = get("slabs");
+    public static final @NotNull GameTag<@NotNull Block> SMALL_DRIPLEAF_PLACEABLE = get("small_dripleaf_placeable");
+    public static final @NotNull GameTag<@NotNull Block> SMALL_FLOWERS = get("small_flowers");
+    public static final @NotNull GameTag<@NotNull Block> SNOW = get("snow");
+    public static final @NotNull GameTag<@NotNull Block> SOUL_FIRE_BASE_BLOCKS = get("soul_fire_base_blocks");
+    public static final @NotNull GameTag<@NotNull Block> SOUL_SPEED_BLOCKS = get("soul_speed_blocks");
+    public static final @NotNull GameTag<@NotNull Block> SPRUCE_LOGS = get("spruce_logs");
+    public static final @NotNull GameTag<@NotNull Block> STAIRS = get("stairs");
+    public static final @NotNull GameTag<@NotNull Block> STANDING_SIGNS = get("standing_signs");
+    public static final @NotNull GameTag<@NotNull Block> STONE_BRICKS = get("stone_bricks");
+    public static final @NotNull GameTag<@NotNull Block> STONE_ORE_REPLACEABLES = get("stone_ore_replaceables");
+    public static final @NotNull GameTag<@NotNull Block> STONE_PRESSURE_PLATES = get("stone_pressure_plates");
+    public static final @NotNull GameTag<@NotNull Block> STRIDER_WARM_BLOCKS = get("strider_warm_blocks");
+    public static final @NotNull GameTag<@NotNull Block> TALL_FLOWERS = get("tall_flowers");
+    public static final @NotNull GameTag<@NotNull Block> TRAPDOORS = get("trapdoors");
+    public static final @NotNull GameTag<@NotNull Block> UNDERWATER_BONEMEALS = get("underwater_bonemeals");
+    public static final @NotNull GameTag<@NotNull Block> UNSTABLE_BOTTOM_CENTER = get("unstable_bottom_center");
+    public static final @NotNull GameTag<@NotNull Block> VALID_SPAWN = get("valid_spawn");
+    public static final @NotNull GameTag<@NotNull Block> WALLS = get("walls");
+    public static final @NotNull GameTag<@NotNull Block> WALL_CORALS = get("wall_corals");
+    public static final @NotNull GameTag<@NotNull Block> WALL_POST_OVERRIDE = get("wall_post_override");
+    public static final @NotNull GameTag<@NotNull Block> WALL_SIGNS = get("wall_signs");
+    public static final @NotNull GameTag<@NotNull Block> WARPED_STEMS = get("warped_stems");
+    public static final @NotNull GameTag<@NotNull Block> WART_BLOCKS = get("wart_blocks");
+    public static final @NotNull GameTag<@NotNull Block> WITHER_IMMUNE = get("wither_immune");
+    public static final @NotNull GameTag<@NotNull Block> WITHER_SUMMON_BASE_BLOCKS = get("wither_summon_base_blocks");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_BUTTONS = get("wooden_buttons");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_DOORS = get("wooden_doors");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_FENCES = get("wooden_fences");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_PRESSURE_PLATES = get("wooden_pressure_plates");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_SLABS = get("wooden_slabs");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_STAIRS = get("wooden_stairs");
+    public static final @NotNull GameTag<@NotNull Block> WOODEN_TRAPDOORS = get("wooden_trapdoors");
+    public static final @NotNull GameTag<@NotNull Block> WOOL = get("wool");
+
+    private static GameTag<Block> get(final String name) {
+        return MinecraftServer.getTagManager().get(GameTagType.BLOCKS, "minecraft:" + name);
+    }
+
+    private BlockGameTags() {
+    }
+}

@@ -1,55 +1,50 @@
 package net.minestom.server.gamedata.tags;
 
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.tags.GameTag;
+import net.minestom.server.tags.GameTagManager;
+import net.minestom.server.tags.GameTagType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Handles loading and caching of tags.
+ *
+ * @deprecated for removal, replaced with {@link net.minestom.server.tags.GameTagManager}
  */
+@Deprecated(forRemoval = true)
 public final class TagManager {
-    private final Map<Tag.BasicType, List<Tag>> tagMap = new ConcurrentHashMap<>();
+    private final GameTagManager gameTagManager;
 
     public TagManager() {
-        // Load required tags from files
-        for (var type : Tag.BasicType.values()) {
-            final var json = Registry.load(type.getResource());
-            final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
-            json.keySet().forEach(tagName -> {
-                final var tag = new Tag(NamespaceID.from(tagName), getValues(json, tagName));
-                tagIdentifierMap.add(tag);
-            });
-        }
+        gameTagManager = MinecraftServer.getGameTagManager();
     }
 
+    @Deprecated(forRemoval = true)
     public @Nullable Tag getTag(Tag.BasicType type, String namespace) {
-        final var tags = tagMap.get(type);
-        for (var tag : tags) {
-            if (tag.getName().asString().equals(namespace))
-                return tag;
-        }
-        return null;
+        return convertTag(gameTagManager.get(Objects.requireNonNull(GameTagType.fromIdentifier(type.getIdentifier())), namespace));
     }
 
+    @Deprecated(forRemoval = true)
     public Map<Tag.BasicType, List<Tag>> getTagMap() {
-        return Collections.unmodifiableMap(tagMap);
+        final Map<Tag.BasicType, List<Tag>> tags = new HashMap<>();
+        for (final var entry : gameTagManager.getTags().entrySet()) {
+            final var converted = entry.getValue().stream()
+                    .map(TagManager::convertTag)
+                    .collect(Collectors.toList());
+            tags.put(Tag.BasicType.fromIdentifer(entry.getKey().identifier()), converted);
+        }
+        return Collections.unmodifiableMap(tags);
     }
 
-    private Set<NamespaceID> getValues(Map<String, Map<String, Object>> main, String value) {
-        Map<String, Object> tagObject = main.get(value);
-        final List<String> tagValues = (List<String>) tagObject.get("values");
-        Set<NamespaceID> result = new HashSet<>(tagValues.size());
-        tagValues.forEach(tagString -> {
-            if (tagString.startsWith("#")) {
-                result.addAll(getValues(main, tagString.substring(1)));
-            } else {
-                result.add(NamespaceID.from(tagString));
-            }
-        });
-        return result;
+    private static <T extends ProtocolObject> @Nullable Tag convertTag(final @Nullable GameTag<T> tag) {
+        if (tag == null) return null;
+        final var values = tag.values().stream()
+                .map(ProtocolObject::namespace)
+                .collect(Collectors.toUnmodifiableSet());
+        return new Tag(tag.name(), values);
     }
 }

@@ -51,6 +51,12 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static @NotNull GameEventEntry gameEvent(final @NotNull String namespace, final @NotNull Map<String, Object> jsonObject,
+                                                    final @Nullable Map<String, Object> override) {
+        return new GameEventEntry(namespace, jsonObject, override);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -127,6 +133,7 @@ public final class Registry {
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
+        GAME_EVENTS("game_events.json"),
 
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
@@ -474,6 +481,32 @@ public final class Registry {
 
         public boolean isInstantaneous() {
             return isInstantaneous;
+        }
+    }
+
+    public static final class GameEventEntry extends Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final int notificationRadius;
+
+        private GameEventEntry(final @NotNull String namespace, final @NotNull Map<String, Object> main,
+                               final @Nullable Map<String, Object> override) {
+            super(main, override);
+            this.namespace = NamespaceID.from(namespace);
+            this.id = getInt("id");
+            this.notificationRadius = getInt("notificationRadius");
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public int notificationRadius() {
+            return notificationRadius;
         }
     }
 
