@@ -1191,18 +1191,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Changes the player {@link GameMode}.
+     * Changes the player {@link GameMode} and calls {@link PlayerGameModeChangeEvent}.
+     * <p>
+     * The change can be cancelled or modified by the event.
      *
      * @param gameMode the new player GameMode
      */
     public void setGameMode(@NotNull GameMode gameMode) {
-        this.gameMode = gameMode;
-        // Condition to prevent sending the packets before spawning the player
-        if (isActive()) {
-            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId()));
-            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
-                    new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
-        }
+        PlayerGameModeChangeEvent playerGameModeChangeEvent = new PlayerGameModeChangeEvent(this, gameMode);
+        EventDispatcher.callCancellable(playerGameModeChangeEvent, event -> {
+            this.gameMode = gameMode;
+            // Condition to prevent sending the packets before spawning the player
+            if (isActive()) {
+                sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId()));
+                sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
+                        new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
+            }
+        });
     }
 
     /**
