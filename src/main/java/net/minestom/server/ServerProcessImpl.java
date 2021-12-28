@@ -9,7 +9,6 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Instance;
@@ -30,7 +29,6 @@ import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -221,7 +219,14 @@ final class ServerProcessImpl implements ServerProcess {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
         }
+
+        extension.start();
+        extension.gotoPreInit();
+
         LOGGER.info("Starting Minestom server.");
+
+        extension.gotoInit();
+
         // Init server
         try {
             server.init(socketAddress);
@@ -229,22 +234,11 @@ final class ServerProcessImpl implements ServerProcess {
             exception.handleException(e);
             throw new RuntimeException(e);
         }
-        if (extension.shouldLoadOnStartup()) {
-            final long loadStartTime = System.nanoTime();
-            // Load extensions
-            extension.loadExtensions();
-            // Init extensions
-            extension.getExtensions().forEach(Extension::preInitialize);
-            extension.getExtensions().forEach(Extension::initialize);
-            extension.getExtensions().forEach(Extension::postInitialize);
-            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
-            LOGGER.info("Extensions loaded in {}ms", loadTime);
-        } else {
-            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
-        }
 
         // Start server
         server.start();
+
+        extension.gotoPostInit();
 
         LOGGER.info("Minestom server started successfully.");
 
@@ -260,13 +254,12 @@ final class ServerProcessImpl implements ServerProcess {
         if (!stopped.compareAndSet(false, true))
             return;
         LOGGER.info("Stopping Minestom server.");
-        extension.unloadAllExtensions();
+        LOGGER.info("Unloading all extensions.");
+        extension.shutdown();
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
         storage.getLoadedLocations().forEach(StorageLocation::close);
-        LOGGER.info("Unloading all extensions.");
-        extension.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         MinestomTerminal.stop();
