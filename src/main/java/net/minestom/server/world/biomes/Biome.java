@@ -120,6 +120,14 @@ public final class Biome {
         return this.temperatureModifier;
     }
 
+    @Override
+    public String toString() {
+        return "Biome{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
+    }
+
     public enum Precipitation {
         RAIN, NONE, SNOW;
     }
