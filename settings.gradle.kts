@@ -14,6 +14,15 @@ dependencyResolutionManagement {
     }
 }
 
+pluginManagement {
+    repositories {
+        maven("https://repo.spongepowered.org/repository/maven-public/")
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    includeBuild("build-logic")
+}
+
 rootProject.name = "Minestom"
 include("code-generators")
 include("jmh-benchmarks")

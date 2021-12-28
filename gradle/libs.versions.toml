@@ -4,7 +4,7 @@ metadata.format.version = "1.1"
 
 # Important dependencies
 adventure = "4.9.3"
-kotlin = "1.5.31"
+kotlin = "1.6.10"
 hydrazine = "1.6.0"
 dependencyGetter = "v1.0.1"
 minestomData = "47da93dd5a99280314d7e6137d2c81e7793f0fdb"

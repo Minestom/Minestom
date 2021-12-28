@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    `maven-publish`
+    id("minestom.publishing-conventions")
 }
 
 allprojects {
@@ -17,15 +17,7 @@ sourceSets {
     }
 }
 
-configurations.all {
-    // We only use Jetbrains Annotations
-    exclude("org.checkerframework", "checker-qual")
-}
-
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
     withJavadocJar()
     withSourcesJar()
 }
@@ -100,14 +92,6 @@ dependencies {
     implementation("com.github.jglrxavpok:Hephaistos:${libs.versions.hephaistos.get()}") {
         capabilities {
             requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
-        }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
         }
     }
 }

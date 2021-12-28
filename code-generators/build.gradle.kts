@@ -1,6 +1,6 @@
 plugins {
-    java
     application
+    id("minestom.common-conventions")
 }
 
 application {
@@ -16,11 +16,6 @@ dependencies {
     implementation(libs.log4j.slf4j)
     // Contains the json files
     implementation(libs.minestomData)
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks {

@@ -1,6 +1,6 @@
 plugins {
-    java
     application
+    id("minestom.common-conventions")
 }
 
 application {
@@ -10,9 +10,4 @@ application {
 dependencies {
     implementation(rootProject)
     implementation(libs.jNoise)
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
