@@ -1,6 +1,5 @@
 package net.minestom.server.tags;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +17,7 @@ public final class EntityTypeGameTags {
     public static final @NotNull GameTag<@NotNull EntityType> FREEZE_HURTS_EXTRA_TYPES = get("freeze_hurts_extra_types");
 
     private static GameTag<EntityType> get(final String name) {
-        return MinecraftServer.getTagManager().get(GameTagType.ENTITY_TYPES, "minecraft:" + name);
+        return GameTags.get(GameTagType.ENTITY_TYPES, "minecraft:" + name);
     }
 
     private EntityTypeGameTags() {

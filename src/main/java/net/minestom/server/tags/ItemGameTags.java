@@ -1,6 +1,5 @@
 package net.minestom.server.tags;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +76,7 @@ public final class ItemGameTags {
     public static final @NotNull GameTag<@NotNull Material> CLUSTER_MAX_HARVESTABLES = get("cluster_max_harvestables");
 
     private static GameTag<Material> get(final String name) {
-        return MinecraftServer.getTagManager().get(GameTagType.ITEMS, "minecraft:" + name);
+        return GameTags.get(GameTagType.ITEMS, "minecraft:" + name);
     }
 
     private ItemGameTags() {

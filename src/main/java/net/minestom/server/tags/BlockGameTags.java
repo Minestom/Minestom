@@ -1,6 +1,5 @@
 package net.minestom.server.tags;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -127,7 +126,7 @@ public final class BlockGameTags {
     public static final @NotNull GameTag<@NotNull Block> WOOL = get("wool");
 
     private static GameTag<Block> get(final String name) {
-        return MinecraftServer.getTagManager().get(GameTagType.BLOCKS, "minecraft:" + name);
+        return GameTags.get(GameTagType.BLOCKS, "minecraft:" + name);
     }
 
     private BlockGameTags() {

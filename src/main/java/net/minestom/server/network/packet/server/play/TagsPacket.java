@@ -1,23 +1,23 @@
 package net.minestom.server.network.packet.server.play;
 
-import java.util.*;
-
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.tags.GameTag;
 import net.minestom.server.tags.GameTagType;
+import net.minestom.server.tags.GameTags;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
+
 public record TagsPacket(@NotNull Map<GameTagType<?>, Set<GameTag<?>>> tagsMap) implements ServerPacket {
     @ApiStatus.Internal
-    public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(MinecraftServer.getGameTagManager().getTags()));
+    public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(GameTags.tags()));
 
     public TagsPacket {
         tagsMap = Map.copyOf(tagsMap);

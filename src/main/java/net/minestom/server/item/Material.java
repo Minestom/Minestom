@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.tags.GameTagHolder;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface Material extends ProtocolObject, Materials permits MaterialImpl {
+public sealed interface Material extends ProtocolObject, GameTagHolder<Material>, Materials permits MaterialImpl {
 
     /**
      * Returns the material registry.

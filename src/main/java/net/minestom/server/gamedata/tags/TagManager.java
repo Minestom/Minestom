@@ -1,10 +1,10 @@
 package net.minestom.server.gamedata.tags;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.tags.GameTag;
-import net.minestom.server.tags.GameTagManager;
 import net.minestom.server.tags.GameTagType;
+import net.minestom.server.tags.GameTags;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -13,25 +13,19 @@ import java.util.stream.Collectors;
 /**
  * Handles loading and caching of tags.
  *
- * @deprecated for removal, replaced with {@link net.minestom.server.tags.GameTagManager}
+ * @deprecated for removal, replaced with {@link net.minestom.server.tags.GameTagHolder}
+ * objects and game tag constants
  */
 @Deprecated(forRemoval = true)
 public final class TagManager {
-    private final GameTagManager gameTagManager;
 
-    public TagManager() {
-        gameTagManager = MinecraftServer.getGameTagManager();
-    }
-
-    @Deprecated(forRemoval = true)
     public @Nullable Tag getTag(Tag.BasicType type, String namespace) {
-        return convertTag(gameTagManager.get(Objects.requireNonNull(GameTagType.fromIdentifier(type.getIdentifier())), namespace));
+        return convertTag(GameTags.get(Objects.requireNonNull(GameTagType.fromIdentifier(type.getIdentifier())), namespace));
     }
 
-    @Deprecated(forRemoval = true)
-    public Map<Tag.BasicType, List<Tag>> getTagMap() {
+    public @NotNull Map<Tag.BasicType, List<Tag>> getTagMap() {
         final Map<Tag.BasicType, List<Tag>> tags = new HashMap<>();
-        for (final var entry : gameTagManager.getTags().entrySet()) {
+        for (final var entry : GameTags.TAGS_BY_TYPE.entrySet()) {
             final var converted = entry.getValue().stream()
                     .map(TagManager::convertTag)
                     .collect(Collectors.toList());

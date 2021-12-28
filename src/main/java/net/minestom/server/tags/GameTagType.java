@@ -45,7 +45,7 @@ public final class GameTagType<T extends ProtocolObject> {
         return null;
     }
 
-    public static List<GameTagType<? extends ProtocolObject>> values() {
+    public static @NotNull List<@NotNull GameTagType<? extends ProtocolObject>> values() {
         return Collections.unmodifiableList(VALUES);
     }
 
@@ -54,7 +54,7 @@ public final class GameTagType<T extends ProtocolObject> {
      *
      * @param type the type
      */
-    public static void add(final GameTagType<? extends ProtocolObject> type) {
+    public static void add(final @NotNull GameTagType<? extends ProtocolObject> type) {
         VALUES.add(type);
     }
 

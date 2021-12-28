@@ -1,7 +1,11 @@
 package net.minestom.server.entity;
 
+import java.util.Set;
+
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.tags.GameTag;
+import net.minestom.server.tags.GameTagHolder;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface EntityType extends ProtocolObject, EntityTypes permits EntityTypeImpl {
+public sealed interface EntityType extends ProtocolObject, GameTagHolder<EntityType>, EntityTypes permits EntityTypeImpl {
     /**
      * Returns the entity registry.
      *
@@ -50,5 +54,9 @@ public sealed interface EntityType extends ProtocolObject, EntityTypes permits E
 
     static @Nullable EntityType fromId(int id) {
         return EntityTypeImpl.getId(id);
+    }
+
+    static @NotNull Set<GameTag<EntityType>> allTags() {
+        return EntityTypeImpl.TAGS;
     }
 }

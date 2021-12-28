@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import java.util.Set;
+
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
@@ -35,6 +37,9 @@ import net.minestom.server.entity.metadata.water.fish.PufferfishMeta;
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.tags.GameTag;
+import net.minestom.server.tags.GameTags;
+import net.minestom.server.tags.GameTagType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -46,6 +51,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
     private static final Registry.Container<EntityType> CONTAINER = new Registry.Container<>(Registry.Resource.ENTITIES,
             (container, namespace, object) -> container.register(new EntityTypeImpl(Registry.entity(namespace, object, null))));
     private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
+    static final Set<GameTag<EntityType>> TAGS = GameTags.ENTITY_TYPES;
 
     static EntityType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -182,6 +188,16 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
         supplier.put("minecraft:player", PlayerMeta::new);
         supplier.put("minecraft:fishing_bobber", FishingHookMeta::new);
         return supplier;
+    }
+
+    @Override
+    public @NotNull GameTagType<EntityType> tagType() {
+        return GameTagType.ENTITY_TYPES;
+    }
+
+    @Override
+    public @NotNull Set<@NotNull GameTag<EntityType>> tags() {
+        return TAGS;
     }
 
     @Override

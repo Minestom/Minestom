@@ -7,6 +7,7 @@ import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tags.GameTagHolder;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -23,7 +24,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-public sealed interface Block extends ProtocolObject, TagReadable, Blocks permits BlockImpl {
+public sealed interface Block extends ProtocolObject, GameTagHolder<Block>, TagReadable, Blocks permits BlockImpl {
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.

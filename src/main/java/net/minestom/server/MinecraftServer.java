@@ -27,7 +27,6 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
-import net.minestom.server.tags.GameTagManager;
 import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.timer.SchedulerManager;
@@ -118,8 +117,7 @@ public final class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
-    private static GameTagManager tagManager;
-    private static TagManager oldTagManager;
+    private static TagManager tagManager;
 
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice
@@ -157,8 +155,7 @@ public final class MinecraftServer {
 
         updateManager = new UpdateManager();
 
-        tagManager = new GameTagManager();
-        oldTagManager = new TagManager();
+        tagManager = new TagManager();
 
         try {
             server = new Server(packetProcessor);
@@ -569,20 +566,10 @@ public final class MinecraftServer {
      * Gets the manager handling tags.
      *
      * @return the tag manager
-     * @deprecated for removal, replace with {@link #getGameTagManager()}
+     * @deprecated for removal, with no replacement
      */
     @Deprecated(forRemoval = true)
     public static TagManager getTagManager() {
-        checkInitStatus(oldTagManager);
-        return oldTagManager;
-    }
-
-    /**
-     * Gets the manager that handles game tags.
-     *
-     * @return the game tag manager
-     */
-    public static @NotNull GameTagManager getGameTagManager() {
         checkInitStatus(tagManager);
         return tagManager;
     }
