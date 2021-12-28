@@ -24,9 +24,6 @@ java {
 }
 
 tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
     withType<Javadoc> {
         (options as? StandardJavadocDocletOptions)?.apply {
             encoding = "UTF-8"
