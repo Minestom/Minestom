@@ -172,7 +172,9 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      */
     public synchronized void clear() {
         // Clear the item array
-        Arrays.fill(itemStacks, ItemStack.AIR);
+        for (int i = 0; i < size; i++) {
+            safeItemInsert(i, ItemStack.AIR);
+        }
         // Send the cleared inventory to viewers
         update();
     }
