@@ -43,7 +43,7 @@ public class HeightMapStage implements PreGenerationStage<HeightMapStage.Data> {
                         .stream()
                         .map(e -> Map.entry(biomeHeightNoises.getOrDefault(e.getKey(), defaultNoise), e.getValue()))
                         .collect(Collectors.toSet());
-                final double sum = noiseWeightEntrySet.stream().map(e -> e.getKey().getValue(globalX, globalZ)).reduce(Double::sum).orElse(0d);
+                final double sum = noiseWeightEntrySet.stream().map(e -> e.getKey().getValue(globalX, globalZ) * e.getValue()).reduce(Double::sum).orElse(0d);
                 final float sumWeight = noiseWeightEntrySet.stream().map(Map.Entry::getValue).reduce(Float::sum).orElse(1f);
                 height[i++] = (int) (sum/sumWeight);
             }
