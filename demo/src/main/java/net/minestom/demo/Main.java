@@ -31,7 +31,6 @@ public class Main {
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
-        commandManager.register(new GamemodeCommand());
         commandManager.register(new EntitySelectorCommand());
         commandManager.register(new HealthCommand());
         commandManager.register(new LegacyCommand());

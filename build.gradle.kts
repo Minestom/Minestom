@@ -61,10 +61,7 @@ dependencies {
     // Performance improving libraries
     api(libs.caffeine)
     api(libs.fastutil)
-
-    // Code modification
-    api(libs.bundles.asm)
-    api(libs.mixin)
+    implementation(libs.bundles.flare)
 
     // Libraries
     api(libs.guava)
@@ -87,11 +84,6 @@ dependencies {
     api(libs.minestomData)
 
     // NBT parsing/manipulation/saving
-    api("com.github.jglrxavpok:Hephaistos:${libs.versions.hephaistos.get()}")
-    implementation("com.github.jglrxavpok:Hephaistos:${libs.versions.hephaistos.get()}:gson")
-    implementation("com.github.jglrxavpok:Hephaistos:${libs.versions.hephaistos.get()}") {
-        capabilities {
-            requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
-        }
-    }
+    api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
+    api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
 }
