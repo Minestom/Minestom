@@ -7,7 +7,7 @@ adventure = "4.9.3"
 kotlin = "1.6.10"
 hydrazine = "1.6.0"
 dependencyGetter = "v1.0.1"
-minestomData = "47da93dd5a99280314d7e6137d2c81e7793f0fdb"
+minestomData = "801b8007cf"
 hephaistos = "2.3.2"
 jetbrainsAnnotations = "23.0.0"
 
@@ -58,7 +58,7 @@ log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.
 log4j-slf4j = { group ="org.apache.logging.log4j", name = "log4j-slf4j-impl", version.ref = "log4j" }
 
 # Terminal
-jline = {group = "org.jline", name = "jline", version.ref = "jline"}
+jline = { group = "org.jline", name = "jline", version.ref = "jline"}
 jline-jansi = { group = "org.jline", name = "jline-terminal-jansi", version.ref = "jline" }
 
 # Performance / Data Structures
@@ -68,8 +68,8 @@ flare = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = 
 flare-fastutil = { group = "space.vectrix.flare", name = "flare", version.ref = "flare"}
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-sparseBitSet = {group = "com.zaxxer", name = "SparseBitSet", version.ref = "sparseBitSet" }
-jcTools = {group = "org.jctools", name = "jctools-core", version.ref = "jcTools"}
+sparseBitSet = { group = "com.zaxxer", name = "SparseBitSet", version.ref = "sparseBitSet" }
+jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools"}
 
 # Test
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
