@@ -25,7 +25,7 @@ public final class TagManager {
 
     public @NotNull Map<Tag.BasicType, List<Tag>> getTagMap() {
         final Map<Tag.BasicType, List<Tag>> tags = new HashMap<>();
-        for (final var entry : GameTags.TAGS_BY_TYPE.entrySet()) {
+        for (final var entry : GameTags.tags().entrySet()) {
             final var converted = entry.getValue().stream()
                     .map(TagManager::convertTag)
                     .collect(Collectors.toList());
