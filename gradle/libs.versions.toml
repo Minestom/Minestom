@@ -12,7 +12,7 @@ hephaistos = "2.3.2"
 jetbrainsAnnotations = "23.0.0"
 
 # Terminal / Logging
-log4j = "2.14.1"
+tinylog = "2.4.1"
 jline = "3.21.0"
 
 # Performance / Data Structures
@@ -54,8 +54,9 @@ minestomData = { group = "com.github.Minestom", name = "MinestomDataGenerator", 
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
 
 # Logging
-log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
-log4j-slf4j = { group ="org.apache.logging.log4j", name = "log4j-slf4j-impl", version.ref = "log4j" }
+tinylog-api = { group = "org.tinylog", name = "tinylog-api", version.ref = "tinylog" }
+tinylog-impl = { group = "org.tinylog", name = "tinylog-impl", version.ref = "tinylog" }
+tinylog-slf4j = { group = "org.tinylog", name = "slf4j-tinylog", version.ref = "tinylog" }
 
 # Terminal
 jline = { group = "org.jline", name = "jline", version.ref = "jline"}
@@ -74,7 +75,7 @@ jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools
 # Test
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito"}
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 
 # Code Generation
 javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
@@ -87,4 +88,5 @@ jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNois
 kotlin = ["kotlin-stdlib-jdk8", "kotlin-reflect"]
 flare = ["flare", "flare-fastutil"]
 adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain"]
+logging = ["tinylog-api", "tinylog-impl", "tinylog-slf4j"]
 terminal = ["jline", "jline-jansi"]

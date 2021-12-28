@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("net.minestom.server.demo.Main")
+    mainClass.set("net.minestom.demo.Main")
 }
 
 dependencies {

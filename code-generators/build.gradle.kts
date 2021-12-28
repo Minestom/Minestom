@@ -12,8 +12,7 @@ dependencies {
     implementation(libs.jetbrainsAnnotations)
     implementation(libs.javaPoet)
     // Logging
-    implementation(libs.log4j.core)
-    implementation(libs.log4j.slf4j)
+    implementation(libs.bundles.logging)
     // Contains the json files
     implementation(libs.minestomData)
 }

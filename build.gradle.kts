@@ -52,9 +52,7 @@ dependencies {
 
 
     // Logging
-    api(libs.log4j.core)
-    api(libs.log4j.slf4j)
-
+    implementation(libs.bundles.logging)
     // Libraries required for the terminal
     implementation(libs.bundles.terminal)
 
