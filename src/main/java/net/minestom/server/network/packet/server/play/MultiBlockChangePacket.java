@@ -24,7 +24,7 @@ public record MultiBlockChangePacket(long chunkSectionPosition,
     public void write(@NotNull BinaryWriter writer) {
         writer.writeLong(chunkSectionPosition);
         writer.writeBoolean(suppressLightUpdates);
-        writer.writeLongArray(blocks);
+        writer.writeVarLongArray(blocks);
     }
 
     @Override
