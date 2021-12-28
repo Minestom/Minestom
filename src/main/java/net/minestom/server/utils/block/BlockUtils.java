@@ -80,8 +80,8 @@ public class BlockUtils {
                 if (equalIndex != -1) {
                     final String key = property.substring(0, equalIndex).trim();
                     final String value = property.substring(equalIndex + 1).trim();
-                    entries[entryIndex++] = key;
-                    entries[entryIndex++] = value;
+                    entries[entryIndex++] = key.intern();
+                    entries[entryIndex++] = value.intern();
                 }
                 start = end + 1;
             }
