@@ -13,8 +13,7 @@ import java.util.List;
 
 public record MapDataPacket(int mapId, byte scale, boolean locked,
                             boolean trackingPosition, @NotNull List<Icon> icons,
-                            byte columns, byte rows, byte x, byte z,
-                            byte @Nullable [] data) implements ServerPacket {
+                            @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket {
     public MapDataPacket {
         icons = List.copyOf(icons);
     }
@@ -26,8 +25,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     private MapDataPacket(MapDataPacket packet) {
         this(packet.mapId, packet.scale, packet.locked,
                 packet.trackingPosition, packet.icons,
-                packet.columns, packet.rows, packet.x, packet.z,
-                packet.data);
+                packet.colorContent);
     }
 
     private static MapDataPacket read(BinaryReader reader) {
@@ -38,19 +36,14 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         List<Icon> icons = trackingPosition ? reader.readVarIntList(Icon::new) : List.of();
 
         var columns = reader.readByte();
-        byte rows = 0;
-        byte x = 0;
-        byte z = 0;
-        byte[] data = null;
-        if (columns > 0) {
-            rows = reader.readByte();
-            x = reader.readByte();
-            z = reader.readByte();
-            data = reader.readBytes(reader.readVarInt());
-        }
+        if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);
+        byte rows = reader.readByte();
+        byte x = reader.readByte();
+        byte z = reader.readByte();
+        byte[] data = reader.readBytes(reader.readVarInt());
         return new MapDataPacket(mapId, scale, locked,
-                trackingPosition, icons, columns, rows, x, z,
-                data);
+                trackingPosition, icons, new ColorContent(columns, rows, x, z,
+                data));
     }
 
     @Override
@@ -60,17 +53,10 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         writer.writeBoolean(locked);
         writer.writeBoolean(trackingPosition);
         if (trackingPosition) writer.writeVarIntList(icons, BinaryWriter::write);
-
-        writer.writeByte(columns);
-        if (columns <= 0) return;
-        writer.writeByte(rows);
-        writer.writeByte(x);
-        writer.writeByte(z);
-        if (data != null && data.length > 0) {
-            writer.writeVarInt(data.length);
-            writer.writeBytes(data);
+        if (colorContent != null) {
+            writer.write(colorContent);
         } else {
-            writer.writeVarInt(0);
+            writer.writeByte((byte) 0);
         }
     }
 
@@ -93,6 +79,22 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
             writer.writeByte(direction);
             writer.writeBoolean(displayName != null);
             if (displayName != null) writer.writeComponent(displayName);
+        }
+    }
+
+    public record ColorContent(byte columns, byte rows, byte x, byte z,
+                               byte @NotNull [] data) implements Writeable {
+        public ColorContent(BinaryReader reader) {
+            this(reader.readByte(), reader.readByte(), reader.readByte(), reader.readByte(),
+                    reader.readBytes(reader.readVarInt()));
+        }
+
+        public void write(BinaryWriter writer) {
+            writer.writeByte(columns);
+            writer.writeByte(rows);
+            writer.writeByte(x);
+            writer.writeByte(z);
+            writer.writeByteArray(data);
         }
     }
 }

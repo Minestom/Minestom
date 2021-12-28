@@ -1,9 +1,6 @@
 package event;
 
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventListener;
-import net.minestom.server.event.EventNode;
+import net.minestom.server.event.*;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
@@ -162,5 +159,65 @@ public class EventNodeTest {
         node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
         assertTrue(result.get(), "The event should be called");
         assertTrue(childResult.get(), "The child event should be called");
+    }
+
+    @Test
+    public void testBinding() {
+
+        record ItemTestEvent(ItemStack item) implements ItemEvent {
+            @Override
+            public @NotNull ItemStack getItemStack() {
+                return item;
+            }
+        }
+
+        var node = EventNode.all("main");
+
+        AtomicBoolean result = new AtomicBoolean(false);
+        var binding = EventBinding.filtered(EventFilter.ITEM, itemStack -> itemStack.getMaterial() == Material.DIAMOND)
+                .map(ItemTestEvent.class, (itemStack, itemTestEvent) -> result.set(true))
+                .build();
+        node.register(binding);
+        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_BLOCK)));
+        assertFalse(result.get());
+
+        result.set(false);
+        node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
+        assertTrue(result.get());
+
+        result.set(false);
+        node.unregister(binding);
+        node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
+        assertFalse(result.get());
+    }
+
+    @Test
+    public void testMap() {
+        record ItemTestEvent(ItemStack item) implements ItemEvent {
+            @Override
+            public @NotNull ItemStack getItemStack() {
+                return item;
+            }
+        }
+
+        var item = ItemStack.of(Material.DIAMOND);
+        var node = EventNode.all("main");
+
+        AtomicBoolean result = new AtomicBoolean(false);
+        var itemNode = EventNode.type("item_node", EventFilter.ITEM);
+        itemNode.addListener(ItemTestEvent.class, event -> result.set(true));
+        assertDoesNotThrow(() -> node.map(itemNode, item));
+
+        node.call(new ItemTestEvent(item));
+        assertTrue(result.get());
+
+        result.set(false);
+        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_INGOT)));
+        assertFalse(result.get());
+
+        result.set(false);
+        assertTrue(node.unmap(item));
+        node.call(new ItemTestEvent(item));
+        assertFalse(result.get());
     }
 }

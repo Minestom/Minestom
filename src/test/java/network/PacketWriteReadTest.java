@@ -106,6 +106,8 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
                 new PlayerInfoPacket.AddPlayer(UUID.randomUUID(), "TheMode911", List.of(new PlayerInfoPacket.AddPlayer.Property("name", "value")), GameMode.CREATIVE, 5, COMPONENT)));
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER, new PlayerInfoPacket.RemovePlayer(UUID.randomUUID())));
+
+        //SERVER_PACKETS.add(new MultiBlockChangePacket(5,5,5,true, new long[]{0,5,543534,1321}));
     }
 
     @BeforeAll
