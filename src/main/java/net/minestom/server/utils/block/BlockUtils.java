@@ -1,11 +1,11 @@
 package net.minestom.server.utils.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class BlockUtils {
@@ -60,19 +60,18 @@ public class BlockUtils {
         if (propertiesString.isEmpty()) return Map.of();
 
         final int entries = StringUtils.countMatches(propertiesString, ',') + 1;
+        assert entries > 0;
         String[] keys = new String[entries];
         String[] values = new String[entries];
         int entryCount = 0;
 
         final int length = propertiesString.length();
         int start = 0;
-        int end;
         int index = 0;
         while (index < length) {
             if (propertiesString.charAt(index) == ',' || index == length - 1) {
                 if (index + 1 == length) index++;
-                end = index;
-                final String property = propertiesString.substring(start, end);
+                final String property = propertiesString.substring(start, index);
                 final int equalIndex = property.indexOf('=');
                 if (equalIndex != -1) {
                     final String key = property.substring(0, equalIndex).trim();
@@ -80,50 +79,33 @@ public class BlockUtils {
                     keys[entryCount] = key.intern();
                     values[entryCount++] = value.intern();
                 }
-                start = end + 1;
+                start = index + 1;
             }
             index++;
         }
         assert entryCount == entries;
         return switch (entryCount) {
-            case 0 -> Map.of();
             case 1 -> Map.of(keys[0], values[0]);
             case 2 -> Map.of(keys[0], values[0], keys[1], values[1]);
-            case 3 -> Map.of(keys[0], values[0],
-                    keys[1], values[1], keys[2], values[2]);
-            case 4 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3]);
-            case 5 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3],
-                    keys[4], values[4]);
-            case 6 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3],
-                    keys[4], values[4], keys[5], values[5]);
-            case 7 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3],
-                    keys[4], values[4], keys[5], values[5],
-                    keys[6], values[6]);
-            case 8 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3],
-                    keys[4], values[4], keys[5], values[5],
-                    keys[6], values[6], keys[7], values[7]);
-            case 9 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3],
-                    keys[4], values[4], keys[5], values[5],
-                    keys[6], values[6], keys[7], values[7],
-                    keys[8], values[8]);
-            case 10 -> Map.of(keys[0], values[0], keys[1], values[1],
-                    keys[2], values[2], keys[3], values[3],
-                    keys[4], values[4], keys[5], values[5],
-                    keys[6], values[6], keys[7], values[7],
-                    keys[8], values[8], keys[9], values[9]);
-            default -> {
-                Map<String, String> map = new HashMap<>(entryCount);
-                for (int i = 0; i < entryCount; i++) {
-                    map.put(keys[i], values[i]);
-                }
-                yield Map.copyOf(map);
-            }
+            case 3 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2]);
+            case 4 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3]);
+            case 5 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3], keys[4], values[4]);
+            case 6 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3], keys[4], values[4], keys[5], values[5]);
+            case 7 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6], values[6]);
+            case 8 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6], values[6],
+                    keys[7], values[7]);
+            case 9 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6], values[6],
+                    keys[7], values[7], keys[8], values[8]);
+            case 10 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
+                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6],
+                    values[6], keys[7], values[7], keys[8], values[8], keys[9], values[9]);
+            default -> Map.copyOf(new Object2ObjectArrayMap<>(keys, values));
         };
     }
 }
