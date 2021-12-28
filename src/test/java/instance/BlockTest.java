@@ -54,7 +54,7 @@ public class BlockTest {
         assertEquals(Map.of("facing", "east", "key", "value"), BlockUtils.parseProperties("[ facing = east, key= value ]"));
 
         // Verify until the limit of 10 entries
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 13; i++) {
             StringBuilder properties = new StringBuilder("[");
             for (int j = 0; j < i; j++) {
                 properties.append("key").append(j).append("=value").append(j);
