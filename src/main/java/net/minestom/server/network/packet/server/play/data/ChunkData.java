@@ -15,11 +15,15 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
                         @NotNull Map<Integer, Block> blockEntities) implements Writeable {
     public ChunkData {
-        blockEntities = Map.copyOf(blockEntities);
+        blockEntities = blockEntities.entrySet()
+                .stream()
+                .filter((entry) -> entry.getValue().registry().isBlockEntity())
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public ChunkData(BinaryReader reader) {
@@ -41,7 +45,6 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
             final int index = entry.getKey();
             final Block block = entry.getValue();
             final var registry = block.registry();
-            if (!registry.isBlockEntity()) continue;
 
             final Point point = ChunkUtils.getBlockPosition(index, 0, 0);
 
@@ -49,7 +52,6 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
             writer.writeShort((short) point.blockY()); // y
 
             writer.writeVarInt(registry.blockEntityId());
-
 
             NBTCompound resultNbt;
             // Append handler tags

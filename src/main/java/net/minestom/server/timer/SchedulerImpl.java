@@ -1,7 +1,7 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
-import org.jctools.queues.MpscGrowableArrayQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 import org.roaringbitmap.RoaringBitmap;
 
@@ -24,7 +24,7 @@ final class SchedulerImpl implements Scheduler {
     });
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
-    private final MpscGrowableArrayQueue<TaskImpl> taskQueue = new MpscGrowableArrayQueue<>(64);
+    private final MpscUnboundedArrayQueue<TaskImpl> taskQueue = new MpscUnboundedArrayQueue<>(64);
     private final RoaringBitmap registeredTasks = new RoaringBitmap();
     private final RoaringBitmap parkedTasks = new RoaringBitmap();
 
