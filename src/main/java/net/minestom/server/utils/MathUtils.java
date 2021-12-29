@@ -102,4 +102,62 @@ public final class MathUtils {
         Check.argCondition(n < 1, "n must be greater than 0");
         return Integer.SIZE - Integer.numberOfLeadingZeros(n);
     }
+
+    public static double distance3Squared(double dx, double dy, double dz) {
+        return dx * dx + dy * dy + dz * dz;
+    }
+    public static double distance3Squared(double x1, double y1, double z1, double x2, double y2, double z2) {
+        final double dx = x2 - x1;
+        final double dy = y2 - y1;
+        final double dz = z2 - z1;
+        return dx * dx + dy * dy + dz * dz;
+    }
+    public static double distance3Squared(@NotNull Point from, @NotNull Point to) {
+        final double dx = to.x() - from.x();
+        final double dy = to.y() - from.y();
+        final double dz = to.z() - from.z();
+        return dx * dx + dy * dy + dz * dz;
+    }
+    public static double distance3(double dx, double dy, double dz) {
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+    public static double distance3(double x1, double y1, double z1, double x2, double y2, double z2) {
+        final double dx = x2 - x1;
+        final double dy = y2 - y1;
+        final double dz = z2 - z1;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+    public static double distance3(@NotNull Point from, @NotNull Point to) {
+        final double dx = to.x() - from.x();
+        final double dy = to.y() - from.y();
+        final double dz = to.z() - from.z();
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    public static double distance2Squared(double dx, double dy) {
+        return dx * dx + dy * dy;
+    }
+    public static double distance2Squared(double x1, double y1, double x2, double y2) {
+        final double dx = x2 - x1;
+        final double dy = y2 - y1;
+        return dx * dx + dy * dy;
+    }
+    public static double distance2Squared(@NotNull Point from, @NotNull Point to) {
+        final double dx = to.x() - from.x();
+        final double dy = to.y() - from.y();
+        return dx * dx + dy * dy;
+    }
+    public static double distance2(double dx, double dy) {
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    public static double distance2(double x1, double y1, double x2, double y2) {
+        final double dx = x2 - x1;
+        final double dy = y2 - y1;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    public static double distance2(@NotNull Point from, @NotNull Point to) {
+        final double dx = to.x() - from.x();
+        final double dy = to.y() - from.y();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }
