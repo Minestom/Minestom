@@ -4,7 +4,6 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     repositories {
         maven("https://jitpack.io")
-        maven("https://repo.spongepowered.org/maven")
         mavenCentral()
     }
     versionCatalogs {
@@ -16,7 +15,6 @@ dependencyResolutionManagement {
 
 pluginManagement {
     repositories {
-        maven("https://repo.spongepowered.org/repository/maven-public/")
         mavenCentral()
         gradlePluginPortal()
     }

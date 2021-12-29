@@ -21,7 +21,6 @@ fastutil = "8.5.6"
 flare = "2.0.0"
 gson = "2.8.9"
 guava = "31.0.1-jre"
-sparseBitSet = "1.2"
 jcTools = "3.3.0"
 
 # Code Generation
@@ -69,7 +68,6 @@ flare = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = 
 flare-fastutil = { group = "space.vectrix.flare", name = "flare", version.ref = "flare"}
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-sparseBitSet = { group = "com.zaxxer", name = "SparseBitSet", version.ref = "sparseBitSet" }
 jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools"}
 
 # Test

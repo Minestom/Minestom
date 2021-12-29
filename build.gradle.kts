@@ -62,7 +62,6 @@ dependencies {
     // Libraries
     api(libs.guava)
     api(libs.gson)
-    api(libs.sparseBitSet)
     api(libs.jcTools)
     // Path finding
     api(libs.hydrazine)
