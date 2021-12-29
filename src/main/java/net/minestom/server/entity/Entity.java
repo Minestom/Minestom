@@ -326,10 +326,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param position the position to look at.
      */
     public void lookAt(@NotNull Pos position) {
-        Vec delta = position.sub(getPosition()).asVec().normalize();
+        Pos newPosition = position.sub(getEyePosition());
         setView(
-                PositionUtils.getLookYaw(delta.x(), delta.z()),
-                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
+                PositionUtils.getLookYaw(newPosition.x(), newPosition.z()),
+                PositionUtils.getLookPitch(newPosition.x(), newPosition.y(), newPosition.z())
         );
     }
 
