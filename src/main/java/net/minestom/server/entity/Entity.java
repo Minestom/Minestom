@@ -337,10 +337,21 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Changes the view of the entity so that it looks in a direction to the given entity.
      *
      * @param entity the entity to look at.
+     * @param lookAtHead if true, the entity will look at head entity otherwise the entity will look at feet entity.
+     */
+    public void lookAt(@NotNull Entity entity, boolean lookAtHead) {
+        Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
+        final Pos positionToLook = (lookAtHead) ? entity.getEyePosition() : entity.position;
+        lookAt(positionToLook);
+    }
+
+    /**
+     * Changes the view of the entity so that it looks in a direction to the head of the given entity.
+     *
+     * @param entity the entity to look at.
      */
     public void lookAt(@NotNull Entity entity) {
-        Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
-        lookAt(entity.position);
+        lookAt(entity, true);
     }
 
     /**
