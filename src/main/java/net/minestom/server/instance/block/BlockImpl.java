@@ -7,9 +7,6 @@ import java.util.*;
 
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tags.GameTag;
-import net.minestom.server.tags.GameTags;
-import net.minestom.server.tags.GameTagType;
 import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +48,6 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
             .expireAfterWrite(Duration.ofMinutes(5))
             .weakValues()
             .build();
-    private static final Set<GameTag<Block>> TAGS = GameTags.BLOCKS;
 
     static {
         BLOCK_STATE_MAP.trim();
@@ -123,16 +119,6 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return nbt != null ? tag.read(nbt) : null;
-    }
-
-    @Override
-    public @NotNull GameTagType<Block> tagType() {
-        return GameTagType.BLOCKS;
-    }
-
-    @Override
-    public @NotNull Set<@NotNull GameTag<Block>> tags() {
-        return TAGS;
     }
 
     private Map<Map<String, String>, Block> possibleProperties() {

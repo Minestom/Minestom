@@ -2,9 +2,12 @@ package net.minestom.server.gameevent;
 
 import java.util.Collection;
 
+import java.util.Set;
+
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.tags.GameTagHolder;
+import net.minestom.server.tags.GameTag;
+import net.minestom.server.tags.GameTags;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * package, as well as the
  * <a href="https://wiki.minestom.net/feature/events">Wiki page</a>.
  */
-public sealed interface GameEvent extends ProtocolObject, GameTagHolder<GameEvent> permits GameEventImpl {
+public sealed interface GameEvent extends ProtocolObject permits GameEventImpl {
 
     static @NotNull Collection<@NotNull GameEvent> values() {
         return GameEventImpl.values();
@@ -35,6 +38,10 @@ public sealed interface GameEvent extends ProtocolObject, GameTagHolder<GameEven
 
     static @Nullable GameEvent fromId(final int id) {
         return GameEventImpl.getId(id);
+    }
+
+    static @NotNull Set<GameTag<GameEvent>> tags() {
+        return GameTags.GAME_EVENTS;
     }
 
     /**

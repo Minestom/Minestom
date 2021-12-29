@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 /**
  * Handles loading and caching of tags.
  *
- * @deprecated for removal, replaced with {@link net.minestom.server.tags.GameTagHolder}
- * objects and game tag constants
+ * @deprecated for removal, replaced with tag holder objects and game tag
+ * constants
  */
 @Deprecated(forRemoval = true)
 public final class TagManager {
