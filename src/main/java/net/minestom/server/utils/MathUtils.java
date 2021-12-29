@@ -1,7 +1,9 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
 public final class MathUtils {
