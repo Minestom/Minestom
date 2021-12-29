@@ -55,14 +55,14 @@ dependencies {
     implementation(libs.bundles.terminal)
 
     // Performance improving libraries
-    api(libs.caffeine)
+    implementation(libs.caffeine)
     api(libs.fastutil)
     implementation(libs.bundles.flare)
 
     // Libraries
     api(libs.guava)
     api(libs.gson)
-    api(libs.jcTools)
+    implementation(libs.jcTools)
     // Path finding
     api(libs.hydrazine)
 
@@ -76,7 +76,7 @@ dependencies {
     api(libs.dependencyGetter)
 
     // Minestom Data (From MinestomDataGenerator)
-    api(libs.minestomData)
+    implementation(libs.minestomData)
 
     // NBT parsing/manipulation/saving
     api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
