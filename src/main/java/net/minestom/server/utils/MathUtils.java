@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Internal
 public final class MathUtils {
 
+    public static final double RADIANS_TO_DEGREES = 57.2957;
+
     private MathUtils() {
     }
 
