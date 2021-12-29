@@ -11,9 +11,6 @@ import java.util.function.DoubleUnaryOperator;
 
 /**
  * Represents a 3D point.
- * <p>
- * Can either be a {@link Pos} or {@link Vec}.
- * Interface will become {@code sealed} in the future.
  */
 public sealed interface Point permits Vec, Pos {
 
