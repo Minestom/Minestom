@@ -1393,6 +1393,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
+     * Gets the entity eye position.
+     *
+     * @return the current position of the entity eye.
+     */
+    public @NotNull Pos getEyePosition() {
+        return position.add(0, getEyeHeight(), 0);
+    }
+
+    /**
      * Gets all the potion effect of this entity.
      *
      * @return an unmodifiable list of all this entity effects
