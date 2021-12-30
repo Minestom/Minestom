@@ -138,7 +138,7 @@ public final class ExtensionManager {
         Map<ExtensionDescriptor, List<ExtensionDescriptor>> dependents = new HashMap<>();
         for (ExtensionDescriptor extension : extensionsByName.values()) {
             for (Dependency dependency : extension.dependencies()) {
-                if (dependency instanceof Dependency.ExtensionDependency extensionDependency) {
+                if (dependency instanceof Dependency.Extension extensionDependency) {
                     ExtensionDescriptor dependencyExtension = extensionsByName.get(extensionDependency.id().toLowerCase());
                     if (dependencyExtension == null) {
                         if (extensionDependency.isOptional()) {
@@ -200,13 +200,13 @@ public final class ExtensionManager {
             return false;
 
         // initialize
-        Extension.LoadStatus result = Extension.LoadStatus.FAILED;
+        Extension.LoadStatus result = net.minestom.server.extensions.Extension.LoadStatus.FAILED;
         try {
             result = extensionInstance.initialize();
         } catch (Throwable throwable) {
             LOGGER.error("An exception occurred while initializing extension {}", extension.name(), throwable);
         }
-        if (result == Extension.LoadStatus.FAILED) {
+        if (result == net.minestom.server.extensions.Extension.LoadStatus.FAILED) {
             LOGGER.error("Failed to initialize extension {}, it nor its dependents will be loaded.", extension.name());
             return false;
         }
@@ -218,13 +218,13 @@ public final class ExtensionManager {
     private boolean loadDependency(ExtensionDescriptor target, Dependency dep, Map<String, ExtensionDescriptor> extensionsById) {
         // Load child and get classloader
         HierarchyClassLoader dependencyClassLoader = null;
-        if (dep instanceof Dependency.ExtensionDependency dependency) {
+        if (dep instanceof Dependency.Extension dependency) {
             ExtensionDescriptor descriptor = extensionsById.get(dependency.id().toLowerCase());
             //todo what happens if extension does not exist?
             boolean loaded = loadExtension(descriptor, extensionsById);
             if (!loaded) return false;
             dependencyClassLoader = descriptor.classLoader();
-        } else if (dep instanceof Dependency.MavenDependency dependency) {
+        } else if (dep instanceof Dependency.Maven dependency) {
             Check.fail("Not implemented");
         }
 
