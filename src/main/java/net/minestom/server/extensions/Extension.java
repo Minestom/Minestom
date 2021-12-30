@@ -20,14 +20,8 @@ public abstract class Extension {
         FAILED
     }
 
-    // Set by reflection
-    @SuppressWarnings("unused")
     ExtensionDescriptor descriptor;
-    // Set by reflection
-    @SuppressWarnings("unused")
     Logger logger;
-    // Set by reflection
-    @SuppressWarnings("unused")
     EventNode<Event> eventNode;
 
     protected Extension() { }
