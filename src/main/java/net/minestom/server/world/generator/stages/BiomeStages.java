@@ -35,7 +35,7 @@ import java.util.*;
  * </ol>
  */
 public class BiomeStages {
-    public static final ChunkBiomeGridStage CHUNK_BIOME_GRID_STAGE = new ChunkBiomeGridStage();
+    private static final ChunkBiomeGridStage CHUNK_BIOME_GRID_STAGE = new ChunkBiomeGridStage();
     private static final GenerationStage BIOME_FILL_2D = new BiomeFillStage2D();
     private static final Logger LOGGER = LoggerFactory.getLogger(BiomeStages.class);
 
@@ -165,14 +165,12 @@ public class BiomeStages {
     }
 
     private static class ChunkBiomeWeightGridStage implements PreGenerationStage<ChunkBiomeWeightGrid> {
-        private static final int GRID_SIZE = 4;
-        private static final double[][] WEIGHTS = new double[MathUtils.square(GRID_SIZE)][];
+        private static final double[][] WEIGHTS = new double[MathUtils.square(16)][];
 
         static {
             // Centers of chunks 3x3
             Vec[] biomePoints = new Vec[9];
-            // Centers of biome cells 4x4 in 0;0
-            Vec[] targetPoints = new Vec[MathUtils.square(GRID_SIZE)];
+            Vec[] targetPoints = new Vec[MathUtils.square(16)];
             {
                 int i = 0;
                 for (int x = -Chunk.CHUNK_SIZE_X / 2; x < Chunk.CHUNK_SIZE_X * 2; x += Chunk.CHUNK_SIZE_X) {
@@ -181,24 +179,41 @@ public class BiomeStages {
                     }
                 }
                 i = 0;
-                for (int x = GRID_SIZE /2; x < Chunk.CHUNK_SIZE_X; x+= GRID_SIZE) {
-                    for (int z = GRID_SIZE /2; z < Chunk.CHUNK_SIZE_Z; z+= GRID_SIZE) {
+                for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                         targetPoints[i++] = new Vec(x, z);
                     }
                 }
             }
-            final double max = biomePoints[0].distanceSquared(targetPoints[targetPoints.length-1]);
             for (int i = 0; i < targetPoints.length; i++) {
                 final double[] weight = new double[biomePoints.length];
                 double sum = 0;
+                double max = 0;
+                // Calculate
                 for (int j = 0; j < biomePoints.length; j++) {
-                    weight[j] = biomePoints[j].distanceSquared(targetPoints[i]);
-                    sum += (max - weight[j]);
+                    final double d = biomePoints[j].distanceSquared(targetPoints[i]);
+                    weight[j] = d;
+                    if (d > max) max = d;
                 }
+                // Invert & sum
                 for (int k = 0; k < weight.length; k++) {
-                    weight[k] =  weight[k] / sum;
+                    double c = weight[k];
+                    c = max-c;
+                    sum += c;
+                    weight[k] = c;
+                }
+                // Normalize
+                for (int k = 0; k < weight.length; k++) {
+                    weight[k] /= sum;
                 }
                 WEIGHTS[i] = weight;
+            }
+
+            //Test
+            for (double[] weight : WEIGHTS) {
+                if (Arrays.stream(weight).sum() < 1d-1e-6) {
+                    throw new IllegalStateException("Weights doesn't add up to 1");
+                }
             }
         }
 
@@ -223,13 +238,13 @@ public class BiomeStages {
             if (biomeWeightIndexes.size() == 1) {
                 final HashMap<DefaultBiomeSettings, Double> map = new HashMap<>();
                 map.put(biomeSettings[0], 1d);
-                for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                for (int i = 0; i < 16*16; i++) {
                     maps.add(map);
                 }
             } else {
                 int i = 0;
-                for (int x = 0; x < GRID_SIZE; x++) {
-                    for (int z = 0; z < GRID_SIZE; z++) {
+                for (int x = 0; x < 16; x++) {
+                    for (int z = 0; z < 16; z++) {
                         final HashMap<DefaultBiomeSettings, Double> map = new HashMap<>();
                         final double[] w = WEIGHTS[i++];
                         biomeWeightIndexes.entrySet().parallelStream().forEach(e -> {
@@ -273,7 +288,7 @@ public class BiomeStages {
             int i = 0;
             for (int x = 0; x < 4; x++) {
                 for (int z = 0; z < 4; z++) {
-                    biomeSettings[i] = biomes.get(i++).entrySet().stream().sorted((a,b) -> Double.compare(b.getValue(),a.getValue())).findFirst().get().getKey();
+                    biomeSettings[i] = biomes.get(i++*2).entrySet().stream().sorted((a,b) -> Double.compare(b.getValue(),a.getValue())).findFirst().get().getKey();
                 }
             }
             context.setChunkData(new Data(biomeSettings), sectionX, sectionZ);
