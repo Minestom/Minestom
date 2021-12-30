@@ -51,7 +51,7 @@ public final class ExtensionManager {
     // Server state
     private final ExceptionManager exceptionManager;
     private final EventNode<Event> globalEventNode;
-    private final ExtensionDiscoverer discoverer;
+    private final List<ExtensionDiscoverer> discoverers;
 
     // Internal state
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
@@ -64,13 +64,14 @@ public final class ExtensionManager {
     private boolean started = false;
 
     public ExtensionManager(ExceptionManager exceptionManager, EventNode<Event> globalEventNode) {
-        this(exceptionManager, globalEventNode, ExtensionDiscoverer.DEFAULT);
+        this(exceptionManager, globalEventNode, List.of(
+                ExtensionDiscoverer.FILESYSTEM, ExtensionDiscoverer.INDEV, ExtensionDiscoverer.AUTOSCAN));
     }
 
-    ExtensionManager(ExceptionManager exceptionManager, EventNode<Event> globalEventNode, ExtensionDiscoverer discoverer) {
+    ExtensionManager(ExceptionManager exceptionManager, EventNode<Event> globalEventNode, List<ExtensionDiscoverer> discoverer) {
         this.exceptionManager = exceptionManager;
         this.globalEventNode = globalEventNode;
-        this.discoverer = discoverer;
+        this.discoverers = new ArrayList<>(discoverer);
     }
 
     public @NotNull Path getExtensionDataRoot() {
@@ -81,6 +82,16 @@ public final class ExtensionManager {
         Check.stateCondition(started, "Cannot set extension data root after initialization.");
         this.extensionDataRoot = dataRoot;
         this.dependenciesFolder = extensionDataRoot.resolve(".libs");
+    }
+
+    public void addExtensionDiscoverer(@NotNull ExtensionDiscoverer discoverer) {
+        Check.stateCondition(started, "Cannot add extension discoverer after initialization.");
+        discoverers.add(discoverer);
+    }
+
+    public void clearExtensionDiscoverers() {
+        Check.stateCondition(started, "Cannot clear extension discoverers after initialization.");
+        discoverers.clear();
     }
 
     @NotNull
@@ -114,7 +125,8 @@ public final class ExtensionManager {
         }
 
         // Discover all extensions
-        Map<String, ExtensionDescriptor> extensionByName = discoverer.discover(extensionDataRoot)
+        Map<String, ExtensionDescriptor> extensionByName = discoverers.stream()
+                .flatMap(discoverer -> discoverer.discover(extensionDataRoot))
                 .collect(Collectors.toMap(ext -> ext.name().toLowerCase(), Function.identity()));
         if (extensionByName.isEmpty()) return;
 
@@ -295,7 +307,8 @@ public final class ExtensionManager {
 
             extensionLoggerField.set(extension, LoggerFactory.getLogger(extensionClass));
 
-            EventNode<Event> eventNode = globalEventNode.addChild(EventNode.all(extensionName));
+            EventNode<Event> eventNode = EventNode.all(extensionName);
+            globalEventNode.addChild(eventNode);
             extensionEventNodeField.set(extension, eventNode);
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur

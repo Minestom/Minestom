@@ -35,7 +35,7 @@ public class ExtensionManagerTest {
     public void setup() {
         extensionManager = new ExtensionManager(
                 TestUtil.IGNORING_EXTENSION_MANAGER,
-                globalNode, ExtensionDiscoverer.AUTOSCAN);
+                globalNode, List.of(ExtensionDiscoverer.AUTOSCAN));
         extensionManager.setExtensionDataRoot(dataRoot);
     }
 

@@ -14,6 +14,9 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Based on <a href="https://github.com/mworzala/minestom_extension_tests">these extensions</a>
+ */
 public class ExtensionManagerIntegrationTest {
     private @TempDir Path dataRoot;
     private EventNode<Event> globalNode = EventNode.all("global");
