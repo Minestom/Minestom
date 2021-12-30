@@ -2,14 +2,12 @@ package net.minestom.server.extensions.descriptor;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minestom.server.utils.PlatformUtil;
+import net.minestom.server.utils.PlatformUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Locale;
 
 public sealed interface Dependency permits Dependency.ExtensionDependency, Dependency.MavenDependency {
     Logger LOGGER = LoggerFactory.getLogger(Dependency.class);
@@ -111,12 +109,12 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
         try {
             if (json.has("os")) {
                 String os = json.get("os").getAsString();
-                if (!os.equals(PlatformUtil.OS)) return false;
+                if (!os.equals(PlatformUtils.OS)) return false;
             }
 
             if (json.has("arch")) {
                 String arch = json.get("arch").getAsString();
-                if (!arch.equals(PlatformUtil.ARCH)) return false;
+                if (!arch.equals(PlatformUtils.ARCH)) return false;
             }
 
             return true;

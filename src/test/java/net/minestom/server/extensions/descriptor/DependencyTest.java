@@ -2,7 +2,7 @@ package net.minestom.server.extensions.descriptor;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import net.minestom.server.utils.PlatformUtil;
+import net.minestom.server.utils.PlatformUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -52,8 +52,8 @@ public class DependencyTest {
     @ParameterizedTest
     @MethodSource("platformValidationProvider")
     public void testPlatformValidation(String dependencyString, boolean expectedValid) {
-        assumeTrue(PlatformUtil.OS.equals("macos"));
-        assumeTrue(PlatformUtil.ARCH.equals("arm64"));
+        assumeTrue(PlatformUtils.OS.equals("macos"));
+        assumeTrue(PlatformUtils.ARCH.equals("arm64"));
 
         JsonElement json = JsonParser.parseString(dependencyString);
         Dependency dependency = Dependency.fromJson(json);

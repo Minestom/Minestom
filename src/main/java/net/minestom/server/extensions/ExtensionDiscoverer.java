@@ -2,7 +2,7 @@ package net.minestom.server.extensions;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
-import net.minestom.server.utils.PropertyUtil;
+import net.minestom.server.utils.PropertyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -129,7 +129,7 @@ public interface ExtensionDiscoverer {
     };
 
     ExtensionDiscoverer AUTOSCAN = (extensionDirectory) -> {
-        boolean enabled = PropertyUtil.getBoolean(AUTOSCAN_ENABLED_PROPERTY, true);
+        boolean enabled = PropertyUtils.getBoolean(AUTOSCAN_ENABLED_PROPERTY, true);
         if (enabled) {
             List<ExtensionDescriptor> discovered = new ArrayList<>();
             ClassLoader rootClassLoader = MinecraftServer.class.getClassLoader();

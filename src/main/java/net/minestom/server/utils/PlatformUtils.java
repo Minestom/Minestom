@@ -1,12 +1,14 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class PlatformUtil {
-    private PlatformUtil() {}
+@ApiStatus.Internal
+public final class PlatformUtils {
+    private PlatformUtils() {}
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformUtils.class);
 
     /**
      * The current operating system normalized to 'linux', 'macos', 'windows' or 'other'.
