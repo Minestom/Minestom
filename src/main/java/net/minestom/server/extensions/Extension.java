@@ -22,13 +22,13 @@ public abstract class Extension {
 
     // Set by reflection
     @SuppressWarnings("unused")
-    private ExtensionDescriptor descriptor;
+    ExtensionDescriptor descriptor;
     // Set by reflection
     @SuppressWarnings("unused")
-    private Logger logger;
+    Logger logger;
     // Set by reflection
     @SuppressWarnings("unused")
-    private EventNode<Event> eventNode;
+    EventNode<Event> eventNode;
 
     protected Extension() { }
 
