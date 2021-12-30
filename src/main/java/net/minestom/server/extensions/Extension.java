@@ -73,7 +73,7 @@ public abstract class Extension {
      * @return The file contents, or null if there was an issue reading the file.
      */
     public @Nullable InputStream getResource(@NotNull Path target) {
-        final Path targetFile = getDataDirectory().resolve(target);
+        final Path targetFile = dataDirectory().resolve(target);
         try {
             // Copy from jar if the file does not exist in the extension data directory.
             if (!Files.exists(targetFile)) {
@@ -97,7 +97,7 @@ public abstract class Extension {
      */
     public @Nullable InputStream getPackagedResource(@NotNull String fileName) {
         try {
-            final URL url = getOrigin().classLoader().getResource(fileName);
+            final URL url = descriptor().classLoader().getResource(fileName);
             if (url == null) {
                 getLogger().debug("Resource not found: {}", fileName);
                 return null;
@@ -139,7 +139,7 @@ public abstract class Extension {
      * @return True if the resource was saved successfully, null otherwise
      */
     public boolean savePackagedResource(@NotNull Path target) {
-        final Path targetFile = getDataDirectory().resolve(target);
+        final Path targetFile = dataDirectory().resolve(target);
         try (InputStream is = getPackagedResource(target)) {
             if (is == null) {
                 return false;
@@ -158,7 +158,7 @@ public abstract class Extension {
      * @see #descriptor()
      */
     @Deprecated
-    public @NotNull ExtensionDescriptor getOrigin() {
+    public final @NotNull ExtensionDescriptor getOrigin() {
         return descriptor();
     }
 
@@ -166,23 +166,23 @@ public abstract class Extension {
      * @see #logger()
      */
     @Deprecated
-    public @NotNull Logger getLogger() {
-        return logger;
+    public final @NotNull Logger getLogger() {
+        return logger();
     }
 
     /**
      * @see #eventNode()
      */
     @Deprecated
-    public @NotNull EventNode<Event> getEventNode() {
-        return eventNode;
+    public final @NotNull EventNode<Event> getEventNode() {
+        return eventNode();
     }
 
     /**
      * @see #dataDirectory()
      */
     @Deprecated
-    public @NotNull Path getDataDirectory() {
-        return getOrigin().dataDirectory();
+    public final @NotNull Path getDataDirectory() {
+        return dataDirectory();
     }
 }
