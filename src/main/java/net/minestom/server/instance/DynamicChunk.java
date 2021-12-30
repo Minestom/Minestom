@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -196,7 +197,7 @@ public class DynamicChunk extends Chunk {
                     "WORLD_SURFACE", NBT.LongArray(Utils.encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
-        final BinaryWriter writer = new BinaryWriter();
+        final BinaryWriter writer = new BinaryWriter(PacketUtils.localBuffer());
         for (Section section : sections) writer.write(section);
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
