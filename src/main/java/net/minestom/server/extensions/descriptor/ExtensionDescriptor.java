@@ -3,7 +3,6 @@ package net.minestom.server.extensions.descriptor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minestom.server.extensions.DiscoveredExtension;
 import net.minestom.server.extensions.HierarchyClassLoader;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,7 @@ public record ExtensionDescriptor(
         @NotNull Path dataDirectory,
         @NotNull HierarchyClassLoader classLoader
 ) {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExtensionDescriptor.class);
 
     static final String NAME_REGEX = "[A-Za-z][_A-Za-z0-9\\.]*[A-Za-z0-9]";
     // From https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
