@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -32,7 +31,7 @@ import java.util.zip.ZipFile;
  *     <li>Autoscan (root classpath)</li>
  * </ul>
  */
-interface ExtensionDiscoverer {
+public interface ExtensionDiscoverer {
     Logger LOGGER = LoggerFactory.getLogger(ExtensionDiscoverer.class);
 
     String INDEV_CLASSES_PROPERTY = "minestom.extension.indevfolder.classes";
