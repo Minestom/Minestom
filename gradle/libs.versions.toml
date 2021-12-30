@@ -5,7 +5,7 @@ metadata.format.version = "1.1"
 # Important dependencies
 adventure = "4.9.3"
 kotlin = "1.6.10"
-hydrazine = "1.6.0"
+hydrazine = "1.7.2"
 dependencyGetter = "v1.0.1"
 minestomData = "801b8007cf"
 hephaistos = "2.3.2"
