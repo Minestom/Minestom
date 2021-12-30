@@ -3,7 +3,6 @@ package net.minestom.server.extensions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minestom.server.utils.PlatformUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -13,11 +12,30 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
     Logger LOGGER = LoggerFactory.getLogger(Dependency.class);
 
     static Dependency newExtensionDependency(@NotNull String name, @Nullable String version, boolean optional) {
-        return new ExtensionDependencyImpl(name, version, optional);
+        return new DependencyImpl.ExtensionDependency(name, version, optional);
     }
 
     static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, boolean optional) {
-        return new MavenDependencyImpl(groupId, artifactId, version, optional);
+        return new DependencyImpl.MavenDependency(groupId, artifactId, version, optional);
+    }
+
+    @NotNull String id();
+
+    boolean isOptional();
+
+    /**
+     * An extension dependency specified in an <code>extension.json</code> file.
+     */
+    sealed interface ExtensionDependency extends Dependency permits DependencyImpl.ExtensionDependency {
+        @Nullable String version();
+    }
+
+    sealed interface MavenDependency extends Dependency permits DependencyImpl.MavenDependency {
+        @NotNull String groupId();
+
+        @NotNull String artifactId();
+
+        @NotNull String version();
     }
 
     /**
@@ -26,11 +44,11 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
      * If a dependency does not match the current system spec, <code>null</code> will be returned.
      * For example, the following would return null on a Windows system:
      * <code>
-     *     {
-     *          "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
-     *          "os": "macos",
-     *          "arch": "arm64"
-     *     }
+     * {
+     * "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+     * "os": "macos",
+     * "arch": "arm64"
+     * }
      * </code>
      *
      * @param json The json to parse
@@ -72,27 +90,10 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
         };
     }
 
-    String id();
-
-    boolean isOptional();
-
-    /**
-     * An extension dependency specified in an <code>extension.json</code> file.
-     */
-    sealed interface ExtensionDependency extends Dependency permits ExtensionDependencyImpl {
-        @Nullable String version();
-    }
-
-    sealed interface MavenDependency extends Dependency permits MavenDependencyImpl {
-        @NotNull String groupId();
-        @NotNull String artifactId();
-        @NotNull String version();
-    }
-
     /**
      * Checks if a dependency is applicable on the current platform. Currently this
      * involves a check for the current OS and architecture.
-     *
+     * <p>
      * OS Values: macos, windows, linux
      * Arch Values: x86, x86_64, arm64
      *
