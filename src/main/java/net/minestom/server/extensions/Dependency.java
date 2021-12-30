@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public sealed interface Dependency permits Dependency.ExtensionDependency, Dependency.MavenDependency {
+public sealed interface Dependency permits Dependency.Extension, Dependency.Maven {
     Logger LOGGER = LoggerFactory.getLogger(Dependency.class);
 
     static Dependency newExtensionDependency(@NotNull String name, @Nullable String version, boolean optional) {
-        return new DependencyImpl.ExtensionDependency(name, version, optional);
+        return new DependencyImpl.Extension(name, version, optional);
     }
 
     static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, boolean optional) {
-        return new DependencyImpl.MavenDependency(groupId, artifactId, version, optional);
+        return new DependencyImpl.Maven(groupId, artifactId, version, optional);
     }
 
     @NotNull String id();
@@ -26,11 +26,11 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
     /**
      * An extension dependency specified in an <code>extension.json</code> file.
      */
-    sealed interface ExtensionDependency extends Dependency permits DependencyImpl.ExtensionDependency {
+    sealed interface Extension extends Dependency permits DependencyImpl.Extension {
         @Nullable String version();
     }
 
-    sealed interface MavenDependency extends Dependency permits DependencyImpl.MavenDependency {
+    sealed interface Maven extends Dependency permits DependencyImpl.Maven {
         @NotNull String groupId();
 
         @NotNull String artifactId();
