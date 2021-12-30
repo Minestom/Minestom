@@ -21,8 +21,7 @@ record ExtensionDescriptorImpl(
         @NotNull Path dataDirectory,
         @NotNull HierarchyClassLoader classLoader
 ) implements ExtensionDescriptor {
-
-    public ExtensionDescriptorImpl {
+    ExtensionDescriptorImpl {
         Check.argCondition(!name.matches(NAME_REGEX), "Invalid extension name: " + name);
         Check.argCondition(!version.matches(VERSION_REGEX), "Invalid extension version: " + version + ". Semantic versioning must be followed. For more information visit https://semver.org/.");
         authors = List.copyOf(authors);
@@ -33,5 +32,4 @@ record ExtensionDescriptorImpl(
 
         dataDirectory = dataDirectory.toAbsolutePath();
     }
-
 }

@@ -36,13 +36,11 @@ public abstract class Extension {
 
     public abstract void terminate();
 
-    @NotNull
-    public ExtensionDescriptor descriptor() {
+    public @NotNull ExtensionDescriptor descriptor() {
         return descriptor;
     }
 
-    @NotNull
-    public Logger logger() {
+    public @NotNull Logger logger() {
         return logger;
     }
 
@@ -166,8 +164,7 @@ public abstract class Extension {
      * @see #descriptor()
      */
     @Deprecated
-    @NotNull
-    public ExtensionDescriptor getOrigin() {
+    public @NotNull ExtensionDescriptor getOrigin() {
         return descriptor();
     }
 
@@ -175,8 +172,7 @@ public abstract class Extension {
      * @see #logger()
      */
     @Deprecated
-    @NotNull
-    public Logger getLogger() {
+    public @NotNull Logger getLogger() {
         return logger;
     }
 
