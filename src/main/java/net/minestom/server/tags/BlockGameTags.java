@@ -61,7 +61,7 @@ public final class BlockGameTags {
     public static final @NotNull GameTag<@NotNull Block> IRON_ORES = get("iron_ores");
     public static final @NotNull GameTag<@NotNull Block> JUNGLE_LOGS = get("jungle_logs");
     public static final @NotNull GameTag<@NotNull Block> LAPIS_ORES = get("lapis_ores");
-    public static final @NotNull GameTag<@NotNull Block> LAVA_POOL_STONE_REPLACEABLES = get("lava_pool_stone_replaceables");
+    public static final @NotNull GameTag<@NotNull Block> LAVA_POOL_STONE_REPLACEABLES = get("lava_pool_stone_cannot_replace");
     public static final @NotNull GameTag<@NotNull Block> LEAVES = get("leaves");
     public static final @NotNull GameTag<@NotNull Block> LOGS = get("logs");
     public static final @NotNull GameTag<@NotNull Block> LOGS_THAT_BURN = get("logs_that_burn");
