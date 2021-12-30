@@ -29,7 +29,7 @@ public final class TagManager {
             final var converted = entry.getValue().stream()
                     .map(TagManager::convertTag)
                     .collect(Collectors.toList());
-            tags.put(Tag.BasicType.fromIdentifer(entry.getKey().identifier()), converted);
+            tags.put(Tag.BasicType.fromIdentifer(entry.getKey().identifier().asString()), converted);
         }
         return Collections.unmodifiableMap(tags);
     }

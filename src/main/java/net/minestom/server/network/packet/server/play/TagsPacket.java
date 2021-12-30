@@ -33,7 +33,7 @@ public record TagsPacket(@NotNull Map<GameTagType<?>, Set<GameTag<?>>> tagsMap) 
         for (var entry : tagsMap.entrySet()) {
             final var type = entry.getKey();
             final var tags = entry.getValue();
-            writer.writeSizedString(type.identifier());
+            writer.writeSizedString(type.identifier().asString());
             writer.writeVarInt(tags.size());
             for (var tag : tags) {
                 writer.writeSizedString(tag.name().asString());

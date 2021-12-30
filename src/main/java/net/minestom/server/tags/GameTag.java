@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public record GameTag<T extends ProtocolObject>(NamespaceID name,
-                                                GameTagType<T> type,
-                                                Collection<T> values) {
+public record GameTag<T extends ProtocolObject>(@NotNull NamespaceID name,
+                                                @NotNull GameTagType<T> type,
+                                                @NotNull Collection<T> values) {
     public GameTag {
         values = List.copyOf(values);
     }
