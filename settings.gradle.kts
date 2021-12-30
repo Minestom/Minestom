@@ -6,11 +6,6 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
         mavenCentral()
     }
-    versionCatalogs {
-        create("global") {
-            from(files("gradle/global.versions.toml"))
-        }
-    }
 }
 
 pluginManagement {
