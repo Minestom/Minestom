@@ -8,9 +8,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public final class HierarchyClassLoader extends URLClassLoader {
-    private final List<HierarchyClassLoader> children = new ArrayList<>();
+public class HierarchyClassLoader extends URLClassLoader {
+    private final List<HierarchyClassLoader> children = new CopyOnWriteArrayList<>();
 
     public HierarchyClassLoader(String name, URL[] urls) {
         super("Ext_" + name, urls, MinecraftServer.class.getClassLoader());
