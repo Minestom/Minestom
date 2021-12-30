@@ -3,9 +3,6 @@ package net.minestom.server.extensions;
 import com.google.gson.JsonObject;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.extensions.descriptor.Dependency;
-import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
-import net.minestom.server.extensions.descriptor.ExtensionDescriptorImpl;
 import net.minestom.server.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -105,7 +102,7 @@ public class ExtensionManagerTest {
             List<Dependency> dependencies = new ArrayList<>();
             for (String dep : stub.dependencies) {
                 String name = dep.replace("?", "");
-                dependencies.add(new Dependency.ExtensionDependency(
+                dependencies.add(Dependency.newExtensionDependency(
                         name + name, null, dep.endsWith("?")));
             }
             ExtensionDescriptor descriptor = new ExtensionDescriptorImpl(

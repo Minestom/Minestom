@@ -1,4 +1,4 @@
-package net.minestom.server.extensions.descriptor;
+package net.minestom.server.extensions;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,6 +11,14 @@ import org.slf4j.LoggerFactory;
 
 public sealed interface Dependency permits Dependency.ExtensionDependency, Dependency.MavenDependency {
     Logger LOGGER = LoggerFactory.getLogger(Dependency.class);
+
+    static Dependency newExtensionDependency(@NotNull String name, @Nullable String version, boolean optional) {
+        return new ExtensionDependencyImpl(name, version, optional);
+    }
+
+    static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, boolean optional) {
+        return new MavenDependencyImpl(groupId, artifactId, version, optional);
+    }
 
     /**
      * Creates a {@link Dependency} from JSON.
@@ -55,9 +63,9 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
         // Create dependency
         String[] idSplit = id.split(":");
         return switch (idSplit.length) {
-            case 1 -> new ExtensionDependency(idSplit[0], null, optional);
-            case 2 -> new ExtensionDependency(idSplit[0], idSplit[1], optional);
-            case 3 -> new MavenDependency(idSplit[0], idSplit[1], idSplit[2], optional);
+            case 1 -> newExtensionDependency(idSplit[0], null, optional);
+            case 2 -> newExtensionDependency(idSplit[0], idSplit[1], optional);
+            case 3 -> newMavenDependency(idSplit[0], idSplit[1], idSplit[2], optional);
             default -> {
                 LOGGER.error("Invalid dependency format: {}", json.getAsString());
                 yield null;
@@ -72,27 +80,14 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
     /**
      * An extension dependency specified in an <code>extension.json</code> file.
      */
-    record ExtensionDependency(
-            @NotNull String id,
-            @Nullable String version,
-            boolean isOptional
-    ) implements Dependency {
-        public ExtensionDependency {
-            Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
-            Check.argCondition(!id.matches(ExtensionDescriptorImpl.NAME_REGEX), "Invalid extension name: " + id);
-        }
+    sealed interface ExtensionDependency extends Dependency permits ExtensionDependencyImpl {
+        @Nullable String version();
     }
 
-    record MavenDependency(
-            String groupId,
-            String artifactId,
-            String version,
-            boolean isOptional
-    ) implements Dependency {
-        @Override
-        public String id() {
-            return artifactId();
-        }
+    sealed interface MavenDependency extends Dependency permits MavenDependencyImpl {
+        @NotNull String groupId();
+        @NotNull String artifactId();
+        @NotNull String version();
     }
 
     /**
