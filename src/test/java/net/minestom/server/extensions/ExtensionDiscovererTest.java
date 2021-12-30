@@ -56,11 +56,14 @@ public class ExtensionDiscovererTest {
     public void testHandleMultipleFiles() throws IOException {
         addTestJarFile("test1.jar", "test1", false);
         addTestJarFile("test2.jar", "test2", false);
-        var result = FILESYSTEM.discover(extensionDirectory).toList();
+        var result = FILESYSTEM.discover(extensionDirectory)
+                .map(ExtensionDescriptor::name)
+                .sorted()
+                .toList();
 
         assertEquals(2, result.size());
-        assertEquals("test1", result.get(0).name());
-        assertEquals("test2", result.get(1).name());
+        assertEquals("test1", result.get(0));
+        assertEquals("test2", result.get(1));
     }
 
     @ParameterizedTest
