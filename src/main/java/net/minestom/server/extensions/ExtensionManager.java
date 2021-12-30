@@ -11,9 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,19 +30,17 @@ public final class ExtensionManager {
     private static final boolean LOAD_ON_START = PropertyUtils.getBoolean("minestom.extension.load-on-start", true);
 
     // Reflection
-    private static final Field extensionDescriptorField;
-    private static final Field extensionLoggerField;
-    private static final Field extensionEventNodeField;
+    private static final VarHandle extensionDescriptorHandle;
+    private static final VarHandle extensionLoggerHandle;
+    private static final VarHandle extensionEventNodeHandle;
 
     static {
         try {
-            extensionDescriptorField = Extension.class.getDeclaredField("descriptor");
-            extensionDescriptorField.setAccessible(true);
-            extensionLoggerField = Extension.class.getDeclaredField("logger");
-            extensionLoggerField.setAccessible(true);
-            extensionEventNodeField = Extension.class.getDeclaredField("eventNode");
-            extensionEventNodeField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
+            MethodHandles.Lookup l = MethodHandles.lookup();
+            extensionDescriptorHandle = l.findVarHandle(Extension.class, "descriptor", ExtensionDescriptor.class);
+            extensionLoggerHandle = l.findVarHandle(Extension.class, "logger", Logger.class);
+            extensionEventNodeHandle = l.findVarHandle(Extension.class, "eventNode", EventNode.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -300,19 +299,11 @@ public final class ExtensionManager {
         }
 
         // Set extension descriptor, logger, and event node
-        try {
-            extensionDescriptorField.set(extension, descriptor);
-
-            extensionLoggerField.set(extension, LoggerFactory.getLogger(extensionClass));
-
-            EventNode<Event> eventNode = EventNode.all(extensionName);
-            globalEventNode.addChild(eventNode);
-            extensionEventNodeField.set(extension, eventNode);
-        } catch (IllegalAccessException e) {
-            // We made it accessible, should not occur
-            exceptionManager.handleException(e);
-            return null;
-        }
+        extensionDescriptorHandle.set(extension, descriptor);
+        extensionLoggerHandle.set(extension, LoggerFactory.getLogger(extensionClass));
+        EventNode<Event> eventNode = EventNode.all(extensionName);
+        globalEventNode.addChild(eventNode);
+        extensionEventNodeHandle.set(extension, eventNode);
 
         return extension;
     }
