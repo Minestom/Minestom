@@ -33,7 +33,7 @@ public class ExtensionDescriptorTest {
     @ValueSource(strings = {"ab", "a.b", "ab", "a.b.b.b...b"})
     public void testValidNames(String name) {
         var exception = assertDoesNotThrow(
-                () -> new ExtensionDescriptor(
+                () -> new ExtensionDescriptorImpl(
                         name,
                         "1.0.0", List.of(), "entrypoint", List.of(), List.of(),
                         new JsonObject(), Paths.get("."), EMPTY_CLASS_LOADER)
@@ -45,7 +45,7 @@ public class ExtensionDescriptorTest {
     public void testInvalidNames(String name) {
         var exception = assertThrowsExactly(
                 IllegalArgumentException.class,
-                () -> new ExtensionDescriptor(
+                () -> new ExtensionDescriptorImpl(
                         name,
                         "1.0.0", List.of(), "entrypoint", List.of(), List.of(),
                         new JsonObject(), Paths.get("."), EMPTY_CLASS_LOADER)
@@ -66,7 +66,7 @@ public class ExtensionDescriptorTest {
 
         // This test can be fairly basic because at the moment its just a call to `fromJson`
         Reader reader = new InputStreamReader(is);
-        ExtensionDescriptor descriptor = assertDoesNotThrow(() -> ExtensionDescriptor.fromReader(reader, tempDir));
+        ExtensionDescriptor descriptor = assertDoesNotThrow(() -> ExtensionDescriptorImpl.fromReader(reader, tempDir));
         assertEquals("ReadFromReader", descriptor.name());
     }
 
@@ -79,7 +79,7 @@ public class ExtensionDescriptorTest {
     public void testInvalidManifestObjects(String ignoredName, String expectedError, String jsonString, @TempDir Path tempDir) {
         JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
         var exception = assertThrows(IllegalArgumentException.class,
-                () -> ExtensionDescriptor.fromJson(json, tempDir));
+                () -> ExtensionDescriptorImpl.fromJson(json, tempDir));
 
         assertEquals(expectedError, exception.getMessage());
 

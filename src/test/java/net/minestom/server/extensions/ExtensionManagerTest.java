@@ -5,6 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.extensions.descriptor.Dependency;
 import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
+import net.minestom.server.extensions.descriptor.ExtensionDescriptorImpl;
 import net.minestom.server.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -107,7 +108,7 @@ public class ExtensionManagerTest {
                 dependencies.add(new Dependency.ExtensionDependency(
                         name + name, null, dep.endsWith("?")));
             }
-            ExtensionDescriptor descriptor = new ExtensionDescriptor(
+            ExtensionDescriptor descriptor = new ExtensionDescriptorImpl(
                     // Single letter extension names are not valid, so we do A > AA
                     stub.name + stub.name, "1.0.0", List.of(), "entrypoint",
                     List.of(), dependencies, new JsonObject(), Paths.get("."),
@@ -150,7 +151,7 @@ public class ExtensionManagerTest {
 
 
     private ExtensionDescriptor createExtensionDescriptor(String name, String mainClass) {
-        return new ExtensionDescriptor(
+        return new ExtensionDescriptorImpl(
                 name, "1.0.0", List.of(), mainClass,
                 List.of(), List.of(), new JsonObject(), dataRoot.resolve(name),
                 new HierarchyClassLoader("Ext_" + name, new URL[0])

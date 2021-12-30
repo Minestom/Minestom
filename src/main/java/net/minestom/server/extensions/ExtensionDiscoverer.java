@@ -2,6 +2,7 @@ package net.minestom.server.extensions;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
+import net.minestom.server.extensions.descriptor.ExtensionDescriptorImpl;
 import net.minestom.server.utils.PropertyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +66,7 @@ public interface ExtensionDiscoverer {
                     }
 
                     try (Reader reader = new InputStreamReader(zip.getInputStream(manifest))) {
-                        discovered.add(ExtensionDescriptor.fromReader(
+                        discovered.add(ExtensionDescriptorImpl.fromReader(
                                 reader,
                                 extensionDirectory,
                                 file.toUri().toURL()
@@ -112,7 +113,7 @@ public interface ExtensionDiscoverer {
             }
 
             try (Reader reader = Files.newBufferedReader(manifest)) {
-                return Stream.of(ExtensionDescriptor.fromReader(
+                return Stream.of(ExtensionDescriptorImpl.fromReader(
                         reader, extensionDirectory,
                         new URL("file://" + indevclasses),
                         new URL("file://" + indevresources)
@@ -147,7 +148,7 @@ public interface ExtensionDiscoverer {
 
                     LOGGER.info("Autoscan found {}. Adding to list of discovered extensions.", target);
                     try (Reader reader = new InputStreamReader(extensionManifest.openStream())) {
-                        discovered.add(ExtensionDescriptor.fromReader(
+                        discovered.add(ExtensionDescriptorImpl.fromReader(
                                 reader, extensionDirectory
                                 // No files, the classloader will exclusively load from the root classloader.
                         ));
