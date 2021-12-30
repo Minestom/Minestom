@@ -4,8 +4,8 @@ import net.minestom.server.extensions.Extension;
 
 public class ValidExtensionMain extends Extension {
     @Override
-    public void initialize() {
-
+    public LoadStatus initialize() {
+        return LoadStatus.SUCCESS;
     }
 
     @Override
