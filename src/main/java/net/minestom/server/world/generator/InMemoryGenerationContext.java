@@ -69,15 +69,43 @@ public class InMemoryGenerationContext implements GenerationContext {
     @Override
     public <T extends StageData.Instance> void setInstanceData(T data) {
         instanceStageDataMap.put(data.getClass(), data);
+        for (Class<?> anInterface : data.getClass().getInterfaces()) {
+            if (StageData.class.isAssignableFrom(anInterface) && anInterface != StageData.Instance.class) {
+                //noinspection unchecked
+                instanceStageDataMap.put((Class<? extends StageData.Instance>) anInterface, data);
+            }
+        }
     }
 
     @Override
     public <T extends StageData.Chunk> void setChunkData(T data, int chunkX, int chunkZ) {
+        boolean usingInterface = false;
+        for (Class<?> anInterface : data.getClass().getInterfaces()) {
+            if (StageData.class.isAssignableFrom(anInterface) && anInterface != StageData.Chunk.class) {
+                chunkStageDataMap.get(anInterface).put(ChunkUtils.getChunkIndex(chunkX, chunkZ), data);
+                usingInterface = true;
+                break;
+            }
+        }
+        if (usingInterface) {
+            return;
+        }
         chunkStageDataMap.get(data.getClass()).put(ChunkUtils.getChunkIndex(chunkX, chunkZ), data);
     }
 
     @Override
     public <T extends StageData.Section> void setSectionData(T data, int sectionX, int sectionY, int sectionZ) {
+        boolean usingInterface = false;
+        for (Class<?> anInterface : data.getClass().getInterfaces()) {
+            if (StageData.class.isAssignableFrom(anInterface) && anInterface != StageData.Section.class) {
+                sectionStageDataMap.get(anInterface).put(new SectionKey(sectionX, sectionY, sectionZ), data);
+                usingInterface = true;
+                break;
+            }
+        }
+        if (usingInterface) {
+            return;
+        }
         sectionStageDataMap.get(data.getClass()).put(new SectionKey(sectionX, sectionY, sectionZ), data);
     }
 

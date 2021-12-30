@@ -45,7 +45,7 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         final Comparator<PreGenerationStage<?>> type = Comparator.comparing(PreGenerationStage::getType);
         final Comparator<PreGenerationStage<?>> range = Comparator.comparing(PreGenerationStage::getRange);
         //TODO Handle dependencies
-        this.preGenerationStages = preGenerationStages.stream().sorted(type.thenComparing(range)).toList();
+        this.preGenerationStages = preGenerationStages;//.stream().sorted(type.thenComparing(range)).toList(); It isn't smart...
         if (!this.preGenerationStages.equals(preGenerationStages)) {
             LOGGER.warn("Supplied pre-generation stages were not ordered, they have been automatically rearranged!");
         }
