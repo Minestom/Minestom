@@ -44,11 +44,11 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
      * If a dependency does not match the current system spec, <code>null</code> will be returned.
      * For example, the following would return null on a Windows system:
      * <code>
-     * {
-     * "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
-     * "os": "macos",
-     * "arch": "arm64"
-     * }
+     *     {
+     *          "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+     *          "os": "macos",
+     *          "arch": "arm64"
+     *     }
      * </code>
      *
      * @param json The json to parse
