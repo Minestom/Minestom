@@ -63,8 +63,6 @@ public final class ExtensionManager {
 
     private boolean started = false;
 
-
-
     public ExtensionManager(ExceptionManager exceptionManager, EventNode<Event> globalEventNode) {
         this(exceptionManager, globalEventNode, ExtensionDiscoverer.DEFAULT);
     }
@@ -123,12 +121,12 @@ public final class ExtensionManager {
         // Compute the load order depending on dependencies
         List<ExtensionDescriptor> loadOrder = computeLoadOrder(extensionByName);
 
-        // Pre initialize
+        // initialize
         for (ExtensionDescriptor ext : loadOrder) {
             if (extensions.containsKey(ext.name().toLowerCase()))
                 continue; // Already loaded
 
-            preloadExtension(ext, extensionByName);
+            loadExtension(ext, extensionByName);
         }
     }
 
@@ -192,9 +190,9 @@ public final class ExtensionManager {
         loadOrder.add(0, target);
     }
 
-    boolean preloadExtension(ExtensionDescriptor extension, Map<String, ExtensionDescriptor> extensionsById) {
+    boolean loadExtension(ExtensionDescriptor extension, Map<String, ExtensionDescriptor> extensionsById) {
         // Do not load if it is already loaded
-        //TODO this creates an issue. If an extension fails to load (preInitialize = FAILED) then we
+        //TODO this creates an issue. If an extension fails to load (initialize = FAILED) then we
         if (extensions.containsKey(extension.name().toLowerCase()))
             return true;
 
@@ -212,15 +210,15 @@ public final class ExtensionManager {
         if (extensionInstance == null)
             return false;
 
-        // Pre initialize
+        // initialize
         Extension.LoadStatus result = Extension.LoadStatus.FAILED;
         try {
-            result = extensionInstance.preInitialize();
+            result = extensionInstance.initialize();
         } catch (Throwable throwable) {
-            LOGGER.error("An exception occurred while pre-initializing extension {}", extension.name(), throwable);
+            LOGGER.error("An exception occurred while initializing extension {}", extension.name(), throwable);
         }
         if (result == Extension.LoadStatus.FAILED) {
-            LOGGER.error("Failed to pre-initialize extension {}, it nor its dependents will be loaded.", extension.name());
+            LOGGER.error("Failed to initialize extension {}, it nor its dependents will be loaded.", extension.name());
             return false;
         }
 
@@ -228,13 +226,13 @@ public final class ExtensionManager {
         return true;
     }
 
-    boolean loadDependency(ExtensionDescriptor target, Dependency dep, Map<String, ExtensionDescriptor> extensionsById) {
+    private boolean loadDependency(ExtensionDescriptor target, Dependency dep, Map<String, ExtensionDescriptor> extensionsById) {
         // Load child and get classloader
         HierarchyClassLoader dependencyClassLoader = null;
         if (dep instanceof Dependency.ExtensionDependency dependency) {
             ExtensionDescriptor descriptor = extensionsById.get(dependency.id().toLowerCase());
             //todo what happens if extension does not exist?
-            boolean loaded = preloadExtension(descriptor, extensionsById);
+            boolean loaded = loadExtension(descriptor, extensionsById);
             if (!loaded) return false;
             dependencyClassLoader = descriptor.classLoader();
         } else if (dep instanceof Dependency.MavenDependency dependency) {

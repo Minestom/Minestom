@@ -33,15 +33,9 @@ public abstract class Extension {
     @SuppressWarnings("unused")
     private EventNode<Event> eventNode;
 
-    protected Extension() {
+    protected Extension() { }
 
-    }
-
-    public LoadStatus preInitialize() {
-        return LoadStatus.SUCCESS;
-    }
-
-    public abstract void initialize();
+    public abstract LoadStatus initialize();
 
     public abstract void terminate();
 
