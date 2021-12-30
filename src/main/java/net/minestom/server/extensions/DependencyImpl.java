@@ -12,7 +12,7 @@ final class DependencyImpl {
         }
     }
 
-    record Maven(String groupId, String artifactId, String version, boolean isOptional)
+    record Maven(String groupId, String artifactId, String version, String classifier, boolean isOptional)
             implements Dependency.Maven {
         @Override
         public @NotNull String id() {

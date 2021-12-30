@@ -70,7 +70,8 @@ public class DependencyTest {
                 of("\"LuckPerms\"", Dependency.Extension.class),
                 of("\"LuckPerms:5.0.0\"", Dependency.Extension.class),
                 of("{\"id\"=\"LuckPerms\"}", Dependency.Extension.class),
-                of("\"org.junit.jupiter:junit-jupiter-params:5.8.1\"", Dependency.Maven.class)
+                of("\"org.junit.jupiter:junit-jupiter-params:5.8.1\"", Dependency.Maven.class),
+                of("\"org.lwjgl:lwjgl:3.2.2:natives-macos-arm64\"", Dependency.Maven.class)
         );
     }
 
@@ -87,46 +88,46 @@ public class DependencyTest {
         return Stream.of(
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "os": "macos",
                     "arch": "arm64"
                 }
                 """, true),
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "os": "macos"
                 }
                 """, true),
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "arch": "arm64"
                 }
                 """, true),
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "os": "windows",
                     "arch": "arm64"
                 }
                 """, false),
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "os": "macos",
                     "arch": "x64"
                 }
                 """, false),
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "os": "windows"
                 }
                 """, false),
                 of("""
                 {
-                    "id": "org.lwjgl:lwjgl:3.2.2-natives-macos-arm64",
+                    "id": "org.lwjgl:lwjgl:3.2.2:natives-macos-arm64",
                     "arch": "x64"
                 }
                 """, false)
