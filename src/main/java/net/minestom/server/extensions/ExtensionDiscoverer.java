@@ -142,7 +142,7 @@ interface ExtensionDiscoverer {
                             "<autoscan:" + target + ">", target,
                             rootClassLoader::getResource, Objects::nonNull);
                     if (extensionManifest == null) {
-                        LOGGER.error("Missing extension.json in extension <autoscan:{}>.", target);
+                        LOGGER.debug("No extension manifest found for <autoscan:{}>", target);
                         continue;
                     }
 

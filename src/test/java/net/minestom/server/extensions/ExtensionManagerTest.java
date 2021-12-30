@@ -16,14 +16,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
@@ -39,17 +37,6 @@ public class ExtensionManagerTest {
                 TestUtil.IGNORING_EXTENSION_MANAGER,
                 globalNode, ExtensionDiscoverer.AUTOSCAN);
         extensionManager.setExtensionDataRoot(dataRoot);
-    }
-
-    @Test
-    public void testingwoo() {
-        System.out.println(dataRoot.toAbsolutePath());
-        System.out.println(globalNode.getChildren());
-        TestUtil.IGNORING_EXTENSION_MANAGER.setExceptionHandler(ignored -> {
-        });
-
-//        assertThat(IGNORING_EXTENSION_MANAGER)
-//                .hasReceived(IllegalStateException.class)
     }
 
     //
@@ -147,11 +134,27 @@ public class ExtensionManagerTest {
 
     @Test
     public void testCreateExtensionImpl() {
-        // Set autoscan
-        
-        // load
+        ExtensionDescriptor descriptor = createExtensionDescriptor("Test", "net.minestom.server.extensions.mock.ValidExtensionMain");
+        Extension extension = extensionManager.createExtensionImpl(descriptor);
 
-        // assert on loaded
+        assertNotNull(extension);
+        assertEquals(descriptor, extension.descriptor());
+        assertNotNull(extension.eventNode());
+        assertEquals("Test", extension.eventNode().getName());
+        assertNotNull(extension.logger());
+    }
+
+    //
+    //
+    //
+
+
+    private ExtensionDescriptor createExtensionDescriptor(String name, String mainClass) {
+        return new ExtensionDescriptor(
+                name, "1.0.0", List.of(), mainClass,
+                List.of(), List.of(), new JsonObject(), dataRoot.resolve(name),
+                new HierarchyClassLoader("Ext_" + name, new URL[0])
+        );
     }
 
 }
