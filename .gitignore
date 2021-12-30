@@ -20,6 +20,7 @@
 
 # Package Files #
 *.jar
+!src/test/resources/**.jar
 *.war
 *.nar
 *.ear
@@ -53,6 +54,4 @@ gradle-app.setting
 /src/main/java/com/mcecraft/
 
 # When running the demo we generate the extensions folder
-# Incase people are using IntelliJ to run the server, this will exclude extensions from any folder.
-/demo/extensions
-/extensions
+demo/extensions/
