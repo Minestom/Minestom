@@ -46,7 +46,7 @@ public class DependencyTest {
         Dependency dependency = Dependency.fromJson(json);
 
         assertNotNull(dependency);
-        assertEquals("luckperms", dependency.id());
+        assertEquals("LuckPerms", dependency.id());
     }
 
     @ParameterizedTest
