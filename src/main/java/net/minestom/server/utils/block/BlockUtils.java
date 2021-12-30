@@ -1,9 +1,9 @@
 package net.minestom.server.utils.block;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.StringUtils;
 
 import java.util.Map;
@@ -83,29 +83,6 @@ public class BlockUtils {
             }
             index++;
         }
-        return switch (entryCount) {
-            case 0 -> Map.of();
-            case 1 -> Map.of(keys[0], values[0]);
-            case 2 -> Map.of(keys[0], values[0], keys[1], values[1]);
-            case 3 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2]);
-            case 4 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3]);
-            case 5 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3], keys[4], values[4]);
-            case 6 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3], keys[4], values[4], keys[5], values[5]);
-            case 7 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6], values[6]);
-            case 8 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6], values[6],
-                    keys[7], values[7]);
-            case 9 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6], values[6],
-                    keys[7], values[7], keys[8], values[8]);
-            case 10 -> Map.of(keys[0], values[0], keys[1], values[1], keys[2], values[2],
-                    keys[3], values[3], keys[4], values[4], keys[5], values[5], keys[6],
-                    values[6], keys[7], values[7], keys[8], values[8], keys[9], values[9]);
-            default -> Map.copyOf(new Object2ObjectArrayMap<>(keys, values, entryCount));
-        };
+        return ArrayUtils.toMap(keys, values, entryCount);
     }
 }
