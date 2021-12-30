@@ -15,8 +15,8 @@ public sealed interface Dependency permits Dependency.Extension, Dependency.Mave
         return new DependencyImpl.Extension(name, version, optional);
     }
 
-    static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, boolean optional) {
-        return new DependencyImpl.Maven(groupId, artifactId, version, optional);
+    static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, @Nullable String classifier, boolean optional) {
+        return new DependencyImpl.Maven(groupId, artifactId, version, classifier, optional);
     }
 
     @NotNull String id();
@@ -36,6 +36,8 @@ public sealed interface Dependency permits Dependency.Extension, Dependency.Mave
         @NotNull String artifactId();
 
         @NotNull String version();
+
+        @Nullable String classifier();
     }
 
     /**
@@ -82,7 +84,8 @@ public sealed interface Dependency permits Dependency.Extension, Dependency.Mave
         return switch (idSplit.length) {
             case 1 -> newExtensionDependency(idSplit[0], null, optional);
             case 2 -> newExtensionDependency(idSplit[0], idSplit[1], optional);
-            case 3 -> newMavenDependency(idSplit[0], idSplit[1], idSplit[2], optional);
+            case 3 -> newMavenDependency(idSplit[0], idSplit[1], idSplit[2], null, optional);
+            case 4 -> newMavenDependency(idSplit[0], idSplit[1], idSplit[2], idSplit[3], optional);
             default -> {
                 LOGGER.error("Invalid dependency format: {}", json.getAsString());
                 yield null;
