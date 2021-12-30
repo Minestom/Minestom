@@ -2,11 +2,8 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.UniqueIdUtils;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +26,7 @@ public final class TeamManager {
     /**
      * Default constructor
      */
-    public TeamManager(ServerProcess serverProcess) {
+    public TeamManager() {
         this.teams = new CopyOnWriteArraySet<>();
     }
 

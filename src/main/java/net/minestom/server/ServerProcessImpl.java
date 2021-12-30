@@ -84,7 +84,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.recipe = new RecipeManager();
         this.storage = new StorageManager();
         this.data = new DataManager();
-        this.team = new TeamManager(this);
+        this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
         this.benchmark = new BenchmarkManager();
