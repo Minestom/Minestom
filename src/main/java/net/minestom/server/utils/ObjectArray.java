@@ -21,23 +21,26 @@ public final class ObjectArray<T> {
     }
 
     public void set(int index, T object) {
+        T[] array = this.array;
         if (index >= array.length) {
-            T[] newArray = allocate(index * 2 + 1);
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            this.array = newArray;
+            T[] temp = allocate(index * 2 + 1);
+            System.arraycopy(array, 0, temp, 0, array.length);
+            this.array = array = temp;
         }
         array[index] = object;
         this.max = Math.max(max, index);
     }
 
     public T get(int index) {
+        final T[] array = this.array;
         return index < array.length ? array[index] : null;
     }
 
     public void trim() {
-        T[] newArray = allocate(max + 1);
-        System.arraycopy(array, 0, newArray, 0, max + 1);
-        this.array = newArray;
+        final int max = this.max;
+        T[] temp = allocate(max + 1);
+        System.arraycopy(array, 0, temp, 0, max + 1);
+        this.array = temp;
     }
 
     private static <T> T[] allocate(int length) {

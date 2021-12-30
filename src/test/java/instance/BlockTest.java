@@ -1,6 +1,7 @@
 package instance;
 
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,51 @@ public class BlockTest {
         assertNotEquals(block.withProperty("facing", "north"), block.withProperty("facing", "south"));
 
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
+    }
+
+    @Test
+    public void parseProperties() {
+        assertEquals(Map.of(), BlockUtils.parseProperties("random test without brackets"));
+        assertEquals(Map.of(), BlockUtils.parseProperties("[]"));
+        assertEquals(Map.of(), BlockUtils.parseProperties("[    ]"));
+        assertEquals(Map.of(), BlockUtils.parseProperties("[  , , ,,,,  ]"));
+        assertEquals(Map.of("facing", "east"), BlockUtils.parseProperties("[facing=east]"));
+        assertEquals(Map.of("facing", "east", "key", "value"), BlockUtils.parseProperties("[facing=east,key=value ]"));
+        assertEquals(Map.of("facing", "east", "key", "value"), BlockUtils.parseProperties("[ facing = east, key= value ]"));
+
+        // Verify all length variations
+        for (int i = 0; i < 13; i++) {
+            StringBuilder properties = new StringBuilder("[");
+            for (int j = 0; j < i; j++) {
+                properties.append("key").append(j).append("=value").append(j);
+                if (j != i - 1) properties.append(",");
+            }
+            properties.append("]");
+
+            var map = BlockUtils.parseProperties(properties.toString());
+            assertEquals(i, map.size());
+            for (int j = 0; j < i; j++) {
+                assertEquals("value" + j, map.get("key" + j));
+            }
+        }
+
+        // Semi-corrupted properties
+        {
+            final int size = 12;
+            StringBuilder properties = new StringBuilder("[");
+            for (int j = 0; j < size; j++) {
+                properties.append("key").append(j).append("=value").append(j);
+                if (j != size - 1) properties.append(",");
+            }
+            properties.append(", , ,]");
+
+            var map = BlockUtils.parseProperties(properties.toString());
+            assertEquals(size, map.size());
+            for (int j = 0; j < size; j++) {
+                assertEquals("value" + j, map.get("key" + j));
+            }
+        }
+
     }
 
     @Test

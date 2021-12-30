@@ -17,14 +17,14 @@ public record MultiBlockChangePacket(long chunkSectionPosition,
     }
 
     public MultiBlockChangePacket(BinaryReader reader) {
-        this(reader.readLong(), reader.readBoolean(), reader.readLongArray());
+        this(reader.readLong(), reader.readBoolean(), reader.readVarLongArray());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeLong(chunkSectionPosition);
         writer.writeBoolean(suppressLightUpdates);
-        writer.writeLongArray(blocks);
+        writer.writeVarLongArray(blocks);
     }
 
     @Override

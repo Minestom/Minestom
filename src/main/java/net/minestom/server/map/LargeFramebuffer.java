@@ -41,8 +41,8 @@ public interface LargeFramebuffer {
         }
         return new MapDataPacket(mapId, (byte) 0, false,
                 false, List.of(),
-                (byte) width, (byte) height,
-                (byte) 0, (byte) 0,
-                colors);
+                new MapDataPacket.ColorContent((byte) width, (byte) height,
+                        (byte) 0, (byte) 0,
+                        colors));
     }
 }
