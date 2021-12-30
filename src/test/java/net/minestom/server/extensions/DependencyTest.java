@@ -1,7 +1,8 @@
-package net.minestom.server.extensions.descriptor;
+package net.minestom.server.extensions;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import net.minestom.server.extensions.Dependency;
 import net.minestom.server.utils.PlatformUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,7 +26,7 @@ public class DependencyTest {
         if (expectedType == null) {
             assertNull(dependency);
         } else {
-            assertEquals(expectedType, dependency.getClass());
+            assertTrue(expectedType.isInstance(dependency));
         }
     }
 

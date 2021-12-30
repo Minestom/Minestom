@@ -1,6 +1,5 @@
 package net.minestom.server.extensions;
 
-import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;

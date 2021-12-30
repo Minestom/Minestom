@@ -3,8 +3,6 @@ package net.minestom.server.extensions;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.descriptor.Dependency;
-import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
 import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
