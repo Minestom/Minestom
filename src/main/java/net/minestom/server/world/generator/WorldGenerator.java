@@ -27,10 +27,6 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
     private final Cache<StageKey, CompletableFuture<Void>> preGenStages = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(30))
             .build();
-    //TODO Do we need to care about de-duplicating section requests?
-    private final Cache<SectionKey, CompletableFuture<Void>> sectionGens = Caffeine.newBuilder()
-            .expireAfterWrite(Duration.ofSeconds(30))
-            .build();
     private final List<PreGenerationStage<?>> preGenerationStages;
     private final List<GenerationStage> generationStages;
     private final GenerationContext.Factory generationContextFactory;
@@ -66,82 +62,80 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
     @SuppressWarnings("unchecked")
     private CompletableFuture<Void> generateSection(Instance instance, SectionBlockCache blockCache, Palette biomePalette,
                                                     int sectionX, int sectionY, int sectionZ) {
-        return sectionGens.get(new SectionKey(instance, new P(sectionX, sectionY, sectionZ)), key -> {
-            final GenerationContext context = instance.getGenerationContext();
-            final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+        final GenerationContext context = instance.getGenerationContext();
+        final CompletableFuture<Void> completableFuture = new CompletableFuture<>();
 
-            // Pre Gen
+        // Pre Gen
 
-            for (PreGenerationStage<? extends StageData> stage : preGenerationStages) {
-                CompletableFuture<?>[] futures = switch (stage.getType()) {
-                    case INSTANCE -> {
-                        final StageData.Instance data = context
-                                .getInstanceData(((Class<? extends StageData.Instance>) stage.getDataClass()));
-                        yield new CompletableFuture[]{data != null && data.generated() ? AsyncUtils.VOID_FUTURE :
-                                preGenStages.get(new StageKey(instance, null, stage), kk -> executePreGenerationStage(context,0, 0, 0, stage))};
+        for (PreGenerationStage<? extends StageData> stage : preGenerationStages) {
+            CompletableFuture<?>[] futures = switch (stage.getType()) {
+                case INSTANCE -> {
+                    final StageData.Instance data = context
+                            .getInstanceData(((Class<? extends StageData.Instance>) stage.getDataClass()));
+                    yield new CompletableFuture[]{data != null && data.generated() ? AsyncUtils.VOID_FUTURE :
+                            preGenStages.get(new StageKey(instance, null, stage), kk -> executePreGenerationStage(context, 0, 0, 0, stage))};
+                }
+                case CHUNK -> {
+                    CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(stage.getRange() * 2 + 1)];
+                    int i = 0;
+                    for (int x = -stage.getRange(); x <= stage.getRange(); x++) {
+                        for (int z = -stage.getRange(); z <= stage.getRange(); z++) {
+                            final P loc = new P(sectionX + x, 0, sectionZ + z);
+                            final StageData.Chunk data = context
+                                    .getChunkData(((Class<? extends StageData.Chunk>) stage.getDataClass()), loc.x(), loc.z());
+                            if (data != null && data.generated()) {
+                                f[i++] = AsyncUtils.VOID_FUTURE;
+                            } else {
+                                f[i++] = preGenStages.get(new StageKey(instance, loc, stage), k ->
+                                        executePreGenerationStage(context, k.loc.x(), 0, k.loc.z(), stage));
+                            }
+                        }
                     }
-                    case CHUNK -> {
-                        CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(stage.getRange()*2+1)];
-                        int i = 0;
-                        for (int x = -stage.getRange(); x <= stage.getRange(); x++) {
+                    yield f;
+                }
+                case SECTION -> {
+                    int min = Math.max(sectionY - stage.getRange(), instance.getSectionMinY());
+                    int max = Math.min(sectionY + stage.getRange(), instance.getSectionMaxY());
+                    CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(stage.getRange() * 2 + 1) + (max - min)];
+                    int i = 0;
+                    for (int x = -stage.getRange(); x <= stage.getRange(); x++) {
+                        for (int y = min; y < max; y++) {
                             for (int z = -stage.getRange(); z <= stage.getRange(); z++) {
-                                final P loc = new P(sectionX + x, 0, sectionZ + z);
-                                final StageData.Chunk data = context
-                                        .getChunkData(((Class<? extends StageData.Chunk>) stage.getDataClass()), loc.x(), loc.z());
+                                final P loc = new P(sectionX + x, y, sectionZ + z);
+                                final StageData.Section data = context
+                                        .getSectionData(((Class<? extends StageData.Section>)
+                                                stage.getDataClass()), loc.x(), loc.y(), loc.z());
                                 if (data != null && data.generated()) {
                                     f[i++] = AsyncUtils.VOID_FUTURE;
                                 } else {
                                     f[i++] = preGenStages.get(new StageKey(instance, loc, stage), k ->
-                                            executePreGenerationStage(context, k.loc.x(),0, k.loc.z(), stage));
+                                            executePreGenerationStage(context, k.loc.x(), k.loc.y(), k.loc.z(), stage));
                                 }
                             }
                         }
-                        yield f;
                     }
-                    case SECTION -> {
-                        int min = Math.max(sectionY-stage.getRange(), instance.getSectionMinY());
-                        int max = Math.min(sectionY+stage.getRange(), instance.getSectionMaxY());
-                        CompletableFuture<?>[] f = new CompletableFuture[MathUtils.square(stage.getRange()*2+1) + (max-min)];
-                        int i = 0;
-                        for (int x = -stage.getRange(); x <= stage.getRange(); x++) {
-                            for (int y = min; y < max; y++) {
-                                for (int z = -stage.getRange(); z <= stage.getRange(); z++) {
-                                    final P loc = new P(sectionX + x, y, sectionZ + z);
-                                    final StageData.Section data = context
-                                            .getSectionData(((Class<? extends StageData.Section>)
-                                                    stage.getDataClass()), loc.x(), loc.y(), loc.z());
-                                    if (data != null && data.generated()) {
-                                        f[i++] = AsyncUtils.VOID_FUTURE;
-                                    } else {
-                                        f[i++] = preGenStages.get(new StageKey(instance, loc, stage), k ->
-                                                executePreGenerationStage(context, k.loc.x(), k.loc.y(), k.loc.z(), stage));
-                                    }
-                                }
-                            }
-                        }
-                        yield f;
-                    }
-                };
-
-                try {
-                    CompletableFuture.allOf(futures).get();
-                } catch (InterruptedException | ExecutionException e) {
-                    //TODO Error handling
-                    e.printStackTrace();
+                    yield f;
                 }
+            };
+
+            try {
+                CompletableFuture.allOf(futures).get();
+            } catch (InterruptedException | ExecutionException e) {
+                //TODO Error handling
+                e.printStackTrace();
             }
+        }
 
-            // Gen
+        // Gen
 
-            WORLD_GEN_POOL.execute(() -> {
-                for (GenerationStage generationStage : generationStages) {
-                    generationStage.process(context, blockCache, biomePalette, sectionX, sectionY, sectionZ);
-                }
-                completableFuture.complete(null);
-            });
-
-            return completableFuture;
+        WORLD_GEN_POOL.execute(() -> {
+            for (GenerationStage generationStage : generationStages) {
+                generationStage.process(context, blockCache, biomePalette, sectionX, sectionY, sectionZ);
+            }
+            completableFuture.complete(null);
         });
+
+        return completableFuture;
     }
 
     private CompletableFuture<Void> executePreGenerationStage(GenerationContext context, int x, int y, int z, PreGenerationStage<?> stage) {
@@ -159,7 +153,9 @@ public class WorldGenerator implements Generator, GenerationContext.Provider {
         return generationContextFactory == null ? null : generationContextFactory.newInstance(instance, preGenerationStages);
     }
 
-    private record StageKey(Instance instance, P loc, PreGenerationStage<?> stage) {}
-    private record SectionKey(Instance instance, P loc) {}
-    private record P(int x, int y, int z) {}
+    private record StageKey(Instance instance, P loc, PreGenerationStage<?> stage) {
+    }
+
+    private record P(int x, int y, int z) {
+    }
 }
