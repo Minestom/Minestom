@@ -5,7 +5,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.descriptor.Dependency;
 import net.minestom.server.extensions.descriptor.ExtensionDescriptor;
-import net.minestom.server.utils.PropertyUtil;
+import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public final class ExtensionManager {
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
     // Properties
-    private static final boolean LOAD_ON_START = PropertyUtil.getBoolean("minestom.extension.load-on-start", true);
+    private static final boolean LOAD_ON_START = PropertyUtils.getBoolean("minestom.extension.load-on-start", true);
 
     // Reflection
     private static final Field extensionDescriptorField;
