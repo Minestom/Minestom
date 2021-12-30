@@ -259,7 +259,7 @@ public final class ExtensionManager {
             return null;
         }
 
-        Extension extension = null;
+        Extension extension;
         try {
             Constructor<? extends Extension> constructor = extensionClass.getDeclaredConstructor();
             constructor.setAccessible(true);
