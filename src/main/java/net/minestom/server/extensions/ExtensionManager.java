@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -28,22 +26,6 @@ public final class ExtensionManager {
 
     // Properties
     private static final boolean LOAD_ON_START = PropertyUtils.getBoolean("minestom.extension.load-on-start", true);
-
-    // Reflection
-    private static final VarHandle extensionDescriptorHandle;
-    private static final VarHandle extensionLoggerHandle;
-    private static final VarHandle extensionEventNodeHandle;
-
-    static {
-        try {
-            MethodHandles.Lookup l = MethodHandles.lookup();
-            extensionDescriptorHandle = l.findVarHandle(Extension.class, "descriptor", ExtensionDescriptor.class);
-            extensionLoggerHandle = l.findVarHandle(Extension.class, "logger", Logger.class);
-            extensionEventNodeHandle = l.findVarHandle(Extension.class, "eventNode", EventNode.class);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     // Server state
     private final ExceptionManager exceptionManager;
@@ -292,6 +274,7 @@ public final class ExtensionManager {
             return null;
         } catch (IllegalAccessException ignored) {
             // We made it accessible, should not occur
+            return null;
         } catch (InvocationTargetException e) {
             LOGGER.error("An exception was thrown while instantiating main class '{}' in '{}'",
                     mainClassName, extensionName, e.getTargetException());
@@ -299,11 +282,11 @@ public final class ExtensionManager {
         }
 
         // Set extension descriptor, logger, and event node
-        extensionDescriptorHandle.set(extension, descriptor);
-        extensionLoggerHandle.set(extension, LoggerFactory.getLogger(extensionClass));
+        extension.descriptor = descriptor;
+        extension.logger = LoggerFactory.getLogger(extension.getClass());
         EventNode<Event> eventNode = EventNode.all(extensionName);
         globalEventNode.addChild(eventNode);
-        extensionEventNodeHandle.set(extension, eventNode);
+        extension.eventNode = eventNode;
 
         return extension;
     }
