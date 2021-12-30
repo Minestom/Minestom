@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -280,6 +281,11 @@ public class InstanceContainer extends Instance {
                 .thenCompose(chunk -> chunk != null ? CompletableFuture.completedFuture(chunk) : createChunk(chunkX, chunkZ))
                 // cache the retrieved chunk
                 .whenComplete((chunk, throwable) -> {
+                    if (throwable != null) {
+                        MinecraftServer.getExceptionManager().handleException(throwable);
+                        LOGGER.error("The generator encountered an exception while trying to generate chunk at {};{}, falling back to empty new chunk.", chunkX, chunkZ);
+                        chunk = this.chunkSupplier.createChunk(this, chunkX, chunkZ);
+                    }
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
                     GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunk));
