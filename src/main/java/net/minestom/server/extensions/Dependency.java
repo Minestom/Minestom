@@ -36,8 +36,7 @@ public sealed interface Dependency permits Dependency.ExtensionDependency, Depen
      * @param json The json to parse
      * @return The created {@link Dependency}, or null if it could not be created.
      */
-    @Nullable
-    static Dependency fromJson(JsonElement json) {
+    static @Nullable Dependency fromJson(JsonElement json) {
         // Parse object
         String id;
         boolean optional = false;

@@ -31,13 +31,11 @@ public interface ExtensionDescriptor {
     }
 
     //todo docs, reader is **not** closed
-    @NotNull
-    static ExtensionDescriptor fromReader(@NotNull Reader reader, @NotNull Path parentDirectory, @NotNull URL... classpath) {
+    static @NotNull ExtensionDescriptor fromReader(@NotNull Reader reader, @NotNull Path parentDirectory, @NotNull URL... classpath) {
         return fromJson(JsonParser.parseReader(reader).getAsJsonObject(), parentDirectory, classpath);
     }
 
-    @NotNull
-    static ExtensionDescriptor fromJson(@NotNull JsonObject json, @NotNull Path parentDirectory, @NotNull URL... classpath) {
+    static @NotNull ExtensionDescriptor fromJson(@NotNull JsonObject json, @NotNull Path parentDirectory, @NotNull URL... classpath) {
         Check.argCondition(!json.has("name"), "Extensions must provide a name");
         String name = json.get("name").getAsString();
 

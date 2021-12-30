@@ -9,7 +9,7 @@ record ExtensionDependencyImpl(
         @Nullable String version,
         boolean isOptional
 ) implements Dependency.ExtensionDependency {
-    public ExtensionDependencyImpl {
+    ExtensionDependencyImpl {
         Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
         Check.argCondition(!id.matches(ExtensionDescriptorImpl.NAME_REGEX), "Invalid extension name: " + id);
     }
