@@ -488,11 +488,13 @@ public class InstanceContainer extends Instance {
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
-                    if (offsetX == 0 && offsetY == 0 && offsetZ == 0 || offsetY < getDimensionType().getMinY() || offsetY > getDimensionType().getTotalHeight())
+                    if (offsetX == 0 && offsetY == 0 && offsetZ == 0)
                         continue;
                     final int neighborX = blockPosition.blockX() + offsetX;
                     final int neighborY = blockPosition.blockY() + offsetY;
                     final int neighborZ = blockPosition.blockZ() + offsetZ;
+                    if (neighborY < getDimensionType().getMinY() || neighborY > getDimensionType().getTotalHeight())
+                        continue;
                     final Chunk chunk = getChunkAt(neighborX, neighborZ);
                     if (chunk == null) continue;
 
