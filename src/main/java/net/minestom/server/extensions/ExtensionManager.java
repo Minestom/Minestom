@@ -73,13 +73,11 @@ public final class ExtensionManager {
         discoverers.clear();
     }
 
-    @NotNull
-    public Collection<Extension> getExtensions() {
+    public @NotNull Collection<Extension> getExtensions() {
         return immutableExtensions.values();
     }
 
-    @Nullable
-    public Extension getExtension(@NotNull String name) {
+    public @Nullable Extension getExtension(@NotNull String name) {
         return extensions.get(name.toLowerCase());
     }
 
