@@ -23,4 +23,12 @@ public interface Noise2D {
     static Noise2D map(Noise2D noise, double slope, double min) {
         return ((x, y) -> slope * (noise.getValue(x, y) - min));
     }
+
+    static Noise2D scaleOutput(Noise2D noise, double scale) {
+        return ((x, y) -> noise.getValue(x, y) * scale);
+    }
+
+    static Noise2D offsetOutput(Noise2D noise, double offset) {
+        return ((x, y) -> noise.getValue(x, y) * offset);
+    }
 }
