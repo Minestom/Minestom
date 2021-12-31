@@ -3,6 +3,7 @@ package net.minestom.server.extras.blockplacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Direction;
 
@@ -15,8 +16,8 @@ final class BlockPlaceMechanicLava {
             return;
         }
 
-        final Direction dir = event.getBlockFace();
-        final Point pos = event.getPosition().add(dir.normalX(), dir.normalY(), dir.normalZ());
+        final BlockFace dir = event.getBlockFace();
+        final Point pos = event.getPosition().relative(dir);
         block = event.getInstance().getBlock(pos);
         if (block.isAir()) {
             event.getInstance().setBlock(pos, Block.LAVA);

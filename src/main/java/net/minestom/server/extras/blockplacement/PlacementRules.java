@@ -220,7 +220,8 @@ public final class PlacementRules {
 
     private static Set<NamespaceID> MINECRAFT_FENCES;
     private static boolean isFence(Block block) {
-        return MINECRAFT_FENCES.contains(block.namespace());
+        return MINECRAFT_FENCES.contains(block.namespace()) || block.compare(Block.IRON_BARS) ||
+                block.namespace().toString().endsWith("glass_pane");
     }
 
     private static Set<NamespaceID> MINECRAFT_DOORS;
@@ -231,7 +232,8 @@ public final class PlacementRules {
     private static Set<NamespaceID> MINECRAFT_TALL_FLOWERS;
     private static boolean isUpper(Block block) {
         return MINECRAFT_TALL_FLOWERS.contains(block.namespace()) || isDoor(block) ||
-                block.compare(Block.SMALL_DRIPLEAF) || block.compare(Block.LARGE_FERN);
+                block.compare(Block.SMALL_DRIPLEAF) || block.compare(Block.LARGE_FERN) ||
+                block.compare(Block.TALL_GRASS);
     }
 
     private static boolean isChest(Block block) {
@@ -330,11 +332,10 @@ public final class PlacementRules {
             }
         }
 
-        for(short stateId=0; stateId<Short.MAX_VALUE; stateId++) {
-            Block block = Block.fromStateId(stateId);
-            if(block == null) continue;
-
-            BlockPlaceMechanicRotation.updateDataFromBlock(block);
+        for (Block block : Block.values()) {
+            for (Block state : block.possibleStates()) {
+                BlockPlaceMechanicRotation.updateDataFromBlock(state);
+            }
         }
     }
 
