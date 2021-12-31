@@ -1370,6 +1370,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             }
             refreshCurrentChunk(newChunk);
         }
+        this.boundingBox.invalidateCache();
     }
 
     /**

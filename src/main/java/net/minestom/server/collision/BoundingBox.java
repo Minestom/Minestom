@@ -1,14 +1,13 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Supplier;
 
 /**
@@ -278,6 +277,15 @@ public class BoundingBox {
         return z;
     }
 
+    public void invalidateCache() {
+        this.bottomFace.invalidate();
+        this.topFace.invalidate();
+        this.leftFace.invalidate();
+        this.rightFace.invalidate();
+        this.frontFace.invalidate();
+        this.backFace.invalidate();
+    }
+
     /**
      * Gets the min X based on {@link #getWidth()} and the {@link Entity} position.
      *
@@ -402,33 +410,29 @@ public class BoundingBox {
         X, Y, Z
     }
 
-    private final class CachedFace {
-        private final AtomicReference<@Nullable PositionedPoints> reference = new AtomicReference<>(null);
+    private static final class CachedFace {
+        private static final AtomicIntegerFieldUpdater<CachedFace> UPDATER = AtomicIntegerFieldUpdater.newUpdater(CachedFace.class, "updated");
         private final Supplier<@NotNull List<Vec>> faceProducer;
+        private volatile int updated;
+        private List<Vec> cachedPoints;
 
         private CachedFace(Supplier<@NotNull List<Vec>> faceProducer) {
             this.faceProducer = faceProducer;
         }
 
-        @NotNull List<Vec> get() {
-            //noinspection ConstantConditions
-            return reference.updateAndGet(value -> {
-                Pos entityPosition = entity.getPosition();
-                if (value == null || !value.lastPosition.samePoint(entityPosition)) {
-                    return new PositionedPoints(entityPosition, faceProducer.get());
-                }
-                return value;
-            }).points;
+        void invalidate() {
+            this.updated = 0;
         }
-    }
 
-    private static final class PositionedPoints {
-        private final @NotNull Pos lastPosition;
-        private final @NotNull List<Vec> points;
-
-        private PositionedPoints(@NotNull Pos lastPosition, @NotNull List<Vec> points) {
-            this.lastPosition = lastPosition;
-            this.points = points;
+        @NotNull List<Vec> get() {
+            List<Vec> cache = this.cachedPoints;
+            final boolean up = updated == 0;
+            if (up || cache == null) {
+                cache = faceProducer.get();
+                this.cachedPoints = cache;
+                if (up) UPDATER.compareAndSet(this, 0, 1);
+            }
+            return cache;
         }
     }
 }
