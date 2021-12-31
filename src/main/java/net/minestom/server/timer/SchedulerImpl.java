@@ -1,9 +1,10 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
-import org.jctools.queues.MpscGrowableArrayQueue;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
-import org.roaringbitmap.RoaringBitmap;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ final class SchedulerImpl implements Scheduler {
     });
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
-    private final MpscGrowableArrayQueue<TaskImpl> taskQueue = new MpscGrowableArrayQueue<>(64);
-    private final RoaringBitmap registeredTasks = new RoaringBitmap();
-    private final RoaringBitmap parkedTasks = new RoaringBitmap();
+    private final MpscUnboundedArrayQueue<TaskImpl> taskQueue = new MpscUnboundedArrayQueue<>(64);
+    private final IntSet registeredTasks = new IntOpenHashSet();
+    private final IntSet parkedTasks = new IntOpenHashSet();
 
     // Tasks scheduled on a certain tick
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
@@ -73,7 +74,7 @@ final class SchedulerImpl implements Scheduler {
     }
 
     synchronized void unparkTask(TaskImpl task) {
-        if (parkedTasks.checkedRemove(task.id()))
+        if (parkedTasks.remove(task.id()))
             this.taskQueue.relaxedOffer(task);
     }
 

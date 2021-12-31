@@ -84,10 +84,13 @@ public class TestScheduler {
         var task = scheduler.buildTask(() -> result.set(true))
                 .delay(TaskSchedule.park())
                 .schedule();
+        assertTrue(task.isParked());
         assertFalse(result.get(), "Task hasn't been unparked yet");
         task.unpark();
+        assertFalse(task.isParked());
         assertFalse(result.get(), "Tasks must be processed first");
         scheduler.process();
+        assertFalse(task.isParked());
         assertTrue(result.get(), "Parked task should be executed");
     }
 

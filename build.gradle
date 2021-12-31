@@ -32,10 +32,6 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        maven {
-            name 'sponge'
-            url 'https://repo.spongepowered.org/maven'
-        }
     }
     javadoc {
         options {
@@ -100,11 +96,11 @@ tasks.withType(Zip).configureEach {
 
 dependencies {
     // Junit Testing Framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.2')
 
     // Only here to ensure J9 module support for extensions and our classloaders
-    testCompileOnly 'org.mockito:mockito-core:4.0.0'
+    testCompileOnly 'org.mockito:mockito-core:4.2.0'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.5.6'
@@ -119,33 +115,22 @@ dependencies {
     api 'com.github.Articdive:Jnoise:2.1.0'
 
     // Logging
-    api 'org.apache.logging.log4j:log4j-core:2.15.0'
+    api 'org.apache.logging.log4j:log4j-core:2.17.0'
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
-    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.15.0'
+    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.0'
 
     // https://mvnrepository.com/artifact/org.jline/jline
     implementation group: 'org.jline', name: 'jline', version: '3.20.0'
     // https://mvnrepository.com/artifact/org.jline/jline-terminal-jansi
     implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.20.0'
 
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
-
-    // https://mvnrepository.com/artifact/org.roaringbitmap/RoaringBitmap
-    implementation group: 'org.roaringbitmap', name: 'RoaringBitmap', version: '0.9.23'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.5'
 
     // https://mvnrepository.com/artifact/org.jctools/jctools-core
     implementation group: 'org.jctools', name: 'jctools-core', version: '3.3.0'
 
     // Guava 21.0+ required for Mixin
     api 'com.google.guava:guava:31.0.1-jre'
-
-    // Code modification
-    api "org.ow2.asm:asm:${asmVersion}"
-    api "org.ow2.asm:asm-tree:${asmVersion}"
-    api "org.ow2.asm:asm-analysis:${asmVersion}"
-    api "org.ow2.asm:asm-util:${asmVersion}"
-    api "org.ow2.asm:asm-commons:${asmVersion}"
-    api "org.spongepowered:mixin:${mixinVersion}"
 
     // Path finding
     api 'com.github.MadMartian:hydrazine-path-finding:1.6.0'

@@ -617,11 +617,16 @@ public final class MinecraftServer {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
+        extensionManager.start();
+        extensionManager.gotoPreInit();
+
         MinecraftServer.started = true;
 
         LOGGER.info("Starting Minestom server.");
 
         updateManager.start();
+
+        extensionManager.gotoInit();
 
         // Init server
         try {
@@ -630,23 +635,10 @@ public final class MinecraftServer {
             e.printStackTrace();
         }
 
-        if (extensionManager.shouldLoadOnStartup()) {
-            final long loadStartTime = System.nanoTime();
-            // Load extensions
-            extensionManager.loadExtensions();
-            // Init extensions
-            extensionManager.getExtensions().forEach(Extension::preInitialize);
-            extensionManager.getExtensions().forEach(Extension::initialize);
-            extensionManager.getExtensions().forEach(Extension::postInitialize);
-
-            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
-            LOGGER.info("Extensions loaded in {}ms", loadTime);
-        } else {
-            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
-        }
-
         // Start server
         server.start();
+
+        extensionManager.gotoPostInit();
 
         LOGGER.info("Minestom server started successfully.");
 
@@ -665,14 +657,13 @@ public final class MinecraftServer {
         if (stopping) return;
         stopping = true;
         LOGGER.info("Stopping Minestom server.");
-        extensionManager.unloadAllExtensions();
+        LOGGER.info("Unloading all extensions.");
+        extensionManager.shutdown();
         updateManager.stop();
         schedulerManager.shutdown();
         connectionManager.shutdown();
         server.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
-        LOGGER.info("Unloading all extensions.");
-        extensionManager.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         MinestomTerminal.stop();
