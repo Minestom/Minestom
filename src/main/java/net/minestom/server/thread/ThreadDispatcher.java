@@ -153,10 +153,6 @@ public final class ThreadDispatcher<P> {
         signalUpdate(new DispatchUpdate.ElementRemove<>(tickable));
     }
 
-    public void signalUpdate(@NotNull DispatchUpdate<P> update) {
-        this.updates.relaxedOffer(update);
-    }
-
     /**
      * Shutdowns all the {@link TickThread tick threads}.
      * <p>
@@ -171,8 +167,12 @@ public final class ThreadDispatcher<P> {
         return threads.get(threadId);
     }
 
+    private void signalUpdate(@NotNull DispatchUpdate<P> update) {
+        this.updates.relaxedOffer(update);
+    }
+
     private void processLoadedChunk(P partition) {
-        if(partitions.containsKey(partition)) return;
+        if (partitions.containsKey(partition)) return;
         final TickThread thread = retrieveThread(partition);
         final Partition partitionEntry = new Partition(thread);
         thread.entries().add(partitionEntry);

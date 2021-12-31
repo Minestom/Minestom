@@ -67,17 +67,20 @@ public class ThreadDispatcherTest {
         dispatcher.updateAndAwait(System.currentTimeMillis());
         assertEquals(2, counter1.get());
         assertEquals(2, counter2.get());
+
+        dispatcher.shutdown();
     }
 
     @Test
     public void uniqueThread() {
         // Ensure that partitions are properly dispatched across threads
-        ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), 10);
-        assertEquals(10, dispatcher.threads().size());
+        final int threadCount = 10;
+        ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), threadCount);
+        assertEquals(threadCount, dispatcher.threads().size());
 
         final AtomicInteger counter = new AtomicInteger();
         Set<Thread> threads = new CopyOnWriteArraySet<>();
-        Set<Tickable> partitions = IntStream.range(0, 10)
+        Set<Tickable> partitions = IntStream.range(0, threadCount)
                 .mapToObj(value -> (Tickable) (time) -> {
                     final Thread thread = Thread.currentThread();
                     assertInstanceOf(TickThread.class, thread);
@@ -86,10 +89,14 @@ public class ThreadDispatcherTest {
                     counter.getAndIncrement();
                 })
                 .collect(Collectors.toUnmodifiableSet());
+        assertEquals(threadCount, partitions.size());
 
         partitions.forEach(dispatcher::createPartition);
         assertEquals(0, counter.get());
+
         dispatcher.updateAndAwait(System.currentTimeMillis());
         assertEquals(10, counter.get());
+
+        dispatcher.shutdown();
     }
 }
