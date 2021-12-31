@@ -122,6 +122,16 @@ public final class PlacementRules {
             .map(PlayerBlockUpdateNeighborEvent.class, BlockPlaceMechanicVerticalPlant.BIG_DRIPLEAF::onNeighbor)
             .build();
 
+    private static final EventBinding<BlockEvent> CAVE_VINES_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::isCaveVine)
+            .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicVerticalPlant.CAVE_VINES::onPlace)
+            .map(PlayerBlockUpdateNeighborEvent.class, BlockPlaceMechanicVerticalPlant.CAVE_VINES::onNeighbor)
+            .build();
+
+    private static final EventBinding<BlockEvent> KELP_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::isKelp)
+            .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicVerticalPlant.KELP::onPlace)
+            .map(PlayerBlockUpdateNeighborEvent.class, BlockPlaceMechanicVerticalPlant.KELP::onNeighbor)
+            .build();
+
     private static final EventBinding<BlockEvent> DOOR_HINGE_BINDING = EventBinding.filtered(EventFilter.BLOCK, PlacementRules::isDoor)
             .map(PlayerBlockPlaceEvent.class, BlockPlaceMechanicDoorHinge::onPlace)
             .build();
@@ -260,6 +270,14 @@ public final class PlacementRules {
         return block.compare(Block.BIG_DRIPLEAF) || block.compare(Block.BIG_DRIPLEAF_STEM);
     }
 
+    private static boolean isCaveVine(Block block) {
+        return block.compare(Block.CAVE_VINES) || block.compare(Block.CAVE_VINES_PLANT);
+    }
+
+    private static boolean isKelp(Block block) {
+        return block.compare(Block.KELP) || block.compare(Block.KELP_PLANT);
+    }
+
     private static boolean hasRotation(Block block) {
         return block.getProperty("facing") != null;
     }
@@ -338,6 +356,8 @@ public final class PlacementRules {
         eventNode.register(TWISTING_VINES_BINDING);
         eventNode.register(WEEPING_VINES_BINDING);
         eventNode.register(BIG_DRIPLEAF_BINDING);
+        eventNode.register(CAVE_VINES_BINDING);
+        eventNode.register(KELP_BINDING);
 
         // Blockstates
         eventNode.register(ROTATION_BINDING);

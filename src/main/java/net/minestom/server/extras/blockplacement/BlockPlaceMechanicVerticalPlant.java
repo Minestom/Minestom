@@ -16,6 +16,10 @@ final class BlockPlaceMechanicVerticalPlant {
             new BlockPlaceMechanicVerticalPlant(-1, Block.WEEPING_VINES, Block.WEEPING_VINES_PLANT);
     static BlockPlaceMechanicVerticalPlant BIG_DRIPLEAF =
             new BlockPlaceMechanicVerticalPlant(1, Block.BIG_DRIPLEAF, Block.BIG_DRIPLEAF_STEM);
+    static BlockPlaceMechanicVerticalPlant CAVE_VINES =
+            new BlockPlaceMechanicVerticalPlant(-1, Block.CAVE_VINES, Block.CAVE_VINES_PLANT);
+    static BlockPlaceMechanicVerticalPlant KELP =
+            new BlockPlaceMechanicVerticalPlant(1, Block.KELP, Block.KELP_PLANT);
 
     private final int offset;
     private final Block mainBlock;
