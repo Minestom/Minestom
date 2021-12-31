@@ -262,8 +262,8 @@ public class InstanceContainer extends Instance {
     @Override
     public void setGenerator(@Nullable Generator generator) {
         this.generator = generator;
-        if (generator != null && GenerationContext.Provider.class.isAssignableFrom(generator.getClass())) {
-            this.generationContext = ((GenerationContext.Provider) generator).getContext(this);
+        if (generator instanceof GenerationContext.Provider provider) {
+            this.generationContext = provider.getContext(this);
         }
     }
 
