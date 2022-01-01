@@ -31,6 +31,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     private final Supplier<ServerPacket> packetSupplier;
+    @SuppressWarnings("unused")
     private SoftReference<FramedPacket> packet;
 
     public CachedPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {

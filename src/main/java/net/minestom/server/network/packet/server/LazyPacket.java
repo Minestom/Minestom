@@ -3,6 +3,8 @@ package net.minestom.server.network.packet.server;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.function.Supplier;
 
 /**
@@ -12,20 +14,32 @@ import java.util.function.Supplier;
  */
 @ApiStatus.Internal
 public final class LazyPacket implements SendablePacket {
+    private static final VarHandle PACKET;
+
+    static {
+        try {
+            PACKET = MethodHandles.lookup().findVarHandle(LazyPacket.class, "packet", ServerPacket.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private final Supplier<ServerPacket> packetSupplier;
-    private volatile ServerPacket packet;
+    @SuppressWarnings("unused")
+    private ServerPacket packet;
 
     public LazyPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
     }
 
     public @NotNull ServerPacket packet() {
-        ServerPacket packet = this.packet;
+        ServerPacket packet = (ServerPacket) PACKET.getOpaque(this);
         if (packet == null) {
             synchronized (this) {
                 packet = this.packet;
                 if (packet == null) {
-                    packet = this.packet = packetSupplier.get();
+                    packet = packetSupplier.get();
+                    PACKET.setOpaque(this, packet);
                 }
             }
         }
