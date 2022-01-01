@@ -9,10 +9,12 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.instance.generator.GenerationRequest;
+import net.minestom.server.instance.generator.GenerationUnit;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
@@ -33,6 +35,7 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -47,8 +50,7 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    // the chunk generator used, can be null
-    private ChunkGenerator chunkGenerator;
+    private Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -271,6 +273,10 @@ public class InstanceContainer extends Instance {
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
                     assert future == completableFuture;
                     future.complete(chunk);
+                })
+                .exceptionally(throwable -> {
+                    MinecraftServer.getExceptionManager().handleException(throwable);
+                    return null;
                 });
         if (loader.supportsParallelLoading()) {
             CompletableFuture.runAsync(retriever);
@@ -281,13 +287,42 @@ public class InstanceContainer extends Instance {
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
-        final ChunkGenerator generator = this.chunkGenerator;
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
+        Generator generator = getGenerator();
         if (generator != null && chunk.shouldGenerate()) {
-            // Execute the chunk generator to populate the chunk
-            final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
-            return chunkBatch.generate(generator);
+            AtomicReference<CompletableFuture<?>> stage = new AtomicReference<>(null);
+            var chunkUnit = GeneratorImpl.chunk(getSectionMinY(), getSectionMaxY(),
+                    new GeneratorImpl.ChunkEntry(chunk));
+            generator.generate(new GenerationRequest() {
+                @Override
+                public void returnAsync(@NotNull CompletableFuture<?> future) {
+                    stage.set(future);
+                }
+
+                @Override
+                public @NotNull GenerationUnit unit() {
+                    return chunkUnit;
+                }
+            });
+
+            CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
+            final CompletableFuture<?> future = stage.get();
+            if (future != null) {
+                future.whenComplete((o, throwable) -> {
+                    if (throwable != null) {
+                        resultFuture.completeExceptionally(throwable);
+                    }
+                    resultFuture.complete(chunk);
+                });
+            } else {
+                resultFuture.complete(chunk);
+            }
+            return resultFuture.whenComplete((c, throwable) -> {
+                c.sendChunk();
+                refreshLastBlockChangeTime();
+                resultFuture.complete(c);
+            });
         } else {
             // No chunk generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);
@@ -418,14 +453,32 @@ public class InstanceContainer extends Instance {
         this.lastBlockChangeTime = System.currentTimeMillis();
     }
 
+    /**
+     * @deprecated Use {@link #getGenerator()}
+     */
     @Override
+    @Deprecated
     public ChunkGenerator getChunkGenerator() {
-        return chunkGenerator;
+        return null;
+    }
+
+    /**
+     * @deprecated Use {@link #setGenerator(Generator)}
+     */
+    @Override
+    @Deprecated
+    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
+        setGenerator(new ChunkGeneratorCompatibilityLayer(chunkGenerator));
     }
 
     @Override
-    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        this.chunkGenerator = chunkGenerator;
+    public @Nullable Generator getGenerator() {
+        return generator;
+    }
+
+    @Override
+    public void setGenerator(@Nullable Generator generator) {
+        this.generator = generator;
     }
 
     /**

@@ -40,7 +40,6 @@ public class ChunkGenerationBatch extends ChunkBatch {
                 }
 
                 // Update the chunk.
-                this.chunk.sendChunk();
                 this.instance.refreshLastBlockChangeTime();
                 completableFuture.complete(chunk);
             }
