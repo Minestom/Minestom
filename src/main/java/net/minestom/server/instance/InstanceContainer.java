@@ -14,10 +14,9 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.instance.generator.GenerationRequest;
-import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.SectionResult;
+import net.minestom.server.instance.generator.units.*;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -48,7 +47,7 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    private @Nullable Generator generator;
+    private @Nullable Generator<? extends GenerationRequest<?>, ? extends GenerationResponse<?>> generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -283,15 +282,29 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         if (getGenerator() != null && chunk.shouldGenerate()) {
-            return AsyncUtils.allOf(getGenerator().generate(this, new GenerationRequest(GenerationUnit.CHUNK, List.of(new Vec(chunkX, chunkZ)))))
-                    .thenAccept(result -> {
-                        for (SectionResult sectionResult : result) {
-                            chunk.setSection(sectionResult.generatedData(), (int) sectionResult.location().y());
-                        }
-                        chunk.sendChunk();
-                        refreshLastBlockChangeTime();
-                    })
-                    .thenCompose(v -> CompletableFuture.completedFuture(chunk));
+            final Class<? extends GenerationRequest<?>> requestType = getGenerator().supportedRequestType();
+
+            if (requestType == ChunkGenerationRequest.class) {
+                final Generator<ChunkGenerationRequest, ChunkGenerationResponse> generator = this.getGenerator();
+                return generator.generate(this, new ChunkGenerationRequest()).futures().get(0).thenAccept(c -> {
+                            c.sendChunk();
+                            refreshLastBlockChangeTime();
+                        })
+                        .thenCompose(v -> CompletableFuture.completedFuture(chunk));
+            } else if (requestType == SectionGenerationRequest.class) {
+                final Generator<SectionGenerationRequest, SectionGenerationResponse> generator = this.getGenerator();
+                return AsyncUtils.allOf(generator.generate(this, new SectionGenerationRequest()).futures())
+                        .thenAccept(result -> {
+                            for (SectionResult sectionResult : result) {
+                                chunk.setSection(sectionResult.sectionData());
+                            }
+                            chunk.sendChunk();
+                            refreshLastBlockChangeTime();
+                        })
+                        .thenCompose(v -> CompletableFuture.completedFuture(chunk));
+            } else {
+                throw new IllegalStateException("Generator doesn't support any known generation request!");
+            }
         } else {
             // No chunk generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);
@@ -444,12 +457,12 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @Nullable Generator getGenerator() {
-        return this.generator;
+    public <T extends GenerationRequest<R>, R extends GenerationResponse<?>> @Nullable Generator<T, R> getGenerator() {
+        return (Generator<T, R>) this.generator;
     }
 
     @Override
-    public void setGenerator(@Nullable Generator generator) {
+    public <T extends GenerationRequest<R>, R extends GenerationResponse<?>> void setGenerator(@Nullable Generator<T, R> generator) {
         this.generator = generator;
     }
 

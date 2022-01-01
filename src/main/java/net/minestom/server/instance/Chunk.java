@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.generator.GeneratedData;
+import net.minestom.server.instance.generator.SectionData;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
@@ -297,9 +297,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     /**
      * Used to set sections during generation<br>
      * WARNING: Only call once per section, calling this after generation has unspecified behaviour
-     *  @param generatedData data
-     * @param y location
+     * @param generatedData data
+     *
      */
     @ApiStatus.Internal
-    public abstract void setSection(GeneratedData generatedData, int y);
+    public abstract void setSection(SectionData generatedData);
 }
