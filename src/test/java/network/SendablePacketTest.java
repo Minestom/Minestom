@@ -35,8 +35,11 @@ public class SendablePacketTest {
         assertSame(packet, cached.packet());
 
         var buffer = PacketUtils.allocateTrimmedPacket(packet);
-        assertEquals(buffer.body(), cached.body());
-        assertEquals(buffer.body(), cached.body());
+        var cachedBuffer = cached.body();
+        assertEquals(buffer.body(), cachedBuffer);
+        // May fail in the very unlikely case where soft references are cleared
+        // Rare enough to make this test worth it
+        assertSame(cached.body(), cachedBuffer);
 
         assertSame(packet, cached.packet());
     }
