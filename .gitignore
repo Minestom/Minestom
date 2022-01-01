@@ -54,4 +54,5 @@ gradle-app.setting
 
 # When running the demo we generate the extensions folder
 # Incase people are using IntelliJ to run the server, this will exclude extensions from any folder.
-**/extensions
+/demo/extensions
+/extensions

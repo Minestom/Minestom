@@ -6,8 +6,8 @@ plugins {
 }
 
 application {
-    // This might be a little redundant, but better safe than sorry.
     mainClass.set("net.minestom.demo.Main")
+    // This is included because Shadow is buggy. Wait for https://github.com/johnrengelman/shadow/issues/613 to befixed.
     @Suppress("DEPRECATION")
     mainClassName = "net.minestom.demo.Main"
 }
