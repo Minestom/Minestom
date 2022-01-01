@@ -26,8 +26,10 @@ public interface Acquirable<T> {
     static @NotNull Stream<@NotNull Entity> currentEntities() {
         final Thread currentThread = Thread.currentThread();
         if (currentThread instanceof TickThread) {
-            //return ((TickThread) currentThread).entries().stream()
-            //        .flatMap(partitionEntry -> partitionEntry.elements().stream());
+            return ((TickThread) currentThread).entries().stream()
+                    .flatMap(partitionEntry -> partitionEntry.elements().stream())
+                    .filter(tickable -> tickable instanceof Entity)
+                    .map(tickable -> (Entity) tickable);
         }
         return Stream.empty();
     }
