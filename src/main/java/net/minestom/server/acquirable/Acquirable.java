@@ -27,7 +27,9 @@ public interface Acquirable<T> {
         final Thread currentThread = Thread.currentThread();
         if (currentThread instanceof TickThread) {
             return ((TickThread) currentThread).entries().stream()
-                    .flatMap(chunkEntry -> chunkEntry.entities().stream());
+                    .flatMap(partitionEntry -> partitionEntry.elements().stream())
+                    .filter(tickable -> tickable instanceof Entity)
+                    .map(tickable -> (Entity) tickable);
         }
         return Stream.empty();
     }
@@ -149,19 +151,19 @@ public interface Acquirable<T> {
     @NotNull Handler getHandler();
 
     final class Handler {
-        private volatile ThreadDispatcher.ChunkEntry chunkEntry;
+        private volatile ThreadDispatcher.Partition partition;
 
-        public ThreadDispatcher.ChunkEntry getChunkEntry() {
-            return chunkEntry;
+        public ThreadDispatcher.Partition getChunkEntry() {
+            return partition;
         }
 
         @ApiStatus.Internal
-        public void refreshChunkEntry(@NotNull ThreadDispatcher.ChunkEntry chunkEntry) {
-            this.chunkEntry = chunkEntry;
+        public void refreshChunkEntry(@NotNull ThreadDispatcher.Partition partition) {
+            this.partition = partition;
         }
 
         public TickThread getTickThread() {
-            final ThreadDispatcher.ChunkEntry entry = this.chunkEntry;
+            final ThreadDispatcher.Partition entry = this.partition;
             return entry != null ? entry.thread() : null;
         }
     }
