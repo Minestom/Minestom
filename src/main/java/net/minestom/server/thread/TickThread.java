@@ -1,6 +1,7 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,7 +26,7 @@ public final class TickThread extends MinestomThread {
     private volatile boolean stop;
 
     private long tickTime;
-    private final List<ThreadDispatcher.ChunkEntry> entries = new ArrayList<>();
+    private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
     public TickThread(Phaser phaser, int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
@@ -50,26 +51,19 @@ public final class TickThread extends MinestomThread {
     }
 
     private void tick() {
-        for (ThreadDispatcher.ChunkEntry entry : entries) {
-            final Chunk chunk = entry.chunk();
-            try {
-                chunk.tick(tickTime);
-            } catch (Throwable e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-            final List<Entity> entities = entry.entities();
-            if (!entities.isEmpty()) {
-                for (Entity entity : entities) {
-                    if (lock.hasQueuedThreads()) {
-                        this.lock.unlock();
-                        // #acquire() callbacks should be called here
-                        this.lock.lock();
-                    }
-                    try {
-                        entity.tick(tickTime);
-                    } catch (Throwable e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
+        for (ThreadDispatcher.Partition entry : entries) {
+            final List<Tickable> elements = entry.elements();
+            if (elements.isEmpty()) continue;
+            for (Tickable element : elements) {
+                if (lock.hasQueuedThreads()) {
+                    this.lock.unlock();
+                    // #acquire() callbacks should be called here
+                    this.lock.lock();
+                }
+                try {
+                    element.tick(tickTime);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
         }
@@ -84,7 +78,7 @@ public final class TickThread extends MinestomThread {
         LockSupport.unpark(this);
     }
 
-    public Collection<ThreadDispatcher.ChunkEntry> entries() {
+    public Collection<ThreadDispatcher.Partition> entries() {
         return entries;
     }
 

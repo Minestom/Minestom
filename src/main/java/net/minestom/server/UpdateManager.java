@@ -7,7 +7,6 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
-import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
@@ -31,7 +30,7 @@ public final class UpdateManager {
     private volatile boolean stopRequested;
 
     // TODO make configurable
-    private final ThreadDispatcher threadDispatcher = ThreadDispatcher.singleThread();
+    private final ThreadDispatcher<Chunk> threadDispatcher = ThreadDispatcher.singleThread();
 
     private final Queue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
     private final Queue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
@@ -55,7 +54,7 @@ public final class UpdateManager {
      *
      * @return the current thread provider
      */
-    public @NotNull ThreadDispatcher getThreadProvider() {
+    public @NotNull ThreadDispatcher<Chunk> getThreadProvider() {
         return threadDispatcher;
     }
 
@@ -89,7 +88,7 @@ public final class UpdateManager {
      * @param chunk the loaded chunk
      */
     public void signalChunkLoad(@NotNull Chunk chunk) {
-        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
+        this.threadDispatcher.createPartition(chunk);
     }
 
     /**
@@ -100,7 +99,7 @@ public final class UpdateManager {
      * @param chunk the unloaded chunk
      */
     public void signalChunkUnload(@NotNull Chunk chunk) {
-        this.threadDispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
+        this.threadDispatcher.deletePartition(chunk);
     }
 
     /**
@@ -237,8 +236,7 @@ public final class UpdateManager {
             this.threadDispatcher.updateAndAwait(tickStart);
 
             // Clear removed entities & update threads
-            final long tickTime = System.currentTimeMillis() - tickStart;
-            this.threadDispatcher.refreshThreads(tickTime);
+            this.threadDispatcher.refreshThreads();
         }
 
         private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
