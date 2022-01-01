@@ -34,7 +34,7 @@ public interface ThreadProvider<T> {
      *
      * @return the refresh type
      */
-    default @NotNull RefreshType getChunkRefreshType() {
+    default @NotNull RefreshType refreshType() {
         return RefreshType.NEVER;
     }
 
@@ -43,16 +43,16 @@ public interface ThreadProvider<T> {
      */
     enum RefreshType {
         /**
-         * Chunk thread is constant after being defined.
+         * Thread never change after being defined once.
+         * <p>
+         * Means that {@link #findThread(Object)} will only be called once for each partition.
          */
         NEVER,
         /**
-         * Chunk thread should be recomputed as often as possible.
+         * Thread is updated as often as possible.
+         * <p>
+         * Means that {@link #findThread(Object)} may be called multiple time for each partition.
          */
-        CONSTANT,
-        /**
-         * Chunk thread should be recomputed, but not continuously.
-         */
-        RARELY
+        ALWAYS
     }
 }

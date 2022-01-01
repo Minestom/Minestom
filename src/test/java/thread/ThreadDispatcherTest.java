@@ -4,10 +4,14 @@ import net.minestom.server.Tickable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.thread.TickThread;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Phaser;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -21,6 +25,7 @@ public class ThreadDispatcherTest {
         final AtomicInteger counter = new AtomicInteger();
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
         assertEquals(1, dispatcher.threads().size());
+        assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(new Phaser(), 1)));
 
         var partition = new Object();
         Tickable element = (time) -> counter.incrementAndGet();
@@ -29,6 +34,8 @@ public class ThreadDispatcherTest {
         assertEquals(0, counter.get());
 
         dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateElement(element, partition); // Should be ignored
+        dispatcher.createPartition(partition); // Ignored too
         assertEquals(1, counter.get());
 
         dispatcher.updateAndAwait(System.currentTimeMillis());
@@ -43,6 +50,7 @@ public class ThreadDispatcherTest {
 
     @Test
     public void partitionTick() {
+        // Partitions implementing Tickable should be ticked same as elements
         final AtomicInteger counter1 = new AtomicInteger();
         final AtomicInteger counter2 = new AtomicInteger();
         ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.singleThread();
@@ -95,7 +103,73 @@ public class ThreadDispatcherTest {
         assertEquals(0, counter.get());
 
         dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(10, counter.get());
+        assertEquals(threadCount, counter.get());
+
+        dispatcher.shutdown();
+    }
+
+    @Test
+    public void threadUpdate() {
+        // Ensure that partitions threads are properly updated every tick
+        // when RefreshType.ALWAYS is used
+        interface Updater extends Tickable {
+            int getValue();
+        }
+
+        final int threadCount = 10;
+        ThreadDispatcher<Updater> dispatcher = ThreadDispatcher.of(new ThreadProvider<>() {
+            @Override
+            public int findThread(@NotNull Updater partition) {
+                return partition.getValue();
+            }
+
+            @Override
+            public @NotNull RefreshType refreshType() {
+                return RefreshType.ALWAYS;
+            }
+        }, threadCount);
+        assertEquals(threadCount, dispatcher.threads().size());
+
+        Map<Updater, Thread> threads = new ConcurrentHashMap<>();
+        Map<Updater, Thread> threads2 = new ConcurrentHashMap<>();
+        Set<Updater> partitions = IntStream.range(0, threadCount)
+                .mapToObj(value -> new Updater() {
+                    private int v = value;
+
+                    @Override
+                    public int getValue() {
+                        return v;
+                    }
+
+                    @Override
+                    public void tick(long time) {
+                        final Thread currentThread = Thread.currentThread();
+                        assertInstanceOf(TickThread.class, currentThread);
+                        if (threads.putIfAbsent(this, currentThread) == null) {
+                            this.v = value + 1;
+                        } else {
+                            assertEquals(value + 1, v);
+                            threads2.putIfAbsent(this, currentThread);
+                        }
+                    }
+                }).collect(Collectors.toUnmodifiableSet());
+        assertEquals(threadCount, partitions.size());
+
+        partitions.forEach(dispatcher::createPartition);
+
+        dispatcher.updateAndAwait(System.currentTimeMillis());
+
+        dispatcher.refreshThreads();
+
+        dispatcher.updateAndAwait(System.currentTimeMillis());
+
+        assertEquals(threads2.size(), threads.size());
+        assertNotEquals(threads, threads2, "Threads have not been updated at all");
+        for (var entry : threads.entrySet()) {
+            final Thread thread1 = entry.getValue();
+            final Thread thread2 = threads2.get(entry.getKey());
+            assertNotEquals(thread1, thread2);
+        }
 
         dispatcher.shutdown();
     }

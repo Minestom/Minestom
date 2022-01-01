@@ -236,8 +236,7 @@ public final class UpdateManager {
             this.threadDispatcher.updateAndAwait(tickStart);
 
             // Clear removed entities & update threads
-            final long tickTime = System.currentTimeMillis() - tickStart;
-            this.threadDispatcher.refreshThreads(tickTime);
+            this.threadDispatcher.refreshThreads();
         }
 
         private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
