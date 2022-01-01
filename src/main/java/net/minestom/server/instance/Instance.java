@@ -19,6 +19,7 @@ import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
@@ -41,6 +42,8 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -256,15 +259,33 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      * Gets the instance {@link ChunkGenerator}.
      *
      * @return the {@link ChunkGenerator} of the instance
+     * @deprecated Use {@link #getGenerator()}
      */
+    @Deprecated
     public abstract @Nullable ChunkGenerator getChunkGenerator();
 
     /**
      * Changes the instance {@link ChunkGenerator}.
      *
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
+     * @deprecated Use {@link #setGenerator(Generator)}
      */
+    @Deprecated
     public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
+
+    /**
+     * Gets the generator associated with the instance
+     *
+     * @return the generator if any
+     */
+    public abstract @Nullable Generator getGenerator();
+
+    /**
+     * Changes the generator of the instance
+     *
+     * @param generator the new generator, or null to disable generation
+     */
+    public abstract void setGenerator(@Nullable Generator generator);
 
     /**
      * Gets all the instance's loaded chunks.
@@ -679,5 +700,23 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    /**
+     * Gets the lowest section y coordinate
+     *
+     * @return lowest y section coordinate
+     */
+    public int getSectionMinY() {
+        return getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+    }
+
+    /**
+     * Gets the highest section y coordinate
+     *
+     * @return highest y section coordinate
+     */
+    public int getSectionMaxY() {
+        return (getDimensionType().getMinY() + getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
     }
 }

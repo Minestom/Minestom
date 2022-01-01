@@ -67,4 +67,8 @@ public final class Section implements Writeable {
         writer.write(blockPalette);
         writer.write(biomePalette);
     }
+
+    public void setBiomePalette(Palette biomePalette) {
+        this.biomePalette = biomePalette;
+    }
 }

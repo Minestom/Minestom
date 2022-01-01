@@ -8,6 +8,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.GeneratedData;
+import net.minestom.server.instance.generator.LegacySectionData;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
@@ -174,6 +176,20 @@ public class DynamicChunk extends Chunk {
     public void reset() {
         for (Section section : sections) section.clear();
         this.entries.clear();
+    }
+
+    @Override
+    public void setSection(GeneratedData generatedData, int y) {
+        this.lastChange = System.currentTimeMillis();
+        this.chunkCache.invalidate();
+        this.lightCache.invalidate();
+        final Section section = getSection(y);
+        section.setBiomePalette(generatedData.biomePalette());
+        generatedData.blockCache().apply(this, y);
+        if (generatedData instanceof LegacySectionData legacySectionData) {
+            section.setSkyLight(legacySectionData.skyLight());
+            section.setBlockLight(legacySectionData.blockLight());
+        }
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {

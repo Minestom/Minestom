@@ -66,6 +66,9 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
             Runtime.getRuntime().availableProcessors() / 2);
+    public static final String THREAD_NAME_WORLD_GEN = "Ms-WorldGenPool";
+    public static final int THREAD_COUNT_WORLD_GEN = getThreadCount("minestom.world-gen-thread-count",
+            Runtime.getRuntime().availableProcessors() / 2);
 
     // Config
     // Can be modified at performance cost when increased

@@ -4,7 +4,9 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.Generator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -73,11 +75,23 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    @Deprecated
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
         this.instanceContainer.setChunkGenerator(chunkGenerator);
     }
 
     @Override
+    public @Nullable Generator getGenerator() {
+        return instanceContainer.getGenerator();
+    }
+
+    @Override
+    public void setGenerator(@Nullable Generator generator) {
+        instanceContainer.setGenerator(generator);
+    }
+
+    @Override
+    @Deprecated
     public ChunkGenerator getChunkGenerator() {
         return instanceContainer.getChunkGenerator();
     }

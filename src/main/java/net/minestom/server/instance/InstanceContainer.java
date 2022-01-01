@@ -11,10 +11,13 @@ import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.instance.generator.GenerationRequest;
+import net.minestom.server.instance.generator.GenerationUnit;
+import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.generator.SectionResult;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -45,8 +48,7 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    // the chunk generator used, can be null
-    private ChunkGenerator chunkGenerator;
+    private @Nullable Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -278,13 +280,18 @@ public class InstanceContainer extends Instance {
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
-        final ChunkGenerator generator = this.chunkGenerator;
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
-        if (generator != null && chunk.shouldGenerate()) {
-            // Execute the chunk generator to populate the chunk
-            final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
-            return chunkBatch.generate(generator);
+        if (getGenerator() != null && chunk.shouldGenerate()) {
+            return AsyncUtils.allOf(getGenerator().generate(this, new GenerationRequest(GenerationUnit.CHUNK, List.of(new Vec(chunkX, chunkZ)))))
+                    .thenAccept(result -> {
+                        for (SectionResult sectionResult : result) {
+                            chunk.setSection(sectionResult.generatedData(), (int) sectionResult.location().y());
+                        }
+                        chunk.sendChunk();
+                        refreshLastBlockChangeTime();
+                    })
+                    .thenCompose(v -> CompletableFuture.completedFuture(chunk));
         } else {
             // No chunk generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);
@@ -415,14 +422,35 @@ public class InstanceContainer extends Instance {
         this.lastBlockChangeTime = System.currentTimeMillis();
     }
 
+    /**
+     * @deprecated Use {@link #getGenerator()}
+     */
     @Override
+    @Deprecated
     public ChunkGenerator getChunkGenerator() {
-        return chunkGenerator;
+        if (generator instanceof ChunkGeneratorCompatibilityLayer compatibilityLayer) {
+            return compatibilityLayer.getChunkGenerator();
+        }
+        return null;
+    }
+
+    /**
+     * @deprecated Use {@link #setGenerator(Generator)}
+     */
+    @Override
+    @Deprecated
+    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
+        this.generator = new ChunkGeneratorCompatibilityLayer(chunkGenerator);
     }
 
     @Override
-    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        this.chunkGenerator = chunkGenerator;
+    public @Nullable Generator getGenerator() {
+        return this.generator;
+    }
+
+    @Override
+    public void setGenerator(@Nullable Generator generator) {
+        this.generator = generator;
     }
 
     /**
