@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -229,7 +231,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
             Handle<? super T> handle = handleMap.get(type);
-            if (handle != null) handle.updated = false;
+            if (handle != null) Handle.UPDATED.setRelease(handle, false);
         });
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
@@ -260,10 +262,21 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     static final class Handle<E extends Event> implements ListenerHandle<E> {
+        private static final VarHandle UPDATED;
+
+        static {
+            try {
+                UPDATED = MethodHandles.lookup().findVarHandle(Handle.class, "updated", boolean.class);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
         private final EventNodeImpl<E> node;
         private final Class<E> eventType;
         private Consumer<E> listener = null;
-        private volatile boolean updated;
+        @SuppressWarnings("unused")
+        private boolean updated; // Use the UPDATED var handle
 
         Handle(EventNodeImpl<E> node, Class<E> eventType) {
             this.node = node;
@@ -287,12 +300,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         @Nullable Consumer<E> updatedListener() {
-            if (updated) return listener;
+            if ((boolean) UPDATED.getAcquire(this)) return listener;
             synchronized (GLOBAL_CHILD_LOCK) {
-                if (updated) return listener;
+                if ((boolean) UPDATED.getAcquire(this)) return listener;
                 final Consumer<E> listener = createConsumer();
                 this.listener = listener;
-                this.updated = true;
+                UPDATED.setRelease(this, true);
                 return listener;
             }
         }
@@ -433,7 +446,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
-                this.updated = false;
+                UPDATED.setRelease(this, false);
             }
         }
     }

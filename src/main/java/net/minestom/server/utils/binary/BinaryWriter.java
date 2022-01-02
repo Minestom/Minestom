@@ -221,6 +221,17 @@ public class BinaryWriter extends OutputStream {
         }
     }
 
+    public void writeVarLongArray(long[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+        writeVarInt(array.length);
+        for (long element : array) {
+            writeVarLong(element);
+        }
+    }
+
     public void writeLongArray(long[] array) {
         if (array == null) {
             writeVarInt(0);
@@ -312,6 +323,17 @@ public class BinaryWriter extends OutputStream {
             // should not throw, as nbtWriter points to this PacketWriter
             MinecraftServer.getExceptionManager().handleException(e);
         }
+    }
+    
+    /**
+     * Writes a Declared Recipe to a packet
+     *
+     * @param writeable the object to write
+     */
+    public void writeRecipe(@NotNull DeclaredRecipe recipe) {
+        this.writeSizedString(recipe.type());
+        this.writeSizedString(recipe.recipeId());
+        recipe.write(this);
     }
 
     /**

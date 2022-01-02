@@ -31,7 +31,7 @@
 hs_err_pid*
 
 ### Gradle template
-.gradle
+**/.gradle
 **/build/
 
 # Ignore Gradle GUI config
@@ -53,5 +53,6 @@ gradle-app.setting
 /src/main/java/com/mcecraft/
 
 # When running the demo we generate the extensions folder
-/extensions/
-/.mixin.out/
+# Incase people are using IntelliJ to run the server, this will exclude extensions from any folder.
+/demo/extensions
+/extensions

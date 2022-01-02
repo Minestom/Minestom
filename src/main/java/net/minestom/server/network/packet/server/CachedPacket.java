@@ -5,9 +5,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Supplier;
 
 /**
@@ -19,12 +20,18 @@ import java.util.function.Supplier;
  */
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
-    private static final AtomicIntegerFieldUpdater<CachedPacket> UPDATER =
-            AtomicIntegerFieldUpdater.newUpdater(CachedPacket.class, "updated");
+    private static final VarHandle PACKET;
+
+    static {
+        try {
+            PACKET = MethodHandles.lookup().findVarHandle(CachedPacket.class, "packet", SoftReference.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private final Supplier<ServerPacket> packetSupplier;
-    // 0 means that the reference needs to be updated
-    // Anything else (currently 1) means that the packet is up-to-date
-    private volatile int updated = 0;
+    @SuppressWarnings("unused")
     private SoftReference<FramedPacket> packet;
 
     public CachedPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
@@ -36,12 +43,14 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public void invalidate() {
-        this.updated = 0;
+        PACKET.setOpaque(this, null);
     }
 
     public @NotNull ServerPacket packet() {
+        @SuppressWarnings("unchecked")
+        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getOpaque(this);
         FramedPacket cache;
-        if (updated == 1 && (cache = packet.get()) != null)
+        if (ref != null && (cache = ref.get()) != null)
             return cache.packet(); // Avoid potential packet allocation
         return packetSupplier.get();
     }
@@ -54,12 +63,12 @@ public final class CachedPacket implements SendablePacket {
     private @Nullable FramedPacket updatedCache() {
         if (!PacketUtils.CACHED_PACKET)
             return null;
-        SoftReference<FramedPacket> ref;
+        @SuppressWarnings("unchecked")
+        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getOpaque(this);
         FramedPacket cache;
-        if (updated == 0 || ((ref = packet) == null || (cache = ref.get()) == null)) {
+        if (ref == null || (cache = ref.get()) == null) {
             cache = PacketUtils.allocateTrimmedPacket(packetSupplier.get());
-            this.packet = new SoftReference<>(cache);
-            UPDATER.compareAndSet(this, 0, 1);
+            PACKET.setOpaque(this, new SoftReference<>(cache));
         }
         return cache;
     }
