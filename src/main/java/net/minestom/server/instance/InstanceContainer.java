@@ -25,6 +25,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.instance.GeneratorUtil;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -284,33 +285,7 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         if (getGenerator() != null && chunk.shouldGenerate()) {
-            final Class<? extends GenerationRequest<?>> requestType = getGenerator().supportedRequestType();
-
-            if (requestType == ChunkGenerationRequest.class) {
-                final Generator<ChunkGenerationRequest, ChunkGenerationResponse> generator = this.getGenerator();
-                return generator.generate(this, new ChunkGenerationRequest(List.of(chunk))).futures().get(0).thenAccept(c -> {
-                            c.sendChunk();
-                            refreshLastBlockChangeTime();
-                        })
-                        .thenCompose(v -> CompletableFuture.completedFuture(chunk));
-            } else if (requestType == SectionGenerationRequest.class) {
-                final Generator<SectionGenerationRequest, SectionGenerationResponse> generator = this.getGenerator();
-                return AsyncUtils.allOf(generator.generate(this, new SectionGenerationRequest(
-                        IntStream.range(getSectionMinY(), getSectionMaxY())
-                                .mapToObj(y -> new Vec(chunkX, y, chunkZ))
-                                .collect(Collectors.toList())))
-                                .futures())
-                        .thenAccept(result -> {
-                            for (SectionResult sectionResult : result) {
-                                chunk.setSection(sectionResult.sectionData(), (int) sectionResult.location().y());
-                            }
-                            chunk.sendChunk();
-                            refreshLastBlockChangeTime();
-                        })
-                        .thenCompose(v -> CompletableFuture.completedFuture(chunk));
-            } else {
-                throw new IllegalStateException("Generator doesn't support any known generation request!");
-            }
+            return GeneratorUtil.generateChunk(this, getGenerator(), chunk);
         } else {
             // No chunk generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);
