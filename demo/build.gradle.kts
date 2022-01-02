@@ -1,8 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     application
     id("minestom.common-conventions")
     id("minestom.native-conventions")
-    id("com.github.johnrengelman.shadow") version("7.1.1")
+    id("com.github.johnrengelman.shadow") version ("7.1.1")
 }
 
 application {
@@ -15,4 +17,8 @@ application {
 dependencies {
     implementation(rootProject)
     implementation(libs.jNoise)
+}
+
+tasks.withType<ShadowJar> {
+    archiveFileName.set("minestom-demo.jar")
 }
