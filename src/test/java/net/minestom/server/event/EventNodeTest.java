@@ -1,4 +1,4 @@
-package event;
+package net.minestom.server.event;
 
 import net.minestom.server.event.*;
 import net.minestom.server.event.trait.CancellableEvent;

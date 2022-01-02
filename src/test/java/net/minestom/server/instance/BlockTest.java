@@ -1,4 +1,4 @@
-package instance;
+package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;

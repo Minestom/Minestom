@@ -1,4 +1,4 @@
-package coordinate;
+package net.minestom.server.coordinate;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.chunk.ChunkUtils;

@@ -1,8 +1,7 @@
-package item;
+package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.item.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

@@ -1,4 +1,4 @@
-package instance;
+package net.minestom.server.instance;
 
 import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
