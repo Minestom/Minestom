@@ -18,7 +18,7 @@ public abstract class SmokingRecipe extends Recipe {
             float experience,
             int cookingTime
     ) {
-        super(RecipeType.SMOKING, recipeId);
+        super(Type.SMOKING, recipeId);
         this.group = group;
         this.result = result;
         this.experience = experience;
