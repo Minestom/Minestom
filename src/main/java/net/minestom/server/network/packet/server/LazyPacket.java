@@ -33,13 +33,13 @@ public final class LazyPacket implements SendablePacket {
     }
 
     public @NotNull ServerPacket packet() {
-        ServerPacket packet = (ServerPacket) PACKET.getOpaque(this);
+        ServerPacket packet = (ServerPacket) PACKET.getAcquire(this);
         if (packet == null) {
             synchronized (this) {
-                packet = this.packet;
+                packet = (ServerPacket) PACKET.getAcquire(this);
                 if (packet == null) {
                     packet = packetSupplier.get();
-                    PACKET.setOpaque(this, packet);
+                    PACKET.setRelease(this, packet);
                 }
             }
         }
