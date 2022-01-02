@@ -1,8 +1,5 @@
-package tag;
+package net.minestom.server.tag;
 
-import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.TagReadable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.junit.jupiter.api.Test;

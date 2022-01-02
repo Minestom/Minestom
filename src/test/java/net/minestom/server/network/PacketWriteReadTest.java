@@ -1,4 +1,4 @@
-package network;
+package net.minestom.server.network;
 
 import com.google.gson.JsonObject;
 import net.kyori.adventure.bossbar.BossBar;

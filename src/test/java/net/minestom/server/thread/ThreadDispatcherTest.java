@@ -1,9 +1,6 @@
-package thread;
+package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import net.minestom.server.thread.ThreadDispatcher;
-import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 

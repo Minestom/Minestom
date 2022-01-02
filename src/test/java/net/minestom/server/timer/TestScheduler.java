@@ -1,9 +1,5 @@
-package timer;
+package net.minestom.server.timer;
 
-import net.minestom.server.timer.ExecutionType;
-import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.Task;
-import net.minestom.server.timer.TaskSchedule;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
