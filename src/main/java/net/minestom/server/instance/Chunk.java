@@ -298,7 +298,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Used to set sections during generation<br>
      * WARNING: Only call once per section, calling this after generation has unspecified behaviour
      * @param generatedData data
-     * @param y
+     * @param y section's Y coordinate
      *
      */
     @ApiStatus.Internal
