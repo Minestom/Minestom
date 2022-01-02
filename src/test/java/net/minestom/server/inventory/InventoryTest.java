@@ -1,4 +1,4 @@
-package inventory;
+package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
