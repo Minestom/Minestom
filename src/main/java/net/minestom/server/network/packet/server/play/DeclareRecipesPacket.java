@@ -34,7 +34,11 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarIntList(recipes, BinaryWriter::writeRecipe);
+        writer.writeVarIntList(recipes, (bWriter, recipe)->{
+            bWriter.writeSizedString(recipe.type());
+            bWriter.writeSizedString(recipe.recipeId());
+            bWriter.write(recipe);
+        });
     }
 
     @Override
