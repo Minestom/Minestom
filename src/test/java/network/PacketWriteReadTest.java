@@ -84,21 +84,10 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, 5, COMPONENT));
         SERVER_PACKETS.add(new DeclareRecipesPacket(
                 List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
-                            "minecraft:sticks",
-                            "sticks",
-                            List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
-                            ItemStack.of(Material.STICK)
-                        ),
-                        new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
-                            "minecraft:torch",
-                            1,
-                            1,
-                            "",
-                            List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                    new Ingredient(List.of(ItemStack.of(Material.STICK)))),
-                            ItemStack.of(Material.TORCH)
-                        ))));
-
+                        "minecraft:sticks",
+                        "sticks",
+                        List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
+                        ItemStack.of(Material.STICK)))));
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
         SERVER_PACKETS.add(new DisplayScoreboardPacket((byte) 5, "scoreboard"));
@@ -153,8 +142,7 @@ public class PacketWriteReadTest {
             BinaryReader reader = new BinaryReader(writer.toByteArray());
             var createdPacket = readerConstructor.newInstance(reader);
             assertEquals(writeable, createdPacket);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
-                | IllegalAccessException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             fail(writeable.toString(), e);
         }
     }
