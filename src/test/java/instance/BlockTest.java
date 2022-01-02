@@ -1,6 +1,7 @@
 package instance;
 
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -27,6 +28,9 @@ public class BlockTest {
         block = block.withNbt(null);
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
+
+        var value = block.getTag(Tag.String("key").defaultValue("Default"));
+        assertEquals("Default", value);
     }
 
     @Test
