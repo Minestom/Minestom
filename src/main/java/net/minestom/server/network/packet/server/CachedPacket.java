@@ -43,12 +43,12 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public void invalidate() {
-        PACKET.setOpaque(this, null);
+        PACKET.setRelease(this, null);
     }
 
     public @NotNull ServerPacket packet() {
         @SuppressWarnings("unchecked")
-        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getOpaque(this);
+        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getAcquire(this);
         FramedPacket cache;
         if (ref != null && (cache = ref.get()) != null)
             return cache.packet(); // Avoid potential packet allocation
@@ -64,11 +64,11 @@ public final class CachedPacket implements SendablePacket {
         if (!PacketUtils.CACHED_PACKET)
             return null;
         @SuppressWarnings("unchecked")
-        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getOpaque(this);
+        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getAcquire(this);
         FramedPacket cache;
         if (ref == null || (cache = ref.get()) == null) {
             cache = PacketUtils.allocateTrimmedPacket(packetSupplier.get());
-            PACKET.setOpaque(this, new SoftReference<>(cache));
+            PACKET.setRelease(this, new SoftReference<>(cache));
         }
         return cache;
     }
