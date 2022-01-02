@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.DeclaredRecipe;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
