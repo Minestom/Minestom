@@ -324,6 +324,17 @@ public class BinaryWriter extends OutputStream {
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
+    
+    /**
+     * Writes a Declared Recipe to a packet
+     *
+     * @param writeable the object to write
+     */
+    public void writeRecipe(@NotNull DeclaredRecipe recipe) {
+        this.writeSizedString(recipe.type());
+        this.writeSizedString(recipe.recipeId());
+        recipe.write(this);
+    }
 
     /**
      * Writes the given writeable object into this writer.
