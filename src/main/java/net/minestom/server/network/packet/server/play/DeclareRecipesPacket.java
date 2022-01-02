@@ -84,7 +84,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             ingredients = List.copyOf(ingredients);
         }
 
-        public DeclaredShapedCraftingRecipe(DeclaredShapedCraftingRecipe packet) {
+        private DeclaredShapedCraftingRecipe(DeclaredShapedCraftingRecipe packet) {
             this(packet.recipeId, packet.width, packet.height, packet.group, packet.ingredients, packet.result);
         }
 
