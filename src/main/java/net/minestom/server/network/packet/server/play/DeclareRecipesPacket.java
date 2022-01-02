@@ -83,10 +83,26 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             ingredients = List.copyOf(ingredients);
         }
 
+        public DeclaredShapedCraftingRecipe(DeclaredShapedCraftingRecipe packet) {
+            this(packet.recipeId, packet.width, packet.height, packet.group, packet.ingredients, packet.result);
+        }
+
         public DeclaredShapedCraftingRecipe(BinaryReader reader) {
-            this(reader.readSizedString(), reader.readVarInt(), reader.readVarInt(),
-                    reader.readSizedString(), reader.readVarIntList(Ingredient::new),
-                    reader.readItemStack());
+            this(read(reader));
+        }
+
+        private static DeclaredShapedCraftingRecipe read(BinaryReader reader) {
+
+            String recipeId = reader.readSizedString();
+            int width = reader.readVarInt();
+            int height = reader.readVarInt();
+            String group = reader.readSizedString();
+            List<Ingredient> ingredients = new ArrayList<>();
+            for (int slot = 0; slot < width * height; ++) {
+                ingredients.add(new Ingredient(reader));
+            }
+            ItemStack result = reader.readItemStack();
+            return new DeclaredShapedCraftingRecipe(recipeId, width, height, group, ingredients, result);
         }
 
         @Override
