@@ -1,4 +1,8 @@
 package net.minestom.server.instance.generator.units;
 
-public record SectionGenerationRequest() implements GenerationRequest<SectionGenerationResponse> {
+import net.minestom.server.coordinate.Point;
+
+import java.util.List;
+
+public record SectionGenerationRequest(List<Point> sections) implements GenerationRequest<SectionGenerationResponse> {
 }

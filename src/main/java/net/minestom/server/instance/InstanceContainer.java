@@ -38,6 +38,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -286,17 +288,21 @@ public class InstanceContainer extends Instance {
 
             if (requestType == ChunkGenerationRequest.class) {
                 final Generator<ChunkGenerationRequest, ChunkGenerationResponse> generator = this.getGenerator();
-                return generator.generate(this, new ChunkGenerationRequest()).futures().get(0).thenAccept(c -> {
+                return generator.generate(this, new ChunkGenerationRequest(List.of(chunk))).futures().get(0).thenAccept(c -> {
                             c.sendChunk();
                             refreshLastBlockChangeTime();
                         })
                         .thenCompose(v -> CompletableFuture.completedFuture(chunk));
             } else if (requestType == SectionGenerationRequest.class) {
                 final Generator<SectionGenerationRequest, SectionGenerationResponse> generator = this.getGenerator();
-                return AsyncUtils.allOf(generator.generate(this, new SectionGenerationRequest()).futures())
+                return AsyncUtils.allOf(generator.generate(this, new SectionGenerationRequest(
+                        IntStream.range(getSectionMinY(), getSectionMaxY())
+                                .mapToObj(y -> new Vec(chunkX, y, chunkZ))
+                                .collect(Collectors.toList())))
+                                .futures())
                         .thenAccept(result -> {
                             for (SectionResult sectionResult : result) {
-                                chunk.setSection(sectionResult.sectionData());
+                                chunk.setSection(sectionResult.sectionData(), (int) sectionResult.location().y());
                             }
                             chunk.sendChunk();
                             refreshLastBlockChangeTime();

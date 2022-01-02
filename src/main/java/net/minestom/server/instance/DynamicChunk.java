@@ -178,13 +178,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setSection(SectionData sectionData) {
+    public void setSection(SectionData sectionData, int y) {
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
         this.lightCache.invalidate();
-        final Section section = getSection(sectionData.y());
+        final Section section = getSection(y);
         section.setBiomePalette(sectionData.biomePalette());
-        sectionData.blockCache().apply(this, sectionData.y());
+        sectionData.blockCache().apply(this, y);
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {
