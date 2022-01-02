@@ -92,7 +92,7 @@ public class PacketWriteReadTest {
                         new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
                             "minecraft:torch",
                             1,
-                            1,
+                            2,
                             "",
                             List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
                                     new Ingredient(List.of(ItemStack.of(Material.STICK)))),
