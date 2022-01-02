@@ -4,10 +4,10 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Recipe {
-    protected final RecipeType recipeType;
+    protected final Type recipeType;
     protected final String recipeId;
 
-    protected Recipe(@NotNull RecipeType recipeType, @NotNull String recipeId) {
+    protected Recipe(@NotNull Type recipeType, @NotNull String recipeId) {
         this.recipeType = recipeType;
         this.recipeId = recipeId;
     }
@@ -15,7 +15,7 @@ public abstract class Recipe {
     public abstract boolean shouldShow(@NotNull Player player);
 
     @NotNull
-    public RecipeType getRecipeType() {
+    public Type getRecipeType() {
         return recipeType;
     }
 
@@ -24,7 +24,7 @@ public abstract class Recipe {
         return recipeId;
     }
 
-    protected enum RecipeType {
+    public enum Type {
         SHAPELESS,
         SHAPED,
         SMELTING,

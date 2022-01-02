@@ -324,7 +324,7 @@ public class BinaryWriter extends OutputStream {
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
-
+    
     /**
      * Writes the given writeable object into this writer.
      *

@@ -20,7 +20,7 @@ public abstract class ShapelessRecipe extends Recipe {
             @Nullable List<DeclareRecipesPacket.Ingredient> ingredients,
             @NotNull ItemStack result
     ) {
-        super(RecipeType.SHAPELESS, recipeId);
+        super(Type.SHAPELESS, recipeId);
         this.group = group;
         this.ingredients = Objects.requireNonNullElseGet(ingredients, LinkedList::new);
         this.result = result;
