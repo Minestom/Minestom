@@ -1,4 +1,4 @@
-package network;
+package net.minestom.server.network;
 
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.PooledBuffers;

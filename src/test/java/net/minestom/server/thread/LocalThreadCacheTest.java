@@ -1,4 +1,4 @@
-package thread;
+package net.minestom.server.thread;
 
 import net.minestom.server.thread.MinestomThread;
 import org.junit.jupiter.api.Test;

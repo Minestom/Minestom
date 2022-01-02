@@ -1,4 +1,4 @@
-package network;
+package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.message.ChatPosition;
