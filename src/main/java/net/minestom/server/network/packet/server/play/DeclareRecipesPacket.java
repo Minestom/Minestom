@@ -7,7 +7,6 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
 
 import java.util.List;
 
@@ -84,26 +83,10 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             ingredients = List.copyOf(ingredients);
         }
 
-        private DeclaredShapedCraftingRecipe(DeclaredShapedCraftingRecipe packet) {
-            this(packet.recipeId, packet.width, packet.height, packet.group, packet.ingredients, packet.result);
-        }
-
         public DeclaredShapedCraftingRecipe(BinaryReader reader) {
-            this(read(reader));
-        }
-
-        private static DeclaredShapedCraftingRecipe read(BinaryReader reader) {
-
-            String recipeId = reader.readSizedString();
-            int width = reader.readVarInt();
-            int height = reader.readVarInt();
-            String group = reader.readSizedString();
-            List<Ingredient> ingredients = new ArrayList<>();
-            for (int slot = 0; slot < width * height; slot++) {
-                ingredients.add(new Ingredient(reader));
-            }
-            ItemStack result = reader.readItemStack();
-            return new DeclaredShapedCraftingRecipe(recipeId, width, height, group, ingredients, result);
+            this(reader.readSizedString(), reader.readVarInt(), reader.readVarInt(),
+                    reader.readSizedString(), reader.readVarIntList(Ingredient::new),
+                    reader.readItemStack());
         }
 
         @Override
