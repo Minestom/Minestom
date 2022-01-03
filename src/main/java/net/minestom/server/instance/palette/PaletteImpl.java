@@ -64,10 +64,12 @@ final class PaletteImpl implements Palette, Cloneable {
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
+        final long[] values = this.values;
         if (values.length == 0) {
             // Section is not loaded, return default value
             return 0;
         }
+        final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
 
         final int sectionIdentifier = getSectionIndex(x % dimension, y % dimension, z % dimension);
@@ -84,18 +86,19 @@ final class PaletteImpl implements Palette, Cloneable {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
         final boolean placedAir = value == 0;
+        if (!placedAir) value = getPaletteIndex(value);
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        long[] values = this.values;
         if (values.length == 0) {
             if (placedAir) {
                 // Section is empty and method is trying to place an air block, stop unnecessary computation
                 return;
             }
             // Initialize the section
-            final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-            this.values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
         }
         // Change to palette value
-        value = getPaletteIndex(value);
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         final int sectionIndex = getSectionIndex(x % dimension, y % dimension, z % dimension);
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
