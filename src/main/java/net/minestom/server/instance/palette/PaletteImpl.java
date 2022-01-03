@@ -7,6 +7,8 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 final class PaletteImpl implements Palette, Cloneable {
     private static final int[] MAGIC_MASKS;
     private static final int[] VALUES_PER_LONG;
@@ -123,6 +125,30 @@ final class PaletteImpl implements Palette, Cloneable {
             }
             values[index] = block;
         }
+    }
+
+    @Override
+    public void fill(int value) {
+        final boolean placedAir = value == 0;
+        if (!placedAir) value = getPaletteIndex(value);
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        long[] values = this.values;
+        if (values.length == 0) {
+            if (placedAir) {
+                // Section is empty and method is trying to place an air block, stop unnecessary computation
+                return;
+            }
+            // Initialize the section
+            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+        }
+
+        long block = 0;
+        for (int i = 0; i < valuesPerLong; i++) {
+            block |= (long) value << i * bitsPerEntry;
+        }
+        Arrays.fill(values, block);
+        this.count = maxSize();
     }
 
     @Override
