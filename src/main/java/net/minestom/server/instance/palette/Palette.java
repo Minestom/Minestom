@@ -25,6 +25,8 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
 
     void set(int x, int y, int z, int value);
 
+    void fill(int value);
+
     /**
      * Returns the number of entries in this palette.
      */
