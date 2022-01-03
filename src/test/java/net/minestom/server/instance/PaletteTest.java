@@ -77,6 +77,28 @@ public class PaletteTest {
         assertEquals(4, palette.get(0, 0, 3));
     }
 
+
+    @Test
+    public void fill() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            assertEquals(0, palette.size());
+            palette.set(0, 0, 0, 5);
+            assertEquals(1, palette.size());
+            assertEquals(5, palette.get(0, 0, 0));
+            palette.fill(6);
+            assertEquals(6, palette.get(0, 0, 0));
+            assertEquals(palette.maxSize(), palette.size());
+            for (int y = 0; y < palette.dimension(); y++) {
+                for (int x = 0; x < palette.dimension(); x++) {
+                    for (int z = 0; z < palette.dimension(); z++) {
+                        assertEquals(6, palette.get(x, y, z));
+                    }
+                }
+            }
+        }
+    }
+
     @Test
     public void dimension() {
         assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3, 1));
