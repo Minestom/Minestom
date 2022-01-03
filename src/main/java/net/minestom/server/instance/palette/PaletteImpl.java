@@ -3,7 +3,6 @@ package net.minestom.server.instance.palette;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -215,9 +214,9 @@ final class PaletteImpl implements Palette, Cloneable {
     private void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
         PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
-        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+        for (int y = 0; y < dimension; y++) {
+            for (int x = 0; x < dimension; x++) {
+                for (int z = 0; z < dimension; z++) {
                     palette.set(x, y, z, get(x, y, z));
                 }
             }
