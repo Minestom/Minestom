@@ -96,6 +96,16 @@ public class PaletteTest {
                     }
                 }
             }
+
+            palette.fill(0);
+            assertEquals(0, palette.size());
+            for (int y = 0; y < palette.dimension(); y++) {
+                for (int x = 0; x < palette.dimension(); x++) {
+                    for (int z = 0; z < palette.dimension(); z++) {
+                        assertEquals(0, palette.get(x, y, z));
+                    }
+                }
+            }
         }
     }
 
