@@ -68,12 +68,9 @@ final class PaletteImpl implements Palette, Cloneable {
             // Section is not loaded, return default value
             return 0;
         }
-        x %= dimension;
-        y %= dimension;
-        z %= dimension;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
 
-        final int sectionIdentifier = getSectionIndex(x, y, z);
+        final int sectionIdentifier = getSectionIndex(x % dimension, y % dimension, z % dimension);
         final int index = sectionIdentifier / valuesPerLong;
         final int bitIndex = sectionIdentifier % valuesPerLong * bitsPerEntry;
         final short value = (short) (values[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry]);
@@ -96,13 +93,10 @@ final class PaletteImpl implements Palette, Cloneable {
             final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
             this.values = new long[(size + valuesPerLong - 1) / valuesPerLong];
         }
-        x %= dimension;
-        y %= dimension;
-        z %= dimension;
         // Change to palette value
         value = getPaletteIndex(value);
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        final int sectionIndex = getSectionIndex(x, y, z);
+        final int sectionIndex = getSectionIndex(x % dimension, y % dimension, z % dimension);
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
 
