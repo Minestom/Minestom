@@ -7,6 +7,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.function.IntUnaryOperator;
 
 final class PaletteImpl implements Palette, Cloneable {
     private static final int[] MAGIC_MASKS;
@@ -174,6 +175,24 @@ final class PaletteImpl implements Palette, Cloneable {
             for (int y = 0; y < dimension; y++) {
                 for (int z = 0; z < dimension; z++) {
                     set(x, y, z, supplier.get(x, y, z));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void replace(int x, int y, int z, @NotNull IntUnaryOperator operator) {
+        // TODO optimize
+        set(x, y, z, operator.applyAsInt(get(x, y, z)));
+    }
+
+    @Override
+    public void replaceAll(@NotNull EntryFunction function) {
+        // TODO optimize
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                for (int z = 0; z < dimension; z++) {
+                    set(x, y, z, function.apply(x, y, z, get(x, y, z)));
                 }
             }
         }
