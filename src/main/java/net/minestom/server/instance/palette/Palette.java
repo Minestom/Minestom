@@ -23,9 +23,13 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
 
     int get(int x, int y, int z);
 
+    void getAll(@NotNull EntryConsumer consumer);
+
     void set(int x, int y, int z, int value);
 
     void fill(int value);
+
+    void setAll(@NotNull EntrySupplier supplier);
 
     /**
      * Returns the number of entries in this palette.
@@ -56,4 +60,14 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     int dimension();
 
     @NotNull Palette clone();
+
+    @FunctionalInterface
+    interface EntrySupplier {
+        int get(int x, int y, int z);
+    }
+
+    @FunctionalInterface
+    interface EntryConsumer {
+        void accept(int x, int y, int z, int value);
+    }
 }
