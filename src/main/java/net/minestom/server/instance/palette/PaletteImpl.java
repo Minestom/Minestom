@@ -238,9 +238,9 @@ final class PaletteImpl implements Palette, Cloneable {
     private void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
         PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
-        for (int y = 0; y < dimension; y++) {
-            for (int z = 0; z < dimension; z++) {
-                for (int x = 0; x < dimension; x++) {
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                for (int z = 0; z < dimension; z++) {
                     palette.set(x, y, z, get(x, y, z));
                 }
             }
@@ -282,16 +282,13 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     private static int validateDimension(int dimension) {
-        if(dimension <= 1) {
+        if (dimension <= 1) {
             throw new IllegalArgumentException("Dimension must be greater 1");
         }
-
         double log2 = Math.log(dimension) / Math.log(2);
-
-        if ((int) Math.ceil(log2) != (int)Math.floor(log2)) {
+        if ((int) Math.ceil(log2) != (int) Math.floor(log2)) {
             throw new IllegalArgumentException("Dimension must be a power of 2");
         }
-
         return (int) log2;
     }
 }
