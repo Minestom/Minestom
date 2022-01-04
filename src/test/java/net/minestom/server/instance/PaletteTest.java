@@ -4,6 +4,7 @@ import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -137,9 +138,20 @@ public class PaletteTest {
     public void bulkAll() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
-            palette.setAll((x, y, z) -> x + y + z + 1);
+            AtomicInteger count = new AtomicInteger();
+            palette.setAll((x, y, z) -> {
+                count.getAndIncrement();
+                return x + y + z + 1;
+            });
             assertEquals(palette.maxSize(), palette.size());
-            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 1, value));
+            assertEquals(count.get(), palette.size());
+
+            count.set(0);
+            palette.getAll((x, y, z, value) -> {
+                count.getAndIncrement();
+                assertEquals(x + y + z + 1, value);
+            });
+            assertEquals(count.get(), palette.size());
         }
     }
 
