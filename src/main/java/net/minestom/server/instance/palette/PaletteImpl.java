@@ -96,7 +96,6 @@ final class PaletteImpl implements Palette, Cloneable {
         final int bitsPerEntry = this.bitsPerEntry;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-
         final int dimensionMinus = dimension - 1;
 
         for (int i = 0; i < values.length; i++) {
@@ -106,8 +105,8 @@ final class PaletteImpl implements Palette, Cloneable {
                 final int y = index >> (dimensionBitCount << 1);
                 final int z = (index >> (dimensionBitCount)) & dimensionMinus;
                 final int x = index & dimensionMinus;
-                if(y >= dimension)
-                    return; //
+                if (y >= dimension)
+                    return; // Out of bounds
                 final int bitIndex = j * bitsPerEntry;
                 final short paletteIndex = (short) (value >> bitIndex & magicMask);
                 final int result = hasPalette ? paletteToValueList.getInt(paletteIndex) : paletteIndex;
@@ -191,13 +190,76 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
-        // TODO optimize
-        for (int y = 0; y < dimension; y++) {
-            for (int z = 0; z < dimension; z++) {
-                for (int x = 0; x < dimension; x++) {
-                    set(x, y, z, supplier.get(x, y, z));
+        long[] values = this.values;
+        int bitsPerEntry = this.bitsPerEntry;
+        int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        if (values.length == 0) {
+            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+        }
+        int magicMask = MAGIC_MASKS[bitsPerEntry];
+        final int dimensionMinus = dimension - 1;
+
+        int[] cache = new int[maxSize()];
+
+        int j = 0;
+        valueLoop:
+        for (int i = 0; i < values.length; i++) {
+            long block = values[i];
+            for (; j < valuesPerLong; j++) {
+                final int index = i * valuesPerLong + j;
+                final int y = index >> (dimensionBitCount << 1);
+                final int z = (index >> (dimensionBitCount)) & dimensionMinus;
+                final int x = index & dimensionMinus;
+                if (y >= dimension)
+                    continue; // Out of bounds
+                int value = supplier.get(x, y, z);
+                cache[index] = value;
+                final boolean placedAir = value == 0;
+                if (value != 0) {
+                    value = getPaletteIndex(value);
+                    if (bitsPerEntry != this.bitsPerEntry) {
+                        // Palette has been resized, must update the loop indexes
+                        for (int k = 0; k < j + 1; k++) { // Place previous elements from cache
+                            final int index2 = i * valuesPerLong + k;
+                            final int y2 = index2 >> (dimensionBitCount << 1);
+                            final int z2 = (index2 >> (dimensionBitCount)) & dimensionMinus;
+                            final int x2 = index2 & dimensionMinus;
+                            if (y2 >= dimension)
+                                throw new IllegalStateException("Out of bounds");
+                            set(x2, y2, z2, cache[index2]);
+                        }
+                        bitsPerEntry = this.bitsPerEntry;
+                        values = this.values;
+                        valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+                        magicMask = MAGIC_MASKS[bitsPerEntry];
+                        if (values.length == 0) {
+                            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+                        }
+                        i = (index) / valuesPerLong - 1;
+                        j = index % valuesPerLong + 1;
+                        continue valueLoop;
+                    }
+                }
+
+                final int bitIndex = j * bitsPerEntry;
+                {
+                    final long clear = MAGIC_MASKS[bitsPerEntry];
+
+                    final long oldBlock = block >> bitIndex & magicMask;
+                    if (oldBlock == value)
+                        continue; // Trying to place the same block
+                    final boolean currentAir = oldBlock == 0;
+                    final long indexClear = clear << bitIndex;
+                    block &= ~indexClear;
+                    block |= (long) value << bitIndex;
+                    if (currentAir != placedAir) {
+                        // Block count changed
+                        this.count += currentAir ? 1 : -1;
+                    }
                 }
             }
+            j = 0;
+            values[i] = block;
         }
     }
 
