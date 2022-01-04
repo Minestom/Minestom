@@ -8,7 +8,6 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.snapshot.ServerSnapshot;
-import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
