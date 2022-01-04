@@ -127,8 +127,7 @@ final class PaletteImpl implements Palette, Cloneable {
             final boolean currentAir = oldBlock == 0;
 
             final long indexClear = clear << bitIndex;
-            block |= indexClear;
-            block ^= indexClear;
+            block &= ~indexClear;
             block |= (long) value << bitIndex;
 
             if (currentAir != placedAir) {
