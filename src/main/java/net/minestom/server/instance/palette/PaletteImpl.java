@@ -82,6 +82,18 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     @Override
+    public void getAll(@NotNull EntryConsumer consumer) {
+        // TODO optimize
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                for (int z = 0; z < dimension; z++) {
+                    consumer.accept(x, y, z, get(x, y, z));
+                }
+            }
+        }
+    }
+
+    @Override
     public void set(int x, int y, int z, int value) {
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
@@ -148,6 +160,18 @@ final class PaletteImpl implements Palette, Cloneable {
         }
         Arrays.fill(values, block);
         this.count = placedAir ? 0 : maxSize();
+    }
+
+    @Override
+    public void setAll(@NotNull EntrySupplier supplier) {
+        // TODO optimize
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                for (int z = 0; z < dimension; z++) {
+                    set(x, y, z, supplier.get(x, y, z));
+                }
+            }
+        }
     }
 
     @Override
