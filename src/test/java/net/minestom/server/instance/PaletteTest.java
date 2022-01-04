@@ -1,9 +1,13 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -140,7 +144,8 @@ public class PaletteTest {
         for (Palette palette : palettes) {
             // Fill all entries
             palette.setAll((x, y, z) -> x + y + z + 1);
-            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 1, value));
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 1, value,
+                    "x: " + x + ", y: " + y + ", z: " + z + ", dimension: " + palette.dimension()));
 
             // Replacing
             palette.replaceAll((x, y, z, value) -> {
@@ -164,9 +169,13 @@ public class PaletteTest {
 
             // Fill all entries
             count.set(0);
-            palette.setAll((x, y, z) -> count.incrementAndGet());
+            Set<Point> points = new HashSet<>();
+            palette.setAll((x, y, z) -> {
+                assertTrue(points.add(new Vec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z + ", dimension " + palette.dimension());
+                return count.incrementAndGet();
+            });
             assertEquals(palette.maxSize(), palette.size());
-            assertEquals(count.get(), palette.size());
+            assertEquals(palette.size(), count.get());
 
             count.set(0);
             palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
