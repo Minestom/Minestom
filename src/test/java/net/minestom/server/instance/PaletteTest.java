@@ -139,6 +139,14 @@ public class PaletteTest {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             AtomicInteger count = new AtomicInteger();
+
+            // Ensure that the lambda is called for every entry
+            // even if the array is initialized
+            palette.getAll((x, y, z, value) -> count.getAndIncrement());
+            assertEquals(count.get(), palette.maxSize());
+
+            // Fill all entries
+            count.set(0);
             palette.setAll((x, y, z) -> {
                 count.getAndIncrement();
                 return x + y + z + 1;
