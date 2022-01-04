@@ -1,4 +1,4 @@
-package misc;
+package net.minestom.server.utils;
 
 import net.minestom.server.utils.NamespaceID;
 import org.junit.jupiter.api.Test;
