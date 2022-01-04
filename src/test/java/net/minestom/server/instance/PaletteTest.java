@@ -110,6 +110,15 @@ public class PaletteTest {
     }
 
     @Test
+    public void bulkAll() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            palette.setAll((x, y, z) -> x + y + z);
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z, value));
+        }
+    }
+
+    @Test
     public void dimension() {
         assertThrows(Exception.class, () -> Palette.newPalette(-4, 5, 3, 1));
         assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3, 1));
