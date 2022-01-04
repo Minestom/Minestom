@@ -3,6 +3,8 @@ package net.minestom.server.instance.palette;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.IntUnaryOperator;
+
 /**
  * Represents a palette used to store blocks and biomes.
  * <p>
@@ -30,6 +32,10 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     void fill(int value);
 
     void setAll(@NotNull EntrySupplier supplier);
+
+    void replace(int x, int y, int z, @NotNull IntUnaryOperator operator);
+
+    void replaceAll(@NotNull EntryFunction function);
 
     /**
      * Returns the number of entries in this palette.
@@ -69,5 +75,10 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     @FunctionalInterface
     interface EntryConsumer {
         void accept(int x, int y, int z, int value);
+    }
+
+    @FunctionalInterface
+    interface EntryFunction {
+        int apply(int x, int y, int z, int value);
     }
 }

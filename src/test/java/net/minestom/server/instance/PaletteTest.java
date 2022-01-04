@@ -154,7 +154,29 @@ public class PaletteTest {
             count.set(0);
             palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
             assertEquals(count.get(), palette.size());
+
+            // Replacing
+            count.set(0);
+            palette.replaceAll((x, y, z, value) -> {
+                assertEquals(count.incrementAndGet(), value);
+                return count.get();
+            });
+            assertEquals(count.get(), palette.size());
+
+            count.set(0);
+            palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
         }
+    }
+
+    @Test
+    public void replace() {
+        var palette = Palette.blocks();
+        palette.set(0, 0, 0, 1);
+        palette.replace(0, 0, 0, operand -> {
+            assertEquals(1, operand);
+            return 2;
+        });
+        assertEquals(2, palette.get(0, 0, 0));
     }
 
     @Test
