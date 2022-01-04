@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class PaletteSetBenchmark {
 
-    @Param({"4", "8", "16"})
+    @Param({"4", "16"})
     public int dimension;
 
     private Palette palette;
