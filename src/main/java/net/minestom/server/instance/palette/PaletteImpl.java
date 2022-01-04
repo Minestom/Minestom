@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.function.IntUnaryOperator;
 
 final class PaletteImpl implements Palette, Cloneable {
+    private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
     private static final int[] MAGIC_MASKS;
     private static final int[] VALUES_PER_LONG;
 
@@ -199,7 +200,11 @@ final class PaletteImpl implements Palette, Cloneable {
         int magicMask = MAGIC_MASKS[bitsPerEntry];
         final int dimensionMinus = dimension - 1;
 
-        int[] cache = new int[maxSize()];
+        int[] cache = WRITE_CACHE.get();
+        if (cache.length < maxSize()) {
+            cache = new int[maxSize()];
+            WRITE_CACHE.set(cache);
+        }
 
         int j = 0;
         valueLoop:
