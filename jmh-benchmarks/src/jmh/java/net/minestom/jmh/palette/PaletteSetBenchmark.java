@@ -4,9 +4,10 @@ import net.minestom.server.instance.palette.Palette;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
-@Warmup(iterations = 5, time = 1500, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 10, time = 1500, timeUnit = TimeUnit.MILLISECONDS)
+@Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 10, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -34,6 +35,16 @@ public class PaletteSetBenchmark {
                 }
             }
         }
+    }
+
+    @Benchmark
+    public void incrWriteAll() {
+        AtomicInteger value = new AtomicInteger(0);
+        palette.setAll((x, y, z) -> {
+            final int v = value.getPlain();
+            value.setPlain(v + 1);
+            return v;
+        });
     }
 
     @Benchmark
