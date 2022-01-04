@@ -24,6 +24,7 @@ final class PaletteImpl implements Palette, Cloneable {
 
     // Specific to this palette type
     private final int dimension;
+    private final int dimensionBitCount;
     private final int size;
     private final int maxBitsPerEntry;
     private final int bitsIncrement;
@@ -42,8 +43,7 @@ final class PaletteImpl implements Palette, Cloneable {
     private Int2IntOpenHashMap valueToPaletteMap;
 
     PaletteImpl(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
-        if (dimension < 1 || dimension % 2 != 0)
-            throw new IllegalArgumentException("Dimension must be positive and power of 2");
+        this.dimensionBitCount = validateDimension(dimension);
 
         this.dimension = dimension;
         this.size = dimension * dimension * dimension;
@@ -215,8 +215,8 @@ final class PaletteImpl implements Palette, Cloneable {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
         PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
         for (int y = 0; y < dimension; y++) {
-            for (int x = 0; x < dimension; x++) {
-                for (int z = 0; z < dimension; z++) {
+            for (int z = 0; z < dimension; z++) {
+                for (int x = 0; x < dimension; x++) {
                     palette.set(x, y, z, get(x, y, z));
                 }
             }
@@ -250,10 +250,24 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     int getSectionIndex(int x, int y, int z) {
-        return y << (dimension / 2) | z << (dimension / 4) | x;
+        return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {
         return 1 << bitsPerEntry;
+    }
+
+    private static int validateDimension(int dimension) {
+        if(dimension <= 0) {
+            throw new IllegalArgumentException("Dimension must be greater 0");
+        }
+
+        double log2 = Math.log(dimension) / Math.log(2);
+
+        if ((int) Math.ceil(log2) != (int)Math.floor(log2)) {
+            throw new IllegalArgumentException("Dimension must be a power of 2");
+        }
+
+        return (int) log2;
     }
 }
