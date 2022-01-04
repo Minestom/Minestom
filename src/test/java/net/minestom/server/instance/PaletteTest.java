@@ -142,23 +142,17 @@ public class PaletteTest {
 
             // Ensure that the lambda is called for every entry
             // even if the array is initialized
-            palette.getAll((x, y, z, value) -> count.getAndIncrement());
+            palette.getAll((x, y, z, value) -> count.incrementAndGet());
             assertEquals(count.get(), palette.maxSize());
 
             // Fill all entries
             count.set(0);
-            palette.setAll((x, y, z) -> {
-                count.getAndIncrement();
-                return x + y + z + 1;
-            });
+            palette.setAll((x, y, z) -> count.incrementAndGet());
             assertEquals(palette.maxSize(), palette.size());
             assertEquals(count.get(), palette.size());
 
             count.set(0);
-            palette.getAll((x, y, z, value) -> {
-                count.getAndIncrement();
-                assertEquals(x + y + z + 1, value);
-            });
+            palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
             assertEquals(count.get(), palette.size());
         }
     }
