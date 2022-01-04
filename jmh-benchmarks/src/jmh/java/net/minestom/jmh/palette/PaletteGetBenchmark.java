@@ -2,6 +2,7 @@ package net.minestom.jmh.palette;
 
 import net.minestom.server.instance.palette.Palette;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Benchmark)
-public class PaletteBenchmark {
+public class PaletteGetBenchmark {
 
     @Param({"4", "8", "16"})
     public int dimension;
@@ -21,16 +22,25 @@ public class PaletteBenchmark {
     @Setup
     public void setup() {
         palette = Palette.newPalette(dimension, 15, 4, 1);
-    }
 
-    @Benchmark
-    public void loop() {
         int value = 0;
         final int dimension = palette.dimension();
         for (int y = 0; y < dimension; y++) {
             for (int x = 0; x < dimension; x++) {
                 for (int z = 0; z < dimension; z++) {
                     palette.set(x, y, z, value++);
+                }
+            }
+        }
+    }
+
+    @Benchmark
+    public void read(Blackhole blackHole) {
+        final int dimension = palette.dimension();
+        for (int y = 0; y < dimension; y++) {
+            for (int x = 0; x < dimension; x++) {
+                for (int z = 0; z < dimension; z++) {
+                    blackHole.consume(palette.get(x, y, z));
                 }
             }
         }

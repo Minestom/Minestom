@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Benchmark)
-public class PaletteFillBenchmark {
+public class PaletteSetBenchmark {
 
     @Param({"4", "8", "16"})
     public int dimension;
@@ -24,7 +24,20 @@ public class PaletteFillBenchmark {
     }
 
     @Benchmark
-    public void loop() {
+    public void incrWrite() {
+        int value = 0;
+        final int dimension = palette.dimension();
+        for (int y = 0; y < dimension; y++) {
+            for (int x = 0; x < dimension; x++) {
+                for (int z = 0; z < dimension; z++) {
+                    palette.set(x, y, z, value++);
+                }
+            }
+        }
+    }
+
+    @Benchmark
+    public void randomWrite() {
         final int dimension = palette.dimension();
         for (int y = 0; y < dimension; y++) {
             for (int x = 0; x < dimension; x++) {
