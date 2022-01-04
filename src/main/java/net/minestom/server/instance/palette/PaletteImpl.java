@@ -217,8 +217,7 @@ final class PaletteImpl implements Palette, Cloneable {
                 final int x = index & dimensionMinus;
                 if (y >= dimension)
                     continue; // Out of bounds
-                int value = supplier.get(x, y, z);
-                cache[index] = value;
+                int value = cache[index] = supplier.get(x, y, z);
                 final boolean placedAir = value == 0;
                 if (value != 0) {
                     value = getPaletteIndex(value);
@@ -229,17 +228,12 @@ final class PaletteImpl implements Palette, Cloneable {
                             final int y2 = index2 >> (dimensionBitCount << 1);
                             final int z2 = (index2 >> (dimensionBitCount)) & dimensionMinus;
                             final int x2 = index2 & dimensionMinus;
-                            if (y2 >= dimension)
-                                throw new IllegalStateException("Out of bounds");
                             set(x2, y2, z2, cache[index2]);
                         }
                         bitsPerEntry = this.bitsPerEntry;
                         values = this.values;
                         valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
                         magicMask = MAGIC_MASKS[bitsPerEntry];
-                        if (values.length == 0) {
-                            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
-                        }
                         i = (index) / valuesPerLong - 1;
                         j = index % valuesPerLong + 1;
                         continue valueLoop;
@@ -248,13 +242,11 @@ final class PaletteImpl implements Palette, Cloneable {
 
                 final int bitIndex = j * bitsPerEntry;
                 {
-                    final long clear = MAGIC_MASKS[bitsPerEntry];
-
                     final long oldBlock = block >> bitIndex & magicMask;
                     if (oldBlock == value)
                         continue; // Trying to place the same block
                     final boolean currentAir = oldBlock == 0;
-                    final long indexClear = clear << bitIndex;
+                    final long indexClear = (long) magicMask << bitIndex;
                     block &= ~indexClear;
                     block |= (long) value << bitIndex;
                     if (currentAir != placedAir) {
