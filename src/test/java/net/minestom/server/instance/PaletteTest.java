@@ -117,15 +117,16 @@ public class PaletteTest {
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
                     for (int z = 0; z < dimension; z++) {
-                        palette.set(x, y, z, x + y + z);
+                        palette.set(x, y, z, x + y + z + 1);
                     }
                 }
             }
+            assertEquals(palette.maxSize(), palette.size());
             // Verify
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
                     for (int z = 0; z < dimension; z++) {
-                        assertEquals(x + y + z, palette.get(x, y, z));
+                        assertEquals(x + y + z + 1, palette.get(x, y, z));
                     }
                 }
             }
@@ -136,8 +137,9 @@ public class PaletteTest {
     public void bulkAll() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
-            palette.setAll((x, y, z) -> x + y + z);
-            palette.getAll((x, y, z, value) -> assertEquals(x + y + z, value));
+            palette.setAll((x, y, z) -> x + y + z + 1);
+            assertEquals(palette.maxSize(), palette.size());
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 1, value));
         }
     }
 
