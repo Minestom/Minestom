@@ -25,8 +25,8 @@ public class PaletteGetBenchmark {
 
         int value = 0;
         final int dimension = palette.dimension();
-        for (int y = 0; y < dimension; y++) {
-            for (int x = 0; x < dimension; x++) {
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
                 for (int z = 0; z < dimension; z++) {
                     palette.set(x, y, z, value++);
                 }
@@ -37,12 +37,17 @@ public class PaletteGetBenchmark {
     @Benchmark
     public void read(Blackhole blackHole) {
         final int dimension = palette.dimension();
-        for (int y = 0; y < dimension; y++) {
-            for (int x = 0; x < dimension; x++) {
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
                 for (int z = 0; z < dimension; z++) {
                     blackHole.consume(palette.get(x, y, z));
                 }
             }
         }
+    }
+
+    @Benchmark
+    public void readAll(Blackhole blackHole) {
+        palette.getAll((x, y, z, value) -> blackHole.consume(value));
     }
 }
