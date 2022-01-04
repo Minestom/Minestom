@@ -138,6 +138,23 @@ public class PaletteTest {
     public void bulkAll() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
+            // Fill all entries
+            palette.setAll((x, y, z) -> x + y + z + 1);
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 1, value));
+
+            // Replacing
+            palette.replaceAll((x, y, z, value) -> {
+                assertEquals(x + y + z + 1, value);
+                return x + y + z + 2;
+            });
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 2, value));
+        }
+    }
+
+    @Test
+    public void bulkAllOrder() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
             AtomicInteger count = new AtomicInteger();
 
             // Ensure that the lambda is called for every entry
