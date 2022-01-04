@@ -23,15 +23,20 @@ gson = "2.8.9"
 guava = "31.0.1-jre"
 jcTools = "3.3.0"
 
+# Test
+junit-jupiter = "5.8.2"
+mockito = "4.2.0"
+
 # Code Generation
 javaPoet = "1.13.0"
 
 # Demo
 jNoise = "3.0.1"
 
-# Test
-junit-jupiter = "5.8.2"
-mockito = "4.2.0"
+# JMH
+jmh = "1.34"
+
+
 
 [libraries]
 
@@ -80,6 +85,10 @@ javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet"
 
 # Demo
 jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNoise" }
+
+# JMH
+jmh-core = { group = "org.openjdk.jmh", name= "jmh-core", version.ref = "jmh" }
+jmh-annotationprocessor = { group = "org.openjdk.jmh", name= "jmh-generator-annprocess", version.ref = "jmh" }
 
 [bundles]
 
