@@ -84,12 +84,34 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void getAll(@NotNull EntryConsumer consumer) {
-        // TODO optimize
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                for (int z = 0; z < dimension; z++) {
-                    consumer.accept(x, y, z, get(x, y, z));
-                }
+        long[] values = this.values;
+        if (values.length == 0) {
+            // No values, give all 0 to make the consumer happy
+            for (int y = 0; y < dimension; y++)
+                for (int z = 0; z < dimension; z++)
+                    for (int x = 0; x < dimension; x++)
+                        consumer.accept(x, y, z, 0);
+            return;
+        }
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int magicMask = MAGIC_MASKS[bitsPerEntry];
+        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+
+        final int dimensionMinus = dimension - 1;
+
+        for (int i = 0; i < values.length; i++) {
+            final long value = values[i];
+            for (int j = 0; j < valuesPerLong; j++) {
+                final int index = i * valuesPerLong + j;
+                final int y = index >> (dimensionBitCount << 1);
+                final int z = (index >> (dimensionBitCount)) & dimensionMinus;
+                final int x = index & dimensionMinus;
+                if(y >= dimension)
+                    return; //
+                final int bitIndex = j * bitsPerEntry;
+                final short paletteIndex = (short) (value >> bitIndex & magicMask);
+                final int result = hasPalette ? paletteToValueList.getInt(paletteIndex) : paletteIndex;
+                consumer.accept(x, y, z, result);
             }
         }
     }
@@ -170,9 +192,9 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
         // TODO optimize
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                for (int z = 0; z < dimension; z++) {
+        for (int y = 0; y < dimension; y++) {
+            for (int z = 0; z < dimension; z++) {
+                for (int x = 0; x < dimension; x++) {
                     set(x, y, z, supplier.get(x, y, z));
                 }
             }
@@ -188,9 +210,9 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void replaceAll(@NotNull EntryFunction function) {
         // TODO optimize
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                for (int z = 0; z < dimension; z++) {
+        for (int y = 0; y < dimension; y++) {
+            for (int z = 0; z < dimension; z++) {
+                for (int x = 0; x < dimension; x++) {
                     set(x, y, z, function.apply(x, y, z, get(x, y, z)));
                 }
             }
@@ -261,9 +283,9 @@ final class PaletteImpl implements Palette, Cloneable {
     private void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
         PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                for (int z = 0; z < dimension; z++) {
+        for (int y = 0; y < dimension; y++) {
+            for (int z = 0; z < dimension; z++) {
+                for (int x = 0; x < dimension; x++) {
                     palette.set(x, y, z, get(x, y, z));
                 }
             }
