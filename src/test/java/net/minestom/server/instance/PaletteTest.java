@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,8 +88,8 @@ public class PaletteTest {
             palette.fill(6);
             assertEquals(6, palette.get(0, 0, 0));
             assertEquals(palette.maxSize(), palette.size());
-            for (int y = 0; y < palette.dimension(); y++) {
-                for (int x = 0; x < palette.dimension(); x++) {
+            for (int x = 0; x < palette.dimension(); x++) {
+                for (int y = 0; y < palette.dimension(); y++) {
                     for (int z = 0; z < palette.dimension(); z++) {
                         assertEquals(6, palette.get(x, y, z));
                     }
@@ -99,10 +98,34 @@ public class PaletteTest {
 
             palette.fill(0);
             assertEquals(0, palette.size());
-            for (int y = 0; y < palette.dimension(); y++) {
-                for (int x = 0; x < palette.dimension(); x++) {
+            for (int x = 0; x < palette.dimension(); x++) {
+                for (int y = 0; y < palette.dimension(); y++) {
                     for (int z = 0; z < palette.dimension(); z++) {
                         assertEquals(0, palette.get(x, y, z));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void bulk() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            final int dimension = palette.dimension();
+            // Place
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        palette.set(x, y, z, x + y + z);
+                    }
+                }
+            }
+            // Verify
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        assertEquals(x + y + z, palette.get(x, y, z));
                     }
                 }
             }
@@ -131,35 +154,10 @@ public class PaletteTest {
     }
 
     private static List<Palette> testPalettes() {
-        List<Palette> palettes = new ArrayList<>();
-        palettes.add(Palette.newPalette(2, 5, 3, 1));
-        palettes.add(Palette.newPalette(4, 5, 3, 1));
-        palettes.add(Palette.newPalette(8, 5, 3, 1));
-        palettes.add(Palette.newPalette(16, 5, 3, 1));
-        return palettes;
-    }
-
-    @Test
-    public void bulk() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
-            final int dimension = palette.dimension();
-            // Place
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    for (int z = 0; z < dimension; z++) {
-                        palette.set(x, y, z, x + y + z);
-                    }
-                }
-            }
-            // Verify
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    for (int z = 0; z < dimension; z++) {
-                        assertEquals(x + y + z, palette.get(x, y, z));
-                    }
-                }
-            }
-        }
+        return List.of(
+                Palette.newPalette(2, 5, 3, 1),
+                Palette.newPalette(4, 5, 3, 1),
+                Palette.newPalette(8, 5, 3, 1),
+                Palette.newPalette(16, 5, 3, 1));
     }
 }
