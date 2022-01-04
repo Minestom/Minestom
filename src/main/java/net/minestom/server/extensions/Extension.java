@@ -8,19 +8,13 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.Reference;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 public abstract class Extension {
     // Set by reflection
@@ -32,15 +26,6 @@ public abstract class Extension {
     // Set by reflection
     @SuppressWarnings("unused")
     private EventNode<Event> eventNode;
-
-    /**
-     * Observers that will be notified of events related to this extension.
-     * Kept as WeakReference because entities can be observers, but could become candidate to be garbage-collected while
-     * this extension holds a reference to it. A WeakReference makes sure this extension does not prevent the memory
-     * from being cleaned up.
-     */
-    protected final Set<WeakReference<IExtensionObserver>> observers = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    protected final ReferenceQueue<IExtensionObserver> observerReferenceQueue = new ReferenceQueue<>();
 
     /**
      * List of extensions that depend on this extension.
@@ -68,13 +53,6 @@ public abstract class Extension {
     public abstract void terminate();
 
     public void postTerminate() {
-
-    }
-
-    /**
-     * Called after postTerminate when reloading an extension
-     */
-    public void unload() {
 
     }
 
@@ -152,7 +130,7 @@ public abstract class Extension {
      */
     public @Nullable InputStream getPackagedResource(@NotNull String fileName) {
         try {
-            final URL url = getOrigin().getMinestomExtensionClassLoader().getResource(fileName);
+            final URL url = getOrigin().getClassLoader().getResource(fileName);
             if (url == null) {
                 getLogger().debug("Resource not found: {}", fileName);
                 return null;
@@ -206,49 +184,6 @@ public abstract class Extension {
         } catch (IOException ex) {
             getLogger().debug("Failed to save resource {}.", target, ex);
             return false;
-        }
-    }
-
-    /**
-     * Adds a new observer to this extension.
-     * Will be kept as a WeakReference.
-     *
-     * @param observer The observer to add
-     */
-    public void observe(IExtensionObserver observer) {
-        observers.add(new WeakReference<>(observer, observerReferenceQueue));
-    }
-
-    /**
-     * Calls some action on all valid observers of this extension
-     *
-     * @param action code to execute on each observer
-     */
-    public void triggerChange(Consumer<IExtensionObserver> action) {
-        for (WeakReference<IExtensionObserver> weakObserver : observers) {
-            IExtensionObserver observer = weakObserver.get();
-            if (observer != null) {
-                action.accept(observer);
-            }
-        }
-    }
-
-    /**
-     * If this extension registers code modifiers and/or mixins, are they loaded correctly?
-     */
-    public boolean areCodeModifiersAllLoadedCorrectly() {
-        return !getOrigin().hasFailedToLoadMixin() && getOrigin().getMissingCodeModifiers().isEmpty();
-    }
-
-    /**
-     * Removes all expired reference to observers
-     *
-     * @see #observers
-     */
-    public void cleanupObservers() {
-        Reference<? extends IExtensionObserver> ref;
-        while ((ref = observerReferenceQueue.poll()) != null) {
-            observers.remove(ref);
         }
     }
 

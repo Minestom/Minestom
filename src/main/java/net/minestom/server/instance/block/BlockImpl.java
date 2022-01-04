@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
@@ -29,18 +30,26 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
                 final var stateObject = (Map<String, Object>) object.get("states");
-                // Loop each state
-                var propertyEntry = new HashMap<Map<String, String>, Block>();
-                for (var stateEntry : stateObject.entrySet()) {
-                    final String query = stateEntry.getKey();
-                    final var stateOverride = (Map<String, Object>) stateEntry.getValue();
-                    final var propertyMap = BlockUtils.parseProperties(query);
-                    final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
-                            propertyMap, null, null);
-                    BLOCK_STATE_MAP.set(block.stateId(), block);
-                    propertyEntry.put(propertyMap, block);
+                // Retrieve the block states
+                {
+                    final var stateEntries = stateObject.entrySet();
+                    final int propertiesCount = stateEntries.size();
+                    Map<String, String>[] propertiesKeys = new Map[propertiesCount];
+                    Block[] blocksValues = new Block[propertiesCount];
+                    int propertiesOffset = 0;
+                    for (var stateEntry : stateEntries) {
+                        final String query = stateEntry.getKey();
+                        final var stateOverride = (Map<String, Object>) stateEntry.getValue();
+                        final var propertyMap = BlockUtils.parseProperties(query);
+                        final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
+                                propertyMap, null, null);
+                        BLOCK_STATE_MAP.set(block.stateId(), block);
+                        propertiesKeys[propertiesOffset] = propertyMap;
+                        blocksValues[propertiesOffset++] = block;
+                    }
+                    POSSIBLE_STATES.set(((Number) object.get("id")).intValue(),
+                            ArrayUtils.toMap(propertiesKeys, blocksValues, propertiesOffset));
                 }
-                POSSIBLE_STATES.set(((Number) object.get("id")).intValue(), Map.copyOf(propertyEntry));
                 // Register default state
                 final int defaultState = ((Number) object.get("defaultStateId")).intValue();
                 container.register(getState(defaultState));
@@ -119,7 +128,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return nbt != null ? tag.read(nbt) : null;
+        return tag.read(Objects.requireNonNullElse(nbt, NBTCompound.EMPTY));
     }
 
     private Map<Map<String, String>, Block> possibleProperties() {

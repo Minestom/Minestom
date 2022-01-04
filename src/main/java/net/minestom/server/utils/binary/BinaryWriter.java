@@ -221,6 +221,17 @@ public class BinaryWriter extends OutputStream {
         }
     }
 
+    public void writeVarLongArray(long[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+        writeVarInt(array.length);
+        for (long element : array) {
+            writeVarLong(element);
+        }
+    }
+
     public void writeLongArray(long[] array) {
         if (array == null) {
             writeVarInt(0);
@@ -313,7 +324,7 @@ public class BinaryWriter extends OutputStream {
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
-
+    
     /**
      * Writes the given writeable object into this writer.
      *

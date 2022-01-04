@@ -10,7 +10,7 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * Represents an immutable 3D vector.
  * <p>
- * To become record and primitive.
+ * To become a value then primitive type.
  */
 public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);

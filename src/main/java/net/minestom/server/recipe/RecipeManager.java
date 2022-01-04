@@ -12,18 +12,20 @@ public class RecipeManager {
     private DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket(List.of());
     private final Set<Recipe> recipes = new CopyOnWriteArraySet<>();
 
+    public void addRecipes(@NotNull Recipe... recipe) {
+        if (recipes.addAll(List.of(recipe))) {
+            refreshRecipesPacket();
+        }
+    }
+
     public void addRecipe(@NotNull Recipe recipe) {
         if (this.recipes.add(recipe)) {
-            // TODO add to all players
-
             refreshRecipesPacket();
         }
     }
 
     public void removeRecipe(@NotNull Recipe recipe) {
         if (this.recipes.remove(recipe)) {
-            // TODO remove to all players
-
             refreshRecipesPacket();
         }
     }
@@ -49,9 +51,7 @@ public class RecipeManager {
                                     shapelessRecipe.getRecipeId(),
                                     shapelessRecipe.getGroup(),
                                     shapelessRecipe.getIngredients(),
-                                    shapelessRecipe.getResult()
-                            )
-                    );
+                                    shapelessRecipe.getResult()));
                 }
                 case SHAPED -> {
                     ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
@@ -62,9 +62,7 @@ public class RecipeManager {
                                     shapedRecipe.getHeight(),
                                     shapedRecipe.getGroup(),
                                     shapedRecipe.getIngredients(),
-                                    shapedRecipe.getResult()
-                            )
-                    );
+                                    shapedRecipe.getResult()));
                 }
                 case SMELTING -> {
                     SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
@@ -75,9 +73,7 @@ public class RecipeManager {
                                     smeltingRecipe.getIngredient(),
                                     smeltingRecipe.getResult(),
                                     smeltingRecipe.getExperience(),
-                                    smeltingRecipe.getCookingTime()
-                            )
-                    );
+                                    smeltingRecipe.getCookingTime()));
                 }
                 case BLASTING -> {
                     BlastingRecipe blastingRecipe = (BlastingRecipe) recipe;
@@ -88,9 +84,7 @@ public class RecipeManager {
                                     blastingRecipe.getIngredient(),
                                     blastingRecipe.getResult(),
                                     blastingRecipe.getExperience(),
-                                    blastingRecipe.getCookingTime()
-                            )
-                    );
+                                    blastingRecipe.getCookingTime()));
                 }
                 case SMOKING -> {
                     SmokingRecipe smokingRecipe = (SmokingRecipe) recipe;
@@ -101,9 +95,7 @@ public class RecipeManager {
                                     smokingRecipe.getIngredient(),
                                     smokingRecipe.getResult(),
                                     smokingRecipe.getExperience(),
-                                    smokingRecipe.getCookingTime()
-                            )
-                    );
+                                    smokingRecipe.getCookingTime()));
                 }
                 case CAMPFIRE_COOKING -> {
                     CampfireCookingRecipe campfireCookingRecipe = (CampfireCookingRecipe) recipe;
@@ -114,9 +106,7 @@ public class RecipeManager {
                                     campfireCookingRecipe.getIngredient(),
                                     campfireCookingRecipe.getResult(),
                                     campfireCookingRecipe.getExperience(),
-                                    campfireCookingRecipe.getCookingTime()
-                            )
-                    );
+                                    campfireCookingRecipe.getCookingTime()));
                 }
                 case STONECUTTING -> {
                     StonecutterRecipe stonecuttingRecipe = (StonecutterRecipe) recipe;
@@ -125,9 +115,7 @@ public class RecipeManager {
                                     stonecuttingRecipe.getRecipeId(),
                                     stonecuttingRecipe.getGroup(),
                                     stonecuttingRecipe.getIngredient(),
-                                    stonecuttingRecipe.getResult()
-                            )
-                    );
+                                    stonecuttingRecipe.getResult()));
                 }
                 case SMITHING -> {
                     SmithingRecipe smithingRecipe = (SmithingRecipe) recipe;
@@ -136,14 +124,13 @@ public class RecipeManager {
                                     smithingRecipe.getRecipeId(),
                                     smithingRecipe.getBaseIngredient(),
                                     smithingRecipe.getAdditionIngredient(),
-                                    smithingRecipe.getResult()
-                            )
-                    );
+                                    smithingRecipe.getResult()));
                 }
             }
         }
 
         declareRecipesPacket = new DeclareRecipesPacket(recipesCache);
+        // TODO; refresh and update players recipes
     }
 
 }

@@ -335,14 +335,16 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             return false;
         }
 
-        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value);
+        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value, type.getSound(this));
         EventDispatcher.callCancellable(entityDamageEvent, () -> {
             // Set the last damage type since the event is not cancelled
             this.lastDamageSource = entityDamageEvent.getDamageType();
 
             float remainingDamage = entityDamageEvent.getDamage();
 
-            sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+            if (entityDamageEvent.shouldAnimate()) {
+                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+            }
 
             // Additional hearts support
             if (this instanceof Player player) {
@@ -362,7 +364,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             setHealth(getHealth() - remainingDamage);
 
             // play damage sound
-            final SoundEvent sound = type.getSound(this);
+            final SoundEvent sound = entityDamageEvent.getSound();
             if (sound != null) {
                 Source soundCategory;
                 if (this instanceof Player) {
