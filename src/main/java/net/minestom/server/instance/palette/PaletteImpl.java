@@ -258,8 +258,8 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     private static int validateDimension(int dimension) {
-        if(dimension <= 0) {
-            throw new IllegalArgumentException("Dimension must be greater 0");
+        if(dimension <= 1) {
+            throw new IllegalArgumentException("Dimension must be greater 1");
         }
 
         double log2 = Math.log(dimension) / Math.log(2);
