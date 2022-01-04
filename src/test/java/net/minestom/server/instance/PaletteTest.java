@@ -111,18 +111,46 @@ public class PaletteTest {
 
     @Test
     public void dimension() {
+        assertThrows(Exception.class, () -> Palette.newPalette(-4, 5, 3, 1));
         assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3, 1));
         assertThrows(Exception.class, () -> Palette.newPalette(1, 5, 3, 1));
         assertDoesNotThrow(() -> Palette.newPalette(2, 5, 3, 1));
         assertThrows(Exception.class, () -> Palette.newPalette(3, 5, 3, 1));
         assertDoesNotThrow(() -> Palette.newPalette(4, 5, 3, 1));
+        assertThrows(Exception.class, () -> Palette.newPalette(6, 5, 3, 1));
+        assertDoesNotThrow(() -> Palette.newPalette(16, 5, 3, 1));
     }
 
     private static List<Palette> testPalettes() {
         List<Palette> palettes = new ArrayList<>();
-        for (int i = 4; i < 16; i += 2) {
-            palettes.add(Palette.newPalette(i, 5, 3, 1));
-        }
+        palettes.add(Palette.newPalette(2, 5, 3, 1));
+        palettes.add(Palette.newPalette(4, 5, 3, 1));
+        palettes.add(Palette.newPalette(8, 5, 3, 1));
+        palettes.add(Palette.newPalette(16, 5, 3, 1));
         return palettes;
+    }
+
+    @Test
+    public void bulk() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            final int dimension = palette.dimension();
+            // Place
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        palette.set(x, y, z, x + y + z);
+                    }
+                }
+            }
+            // Verify
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        assertEquals(x + y + z, palette.get(x, y, z));
+                    }
+                }
+            }
+        }
     }
 }
