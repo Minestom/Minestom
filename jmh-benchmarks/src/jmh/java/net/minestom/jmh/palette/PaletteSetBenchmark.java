@@ -27,8 +27,8 @@ public class PaletteSetBenchmark {
     public void incrWrite() {
         int value = 0;
         final int dimension = palette.dimension();
-        for (int y = 0; y < dimension; y++) {
-            for (int x = 0; x < dimension; x++) {
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
                 for (int z = 0; z < dimension; z++) {
                     palette.set(x, y, z, value++);
                 }
@@ -37,15 +37,20 @@ public class PaletteSetBenchmark {
     }
 
     @Benchmark
-    public void randomWrite() {
+    public void constantWrite() {
         final int dimension = palette.dimension();
-        for (int y = 0; y < dimension; y++) {
-            for (int x = 0; x < dimension; x++) {
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
                 for (int z = 0; z < dimension; z++) {
                     palette.set(x, y, z, 5);
                 }
             }
         }
+    }
+
+    @Benchmark
+    public void constantWriteAll() {
+        palette.setAll((x, y, z) -> 5);
     }
 
     @Benchmark
