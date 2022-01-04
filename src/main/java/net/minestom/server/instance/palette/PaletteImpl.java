@@ -154,12 +154,17 @@ final class PaletteImpl implements Palette, Cloneable {
             this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
         }
 
-        long block = 0;
-        for (int i = 0; i < valuesPerLong; i++) {
-            block |= (long) value << i * bitsPerEntry;
+        if (placedAir) {
+            Arrays.fill(values, 0);
+            this.count = 0;
+        } else {
+            long block = 0;
+            for (int i = 0; i < valuesPerLong; i++) {
+                block |= (long) value << i * bitsPerEntry;
+            }
+            Arrays.fill(values, block);
+            this.count = maxSize();
         }
-        Arrays.fill(values, block);
-        this.count = placedAir ? 0 : maxSize();
     }
 
     @Override
