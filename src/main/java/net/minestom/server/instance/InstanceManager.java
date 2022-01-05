@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -120,7 +119,7 @@ public final class InstanceManager {
             instance.setRegistered(false);
             this.instances.remove(instance);
             var dispatcher = MinecraftServer.process().dispatcher();
-            instance.getChunks().forEach(chunk -> dispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk)));
+            instance.getChunks().forEach(dispatcher::deletePartition);
         }
     }
 
@@ -158,6 +157,6 @@ public final class InstanceManager {
         instance.setRegistered(true);
         this.instances.add(instance);
         var dispatcher = MinecraftServer.process().dispatcher();
-        instance.getChunks().forEach(chunk -> dispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk)));
+        instance.getChunks().forEach(dispatcher::createPartition);
     }
 }

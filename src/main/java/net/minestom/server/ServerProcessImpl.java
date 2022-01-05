@@ -11,6 +11,7 @@ import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -65,7 +66,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final TagManager tag;
     private final Server server;
 
-    private final ThreadDispatcher dispatcher;
+    private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
 
     private boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
@@ -205,7 +206,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ThreadDispatcher dispatcher() {
+    public @NotNull ThreadDispatcher<Chunk> dispatcher() {
         return dispatcher;
     }
 

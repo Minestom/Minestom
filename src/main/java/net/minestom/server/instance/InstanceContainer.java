@@ -20,7 +20,6 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.thread.DispatchUpdate;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -226,7 +225,7 @@ public class InstanceContainer extends Instance {
         this.chunks.remove(index);
         chunk.unload();
         var dispatcher = MinecraftServer.process().dispatcher();
-        dispatcher.signalUpdate(new DispatchUpdate.ChunkUnload(chunk));
+        dispatcher.deletePartition(chunk);
     }
 
     @Override
@@ -529,6 +528,6 @@ public class InstanceContainer extends Instance {
         final long index = ChunkUtils.getChunkIndex(chunk);
         this.chunks.put(index, chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
-        dispatcher.signalUpdate(new DispatchUpdate.ChunkLoad(chunk));
+        dispatcher.createPartition(chunk);
     }
 }
