@@ -176,6 +176,7 @@ public final class MinecraftServer {
         PacketUtils.broadcastPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
+    @ApiStatus.Experimental
     public static @UnknownNullability ServerProcess process() {
         return serverProcess;
     }
@@ -245,6 +246,14 @@ public final class MinecraftServer {
 
     public static PacketProcessor getPacketProcessor() {
         return serverProcess.packetProcessor();
+    }
+
+    public static boolean isStarted() {
+        return serverProcess.isAlive();
+    }
+
+    public static boolean isStopping() {
+        return !isStarted();
     }
 
     /**
