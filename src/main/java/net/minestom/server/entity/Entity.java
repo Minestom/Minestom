@@ -784,7 +784,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.getUpdateManager().getThreadProvider().updateElement(this, currentChunk);
+        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
     }
 
     /**
@@ -1423,7 +1423,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
-        MinecraftServer.getUpdateManager().getThreadProvider().removeElement(this);
+        MinecraftServer.process().dispatcher().removeElement(this);
         this.removed = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);

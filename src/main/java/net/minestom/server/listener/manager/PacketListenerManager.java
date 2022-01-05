@@ -1,6 +1,7 @@
 package net.minestom.server.listener.manager;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerPacketEvent;
@@ -21,11 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class PacketListenerManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+    private final ServerProcess serverProcess;
 
     private final Map<Class<? extends ClientPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
-    public PacketListenerManager() {
+    public PacketListenerManager(ServerProcess serverProcess) {
+        this.serverProcess = serverProcess;
+
         setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
         setListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
@@ -79,7 +82,7 @@ public final class PacketListenerManager {
         // TODO remove legacy
         {
             final PacketController packetController = new PacketController();
-            for (ClientPacketConsumer clientPacketConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
+            for (ClientPacketConsumer clientPacketConsumer : serverProcess.connection().getReceivePacketConsumers()) {
                 clientPacketConsumer.accept(player, packetController, packet);
             }
 
@@ -113,7 +116,7 @@ public final class PacketListenerManager {
      * @return true if the packet is not cancelled, false otherwise
      */
     public boolean processServerPacket(@NotNull ServerPacket packet, @NotNull Collection<Player> players) {
-        final List<ServerPacketConsumer> consumers = CONNECTION_MANAGER.getSendPacketConsumers();
+        final List<ServerPacketConsumer> consumers = serverProcess.connection().getSendPacketConsumers();
         if (consumers.isEmpty()) {
             return true;
         }
