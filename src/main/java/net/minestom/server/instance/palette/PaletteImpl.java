@@ -209,7 +209,6 @@ final class PaletteImpl implements Palette, Cloneable {
                 count++;
             } else {
                 cache[i] = 0;
-                count--;
             }
         }
         // Set values to final array
