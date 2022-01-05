@@ -1,7 +1,5 @@
-package process;
+package net.minestom.server;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerProcess;
 import org.junit.jupiter.api.Test;
 
 import java.net.InetSocketAddress;
