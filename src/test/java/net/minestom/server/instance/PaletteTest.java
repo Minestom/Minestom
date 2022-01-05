@@ -195,14 +195,43 @@ public class PaletteTest {
     }
 
     @Test
+    public void replaceAll() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            palette.setAll((x, y, z) -> x+y+z+1);
+            palette.replaceAll((x, y, z, value) -> {
+                assertEquals(x+y+z+1, value);
+                return x+y+z+2;
+            });
+            palette.getAll((x, y, z, value) -> assertEquals(x+y+z+2, value));
+        }
+    }
+
+    @Test
     public void replace() {
-        var palette = Palette.blocks();
-        palette.set(0, 0, 0, 1);
-        palette.replace(0, 0, 0, operand -> {
-            assertEquals(1, operand);
-            return 2;
-        });
-        assertEquals(2, palette.get(0, 0, 0));
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            palette.set(0, 0, 0, 1);
+            palette.replace(0, 0, 0, operand -> {
+                assertEquals(1, operand);
+                return 2;
+            });
+            assertEquals(2, palette.get(0, 0, 0));
+        }
+    }
+
+    @Test
+    public void replaceLoop(){
+        var palette = Palette.newPalette(2, 15, 4, 1);
+        palette.setAll((x, y, z) -> x+y+z);
+        final int dimension = palette.dimension();
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                for (int z = 0; z < dimension; z++) {
+                    palette.replace(x, y, z, value -> value + 1);
+                }
+            }
+        }
     }
 
     @Test

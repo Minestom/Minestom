@@ -7,6 +7,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
 final class PaletteImpl implements Palette, Cloneable {
@@ -191,11 +192,7 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
-        int[] cache = WRITE_CACHE.get();
-        if (cache.length < maxSize()) {
-            cache = new int[maxSize()];
-            WRITE_CACHE.set(cache);
-        }
+        int[] cache = sizeCache(maxSize());
         // Fill cache with values
         final int dimensionMinus = dimension - 1;
         int count = 0;
@@ -244,14 +241,22 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void replaceAll(@NotNull EntryFunction function) {
-        // TODO optimize
-        for (int y = 0; y < dimension; y++) {
-            for (int z = 0; z < dimension; z++) {
-                for (int x = 0; x < dimension; x++) {
-                    set(x, y, z, function.apply(x, y, z, get(x, y, z)));
-                }
-            }
-        }
+        int[] cache = sizeCache(maxSize());
+        AtomicInteger count = new AtomicInteger();
+        // Fill cache with values
+        getAll((x, y, z, value) -> {
+            final int newValue = function.apply(x, y, z, value);
+            final int index = count.getPlain();
+            count.setPlain(index + 1);
+            cache[index] = getPaletteIndex(newValue);
+        });
+        // Set values to final array
+        count.set(0);
+        setAll((x, y, z) -> {
+            final int index = count.getPlain();
+            count.setPlain(index + 1);
+            return cache[index];
+        });
     }
 
     @Override
@@ -356,6 +361,15 @@ final class PaletteImpl implements Palette, Cloneable {
 
     int getSectionIndex(int x, int y, int z) {
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
+    }
+
+    static int[] sizeCache(int size) {
+        int[] cache = WRITE_CACHE.get();
+        if (cache.length < size) {
+            cache = new int[size];
+            WRITE_CACHE.set(cache);
+        }
+        return cache;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {
