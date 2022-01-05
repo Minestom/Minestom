@@ -118,7 +118,8 @@ public final class InstanceManager {
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            MinecraftServer.getUpdateManager().signalInstanceDelete(instance);
+            var dispatcher = MinecraftServer.process().dispatcher();
+            instance.getChunks().forEach(dispatcher::deletePartition);
         }
     }
 
@@ -155,6 +156,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
-        MinecraftServer.getUpdateManager().signalInstanceCreate(instance);
+        var dispatcher = MinecraftServer.process().dispatcher();
+        instance.getChunks().forEach(dispatcher::createPartition);
     }
 }

@@ -12,7 +12,6 @@ import net.minestom.server.Viewable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -50,7 +49,6 @@ import java.util.zip.Inflater;
  * Be sure to check the implementation code.
  */
 public final class PacketUtils {
-    private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
 
     public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
@@ -118,7 +116,7 @@ public final class PacketUtils {
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
         if (players.isEmpty()) return;
-        if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players)) return;
+        if (!MinecraftServer.getPacketListenerManager().processServerPacket(packet, players)) return;
         // work out if the packet needs to be sent individually due to server-side translating
         final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
         players.forEach(player -> {
