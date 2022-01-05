@@ -72,7 +72,7 @@ public final class MinecraftServer {
     private static int maxPacketSize = 30_000;
 
     // In-Game Manager
-    private static volatile ServerProcess serverProcess = updateProcess();
+    private static volatile ServerProcess serverProcess;
 
     private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
     private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
