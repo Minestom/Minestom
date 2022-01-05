@@ -7,6 +7,7 @@ import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.event.player.*;
+import net.minestom.server.event.server.ServerTickMonitorEvent;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -25,4 +26,6 @@ public final class GlobalHandles {
     public static final ListenerHandle<InstanceChunkLoadEvent> INSTANCE_CHUNK_LOAD = EventDispatcher.getHandle(InstanceChunkLoadEvent.class);
     public static final ListenerHandle<InventoryItemChangeEvent> INVENTORY_ITEM_CHANGE_EVENT = EventDispatcher.getHandle(InventoryItemChangeEvent.class);
     public static final ListenerHandle<PlayerInventoryItemChangeEvent> PLAYER_INVENTORY_ITEM_CHANGE_EVENT = EventDispatcher.getHandle(PlayerInventoryItemChangeEvent.class);
+
+    public static final ListenerHandle<ServerTickMonitorEvent> SERVER_TICK_MONITOR_HANDLE = EventDispatcher.getHandle(ServerTickMonitorEvent.class);
 }
