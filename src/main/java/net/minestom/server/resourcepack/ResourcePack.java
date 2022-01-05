@@ -15,15 +15,7 @@ public class ResourcePack {
     private final boolean forced;
     private final Component forcedMessage;
 
-    /**
-     * @deprecated use {@link ResourcePack#optional(String, String)}.
-     */
-    @Deprecated
-    public ResourcePack(@NotNull String url, @Nullable String hash) {
-        this(url, hash, false, null);
-    }
-
-    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, Component forcedMessage) {
+    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, @Nullable Component forcedMessage) {
         this.url = url;
         // Optional, set to empty if null
         this.hash = hash == null ? "" : hash;
@@ -32,7 +24,7 @@ public class ResourcePack {
     }
 
     public static ResourcePack optional(@NotNull String url, @Nullable String hash) {
-        return new ResourcePack(url, hash);
+        return new ResourcePack(url, hash, false, null);
     }
 
     public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component forcedMessage) {
