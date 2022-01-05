@@ -128,7 +128,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return nbt != null ? tag.read(nbt) : null;
+        return tag.read(Objects.requireNonNullElse(nbt, NBTCompound.EMPTY));
     }
 
     private Map<Map<String, String>, Block> possibleProperties() {

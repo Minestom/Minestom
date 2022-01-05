@@ -496,6 +496,8 @@ public class InstanceContainer extends Instance {
                     final int neighborX = blockPosition.blockX() + offsetX;
                     final int neighborY = blockPosition.blockY() + offsetY;
                     final int neighborZ = blockPosition.blockZ() + offsetZ;
+                    if (neighborY < getDimensionType().getMinY() || neighborY > getDimensionType().getTotalHeight())
+                        continue;
                     final Chunk chunk = getChunkAt(neighborX, neighborZ);
                     if (chunk == null) continue;
 
