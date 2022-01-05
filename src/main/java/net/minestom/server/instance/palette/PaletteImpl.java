@@ -235,8 +235,9 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void replace(int x, int y, int z, @NotNull IntUnaryOperator operator) {
-        // TODO optimize
-        set(x, y, z, operator.applyAsInt(get(x, y, z)));
+        final int oldValue = get(x, y, z);
+        final int newValue = operator.applyAsInt(oldValue);
+        if (oldValue != newValue) set(x, y, z, newValue);
     }
 
     @Override
