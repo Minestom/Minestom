@@ -121,6 +121,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        if (y < minSection * CHUNK_SECTION_SIZE || y >= maxSection * CHUNK_SECTION_SIZE)
+            return Block.AIR; // Out of bounds
+
         // Verify if the block object is present
         if (condition != Condition.TYPE) {
             final Block entry = !entries.isEmpty() ?
