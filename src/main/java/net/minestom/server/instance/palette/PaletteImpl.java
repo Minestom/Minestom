@@ -265,7 +265,7 @@ final class PaletteImpl implements Palette, Cloneable {
             final int newValue = function.apply(x, y, z, value);
             final int index = count.getPlain();
             count.setPlain(index + 1);
-            cache[index] = getPaletteIndex(newValue);
+            cache[index] = newValue != value ? getPaletteIndex(newValue) : value;
         });
         // Set values to final array
         count.setPlain(0);
