@@ -66,6 +66,12 @@ public final class PFBlock implements IBlockDescription, IBlockObject {
     }
 
     @Override
+    public boolean isIntractable() {
+        // TODO: Interactability of blocks.
+        return false;
+    }
+
+    @Override
     public boolean isImpeding() {
         return block.isSolid();
     }
