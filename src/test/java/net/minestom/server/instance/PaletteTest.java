@@ -195,15 +195,30 @@ public class PaletteTest {
     }
 
     @Test
+    public void getAllPresent() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            palette.getAllPresent((x, y, z, value) -> fail("The palette should be empty"));
+            palette.set(0, 0, 1, 1);
+            palette.getAllPresent((x, y, z, value) -> {
+                assertEquals(0, x);
+                assertEquals(0, y);
+                assertEquals(1, z);
+                assertEquals(1, value);
+            });
+        }
+    }
+
+    @Test
     public void replaceAll() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
-            palette.setAll((x, y, z) -> x+y+z+1);
+            palette.setAll((x, y, z) -> x + y + z + 1);
             palette.replaceAll((x, y, z, value) -> {
-                assertEquals(x+y+z+1, value);
-                return x+y+z+2;
+                assertEquals(x + y + z + 1, value);
+                return x + y + z + 2;
             });
-            palette.getAll((x, y, z, value) -> assertEquals(x+y+z+2, value));
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 2, value));
         }
     }
 
@@ -221,9 +236,9 @@ public class PaletteTest {
     }
 
     @Test
-    public void replaceLoop(){
+    public void replaceLoop() {
         var palette = Palette.newPalette(2, 15, 4, 1);
-        palette.setAll((x, y, z) -> x+y+z);
+        palette.setAll((x, y, z) -> x + y + z);
         final int dimension = palette.dimension();
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
