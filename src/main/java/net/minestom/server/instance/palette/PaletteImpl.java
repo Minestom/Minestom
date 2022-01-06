@@ -196,11 +196,15 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
         int[] cache = sizeCache(maxSize());
-        // Fill cache with values
+        // Constants
+        final int size = this.size;
         final int dimensionMinus = dimension - 1;
+        final int dimensionBitCount = this.dimensionBitCount;
+        final int shiftedDimensionBitCount = dimensionBitCount << 1;
+        // Fill cache with values
         int count = 0;
         for (int i = 0; i < size; i++) {
-            final int y = i >> (dimensionBitCount << 1);
+            final int y = i >> shiftedDimensionBitCount;
             final int z = (i >> (dimensionBitCount)) & dimensionMinus;
             final int x = i & dimensionMinus;
             final int value = supplier.get(x, y, z);
@@ -221,15 +225,12 @@ final class PaletteImpl implements Palette, Cloneable {
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         for (int i = 0; i < values.length; i++) {
             long block = values[i];
-            for (int j = 0; j < valuesPerLong; j++) {
-                final int index = i * valuesPerLong + j;
-                if (index >= size) break;
+            final int startIndex = i * valuesPerLong;
+            final int maxIndex = startIndex + valuesPerLong > size ? size - startIndex : valuesPerLong;
+            for (int j = 0; j < maxIndex; j++) {
                 final int bitIndex = j * bitsPerEntry;
-                {
-                    final long indexClear = (long) magicMask << bitIndex;
-                    block &= ~indexClear;
-                    block |= (long) cache[index] << bitIndex;
-                }
+                block &= ~((long) magicMask << bitIndex);
+                block |= (long) cache[startIndex + j] << bitIndex;
             }
             values[i] = block;
         }
