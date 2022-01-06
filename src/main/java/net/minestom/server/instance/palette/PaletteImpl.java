@@ -98,20 +98,24 @@ final class PaletteImpl implements Palette, Cloneable {
         final int bitsPerEntry = this.bitsPerEntry;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int size = this.size;
         final int dimensionMinus = dimension - 1;
+        final int[] ids = hasPalette ? paletteToValueList.elements() : null;
+        final int dimensionBitCount = this.dimensionBitCount;
+        final int shiftedDimensionBitCount = dimensionBitCount << 1;
+
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
             final int startIndex = i * valuesPerLong;
             final int maxIndex = startIndex + valuesPerLong > size ? size - startIndex : valuesPerLong;
             for (int j = 0; j < maxIndex; j++) {
                 final int index = startIndex + j;
-                final int y = index >> (dimensionBitCount << 1);
-                final int z = (index >> (dimensionBitCount)) & dimensionMinus;
+                final int y = index >> shiftedDimensionBitCount;
+                final int z = index >> dimensionBitCount & dimensionMinus;
                 final int x = index & dimensionMinus;
                 final int bitIndex = j * bitsPerEntry;
                 final short paletteIndex = (short) (value >> bitIndex & magicMask);
-                final int result = hasPalette ? paletteToValueList.getInt(paletteIndex) : paletteIndex;
-                consumer.accept(x, y, z, result);
+                consumer.accept(x, y, z, ids != null ? ids[paletteIndex] : paletteIndex);
             }
         }
     }
