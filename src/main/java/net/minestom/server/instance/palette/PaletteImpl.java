@@ -268,7 +268,7 @@ final class PaletteImpl implements Palette, Cloneable {
             cache[index] = getPaletteIndex(newValue);
         });
         // Set values to final array
-        count.set(0);
+        count.setPlain(0);
         setAll((x, y, z) -> {
             final int index = count.getPlain();
             count.setPlain(index + 1);
