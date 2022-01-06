@@ -5,6 +5,7 @@ import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 10, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
@@ -22,16 +23,8 @@ public class PaletteGetBenchmark {
     @Setup
     public void setup() {
         palette = Palette.newPalette(dimension, 15, 4, 1);
-
-        int value = 0;
-        final int dimension = palette.dimension();
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                for (int z = 0; z < dimension; z++) {
-                    palette.set(x, y, z, value++);
-                }
-            }
-        }
+        AtomicInteger value = new AtomicInteger();
+        palette.setAll((x, y, z) -> value.getAndIncrement());
     }
 
     @Benchmark
