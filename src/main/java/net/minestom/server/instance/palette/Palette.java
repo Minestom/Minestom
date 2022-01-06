@@ -27,6 +27,8 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
 
     void getAll(@NotNull EntryConsumer consumer);
 
+    void getAllPresent(@NotNull EntryConsumer consumer);
+
     void set(int x, int y, int z, int value);
 
     void fill(int value);

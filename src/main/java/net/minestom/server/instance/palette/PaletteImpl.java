@@ -86,13 +86,24 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void getAll(@NotNull EntryConsumer consumer) {
-        long[] values = this.values;
+        getAllOptional(consumer, true);
+    }
+
+    @Override
+    public void getAllPresent(@NotNull EntryConsumer consumer) {
+        getAllOptional(consumer, false);
+    }
+
+    void getAllOptional(@NotNull EntryConsumer consumer, boolean empty) {
+        final long[] values = this.values;
         if (values.length == 0) {
-            // No values, give all 0 to make the consumer happy
-            for (int y = 0; y < dimension; y++)
-                for (int z = 0; z < dimension; z++)
-                    for (int x = 0; x < dimension; x++)
-                        consumer.accept(x, y, z, 0);
+            if (empty) {
+                // No values, give all 0 to make the consumer happy
+                for (int y = 0; y < dimension; y++)
+                    for (int z = 0; z < dimension; z++)
+                        for (int x = 0; x < dimension; x++)
+                            consumer.accept(x, y, z, 0);
+            }
             return;
         }
         final int bitsPerEntry = this.bitsPerEntry;
@@ -103,11 +114,11 @@ final class PaletteImpl implements Palette, Cloneable {
         final int[] ids = hasPalette ? paletteToValueList.elements() : null;
         final int dimensionBitCount = this.dimensionBitCount;
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
-
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
             final int startIndex = i * valuesPerLong;
             final int maxIndex = startIndex + valuesPerLong > size ? size - startIndex : valuesPerLong;
+            if (value == 0 && !empty) continue;
             for (int j = 0; j < maxIndex; j++) {
                 final int index = startIndex + j;
                 final int y = index >> shiftedDimensionBitCount;
@@ -115,7 +126,8 @@ final class PaletteImpl implements Palette, Cloneable {
                 final int x = index & dimensionMinus;
                 final int bitIndex = j * bitsPerEntry;
                 final short paletteIndex = (short) (value >> bitIndex & magicMask);
-                consumer.accept(x, y, z, ids != null ? ids[paletteIndex] : paletteIndex);
+                final int result = ids != null ? ids[paletteIndex] : paletteIndex;
+                if (result != 0 || empty) consumer.accept(x, y, z, result);
             }
         }
     }
