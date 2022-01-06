@@ -1,20 +1,17 @@
 package net.minestom.server.weather.manager;
 
-import net.minestom.server.network.netty.packet.FramedPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
-import net.minestom.server.network.packet.server.play.ChangeGameStatePacket.Reason;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.weather.Weather;
-import net.minestom.server.weather.Weather.Type;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
+import net.minestom.server.network.packet.server.play.ChangeGameStatePacket.Reason;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.weather.Weather;
+import net.minestom.server.weather.Weather.Type;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A weather manager.
@@ -87,7 +84,7 @@ public abstract class WeatherManager {
      *
      * @param packets the packets
      */
-    protected abstract void sendWeatherPackets(@NotNull Collection<FramedPacket> packets);
+    protected abstract void sendWeatherPackets(@NotNull Collection<SendablePacket> packets);
 
     /**
      * Calculates the weather packets that need to be sent to the client in order to
@@ -97,33 +94,29 @@ public abstract class WeatherManager {
      * @param newWeather the new weather
      * @return the resulting packets
      */
-    public static @NotNull Collection<FramedPacket> createWeatherPackets(@NotNull Weather oldWeather, @NotNull Weather newWeather) {
+    public static @NotNull Collection<SendablePacket> createWeatherPackets(@NotNull Weather oldWeather, @NotNull Weather newWeather) {
         if (newWeather.getType() == Type.CLEAR) {
-            return List.of(frame(new ChangeGameStatePacket(Reason.END_RAINING, 0)),
-                    frame(new ChangeGameStatePacket(Reason.RAIN_LEVEL_CHANGE, 0)),
-                    frame(new ChangeGameStatePacket(Reason.THUNDER_LEVEL_CHANGE, 0)));
+            return List.of(new ChangeGameStatePacket(Reason.END_RAINING, 0),
+                    new ChangeGameStatePacket(Reason.RAIN_LEVEL_CHANGE, 0),
+                    new ChangeGameStatePacket(Reason.THUNDER_LEVEL_CHANGE, 0));
         } else {
-            final List<FramedPacket> packets = new ArrayList<>(3);
+            final List<SendablePacket> packets = new ArrayList<>(3);
 
             if (oldWeather.getType() == Type.CLEAR) {
-                packets.add(frame(new ChangeGameStatePacket(Reason.BEGIN_RAINING, 0)));
-                packets.add(frame(new ChangeGameStatePacket(Reason.RAIN_LEVEL_CHANGE, newWeather.getRainStrength())));
-                packets.add(frame(new ChangeGameStatePacket(Reason.THUNDER_LEVEL_CHANGE, newWeather.getThunderStrength())));
+                packets.add(new ChangeGameStatePacket(Reason.BEGIN_RAINING, 0));
+                packets.add(new ChangeGameStatePacket(Reason.RAIN_LEVEL_CHANGE, newWeather.getRainStrength()));
+                packets.add(new ChangeGameStatePacket(Reason.THUNDER_LEVEL_CHANGE, newWeather.getThunderStrength()));
             } else {
                 if (!MathUtils.equals(oldWeather.getRainStrength(), newWeather.getRainStrength())) {
-                    packets.add(frame(new ChangeGameStatePacket(Reason.RAIN_LEVEL_CHANGE, newWeather.getRainStrength())));
+                    packets.add(new ChangeGameStatePacket(Reason.RAIN_LEVEL_CHANGE, newWeather.getRainStrength()));
                 }
 
                 if (!MathUtils.equals(oldWeather.getThunderStrength(), newWeather.getThunderStrength())) {
-                    packets.add(frame(new ChangeGameStatePacket(Reason.THUNDER_LEVEL_CHANGE, newWeather.getThunderStrength())));
+                    packets.add(new ChangeGameStatePacket(Reason.THUNDER_LEVEL_CHANGE, newWeather.getThunderStrength()));
                 }
             }
 
             return packets;
         }
-    }
-
-    private static FramedPacket frame(@NotNull ServerPacket serverPacket) {
-        return new FramedPacket(PacketUtils.createFramedPacket(serverPacket, false));
     }
 }

@@ -1,6 +1,16 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -30,20 +40,13 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.weather.container.ChildWeatherContainer;
+import net.minestom.server.weather.WeatherContainer;
 import net.minestom.server.weather.manager.ForwardingWeatherManager;
-import net.minestom.server.weather.manager.InstanceWeatherManager;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
-
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -55,7 +58,7 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience,  ChildWeatherContainer {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience, WeatherContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
@@ -95,7 +98,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     // Weather
-    private final ForwardingWeatherManager weatherManager = new InstanceWeatherManager(this);
+    private final ForwardingWeatherManager weatherManager = new ForwardingWeatherManager(this::getPlayers);
 
     // Adventure
     private final Pointers pointers;

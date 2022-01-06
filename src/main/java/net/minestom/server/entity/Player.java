@@ -1,5 +1,21 @@
 package net.minestom.server.entity;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
@@ -37,7 +53,18 @@ import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
-import net.minestom.server.event.player.*;
+import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
+import net.minestom.server.event.player.PlayerChunkLoadEvent;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
+import net.minestom.server.event.player.PlayerDeathEvent;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerEatEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerRespawnEvent;
+import net.minestom.server.event.player.PlayerSkinInitEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.player.PlayerStopFlyingWithElytraEvent;
+import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
@@ -55,10 +82,43 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.ActionBarPacket;
+import net.minestom.server.network.packet.server.play.CameraPacket;
+import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
+import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
+import net.minestom.server.network.packet.server.play.CloseWindowPacket;
+import net.minestom.server.network.packet.server.play.DeathCombatEventPacket;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
+import net.minestom.server.network.packet.server.play.DisconnectPacket;
+import net.minestom.server.network.packet.server.play.EffectPacket;
+import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
+import net.minestom.server.network.packet.server.play.FacePlayerPacket;
+import net.minestom.server.network.packet.server.play.HeldItemChangePacket;
+import net.minestom.server.network.packet.server.play.JoinGamePacket;
+import net.minestom.server.network.packet.server.play.KeepAlivePacket;
+import net.minestom.server.network.packet.server.play.OpenBookPacket;
+import net.minestom.server.network.packet.server.play.OpenWindowPacket;
+import net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket;
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
+import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.packet.server.play.PluginMessagePacket;
+import net.minestom.server.network.packet.server.play.ResourcePackSendPacket;
+import net.minestom.server.network.packet.server.play.RespawnPacket;
+import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
+import net.minestom.server.network.packet.server.play.SetExperiencePacket;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.SpawnPositionPacket;
+import net.minestom.server.network.packet.server.play.TagsPacket;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.packet.server.play.UnlockRecipesPacket;
+import net.minestom.server.network.packet.server.play.UpdateHealthPacket;
+import net.minestom.server.network.packet.server.play.UpdateViewPositionPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
@@ -91,14 +151,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 /**
  * Those are the major actors of the server,
@@ -311,11 +363,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setInstance(spawnInstance);
         // if the instance has some weather, give it to the player
         if ((spawnInstance.hasWeather() || MinecraftServer.getGlobalWeatherManager().getWeather().getType() != Weather.Type.CLEAR)
-                && playerConnection instanceof NettyPlayerConnection) {
-            final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-
-            for (FramedPacket packet : WeatherManager.createWeatherPackets(Weather.clear(), spawnInstance.getWeather())) {
-                nettyPlayerConnection.write(packet);
+                && playerConnection instanceof PlayerSocketConnection psc) {
+            for (SendablePacket packet : WeatherManager.createWeatherPackets(Weather.clear(), spawnInstance.getWeather())) {
+                psc.sendPacket(packet);
             }
         }
     }
@@ -598,12 +648,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (dimensionChange) sendDimension(instance.getDimensionType());
 
         // if the player doesn't have their own weather and the new/old instance did, we need to resync their weather
-        if (playerConnection instanceof NettyPlayerConnection) {
+        if (playerConnection instanceof PlayerSocketConnection psc) {
             if (!hasWeather() && ((this.instance != null && this.instance.hasWeather()) || instance.hasWeather())) {
-                final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
 
-                for (FramedPacket weatherPacket : WeatherManager.createWeatherPackets(this.getWeather(), instance.getWeather())) {
-                    nettyPlayerConnection.write(weatherPacket, true);
+                for (SendablePacket weatherPacket : WeatherManager.createWeatherPackets(this.getWeather(), instance.getWeather())) {
+                    psc.sendPacket(weatherPacket);
                 }
             }
         }

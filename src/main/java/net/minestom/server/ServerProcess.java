@@ -22,6 +22,7 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.weather.manager.GlobalWeatherManager;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
@@ -116,6 +117,11 @@ public interface ServerProcess {
      * Handles incoming packets.
      */
     @NotNull PacketListenerManager packetListener();
+
+    /**
+     * Handles global weather.
+     */
+    @NotNull GlobalWeatherManager globalWeather();
 
     /**
      * Gets the object handling the client packets processing.

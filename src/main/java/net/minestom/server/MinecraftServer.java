@@ -26,6 +26,7 @@ import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.weather.manager.GlobalWeatherManager;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -374,6 +375,10 @@ public final class MinecraftServer {
 
     public static TagManager getTagManager() {
         return serverProcess.tag();
+    }
+
+    public static GlobalWeatherManager getGlobalWeatherManager() {
+        return serverProcess.globalWeather();
     }
 
     public static Server getServer() {

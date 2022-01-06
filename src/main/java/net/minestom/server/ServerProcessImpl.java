@@ -31,6 +31,7 @@ import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.weather.manager.GlobalWeatherManager;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
@@ -64,6 +65,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
     private final TagManager tag;
+    private final GlobalWeatherManager globalWeather;
     private final Server server;
 
     private final ThreadDispatcher<Chunk> dispatcher;
@@ -94,6 +96,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
+        this.globalWeather = new GlobalWeatherManager();
         this.server = new Server(packetProcessor);
 
         this.dispatcher = ThreadDispatcher.singleThread();
@@ -196,6 +199,11 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public @NotNull GlobalWeatherManager globalWeather() {
+        return globalWeather;
+    }
+
+    @Override
     public @NotNull PacketProcessor packetProcessor() {
         return packetProcessor;
     }
@@ -287,7 +295,7 @@ final class ServerProcessImpl implements ServerProcess {
             // Keep Alive Handling
             connection().handleKeepAlive(msTime);
 
-            // Server tick (chunks/entities)
+            // Server tick (chunks/entities/weather)
             serverTick(msTime);
 
             // Flush all waiting packets
@@ -319,6 +327,9 @@ final class ServerProcessImpl implements ServerProcess {
             // Clear removed entities & update threads
             final long tickTime = System.currentTimeMillis() - tickStart;
             dispatcher().refreshThreads(tickTime);
+
+            // Tick weather
+            globalWeather().checkWeatherExpiration();
         }
     }
 }

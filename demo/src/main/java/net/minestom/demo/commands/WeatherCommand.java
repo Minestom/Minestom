@@ -1,6 +1,11 @@
-package demo.commands;
+package net.minestom.demo.commands;
 
+import java.time.Duration;
+import static net.kyori.adventure.text.Component.text;
 import net.kyori.adventure.text.event.ClickEvent;
+import static net.kyori.adventure.text.format.NamedTextColor.RED;
+import static net.minestom.server.MinecraftServer.getGlobalWeatherManager;
+import static net.minestom.server.MinecraftServer.getInstanceManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -9,18 +14,12 @@ import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.weather.Weather;
 import net.minestom.server.weather.Weather.Type;
 import net.minestom.server.weather.WeatherContainer;
 import net.minestom.server.weather.manager.GlobalWeatherManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.RED;
-import static net.minestom.server.MinecraftServer.getGlobalWeatherManager;
-import static net.minestom.server.MinecraftServer.getInstanceManager;
 
 public class WeatherCommand extends Command {
     // weather
@@ -129,13 +128,13 @@ public class WeatherCommand extends Command {
         if (container == null) {
             sender.sendMessage(text("Could not find the weather container!", RED));
         } else {
-            UpdateOption time = context.get(length);
+            Duration time = context.get(length);
 
             Weather weather = Weather.builder()
                     .type(context.get(type))
                     .rainStrength(context.get(rainStrength))
                     .thunderStrength(context.get(thunderStrength))
-                    .length(time.getTimeUnit().toMilliseconds(time.getValue()))
+                    .length(time)
                     .build();
 
             container.setWeather(weather);

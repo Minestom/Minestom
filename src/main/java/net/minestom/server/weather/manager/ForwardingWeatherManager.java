@@ -1,14 +1,13 @@
 package net.minestom.server.weather.manager;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.netty.packet.FramedPacket;
-import net.minestom.server.weather.Weather;
-import net.minestom.server.weather.WeatherContainer;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Supplier;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.weather.Weather;
+import net.minestom.server.weather.WeatherContainer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A weather manager that either has a weather or has the weather of it's parent.
@@ -68,7 +67,7 @@ public class ForwardingWeatherManager extends WeatherManager {
     }
 
     @Override
-    protected void sendWeatherPackets(@NotNull Collection<FramedPacket> packets) {
+    protected void sendWeatherPackets(@NotNull Collection<SendablePacket> packets) {
         if (!packets.isEmpty()) {
             for (WeatherContainer weatherContainer : this.children.get()) {
                 weatherContainer.getWeatherManager().sendWeatherPackets(packets);

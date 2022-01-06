@@ -1,15 +1,14 @@
 package net.minestom.server.weather.manager;
 
+import java.util.Collection;
+import java.util.Objects;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.weather.Weather;
 import net.minestom.server.weather.Weather.Type;
 import net.minestom.server.weather.WeatherContainer;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.Objects;
 
 /**
  * The global weather manager.
@@ -64,7 +63,7 @@ public class GlobalWeatherManager extends WeatherManager implements WeatherConta
     }
 
     @Override
-    protected void sendWeatherPackets(@NotNull Collection<FramedPacket> packets) {
+    protected void sendWeatherPackets(@NotNull Collection<SendablePacket> packets) {
         if (!packets.isEmpty()) {
             for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
                 if (!instance.hasWeather()) {
