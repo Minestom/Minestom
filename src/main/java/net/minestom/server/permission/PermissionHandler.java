@@ -3,9 +3,20 @@ package net.minestom.server.permission;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Set;
 
+/**
+ * Represents an object which can have permissions.
+ * <p>
+ * Permissions are in-memory only by default.
+ * You have however the capacity to store them persistently as the {@link Permission} object
+ * is serializer-friendly, {@link Permission#getPermissionName()} being a {@link String}
+ * and {@link Permission#getNBTData()} serializable into a string using {@link NBTCompound#toSNBT()}
+ * and deserialized back with {@link SNBTParser#parse()}.
+ */
 public interface PermissionHandler {
 
     /**
