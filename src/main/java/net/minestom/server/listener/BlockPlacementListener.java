@@ -110,7 +110,7 @@ public class BlockPlacementListener {
         final Block placedBlock = useMaterial.block();
         final Set<Entity> entities = instance.getChunkEntities(chunk);
         // Check if the player is trying to place a block in an entity
-        boolean intersect = player.getBoundingBox().intersectWithBlock(placementPosition);
+        boolean intersect = player.getBoundingBox().intersectBlock(player.getPosition(), placementPosition);
         if (!intersect && placedBlock.isSolid()) {
             // TODO push entities too close to the position
             for (Entity entity : entities) {
@@ -122,7 +122,7 @@ public class BlockPlacementListener {
                 if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
                     if (armorStandMeta.isMarker()) continue;
                 }
-                intersect = entity.getBoundingBox().intersectWithBlock(placementPosition);
+                intersect = entity.getBoundingBox().intersectBlock(entity.getPosition(), placementPosition);
                 if (intersect)
                     break;
             }

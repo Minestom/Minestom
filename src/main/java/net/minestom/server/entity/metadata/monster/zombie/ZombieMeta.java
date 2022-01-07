@@ -24,9 +24,9 @@ public class ZombieMeta extends MonsterMeta {
         }
         BoundingBox bb = this.entity.getBoundingBox();
         if (value) {
-            setBoundingBox(bb.getWidth() / 2, bb.getHeight() / 2);
+            setBoundingBox(bb.width() / 2, bb.height() / 2);
         } else {
-            setBoundingBox(bb.getWidth() * 2, bb.getHeight() * 2);
+            setBoundingBox(bb.width() * 2, bb.height() * 2);
         }
         super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }

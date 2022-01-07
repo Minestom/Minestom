@@ -11,6 +11,7 @@ import net.minestom.server.Viewable;
 import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.EntityCollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -90,6 +91,8 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     protected boolean onGround;
 
     private BoundingBox boundingBox;
+
+    public CollisionUtils.PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
 
@@ -192,7 +195,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        setBoundingBox(entityType.width(), entityType.height(), entityType.width());
+        setBoundingBox(entityType.registry().boundingBox());
 
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
@@ -569,7 +572,11 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+            final Vec sumDeltaPos = deltaPos
+                    .add(EntityCollisionUtils.calculateEntityCollisions(this).mul(new Vec(0.01, 0.01, 0.01)));
+
+            final var physicsResult = CollisionUtils.handlePhysics(this, sumDeltaPos);
+            this.lastPhysicsResult = physicsResult;
             this.onGround = physicsResult.isOnGround();
             newPosition = physicsResult.newPosition();
             newVelocity = physicsResult.newVelocity();
@@ -627,12 +634,13 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
 
     private void touchTick() {
         // TODO do not call every tick (it is pretty expensive)
-        final int minX = (int) Math.floor(boundingBox.getMinX());
-        final int maxX = (int) Math.ceil(boundingBox.getMaxX());
-        final int minY = (int) Math.floor(boundingBox.getMinY());
-        final int maxY = (int) Math.ceil(boundingBox.getMaxY());
-        final int minZ = (int) Math.floor(boundingBox.getMinZ());
-        final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
+        final Pos position = this.position;
+        final int minX = (int) Math.floor(boundingBox.minX() + position.x());
+        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
+        final int minY = (int) Math.floor(boundingBox.minY() + position.y());
+        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y());
+        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z());
+        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z());
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
@@ -645,7 +653,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
                         // checks that we are actually in the block, and not just here because of a rounding error
-                        if (boundingBox.intersectWithBlock(x, y, z)) {
+                        if (boundingBox.intersectBlock(position, x, y, z)) {
                             // TODO: replace with check with custom block bounding box
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
@@ -753,12 +761,12 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
-     * @param x the bounding box X size
-     * @param y the bounding box Y size
-     * @param z the bounding box Z size
+     * @param width  the bounding box X size
+     * @param height the bounding box Y size
+     * @param depth  the bounding box Z size
      */
-    public void setBoundingBox(double x, double y, double z) {
-        this.boundingBox = new BoundingBox(this, x, y, z);
+    public void setBoundingBox(double width, double height, double depth) {
+        this.boundingBox = new BoundingBox(width, height, depth, BoundingBox.BoundingBoxType.ENTITY);
     }
 
     /**
@@ -1314,7 +1322,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      *
      * @param newPosition the new position
      */
-    private void refreshCoordinate(Point newPosition) {
+    protected void refreshCoordinate(Point newPosition) {
         // Passengers update
         final Set<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
@@ -1355,12 +1363,12 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     /**
      * Gets the entity eye height.
      * <p>
-     * Default to {@link BoundingBox#getHeight()}x0.85
+     * Default to {@link BoundingBox#height()}x0.85
      *
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return boundingBox.getHeight() * 0.85;
+        return boundingBox.height() * 0.85;
     }
 
     /**
@@ -1633,7 +1641,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         Vec end = start.add(position.direction().mul(range));
 
         List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e)).toList();
+                .filter(e -> e != this && e.boundingBox.intersectPoint(start, end) && predicate.test(e)).toList();
         if (nearby.isEmpty()) {
             return null;
         }

@@ -203,12 +203,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.getWidth(),
+            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
-                        if (expandedBoundingBox.intersect(itemBoundingBox)) {
+
+                        if (expandedBoundingBox.intersectEntity(position, itemEntity)) {
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                             EventDispatcher.callCancellable(pickupItemEvent, () -> {
                                 final ItemStack item = itemEntity.getItemStack();

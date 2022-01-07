@@ -1,5 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -7,9 +10,6 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -172,9 +172,8 @@ public class EntityProjectile extends Entity {
             if (getAliveTicks() < 3) {
                 continue;
             }
-            final Pos finalPos = pos;
             Optional<Entity> victimOptional = entities.stream()
-                    .filter(entity -> entity.getBoundingBox().intersect(finalPos))
+                    .filter(entity -> getBoundingBox().intersectEntity(getPosition(), entity))
                     .findAny();
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
