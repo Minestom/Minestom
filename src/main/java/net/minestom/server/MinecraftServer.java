@@ -17,6 +17,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.permission.PermissionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
@@ -246,6 +247,14 @@ public final class MinecraftServer {
 
     public static PacketProcessor getPacketProcessor() {
         return serverProcess.packetProcessor();
+    }
+
+    public static PermissionManager getPermissionManager() {
+        return serverProcess.permissionManager();
+    }
+
+    public static void setPermissionManager(PermissionManager permissionManager) {
+        serverProcess.permissionManager(permissionManager);
     }
 
     public static boolean isStarted() {

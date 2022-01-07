@@ -22,6 +22,8 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.network.socket.Worker;
+import net.minestom.server.permission.PermissionManager;
+import net.minestom.server.permission.PermissionManagerImpl;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
@@ -66,6 +68,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final TagManager tag;
     private final Server server;
 
+    private PermissionManager permissionManager;
+
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
 
@@ -95,6 +99,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
         this.server = new Server(packetProcessor);
+        this.permissionManager = new PermissionManagerImpl();
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
@@ -213,6 +218,16 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull Ticker ticker() {
         return ticker;
+    }
+
+    @Override
+    public @NotNull PermissionManager permissionManager() {
+        return permissionManager;
+    }
+
+    @Override
+    public void permissionManager(PermissionManager permissionManager) {
+        this.permissionManager = permissionManager;
     }
 
     @Override

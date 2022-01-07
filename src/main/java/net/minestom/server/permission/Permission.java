@@ -17,7 +17,20 @@ import java.util.Objects;
 public class Permission {
 
     private final String permissionName;
+    private final PermissionDefault permissionDefault;
     private final NBTCompound data;
+
+    /**
+     * Creates a new permission object with optional permission default and optional data
+     * @param permissionName    the name of permission
+     * @param permissionDefault the default behaviour of permission
+     * @param data              the optional data of the permission
+     */
+    public Permission(@NotNull String permissionName, @Nullable PermissionDefault permissionDefault, @Nullable NBTCompound data) {
+        this.permissionName = permissionName;
+        this.permissionDefault = Objects.requireNonNullElse(permissionDefault, PermissionDefault.TRUE);
+        this.data = data;
+    }
 
     /**
      * Creates a new permission object with optional data.
@@ -26,8 +39,17 @@ public class Permission {
      * @param data           the optional data of the permission
      */
     public Permission(@NotNull String permissionName, @Nullable NBTCompound data) {
-        this.permissionName = permissionName;
-        this.data = data;
+        this(permissionName, null, data);
+    }
+
+    /**
+     * Creates a new permission object with optional permission default
+     *
+     * @param permissionName    the name of permission
+     * @param permissionDefault the default behaviour of permission
+     */
+    public Permission(@NotNull String permissionName, @Nullable PermissionDefault permissionDefault) {
+        this(permissionName, permissionDefault, null);
     }
 
     /**
@@ -36,7 +58,7 @@ public class Permission {
      * @param permissionName the name of the permission
      */
     public Permission(@NotNull String permissionName) {
-        this(permissionName, null);
+        this(permissionName, null, null);
     }
 
     /**
@@ -57,6 +79,16 @@ public class Permission {
     @Nullable
     public NBTCompound getNBTData() {
         return data;
+    }
+
+    /**
+     * Gets the permission default
+     *
+     * @return the default permission behaviour
+     */
+    @NotNull
+    public PermissionDefault getPermissionDefault() {
+        return permissionDefault;
     }
 
     @Override

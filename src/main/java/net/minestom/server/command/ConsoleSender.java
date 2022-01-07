@@ -23,7 +23,6 @@ public class ConsoleSender implements CommandSender {
     private static final PlainTextComponentSerializer PLAIN_SERIALIZER = PlainTextComponentSerializer.plainText();
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleSender.class);
 
-    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
     private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
 
     @Override
@@ -35,12 +34,6 @@ public class ConsoleSender implements CommandSender {
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         // we don't use the serializer here as we just need the plain text of the message
         this.sendMessage(PLAIN_SERIALIZER.serialize(message));
-    }
-
-    @NotNull
-    @Override
-    public Set<Permission> getAllPermissions() {
-        return permissions;
     }
 
     @Override

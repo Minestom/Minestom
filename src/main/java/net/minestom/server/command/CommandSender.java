@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.tag.TagHandler;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
-public interface CommandSender extends PermissionHandler, Audience, TagHandler {
+public interface CommandSender extends Audience, TagHandler, PermissionHandler {
 
     /**
      * Sends a raw string message.
@@ -80,5 +81,10 @@ public interface CommandSender extends PermissionHandler, Audience, TagHandler {
     @Deprecated
     default ConsoleSender asConsole() {
         throw new ClassCastException("CommandSender is not the ConsoleSender");
+    }
+
+    @Override
+    default boolean hasPermission(String permission) {
+        return MinecraftServer.getPermissionManager().verify(this, permission);
     }
 }

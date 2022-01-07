@@ -17,6 +17,7 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.permission.PermissionManager;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageManager;
@@ -139,6 +140,16 @@ public interface ServerProcess {
      */
     @NotNull Ticker ticker();
 
+    /**
+     * Manage permissions
+     */
+    @NotNull PermissionManager permissionManager();
+
+    /**
+     * Sets permission manager
+     */
+    void permissionManager(PermissionManager permissionManager);
+
     void start(@NotNull SocketAddress socketAddress);
 
     void stop();
@@ -155,4 +166,5 @@ public interface ServerProcess {
 
     @Deprecated
     @NotNull DataManager data();
+
 }
