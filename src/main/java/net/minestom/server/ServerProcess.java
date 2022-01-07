@@ -145,11 +145,6 @@ public interface ServerProcess {
      */
     @NotNull PermissionManager permissionManager();
 
-    /**
-     * Sets permission manager
-     */
-    void permissionManager(PermissionManager permissionManager);
-
     void start(@NotNull SocketAddress socketAddress);
 
     void stop();

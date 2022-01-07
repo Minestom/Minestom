@@ -23,7 +23,6 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.permission.PermissionManager;
-import net.minestom.server.permission.PermissionManagerImpl;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
@@ -42,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
     private final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
@@ -67,8 +67,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final BossBarManager bossBar;
     private final TagManager tag;
     private final Server server;
-
-    private PermissionManager permissionManager;
+    private final PermissionManager permissionManager;
 
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
@@ -99,7 +98,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
         this.server = new Server(packetProcessor);
-        this.permissionManager = new PermissionManagerImpl();
+        this.permissionManager = new PermissionManager();
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
@@ -223,11 +222,6 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull PermissionManager permissionManager() {
         return permissionManager;
-    }
-
-    @Override
-    public void permissionManager(PermissionManager permissionManager) {
-        this.permissionManager = permissionManager;
     }
 
     @Override

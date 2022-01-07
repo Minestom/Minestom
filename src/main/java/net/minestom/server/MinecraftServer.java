@@ -253,10 +253,6 @@ public final class MinecraftServer {
         return serverProcess.permissionManager();
     }
 
-    public static void setPermissionManager(PermissionManager permissionManager) {
-        serverProcess.permissionManager(permissionManager);
-    }
-
     public static boolean isStarted() {
         return serverProcess.isAlive();
     }
