@@ -1,11 +1,12 @@
 package net.minestom.server.permission;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 
 import java.util.function.Predicate;
 
-public class PermissionDefault implements Predicate<CommandSender> {
+public class PermissionDefault implements Predicate<PermissionHandler> {
 
     public static final PermissionDefault TRUE = new PermissionDefault(it -> true);
 
@@ -26,17 +27,17 @@ public class PermissionDefault implements Predicate<CommandSender> {
     }
 
     private static PermissionDefault newOP(int level) {
-        return new PermissionDefault(sender -> !(sender instanceof Player) || ((Player) sender).getPermissionLevel() >= level);
+        return new PermissionDefault(permissionHandler -> permissionHandler instanceof Entity && (!(permissionHandler instanceof Player) || ((Player) permissionHandler).getPermissionLevel() >= level));
     }
 
-    private final Predicate<CommandSender> permissionPredicate;
+    private final Predicate<PermissionHandler> permissionPredicate;
 
-    private PermissionDefault(Predicate<CommandSender> permissionPredicate) {
+    private PermissionDefault(Predicate<PermissionHandler> permissionPredicate) {
         this.permissionPredicate = permissionPredicate;
     }
 
     @Override
-    public boolean test(CommandSender sender) {
-        return permissionPredicate.test(sender);
+    public boolean test(PermissionHandler permissionHandler) {
+        return permissionPredicate.test(permissionHandler);
     }
 }

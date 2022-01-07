@@ -22,7 +22,13 @@ import java.util.Set;
  */
 public class ServerSender implements CommandSender {
 
+    private final Set<Permission> permissions = Collections.unmodifiableSet(new HashSet<>());
     private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+
+    @Override
+    public @NotNull Set<Permission> getAllPermissions() {
+        return permissions;
+    }
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
@@ -33,4 +39,5 @@ public class ServerSender implements CommandSender {
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
     }
+
 }

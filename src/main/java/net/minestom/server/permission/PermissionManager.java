@@ -1,11 +1,15 @@
 package net.minestom.server.permission;
 
-import net.minestom.server.command.CommandSender;
-
 public interface PermissionManager {
 
-    boolean verify(CommandSender sender, String permission);
+    boolean verify(PermissionHandler sender, String permission);
 
-    void registerPermission(Permission permission);
+    void registerPermission(PermissionDescriptor permission);
+
+    void unregisterPermission(String permission);
+
+    default void unregisterPermission(Permission permission) {
+        unregisterPermission(permission);
+    }
 
 }

@@ -83,8 +83,4 @@ public interface CommandSender extends Audience, TagHandler, PermissionHandler {
         throw new ClassCastException("CommandSender is not the ConsoleSender");
     }
 
-    @Override
-    default boolean hasPermission(String permission) {
-        return MinecraftServer.getPermissionManager().verify(this, permission);
-    }
 }
