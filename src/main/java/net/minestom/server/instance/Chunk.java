@@ -44,6 +44,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     protected Instance instance;
     protected final int chunkX, chunkZ;
+    protected final int minSection, maxSection;
 
     // Options
     private final boolean shouldGenerate;
@@ -64,6 +65,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
+        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
 
         final EntityTracker tracker = instance.getEntityTracker();
         this.viewers.updateTracker(toPosition(), tracker);
@@ -179,6 +182,24 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    /**
+     * Gets the lowest (inclusive) section Y available in this chunk
+     *
+     * @return the lowest (inclusive) section Y available in this chunk
+     */
+    public int getMinSection() {
+        return minSection;
+    }
+
+    /**
+     * Gets the highest (exclusive) section Y available in this chunk
+     *
+     * @return the highest (exclusive) section Y available in this chunk
+     */
+    public int getMaxSection() {
+        return maxSection;
     }
 
     /**
