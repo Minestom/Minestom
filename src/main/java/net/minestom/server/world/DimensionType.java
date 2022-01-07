@@ -209,6 +209,10 @@ public class DimensionType {
         return height;
     }
 
+    public int getMaxY() {
+        return getMinY() + getHeight();
+    }
+
     public int getLogicalHeight() {
         return this.logicalHeight;
     }
