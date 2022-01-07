@@ -118,13 +118,12 @@ final class PaletteImpl implements Palette, Cloneable {
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
-            final int startIndex = i * valuesPerLong;
-            final int maxIndex = startIndex + valuesPerLong > size ? size - startIndex : valuesPerLong;
+            int index = i * valuesPerLong;
+            final int maxIndex = Math.min(index + valuesPerLong, size);
             if (value == 0) {
                 // No values in this long, skip
                 if (consumeEmpty) {
-                    for (int j = 0; j < maxIndex; j++) {
-                        final int index = startIndex + j;
+                    for (; index < maxIndex; index++) {
                         final int y = index >> shiftedDimensionBitCount;
                         final int z = index >> dimensionBitCount & dimensionMinus;
                         final int x = index & dimensionMinus;
@@ -133,9 +132,8 @@ final class PaletteImpl implements Palette, Cloneable {
                 }
                 continue;
             }
-            for (int j = 0; j < maxIndex; j++) {
-                final int index = startIndex + j;
-                final int bitIndex = j * bitsPerEntry;
+            int bitIndex = 0;
+            for (; index < maxIndex; index++) {
                 final short paletteIndex = (short) (value >> bitIndex & magicMask);
                 if (paletteIndex != 0 || consumeEmpty) {
                     final int result = ids != null ? ids[paletteIndex] : paletteIndex;
@@ -144,6 +142,7 @@ final class PaletteImpl implements Palette, Cloneable {
                     final int x = index & dimensionMinus;
                     consumer.accept(x, y, z, result);
                 }
+                bitIndex += bitsPerEntry;
             }
         }
     }
