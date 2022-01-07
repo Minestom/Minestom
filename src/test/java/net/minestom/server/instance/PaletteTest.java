@@ -15,6 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PaletteTest {
 
     @Test
+    public void singlePlacement() {
+        var palette = Palette.blocks();
+        palette.set(0, 0, 1, 1);
+        assertEquals(1, palette.get(0, 0, 1));
+    }
+
+    @Test
     public void placement() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
