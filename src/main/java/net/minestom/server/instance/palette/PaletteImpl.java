@@ -95,10 +95,11 @@ final class PaletteImpl implements Palette, Cloneable {
         getAllOptional(consumer, false);
     }
 
-    void getAllOptional(@NotNull EntryConsumer consumer, boolean empty) {
+    void getAllOptional(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
         final long[] values = this.values;
+        final int dimension = this.dimension;
         if (values.length == 0) {
-            if (empty) {
+            if (consumeEmpty) {
                 // No values, give all 0 to make the consumer happy
                 for (int y = 0; y < dimension; y++)
                     for (int z = 0; z < dimension; z++)
@@ -119,16 +120,30 @@ final class PaletteImpl implements Palette, Cloneable {
             final long value = values[i];
             final int startIndex = i * valuesPerLong;
             final int maxIndex = startIndex + valuesPerLong > size ? size - startIndex : valuesPerLong;
-            if (value == 0 && !empty) continue;
+            if (value == 0) {
+                // No values in this long, skip
+                if (consumeEmpty) {
+                    for (int j = 0; j < maxIndex; j++) {
+                        final int index = startIndex + j;
+                        final int y = index >> shiftedDimensionBitCount;
+                        final int z = index >> dimensionBitCount & dimensionMinus;
+                        final int x = index & dimensionMinus;
+                        consumer.accept(x, y, z, 0);
+                    }
+                }
+                continue;
+            }
             for (int j = 0; j < maxIndex; j++) {
                 final int index = startIndex + j;
-                final int y = index >> shiftedDimensionBitCount;
-                final int z = index >> dimensionBitCount & dimensionMinus;
-                final int x = index & dimensionMinus;
                 final int bitIndex = j * bitsPerEntry;
                 final short paletteIndex = (short) (value >> bitIndex & magicMask);
-                final int result = ids != null ? ids[paletteIndex] : paletteIndex;
-                if (result != 0 || empty) consumer.accept(x, y, z, result);
+                if (paletteIndex != 0 || consumeEmpty) {
+                    final int result = ids != null ? ids[paletteIndex] : paletteIndex;
+                    final int y = index >> shiftedDimensionBitCount;
+                    final int z = index >> dimensionBitCount & dimensionMinus;
+                    final int x = index & dimensionMinus;
+                    consumer.accept(x, y, z, result);
+                }
             }
         }
     }
