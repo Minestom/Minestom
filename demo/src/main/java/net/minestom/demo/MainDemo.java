@@ -1,5 +1,7 @@
 package net.minestom.demo;
 
+import demo.commands.GamemodeCommand;
+import net.minestom.demo.commands.SaveCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -28,9 +30,13 @@ public class MainDemo {
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
+            player.setPermissionLevel(2);
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Pos(0, 42, 0));
         });
+
+        MinecraftServer.getCommandManager().register(new SaveCommand());
+        MinecraftServer.getCommandManager().register(new GamemodeCommand());
 
         // Start the server on port 25565
         minecraftServer.start("0.0.0.0", 25565);
