@@ -61,6 +61,7 @@ final class PaletteImpl implements Palette, Cloneable {
         this.paletteToValueList.add(0);
         this.valueToPaletteMap = new Int2IntOpenHashMap(1);
         this.valueToPaletteMap.put(0, 0);
+        this.valueToPaletteMap.defaultReturnValue(-1);
     }
 
     @Override
@@ -362,18 +363,17 @@ final class PaletteImpl implements Palette, Cloneable {
 
     private int getPaletteIndex(int value) {
         if (!hasPalette) return value;
-        final int lookup = valueToPaletteMap.getOrDefault(value, (short) -1);
-        if (lookup != -1) return lookup;
-
+        final int lastPaletteIndex = this.lastPaletteIndex;
         if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
             resize(bitsPerEntry + bitsIncrement);
             return getPaletteIndex(value);
         }
-        final int paletteIndex = lastPaletteIndex++;
+        final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
+        if (lookup != -1) return lookup;
+        this.lastPaletteIndex = lastPaletteIndex + 1;
         this.paletteToValueList.add(value);
-        this.valueToPaletteMap.put(value, paletteIndex);
-        return paletteIndex;
+        return lastPaletteIndex;
     }
 
     int getSectionIndex(int x, int y, int z) {
