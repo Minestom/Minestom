@@ -1,4 +1,4 @@
-package demo.commands;
+package net.minestom.demo.commands;
 
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
