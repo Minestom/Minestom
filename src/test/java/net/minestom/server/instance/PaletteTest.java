@@ -202,6 +202,15 @@ public class PaletteTest {
     }
 
     @Test
+    public void setAllConstant() {
+        var palettes = testPalettes();
+        for (Palette palette : palettes) {
+            palette.setAll((x, y, z) -> 1);
+            palette.getAll((x, y, z, value) -> assertEquals(1, value));
+        }
+    }
+
+    @Test
     public void getAllPresent() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
