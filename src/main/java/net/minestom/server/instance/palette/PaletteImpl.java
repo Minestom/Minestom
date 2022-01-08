@@ -87,64 +87,12 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void getAll(@NotNull EntryConsumer consumer) {
-        getAllOptional(consumer, true);
+        retrieveAll(consumer, true);
     }
 
     @Override
     public void getAllPresent(@NotNull EntryConsumer consumer) {
-        getAllOptional(consumer, false);
-    }
-
-    void getAllOptional(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
-        final long[] values = this.values;
-        final int dimension = this.dimension;
-        if (values.length == 0) {
-            if (consumeEmpty) {
-                // No values, give all 0 to make the consumer happy
-                for (int y = 0; y < dimension; y++)
-                    for (int z = 0; z < dimension; z++)
-                        for (int x = 0; x < dimension; x++)
-                            consumer.accept(x, y, z, 0);
-            }
-            return;
-        }
-        final int bitsPerEntry = this.bitsPerEntry;
-        final int magicMask = MAGIC_MASKS[bitsPerEntry];
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        final int size = this.size;
-        final int dimensionMinus = dimension - 1;
-        final int[] ids = hasPalette ? paletteToValueList.elements() : null;
-        final int dimensionBitCount = this.dimensionBitCount;
-        final int shiftedDimensionBitCount = dimensionBitCount << 1;
-        for (int i = 0; i < values.length; i++) {
-            final long value = values[i];
-            int index = i * valuesPerLong;
-            final int maxIndex = Math.min(index + valuesPerLong, size);
-            if (value == 0) {
-                // No values in this long, skip
-                if (consumeEmpty) {
-                    for (; index < maxIndex; index++) {
-                        final int y = index >> shiftedDimensionBitCount;
-                        final int z = index >> dimensionBitCount & dimensionMinus;
-                        final int x = index & dimensionMinus;
-                        consumer.accept(x, y, z, 0);
-                    }
-                }
-                continue;
-            }
-            int bitIndex = 0;
-            for (; index < maxIndex; index++) {
-                final short paletteIndex = (short) (value >> bitIndex & magicMask);
-                if (paletteIndex != 0 || consumeEmpty) {
-                    final int result = ids != null ? ids[paletteIndex] : paletteIndex;
-                    final int y = index >> shiftedDimensionBitCount;
-                    final int z = index >> dimensionBitCount & dimensionMinus;
-                    final int x = index & dimensionMinus;
-                    consumer.accept(x, y, z, result);
-                }
-                bitIndex += bitsPerEntry;
-            }
-        }
+        retrieveAll(consumer, false);
     }
 
     @Override
@@ -344,6 +292,58 @@ final class PaletteImpl implements Palette, Cloneable {
         return bitsPerEntry > maxBitsPerEntry ? 15 : bitsPerEntry;
     }
 
+    private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
+        final long[] values = this.values;
+        final int dimension = this.dimension;
+        if (values.length == 0) {
+            if (consumeEmpty) {
+                // No values, give all 0 to make the consumer happy
+                for (int y = 0; y < dimension; y++)
+                    for (int z = 0; z < dimension; z++)
+                        for (int x = 0; x < dimension; x++)
+                            consumer.accept(x, y, z, 0);
+            }
+            return;
+        }
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int magicMask = MAGIC_MASKS[bitsPerEntry];
+        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int size = this.size;
+        final int dimensionMinus = dimension - 1;
+        final int[] ids = hasPalette ? paletteToValueList.elements() : null;
+        final int dimensionBitCount = this.dimensionBitCount;
+        final int shiftedDimensionBitCount = dimensionBitCount << 1;
+        for (int i = 0; i < values.length; i++) {
+            final long value = values[i];
+            int index = i * valuesPerLong;
+            final int maxIndex = Math.min(index + valuesPerLong, size);
+            if (value == 0) {
+                // No values in this long, skip
+                if (consumeEmpty) {
+                    for (; index < maxIndex; index++) {
+                        final int y = index >> shiftedDimensionBitCount;
+                        final int z = index >> dimensionBitCount & dimensionMinus;
+                        final int x = index & dimensionMinus;
+                        consumer.accept(x, y, z, 0);
+                    }
+                }
+                continue;
+            }
+            int bitIndex = 0;
+            for (; index < maxIndex; index++) {
+                final short paletteIndex = (short) (value >> bitIndex & magicMask);
+                if (paletteIndex != 0 || consumeEmpty) {
+                    final int result = ids != null ? ids[paletteIndex] : paletteIndex;
+                    final int y = index >> shiftedDimensionBitCount;
+                    final int z = index >> dimensionBitCount & dimensionMinus;
+                    final int x = index & dimensionMinus;
+                    consumer.accept(x, y, z, result);
+                }
+                bitIndex += bitsPerEntry;
+            }
+        }
+    }
+
     private void updateAll(int[] paletteValues) {
         final int size = this.size;
         assert paletteValues.length >= size;
@@ -374,20 +374,11 @@ final class PaletteImpl implements Palette, Cloneable {
         palette.lastPaletteIndex = lastPaletteIndex;
         palette.paletteToValueList = paletteToValueList;
         palette.valueToPaletteMap = valueToPaletteMap;
-        for (int y = 0; y < dimension; y++) {
-            for (int z = 0; z < dimension; z++) {
-                for (int x = 0; x < dimension; x++) {
-                    palette.set(x, y, z, get(x, y, z));
-                }
-            }
-        }
-
+        getAll(palette::set);
         this.bitsPerEntry = palette.bitsPerEntry;
-
         this.hasPalette = palette.hasPalette;
         this.lastPaletteIndex = palette.lastPaletteIndex;
         this.count = palette.count;
-
         this.values = palette.values;
     }
 
