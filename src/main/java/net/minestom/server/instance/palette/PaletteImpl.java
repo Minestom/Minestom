@@ -141,29 +141,23 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void fill(int value) {
-        final boolean placedAir = value == 0;
-        if (!placedAir) value = getPaletteIndex(value);
+        if (value == 0) {
+            this.values = new long[0];
+            this.count = 0;
+            return;
+        }
+        value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         long[] values = this.values;
         if (values.length == 0) {
-            if (placedAir) {
-                // Section is empty and method is trying to place an air block, stop unnecessary computation
-                return;
-            }
-            // Initialize the section
             this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
         }
-        if (placedAir) {
-            this.values = new long[0];
-            this.count = 0;
-        } else {
-            long block = 0;
-            for (int i = 0; i < valuesPerLong; i++)
-                block |= (long) value << i * bitsPerEntry;
-            Arrays.fill(values, block);
-            this.count = maxSize();
-        }
+        long block = 0;
+        for (int i = 0; i < valuesPerLong; i++)
+            block |= (long) value << i * bitsPerEntry;
+        Arrays.fill(values, block);
+        this.count = maxSize();
     }
 
     @Override
