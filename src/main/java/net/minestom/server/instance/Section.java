@@ -49,8 +49,8 @@ public final class Section implements Writeable {
     }
 
     public void clear() {
-        this.blockPalette = Palette.blocks();
-        this.biomePalette = Palette.biomes();
+        this.blockPalette.fill(0);
+        this.biomePalette.fill(0);
         this.skyLight = new byte[0];
         this.blockLight = new byte[0];
     }
