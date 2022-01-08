@@ -4,7 +4,7 @@ import net.minestom.server.instance.palette.Palette;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
@@ -23,7 +23,7 @@ public class PaletteGetPresentBenchmark {
     @Setup
     public void setup() {
         palette = Palette.blocks();
-        var random = ThreadLocalRandom.current();
+        var random = new Random(18932365);
         final int dimension = palette.dimension();
         for (int y = 0; y < dimension; y++)
             for (int z = 0; z < dimension; z++)
@@ -40,5 +40,14 @@ public class PaletteGetPresentBenchmark {
     @Benchmark
     public void readAllPresent(Blackhole blackHole) {
         palette.getAllPresent((x, y, z, value) -> blackHole.consume(value));
+    }
+
+    @Benchmark
+    public void readAllPresentAlt(Blackhole blackHole) {
+        palette.getAll((x, y, z, value) -> {
+            if (value != 0) {
+                blackHole.consume(value);
+            }
+        });
     }
 }
