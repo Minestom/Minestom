@@ -269,21 +269,18 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void replaceAll(@NotNull EntryFunction function) {
         int[] cache = sizeCache(maxSize());
+        AtomicInteger arrayIndex = new AtomicInteger();
         AtomicInteger count = new AtomicInteger();
-        // Fill cache with values
         getAll((x, y, z, value) -> {
             final int newValue = function.apply(x, y, z, value);
-            final int index = count.getPlain();
-            count.setPlain(index + 1);
+            final int index = arrayIndex.getPlain();
+            arrayIndex.setPlain(index + 1);
             cache[index] = newValue != value ? getPaletteIndex(newValue) : value;
+            if (newValue != 0) count.setPlain(count.getPlain() + 1);
         });
-        // Set values to final arrayUse setAll for generation
-        count.setPlain(0);
-        setAll((x, y, z) -> {
-            final int index = count.getPlain();
-            count.setPlain(index + 1);
-            return cache[index];
-        });
+        // Update palette content
+        updateAll(cache);
+        this.count = count.getPlain();
     }
 
     @Override
