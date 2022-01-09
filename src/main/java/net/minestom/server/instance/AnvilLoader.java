@@ -88,6 +88,23 @@ public class AnvilLoader implements IChunkLoader {
             return CompletableFuture.completedFuture(null);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
+        if(fileChunk.getMinY() < instance.getDimensionType().getMinY()) {
+            throw new AnvilException(
+                    String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
+                            fileChunk.getMinY(),
+                            instance.getDimensionType().getName().asString(),
+                            instance.getDimensionType().getMinY()
+                            ));
+        }
+        if(fileChunk.getMaxY() > instance.getDimensionType().getMaxY()) {
+            throw new AnvilException(
+                    String.format("Trying to load chunk with maxY = %d, but instance dimension type (%s) has a maxY of %d",
+                            fileChunk.getMaxY(),
+                            instance.getDimensionType().getName().asString(),
+                            instance.getDimensionType().getMaxY()
+                    ));
+        }
+
         // TODO: Parallelize block, block entities and biome loading
 
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {

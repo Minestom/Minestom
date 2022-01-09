@@ -3,6 +3,7 @@ package net.minestom.server.world;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.mcdata.SizesKt;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -258,9 +259,9 @@ public class DimensionType {
         private boolean bedSafe = true;
         private String effects = "minecraft:overworld";
         private boolean piglinSafe = false;
-        private int minY = 0;
-        private int logicalHeight = 256;
-        private int height = 256;
+        private int minY = SizesKt.getVanillaMinY();
+        private int logicalHeight = SizesKt.getVanillaMaxY() - SizesKt.getVanillaMinY() + 1;
+        private int height = SizesKt.getVanillaMaxY() - SizesKt.getVanillaMinY() + 1;
         private int coordinateScale = 1;
         private NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
 
