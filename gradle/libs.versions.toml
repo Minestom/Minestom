@@ -8,7 +8,7 @@ kotlin = "1.6.10"
 hydrazine = "1.7.2"
 dependencyGetter = "v1.0.1"
 minestomData = "801b8007cf"
-hephaistos = "2.4.0"
+hephaistos = "2.4.1"
 jetbrainsAnnotations = "23.0.0"
 
 # Terminal / Logging
