@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a new instance is set for a player.
  */
-public class PlayerSpawnEvent implements PlayerEvent {
+public class PlayerSpawnEvent implements PlayerEvent, EntityInstanceEvent {
 
     private final Player player;
     private final Instance spawnInstance;
@@ -27,6 +28,11 @@ public class PlayerSpawnEvent implements PlayerEvent {
      */
     @NotNull
     public Instance getSpawnInstance() {
+        return spawnInstance;
+    }
+
+    @Override
+    public @NotNull Instance getInstance() {
         return spawnInstance;
     }
 
