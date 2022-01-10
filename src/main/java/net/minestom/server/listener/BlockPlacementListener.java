@@ -92,10 +92,11 @@ public class BlockPlacementListener {
         final Point placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
-            // Send a block change with AIR as block to keep the client in sync,
+            // Send a block change with the real block in the instance to keep the client in sync,
             // using refreshChunk results in the client not being in sync
             // after rapid invalid block placements
-            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, Block.AIR));
+            final Block block = interactedChunk.getBlock(placementPosition);
+            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, block));
             return;
         }
 
