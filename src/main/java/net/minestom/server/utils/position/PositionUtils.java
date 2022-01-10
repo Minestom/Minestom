@@ -13,11 +13,15 @@ public final class PositionUtils {
     }
 
     public static float getLookYaw(double dx, double dz) {
-        final double horizontalAngle = Math.atan2(dz, dx);
-        return (float) (horizontalAngle * (180.0 / Math.PI)) - 90;
+        final double radians = Math.atan2(dz, dx);
+        final float degrees = (float)Math.toDegrees(radians) - 90;
+        if (degrees < -180) return degrees + 360;
+        if (degrees > 180) return degrees - 360;
+        return degrees;
     }
 
     public static float getLookPitch(double dx, double dy, double dz) {
-        return (float) Math.atan2(dy, Math.max(Math.abs(dx), Math.abs(dz)));
+        final double radians = -Math.atan2(dy, Math.max(Math.abs(dx), Math.abs(dz)));
+        return (float) Math.toDegrees(radians);
     }
 }
