@@ -352,13 +352,3 @@ $(function() {
         }
     });
 });
-
-
-getURLPrefix = function(ui) {
-    return '';
-};
-
-
-getURLPrefix = function(ui) {
-    return '';
-};
