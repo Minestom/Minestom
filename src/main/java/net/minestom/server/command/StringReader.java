@@ -314,7 +314,15 @@ public final class StringReader implements FixedStringReader {
      */
     public @NotNull NamespaceID readNamespaceID() throws CommandException {
         int start = position;
-        String next = readUnquotedString();
+        while (canRead()) {
+            int peek = peek();
+            if (isValidLetter(peek) || isValidNumber(peek) || peek == '_' || peek == ':' || peek == '/') {
+                skip();
+            } else {
+                break;
+            }
+        }
+        String next = all().substring(start, position);
         try {
             return NamespaceID.from(next);
         } catch (AssertionError error) {
