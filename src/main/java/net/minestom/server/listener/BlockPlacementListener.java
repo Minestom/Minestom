@@ -95,7 +95,7 @@ public class BlockPlacementListener {
             // Send a block change with the real block in the instance to keep the client in sync,
             // using refreshChunk results in the client not being in sync
             // after rapid invalid block placements
-            final Block block = interactedChunk.getBlock(placementPosition);
+            final Block block = instance.getBlock(placementPosition);
             player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, block));
             return;
         }
