@@ -4,7 +4,7 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 
 /**
- * 8 directional rotation for signs & banners
+ * 8 directional rotation for signs and banners
  */
 final class BlockPlaceMechanicRotation8 {
     static void onPlace(Block block, PlayerBlockPlaceEvent event) {

@@ -16,7 +16,7 @@ final class BlockPlaceMechanicWater {
                 event.getInstance().setBlock(event.getPosition(), Block.WATER_CAULDRON.withProperty("level", "3"));
                 return;
             } else {
-                if (!Boolean.parseBoolean(block.getProperty("waterlogged"))) {
+                if ("false".equals(block.getProperty("waterlogged"))) {
                     event.getInstance().setBlock(event.getPosition(), block.withProperty("waterlogged", "true"));
                     return;
                 }
