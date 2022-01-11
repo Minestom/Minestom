@@ -294,17 +294,10 @@ public class CommandException extends RuntimeException {
 
     /**
      * Generates an error message that displays where the error occurred.
-     * @see FixedStringReader#generateContextMessage()
+     * @see FixedStringReader#generateContextMessage(String, int)
      */
     public @NotNull Component generateContextMessage() {
-        String prev = (position > CUTOFF_LENGTH) ?
-                ("..." + text.substring(position - CUTOFF_LENGTH, position)) :
-                text.substring(0, position);
-
-        Component read = Component.text(prev, NamedTextColor.GRAY);
-        Component error = Component.text(text.substring(position), NamedTextColor.RED, TextDecoration.UNDERLINED);
-
-        return Component.text().append(read, error, CONTEXT_HERE).build();
+        return FixedStringReader.generateContextMessage(text, position);
     }
 
     /**

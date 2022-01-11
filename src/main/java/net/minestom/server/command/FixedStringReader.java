@@ -125,6 +125,13 @@ public sealed interface FixedStringReader permits StringReader {
     }
 
     /**
+     * @see #generateContextMessage()
+     */
+    default @NotNull Component generateContextMessage() {
+        return generateContextMessage(all(), position());
+    }
+
+    /**
      * Generates a context message for this reader. The previously read text is properly formatted and cut off, and
      * the unread text is formatted. Here's an example of the output (using MiniMessage syntax) with
      * the translatable components converted to the en-US locale:<br>
@@ -132,13 +139,13 @@ public sealed interface FixedStringReader permits StringReader {
      * Position: 19<br>
      * Output: {@code &lt;gray&gt;... survival &lt;/gray&gt;&lt;red&gt;&lt;underlined&gt;creative&lt;/underlined&gt;&lt;/red&gt;&lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"}<br>
      */
-    default @NotNull Component generateContextMessage() {
-        String prev = (position() > CommandException.CUTOFF_LENGTH) ?
-                ("..." + all().substring(position() - CommandException.CUTOFF_LENGTH, position())) :
-                previouslyRead();
+    static @NotNull Component generateContextMessage(@NotNull String all, int position) {
+        String prev = (position > CommandException.CUTOFF_LENGTH) ?
+                ("..." + all.substring(position - CommandException.CUTOFF_LENGTH, position)) :
+                all.substring(0, position);
 
         Component read = Component.text(prev, NamedTextColor.GRAY);
-        Component error = Component.text(unread(), NamedTextColor.RED, TextDecoration.UNDERLINED);
+        Component error = Component.text(all.substring(position), NamedTextColor.RED, TextDecoration.UNDERLINED);
 
         return Component.text().append(read, error, CommandException.CONTEXT_HERE).build();
     }

@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -25,6 +26,20 @@ import java.util.*;
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
+
+    public static final @NotNull CommandCallback STANDARD_UNKNOWN_COMMAND_CALLBACK = (sender, command) -> {
+        sender.sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
+        sender.sendMessage(command.generateContextMessage());
+    };
+
+    public static final @NotNull CommandExecutor STANDARD_DEFAULT_EXECUTOR = (sender, context) -> {
+        sender.sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
+        if (context.getException() != null) {
+            sender.sendMessage(context.getException().generateContextMessage());
+        } else {
+            sender.sendMessage(FixedStringReader.generateContextMessage(context.getMessage(), context.getStartingPosition()));
+        }
+    };
 
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
