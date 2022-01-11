@@ -23,6 +23,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     @Override
     public @NotNull NBTCompound parse(@NotNull StringReader input) throws CommandException {
+        @SuppressWarnings("deprecation")
         NBT nbt = NBTUtils.readSNBT(input);
 
         // FIXME: Throw an exception that's more accurate (ideally once Hephaistos adds partial reading)

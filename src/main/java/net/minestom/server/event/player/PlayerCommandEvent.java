@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
@@ -12,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerCommandEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
 
     private final Player player;
-    private String command;
+    private StringReader command;
 
     private boolean cancelled;
 
-    public PlayerCommandEvent(@NotNull Player player, @NotNull String command) {
+    public PlayerCommandEvent(@NotNull Player player, @NotNull StringReader command) {
         this.player = player;
         this.command = command;
     }
@@ -27,7 +28,7 @@ public class PlayerCommandEvent implements PlayerEvent, EntityInstanceEvent, Can
      * @return the command that the player wants to execute
      */
     @NotNull
-    public String getCommand() {
+    public StringReader getCommand() {
         return command;
     }
 
@@ -36,7 +37,7 @@ public class PlayerCommandEvent implements PlayerEvent, EntityInstanceEvent, Can
      *
      * @param command the new command
      */
-    public void setCommand(@NotNull String command) {
+    public void setCommand(@NotNull StringReader command) {
         this.command = command;
     }
 

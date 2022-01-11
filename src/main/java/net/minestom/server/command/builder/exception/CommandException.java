@@ -1,7 +1,11 @@
 package net.minestom.server.command.builder.exception;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minestom.server.command.FixedStringReader;
+import net.minestom.server.command.builder.ArgumentCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +15,19 @@ import java.util.regex.Pattern;
  * This represents a basic command-related exception.
  */
 public class CommandException extends RuntimeException {
+
+    /**
+     * Represents the length after which characters will be cut off from the result of
+     * {@link #generateContextMessage()}. If there are more than CUTOFF_LENGTH characters, the extra characters will be
+     * replaced with "...".
+     */
+    public static final int CUTOFF_LENGTH = 10;
+
+    /**
+     * A static translatable component that represents the message that appears after incorrect command syntax, e.g.
+     * "/gamemode test<--[HERE]". It's automatically styled to be red and italicised.
+     */
+    public static final @NotNull Component CONTEXT_HERE = Component.translatable("command.context.here", NamedTextColor.RED, TextDecoration.ITALIC);
 
     /**
      * This represents the constant that is used for placeholders for error messages. If you want to use {@link
@@ -274,4 +291,27 @@ public class CommandException extends RuntimeException {
     public @NotNull Component getDisplayComponent(){
         return component == null ? CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent() : component;
     }
+
+    /**
+     * Generates an error message that displays where the error occurred.
+     * @see FixedStringReader#generateContextMessage()
+     */
+    public @NotNull Component generateContextMessage() {
+        String prev = (position > CUTOFF_LENGTH) ?
+                ("..." + text.substring(position - CUTOFF_LENGTH, position)) :
+                text.substring(0, position);
+
+        Component read = Component.text(prev, NamedTextColor.GRAY);
+        Component error = Component.text(text.substring(position), NamedTextColor.RED, TextDecoration.UNDERLINED);
+
+        return Component.text().append(read, error, CONTEXT_HERE).build();
+    }
+
+    /**
+     * The standard callback, which sends the sender messages generated from the exception.
+     */
+    public static @NotNull ArgumentCallback STANDARD_CALLBACK = (sender, exception) -> {
+        sender.sendMessage(exception.getDisplayComponent());
+        sender.sendMessage(exception.generateContextMessage());
+    };
 }

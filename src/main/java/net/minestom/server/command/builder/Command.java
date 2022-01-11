@@ -318,11 +318,9 @@ public class Command {
      * Can be used if you wish to still suggest the player syntaxes but want to parse things mostly by yourself.
      *
      * @param sender  the {@link CommandSender}
-     * @param context the UNCHECKED context of the command, some can be null even when unexpected
-     * @param command the raw UNCHECKED received command
+     * @param context the UNCHECKED context of the command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
-    }
+    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context) {}
 
     @ApiStatus.Experimental
     public @NotNull Set<String> getSyntaxesStrings() {

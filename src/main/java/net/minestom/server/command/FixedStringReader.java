@@ -2,49 +2,18 @@ package net.minestom.server.command;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.minestom.server.command.builder.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that provides access to a string by allowing code to "read" from it. This specific implementation is fixed,
  * so you cannot modify the string or the position of the cursor in the string. However, you can still read information
  * from it. If you want a mutable string reader implementation, see {@link StringReader}.<br>
- * Note that classes that extend this may make it mutable, but this implementation is still fixed. You can treat it as a
+ * Note that classes that implement this may make it mutable, but this implementation is still fixed. You can treat it as a
  * view of a mutable string reader.
  */
 public sealed interface FixedStringReader permits StringReader {
-
-    /**
-     * Represents the length after which characters will be cut off from the result of
-     * {@link #generateContextMessage()}. If there are more than CUTOFF_LENGTH characters, the extra characters will be
-     * replaced with "...".
-     */
-    int CUTOFF_LENGTH = 10;
-
-    /**
-     * A static style instance that represents {@link NamedTextColor#RED}. This is here so that some style instances
-     * don't have to be created each time they're used.
-     */
-    @NotNull Style RED_STYLE = Style.style(NamedTextColor.RED);
-
-    /**
-     * A static style instance that represents {@link NamedTextColor#RED} and {@link TextDecoration#UNDERLINED}. This is
-     * here so that some style instances don't have to be created each time they're used.
-     */
-    @NotNull Style RED_UNDERLINED_STYLE = Style.style(NamedTextColor.RED, TextDecoration.UNDERLINED);
-
-    /**
-     * A static style instance that represents {@link NamedTextColor#GRAY}. This is here so that gray style instances
-     * don't have to be created each time they're used.
-     */
-    @NotNull Style GRAY_STYLE = Style.style(NamedTextColor.GRAY);
-
-    /**
-     * A static translatable component that represents the message that appears after incorrect command syntax, e.g.
-     * "/gamemode test<--[HERE]". It's automatically styled to be red and italicised.
-     */
-    @NotNull Component CONTEXT_HERE = Component.translatable("command.context.here", NamedTextColor.RED, TextDecoration.ITALIC);
 
     /**
      * @return the entire string that this reader is reading
@@ -164,14 +133,14 @@ public sealed interface FixedStringReader permits StringReader {
      * Output: {@code &lt;gray&gt;... survival &lt;/gray&gt;&lt;red&gt;&lt;underlined&gt;creative&lt;/underlined&gt;&lt;/red&gt;&lt;red&gt;&lt;italic&gt;&lt;--HERE&lt;/italic&gt;&lt;/red&gt;"}<br>
      */
     default @NotNull Component generateContextMessage() {
-        String prev = (position() > CUTOFF_LENGTH) ?
-                ("..." + all().substring(position() - CUTOFF_LENGTH, position())) :
+        String prev = (position() > CommandException.CUTOFF_LENGTH) ?
+                ("..." + all().substring(position() - CommandException.CUTOFF_LENGTH, position())) :
                 previouslyRead();
 
-        Component read = Component.text(prev, GRAY_STYLE);
-        Component error = Component.text(unread(), RED_UNDERLINED_STYLE);
+        Component read = Component.text(prev, NamedTextColor.GRAY);
+        Component error = Component.text(unread(), NamedTextColor.RED, TextDecoration.UNDERLINED);
 
-        return Component.text().append(read, error, CONTEXT_HERE).build();
+        return Component.text().append(read, error, CommandException.CONTEXT_HERE).build();
     }
 
     default @NotNull String asString() {

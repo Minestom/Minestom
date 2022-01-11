@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder.exception;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.command.FixedStringReader;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,7 +40,7 @@ public class ExpandableExceptionGenerator extends ContextualExceptionGenerator {
         for (int i = 0; i < args.length; i++){
             components[i] = Component.text(String.valueOf(args[i]));
         }
-        return Component.translatable(translationKey(), FixedStringReader.RED_STYLE, components);
+        return Component.translatable(translationKey(), NamedTextColor.RED, components);
     }
 
     /**

@@ -24,6 +24,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
 
     @Override
     public @NotNull NBT parse(@NotNull StringReader input) throws CommandException {
+        @SuppressWarnings("deprecation")
         NBT nbt = NBTUtils.readSNBT(input);
 
         // FIXME: Throw an exception that's more accurate (ideally once Hephaistos adds partial reading)

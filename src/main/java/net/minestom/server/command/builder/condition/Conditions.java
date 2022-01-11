@@ -17,7 +17,7 @@ public class Conditions {
     /**
      * @return true if the sender is a player. If they are not, they are sent a translatable error message
      */
-    public static boolean playerOnly(@NotNull CommandSender sender, @Nullable String commandString) {
+    public static boolean playerOnly(@NotNull CommandSender sender, @Nullable String commandString, int startingPosition) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(Component.translatable("permissions.requires.player", NamedTextColor.RED));
             return false;
@@ -29,7 +29,7 @@ public class Conditions {
      * @return true if the sender is the console. If they are not, they are sent the text "The console is required to
      * run this command here".
      */
-    public static boolean consoleOnly(@NotNull CommandSender sender, @Nullable String commandString) {
+    public static boolean consoleOnly(@NotNull CommandSender sender, @Nullable String commandString, int startingPosition) {
         if (!(sender instanceof ConsoleSender)) {
             sender.sendMessage(Component.text("The console is required to run this command here", NamedTextColor.RED));
             return false;

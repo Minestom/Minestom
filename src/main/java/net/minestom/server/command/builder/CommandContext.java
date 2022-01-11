@@ -1,13 +1,12 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.utils.StringUtils;
+import net.minestom.server.command.builder.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class used to retrieve argument data in a {@link CommandExecutor}.
@@ -20,31 +19,77 @@ import java.util.function.Supplier;
  */
 public class CommandContext {
 
-    private final String input;
-    private final String commandName;
-    protected Map<String, Object> args = new HashMap<>();
-    protected Map<String, String> rawArgs = new HashMap<>();
-    private CommandData returnData;
+    private final String message;
+    private final Command command;
+    private final CommandSyntax syntax;
+    private Map<String, Object> argumentMap;
+    private CommandData data;
+    private CommandException exception;
+    private int startingPosition;
 
-    public CommandContext(@NotNull String input) {
-        this.input = input;
-        this.commandName = input.split(StringUtils.SPACE)[0];
+    public CommandContext(@NotNull String message, @NotNull Command command, @Nullable CommandSyntax syntax,
+                          @Nullable Map<String, Object> argumentMap, @Nullable CommandData data,
+                          @Nullable CommandException exception, int startingPosition) {
+        this.message = message;
+        this.command = command;
+        this.syntax = syntax;
+        this.argumentMap = argumentMap == null ? new ConcurrentHashMap<>() : new ConcurrentHashMap<>(argumentMap);
+        this.data = data == null ? new CommandData() : data;
+        this.exception = exception;
+        this.startingPosition = startingPosition;
     }
 
-    public @NotNull String getInput() {
-        return input;
+    public @NotNull String getMessage() {
+        return message;
     }
 
-    public @NotNull String getCommandName() {
-        return commandName;
+    public @NotNull Command getCommand() {
+        return command;
+    }
+
+    public @Nullable CommandSyntax getSyntax() {
+        return syntax;
+    }
+
+    public @NotNull CommandData getData() {
+        return data;
+    }
+
+    public @NotNull Map<String, Object> getArgumentMap() {
+        return argumentMap;
+    }
+
+    public @Nullable CommandException getException() {
+        return exception;
+    }
+
+    public int getStartingPosition() {
+        return startingPosition;
+    }
+
+    public void setArgumentMap(@NotNull Map<String, Object> argumentMap) {
+        this.argumentMap = argumentMap;
+    }
+
+    public void setException(@Nullable CommandException exception) {
+        this.exception = exception;
+    }
+
+    public void setData(@NotNull CommandData data) {
+        this.data = data;
+    }
+
+    public void setStartingPosition(int startingPosition) {
+        this.startingPosition = startingPosition;
     }
 
     public <T> T get(@NotNull Argument<T> argument) {
         return get(argument.getId());
     }
 
-    public <T> T get(@NotNull String identifier) {
-        return (T) args.get(identifier);
+    public <T> T get(@NotNull String id) {
+        //noinspection unchecked
+        return (T) argumentMap.get(id);
     }
 
     public <T> T getOrDefault(@NotNull Argument<T> argument, T defaultValue) {
@@ -52,63 +97,24 @@ public class CommandContext {
     }
 
     public <T> T getOrDefault(@NotNull String identifier, T defaultValue) {
-        T value;
-        return (value = get(identifier)) != null ? value : defaultValue;
+        T value = get(identifier);
+        return value == null ? defaultValue : value;
     }
 
     public boolean has(@NotNull Argument<?> argument) {
-        return args.containsKey(argument.getId());
+        return has(argument.getId());
     }
 
-    public boolean has(@NotNull String identifier) {
-        return args.containsKey(identifier);
+    public boolean has(@NotNull String id) {
+        return argumentMap.containsKey(id);
     }
 
-    public @Nullable CommandData getReturnData() {
-        return returnData;
+    public <T> void set(@NotNull Argument<T> argument, T value) {
+        set(argument.getId(), value);
     }
 
-    public void setReturnData(@Nullable CommandData returnData) {
-        this.returnData = returnData;
+    public <T> void set(@NotNull String id, T value) {
+        this.argumentMap.put(id, value);
     }
 
-    public @NotNull Map<String, Object> getMap() {
-        return args;
-    }
-
-    public void copy(@NotNull CommandContext context) {
-        this.args = context.args;
-        this.rawArgs = context.rawArgs;
-    }
-
-    public String getRaw(@NotNull Argument<?> argument) {
-        return rawArgs.get(argument.getId());
-    }
-
-    public String getRaw(@NotNull String identifier) {
-        return rawArgs.computeIfAbsent(identifier, s -> {
-            throw new NullPointerException(
-                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
-        });
-    }
-
-    public void setArg(@NotNull String id, Object value, String rawInput) {
-        this.args.put(id, value);
-        this.rawArgs.put(id, rawInput);
-    }
-
-    protected void clear() {
-        this.args.clear();
-    }
-
-    protected void retrieveDefaultValues(@Nullable Map<String, Supplier<Object>> defaultValuesMap) {
-        if (defaultValuesMap == null) return;
-        for (var entry : defaultValuesMap.entrySet()) {
-            final String key = entry.getKey();
-            if (!args.containsKey(key)) {
-                final var supplier = entry.getValue();
-                this.args.put(key, supplier.get());
-            }
-        }
-    }
 }

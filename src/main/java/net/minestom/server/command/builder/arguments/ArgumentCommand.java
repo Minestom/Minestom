@@ -1,18 +1,17 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentCommand extends Argument<CommandResult> {
 
     private boolean onlyCorrect;
-    private String shortcut = "";
 
     public ArgumentCommand(@NotNull String id) {
         super(id);
@@ -20,26 +19,24 @@ public class ArgumentCommand extends Argument<CommandResult> {
 
     @Override
     public @NotNull CommandResult parse(@NotNull StringReader input) throws CommandException {
-        // FIXME: Complete
-        throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
+        int start = input.position();
+        CommandResult result = MinecraftServer.getCommandManager().getDispatcher().parse(input);
+
+        if (onlyCorrect && result.type() != CommandResult.Type.SUCCESS) {
+            if (result.parsedCommand() == null || result.parsedCommand().getException() == null) {
+                throw CommandException.COMMAND_EXCEPTION.generateException(input.all(), start, input.all().substring(start));
+            }
+            throw result.parsedCommand().getException();
+        }
+
+        return result;
     }
 
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLatestNodes();
-
-        if (!shortcut.isEmpty()) {
-            nodeMaker.request(shortcut, (id) -> {
-                for (DeclareCommandsPacket.Node node : lastNodes) {
-                    node.flags |= 0x08; // Redirection mask
-                    node.redirectedNode = id;
-                }
-            });
-        } else {
-            for (DeclareCommandsPacket.Node node : lastNodes) {
-                node.flags |= 0x08; // Redirection mask
-                node.redirectedNode = 0; // Redirect to root
-            }
+        for (DeclareCommandsPacket.Node node : nodeMaker.getLatestNodes()) {
+            node.flags |= 0x08; // Redirection mask
+            node.redirectedNode = 0; // Redirect to root
         }
     }
 
@@ -50,18 +47,6 @@ public class ArgumentCommand extends Argument<CommandResult> {
     @Contract("_ -> this")
     public @NotNull ArgumentCommand setOnlyCorrect(boolean onlyCorrect) {
         this.onlyCorrect = onlyCorrect;
-        return this;
-    }
-
-    @NotNull
-    public String getShortcut() {
-        return shortcut;
-    }
-
-    @ApiStatus.Experimental
-    @Contract("_ -> this")
-    public @NotNull ArgumentCommand setShortcut(@NotNull String shortcut) {
-        this.shortcut = shortcut;
         return this;
     }
 

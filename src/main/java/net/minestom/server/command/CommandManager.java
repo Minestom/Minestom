@@ -7,25 +7,20 @@ import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.parser.ArgumentQueryResult;
-import net.minestom.server.command.builder.parser.CommandParser;
-import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.callback.CommandCallback;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 /**
- * Manager used to register {@link Command commands}.
- * <p>
- * It is also possible to simulate a command using {@link #execute(CommandSender, String)}.
+ * Manager used to register and execute {@link Command Command}s.<br>
+ * It is also possible to simulate a sender executing a command using {@link #execute(CommandSender, StringReader)}.
  */
 public final class CommandManager {
 
@@ -42,24 +37,16 @@ public final class CommandManager {
     }
 
     /**
-     * Registers a {@link Command}.
+     * Registers a {@link Command}. This method does nothing if the command was already registered.
      *
      * @param command the command to register
-     * @throws IllegalStateException if a command with the same name already exists
      */
     public synchronized void register(@NotNull Command command) {
-        Check.stateCondition(commandExists(command.getName()),
-                "A command with the name " + command.getName() + " is already registered!");
-        for (String alias : command.getAliases()) {
-            Check.stateCondition(commandExists(alias),
-                    "A command with the name " + alias + " is already registered!");
-        }
         this.dispatcher.register(command);
     }
 
     /**
-     * Removes a command from the currently registered commands.
-     * Does nothing if the command was not registered before
+     * Unregisters a {@link Command}. This method does nothing if the command was not already registered.
      *
      * @param command the command to remove
      */
@@ -68,48 +55,43 @@ public final class CommandManager {
     }
 
     /**
-     * Gets the {@link Command} registered by {@link #register(Command)}.
+     * Gets a {@link Command} that has an alias that the provided reader starts with. This method reads from the
+     * provided reader if a command was found because it is possible that the client may not know which alias was found.
      *
-     * @param commandName the command name
-     * @return the command associated with the name, null if not any
+     * @param reader the reader to read from
+     * @return the command that was found, or null if there was not a command found
      */
-    public @Nullable Command getCommand(@NotNull String commandName) {
-        return dispatcher.findCommand(commandName);
+    public @Nullable Command findCommand(@NotNull StringReader reader) {
+        return dispatcher.findCommand(reader);
     }
 
     /**
-     * Gets if a command with the name {@code commandName} already exists or not.
-     *
-     * @param commandName the command name to check
-     * @return true if the command does exist
+     * Find any command that has been registered to this manager's dispatcher and has the provided input as one of its
+     * aliases.
      */
-    public boolean commandExists(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
-        return dispatcher.findCommand(commandName) != null;
+    public @Nullable Command findCommand(@NotNull String input) {
+        return dispatcher.findCommand(input);
     }
 
     /**
      * Executes a command for a {@link CommandSender}.
      *
      * @param sender  the sender of the command
-     * @param command the raw command string (without the command prefix)
+     * @param command the reader that should be read from (without the prefix)
      * @return the execution result
      */
-    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
-        // Command event
+    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull StringReader command) {
         if (sender instanceof Player player) {
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
-            EventDispatcher.call(playerCommandEvent);
-            if (playerCommandEvent.isCancelled())
-                return CommandResult.of(CommandResult.Type.CANCELLED, command);
-            command = playerCommandEvent.getCommand();
-        }
-        // Process the command
-        final CommandResult result = dispatcher.execute(sender, command);
-        if (result.getType() == CommandResult.Type.UNKNOWN) {
-            if (unknownCommandCallback != null) {
-                this.unknownCommandCallback.apply(sender, command);
+            PlayerCommandEvent event = new PlayerCommandEvent(player, command);
+            EventDispatcher.call(event);
+            if (event.isCancelled()) {
+                return new CommandResult(CommandResult.Type.CANCELLED, event.getCommand().all(), event.getCommand().position(), null);
             }
+            command = event.getCommand();
+        }
+        final CommandResult result = dispatcher.execute(sender, command);
+        if (result.type() == CommandResult.Type.UNKNOWN_COMMAND && this.unknownCommandCallback != null) {
+            this.unknownCommandCallback.apply(sender, command);
         }
         return result;
     }
@@ -118,9 +100,9 @@ public final class CommandManager {
      * Executes the command using a {@link ServerSender}. This can be used
      * to run a silent command (nothing is printed to console).
      *
-     * @see #execute(CommandSender, String)
+     * @see #execute(CommandSender, StringReader)
      */
-    public @NotNull CommandResult executeServerCommand(@NotNull String command) {
+    public @NotNull CommandResult executeServerCommand(@NotNull StringReader command) {
         return execute(serverSender, command);
     }
 
@@ -197,32 +179,6 @@ public final class CommandManager {
             commandIdentityMap.put(command, commandNodeIndex);
         }
 
-        // Answer to all node requests
-        for (Pair<String, NodeMaker.Request> pair : nodeRequests) {
-            String input = pair.left();
-            NodeMaker.Request request = pair.right();
-
-            final CommandQueryResult commandQueryResult = CommandParser.findCommand(input);
-            if (commandQueryResult == null) {
-                // Invalid command, return root node
-                request.retrieve(0);
-                continue;
-            }
-
-            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, input, false, true, syntax -> true, argument -> true);
-            if (queryResult == null) {
-                // Invalid argument, return command node (default to root)
-                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
-                request.retrieve(commandNode);
-                continue;
-            }
-
-            // Retrieve argument node
-            final Argument<?> argument = queryResult.argument;
-            final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
-            request.retrieve(argumentNode);
-        }
         // Add root node children
         rootNode.children = ArrayUtils.toArray(rootChildren);
 
@@ -242,7 +198,7 @@ public final class CommandManager {
         final CommandCondition commandCondition = command.getCondition();
         if (commandCondition != null) {
             // Do not show command if return false
-            if (!commandCondition.canUse(sender, null)) {
+            if (!commandCondition.canUse(sender, null, -1)) {
                 return -1;
             }
         }
@@ -312,7 +268,7 @@ public final class CommandManager {
         syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().size())).toList();
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
-            if (commandCondition != null && !commandCondition.canUse(sender, null)) {
+            if (commandCondition != null && !commandCondition.canUse(sender, null, -1)) {
                 // Sender does not have the right to use this syntax, ignore it
                 continue;
             }
@@ -414,8 +370,6 @@ public final class CommandManager {
                     lastArgumentNodeIndex = nodesLayer.size();
                 }
             }
-
-            nodeRequests.addAll(nodeMaker.getNodeRequests());
 
             syntaxesArguments.put(syntax, arguments);
         }

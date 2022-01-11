@@ -3,53 +3,35 @@ package net.minestom.server.command.builder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CommandResult {
+public record CommandResult(@NotNull Type type, @NotNull String input, int position, @Nullable ParsedCommand parsedCommand) {
 
-    protected Type type = Type.UNKNOWN;
-    protected String input;
-    protected ParsedCommand parsedCommand;
-    protected CommandData commandData;
-
-    public @NotNull Type getType() {
-        return type;
+    public CommandResult(@NotNull Type type, @NotNull String input, int position) {
+        this(type, input, position, null);
     }
 
-    public @NotNull String getInput() {
-        return input;
-    }
-
-    public @Nullable ParsedCommand getParsedCommand() {
-        return parsedCommand;
-    }
-
-    public @Nullable CommandData getCommandData() {
-        return commandData;
-    }
-
+    /**
+     * Represents the type of result that this instance represents.
+     */
     public enum Type {
+
         /**
-         * Command and syntax successfully found.
+         * This type indicates that the command provided was not found.
+         */
+        UNKNOWN_COMMAND,
+
+        /**
+         * This type indicates that a command was found and that a syntax was successfully completed.
          */
         SUCCESS,
-        /**
-         * Command found, but the syntax is invalid.
-         * Executor sets to {@link Command#getDefaultExecutor()}.
-         */
-        INVALID_SYNTAX,
-        /**
-         * Command cancelled by an event listener.
-         */
-        CANCELLED,
-        /**
-         * Command is not registered, it is also the default result type.
-         */
-        UNKNOWN
-    }
 
-    public static @NotNull CommandResult of(@NotNull Type type, @NotNull String input) {
-        CommandResult result = new CommandResult();
-        result.type = type;
-        result.input = input;
-        return result;
+        /**
+         * This type indicates that a command was found but none of its syntaxes were valid.
+         */
+        FAILURE,
+
+        /**
+         * This type indicates that the execution was cancelled because the event that it created was cancelled.
+         */
+        CANCELLED
     }
 }

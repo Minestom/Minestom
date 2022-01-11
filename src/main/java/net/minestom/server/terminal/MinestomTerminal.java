@@ -2,6 +2,7 @@ package net.minestom.server.terminal;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.StringReader;
 import org.jetbrains.annotations.ApiStatus;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
@@ -37,7 +38,7 @@ public class MinestomTerminal {
                 String command;
                 try {
                     command = reader.readLine(PROMPT);
-                    COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender(), command);
+                    COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender(), new StringReader(command));
                 } catch (UserInterruptException e) {
                     // Handle Ctrl + C
                     System.exit(0);

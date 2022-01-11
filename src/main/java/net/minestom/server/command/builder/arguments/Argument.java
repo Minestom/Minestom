@@ -3,11 +3,13 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,12 +124,14 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Sets the {@link ArgumentCallback}.
-     *
-     * @param callback the argument callback, null to do not have one
+     * Sets the {@link ArgumentCallback}.<br>
+     * Returns itself for chaining.
+     * @param callback the argument callback, null to not have one
      */
-    public void setCallback(@Nullable ArgumentCallback callback) {
+    @Contract("_ -> this")
+    public @NotNull Argument<T> setCallback(@Nullable ArgumentCallback callback) {
         this.callback = callback;
+        return this;
     }
 
     /**

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents an argument giving a {@link Particle}.
  */
+// TODO: Correctly parse this argument. There should be extra information at the end that depends on the particle that is currently not handled.
 public class ArgumentParticle extends ArgumentRegistry<Particle> {
 
     public ArgumentParticle(@NotNull String id) {

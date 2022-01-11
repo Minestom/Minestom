@@ -59,14 +59,6 @@ public class NodeMaker {
         return nodeIdsMap;
     }
 
-    public void request(String input, Request request) {
-        this.nodeRequests.add(Pair.of(input, request));
-    }
-
-    public List<Pair<String, Request>> getNodeRequests() {
-        return nodeRequests;
-    }
-
     public static class ConfiguredNodes {
         private DeclareCommandsPacket.Node[] nodes;
         private Options options;
