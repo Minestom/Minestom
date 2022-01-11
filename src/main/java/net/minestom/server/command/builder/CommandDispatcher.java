@@ -289,7 +289,18 @@ public class CommandDispatcher {
         final Map<String, Object> temporaryArgumentMap = new HashMap<>();
 
         // Unexpected behavior will occur if the following loop runs when there are no syntaxes.
-        if (syntaxes.isEmpty() || !reader.canRead()) {
+        if (syntaxes.isEmpty()) {
+            return primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1)
+                    .setException(CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(reader.all(), start))
+                    .setSuccess(false);
+        }
+
+        if (!reader.canRead()) {
+            for (CommandSyntax syntax : syntaxes) {
+                if (syntax.getArguments().isEmpty()) {
+                    return primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>()).setArgumentNumber(-1).setSuccess(true);
+                }
+            }
             return primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1)
                     .setException(CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(reader.all(), start))
                     .setSuccess(false);
