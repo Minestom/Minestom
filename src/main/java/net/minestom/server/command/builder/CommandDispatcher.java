@@ -307,11 +307,11 @@ public class CommandDispatcher {
                     reader.assureWhitespace();
                     temporaryArgumentMap.put(argument.getId(), argument.parse(reader));
                 } catch (CommandException exception) {
-                    if (reader.position() > primaryContext.getReaderPosition()) {
+                    if (exception.getPosition() > primaryContext.getReaderPosition()) {
                         primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>(temporaryArgumentMap))
-                                .setReaderPosition(reader.position()).setArgumentNumber(i).setException(exception)
+                                .setReaderPosition(exception.getPosition()).setArgumentNumber(i).setException(exception)
                                 .setSuccess(false);
-                    } else if (reader.position() == primaryContext.getReaderPosition()) {
+                    } else if (exception.getPosition() == primaryContext.getReaderPosition()) {
                         primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1)
                                 .setException(CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(primaryContext.getMessage(), primaryContext.getReaderPosition()))
                                 .setSuccess(false);
