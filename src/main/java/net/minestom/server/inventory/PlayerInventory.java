@@ -3,7 +3,9 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
+import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
@@ -275,6 +277,16 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
+        if (key == 40) {
+            // Swap the item with the offhand if key == 40
+            // https://wiki.vg/Protocol#Click_Window
+            return swapItemWithOffhand(player, slot);
+        } else {
+            return swapItemWithSlot(player, slot, key);
+        }
+    }
+
+    private boolean swapItemWithSlot(@NotNull Player player, int slot, int key) {
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
@@ -289,6 +301,18 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         setItemStack(key, clickResult.getCursor());
         callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
         return true;
+    }
+
+    private boolean swapItemWithOffhand(@NotNull Player player, int clickedSlot) {
+        final int clickedSlotConverted = convertPlayerInventorySlot(clickedSlot, OFFSET);
+        final ItemStack clickedItem = getItemStack(clickedSlotConverted);
+        final ItemStack offhandItem = getItemInOffHand();
+        PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offhandItem, clickedItem);
+        EventDispatcher.callCancellable(swapItemEvent, () -> {
+            setItemStack(clickedSlotConverted, swapItemEvent.getMainHandItem());
+            setItemInOffHand(swapItemEvent.getOffHandItem());
+        });
+        return swapItemEvent.isCancelled();
     }
 
     @Override

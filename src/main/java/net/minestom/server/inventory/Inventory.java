@@ -3,6 +3,8 @@ package net.minestom.server.inventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
@@ -18,6 +20,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.OFFSET;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertPlayerInventorySlot;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -291,6 +296,16 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
+        if (key == 40) {
+            // Swap the item with the offhand if key == 40
+            // https://wiki.vg/Protocol#Click_Window
+            return swapItemWithOffhand(player, slot);
+        } else {
+            return swapItemWithSlot(player, slot, key);
+        }
+    }
+
+    private boolean swapItemWithSlot(@NotNull Player player, int slot, int key) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
@@ -310,6 +325,27 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         playerInventory.setItemStack(key, clickResult.getCursor());
         callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
         return true;
+    }
+
+    private boolean swapItemWithOffhand(@NotNull Player player, int slot) {
+        final PlayerInventory playerInventory = player.getInventory();
+
+        final boolean isInWindow = isClickInWindow(slot);
+        final int clickedSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
+
+        final ItemStack clickedItem = isInWindow ? getItemStack(clickedSlot) : playerInventory.getItemStack(clickedSlot);
+        final ItemStack offhandItem = playerInventory.getItemInOffHand();
+
+        PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offhandItem, clickedItem);
+        EventDispatcher.callCancellable(swapItemEvent, () -> {
+            if (isInWindow) {
+                setItemStack(clickedSlot, swapItemEvent.getMainHandItem());
+            } else {
+                playerInventory.setItemStack(clickedSlot, swapItemEvent.getMainHandItem());
+            }
+            playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
+        });
+        return swapItemEvent.isCancelled();
     }
 
     @Override
