@@ -26,7 +26,6 @@ public final class ViewEngine {
     private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
 
     private EntityTracker tracker;
-    private Point lastTrackingPoint;
 
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
@@ -55,7 +54,6 @@ public final class ViewEngine {
     public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
         synchronized (mutex) {
             this.tracker = tracker;
-            this.lastTrackingPoint = point;
             if (tracker != null) {
                 this.viewableOption.references = tracker.references(point, EntityTracker.Target.PLAYERS);
                 this.viewerOption.references = tracker.references(point, EntityTracker.Target.ENTITIES);

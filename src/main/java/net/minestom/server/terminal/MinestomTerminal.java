@@ -1,7 +1,6 @@
 package net.minestom.server.terminal;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
