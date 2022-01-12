@@ -46,7 +46,6 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
-import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -104,7 +103,6 @@ import java.util.function.UnaryOperator;
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
-    private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -306,7 +304,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Used to initialize the player connection
      */
     protected void playerConnectionInit() {
-        this.playerConnection.setPlayer(this);
+        PlayerConnection connection = playerConnection;
+        if (connection != null) connection.setPlayer(this);
     }
 
     @Override
@@ -315,7 +314,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.update();
 
         // Process received packets
-        this.packets.drain(packet -> PACKET_LISTENER_MANAGER.processClientPacket(packet, this));
+        this.packets.drain(packet -> MinecraftServer.getPacketListenerManager().processClientPacket(packet, this));
 
         super.update(time); // Super update (item pickup/fire management)
 
