@@ -61,13 +61,13 @@ public final class ThreadDispatcher<P> {
         // Update dispatcher
         this.updates.drain(update -> {
             if (update instanceof DispatchUpdate.PartitionLoad<P> chunkUpdate) {
-                processLoadedChunk(chunkUpdate.partition());
+                processLoadedPartition(chunkUpdate.partition());
             } else if (update instanceof DispatchUpdate.PartitionUnload<P> partitionUnload) {
-                processUnloadedChunk(partitionUnload.partition());
+                processUnloadedPartition(partitionUnload.partition());
             } else if (update instanceof DispatchUpdate.ElementUpdate<P> elementUpdate) {
                 processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
             } else if (update instanceof DispatchUpdate.ElementRemove elementRemove) {
-                processRemovedEntity(elementRemove.tickable());
+                processRemovedElement(elementRemove.tickable());
             } else {
                 throw new IllegalStateException("Unknown update type: " + update.getClass().getSimpleName());
             }
@@ -152,7 +152,7 @@ public final class ThreadDispatcher<P> {
         this.updates.relaxedOffer(update);
     }
 
-    private void processLoadedChunk(P partition) {
+    private void processLoadedPartition(P partition) {
         if (partitions.containsKey(partition)) return;
         final TickThread thread = retrieveThread(partition);
         final Partition partitionEntry = new Partition(thread);
@@ -164,7 +164,7 @@ public final class ThreadDispatcher<P> {
         }
     }
 
-    private void processUnloadedChunk(P partition) {
+    private void processUnloadedPartition(P partition) {
         final Partition partitionEntry = partitions.remove(partition);
         if (partitionEntry != null) {
             TickThread thread = partitionEntry.thread;
@@ -172,11 +172,11 @@ public final class ThreadDispatcher<P> {
         }
         this.partitionUpdateQueue.remove(partition);
         if (partition instanceof Tickable tickable) {
-            processRemovedEntity(tickable);
+            processRemovedElement(tickable);
         }
     }
 
-    private void processRemovedEntity(Tickable tickable) {
+    private void processRemovedElement(Tickable tickable) {
         Partition partition = elements.get(tickable);
         if (partition != null) {
             partition.elements.remove(tickable);
