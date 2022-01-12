@@ -44,8 +44,12 @@ public final class ViewEngine {
         this.viewerOption = new Option<>(Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
     }
 
+    public ViewEngine(@Nullable Entity entity) {
+        this(entity, null, null, null, null);
+    }
+
     public ViewEngine() {
-        this(null, null, null, null, null);
+        this(null);
     }
 
     public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
@@ -101,10 +105,10 @@ public final class ViewEngine {
         if (entity.getVehicle() != null)
             return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
-            viewer.accept(entity); // Send packet to this player
+            if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
-            viewable.accept(player); // Send packet to the range-visible player
+            if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
     }
 
