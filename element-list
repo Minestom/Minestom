@@ -143,7 +143,6 @@ net.minestom.server.utils.math
 net.minestom.server.utils.mojang
 net.minestom.server.utils.player
 net.minestom.server.utils.position
-net.minestom.server.utils.thread
 net.minestom.server.utils.time
 net.minestom.server.utils.url
 net.minestom.server.utils.validate
