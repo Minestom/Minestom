@@ -27,7 +27,6 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.terminal.MinestomTerminal;
-import net.minestom.server.thread.MinestomThreadPool;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
@@ -264,7 +263,6 @@ final class ServerProcessImpl implements ServerProcess {
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         MinestomTerminal.stop();
-        MinestomThreadPool.shutdownAll();
         dispatcher.shutdown();
         LOGGER.info("Minestom server stopped successfully.");
     }

@@ -58,10 +58,6 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_TICK_SCHEDULER = "Ms-TickScheduler";
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
-    public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
-    public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
-            Runtime.getRuntime().availableProcessors() / 2);
-
     // Config
     // Can be modified at performance cost when increased
     public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
