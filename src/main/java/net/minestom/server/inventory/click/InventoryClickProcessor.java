@@ -476,13 +476,6 @@ public final class InventoryClickProcessor {
         this.rightDraggingMap.remove(player);
     }
 
-    private static final class DragData {
-        private final int slot;
-        private final AbstractInventory inventory;
-
-        public DragData(int slot, AbstractInventory inventory) {
-            this.slot = slot;
-            this.inventory = inventory;
-        }
+    private record DragData(int slot, AbstractInventory inventory) {
     }
 }
