@@ -171,6 +171,9 @@ public final class ThreadDispatcher<P> {
             thread.entries().remove(partitionEntry);
         }
         this.partitionUpdateQueue.remove(partition);
+        if (partition instanceof Tickable tickable) {
+            processRemovedEntity(tickable);
+        }
     }
 
     private void processRemovedEntity(Tickable tickable) {
