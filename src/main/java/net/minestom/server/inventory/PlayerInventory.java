@@ -304,15 +304,18 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     }
 
     private boolean swapItemWithOffhand(@NotNull Player player, int clickedSlot) {
-        final int clickedSlotConverted = convertPlayerInventorySlot(clickedSlot, OFFSET);
-        final ItemStack clickedItem = getItemStack(clickedSlotConverted);
-        final ItemStack offhandItem = getItemInOffHand();
-        PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offhandItem, clickedItem);
-        EventDispatcher.callCancellable(swapItemEvent, () -> {
-            setItemStack(clickedSlotConverted, swapItemEvent.getMainHandItem());
-            setItemInOffHand(swapItemEvent.getOffHandItem());
-        });
-        return swapItemEvent.isCancelled();
+        final int convertedSlot = convertPlayerInventorySlot(clickedSlot, OFFSET);
+        final ItemStack clickedItem = getItemStack(convertedSlot); // Being treated as clicked
+        final ItemStack offhandItem = getItemInOffHand(); // Being treated as cursor
+        final InventoryClickResult clickResult = clickProcessor.swapItem(player, this, convertedSlot, clickedItem, offhandItem);
+        if (clickResult.isCancel()) {
+            update();
+            return false;
+        }
+        setItemStack(convertedSlot, clickResult.getClicked());
+        setItemStack(OFFHAND_SLOT, clickResult.getCursor());
+        callClickEvent(player, null, convertedSlot, ClickType.SWAP, clickedItem, offhandItem);
+        return true;
     }
 
     @Override

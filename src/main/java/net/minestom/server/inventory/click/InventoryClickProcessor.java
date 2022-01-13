@@ -118,6 +118,17 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
+    public @NotNull InventoryClickResult swapItem(@NotNull Player player, @NotNull AbstractInventory inventory, int slot,
+                                                  @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        // Verify the swap
+        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.SWAP, clicked, cursor);
+        if (clickResult.isCancel()) return clickResult;
+        // Swap items
+        clickResult.setClicked(cursor);
+        clickResult.setCursor(clicked);
+        return clickResult;
+    }
+
     public @NotNull InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
                                                     int start, int end, int step,
                                                     @NotNull Player player, int slot,

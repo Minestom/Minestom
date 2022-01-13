@@ -335,17 +335,21 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
         final ItemStack clickedItem = isInWindow ? getItemStack(clickedSlot) : playerInventory.getItemStack(clickedSlot);
         final ItemStack offhandItem = playerInventory.getItemInOffHand();
+        final InventoryClickResult clickResult = clickProcessor.swapItem(player,
+                isInWindow ? this : playerInventory, clickedSlot, clickedItem, offhandItem);
+        if (clickResult.isCancel()) {
+            updateAll(player);
+            return false;
+        }
 
-        PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offhandItem, clickedItem);
-        EventDispatcher.callCancellable(swapItemEvent, () -> {
-            if (isInWindow) {
-                setItemStack(clickedSlot, swapItemEvent.getMainHandItem());
-            } else {
-                playerInventory.setItemStack(clickedSlot, swapItemEvent.getMainHandItem());
-            }
-            playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
-        });
-        return swapItemEvent.isCancelled();
+        if (isInWindow) {
+            setItemStack(clickedSlot, clickResult.getClicked());
+        } else {
+            playerInventory.setItemStack(clickedSlot, clickResult.getClicked());
+        }
+        playerInventory.setItemInOffHand(clickResult.getCursor());
+        callClickEvent(player, null, clickedSlot, ClickType.SWAP, clickedItem, offhandItem);
+        return true;
     }
 
     @Override
