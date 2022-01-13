@@ -21,8 +21,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.OFFSET;
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertPlayerInventorySlot;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -296,23 +295,14 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
-        if (key == 40) {
-            // Swap the item with the offhand if key == 40
-            // https://wiki.vg/Protocol#Click_Window
-            return swapItemWithOffhand(player, slot);
-        } else {
-            return swapItemWithSlot(player, slot, key);
-        }
-    }
-
-    private boolean swapItemWithSlot(@NotNull Player player, int slot, int key) {
+        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final ItemStack heldItem = playerInventory.getItemStack(key);
+        final ItemStack heldItem = playerInventory.getItemStack(convertedKey);
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player,
-                isInWindow ? this : playerInventory, clickSlot, key, clicked, heldItem);
+                isInWindow ? this : playerInventory, clickSlot, convertedKey, clicked, heldItem);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -322,33 +312,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        playerInventory.setItemStack(key, clickResult.getCursor());
+        playerInventory.setItemStack(convertedKey, clickResult.getCursor());
         callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
-        return true;
-    }
-
-    private boolean swapItemWithOffhand(@NotNull Player player, int slot) {
-        final PlayerInventory playerInventory = player.getInventory();
-
-        final boolean isInWindow = isClickInWindow(slot);
-        final int clickedSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
-
-        final ItemStack clickedItem = isInWindow ? getItemStack(clickedSlot) : playerInventory.getItemStack(clickedSlot);
-        final ItemStack offhandItem = playerInventory.getItemInOffHand();
-        final InventoryClickResult clickResult = clickProcessor.swapItem(player,
-                isInWindow ? this : playerInventory, clickedSlot, clickedItem, offhandItem);
-        if (clickResult.isCancel()) {
-            updateAll(player);
-            return false;
-        }
-
-        if (isInWindow) {
-            setItemStack(clickedSlot, clickResult.getClicked());
-        } else {
-            playerInventory.setItemStack(clickedSlot, clickResult.getClicked());
-        }
-        playerInventory.setItemInOffHand(clickResult.getCursor());
-        callClickEvent(player, null, clickedSlot, ClickType.SWAP, clickedItem, offhandItem);
         return true;
     }
 

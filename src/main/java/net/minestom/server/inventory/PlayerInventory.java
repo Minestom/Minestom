@@ -277,44 +277,20 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
-        if (key == 40) {
-            // Swap the item with the offhand if key == 40
-            // https://wiki.vg/Protocol#Click_Window
-            return swapItemWithOffhand(player, slot);
-        } else {
-            return swapItemWithSlot(player, slot, key);
-        }
-    }
-
-    private boolean swapItemWithSlot(@NotNull Player player, int slot, int key) {
+        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack heldItem = getItemStack(key);
+        final ItemStack heldItem = getItemStack(convertedKey);
         final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, key, clicked, heldItem);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, convertedKey, clicked, heldItem);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
         setItemStack(convertedSlot, clickResult.getClicked());
-        setItemStack(key, clickResult.getCursor());
+        setItemStack(convertedKey, clickResult.getCursor());
         callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
-        return true;
-    }
-
-    private boolean swapItemWithOffhand(@NotNull Player player, int clickedSlot) {
-        final int convertedSlot = convertPlayerInventorySlot(clickedSlot, OFFSET);
-        final ItemStack clickedItem = getItemStack(convertedSlot); // Being treated as clicked
-        final ItemStack offhandItem = getItemInOffHand(); // Being treated as cursor
-        final InventoryClickResult clickResult = clickProcessor.swapItem(player, this, convertedSlot, clickedItem, offhandItem);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setItemStack(OFFHAND_SLOT, clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.SWAP, clickedItem, offhandItem);
         return true;
     }
 

@@ -21,8 +21,6 @@ public enum ClickType {
     START_DOUBLE_CLICK,
     DOUBLE_CLICK,
 
-    DROP,
-
-    SWAP
+    DROP
 
 }
