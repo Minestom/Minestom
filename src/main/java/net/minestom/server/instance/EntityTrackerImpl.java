@@ -94,11 +94,6 @@ final class EntityTrackerImpl implements EntityTracker {
                 public void remove(@NotNull T removed) {
                     if (entity != removed) update.remove(removed);
                 }
-
-                @Override
-                public void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
-                    // Empty
-                }
             });
             update.referenceUpdate(newPoint, this);
         }

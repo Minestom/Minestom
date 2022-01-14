@@ -148,7 +148,9 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
 
         void remove(@NotNull E entity);
 
-        void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker);
+        default void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
+            // Empty
+        }
     }
 
     /**
