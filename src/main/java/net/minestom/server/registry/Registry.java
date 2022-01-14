@@ -68,20 +68,22 @@ public final class Registry {
 
     @ApiStatus.Internal
     public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
-        Map<String, T> namespaces = new HashMap<>();
-        ObjectArray<T> ids = new ObjectArray<>();
-        for (var entry : Registry.load(resource).entrySet()) {
+        var entries = Registry.load(resource);
+        Map<String, T> namespaces = new HashMap<>(entries.size());
+        ObjectArray<T> ids = new ObjectArray<>(entries.size());
+        for (var entry : entries.entrySet()) {
             final String namespace = entry.getKey();
             final Map<String, Object> object = entry.getValue();
             final T value = loader.get(namespace, object);
             ids.set(value.id(), value);
             namespaces.put(value.name(), value);
         }
-        return new Container<>(namespaces, ids);
+        return new Container<>(resource, namespaces, ids);
     }
 
     @ApiStatus.Internal
-    public record Container<T extends ProtocolObject>(Map<String, T> namespaces,
+    public record Container<T extends ProtocolObject>(Resource resource,
+                                                      Map<String, T> namespaces,
                                                       ObjectArray<T> ids) {
         public Container {
             namespaces = Map.copyOf(namespaces);
@@ -102,6 +104,18 @@ public final class Registry {
 
         public Collection<T> values() {
             return namespaces.values();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Container<?> container)) return false;
+            return resource == container.resource;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(resource);
         }
 
         public interface Loader<T extends ProtocolObject> {
