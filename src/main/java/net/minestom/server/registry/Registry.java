@@ -66,31 +66,30 @@ public final class Registry {
         return map;
     }
 
-    public static class Container<T extends ProtocolObject> {
-        // Maps do not need to be thread-safe as they are fully populated
-        // in the static initializer, should not be modified during runtime
+    @ApiStatus.Internal
+    public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
+        Map<String, T> namespaces = new HashMap<>();
+        ObjectArray<T> ids = new ObjectArray<>();
+        for (var entry : Registry.load(resource).entrySet()) {
+            final String namespace = entry.getKey();
+            final Map<String, Object> object = entry.getValue();
+            final T value = loader.get(namespace, object);
+            ids.set(value.id(), value);
+            namespaces.put(value.name(), value);
+        }
+        return new Container<>(namespaces, ids);
+    }
 
-        // namespace -> registry data
-        private final Map<String, T> namespaceMap = new HashMap<>();
-        // id -> registry data
-        private final ObjectArray<T> ids = new ObjectArray<>();
-        private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
-
-        private final boolean initialized;
-
-        @ApiStatus.Internal
-        public Container(Resource resource, Loader<T> loader) {
-            for (var entry : Registry.load(resource).entrySet()) {
-                final String namespace = entry.getKey();
-                final Map<String, Object> object = entry.getValue();
-                loader.accept(this, namespace, object);
-            }
-            this.initialized = true;
-            this.ids.trim();
+    @ApiStatus.Internal
+    public record Container<T extends ProtocolObject>(Map<String, T> namespaces,
+                                                      ObjectArray<T> ids) {
+        public Container {
+            namespaces = Map.copyOf(namespaces);
+            ids.trim();
         }
 
         public T get(@NotNull String namespace) {
-            return namespaceMap.get(namespace);
+            return namespaces.get(namespace);
         }
 
         public T getSafe(@NotNull String namespace) {
@@ -102,17 +101,11 @@ public final class Registry {
         }
 
         public Collection<T> values() {
-            return objects;
-        }
-
-        public void register(@NotNull T value) {
-            Check.stateCondition(initialized, "Registering is only available within the loader lambda.");
-            this.ids.set(value.id(), value);
-            this.namespaceMap.put(value.name(), value);
+            return namespaces.values();
         }
 
         public interface Loader<T extends ProtocolObject> {
-            void accept(Container<T> container, String namespace, Map<String, Object> object);
+            T get(String namespace, Map<String, Object> object);
         }
     }
 

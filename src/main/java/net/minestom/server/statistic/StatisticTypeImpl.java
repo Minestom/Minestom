@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record StatisticTypeImpl(NamespaceID namespace, int id) implements StatisticType {
-    private static final Registry.Container<StatisticType> CONTAINER = new Registry.Container<>(Registry.Resource.STATISTICS,
-            (container, namespace, object) -> {
+    private static final Registry.Container<StatisticType> CONTAINER = Registry.createContainer(Registry.Resource.STATISTICS,
+            (namespace, object) -> {
                 final int id = ((Number) object.get("id")).intValue();
-                container.register(new StatisticTypeImpl(NamespaceID.from(namespace), id));
+                return new StatisticTypeImpl(NamespaceID.from(namespace), id);
             });
 
     static StatisticType get(@NotNull String namespace) {

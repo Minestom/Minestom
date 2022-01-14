@@ -27,8 +27,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
     // Block id -> Map<Properties, Block>
     private static final ObjectArray<Map<Map<String, String>, Block>> POSSIBLE_STATES = new ObjectArray<>();
-    private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
-            (container, namespace, object) -> {
+    private static final Registry.Container<Block> CONTAINER = Registry.createContainer(Registry.Resource.BLOCKS,
+            (namespace, object) -> {
                 final var stateObject = (Map<String, Object>) object.get("states");
                 // Retrieve the block states
                 {
@@ -52,7 +52,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                 }
                 // Register default state
                 final int defaultState = ((Number) object.get("defaultStateId")).intValue();
-                container.register(getState(defaultState));
+                return getState(defaultState);
             });
     private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofMinutes(5))

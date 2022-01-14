@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record MaterialImpl(Registry.MaterialEntry registry) implements Material {
-    private static final Registry.Container<Material> CONTAINER = new Registry.Container<>(Registry.Resource.ITEMS,
-            (container, namespace, object) -> container.register(new MaterialImpl(Registry.material(namespace, object, null))));
+    private static final Registry.Container<Material> CONTAINER = Registry.createContainer(Registry.Resource.ITEMS,
+            (namespace, object) -> new MaterialImpl(Registry.material(namespace, object, null)));
 
     static Material get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

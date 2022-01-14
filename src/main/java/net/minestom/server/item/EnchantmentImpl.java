@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record EnchantmentImpl(Registry.EnchantmentEntry registry) implements Enchantment {
-    private static final Registry.Container<Enchantment> CONTAINER = new Registry.Container<>(Registry.Resource.ENCHANTMENTS,
-            (container, namespace, object) -> container.register(new EnchantmentImpl(Registry.enchantment(namespace, object, null))));
+    private static final Registry.Container<Enchantment> CONTAINER = Registry.createContainer(Registry.Resource.ENCHANTMENTS,
+            (namespace, object) -> new EnchantmentImpl(Registry.enchantment(namespace, object, null)));
 
     static Enchantment get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
