@@ -44,6 +44,7 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         }
         if (update != null) {
+            update.referenceUpdate(point, this);
             visibleEntities(point, target, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
@@ -64,6 +65,7 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         }
         if (update != null) {
+            update.referenceUpdate(point, null);
             visibleEntities(point, target, update::remove);
         }
     }
@@ -92,7 +94,13 @@ final class EntityTrackerImpl implements EntityTracker {
                 public void remove(@NotNull T removed) {
                     if (entity != removed) update.remove(removed);
                 }
+
+                @Override
+                public void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
+                    // Empty
+                }
             });
+            update.referenceUpdate(newPoint, this);
         }
     }
 
