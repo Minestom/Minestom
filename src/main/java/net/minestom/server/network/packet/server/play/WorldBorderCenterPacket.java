@@ -6,22 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldBorderCenterPacket implements ServerPacket {
-
-    public double x;
-    public double z;
-
-    public static WorldBorderCenterPacket of(double x, double z) {
-        WorldBorderCenterPacket packet = new WorldBorderCenterPacket();
-        packet.x = x;
-        packet.z = z;
-        return packet;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.x = reader.readDouble();
-        this.z = reader.readDouble();
+public record WorldBorderCenterPacket(double x, double z) implements ServerPacket {
+    public WorldBorderCenterPacket(BinaryReader reader) {
+        this(reader.readDouble(), reader.readDouble());
     }
 
     @Override

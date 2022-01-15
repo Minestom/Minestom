@@ -43,8 +43,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
-    private static final Registry.Container<EntityType> CONTAINER = new Registry.Container<>(Registry.Resource.ENTITIES,
-            (container, namespace, object) -> container.register(new EntityTypeImpl(Registry.entity(namespace, object, null))));
+    private static final Registry.Container<EntityType> CONTAINER = Registry.createContainer(Registry.Resource.ENTITIES,
+            (namespace, object) -> new EntityTypeImpl(Registry.entity(namespace, object, null)));
     private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
     static EntityType get(@NotNull String namespace) {

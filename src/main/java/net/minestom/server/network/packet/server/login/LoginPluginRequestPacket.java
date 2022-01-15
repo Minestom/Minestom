@@ -5,12 +5,14 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class LoginPluginRequestPacket implements ServerPacket {
-
-    public int messageId;
-    public String channel = "none";
-    public byte[] data;
+public record LoginPluginRequestPacket(int messageId, @NotNull String channel,
+                                       byte @Nullable [] data) implements ServerPacket {
+    public LoginPluginRequestPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readSizedString(),
+                reader.readRemainingBytes());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -19,13 +21,6 @@ public class LoginPluginRequestPacket implements ServerPacket {
         if (data != null && data.length > 0) {
             writer.writeBytes(data);
         }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        messageId = reader.readVarInt();
-        channel = reader.readSizedString();
-        data = reader.readRemainingBytes();
     }
 
     @Override

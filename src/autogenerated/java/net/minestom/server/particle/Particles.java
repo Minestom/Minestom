@@ -9,11 +9,9 @@ interface Particles {
 
     Particle ANGRY_VILLAGER = ParticleImpl.get("minecraft:angry_villager");
 
-    Particle BARRIER = ParticleImpl.get("minecraft:barrier");
-
-    Particle LIGHT = ParticleImpl.get("minecraft:light");
-
     Particle BLOCK = ParticleImpl.get("minecraft:block");
+
+    Particle BLOCK_MARKER = ParticleImpl.get("minecraft:block_marker");
 
     Particle BUBBLE = ParticleImpl.get("minecraft:bubble");
 

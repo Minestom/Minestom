@@ -8,62 +8,32 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.EnumMap;
+import java.util.Map;
 
-public class EntityEquipmentPacket implements ServerPacket {
+public record EntityEquipmentPacket(int entityId,
+                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket {
+    public EntityEquipmentPacket {
+        equipments = Map.copyOf(equipments);
+        if (equipments.isEmpty())
+            throw new IllegalArgumentException("Equipments cannot be empty");
+    }
 
-    public int entityId;
-    public EquipmentSlot[] slots;
-    public ItemStack[] itemStacks;
-
-    public EntityEquipmentPacket() {
+    public EntityEquipmentPacket(BinaryReader reader) {
+        this(reader.readVarInt(), readEquipments(reader));
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-
-        if (slots == null || itemStacks == null) {
-            throw new IllegalArgumentException("You need to specify at least one slot and one item");
-        }
-
-        if (slots.length != itemStacks.length) {
-            throw new IllegalArgumentException("You need the same amount of slots and items");
-        }
-
-        for (int i = 0; i < slots.length; i++) {
-            final EquipmentSlot slot = slots[i];
-            final ItemStack itemStack = itemStacks[i];
-            final boolean last = i == slots.length - 1;
-
-            byte slotEnum = (byte) slot.ordinal();
-            if (!last) {
-                slotEnum |= 0x80;
-            }
-
+        int index = 0;
+        for (var entry : equipments.entrySet()) {
+            final boolean last = index++ == equipments.size() - 1;
+            byte slotEnum = (byte) entry.getKey().ordinal();
+            if (!last) slotEnum |= 0x80;
             writer.writeByte(slotEnum);
-            writer.writeItemStack(itemStack);
+            writer.writeItemStack(entry.getValue());
         }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-
-        boolean hasRemaining = true;
-        List<EquipmentSlot> slots = new LinkedList<>();
-        List<ItemStack> stacks = new LinkedList<>();
-        while (hasRemaining) {
-            byte slotEnum = reader.readByte();
-            hasRemaining = (slotEnum & 0x80) == 0x80;
-
-            slots.add(EquipmentSlot.values()[slotEnum & 0x7F]);
-            stacks.add(reader.readItemStack());
-        }
-
-        this.slots = slots.toArray(new EquipmentSlot[0]);
-        this.itemStacks = stacks.toArray(new ItemStack[0]);
     }
 
     @Override
@@ -71,4 +41,13 @@ public class EntityEquipmentPacket implements ServerPacket {
         return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
 
+    private static Map<EquipmentSlot, ItemStack> readEquipments(BinaryReader reader) {
+        Map<EquipmentSlot, ItemStack> equipments = new EnumMap<>(EquipmentSlot.class);
+        byte slot;
+        do {
+            slot = reader.readByte();
+            equipments.put(EquipmentSlot.values()[slot & 0x7F], reader.readItemStack());
+        } while ((slot & 0x80) == 0x80);
+        return equipments;
+    }
 }

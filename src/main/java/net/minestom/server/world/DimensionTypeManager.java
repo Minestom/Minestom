@@ -3,9 +3,9 @@ package net.minestom.server.world;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.Collections;
 import java.util.List;
@@ -88,13 +88,14 @@ public final class DimensionTypeManager {
      * @return an nbt compound containing the registered dimensions
      */
     public @NotNull NBTCompound toNBT() {
-        NBTCompound dimensions = new NBTCompound();
-        dimensions.setString("type", "minecraft:dimension_type");
-        NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
-        for (DimensionType dimensionType : dimensionTypes) {
-            dimensionList.add(dimensionType.toIndexedNBT());
-        }
-        dimensions.set("value", dimensionList);
-        return dimensions;
+        return NBT.Compound(dimensions -> {
+            dimensions.setString("type", "minecraft:dimension_type");
+            dimensions.set("value", NBT.List(
+                    NBTType.TAG_Compound,
+                    dimensionTypes.stream()
+                            .map(DimensionType::toIndexedNBT)
+                            .toList()
+            ));
+        });
     }
 }

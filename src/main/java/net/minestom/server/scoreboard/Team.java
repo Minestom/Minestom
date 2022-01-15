@@ -8,7 +8,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
@@ -25,9 +24,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * This object represents a team on a scoreboard that has a common display theme and other properties.
  */
 public class Team implements PacketGroupingAudience {
-
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
-
     private static final byte ALLOW_FRIENDLY_FIRE_BIT = 0x01;
     private static final byte SEE_INVISIBLE_PLAYERS_BIT = 0x02;
 
@@ -115,13 +111,10 @@ public class Team implements PacketGroupingAudience {
         this.members.add(member);
 
         // Initializes add player packet
-        final TeamsPacket addPlayerPacket = new TeamsPacket();
-        addPlayerPacket.teamName = this.teamName;
-        addPlayerPacket.action = TeamsPacket.Action.ADD_PLAYERS_TEAM;
-        addPlayerPacket.entities = members.toArray(new String[0]);
-
+        final TeamsPacket addPlayerPacket = new TeamsPacket(teamName,
+                new TeamsPacket.AddEntitiesToTeamAction(members));
         // Sends to all online players the add player packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), addPlayerPacket);
+        PacketUtils.broadcastPacket(addPlayerPacket);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
@@ -134,13 +127,10 @@ public class Team implements PacketGroupingAudience {
      */
     public void removeMember(@NotNull String member) {
         // Initializes remove player packet
-        final TeamsPacket removePlayerPacket = new TeamsPacket();
-        removePlayerPacket.teamName = this.teamName;
-        removePlayerPacket.action = TeamsPacket.Action.REMOVE_PLAYERS_TEAM;
-        removePlayerPacket.entities = new String[]{member};
-
+        final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
+                new TeamsPacket.RemoveEntitiesToTeamAction(new String[]{member}));
         // Sends to all online player teh remove player packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), removePlayerPacket);
+        PacketUtils.broadcastPacket(removePlayerPacket);
 
         // Removes the member from the team
         this.members.remove(member);
@@ -351,21 +341,10 @@ public class Team implements PacketGroupingAudience {
      *
      * @return the packet to add the team
      */
-    @NotNull
-    public TeamsPacket createTeamsCreationPacket() {
-        TeamsPacket teamsCreationPacket = new TeamsPacket();
-        teamsCreationPacket.teamName = teamName;
-        teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsCreationPacket.teamDisplayName = this.teamDisplayName;
-        teamsCreationPacket.friendlyFlags = this.friendlyFlags;
-        teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
-        teamsCreationPacket.collisionRule = this.collisionRule;
-        teamsCreationPacket.teamColor = this.teamColor;
-        teamsCreationPacket.teamPrefix = this.prefix;
-        teamsCreationPacket.teamSuffix = this.suffix;
-        teamsCreationPacket.entities = this.members.toArray(new String[0]);
-
-        return teamsCreationPacket;
+    public @NotNull TeamsPacket createTeamsCreationPacket() {
+        final var info = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
+        return new TeamsPacket(teamName, info);
     }
 
     /**
@@ -373,12 +352,8 @@ public class Team implements PacketGroupingAudience {
      *
      * @return the packet to remove the team
      */
-    @NotNull
-    public TeamsPacket createTeamDestructionPacket() {
-        TeamsPacket teamsPacket = new TeamsPacket();
-        teamsPacket.teamName = teamName;
-        teamsPacket.action = TeamsPacket.Action.REMOVE_TEAM;
-        return teamsPacket;
+    public @NotNull TeamsPacket createTeamDestructionPacket() {
+        return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
     }
 
     /**
@@ -454,21 +429,12 @@ public class Team implements PacketGroupingAudience {
     }
 
     /**
-     * Sends an {@link TeamsPacket.Action#UPDATE_TEAM_INFO} packet.
+     * Sends an {@link TeamsPacket.UpdateTeamAction} action packet.
      */
     public void sendUpdatePacket() {
-        final TeamsPacket updatePacket = new TeamsPacket();
-        updatePacket.teamName = this.teamName;
-        updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = this.teamDisplayName;
-        updatePacket.friendlyFlags = this.friendlyFlags;
-        updatePacket.nameTagVisibility = this.nameTagVisibility;
-        updatePacket.collisionRule = this.collisionRule;
-        updatePacket.teamColor = this.teamColor;
-        updatePacket.teamPrefix = this.prefix;
-        updatePacket.teamSuffix = this.suffix;
-
-        PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), updatePacket);
+        final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix);
+        PacketUtils.broadcastPacket(new TeamsPacket(teamName, info));
     }
 
     @Override

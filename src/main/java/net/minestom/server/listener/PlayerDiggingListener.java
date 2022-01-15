@@ -21,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
-        final ClientPlayerDiggingPacket.Status status = packet.status;
-        final Point blockPosition = packet.blockPosition;
+        final ClientPlayerDiggingPacket.Status status = packet.status();
+        final Point blockPosition = packet.blockPosition();
         final Instance instance = player.getInstance();
         if (instance == null) return;
 

@@ -4,105 +4,95 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.TradeListPacket;
-import net.minestom.server.utils.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class VillagerInventory extends Inventory {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-    protected TradeListPacket tradeListPacket;
+public class VillagerInventory extends Inventory {
+    private final CachedPacket tradeCache = new CachedPacket(this::createTradePacket);
+    private final List<TradeListPacket.Trade> trades = new ArrayList<>();
+    private int villagerLevel;
+    private int experience;
+    private boolean regularVillager;
+    private boolean canRestock;
 
     public VillagerInventory(@NotNull Component title) {
         super(InventoryType.MERCHANT, title);
-        setupPacket();
     }
 
     public VillagerInventory(@NotNull String title) {
         super(InventoryType.MERCHANT, title);
-        setupPacket();
     }
 
-    public TradeListPacket.Trade[] getTrades() {
-        return tradeListPacket.trades;
+    public List<TradeListPacket.Trade> getTrades() {
+        return Collections.unmodifiableList(trades);
     }
 
     public void addTrade(TradeListPacket.Trade trade) {
-        TradeListPacket.Trade[] oldTrades = getTrades();
-        final int length = oldTrades.length + 1;
-        TradeListPacket.Trade[] trades = new TradeListPacket.Trade[length];
-        System.arraycopy(oldTrades, 0, trades, 0, oldTrades.length);
-        trades[length - 1] = trade;
-        this.tradeListPacket.trades = trades;
+        this.trades.add(trade);
         update();
     }
 
     public void removeTrade(int index) {
-        TradeListPacket.Trade[] oldTrades = getTrades();
-        final int length = oldTrades.length - 1;
-        TradeListPacket.Trade[] trades = new TradeListPacket.Trade[length];
-        ArrayUtils.removeElement(trades, index);
-        this.tradeListPacket.trades = trades;
+        this.trades.remove(index);
         update();
     }
 
     public int getVillagerLevel() {
-        return tradeListPacket.villagerLevel;
+        return villagerLevel;
     }
 
     public void setVillagerLevel(int level) {
-        this.tradeListPacket.villagerLevel = level;
+        this.villagerLevel = level;
         update();
     }
 
     public int getExperience() {
-        return tradeListPacket.experience;
+        return experience;
     }
 
     public void setExperience(int experience) {
-        this.tradeListPacket.experience = experience;
+        this.experience = experience;
         update();
     }
 
     public boolean isRegularVillager() {
-        return tradeListPacket.regularVillager;
+        return regularVillager;
     }
 
     public void setRegularVillager(boolean regularVillager) {
-        this.tradeListPacket.regularVillager = regularVillager;
+        this.regularVillager = regularVillager;
         update();
     }
 
     public boolean canRestock() {
-        return tradeListPacket.canRestock;
+        return canRestock;
     }
 
     public void setCanRestock(boolean canRestock) {
-        this.tradeListPacket.canRestock = canRestock;
+        this.canRestock = canRestock;
         update();
     }
 
     @Override
     public void update() {
         super.update();
-        sendPacketToViewers(tradeListPacket); // Refresh window
+        this.tradeCache.invalidate();
+        sendPacketToViewers(tradeCache);
     }
 
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = super.addViewer(player);
-        if (result) {
-            player.getPlayerConnection().sendPacket(tradeListPacket);
-        }
+        if (result) player.sendPacket(tradeCache);
         return result;
     }
 
-    private void setupPacket() {
-        this.tradeListPacket = new TradeListPacket();
-        this.tradeListPacket.windowId = getWindowId();
-        this.tradeListPacket.trades = new TradeListPacket.Trade[0];
-        this.tradeListPacket.villagerLevel = 0;
-        this.tradeListPacket.experience = 0;
-        this.tradeListPacket.regularVillager = false;
-        this.tradeListPacket.canRestock = false;
+    private TradeListPacket createTradePacket() {
+        return new TradeListPacket(getWindowId(), trades, villagerLevel, experience, regularVillager, canRestock);
     }
 }

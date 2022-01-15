@@ -1,21 +1,14 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientUpdateCommandBlockMinecartPacket extends ClientPlayPacket {
-
-    public int entityId;
-    public String command = "";
-    public boolean trackOutput;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.entityId = reader.readVarInt();
-        this.command = reader.readSizedString(Short.MAX_VALUE);
-        this.trackOutput = reader.readBoolean();
+public record ClientUpdateCommandBlockMinecartPacket(int entityId, @NotNull String command,
+                                                     boolean trackOutput) implements ClientPacket {
+    public ClientUpdateCommandBlockMinecartPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readSizedString(Short.MAX_VALUE), reader.readBoolean());
     }
 
     @Override

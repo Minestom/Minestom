@@ -7,26 +7,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class OpenBookPacket implements ServerPacket {
-
-    public Player.Hand hand;
-
-    public OpenBookPacket(Player.Hand hand) {
-        this.hand = hand;
-    }
-
-    public OpenBookPacket() {
-        this(Player.Hand.MAIN);
+public record OpenBookPacket(@NotNull Player.Hand hand) implements ServerPacket {
+    public OpenBookPacket(BinaryReader reader) {
+        this(Player.Hand.values()[reader.readVarInt()]);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(hand.ordinal());
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        hand = Player.Hand.values()[reader.readVarInt()];
     }
 
     @Override

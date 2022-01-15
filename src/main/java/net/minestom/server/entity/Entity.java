@@ -25,9 +25,9 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
@@ -37,6 +37,9 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.timer.Schedulable;
+import net.minestom.server.timer.Scheduler;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -51,12 +54,16 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
+import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -67,9 +74,9 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
-    private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
+    private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
@@ -121,7 +128,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
 
         @Override
-        public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
+        public void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
             viewEngine.updateTracker(point, tracker);
         }
     };
@@ -129,29 +136,40 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected final ViewEngine viewEngine = new ViewEngine(this,
             player -> {
                 // Add viewable
-                if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
-                        !player.viewEngine.viewerOption.predicate(this)) return;
-                Entity.this.viewEngine.viewableOption.register(player);
-                player.viewEngine.viewerOption.register(this);
+                var lock1 = player.getEntityId() < getEntityId() ? player : this;
+                var lock2 = lock1 == this ? player : this;
+                synchronized (lock1.viewEngine.mutex()) {
+                    synchronized (lock2.viewEngine.mutex()) {
+                        if (!Entity.this.viewEngine.viewableOption.predicate(player) ||
+                                !player.viewEngine.viewerOption.predicate(this)) return;
+                        Entity.this.viewEngine.viewableOption.register(player);
+                        player.viewEngine.viewerOption.register(this);
+                    }
+                }
                 updateNewViewer(player);
             },
             player -> {
                 // Remove viewable
-                Entity.this.viewEngine.viewableOption.unregister(player);
-                player.viewEngine.viewerOption.unregister(this);
+                var lock1 = player.getEntityId() < getEntityId() ? player : this;
+                var lock2 = lock1 == this ? player : this;
+                synchronized (lock1.viewEngine.mutex()) {
+                    synchronized (lock2.viewEngine.mutex()) {
+                        Entity.this.viewEngine.viewableOption.unregister(player);
+                        player.viewEngine.viewerOption.unregister(this);
+                    }
+                }
                 updateOldViewer(player);
             },
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.removal.accept(player) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
-    private final NBTCompound nbtCompound = new NBTCompound();
+    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+    private final Scheduler scheduler = Scheduler.newScheduler();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
-    private boolean shouldRemove;
-    private long scheduledRemoveTime;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
@@ -165,9 +183,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
-
-    // list of scheduled tasks to be executed during the next entity tick
-    protected final Queue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
 
     // Tick related
     private long ticks;
@@ -203,7 +218,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param callback the task to execute during the next entity tick
      */
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.nextTick.add(callback);
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     /**
@@ -215,7 +230,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return the entity having the specified id, null if not found
      */
     public static @Nullable Entity getEntity(int id) {
-        return Entity.ENTITY_BY_ID.getOrDefault(id, null);
+        return Entity.ENTITY_BY_ID.get(id);
     }
 
     /**
@@ -428,7 +443,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public void updateNewViewer(@NotNull Player player) {
         player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
-        player.sendPacket(getMetadataPacket());
+        player.sendPacket(new LazyPacket(this::getMetadataPacket));
         // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
@@ -506,38 +521,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @Override
     public void tick(long time) {
-        if (instance == null)
+        if (instance == null || isRemoved() || !ChunkUtils.isLoaded(currentChunk))
             return;
-
-        // Scheduled remove
-        if (scheduledRemoveTime != 0) {
-            final boolean finished = time >= scheduledRemoveTime;
-            if (finished) {
-                remove();
-                return;
-            }
-        }
-
-        // Instant remove
-        if (shouldRemove()) {
-            remove();
-            return;
-        }
-
-        // Check if the entity chunk is loaded
-        if (!ChunkUtils.isLoaded(currentChunk)) {
-            // No update for entities in unloaded chunk
-            return;
-        }
 
         // scheduled tasks
-        {
-            Consumer<Entity> callback;
-            while ((callback = nextTick.poll()) != null) {
-                callback.accept(this);
-            }
-            if (isRemoved()) return;
-        }
+        this.scheduler.processTick();
+        if (isRemoved()) return;
 
         // Entity tick
         {
@@ -561,9 +550,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             synchronizePosition(false);
-        }
-        if (shouldRemove() && !MinecraftServer.isStopping()) {
-            remove();
         }
     }
 
@@ -658,7 +644,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                     final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
                     if (!ChunkUtils.isLoaded(chunk))
                         continue;
-                    final Block block = chunk.getBlock(x, y, z, BlockGetter.Condition.CACHED);
+                    final Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.CACHED);
                     if (block == null)
                         continue;
                     final BlockHandler handler = block.handler();
@@ -678,7 +664,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final List<TimedPotion> effects = this.effects;
         if (effects.isEmpty()) return;
         effects.removeIf(timedPotion -> {
-            final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
+            final long potionTime = (long) timedPotion.getPotion().duration() * MinecraftServer.TICK_MS;
             // Remove if the potion should be expired
             if (time >= timedPotion.getStartingTime() + potionTime) {
                 // Send the packet that the potion should no longer be applied
@@ -803,7 +789,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
+        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
     }
 
     /**
@@ -877,7 +863,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
-        instance.getEntityTracker().unregister(this, position, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1043,17 +1029,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected @NotNull SetPassengersPacket getPassengersPacket() {
-        SetPassengersPacket passengersPacket = new SetPassengersPacket();
-        passengersPacket.vehicleEntityId = getEntityId();
-
-        int[] passengers = new int[this.passengers.size()];
-        int counter = 0;
-        for (Entity passenger : this.passengers) {
-            passengers[counter++] = passenger.getEntityId();
-        }
-
-        passengersPacket.passengersId = passengers;
-        return passengersPacket;
+        return new SetPassengersPacket(getEntityId(), passengers.stream().map(Entity::getEntityId).toList());
     }
 
     /**
@@ -1354,7 +1330,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, previousPosition, newPosition, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
@@ -1407,7 +1383,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param potion The potion to add
      */
     public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.getEffect());
+        removeEffect(potion.effect());
         this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
         EventDispatcher.call(new EntityPotionAddEvent(this, potion));
@@ -1420,7 +1396,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void removeEffect(@NotNull PotionEffect effect) {
         this.effects.removeIf(timedPotion -> {
-            if (timedPotion.getPotion().getEffect() == effect) {
+            if (timedPotion.getPotion().effect() == effect) {
                 timedPotion.getPotion().sendRemovePacket(this);
                 EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
                 return true;
@@ -1452,9 +1428,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
-        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
+        MinecraftServer.process().dispatcher().removeElement(this);
         this.removed = true;
-        this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
         Instance currentInstance = this.instance;
@@ -1484,24 +1459,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Triggers {@link #remove()} after the specified time.
      *
-     * @param delay the time before removing the entity,
-     *              0 to cancel the removing
+     * @param delay the time before removing the entity
      */
     public void scheduleRemove(Duration delay) {
-        if (delay.isZero()) { // Cancel the scheduled remove
-            this.scheduledRemoveTime = 0;
-            return;
-        }
-        this.scheduledRemoveTime = System.currentTimeMillis() + delay.toMillis();
-    }
-
-    /**
-     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(Duration)}.
-     *
-     * @return true if the entity removal has been scheduled
-     */
-    public boolean isRemoveScheduled() {
-        return scheduledRemoveTime != 0;
+        this.scheduler.buildTask(this::remove).delay(TaskSchedule.duration(delay)).schedule();
     }
 
     protected @NotNull Vec getVelocityForPacket() {
@@ -1582,6 +1543,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
+    }
+
+    @Override
+    public @NotNull Scheduler scheduler() {
+        return scheduler;
     }
 
     /**
@@ -1715,9 +1681,5 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         SPIN_ATTACK,
         SNEAKING,
         DYING
-    }
-
-    protected boolean shouldRemove() {
-        return shouldRemove;
     }
 }

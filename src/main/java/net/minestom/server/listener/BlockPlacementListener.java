@@ -23,7 +23,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
@@ -34,10 +33,9 @@ public class BlockPlacementListener {
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
-        final Player.Hand hand = packet.hand;
-        final BlockFace blockFace = packet.blockFace;
-        final Point blockPosition = packet.blockPosition;
-        final Direction direction = blockFace.toDirection();
+        final Player.Hand hand = packet.hand();
+        final BlockFace blockFace = packet.blockFace();
+        final Point blockPosition = packet.blockPosition();
 
         final Instance instance = player.getInstance();
         if (instance == null)
@@ -72,7 +70,7 @@ public class BlockPlacementListener {
         final Material useMaterial = usedItem.getMaterial();
         if (!useMaterial.isBlock()) {
             // Player didn't try to place a block but interacted with one
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, direction);
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace);
             EventDispatcher.call(event);
             return;
         }
@@ -94,10 +92,11 @@ public class BlockPlacementListener {
         final Point placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
-            // Send a block change with AIR as block to keep the client in sync,
+            // Send a block change with the real block in the instance to keep the client in sync,
             // using refreshChunk results in the client not being in sync
             // after rapid invalid block placements
-            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, Block.AIR));
+            final Block block = instance.getBlock(placementPosition);
+            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, block));
             return;
         }
 
@@ -134,7 +133,7 @@ public class BlockPlacementListener {
             return;
         }
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand);
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
@@ -155,7 +154,7 @@ public class BlockPlacementListener {
         }
         // Place the block
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ));
+                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand

@@ -18,7 +18,7 @@ public final class MojangAuth {
      */
     public static void init() {
         Check.stateCondition(enabled, "Mojang auth is already enabled!");
-        Check.stateCondition(MinecraftServer.isStarted(), "The server has already been started!");
+        Check.stateCondition(MinecraftServer.process().isAlive(), "The server has already been started!");
         MojangAuth.enabled = true;
         // Generate necessary fields...
         MojangAuth.keyPair = MojangCrypt.generateKeyPair();

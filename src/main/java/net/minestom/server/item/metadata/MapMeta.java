@@ -1,36 +1,32 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.color.Color;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
-import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
 public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMeta.Builder> {
 
     private final int mapId;
     private final int mapScaleDirection;
-    private final List<MapDecoration> decorations;
+    private final List<Decoration> decorations;
     private final Color mapColor;
 
     protected MapMeta(ItemMetaBuilder metaBuilder,
                       int mapId,
                       int mapScaleDirection,
-                      @NotNull List<MapDecoration> decorations,
+                      @NotNull List<Decoration> decorations,
                       @NotNull Color mapColor) {
         super(metaBuilder);
         this.mapId = mapId;
         this.mapScaleDirection = mapScaleDirection;
-        this.decorations = decorations;
+        this.decorations = List.copyOf(decorations);
         this.mapColor = mapColor;
     }
 
@@ -57,7 +53,7 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
      *
      * @return a modifiable list containing all the map decorations
      */
-    public List<MapDecoration> getDecorations() {
+    public List<Decoration> getDecorations() {
         return decorations;
     }
 
@@ -74,54 +70,39 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
 
         private int mapId;
         private int mapScaleDirection = 1;
-        private List<MapDecoration> decorations = new CopyOnWriteArrayList<>();
+        private List<Decoration> decorations = new CopyOnWriteArrayList<>();
         private Color mapColor = new Color(0, 0, 0);
 
         public Builder mapId(int value) {
             this.mapId = value;
-            mutateNbt(compound -> compound.setInt("map", mapId));
+            mutableNbt().setInt("map", mapId);
             return this;
         }
 
         public Builder mapScaleDirection(int value) {
             this.mapScaleDirection = value;
-            mutateNbt(compound -> compound.setInt("map_scale_direction", value));
+            mutableNbt().setInt("map_scale_direction", value);
             return this;
         }
 
-        public Builder decorations(List<MapDecoration> value) {
+        public Builder decorations(List<Decoration> value) {
             this.decorations = new ArrayList<>(value);
-
-            NBTList<NBTCompound> decorationsList = new NBTList<>(NBTTypes.TAG_Compound);
-            for (MapDecoration decoration : decorations) {
-                NBTCompound decorationCompound = new NBTCompound();
-                decorationCompound.setString("id", decoration.getId());
-                decorationCompound.setByte("type", decoration.getType());
-                decorationCompound.setByte("x", decoration.getX());
-                decorationCompound.setByte("z", decoration.getZ());
-                decorationCompound.setDouble("rot", decoration.getRotation());
-
-                decorationsList.add(decorationCompound);
-            }
-            mutateNbt(compound -> compound.set("Decorations", decorationsList));
-
+            mutableNbt().set("Decorations", NBT.List(NBTType.TAG_Compound,
+                    decorations.stream()
+                            .map(decoration -> NBT.Compound(Map.of(
+                                    "id", NBT.String(decoration.id()),
+                                    "type", NBT.Byte(decoration.type()),
+                                    "x", NBT.Byte(decoration.x()),
+                                    "z", NBT.Byte(decoration.z()),
+                                    "rot", NBT.Double(decoration.rotation()))))
+                            .toList()
+            ));
             return this;
         }
 
         public Builder mapColor(Color value) {
             this.mapColor = value;
-
-            mutateNbt(nbt -> {
-                NBTCompound displayCompound;
-                if (nbt.containsKey("display")) {
-                    displayCompound = nbt.getCompound("display");
-                } else {
-                    displayCompound = new NBTCompound();
-                    nbt.set("display", displayCompound);
-                }
-                displayCompound.setInt("MapColor", mapColor.asRGB());
-            });
-
+            handleCompound("display", displayCompound -> displayCompound.setInt("MapColor", mapColor.asRGB()));
             return this;
         }
 
@@ -132,125 +113,48 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
 
         @Override
         public void read(@NotNull NBTCompound compound) {
-            if (compound.containsKey("map")) {
-                mapId(compound.getAsInt("map"));
+            if (compound.get("map") instanceof NBTInt mapInt) {
+                this.mapId = mapInt.getValue();
+            }
+            if (compound.get("map_scale_direction") instanceof NBTInt mapScaleDirection) {
+                this.mapScaleDirection = mapScaleDirection.getValue();
             }
 
-            if (compound.containsKey("map_scale_direction")) {
-                mapScaleDirection(compound.getAsInt("map_scale_direction"));
-            }
-
-            if (compound.containsKey("Decorations")) {
-                final NBTList<NBTCompound> decorationsList = compound.getList("Decorations");
-                List<MapDecoration> mapDecorations = new ArrayList<>();
-                for (NBTCompound decorationCompound : decorationsList) {
+            if (compound.get("Decorations") instanceof NBTList<?> decorationsList &&
+                    decorationsList.getSubtagType() == NBTType.TAG_Compound) {
+                List<Decoration> decorations = new ArrayList<>();
+                for (NBTCompound decorationCompound : decorationsList.<NBTCompound>asListOf()) {
                     final String id = decorationCompound.getString("id");
                     final byte type = decorationCompound.getAsByte("type");
                     byte x = 0;
 
-                    if (decorationCompound.containsKey("x")) {
-                        x = decorationCompound.getAsByte("x");
+                    if (decorationCompound.get("x") instanceof NBTByte xByte) {
+                        x = xByte.getValue();
                     }
 
                     byte z = 0;
-                    if (decorationCompound.containsKey("z")) {
-                        z = decorationCompound.getAsByte("z");
+                    if (decorationCompound.get("z") instanceof NBTByte zByte) {
+                        z = zByte.getValue();
                     }
 
                     double rotation = 0.0;
-                    if (decorationCompound.containsKey("rot")) {
-                        rotation = decorationCompound.getAsDouble("rot");
+                    if (decorationCompound.get("rot") instanceof NBTDouble rotDouble) {
+                        rotation = rotDouble.getValue();
                     }
 
-                    mapDecorations.add(new MapDecoration(id, type, x, z, rotation));
+                    decorations.add(new Decoration(id, type, x, z, rotation));
                 }
-                decorations(mapDecorations);
+                this.decorations = decorations;
             }
 
-            if (compound.containsKey("display")) {
-                final NBTCompound displayCompound = compound.getCompound("display");
-                if (displayCompound.containsKey("MapColor")) {
-                    mapColor(new Color(displayCompound.getAsInt("MapColor")));
+            if (compound.get("display") instanceof NBTCompound displayCompound) {
+                if (displayCompound.get("MapColor") instanceof NBTInt mapColor) {
+                    this.mapColor = new Color(mapColor.getValue());
                 }
-            }
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return Builder::new;
-        }
-    }
-
-    public static class MapDecoration implements PublicCloneable<MapDecoration> {
-        private final String id;
-        private final byte type;
-        private final byte x, z;
-        private final double rotation;
-
-        public MapDecoration(@NotNull String id, byte type, byte x, byte z, double rotation) {
-            this.id = id;
-            this.type = type;
-            this.x = x;
-            this.z = z;
-            this.rotation = rotation;
-        }
-
-        /**
-         * Gets the arbitrary decoration id.
-         *
-         * @return the decoration id
-         */
-        public String getId() {
-            return id;
-        }
-
-        /**
-         * Gets the decoration type.
-         *
-         * @return the decoration type
-         * @see <a href="https://minecraft.gamepedia.com/Map#Map_icons">Map icons</a>
-         */
-        public byte getType() {
-            return type;
-        }
-
-        /**
-         * Gets the X position of the decoration.
-         *
-         * @return the X position
-         */
-        public byte getX() {
-            return x;
-        }
-
-        /**
-         * Gets the Z position of the decoration.
-         *
-         * @return the Z position
-         */
-        public byte getZ() {
-            return z;
-        }
-
-        /**
-         * Gets the rotation of the symbol (0;360).
-         *
-         * @return the rotation of the symbol
-         */
-        public double getRotation() {
-            return rotation;
-        }
-
-        @NotNull
-        @Override
-        public MapDecoration clone() {
-            try {
-                return (MapDecoration) super.clone();
-            } catch (CloneNotSupportedException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                throw new IllegalStateException("Something weird happened");
             }
         }
     }
 
+    public record Decoration(String id, byte type, byte x, byte z, double rotation) {
+    }
 }

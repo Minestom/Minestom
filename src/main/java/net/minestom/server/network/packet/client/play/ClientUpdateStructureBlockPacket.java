@@ -2,13 +2,27 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
+public record ClientUpdateStructureBlockPacket(Point location, Action action,
+                                               Mode mode, String name,
+                                               Point offset, Point size,
+                                               Mirror mirror, Rotation rotation,
+                                               String metadata, float integrity,
+                                               long seed, byte flags) implements ClientPacket {
+    public ClientUpdateStructureBlockPacket(BinaryReader reader) {
+        this(reader.readBlockPosition(), Action.values()[reader.readVarInt()],
+                Mode.values()[reader.readVarInt()], reader.readSizedString(Short.MAX_VALUE),
+                new Vec(reader.readByte(), reader.readByte(), reader.readByte()), new Vec(reader.readByte(), reader.readByte(), reader.readByte()),
+                Mirror.values()[reader.readVarInt()], fromRestrictedRotation(reader.readVarInt()),
+                reader.readSizedString(Short.MAX_VALUE), reader.readFloat(),
+                reader.readVarLong(), reader.readByte());
+    }
+
     // Flag values
     public static final byte IGNORE_ENTITIES = 0x1;
     public static final byte SHOW_AIR = 0x2;
@@ -16,19 +30,6 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
      * Requires the player to be in creative and have a permission level higher than 2.
      */
     public static final byte SHOW_BOUNDING_BOX = 0x4;
-
-    public Point location = Vec.ZERO;
-    public Action action = Action.UPDATE_DATA;
-    public Mode mode = Mode.DATA;
-    public String name = "";
-    public Point offset = new Vec(0, 1, 0);
-    public Point size = Vec.ONE;
-    public Mirror mirror = Mirror.NONE;
-    public Rotation rotation = Rotation.NONE;
-    public String metadata = "";
-    public float integrity = 1.0f;
-    public long seed = 0;
-    public byte flags = 0x0;
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -50,30 +51,6 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
         writer.writeByte(flags);
     }
 
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        location = reader.readBlockPosition();
-        action = Action.values()[reader.readVarInt()];
-        mode = Mode.values()[reader.readVarInt()];
-        name = reader.readSizedString(Short.MAX_VALUE);
-        offset = new Vec(
-                reader.readByte(),
-                reader.readByte(),
-                reader.readByte()
-        );
-        size = new Vec(
-                reader.readByte(),
-                reader.readByte(),
-                reader.readByte()
-        );
-        mirror = Mirror.values()[reader.readVarInt()];
-        rotation = fromRestrictedRotation(reader.readVarInt());
-        metadata = reader.readSizedString(Short.MAX_VALUE);
-        integrity = reader.readFloat();
-        seed = reader.readVarLong();
-        flags = reader.readByte();
-    }
-
     /**
      * Update action, <code>UPDATE_DATA</code> indicates nothing special.
      */
@@ -89,7 +66,7 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
         NONE, LEFT_RIGHT, FRONT_BACK
     }
 
-    private int toRestrictedRotation(Rotation rotation) {
+    private static int toRestrictedRotation(Rotation rotation) {
         return switch (rotation) {
             case NONE -> 0;
             case CLOCKWISE -> 1;
@@ -99,7 +76,7 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
         };
     }
 
-    private Rotation fromRestrictedRotation(int rotation) {
+    private static Rotation fromRestrictedRotation(int rotation) {
         return switch (rotation) {
             case 0 -> Rotation.NONE;
             case 1 -> Rotation.CLOCKWISE;

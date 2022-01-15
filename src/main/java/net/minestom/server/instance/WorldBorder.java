@@ -102,7 +102,7 @@ public class WorldBorder {
      */
     public void setWarningTime(int warningTime) {
         this.warningTime = warningTime;
-        sendPacket(WorldBorderWarningDelayPacket.of(warningTime));
+        sendPacket(new WorldBorderWarningDelayPacket(warningTime));
     }
 
     public int getWarningBlocks() {
@@ -114,7 +114,7 @@ public class WorldBorder {
      */
     public void setWarningBlocks(int warningBlocks) {
         this.warningBlocks = warningBlocks;
-        sendPacket(WorldBorderWarningReachPacket.of(warningBlocks));
+        sendPacket(new WorldBorderWarningReachPacket(warningBlocks));
     }
 
     /**
@@ -131,7 +131,7 @@ public class WorldBorder {
         this.newDiameter = diameter;
         this.speed = speed;
         this.lerpStartTime = System.currentTimeMillis();
-        sendPacket(WorldBorderLerpSizePacket.of(oldDiameter, newDiameter, speed));
+        sendPacket(new WorldBorderLerpSizePacket(oldDiameter, newDiameter, speed));
     }
 
     /**
@@ -154,7 +154,7 @@ public class WorldBorder {
         this.oldDiameter = diameter;
         this.newDiameter = diameter;
         this.lerpStartTime = 0;
-        sendPacket(WorldBorderSizePacket.of(diameter));
+        sendPacket(new WorldBorderSizePacket(diameter));
     }
 
     /**
@@ -229,9 +229,8 @@ public class WorldBorder {
      */
     @ApiStatus.Internal
     public void init(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(
-                InitializeWorldBorderPacket.of(centerX, centerZ, oldDiameter, newDiameter, speed,
-                        portalTeleportBoundary, warningTime, warningBlocks));
+        player.sendPacket(new InitializeWorldBorderPacket(centerX, centerZ,
+                oldDiameter, newDiameter, speed, portalTeleportBoundary, warningTime, warningBlocks));
     }
 
     /**
@@ -248,7 +247,7 @@ public class WorldBorder {
      * Sends the new world border centers to all instance players.
      */
     private void refreshCenter() {
-        sendPacket(WorldBorderCenterPacket.of(centerX, centerZ));
+        sendPacket(new WorldBorderCenterPacket(centerX, centerZ));
     }
 
     private void sendPacket(@NotNull ServerPacket packet) {

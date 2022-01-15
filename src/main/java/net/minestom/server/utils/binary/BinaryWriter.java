@@ -9,6 +9,7 @@ import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
@@ -19,7 +20,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -218,6 +221,17 @@ public class BinaryWriter extends OutputStream {
         }
     }
 
+    public void writeVarLongArray(long[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+        writeVarInt(array.length);
+        for (long element : array) {
+            writeVarLong(element);
+        }
+    }
+
     public void writeLongArray(long[] array) {
         if (array == null) {
             writeVarInt(0);
@@ -227,6 +241,15 @@ public class BinaryWriter extends OutputStream {
         for (long element : array) {
             writeLong(element);
         }
+    }
+
+    public void writeByteArray(byte[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+        writeVarInt(array.length);
+        writeBytes(array);
     }
 
     /**
@@ -292,7 +315,7 @@ public class BinaryWriter extends OutputStream {
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {
         if (nbtWriter == null) {
-            this.nbtWriter = new NBTWriter(this, false);
+            this.nbtWriter = new NBTWriter(this, CompressedProcesser.NONE);
         }
         try {
             nbtWriter.writeNamed(name, tag);
@@ -301,7 +324,7 @@ public class BinaryWriter extends OutputStream {
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
-
+    
     /**
      * Writes the given writeable object into this writer.
      *
@@ -312,8 +335,8 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void write(@NotNull ByteBuffer buffer) {
-        ensureSize(buffer.position());
-        this.buffer.put(buffer.flip());
+        ensureSize(buffer.remaining());
+        this.buffer.put(buffer);
     }
 
     public void write(@NotNull BinaryWriter writer) {
@@ -331,6 +354,20 @@ public class BinaryWriter extends OutputStream {
         for (Writeable w : writeables) {
             write(w);
         }
+    }
+
+    public <T> void writeVarIntList(Collection<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
+        writeVarInt(list.size());
+        writeList(list, consumer);
+    }
+
+    public <T> void writeByteList(Collection<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
+        writeByte((byte) list.size());
+        writeList(list, consumer);
+    }
+
+    private <T> void writeList(Collection<T> list, @NotNull BiConsumer<BinaryWriter, T> consumer) {
+        for (T t : list) consumer.accept(this, t);
     }
 
     /**

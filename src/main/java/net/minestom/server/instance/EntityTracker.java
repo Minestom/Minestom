@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,9 @@ import java.util.Set;
  */
 @ApiStatus.Experimental
 public sealed interface EntityTracker permits EntityTrackerImpl {
+    static @NotNull EntityTracker newTracker() {
+        return new EntityTrackerImpl();
+    }
 
     /**
      * Register an entity to be tracked.
@@ -30,15 +34,13 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     /**
      * Unregister an entity tracking.
      */
-    <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Point point,
-                                       @NotNull Target<T> target, @Nullable Update<T> update);
+    <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
-    <T extends Entity> void move(@NotNull Entity entity,
-                                 @NotNull Point oldPoint, @NotNull Point newPoint,
+    <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                  @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
@@ -54,14 +56,15 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     }
 
     /**
-     * Gets the entities present in the specified chunk.
+     * Returns a copy of the entities present in the specified chunk.
      */
-    <T extends Entity> void chunkEntities(int chunkX, int chunkZ,
-                                          @NotNull Target<T> target, @NotNull Query<T> query);
+    @ApiStatus.Experimental
+    @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
 
-    default <T extends Entity> void chunkEntities(@NotNull Point point,
-                                                  @NotNull Target<T> target, @NotNull Query<T> query) {
-        chunkEntities(point.chunkX(), point.chunkZ(), target, query);
+    @ApiStatus.Experimental
+    @UnmodifiableView
+    default <T extends Entity> @NotNull Collection<T> chunkEntities(@NotNull Point point, @NotNull Target<T> target) {
+        return chunkEntities(point.chunkX(), point.chunkZ(), target);
     }
 
     /**
@@ -102,11 +105,6 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     default @NotNull Set<@NotNull Entity> entities() {
         return entities(Target.ENTITIES);
     }
-
-    /**
-     * Run {@code runnable} and ensure that the tracking state is locked during execution.
-     */
-    void synchronize(@NotNull Point point, @NotNull Runnable runnable);
 
     /**
      * Represents the type of entity you want to retrieve.
@@ -150,7 +148,9 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
 
         void remove(@NotNull E entity);
 
-        void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker);
+        default void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
+            // Empty
+        }
     }
 
     /**

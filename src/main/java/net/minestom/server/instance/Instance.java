@@ -1,10 +1,10 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
-import net.minestom.server.UpdateManager;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.data.Data;
@@ -15,11 +15,16 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceTickEvent;
-import net.minestom.server.instance.block.*;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.thread.ThreadDispatcher;
+import net.minestom.server.timer.Schedulable;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -29,12 +34,11 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -46,13 +50,11 @@ import java.util.stream.Collectors;
  * <p>
  * WARNING: when making your own implementation registering the instance manually is required
  * with {@link InstanceManager#registerInstance(Instance)}, and
- * you need to be sure to signal the {@link UpdateManager} of the changes using
- * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
+ * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements BlockGetter, BlockSetter, Tickable, TagHandler, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
 
     private boolean registered;
 
@@ -77,12 +79,11 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     // the uuid of this instance
     protected UUID uniqueId;
 
-    // list of scheduled tasks to be executed during the next instance tick
-    protected final Queue<Consumer<Instance>> nextTick = new ConcurrentLinkedQueue<>();
-
     // instance custom data
     private final Object nbtLock = new Object();
-    private final NBTCompound nbt = new NBTCompound();
+    private final MutableNBTCompound nbt = new MutableNBTCompound();
+
+    private final Scheduler scheduler = Scheduler.newScheduler();
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
@@ -118,7 +119,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param callback the task to execute during the next instance tick
      */
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
-        this.nextTick.add(callback);
+        this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     @ApiStatus.Internal
@@ -484,9 +485,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        Set<Entity> result = new HashSet<>();
-        this.entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES, result::add);
-        return result;
+        var chunkEntities = entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES);
+        return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
     }
 
     /**
@@ -571,12 +571,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     @Override
     public void tick(long time) {
         // Scheduled tasks
-        {
-            Consumer<Instance> callback;
-            while ((callback = nextTick.poll()) != null) {
-                callback.accept(this);
-            }
-        }
+        this.scheduler.processTick();
         // Time
         {
             this.worldAge++;
@@ -610,6 +605,11 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         synchronized (nbtLock) {
             tag.write(nbt, value);
         }
+    }
+
+    @Override
+    public @NotNull Scheduler scheduler() {
+        return scheduler;
     }
 
     /**

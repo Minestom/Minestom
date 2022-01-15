@@ -139,10 +139,6 @@ public final class ChunkUtils {
         return (int) index;
     }
 
-    public static int getSectionAt(int y) {
-        return y / Chunk.CHUNK_SECTION_SIZE;
-    }
-
     public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
                                                  int oldChunkX, int oldChunkZ,
                                                  int range, @NotNull IntegerBiConsumer callback) {
@@ -236,5 +232,19 @@ public final class ChunkUtils {
      */
     public static int blockIndexToChunkPositionZ(int index) {
         return (index >> 28) & 0xF; // 28-32 bits
+    }
+
+    /**
+     * Converts a global coordinate value to a section coordinate
+     *
+     * @param xyz global coordinate
+     * @return section coordinate
+     */
+    public static int toSectionRelativeCoordinate(int xyz) {
+        xyz %= 16;
+        if (xyz < 0) {
+            xyz += Chunk.CHUNK_SECTION_SIZE;
+        }
+        return xyz;
     }
 }

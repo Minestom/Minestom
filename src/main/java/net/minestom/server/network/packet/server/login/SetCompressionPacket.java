@@ -6,29 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetCompressionPacket implements ServerPacket {
-
-    public int threshold;
-
-    /**
-     * DO NOT USE
-     */
-    private SetCompressionPacket() {
-        threshold = 256;
-    }
-
-    public SetCompressionPacket(int threshold) {
-        this.threshold = threshold;
+public record SetCompressionPacket(int threshold) implements ServerPacket {
+    public SetCompressionPacket(BinaryReader reader) {
+        this(reader.readVarInt());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(threshold);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        threshold = reader.readVarInt();
     }
 
     @Override

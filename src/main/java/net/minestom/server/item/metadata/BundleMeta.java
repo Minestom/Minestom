@@ -5,13 +5,13 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @ApiStatus.Experimental
 public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<BundleMeta.Builder> {
@@ -57,28 +57,17 @@ public class BundleMeta extends ItemMeta implements ItemMetaBuilder.Provider<Bun
         }
 
         private void updateItems() {
-            mutateNbt(compound -> {
-                NBTList<NBTCompound> itemList = new NBTList<>(NBTTypes.TAG_Compound);
-                for (ItemStack item : items) {
-                    itemList.add(item.toItemNBT());
-                }
-                compound.set("Items", itemList);
-            });
+            mutableNbt().set("Items", NBT.List(NBTType.TAG_Compound, items.size(), i -> items.get(i).toItemNBT()));
         }
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Items")) {
-                final NBTList<NBTCompound> items = nbtCompound.getList("Items");
-                for (NBTCompound item : items) {
+            if (nbtCompound.get("Items") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_Compound) {
+                for (NBTCompound item : list.<NBTCompound>asListOf()) {
                     this.items.add(ItemStack.fromItemNBT(item));
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

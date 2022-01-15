@@ -1,13 +1,12 @@
 package net.minestom.server.instance.batch;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.BlockSetter;
-import net.minestom.server.thread.MinestomThreadPool;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * A Batch is a tool used to cache a list of block changes, and apply the changes whenever you want.
@@ -27,11 +26,9 @@ import java.util.concurrent.ExecutorService;
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
-public interface Batch<C> extends BlockSetter {
+public interface Batch<C> extends Block.Setter {
 
-    ExecutorService BLOCK_BATCH_POOL = new MinestomThreadPool(
-            MinecraftServer.THREAD_COUNT_BLOCK_BATCH,
-            MinecraftServer.THREAD_NAME_BLOCK_BATCH);
+    ExecutorService BLOCK_BATCH_POOL = ForkJoinPool.commonPool();
 
     /**
      * Gets if the batch is ready to be applied to an instance.

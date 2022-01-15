@@ -2,8 +2,6 @@ package net.minestom.server.registry;
 
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
@@ -68,31 +66,32 @@ public final class Registry {
         return map;
     }
 
-    public static class Container<T extends ProtocolObject> {
-        // Maps do not need to be thread-safe as they are fully populated
-        // in the static initializer, should not be modified during runtime
+    @ApiStatus.Internal
+    public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
+        var entries = Registry.load(resource);
+        Map<String, T> namespaces = new HashMap<>(entries.size());
+        ObjectArray<T> ids = new ObjectArray<>(entries.size());
+        for (var entry : entries.entrySet()) {
+            final String namespace = entry.getKey();
+            final Map<String, Object> object = entry.getValue();
+            final T value = loader.get(namespace, object);
+            ids.set(value.id(), value);
+            namespaces.put(value.name(), value);
+        }
+        return new Container<>(resource, namespaces, ids);
+    }
 
-        // namespace -> registry data
-        private final Map<String, T> namespaceMap = new HashMap<>();
-        // id -> registry data
-        private final ObjectArray<T> ids = new ObjectArray<>();
-        private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
-
-        private final boolean initialized;
-
-        @ApiStatus.Internal
-        public Container(Resource resource, Loader<T> loader) {
-            for (var entry : Registry.load(resource).entrySet()) {
-                final String namespace = entry.getKey();
-                final Map<String, Object> object = entry.getValue();
-                loader.accept(this, namespace, object);
-            }
-            this.initialized = true;
-            this.ids.trim();
+    @ApiStatus.Internal
+    public record Container<T extends ProtocolObject>(Resource resource,
+                                                      Map<String, T> namespaces,
+                                                      ObjectArray<T> ids) {
+        public Container {
+            namespaces = Map.copyOf(namespaces);
+            ids.trim();
         }
 
         public T get(@NotNull String namespace) {
-            return namespaceMap.get(namespace);
+            return namespaces.get(namespace);
         }
 
         public T getSafe(@NotNull String namespace) {
@@ -104,17 +103,23 @@ public final class Registry {
         }
 
         public Collection<T> values() {
-            return objects;
+            return namespaces.values();
         }
 
-        public void register(@NotNull T value) {
-            Check.stateCondition(initialized, "Registering is only available within the loader lambda.");
-            this.ids.set(value.id(), value);
-            this.namespaceMap.put(value.name(), value);
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Container<?> container)) return false;
+            return resource == container.resource;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(resource);
         }
 
         public interface Loader<T extends ProtocolObject> {
-            void accept(Container<T> container, String namespace, Map<String, Object> object);
+            T get(String namespace, Map<String, Object> object);
         }
     }
 
@@ -157,6 +162,7 @@ public final class Registry {
         private final boolean solid;
         private final boolean liquid;
         private final String blockEntity;
+        private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
 
         private BlockEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
@@ -173,13 +179,14 @@ public final class Registry {
             this.air = getBoolean("air", false);
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid", false);
-
             {
                 Map<String, Object> blockEntity = element("blockEntity");
                 if (blockEntity != null) {
                     this.blockEntity = (String) blockEntity.get("namespace");
+                    this.blockEntityId = ((Number) blockEntity.get("id")).intValue();
                 } else {
                     this.blockEntity = null;
+                    this.blockEntityId = 0;
                 }
             }
             {
@@ -242,6 +249,10 @@ public final class Registry {
 
         public @Nullable String blockEntity() {
             return blockEntity;
+        }
+
+        public int blockEntityId() {
+            return blockEntityId;
         }
 
         public @Nullable Material material() {
@@ -529,18 +540,18 @@ public final class Registry {
     private static Object readObject(JsonReader reader) throws IOException {
         return switch (reader.peek()) {
             case BEGIN_ARRAY -> {
-                ObjectArrayList<Object> list = new ObjectArrayList<>();
+                List<Object> list = new ArrayList<>();
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
-                yield new ObjectArrayList<>(list);
+                yield List.copyOf(list);
             }
             case BEGIN_OBJECT -> {
-                Object2ObjectArrayMap<String, Object> map = new Object2ObjectArrayMap<>();
+                Map<String, Object> map = new HashMap<>();
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
                 reader.endObject();
-                yield new Object2ObjectArrayMap<>(map);
+                yield Map.copyOf(map);
             }
             case STRING -> reader.nextString().intern();
             case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);

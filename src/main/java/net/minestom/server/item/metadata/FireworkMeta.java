@@ -4,15 +4,10 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.firework.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
 public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkMeta.Builder> {
 
@@ -22,12 +17,12 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
     protected FireworkMeta(@NotNull ItemMetaBuilder metaBuilder, List<FireworkEffect> effects,
                            byte flightDuration) {
         super(metaBuilder);
-        this.effects = new ArrayList<>(effects);
+        this.effects = List.copyOf(effects);
         this.flightDuration = flightDuration;
     }
 
     public List<FireworkEffect> getEffects() {
-        return Collections.unmodifiableList(effects);
+        return effects;
     }
 
     public byte getFlightDuration() {
@@ -42,11 +37,12 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
         public Builder effects(List<FireworkEffect> effects) {
             this.effects = effects;
             handleCompound("Fireworks", nbtCompound -> {
-                NBTList<NBTCompound> explosions = new NBTList<>(NBTTypes.TAG_Compound);
-                for (FireworkEffect effect : this.effects) {
-                    explosions.add(effect.asCompound());
-                }
-                nbtCompound.set("Explosions", explosions);
+                nbtCompound.set("Explosions", NBT.List(
+                        NBTType.TAG_Compound,
+                        effects.stream()
+                                .map(FireworkEffect::asCompound)
+                                .toList()
+                ));
             });
             return this;
         }
@@ -65,27 +61,18 @@ public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<F
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Fireworks")) {
-                NBTCompound fireworksCompound = nbtCompound.getCompound("Fireworks");
-
-                if (fireworksCompound.containsKey("Flight")) {
-                    flightDuration(fireworksCompound.getAsByte("Flight"));
+            if (nbtCompound.get("Fireworks") instanceof NBTCompound fireworksCompound) {
+                if (fireworksCompound.get("Flight") instanceof NBTByte flight) {
+                    this.flightDuration = flight.getValue();
                 }
 
-                if (fireworksCompound.containsKey("Explosions")) {
-                    NBTList<NBTCompound> explosions = fireworksCompound.getList("Explosions");
-
-                    for (NBTCompound explosion : explosions) {
+                if (fireworksCompound.get("Explosions") instanceof NBTList<?> list &&
+                        list.getSubtagType() == NBTType.TAG_Compound) {
+                    for (NBTCompound explosion : list.<NBTCompound>asListOf()) {
                         this.effects.add(FireworkEffect.fromCompound(explosion));
                     }
-                    effects(effects);
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

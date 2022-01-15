@@ -7,22 +7,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetSlotPacket implements ServerPacket {
-
-    public byte windowId;
-    public int stateId;
-    public short slot;
-    public ItemStack itemStack;
-
-    public SetSlotPacket(byte windowId, int stateId, short slot, ItemStack itemStack) {
-        this.windowId = windowId;
-        this.stateId = stateId;
-        this.slot = slot;
-        this.itemStack = itemStack;
-    }
-
-    public SetSlotPacket() {
-        this((byte) 0, 0, (short) 0, ItemStack.AIR);
+public record SetSlotPacket(byte windowId, int stateId, short slot,
+                            @NotNull ItemStack itemStack) implements ServerPacket {
+    public SetSlotPacket(BinaryReader reader) {
+        this(reader.readByte(), reader.readVarInt(), reader.readShort(),
+                reader.readItemStack());
     }
 
     @Override
@@ -31,14 +20,6 @@ public class SetSlotPacket implements ServerPacket {
         writer.writeVarInt(stateId);
         writer.writeShort(slot);
         writer.writeItemStack(itemStack);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        windowId = reader.readByte();
-        stateId = reader.readVarInt();
-        slot = reader.readShort();
-        itemStack = reader.readItemStack();
     }
 
     @Override

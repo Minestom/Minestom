@@ -1,7 +1,7 @@
 package net.minestom.server.utils;
 
-import com.zaxxer.sparsebits.SparseBitSet;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -10,10 +10,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -24,10 +23,9 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
-    private final ObjectArraySet<Player> manualViewers = new ObjectArraySet<>();
+    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
 
     private EntityTracker tracker;
-    private Point lastTrackingPoint;
 
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
@@ -45,14 +43,17 @@ public final class ViewEngine {
         this.viewerOption = new Option<>(Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
     }
 
+    public ViewEngine(@Nullable Entity entity) {
+        this(entity, null, null, null, null);
+    }
+
     public ViewEngine() {
-        this(null, null, null, null, null);
+        this(null);
     }
 
     public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
         synchronized (mutex) {
             this.tracker = tracker;
-            this.lastTrackingPoint = point;
             if (tracker != null) {
                 this.viewableOption.references = tracker.references(point, EntityTracker.Target.PLAYERS);
                 this.viewerOption.references = tracker.references(point, EntityTracker.Target.ENTITIES);
@@ -99,20 +100,22 @@ public final class ViewEngine {
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
-        if (this.entity == entity)
-            return; // Ensure that self isn't added or removed as viewer
         if (entity.getVehicle() != null)
             return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
-            viewer.accept(entity); // Send packet to this player
+            if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
-            viewable.accept(player); // Send packet to the range-visible player
+            if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
     }
 
     private boolean validAutoViewer(Player player) {
         return entity == null || viewableOption.isRegistered(player);
+    }
+
+    public Object mutex() {
+        return mutex;
     }
 
     public Set<Player> asSet() {
@@ -126,8 +129,8 @@ public final class ViewEngine {
         private final Predicate<T> loopPredicate;
         // The consumers to be called when an entity is added/removed.
         public final Consumer<T> addition, removal;
-        // Contains all the entity ids that are viewable by this option.
-        public final SparseBitSet bitSet = new SparseBitSet();
+        // Contains all the auto-entity ids that are viewable by this option.
+        public final IntSet bitSet = new IntOpenHashSet();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // References from the entity trackers.
@@ -151,15 +154,15 @@ public final class ViewEngine {
         }
 
         public boolean isRegistered(T entity) {
-            return bitSet.get(entity.getEntityId());
+            return bitSet.contains(entity.getEntityId());
         }
 
         public void register(T entity) {
-            this.bitSet.set(entity.getEntityId());
+            this.bitSet.add(entity.getEntityId());
         }
 
         public void unregister(T entity) {
-            this.bitSet.clear(entity.getEntityId());
+            this.bitSet.remove(entity.getEntityId());
         }
 
         public void updateAuto(boolean autoViewable) {
@@ -195,25 +198,25 @@ public final class ViewEngine {
                             Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             if (tracker == null || references == null) return;
-            tracker.synchronize(lastTrackingPoint, () -> {
-                for (List<T> entities : references) {
-                    if (entities.isEmpty()) continue;
-                    for (T entity : entities) {
-                        if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
-                        if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                        if (entity.getVehicle() != null) continue;
-                        action.accept(entity);
-                    }
+            for (List<T> entities : references) {
+                if (entities.isEmpty()) continue;
+                for (T entity : entities) {
+                    if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
+                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
+                    if (entity.getVehicle() != null) continue;
+                    action.accept(entity);
                 }
-            });
+            }
         }
     }
 
     final class SetImpl extends AbstractSet<Player> {
+        private static final Object[] EMPTY = new Object[0];
+
         @Override
         public @NotNull Iterator<Player> iterator() {
             synchronized (mutex) {
-                return new It();
+                return Arrays.asList(toArray(Player[]::new)).iterator();
             }
         }
 
@@ -277,7 +280,12 @@ public final class ViewEngine {
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
                 if (!manualViewers.isEmpty()) manualViewers.forEach(action);
-                // Auto
+                if (entity != null) {
+                    viewableOption.bitSet.forEach((int id) ->
+                            action.accept((Player) Entity.getEntity(id)));
+                    return;
+                }
+                // Non-entity fallback
                 final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
                 if (auto != null && viewableOption.isAuto()) {
                     for (List<Player> players : auto) {
@@ -290,54 +298,31 @@ public final class ViewEngine {
             }
         }
 
-        final class It implements Iterator<Player> {
-            private Iterator<Player> current = ViewEngine.this.manualViewers.iterator();
-            private boolean autoIterator = false; // True if the current iterator comes from the auto-viewable references
-            private int index;
-            private Player next;
-
-            @Override
-            public boolean hasNext() {
-                synchronized (mutex) {
-                    return next != null || (next = findNext()) != null;
-                }
+        @Override
+        public @NotNull Object @NotNull [] toArray() {
+            synchronized (mutex) {
+                final int size = size();
+                if (size == 0) return EMPTY;
+                Object[] array = new Object[size];
+                AtomicInteger index = new AtomicInteger();
+                forEach(player -> array[index.getAndIncrement()] = player);
+                assert index.get() == size;
+                return array;
             }
+        }
 
-            @Override
-            public Player next() {
-                synchronized (mutex) {
-                    if (next == null) return findNext();
-                    final Player temp = this.next;
-                    this.next = null;
-                    return temp;
-                }
-            }
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> @NotNull T @NotNull [] toArray(@NotNull T @NotNull [] a) {
+            synchronized (mutex) {
+                final int size = size();
+                T[] array = a.length >= size ? a :
+                        (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
 
-            private Player findNext() {
-                Player result;
-                if ((result = nextValidEntry(current)) != null) return result;
-                this.autoIterator = true;
-                final var references = viewableOption.references;
-                if (references == null || !viewableOption.isAuto()) return null;
-                for (int i = index + 1; i < references.size(); i++) {
-                    final List<Player> players = references.get(i);
-                    Iterator<Player> iterator = players.iterator();
-                    if ((result = nextValidEntry(iterator)) != null) {
-                        this.current = iterator;
-                        this.index = i;
-                        return result;
-                    }
-                }
-                return null;
-            }
-
-            private Player nextValidEntry(Iterator<Player> iterator) {
-                while (iterator.hasNext()) {
-                    final Player player = iterator.next();
-                    if (autoIterator ? validAutoViewer(player) : player != entity)
-                        return player;
-                }
-                return null;
+                AtomicInteger index = new AtomicInteger();
+                forEach(player -> array[index.getAndIncrement()] = (T) player);
+                assert index.get() == size;
+                return array;
             }
         }
     }

@@ -1,12 +1,13 @@
 package net.minestom.server.listener.manager;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
@@ -21,11 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class PacketListenerManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+    private final ServerProcess serverProcess;
 
-    private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
+    private final Map<Class<? extends ClientPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
-    public PacketListenerManager() {
+    public PacketListenerManager(ServerProcess serverProcess) {
+        this.serverProcess = serverProcess;
+
         setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
         setListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
@@ -65,7 +68,7 @@ public final class PacketListenerManager {
      * @param player the player who sent the packet
      * @param <T>    the packet type
      */
-    public <T extends ClientPlayPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
+    public <T extends ClientPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
 
         final Class clazz = packet.getClass();
 
@@ -79,7 +82,7 @@ public final class PacketListenerManager {
         // TODO remove legacy
         {
             final PacketController packetController = new PacketController();
-            for (ClientPacketConsumer clientPacketConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
+            for (ClientPacketConsumer clientPacketConsumer : serverProcess.connection().getReceivePacketConsumers()) {
                 clientPacketConsumer.accept(player, packetController, packet);
             }
 
@@ -113,7 +116,7 @@ public final class PacketListenerManager {
      * @return true if the packet is not cancelled, false otherwise
      */
     public boolean processServerPacket(@NotNull ServerPacket packet, @NotNull Collection<Player> players) {
-        final List<ServerPacketConsumer> consumers = CONNECTION_MANAGER.getSendPacketConsumers();
+        final List<ServerPacketConsumer> consumers = serverProcess.connection().getSendPacketConsumers();
         if (consumers.isEmpty()) {
             return true;
         }
@@ -135,7 +138,7 @@ public final class PacketListenerManager {
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPlayPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketListenerConsumer<T> consumer) {
         this.listeners.put(packetClass, consumer);
     }
 

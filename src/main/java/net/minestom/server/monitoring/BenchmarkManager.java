@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.minestom.server.MinecraftServer.*;
+import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK;
+import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK_SCHEDULER;
 
 /**
  * Small monitoring tools that can be used to check the current memory usage and Minestom threads CPU usage.
@@ -35,8 +36,6 @@ public final class BenchmarkManager {
     private static final List<String> THREADS = new ArrayList<>();
 
     static {
-        THREADS.add(THREAD_NAME_BLOCK_BATCH);
-        THREADS.add(THREAD_NAME_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK);
     }

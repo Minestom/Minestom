@@ -6,15 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EndCombatEventPacket implements ServerPacket {
-
-    public int duration;
-    public int entityId;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.duration = reader.readVarInt();
-        this.entityId = reader.readInt();
+public record EndCombatEventPacket(int duration, int entityId) implements ServerPacket {
+    public EndCombatEventPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readInt());
     }
 
     @Override

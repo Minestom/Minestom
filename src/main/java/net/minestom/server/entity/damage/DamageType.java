@@ -9,7 +9,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 /**
  * Represents a type of damage, required when calling {@link LivingEntity#damage(DamageType, float)}
@@ -29,7 +29,7 @@ public class DamageType implements TagHandler {
     };
     private final String identifier;
     private final Object nbtLock = new Object();
-    private final NBTCompound nbt = new NBTCompound();
+    private final MutableNBTCompound nbt = new MutableNBTCompound();
 
     /**
      * Creates a new damage type.
