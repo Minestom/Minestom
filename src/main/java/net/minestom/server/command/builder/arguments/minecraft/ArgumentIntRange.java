@@ -19,6 +19,10 @@ public class ArgumentIntRange extends ArgumentRange<IntRange, Integer> {
 
     @Override
     public @NotNull IntRange parse(@NotNull StringReader input) throws CommandException {
+        return ArgumentIntRange.read(input);
+    }
+
+    public static @NotNull IntRange read(@NotNull StringReader input) throws CommandException {
         return ArgumentRange.readNumberRange(input, ArgumentIntRange::parseIntegerFrom, IntRange::new, (min, max) -> min > max);
     }
 

@@ -19,6 +19,10 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange, Float> {
 
     @Override
     public @NotNull FloatRange parse(@NotNull StringReader input) throws CommandException {
+        return ArgumentFloatRange.read(input);
+    }
+
+    public static @NotNull FloatRange read(@NotNull StringReader input) throws CommandException {
         return ArgumentRange.readNumberRange(input, ArgumentFloatRange::parseFloatFrom, FloatRange::new, (min, max) -> min > max);
     }
 
