@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.entity.Player;
@@ -19,7 +20,7 @@ public class TabCompleteListener {
 
         StringReader reader = new StringReader(text, CommandManager.COMMAND_PREFIX.length());
 
-        Suggestion suggestion = MinecraftServer.getCommandManager().getDispatcher().tabComplete(player, reader);
+        Suggestion suggestion = MinecraftServer.getCommandManager().getDispatcher().tabComplete(CommandOrigin.ofPlayer(player), reader);
         if (suggestion != null) {
             TabCompletePacket tabCompletePacket = new TabCompletePacket();
             tabCompletePacket.transactionId = packet.transactionId;

@@ -1,8 +1,6 @@
 package demo.commands;
 
-import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.condition.Conditions;
@@ -23,12 +21,10 @@ public class RemoveCommand extends Command {
             super("entities");
             setCondition(Conditions::playerOnly);
             entity = ArgumentType.Entity("entity");
-            addSyntax(this::remove, entity);
-        }
-
-        private void remove(CommandSender commandSender, CommandContext commandContext) {
-            final EntityFinder entityFinder = commandContext.get(entity);
-            entityFinder.find(commandSender).forEach(Entity::remove);
+            addSyntax((origin, context) -> {
+                final EntityFinder entityFinder = context.get(entity);
+                entityFinder.find(origin.sender()).forEach(Entity::remove);
+            }, entity);
         }
     }
 }

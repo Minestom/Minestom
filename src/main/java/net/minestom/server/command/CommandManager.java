@@ -21,23 +21,23 @@ import java.util.*;
 
 /**
  * Manager used to register and execute {@link Command Command}s.<br>
- * It is also possible to simulate a sender executing a command using {@link #execute(CommandSender, StringReader)}.
+ * It is also possible to simulate a sender executing a command using {@link #execute(CommandOrigin, StringReader)}.
  */
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
 
-    public static final @NotNull CommandCallback STANDARD_UNKNOWN_COMMAND_CALLBACK = (sender, command) -> {
-        sender.sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
-        sender.sendMessage(command.generateContextMessage());
+    public static final @NotNull CommandCallback STANDARD_UNKNOWN_COMMAND_CALLBACK = (origin, command) -> {
+        origin.sender().sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
+        origin.sender().sendMessage(command.generateContextMessage());
     };
 
-    public static final @NotNull CommandExecutor STANDARD_DEFAULT_EXECUTOR = (sender, context) -> {
-        sender.sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
+    public static final @NotNull CommandExecutor STANDARD_DEFAULT_EXECUTOR = (origin, context) -> {
+        origin.sender().sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
         if (context.getException() != null) {
-            sender.sendMessage(context.getException().generateContextMessage());
+            origin.sender().sendMessage(context.getException().generateContextMessage());
         } else {
-            sender.sendMessage(FixedStringReader.generateContextMessage(context.getMessage(), context.getStartingPosition()));
+            origin.sender().sendMessage(FixedStringReader.generateContextMessage(context.getMessage(), context.getStartingPosition()));
         }
     };
 
@@ -89,14 +89,14 @@ public final class CommandManager {
     }
 
     /**
-     * Executes a command for a {@link CommandSender}.
+     * Executes a command for a {@link CommandOrigin}.
      *
-     * @param sender  the sender of the command
+     * @param origin the origin of the command
      * @param command the reader that should be read from (without the prefix)
      * @return the execution result
      */
-    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull StringReader command) {
-        if (sender instanceof Player player) {
+    public @NotNull CommandResult execute(@NotNull CommandOrigin origin, @NotNull StringReader command) {
+        if (origin.entity() instanceof Player player) {
             PlayerCommandEvent event = new PlayerCommandEvent(player, command);
             EventDispatcher.call(event);
             if (event.isCancelled()) {
@@ -104,9 +104,9 @@ public final class CommandManager {
             }
             command = event.getCommand();
         }
-        final CommandResult result = dispatcher.execute(sender, command);
+        final CommandResult result = dispatcher.execute(origin, command);
         if (result.type() == CommandResult.Type.UNKNOWN_COMMAND && this.unknownCommandCallback != null) {
-            this.unknownCommandCallback.apply(sender, command);
+            this.unknownCommandCallback.apply(origin, command);
         }
         return result;
     }
@@ -115,10 +115,10 @@ public final class CommandManager {
      * Executes the command using a {@link ServerSender}. This can be used
      * to run a silent command (nothing is printed to console).
      *
-     * @see #execute(CommandSender, StringReader)
+     * @see #execute(CommandOrigin, StringReader)
      */
     public @NotNull CommandResult executeServerCommand(@NotNull StringReader command) {
-        return execute(serverSender, command);
+        return execute(new CommandOrigin(serverSender, null, null, null), command);
     }
 
     public @NotNull CommandDispatcher getDispatcher() {
@@ -190,7 +190,7 @@ public final class CommandManager {
 
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
-            final int commandNodeIndex = serializeCommand(player, command, nodes, rootChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
+            final int commandNodeIndex = serializeCommand(CommandOrigin.ofPlayer(player), command, nodes, rootChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
             commandIdentityMap.put(command, commandNodeIndex);
         }
 
@@ -203,7 +203,7 @@ public final class CommandManager {
         return declareCommandsPacket;
     }
 
-    private int serializeCommand(CommandSender sender, Command command,
+    private int serializeCommand(CommandOrigin origin, Command command,
                                  List<DeclareCommandsPacket.Node> nodes,
                                  IntList rootChildren,
                                  Map<Command, Integer> commandIdentityMap,
@@ -213,7 +213,7 @@ public final class CommandManager {
         final CommandCondition commandCondition = command.getCondition();
         if (commandCondition != null) {
             // Do not show command if return false
-            if (!commandCondition.canUse(sender, null, -1)) {
+            if (!commandCondition.canUse(origin, null, -1)) {
                 return -1;
             }
         }
@@ -223,13 +223,13 @@ public final class CommandManager {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         // Create command for main name
-        final DeclareCommandsPacket.Node mainNode = createCommandNodes(sender, nodes, cmdChildren,
+        final DeclareCommandsPacket.Node mainNode = createCommandNodes(origin, nodes, cmdChildren,
                 command.getName(), syntaxes, rootChildren, argumentIdentityMap, nodeRequests);
         final int mainNodeIndex = nodes.indexOf(mainNode);
 
         // Serialize all the subcommands
         for (Command subcommand : command.getSubcommands()) {
-            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
+            final int subNodeIndex = serializeCommand(origin, subcommand, nodes, cmdChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
             if (subNodeIndex != -1) {
                 mainNode.children = ArrayUtils.concatenateIntArrays(mainNode.children, new int[]{subNodeIndex});
                 commandIdentityMap.put(subcommand, subNodeIndex);
@@ -253,7 +253,7 @@ public final class CommandManager {
     /**
      * Adds the command's syntaxes to the nodes list.
      *
-     * @param sender       the potential sender of the command
+     * @param origin       the origin of this
      * @param nodes        the nodes of the packet
      * @param cmdChildren  the main root of this command
      * @param name         the name of the command (or the alias)
@@ -261,7 +261,7 @@ public final class CommandManager {
      * @param rootChildren the children of the main node (all commands name)
      * @return The index of the main node for alias redirection
      */
-    private DeclareCommandsPacket.Node createCommandNodes(@NotNull CommandSender sender,
+    private DeclareCommandsPacket.Node createCommandNodes(@NotNull CommandOrigin origin,
                                                           @NotNull List<DeclareCommandsPacket.Node> nodes,
                                                           @NotNull IntList cmdChildren,
                                                           @NotNull String name,
@@ -283,7 +283,7 @@ public final class CommandManager {
         syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().size())).toList();
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
-            if (commandCondition != null && !commandCondition.canUse(sender, null, -1)) {
+            if (commandCondition != null && !commandCondition.canUse(origin, null, -1)) {
                 // Sender does not have the right to use this syntax, ignore it
                 continue;
             }

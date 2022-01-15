@@ -1,14 +1,15 @@
 package demo.commands;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.command.CommandSender;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class HealthCommand extends Command {
 
@@ -30,34 +31,28 @@ public class HealthCommand extends Command {
         addSyntax(this::onHealthCommand, modeArg, valueArg);
     }
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Correct usage: health set|add <number>"));
+    private void defaultExecutor(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        origin.sender().sendMessage(Component.text("Correct usage: health set|add <number>"));
     }
 
-    private void onModeError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'set' or 'add'"));
+    private void onModeError(@NotNull CommandOrigin origin, @NotNull CommandException exception) {
+        origin.sender().sendMessage(Component.text("Expected 'set' or 'add'", NamedTextColor.RED));
+        origin.sender().sendMessage(exception.generateContextMessage());
     }
 
-    private void onValueError(CommandSender sender, ArgumentSyntaxException exception) {
-        final int error = exception.getErrorCode();
-        final String input = exception.getInput();
-        switch (error) {
-            case ArgumentNumber.NOT_NUMBER_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
-                break;
-            case ArgumentNumber.TOO_LOW_ERROR:
-            case ArgumentNumber.TOO_HIGH_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
-                break;
+    private void onValueError(@NotNull CommandOrigin origin, @NotNull CommandException exception) {
+        origin.sender().sendMessage(exception.getDisplayComponent());
+        origin.sender().sendMessage(exception.generateContextMessage());
+    }
+
+    private void sendSuggestionMessage(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        origin.sender().sendMessage(Component.text("/health " + context.get("mode") + " [Integer]"));
+    }
+
+    private void onHealthCommand(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        if (!(origin.entity() instanceof Player player)) {
+            return;
         }
-    }
-
-    private void sendSuggestionMessage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("/health " + context.get("mode") + " [Integer]"));
-    }
-
-    private void onHealthCommand(CommandSender sender, CommandContext context) {
-        final Player player = (Player) sender;
         final String mode = context.get("mode");
         final int value = context.get("value");
 
@@ -70,7 +65,7 @@ public class HealthCommand extends Command {
                 break;
         }
 
-        player.sendMessage(Component.text("You have now " + player.getHealth() + " health"));
+        origin.sender().sendMessage(Component.text("You have now " + player.getHealth() + " health"));
     }
 
 }

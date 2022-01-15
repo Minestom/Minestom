@@ -11,16 +11,21 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Set;
 
 /**
- * Sender used in {@link CommandManager#executeServerCommand(String)}.
- * <p>
- * Although this class implemented {@link CommandSender} and thus {@link Audience}, no
- * data can be sent to this sender because it's purpose is to process the data of
- * {@link CommandContext#getReturnData()}.
+ * Sender used in {@link CommandManager#executeServerCommand(StringReader)}.<br>
+ * Although this class implemented {@link CommandSender} and thus {@link Audience}, no data can be sent to this sender
+ * because its purpose is to process the data of {@link CommandContext#getData()}.
  */
 public class ServerSender implements CommandSender {
 
     private final Set<Permission> permissions = Set.of();
     private final NBTCompound nbtCompound = new NBTCompound();
+
+    // Cache a CommandOrigin instance for this sender because they are immutable
+    private final @NotNull CommandOrigin origin = new CommandOrigin(this);
+
+    public @NotNull CommandOrigin getOrigin() {
+        return origin;
+    }
 
     @NotNull
     @Override

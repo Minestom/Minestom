@@ -1,15 +1,17 @@
 package demo.commands;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,26 +27,24 @@ public class UnloadExtensionCommand extends Command {
 
         setDefaultExecutor(this::usage);
 
-        extensionName = ArgumentType.String("extensionName").map((input) -> {
-            Extension extension = MinecraftServer.getExtensionManager().getExtension(input);
-
-            if (extension == null) throw new ArgumentSyntaxException("The specified extension was not found", input, 1);
-
-            return extension;
-        });
+        extensionName = ArgumentType.String("extensionName").map(MinecraftServer.getExtensionManager()::getExtension);
 
         setArgumentCallback(this::extensionCallback, extensionName);
 
         addSyntax(this::execute, extensionName);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Usage: /unload <extension name>"));
+    private void usage(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        origin.sender().sendMessage(Component.text("Usage: /unload <extension name>"));
     }
 
-    private void execute(CommandSender sender, CommandContext context) {
+    private void execute(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
         final Extension ext = context.get(extensionName);
-        sender.sendMessage(Component.text("extensionName = " + ext.getOrigin().getName() + "...."));
+        if (ext == null) {
+            origin.sender().sendMessage(Component.text("Invalid extension!", NamedTextColor.RED));
+            return;
+        }
+        origin.sender().sendMessage(Component.text("extensionName = " + ext.getOrigin().getName() + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
 
@@ -58,14 +58,15 @@ public class UnloadExtensionCommand extends Command {
                 baos.flush();
                 baos.close();
                 String contents = baos.toString(StandardCharsets.UTF_8);
-                contents.lines().map(Component::text).forEach(sender::sendMessage);
+                contents.lines().map(Component::text).forEach(origin.sender()::sendMessage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid extension name!"));
+    private void extensionCallback(@NotNull CommandOrigin origin, @NotNull CommandException exception) {
+        origin.sender().sendMessage(Component.text("Expected a valid extension name", NamedTextColor.RED));
+        origin.sender().sendMessage(exception.generateContextMessage());
     }
 }

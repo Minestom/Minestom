@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -31,7 +32,7 @@ public class ChatMessageListener {
 
             // check if we can receive commands
             if (Messenger.canReceiveCommand(player)) {
-                COMMAND_MANAGER.execute(player, reader);
+                COMMAND_MANAGER.execute(CommandOrigin.ofPlayer(player), reader);
             } else {
                 Messenger.sendRejectionMessage(player);
             }

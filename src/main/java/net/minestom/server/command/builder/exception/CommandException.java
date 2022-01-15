@@ -303,8 +303,8 @@ public class CommandException extends RuntimeException {
     /**
      * The standard callback, which sends the sender messages generated from the exception.
      */
-    public static @NotNull ArgumentCallback STANDARD_CALLBACK = (sender, exception) -> {
-        sender.sendMessage(exception.getDisplayComponent());
-        sender.sendMessage(exception.generateContextMessage());
+    public static @NotNull ArgumentCallback STANDARD_CALLBACK = (origin, exception) -> {
+        origin.sender().sendMessage(exception.getDisplayComponent());
+        origin.sender().sendMessage(exception.generateContextMessage());
     };
 }

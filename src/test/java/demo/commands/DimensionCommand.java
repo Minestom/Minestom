@@ -1,6 +1,7 @@
 package demo.commands;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
@@ -13,9 +14,10 @@ public class DimensionCommand extends Command {
     public DimensionCommand() {
         super("dimensiontest");
         setCondition(Conditions::playerOnly);
+        setDefaultExecutor(CommandManager.STANDARD_DEFAULT_EXECUTOR);
 
-        addSyntax((sender, context) -> {
-            final Player player = (Player) sender;
+        addSyntax((origin, context) -> {
+            final Player player = (Player) origin.sender();
             final Instance instance = player.getInstance();
             final var instances = MinecraftServer.getInstanceManager().getInstances().stream().filter(instance1 -> !instance1.equals(instance)).toList();
             if (instances.isEmpty()) {

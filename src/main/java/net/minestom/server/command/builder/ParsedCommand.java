@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.CommandException;
 import org.jetbrains.annotations.Contract;
@@ -119,12 +119,12 @@ public class ParsedCommand {
         return new CommandContext(this.message, this.command, this.syntax, this.argumentMap, new CommandData(), this.exception, this.startingPosition);
     }
 
-    public @Nullable CommandData execute(@NotNull CommandSender sender) {
+    public @Nullable CommandData execute(@NotNull CommandOrigin origin) {
         CommandContext context = toContext();
 
-        command.globalListener(sender, context);
+        command.globalListener(origin, context);
 
-        if (command.getCondition() != null && !command.getCondition().canUse(sender, message, startingPosition)) {
+        if (command.getCondition() != null && !command.getCondition().canUse(origin, message, startingPosition)) {
             return null;
         }
 
@@ -135,7 +135,7 @@ public class ParsedCommand {
                 Argument<?> exactArgument = syntax.getArguments().get(argumentNumber);
                 if (exactArgument.getCallback() != null) {
                     try {
-                        exactArgument.getCallback().apply(sender, exception);
+                        exactArgument.getCallback().apply(origin, exception);
                     } catch (Throwable throwable) {
                         MinecraftServer.getExceptionManager().handleException(throwable);
                     }
@@ -144,7 +144,7 @@ public class ParsedCommand {
             }
             if (command.getDefaultExecutor() != null) {
                 try {
-                    command.getDefaultExecutor().apply(sender, context);
+                    command.getDefaultExecutor().apply(origin, context);
                 } catch (Throwable throwable) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
                 }
@@ -155,14 +155,14 @@ public class ParsedCommand {
         if (syntax == null) {
             if (command.getDefaultExecutor() != null) {
                 try {
-                    command.getDefaultExecutor().apply(sender, context);
+                    command.getDefaultExecutor().apply(origin, context);
                 } catch (Throwable throwable) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
                 }
             }
         } else {
             try {
-                syntax.getExecutor().apply(sender, context);
+                syntax.getExecutor().apply(origin, context);
             } catch (Throwable throwable) {
                 MinecraftServer.getExceptionManager().handleException(throwable);
             }

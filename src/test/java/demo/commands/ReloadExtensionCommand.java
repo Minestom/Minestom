@@ -1,15 +1,17 @@
 package demo.commands;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,13 +44,13 @@ public class ReloadExtensionCommand extends Command {
         addSyntax(this::execute, extensionName);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Usage: /reload <extension name>"));
+    private void usage(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        origin.sender().sendMessage(Component.text("Usage: /reload <extension name>"));
     }
 
-    private void execute(CommandSender sender, CommandContext context) {
+    private void execute(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
         final String name = context.get(extensionName);
-        sender.sendMessage(Component.text("extensionName = " + name + "...."));
+        origin.sender().sendMessage(Component.text("extensionName = " + name + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
         Extension ext = extensionManager.getExtension(name);
@@ -63,17 +65,18 @@ public class ReloadExtensionCommand extends Command {
                     baos.flush();
                     baos.close();
                     String contents = new String(baos.toByteArray(), StandardCharsets.UTF_8);
-                    contents.lines().map(Component::text).forEach(sender::sendMessage);
+                    contents.lines().map(Component::text).forEach(origin.sender()::sendMessage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         } else {
-            sender.sendMessage(Component.text("Extension '" + name + "' does not exist."));
+            origin.sender().sendMessage(Component.text("Extension '" + name + "' does not exist."));
         }
     }
 
-    private void gameModeCallback(CommandSender sender, ArgumentSyntaxException argumentSyntaxException) {
-        sender.sendMessage(Component.text("'" + argumentSyntaxException.getInput() + "' is not a valid extension name!"));
+    private void gameModeCallback(@NotNull CommandOrigin origin, @NotNull CommandException exception) {
+        origin.sender().sendMessage(Component.text("Expected a valid extension", NamedTextColor.RED));
+        origin.sender().sendMessage(exception.generateContextMessage());
     }
 }

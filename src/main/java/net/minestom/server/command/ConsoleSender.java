@@ -25,6 +25,13 @@ public class ConsoleSender implements CommandSender {
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
     private final NBTCompound nbtCompound = new NBTCompound();
 
+    // Cache a CommandOrigin instance for this sender because they are immutable
+    private final @NotNull CommandOrigin origin = new CommandOrigin(this);
+
+    public @NotNull CommandOrigin getOrigin() {
+        return origin;
+    }
+
     @Override
     public void sendMessage(@NotNull String message) {
         LOGGER.info(message);

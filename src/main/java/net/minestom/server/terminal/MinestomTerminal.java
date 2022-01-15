@@ -38,7 +38,7 @@ public class MinestomTerminal {
                 String command;
                 try {
                     command = reader.readLine(PROMPT);
-                    COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender(), new StringReader(command));
+                    COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender().getOrigin(), new StringReader(command));
                 } catch (UserInterruptException e) {
                     // Handle Ctrl + C
                     System.exit(0);

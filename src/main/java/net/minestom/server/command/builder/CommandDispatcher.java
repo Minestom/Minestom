@@ -3,7 +3,7 @@ package net.minestom.server.command.builder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.CommandException;
@@ -112,17 +112,15 @@ public class CommandDispatcher {
         return commandNamesMap.get(input);
     }
 
-    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull StringReader reader) {
+    public @NotNull CommandResult execute(@NotNull CommandOrigin origin, @NotNull StringReader reader) {
         CommandResult result = parse(reader);
-
         if (result.parsedCommand() != null) {
-            result.parsedCommand().execute(sender);
+            result.parsedCommand().execute(origin);
         }
-
         return result;
     }
 
-    public @Nullable Suggestion tabComplete(@NotNull CommandSender sender, @NotNull StringReader reader) {
+    public @Nullable Suggestion tabComplete(@NotNull CommandOrigin origin, @NotNull StringReader reader) {
         Command command = findCommand(reader);
         if (command == null) {
             return null;
@@ -232,7 +230,7 @@ public class CommandDispatcher {
                     Suggestion suggestion = new Suggestion(reader.all(), primaryContext.getReaderPosition(), reader.length());
                     CommandContext context = primaryContext.toContext();
 
-                    callback.apply(sender, context, suggestion);
+                    callback.apply(origin, context, suggestion);
 
                     return suggestion;
                 }

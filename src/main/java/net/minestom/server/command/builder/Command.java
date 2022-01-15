@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
@@ -310,17 +311,17 @@ public class Command {
     }
 
     /**
-     * Called when a {@link CommandSender} executes this command before any syntax callback.
+     * Called when something executes this command before any syntax callback.
      * <p>
      * WARNING: the {@link CommandCondition} is not executed, and all the {@link CommandSyntax} are not checked,
      * this is called every time a {@link CommandSender} send a command which start by {@link #getName()} or {@link #getAliases()}.
      * <p>
      * Can be used if you wish to still suggest the player syntaxes but want to parse things mostly by yourself.
      *
-     * @param sender  the {@link CommandSender}
+     * @param origin  the origin of the command
      * @param context the UNCHECKED context of the command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context) {}
+    public void globalListener(@NotNull CommandOrigin origin, @NotNull CommandContext context) {}
 
     @ApiStatus.Experimental
     public @NotNull Set<String> getSyntaxesStrings() {

@@ -1,16 +1,18 @@
 package demo.commands;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.command.CommandSender;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.arrow.ArrowMeta;
-import net.minestom.server.entity.EntityProjectile;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,16 +27,17 @@ public class ShootCommand extends Command {
         addSyntax(this::onShootCommand, typeArg);
     }
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Correct usage: shoot [default/spectral/colored]"));
+    private void defaultExecutor(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        origin.sender().sendMessage(Component.text("Correct usage: shoot [default/spectral/colored]"));
     }
 
-    private void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral' or 'colored'"));
+    private void onTypeError(@NotNull CommandOrigin origin, @NotNull CommandException exception) {
+        origin.sender().sendMessage(Component.text("Expected 'default', 'spectral' or 'colored'", NamedTextColor.RED));
+        origin.sender().sendMessage(exception.generateContextMessage());
     }
 
-    private void onShootCommand(CommandSender sender, CommandContext context) {
-        Player player = (Player) sender;
+    private void onShootCommand(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        Player player = (Player) origin.entity();
         String mode = context.get("type");
         EntityProjectile projectile;
         switch (mode) {
