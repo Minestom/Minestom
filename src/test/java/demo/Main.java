@@ -52,8 +52,7 @@ public class Main {
         commandManager.register(new SetBlockCommand());
         commandManager.register(new AutoViewCommand());
 
-
-        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
+        commandManager.setUnknownCommandCallback(CommandManager.STANDARD_UNKNOWN_COMMAND_CALLBACK);
 
         MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
