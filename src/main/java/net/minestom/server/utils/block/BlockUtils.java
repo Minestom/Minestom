@@ -56,26 +56,24 @@ public class BlockUtils {
 
     public static Map<String, String> parseProperties(String query) {
         if (!query.startsWith("[") || !query.endsWith("]")) return Map.of();
-        final String propertiesString = query.substring(1, query.length() - 1).trim();
-        if (propertiesString.isEmpty()) return Map.of();
+        if (query.length() == 2) return Map.of();
 
-        final int entries = StringUtils.countMatches(propertiesString, ',') + 1;
+        final int entries = StringUtils.countMatches(query, ',') + 1;
         assert entries > 0;
         String[] keys = new String[entries];
         String[] values = new String[entries];
         int entryCount = 0;
 
-        final int length = propertiesString.length();
-        int start = 0;
-        int index = 0;
+        final int length = query.length() - 1;
+        int start = 1;
+        int index = 1;
         while (index < length) {
-            if (propertiesString.charAt(index) == ',' || index == length - 1) {
+            if (query.charAt(index) == ',' || index == length - 1) {
                 if (index + 1 == length) index++;
-                final String property = propertiesString.substring(start, index).replace(',', '\0');
-                final int equalIndex = property.indexOf('=');
-                if (equalIndex != -1) {
-                    final String key = property.substring(0, equalIndex).trim();
-                    final String value = property.substring(equalIndex + 1).trim();
+                final int equalIndex = query.indexOf('=', start);
+                if (equalIndex != -1 && equalIndex < index) {
+                    final String key = query.substring(start, equalIndex).trim();
+                    final String value = query.substring(equalIndex + 1, index).trim();
                     keys[entryCount] = key.intern();
                     values[entryCount++] = value.intern();
                 }
