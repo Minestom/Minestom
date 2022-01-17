@@ -1,14 +1,24 @@
-package net.minestom.server.acquirable;
+package net.minestom.server.thread;
 
-import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 final class AcquirableImpl<T> implements Acquirable<T> {
     static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
+    private static final VarHandle ASSIGNED_THREAD;
+
+    static {
+        try {
+            ASSIGNED_THREAD = MethodHandles.lookup().findVarHandle(AcquirableImpl.class, "assignedThread", TickThread.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     /**
      * Global lock used for synchronization.
@@ -16,11 +26,11 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     private static final ReentrantLock GLOBAL_LOCK = new ReentrantLock();
 
     private final T value;
-    private final Acquirable.Handler handler;
+    @SuppressWarnings("unused")
+    private TickThread assignedThread;
 
     public AcquirableImpl(@NotNull T value) {
         this.value = value;
-        this.handler = new Acquirable.Handler();
     }
 
     @Override
@@ -29,8 +39,12 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     @Override
-    public @NotNull Acquirable.Handler getHandler() {
-        return handler;
+    public @NotNull TickThread assignedThread() {
+        return (TickThread) ASSIGNED_THREAD.getAcquire(this);
+    }
+
+    void updateThread(@NotNull TickThread thread) {
+        ASSIGNED_THREAD.setRelease(this, thread);
     }
 
     static @Nullable ReentrantLock enter(@NotNull Thread currentThread, @Nullable TickThread elementThread) {

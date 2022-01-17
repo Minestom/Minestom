@@ -1,8 +1,6 @@
-package net.minestom.server.acquirable;
+package net.minestom.server.thread;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.thread.ThreadDispatcher;
-import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +10,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 @ApiStatus.Experimental
-public interface Acquirable<T> {
+public sealed interface Acquirable<T> permits AcquirableImpl {
 
     /**
      * Gets all the {@link Entity entities} being ticked in the current thread.
@@ -78,7 +76,7 @@ public interface Acquirable<T> {
      * @see #sync(Consumer) for auto-closeable capability
      */
     default @NotNull Acquired<T> lock() {
-        return new Acquired<>(unwrap(), getHandler().getTickThread());
+        return new Acquired<>(unwrap(), assignedThread());
     }
 
     /**
@@ -102,7 +100,7 @@ public interface Acquirable<T> {
      * @return true if the element is linked to the current thread
      */
     default boolean isLocal() {
-        return Thread.currentThread() == getHandler().getTickThread();
+        return Thread.currentThread() == assignedThread();
     }
 
     /**
@@ -139,32 +137,6 @@ public interface Acquirable<T> {
      */
     @NotNull T unwrap();
 
-    /**
-     * Gets the {@link Handler} of this acquirable element,
-     * containing the currently linked thread.
-     * <p>
-     * Mostly for internal use.
-     *
-     * @return this element handler
-     */
     @ApiStatus.Internal
-    @NotNull Handler getHandler();
-
-    final class Handler {
-        private volatile ThreadDispatcher.Partition partition;
-
-        public ThreadDispatcher.Partition getChunkEntry() {
-            return partition;
-        }
-
-        @ApiStatus.Internal
-        public void refreshChunkEntry(@NotNull ThreadDispatcher.Partition partition) {
-            this.partition = partition;
-        }
-
-        public TickThread getTickThread() {
-            final ThreadDispatcher.Partition entry = this.partition;
-            return entry != null ? entry.thread() : null;
-        }
-    }
+    @NotNull TickThread assignedThread();
 }

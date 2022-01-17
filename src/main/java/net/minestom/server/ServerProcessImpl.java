@@ -1,6 +1,5 @@
 package net.minestom.server;
 
-import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
@@ -27,6 +26,7 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.terminal.MinestomTerminal;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;

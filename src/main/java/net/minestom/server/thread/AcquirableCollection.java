@@ -1,6 +1,5 @@
-package net.minestom.server.acquirable;
+package net.minestom.server.thread;
 
-import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,6 @@ import java.util.stream.Stream;
 
 @ApiStatus.Experimental
 public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
-
     private final Collection<Acquirable<E>> acquirableCollection;
 
     public AcquirableCollection(Collection<Acquirable<E>> acquirableCollection) {
@@ -131,7 +129,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
         for (var element : collection) {
             final T value = element.unwrap();
 
-            final TickThread elementThread = element.getHandler().getTickThread();
+            final TickThread elementThread = element.assignedThread();
             if (currentThread == elementThread) {
                 // The element is managed in the current thread, consumer can be immediately called
                 consumer.accept(value);

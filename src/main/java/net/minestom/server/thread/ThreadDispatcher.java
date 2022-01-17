@@ -1,7 +1,7 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.entity.Entity;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -196,8 +196,8 @@ public final class ThreadDispatcher<P> {
         if (partitionEntry != null) {
             this.elements.put(tickable, partitionEntry);
             partitionEntry.elements.add(tickable);
-            if (tickable instanceof Acquirable<?> acquirable) {
-                acquirable.getHandler().refreshChunkEntry(partitionEntry);
+            if (tickable instanceof Entity entity) { // TODO support other types
+                ((AcquirableImpl<?>) entity.getAcquirable()).updateThread(partitionEntry.thread());
             }
         }
     }

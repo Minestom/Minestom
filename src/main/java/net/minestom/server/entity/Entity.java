@@ -8,7 +8,6 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
@@ -37,6 +36,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -1527,11 +1527,6 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
 
     @ApiStatus.Experimental
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
-        return (Acquirable<T>) acquirable;
-    }
-
-    @ApiStatus.Experimental
-    public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
         return (Acquirable<T>) acquirable;
     }
 

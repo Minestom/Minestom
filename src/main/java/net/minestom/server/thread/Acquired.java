@@ -1,6 +1,5 @@
-package net.minestom.server.acquirable;
+package net.minestom.server.thread;
 
-import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
