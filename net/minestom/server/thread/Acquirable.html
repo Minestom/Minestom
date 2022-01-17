@@ -5,7 +5,7 @@
 <title>Acquirable (Minestom 1.0 API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.acquirable, interface: Acquirable">
+<meta name="description" content="declaration: package: net.minestom.server.thread, interface: Acquirable">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -44,7 +44,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -68,31 +68,16 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.acquirable</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.thread</a></div>
 <h1 title="Interface Acquirable" class="title">Interface Acquirable&lt;T&gt;</h1>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">public interface </span><span class="element-name type-name-label">Acquirable&lt;T&gt;</span></div>
+</span><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">Acquirable&lt;T&gt;</span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Interface</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Acquirable.Handler.html" class="type-name-link" title="class in net.minestom.server.acquirable">Acquirable.Handler</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
@@ -104,26 +89,23 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#async(java.util.function.Consumer)" class="member-name-link">async</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;&nbsp;consumer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#assignedThread()" class="member-name-link">assignedThread</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#async(java.util.function.Consumer)" class="member-name-link">async</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;&nbsp;consumer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Async version of <a href="#sync(java.util.function.Consumer)"><code>sync(Consumer)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#currentEntities()" class="member-name-link">currentEntities</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#currentEntities()" class="member-name-link">currentEntities</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Gets all the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a> being ticked in the current thread.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#getAcquiringTime()" class="member-name-link">getAcquiringTime</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#getAcquiringTime()" class="member-name-link">getAcquiringTime</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Gets the time spent acquiring since last tick.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Acquirable.Handler.html" title="class in net.minestom.server.acquirable">Acquirable.Handler</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getHandler()" class="member-name-link">getHandler</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the <a href="Acquirable.Handler.html" title="class in net.minestom.server.acquirable"><code>Acquirable.Handler</code></a> of this acquirable element,
- containing the currently linked thread.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isLocal()" class="member-name-link">isLocal</a>()</code></div>
@@ -136,15 +118,15 @@ loadScripts(document, 'script');</script>
 <div class="block">Retrieves the acquirable value if and only if the element
  is already present/ticked in the current thread.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="Acquired.html" title="class in net.minestom.server.acquirable">Acquired</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="Acquired.html" title="class in net.minestom.server.thread">Acquired</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#lock()" class="member-name-link">lock</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">Returns a new <a href="Acquired.html" title="class in net.minestom.server.acquirable"><code>Acquired</code></a> object which will be locked to the current thread.</div>
+<div class="block">Returns a new <a href="Acquired.html" title="class in net.minestom.server.thread"><code>Acquired</code></a> object which will be locked to the current thread.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.acquirable">Acquirable</a>&lt;T&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(T)" class="member-name-link">of</a><wbr>(T&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
-<div class="block">Creates a new <a href="Acquirable.html" title="interface in net.minestom.server.acquirable"><code>Acquirable</code></a> object.</div>
+<div class="block">Creates a new <a href="Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a> object.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#resetAcquiringTime()" class="member-name-link">resetAcquiringTime</a>()</code></div>
@@ -217,11 +199,11 @@ loadScripts(document, 'script');</script>
 <h3 id="of(java.lang.Object)">of</h3>
 <div class="member-signature"><span class="annotations">@Internal
 @NotNull
-</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.acquirable">Acquirable</a>&lt;T&gt;</span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;T&gt;</span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
  T&nbsp;value)</span></div>
-<div class="block">Creates a new <a href="Acquirable.html" title="interface in net.minestom.server.acquirable"><code>Acquirable</code></a> object.
+<div class="block">Creates a new <a href="Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a> object.
  <p>
- Mostly for internal use, as a <a href="../thread/TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a> has to be used
+ Mostly for internal use, as a <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a> has to be used
  and properly synchronized.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -237,8 +219,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="lock()">
 <h3>lock</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="Acquired.html" title="class in net.minestom.server.acquirable">Acquired</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</span>&nbsp;<span class="element-name">lock</span>()</div>
-<div class="block">Returns a new <a href="Acquired.html" title="class in net.minestom.server.acquirable"><code>Acquired</code></a> object which will be locked to the current thread.
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="Acquired.html" title="class in net.minestom.server.thread">Acquired</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</span>&nbsp;<span class="element-name">lock</span>()</div>
+<div class="block">Returns a new <a href="Acquired.html" title="class in net.minestom.server.thread"><code>Acquired</code></a> object which will be locked to the current thread.
  <p>
  Useful when your code cannot be done inside a callback and need to be sync.
  Do not forget to call <a href="Acquired.html#unlock()"><code>Acquired.unlock()</code></a> once you are done with it.</div>
@@ -335,19 +317,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getHandler()">
-<h3>getHandler</h3>
+<section class="detail" id="assignedThread()">
+<h3>assignedThread</h3>
 <div class="member-signature"><span class="annotations">@Internal
 @NotNull
-</span><span class="return-type">@NotNull <a href="Acquirable.Handler.html" title="class in net.minestom.server.acquirable">Acquirable.Handler</a></span>&nbsp;<span class="element-name">getHandler</span>()</div>
-<div class="block">Gets the <a href="Acquirable.Handler.html" title="class in net.minestom.server.acquirable"><code>Acquirable.Handler</code></a> of this acquirable element,
- containing the currently linked thread.
- <p>
- Mostly for internal use.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>this element handler</dd>
-</dl>
+</span><span class="return-type">@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a></span>&nbsp;<span class="element-name">assignedThread</span>()</div>
 </section>
 </li>
 </ul>
