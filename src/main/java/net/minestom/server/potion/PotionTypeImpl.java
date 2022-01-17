@@ -8,10 +8,7 @@ import java.util.Collection;
 
 record PotionTypeImpl(NamespaceID namespace, int id) implements PotionType {
     private static final Registry.Container<PotionType> CONTAINER = Registry.createContainer(Registry.Resource.POTION_TYPES,
-            (namespace, object) -> {
-                final int id = ((Number) object.get("id")).intValue();
-                return new PotionTypeImpl(NamespaceID.from(namespace), id);
-            });
+            (namespace, object) -> new PotionTypeImpl(NamespaceID.from(namespace), ((Number) object.get("id")).intValue()));
 
     static PotionType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

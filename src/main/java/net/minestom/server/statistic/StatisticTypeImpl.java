@@ -8,10 +8,7 @@ import java.util.Collection;
 
 record StatisticTypeImpl(NamespaceID namespace, int id) implements StatisticType {
     private static final Registry.Container<StatisticType> CONTAINER = Registry.createContainer(Registry.Resource.STATISTICS,
-            (namespace, object) -> {
-                final int id = ((Number) object.get("id")).intValue();
-                return new StatisticTypeImpl(NamespaceID.from(namespace), id);
-            });
+            (namespace, object) -> new StatisticTypeImpl(NamespaceID.from(namespace), ((Number) object.get("id")).intValue()));
 
     static StatisticType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

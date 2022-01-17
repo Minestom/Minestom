@@ -8,10 +8,7 @@ import java.util.Collection;
 
 record SoundEventImpl(NamespaceID namespace, int id) implements SoundEvent {
     private static final Registry.Container<SoundEvent> CONTAINER = Registry.createContainer(Registry.Resource.SOUNDS,
-            (namespace, object) -> {
-                final int id = ((Number) object.get("id")).intValue();
-                return new SoundEventImpl(NamespaceID.from(namespace), id);
-            });
+            (namespace, object) -> new SoundEventImpl(NamespaceID.from(namespace), ((Number) object.get("id")).intValue()));
 
     static SoundEvent get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
