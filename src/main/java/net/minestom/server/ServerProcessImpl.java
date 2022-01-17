@@ -68,7 +68,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
 
-    private boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
@@ -242,7 +241,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         LOGGER.info("Minestom server started successfully.");
 
-        if (terminalEnabled) {
+        if (MinecraftServer.isTerminalEnabled()) {
             MinestomTerminal.start();
         }
         // Stop the server on SIGINT
