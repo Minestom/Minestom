@@ -1,5 +1,6 @@
 package net.minestom.server.extensions;
 
+import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.exception.ExceptionManager;
@@ -41,6 +42,10 @@ public final class ExtensionManager {
     private Path dependenciesFolder = extensionDataRoot.resolve(".libs");
 
     private boolean started = false;
+
+    public ExtensionManager(ServerProcess serverProcess) {
+        this(serverProcess.exception(), serverProcess.eventHandler());
+    }
 
     public ExtensionManager(ExceptionManager exceptionManager, EventNode<Event> globalEventNode) {
         this(exceptionManager, globalEventNode, List.of(
