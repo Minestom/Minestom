@@ -9,16 +9,13 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
 
 final class TestConnectionImpl implements TestConnection {
     private final Env env;
@@ -51,7 +48,7 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public <T extends ServerPacket> PacketTracker<T> trackIncoming(Class<T> type, Predicate<T> predicate, @Nullable Duration timeout) {
+    public @NotNull <T extends ServerPacket> PacketTracker<T> trackIncoming(@NotNull Class<T> type) {
         var tracker = new TrackerImpl<>(type);
         this.incomingTrackers.add(TrackerImpl.class.cast(tracker));
         return tracker;
@@ -86,7 +83,7 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         @Override
-        public List<T> collect() {
+        public @NotNull List<T> collect() {
             incomingTrackers.remove(this);
             return List.copyOf(packets);
         }
