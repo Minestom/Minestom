@@ -2,20 +2,41 @@ package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 
 import java.util.Collection;
 
 public class EntityCollisionUtils {
+    final static Vec power = new Vec(0.1, 0.1, 0.1);
+
     public static Vec calculateEntityCollisions(Entity entity) {
         BoundingBox bb = entity.getBoundingBox();
         double bbFurthestCorner = Math.sqrt(bb.depth() + bb.height() + bb.width());
+
+        if (entity.getEntityType() == EntityType.ARMOR_STAND
+                || entity.getEntityType() == EntityType.VILLAGER
+                || entity.getEntityType() == EntityType.AREA_EFFECT_CLOUD
+                || entity.getEntityType() == EntityType.LIGHTNING_BOLT
+                || entity.getEntityType() == EntityType.ARROW
+                || entity.getEntityType() == EntityType.SPECTRAL_ARROW
+                || !entity.hasEntityCollisions())
+            return Vec.ZERO;
 
         if (entity.getInstance() == null)
             return Vec.ZERO;
 
         Vec vecAcc = Vec.ZERO;
 
-        Collection<Entity> foundNearby = entity.getInstance().getNearbyEntities(entity.getPosition(), bbFurthestCorner);
+        Collection<Entity> foundNearby = entity.getInstance().getNearbyEntities(entity.getPosition(), bbFurthestCorner)
+                .stream()
+                .filter(e ->
+                        e.getEntityType() != EntityType.ARMOR_STAND &&
+                        e.getEntityType() != EntityType.AREA_EFFECT_CLOUD &&
+                        e.getEntityType() != EntityType.LIGHTNING_BOLT &&
+                        e.getEntityType() != EntityType.ARROW &&
+                        e.getEntityType() != EntityType.SPECTRAL_ARROW &&
+                        e.hasEntityCollisions()
+                    ).toList();
 
         for (Entity nearby : foundNearby) {
             if (nearby == entity)
@@ -76,7 +97,7 @@ public class EntityCollisionUtils {
         if (vecAcc.isZero())
             return vecAcc;
         else
-            return vecAcc.normalize();
+            return vecAcc.normalize().mul(power);
     }
 
 }

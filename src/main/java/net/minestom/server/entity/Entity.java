@@ -100,6 +100,8 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     protected Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean hasPhysics = true;
 
+    private boolean entityCollisions = true;
+
     /**
      * The amount of drag applied on the Y axle.
      * <p>
@@ -281,6 +283,14 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      */
     public @NotNull EntityMeta getEntityMeta() {
         return this.entityMeta;
+    }
+
+    public boolean hasEntityCollisions() {
+        return this.entityCollisions;
+    }
+
+    public void setEntityCollisions (boolean collisions) {
+        this.entityCollisions = collisions;
     }
 
     /**
@@ -572,10 +582,9 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final Vec sumDeltaPos = deltaPos
-                    .add(EntityCollisionUtils.calculateEntityCollisions(this).mul(new Vec(0.01, 0.01, 0.01)));
-
+            final Vec sumDeltaPos = deltaPos.add(EntityCollisionUtils.calculateEntityCollisions(this));
             final var physicsResult = CollisionUtils.handlePhysics(this, sumDeltaPos);
+
             this.lastPhysicsResult = physicsResult;
             this.onGround = physicsResult.isOnGround();
             newPosition = physicsResult.newPosition();
