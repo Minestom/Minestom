@@ -1,6 +1,8 @@
 package net.minestom.server.api;
 
 import net.minestom.server.ServerProcess;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
@@ -33,6 +35,10 @@ public interface Env {
             }
         }
         return true;
+    }
+
+    default @NotNull Player createPlayer(@NotNull Instance instance, @NotNull Pos pos) {
+        return createConnection().connect(instance, pos).join();
     }
 
     default @NotNull Instance createFlatInstance() {
