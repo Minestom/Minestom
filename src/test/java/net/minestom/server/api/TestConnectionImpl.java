@@ -1,6 +1,7 @@
 package net.minestom.server.api;
 
 import net.minestom.server.ServerProcess;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerLoginEvent;
@@ -30,12 +31,13 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public CompletableFuture<Player> connect(Instance instance) {
+    public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
         process.eventHandler().addListener(EventListener.builder(PlayerLoginEvent.class)
                 .expireCount(1)
                 .handler(event -> {
                     if (event.getPlayer().getPlayerConnection() == playerConnection) {
                         event.setSpawningInstance(instance);
+                        event.getPlayer().setRespawnPoint(pos);
                     }
                 }).build());
 
