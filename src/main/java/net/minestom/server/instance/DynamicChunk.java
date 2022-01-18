@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
@@ -35,7 +36,6 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
  */
 public class DynamicChunk extends Chunk {
 
-    private final int minSection, maxSection;
     private List<Section> sections;
 
     // Key = ChunkUtils#getBlockIndex
@@ -48,8 +48,6 @@ public class DynamicChunk extends Chunk {
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
-        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
-        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
         var sectionsTemp = new Section[maxSection - minSection];
         Arrays.setAll(sectionsTemp, value -> new Section());
         this.sections = List.of(sectionsTemp);
@@ -143,7 +141,7 @@ public class DynamicChunk extends Chunk {
     public @NotNull Biome getBiome(int x, int y, int z) {
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
-                .get(toSectionRelativeCoordinate(x) / 4, y / 4, toSectionRelativeCoordinate(z) / 4);
+                .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
         return MinecraftServer.getBiomeManager().getById(id);
     }
 

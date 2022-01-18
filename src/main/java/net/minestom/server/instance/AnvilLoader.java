@@ -80,7 +80,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private @NotNull CompletableFuture<@Nullable Chunk> loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException, AnvilException {
-        final RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
+        final RegionFile mcaFile = getMCAFile(instance, chunkX, chunkZ);
         if (mcaFile == null)
             return CompletableFuture.completedFuture(null);
         final ChunkColumn fileChunk = mcaFile.getChunk(chunkX, chunkZ);
@@ -88,6 +88,23 @@ public class AnvilLoader implements IChunkLoader {
             return CompletableFuture.completedFuture(null);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
+        if(fileChunk.getMinY() < instance.getDimensionType().getMinY()) {
+            throw new AnvilException(
+                    String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
+                            fileChunk.getMinY(),
+                            instance.getDimensionType().getName().asString(),
+                            instance.getDimensionType().getMinY()
+                            ));
+        }
+        if(fileChunk.getMaxY() > instance.getDimensionType().getMaxY()) {
+            throw new AnvilException(
+                    String.format("Trying to load chunk with maxY = %d, but instance dimension type (%s) has a maxY of %d",
+                            fileChunk.getMaxY(),
+                            instance.getDimensionType().getName().asString(),
+                            instance.getDimensionType().getMaxY()
+                    ));
+        }
+
         // TODO: Parallelize block, block entities and biome loading
 
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
@@ -113,8 +130,9 @@ public class AnvilLoader implements IChunkLoader {
         loadBlocks(chunk, fileChunk);
         loadTileEntities(chunk, fileChunk);
         // Lights
-        for (var chunkSection : fileChunk.getSections().values()) {
-            Section section = chunk.getSection(chunkSection.getY());
+        for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
+            var section = chunk.getSection(sectionY);
+            var chunkSection = fileChunk.getSection((byte) sectionY);
             section.setSkyLight(chunkSection.getSkyLights());
             section.setBlockLight(chunkSection.getBlockLights());
         }
@@ -122,7 +140,7 @@ public class AnvilLoader implements IChunkLoader {
         return CompletableFuture.completedFuture(chunk);
     }
 
-    private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
+    private @Nullable RegionFile getMCAFile(Instance instance, int chunkX, int chunkZ) {
         final int regionX = CoordinatesKt.chunkToRegion(chunkX);
         final int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
         return alreadyLoaded.computeIfAbsent(RegionFile.Companion.createFileName(regionX, regionZ), n -> {
@@ -131,7 +149,7 @@ public class AnvilLoader implements IChunkLoader {
                 if (!Files.exists(regionPath)) {
                     return null;
                 }
-                return new RegionFile(new RandomAccessFile(regionPath.toFile(), "rw"), regionX, regionZ);
+                return new RegionFile(new RandomAccessFile(regionPath.toFile(), "rw"), regionX, regionZ, instance.getDimensionType().getMinY(), instance.getDimensionType().getMaxY()-1);
             } catch (IOException | AnvilException e) {
                 EXCEPTION_MANAGER.handleException(e);
                 return null;
@@ -219,7 +237,7 @@ public class AnvilLoader implements IChunkLoader {
         final int chunkZ = chunk.getChunkZ();
         RegionFile mcaFile;
         synchronized (alreadyLoaded) {
-            mcaFile = getMCAFile(chunkX, chunkZ);
+            mcaFile = getMCAFile(chunk.instance, chunkX, chunkZ);
             if (mcaFile == null) {
                 final int regionX = CoordinatesKt.chunkToRegion(chunkX);
                 final int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
@@ -263,15 +281,17 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
+        chunkColumn.changeVersion(SupportedVersion.Companion.getLatest());
+        chunkColumn.setYRange(chunk.getMinSection()*16, chunk.getMaxSection()*16-1);
         List<NBTCompound> tileEntities = new ArrayList<>();
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                for (int y = 0; y < 256; y++) { // TODO don't hardcode world height
+                for (int y = chunkColumn.getMinY(); y < chunkColumn.getMaxY(); y++) {
                     final Block block = chunk.getBlock(x, y, z);
                     // Block
                     chunkColumn.setBlockState(x, y, z, new BlockState(block.name(), block.properties()));
-                    chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).name().asString());
+                    chunkColumn.setBiome(x, y, z, chunk.getBiome(x, y, z).name().asString());
 
                     // Tile entity
                     final BlockHandler handler = block.handler();

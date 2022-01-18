@@ -1,4 +1,4 @@
-package demo.commands;
+package net.minestom.demo.commands;
 
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
@@ -20,7 +20,7 @@ import java.util.Locale;
  * Command that make a player change gamemode, made in
  * the style of the vanilla /gamemode command.
  *
- * @see https://minecraft.fandom.com/wiki/Commands/gamemode
+ * @see <a href="https://minecraft.fandom.com/wiki/Commands/gamemode">...</a>
  */
 public class GamemodeCommand extends Command {
 
