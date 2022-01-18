@@ -6,18 +6,26 @@ import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 
 final class TestConnectionImpl implements TestConnection {
     private final Env env;
     private final ServerProcess process;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
+
+    private final List<TrackerImpl<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
     public TestConnectionImpl(Env env) {
         this.env = env;
@@ -42,10 +50,20 @@ final class TestConnectionImpl implements TestConnection {
         return CompletableFuture.completedFuture(player);
     }
 
+    @Override
+    public <T extends ServerPacket> PacketTracker<T> trackIncoming(Class<T> type, Predicate<T> predicate, @Nullable Duration timeout) {
+        var tracker = new TrackerImpl<>(type);
+        this.incomingTrackers.add(TrackerImpl.class.cast(tracker));
+        return tracker;
+    }
+
     final class PlayerConnectionImpl extends PlayerConnection {
         @Override
         public void sendPacket(@NotNull SendablePacket packet) {
-
+            for (var tracker : incomingTrackers) {
+                final var serverPacket = SendablePacket.extractServerPacket(packet);
+                if (tracker.type.isAssignableFrom(serverPacket.getClass())) tracker.packets.add(serverPacket);
+            }
         }
 
         @Override
@@ -56,6 +74,21 @@ final class TestConnectionImpl implements TestConnection {
         @Override
         public void disconnect() {
 
+        }
+    }
+
+    final class TrackerImpl<T extends ServerPacket> implements PacketTracker<T> {
+        private final Class<T> type;
+        private final List<T> packets = new CopyOnWriteArrayList<>();
+
+        public TrackerImpl(Class<T> type) {
+            this.type = type;
+        }
+
+        @Override
+        public List<T> collect() {
+            incomingTrackers.remove(this);
+            return List.copyOf(packets);
         }
     }
 }
