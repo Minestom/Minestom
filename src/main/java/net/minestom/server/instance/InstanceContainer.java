@@ -124,7 +124,7 @@ public class InstanceContainer extends Instance {
             final BlockHandler previousHandler = previousBlock.handler();
 
             // Change id based on neighbors
-            final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
+            final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
             if (blockPlacementRule != null) {
                 block = blockPlacementRule.blockUpdate(this, blockPosition, block);
             }
@@ -501,7 +501,7 @@ public class InstanceContainer extends Instance {
                     if (chunk == null) continue;
 
                     final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
-                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborBlock);
+                    final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
                     if (neighborBlockPlacementRule == null) continue;
 
                     final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);

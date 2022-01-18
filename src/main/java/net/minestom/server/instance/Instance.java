@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
@@ -17,7 +16,6 @@ import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.Tag;
@@ -53,8 +51,6 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
 public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience {
-
-    protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     private boolean registered;
 
