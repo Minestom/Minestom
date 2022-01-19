@@ -17,7 +17,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.Inflater;
 
@@ -30,7 +29,6 @@ public final class Worker extends MinestomThread {
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
-    private final AtomicBoolean flush = new AtomicBoolean();
 
     Worker(Server server) {
         super("Ms-worker-" + COUNTER.getAndIncrement());
@@ -52,12 +50,10 @@ public final class Worker extends MinestomThread {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
                 // Flush all connections if needed
-                if (flush.compareAndSet(true, false)) {
-                    try {
-                        connectionMap.values().forEach(PlayerSocketConnection::flushSync);
-                    } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
+                try {
+                    connectionMap.values().forEach(PlayerSocketConnection::flushSync);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
                 // Wait for an event
                 this.selector.select(key -> {
@@ -79,7 +75,7 @@ public final class Worker extends MinestomThread {
                         MinecraftServer.getExceptionManager().handleException(e);
                         connection.disconnect();
                     }
-                });
+                }, MinecraftServer.TICK_MS);
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -110,11 +106,6 @@ public final class Worker extends MinestomThread {
         socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
         socket.setTcpNoDelay(Server.NO_DELAY);
         socket.setSoTimeout(30 * 1000); // 30 seconds
-        this.selector.wakeup();
-    }
-
-    public void flush() {
-        this.flush.set(true);
         this.selector.wakeup();
     }
 

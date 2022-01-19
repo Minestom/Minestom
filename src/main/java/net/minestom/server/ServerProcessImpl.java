@@ -20,7 +20,6 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
-import net.minestom.server.network.socket.Worker;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
@@ -289,7 +288,6 @@ final class ServerProcessImpl implements ServerProcess {
 
             // Flush all waiting packets
             PacketUtils.flush();
-            server().workers().forEach(Worker::flush);
 
             // Monitoring
             {
