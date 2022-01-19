@@ -1,18 +1,17 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvParameterResolver;
+import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.JoinGamePacket;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(EnvParameterResolver.class)
-public class EntityInstanceTest {
+@EnvTest
+public class EntityInstanceIntegrationTest {
 
     @Test
     public void entityJoin(Env env) {
