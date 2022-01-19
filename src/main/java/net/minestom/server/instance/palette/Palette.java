@@ -16,7 +16,7 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     }
 
     static Palette biomes() {
-        return newPalette(4, 2, 2, 1);
+        return newPalette(4, 2, 1, 1);
     }
 
     static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitIncrement) {
