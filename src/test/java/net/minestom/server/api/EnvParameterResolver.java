@@ -4,16 +4,12 @@ import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
-import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.support.TypeBasedParameterResolver;
 
-public final class EnvParameterResolver implements ParameterResolver {
+public final class EnvParameterResolver extends TypeBasedParameterResolver<Env> {
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().getType() == Env.class;
-    }
-
-    @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public Env resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
+            throws ParameterResolutionException {
         return new EnvImpl(MinecraftServer.updateProcess());
     }
 }
