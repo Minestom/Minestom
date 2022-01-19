@@ -1,9 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.inventory.TransactionOption;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -11,6 +9,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InventoryTest {
+
+    static {
+        // Required to prevent initialization error during event call
+        MinecraftServer.init();
+    }
 
     @Test
     public void testCreation() {
