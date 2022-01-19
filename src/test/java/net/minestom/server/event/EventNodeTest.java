@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.*;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
@@ -37,6 +36,13 @@ public class EventNodeTest {
     }
 
     static class Recursive2 extends Recursive1 {
+    }
+
+    record ItemTestEvent(ItemStack item) implements ItemEvent {
+        @Override
+        public @NotNull ItemStack getItemStack() {
+            return item;
+        }
     }
 
     @Test
@@ -133,12 +139,6 @@ public class EventNodeTest {
 
     @Test
     public void testFiltering() {
-        record ItemTestEvent(ItemStack item) implements ItemEvent {
-            @Override
-            public @NotNull ItemStack getItemStack() {
-                return item;
-            }
-        }
         AtomicBoolean result = new AtomicBoolean(false);
         AtomicBoolean childResult = new AtomicBoolean(false);
 
@@ -163,14 +163,6 @@ public class EventNodeTest {
 
     @Test
     public void testBinding() {
-
-        record ItemTestEvent(ItemStack item) implements ItemEvent {
-            @Override
-            public @NotNull ItemStack getItemStack() {
-                return item;
-            }
-        }
-
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
@@ -193,13 +185,6 @@ public class EventNodeTest {
 
     @Test
     public void testMap() {
-        record ItemTestEvent(ItemStack item) implements ItemEvent {
-            @Override
-            public @NotNull ItemStack getItemStack() {
-                return item;
-            }
-        }
-
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
 
