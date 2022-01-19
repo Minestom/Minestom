@@ -53,8 +53,7 @@ public final class PacketUtils {
 
     public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
     public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", true);
-    // FIXME: Not compatible with packet tracking in integration tests
-    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", false);
+    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
 
     /// Local buffers
     private static final LocalCache<ByteBuffer> PACKET_BUFFER = LocalCache.ofBuffer(Server.MAX_PACKET_SIZE);
