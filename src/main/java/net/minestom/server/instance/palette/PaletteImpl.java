@@ -111,7 +111,7 @@ final class PaletteImpl implements Palette, Cloneable {
                 return;
             }
             // Initialize the section
-            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+            this.values = values = new long[valuesLength(bitsPerEntry)];
         }
         // Change to palette value
         final int sectionIndex = getSectionIndex(x % dimension, y % dimension, z % dimension);
@@ -151,7 +151,7 @@ final class PaletteImpl implements Palette, Cloneable {
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         long[] values = this.values;
         if (values.length == 0) {
-            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+            this.values = values = new long[valuesLength(bitsPerEntry)];
         }
         long block = 0;
         for (int i = 0; i < valuesPerLong; i++)
@@ -270,12 +270,9 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) bitsPerEntry);
-        // Palette
-        if (bitsPerEntry < 9) {
-            // Palette has to exist
+        if (bitsPerEntry <= maxBitsPerEntry) { // Palette index
             writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
         }
-        // Raw
         writer.writeLongArray(values);
     }
 
@@ -342,7 +339,7 @@ final class PaletteImpl implements Palette, Cloneable {
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         long[] values = this.values;
         if (values.length == 0) {
-            this.values = values = new long[(size + valuesPerLong - 1) / valuesPerLong];
+            this.values = values = new long[valuesLength(bitsPerEntry)];
         }
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         for (int i = 0; i < values.length; i++) {
@@ -399,6 +396,11 @@ final class PaletteImpl implements Palette, Cloneable {
             WRITE_CACHE.set(cache);
         }
         return cache;
+    }
+
+    int valuesLength(int bitsPerEntry) {
+        int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        return (size + valuesPerLong - 1) / valuesPerLong;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {
