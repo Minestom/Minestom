@@ -21,5 +21,8 @@ tasks {
     }
     withType<Test> {
         useJUnitPlatform()
+        // Present until tests all succeed without
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        setForkEvery(1)
     }
 }
