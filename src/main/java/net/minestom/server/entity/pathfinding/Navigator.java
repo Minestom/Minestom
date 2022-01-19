@@ -58,7 +58,7 @@ public final class Navigator {
         final double speedY = dy * speed;
         final double speedZ = Math.sin(radians) * speed;
         final float yaw = PositionUtils.getLookYaw(dx, dz);
-        final float pitch = PositionUtils.getLookPitch(dx, direction.y(), dz);
+        final float pitch = PositionUtils.getLookPitch(dx, dy, dz);
         // Prevent ghosting
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
         this.entity.refreshPosition(physicsResult.newPosition().withView(yaw, pitch));
