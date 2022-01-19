@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class TestConnectionImpl implements TestConnection {
     private final Env env;
@@ -32,14 +33,17 @@ final class TestConnectionImpl implements TestConnection {
 
     @Override
     public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
-        process.eventHandler().addListener(EventListener.builder(PlayerLoginEvent.class)
-                .expireCount(1)
+        AtomicReference<EventListener<PlayerLoginEvent>> listenerRef = new AtomicReference<>();
+        var listener = EventListener.builder(PlayerLoginEvent.class)
                 .handler(event -> {
                     if (event.getPlayer().getPlayerConnection() == playerConnection) {
                         event.setSpawningInstance(instance);
                         event.getPlayer().setRespawnPoint(pos);
+                        process.eventHandler().removeListener(listenerRef.get());
                     }
-                }).build());
+                }).build();
+        listenerRef.set(listener);
+        process.eventHandler().addListener(listener);
 
         var player = new Player(UUID.randomUUID(), "RandName", playerConnection);
         process.connection().startPlayState(player, true);

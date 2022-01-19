@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.support.TypeBasedParameterResolver;
 
-public final class EnvParameterResolver extends TypeBasedParameterResolver<Env> {
+final class EnvParameterResolver extends TypeBasedParameterResolver<Env> {
     @Override
     public Env resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {
