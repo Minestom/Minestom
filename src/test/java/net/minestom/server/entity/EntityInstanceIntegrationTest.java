@@ -5,7 +5,10 @@ import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.JoinGamePacket;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,5 +44,20 @@ public class EntityInstanceIntegrationTest {
 
         assertEquals(1, tracker.collect().size());
         assertTrue(tracker2.collect().size() > 1);
+    }
+
+    @Test
+    public void playerSwitch(Env env) {
+        var instance = env.createFlatInstance();
+        var instance2 = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, player.getInstance());
+
+        // #join may cause the thread to hang as scheduled for the next tick when initially in a pool
+        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            player.setInstance(instance2).join();
+        });
+        assertEquals(instance2, player.getInstance());
     }
 }
