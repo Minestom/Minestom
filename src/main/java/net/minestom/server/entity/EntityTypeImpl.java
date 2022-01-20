@@ -45,7 +45,7 @@ import java.util.function.BiFunction;
 record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
     private static final Registry.Container<EntityType> CONTAINER = Registry.createContainer(Registry.Resource.ENTITIES,
             (namespace, object) -> new EntityTypeImpl(Registry.entity(namespace, object, null)));
-    private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
+    static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
     static EntityType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -75,6 +75,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
         supplier.put("minecraft:axolotl", AxolotlMeta::new);
         supplier.put("minecraft:bat", BatMeta::new);
         supplier.put("minecraft:bee", BeeMeta::new);
+        supplier.put("minecraft:blaze", BlazeMeta::new);
         supplier.put("minecraft:boat", BoatMeta::new);
         supplier.put("minecraft:cat", CatMeta::new);
         supplier.put("minecraft:cave_spider", CaveSpiderMeta::new);
