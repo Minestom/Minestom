@@ -66,6 +66,7 @@ import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.statistic.PlayerStatistic;
+import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -90,6 +91,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -522,21 +524,36 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
         ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(),
                 (chunkX, chunkZ) -> futures.add(instance.loadOptionalChunk(chunkX, chunkZ)));
-        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
-                .thenCompose(unused -> {
+
+        SchedulerManager scheduler = MinecraftServer.getSchedulerManager();
+        AtomicBoolean join = new AtomicBoolean();
+        CompletableFuture<Void> future = new CompletableFuture<>() {
+            @Override
+            public Void join() {
+                // Prevent deadlock
+                scheduler.process();
+                join.set(true);
+                final Void result = super.join();
+                join.set(false);
+                return result;
+            }
+        };
+
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+                .thenRun(() -> {
                     if (runThread == Thread.currentThread()) {
                         runnable.accept(instance);
-                        return AsyncUtils.VOID_FUTURE;
+                        future.complete(null);
                     } else {
-                        // Complete the future during the next instance tick
-                        CompletableFuture<Void> future = new CompletableFuture<>();
-                        instance.scheduleNextTick(i -> {
-                            runnable.accept(i);
+                        scheduler.scheduleNextProcess(() -> {
+                            runnable.accept(instance);
                             future.complete(null);
                         });
-                        return future;
+                        if (join.compareAndSet(true, false))
+                            scheduler.process();
                     }
                 });
+        return future;
     }
 
     /**
