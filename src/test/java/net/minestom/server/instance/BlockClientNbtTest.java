@@ -46,5 +46,8 @@ public class BlockClientNbtTest {
         var nbt = NBT.Compound(Map.of("test", NBT.String("test")));
         assertNull(BlockUtils.extractClientNbt(Block.STONE.withNbt(nbt).withHandler(handler)));
         assertEquals(nbt, BlockUtils.extractClientNbt(Block.CHEST.withNbt(nbt).withHandler(handler)));
+        assertEquals(nbt, BlockUtils.extractClientNbt(Block.CHEST
+                .withNbt(NBT.Compound(Map.of("test", NBT.String("test"), "test2", NBT.String("test"))))
+                .withHandler(handler)));
     }
 }
