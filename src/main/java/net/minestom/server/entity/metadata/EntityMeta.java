@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityMeta {
     public static final byte OFFSET = 0;
@@ -17,10 +18,10 @@ public class EntityMeta {
     private final static byte HAS_GLOWING_EFFECT_BIT = 0x40;
     private final static byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
 
-    protected final Entity entity;
+    protected final @Nullable Entity entity;
     protected final Metadata metadata;
 
-    public EntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public EntityMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
         this.entity = entity;
         this.metadata = metadata;
     }
@@ -181,7 +182,9 @@ public class EntityMeta {
     }
 
     protected void setBoundingBox(double x, double y, double z) {
-        this.entity.setBoundingBox(x, y, z);
+        if (this.entity != null) {
+            this.entity.setBoundingBox(x, y, z);
+        }
     }
 
     protected void setBoundingBox(double width, double height) {
