@@ -55,21 +55,13 @@ public class EntityTeleportIntegrationTest {
         assertEquals(teleportPosition, player.getPosition());
 
         // Verify received packet(s)
-        {
-            var packets = tracker.collect();
-            assertEquals(1, packets.size());
-            var packet = ((PlayerPositionAndLookPacket) packets.get(0));
-            assertEquals(teleportPosition, packet.position());
-        }
-
+        tracker.assertSingle(PlayerPositionAndLookPacket.class,
+                packet -> assertEquals(teleportPosition, packet.position()));
         // Verify broadcast packet(s)
-        {
-            var packets = viewerTracker.collect();
-            assertEquals(1, packets.size());
-            var packet = ((EntityTeleportPacket) packets.get(0));
+        viewerTracker.assertSingle(EntityTeleportPacket.class, packet -> {
             assertEquals(player.getEntityId(), packet.entityId());
             assertEquals(teleportPosition, packet.position());
-        }
+        });
     }
 
     @Test

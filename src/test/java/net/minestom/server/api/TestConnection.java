@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public interface TestConnection {
     @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos);
@@ -16,5 +17,7 @@ public interface TestConnection {
 
     interface PacketTracker<T> {
         @NotNull List<@NotNull T> collect();
+
+        <P extends T> void assertSingle(Class<P> packetType, Consumer<P> consumer);
     }
 }
