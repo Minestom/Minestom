@@ -15,6 +15,10 @@ public interface TestConnection {
 
     <T extends ServerPacket> @NotNull PacketTracker<T> trackIncoming(@NotNull Class<T> type);
 
+    default @NotNull PacketTracker<ServerPacket> trackIncoming(){
+        return trackIncoming(ServerPacket.class);
+    }
+
     interface PacketTracker<T> {
         @NotNull List<@NotNull T> collect();
 
