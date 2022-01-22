@@ -600,6 +600,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         synchronizePosition(true); // So the player doesn't get stuck
+        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
 
         if (dimensionChange || firstSpawn) {
             this.inventory.update();
