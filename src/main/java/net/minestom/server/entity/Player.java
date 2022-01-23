@@ -296,6 +296,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Some client updates
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -424,6 +425,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true);
         getPlayerConnection().sendPacket(respawnPacket);
+
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level
@@ -431,6 +433,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
+    }
+
+    /**
+     * Sends necessary packets to synchronize player data after a {@link RespawnPacket}
+     */
+    public void refreshPlayer() {
+        this.playerConnection.sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
+        this.playerConnection.sendPacket(new SetExperiencePacket(exp, level, 0));
+        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
+        refreshAbilities();
     }
 
     /**
@@ -902,6 +914,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
+        refreshPlayer();
 
         {
             // Remove player
@@ -1213,12 +1226,45 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param gameMode the new player GameMode
      */
     public void setGameMode(@NotNull GameMode gameMode) {
+        this.setGameMode(gameMode, true);
+    }
+
+    /**
+     * Changes the player {@link GameMode}, optionally updating the players' abilities to sync with the client
+     *
+     * @param gameMode the new player GameMode
+     */
+    public void setGameMode(@NotNull GameMode gameMode, boolean updateAbilities) {
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId()));
             sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
                     new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
+
+            if (updateAbilities) {
+                switch (gameMode) {
+                    case CREATIVE -> {
+                        this.allowFlying = true;
+                        this.instantBreak = true;
+                        this.setInvulnerable(true); // This also sends the abilities packet
+                    }
+                    case SPECTATOR -> {
+                        this.allowFlying = true;
+                        this.flying = true;
+                        this.instantBreak = false;
+                        this.setInvulnerable(true); // This also sends the abilities packet
+                    }
+                    default -> {
+                        this.allowFlying = false;
+                        this.flying = false;
+                        this.instantBreak = false;
+                        this.setInvulnerable(false); // This also sends the abilities packet
+                    }
+                }
+            } else {
+                refreshAbilities(); // Make sure the client has the correct abilities
+            }
         }
     }
 
@@ -1243,6 +1289,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionType = dimensionType;
         sendPacket(new RespawnPacket(dimensionType, dimensionType.getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true));
+        refreshPlayer();
     }
 
     /**
