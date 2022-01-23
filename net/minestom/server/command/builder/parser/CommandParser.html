@@ -76,7 +76,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CommandParser</span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">CommandParser</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Class used to parse complete command inputs.</div>
 </section>
@@ -107,37 +107,33 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findCommand(java.lang.String)" class="member-name-link">findCommand</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findCommand(net.minestom.server.command.builder.CommandDispatcher,java.lang.String)" class="member-name-link">findCommand</a><wbr>(@NotNull <a href="../CommandDispatcher.html" title="class in net.minestom.server.command.builder">CommandDispatcher</a>&nbsp;dispatcher,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findCommand(net.minestom.server.command.builder.Command,java.lang.String,java.lang.String%5B%5D)" class="member-name-link">findCommand</a><wbr>(@Nullable <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;parentCommand,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandName,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findEligibleArgument(net.minestom.server.command.builder.Command,java.lang.String%5B%5D,java.lang.String,boolean,boolean,java.util.function.Predicate,java.util.function.Predicate)" class="member-name-link">findEligibleArgument</a><wbr>(@NotNull <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findEligibleArgument(net.minestom.server.command.builder.Command,java.lang.String%5B%5D,java.lang.String,boolean,boolean,java.util.function.Predicate,java.util.function.Predicate)" class="member-name-link">findEligibleArgument</a><wbr>(@NotNull <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandString,
  boolean&nbsp;trailingSpace,
  boolean&nbsp;forceCorrect,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findMostCorrectSyntax(java.util.List,net.minestom.server.command.builder.CommandContext)" class="member-name-link">findMostCorrectSyntax</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findMostCorrectSyntax(java.util.List,net.minestom.server.command.builder.CommandContext)" class="member-name-link">findMostCorrectSyntax</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
  @NotNull <a href="../CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Retrieves from the valid syntax map the arguments condition result and get the one with the most
  valid arguments.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(net.minestom.server.command.builder.CommandSyntax,net.minestom.server.command.builder.arguments.Argument%5B%5D,java.lang.String%5B%5D,java.lang.String,java.util.List,it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap)" class="member-name-link">parse</a><wbr>(@Nullable <a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&nbsp;syntax,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(net.minestom.server.command.builder.CommandSyntax,net.minestom.server.command.builder.arguments.Argument%5B%5D,java.lang.String%5B%5D,java.lang.String,java.util.List,it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap)" class="member-name-link">parse</a><wbr>(@Nullable <a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&nbsp;syntax,
  @NotNull <a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;[]&nbsp;commandArguments,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;inputArguments,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandString,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
  @Nullable it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap&lt;<a href="CommandSuggestionHolder.html" title="class in net.minestom.server.command.builder.parser">CommandSuggestionHolder</a>&gt;&nbsp;syntaxesSuggestions)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -170,22 +166,12 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="findCommand(net.minestom.server.command.builder.Command,java.lang.String,java.lang.String[])">
-<h3>findCommand</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></span>&nbsp;<span class="element-name">findCommand</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;parentCommand,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandName,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="findCommand(java.lang.String)">
+<section class="detail" id="findCommand(net.minestom.server.command.builder.CommandDispatcher,java.lang.String)">
 <h3>findCommand</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></span>&nbsp;<span class="element-name">findCommand</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../CommandDispatcher.html" title="class in net.minestom.server.command.builder">CommandDispatcher</a>&nbsp;dispatcher,
+ @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span></div>
 </section>
 </li>
