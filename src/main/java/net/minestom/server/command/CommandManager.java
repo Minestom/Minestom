@@ -219,8 +219,7 @@ public final class CommandManager {
             }
 
             // Retrieve argument node
-            final Argument<?> argument = queryResult.argument;
-            final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
+            final int argumentNode = argumentIdentityMap.getOrDefault(queryResult.argument(), 0);
             request.retrieve(argumentNode);
         }
         // Add root node children

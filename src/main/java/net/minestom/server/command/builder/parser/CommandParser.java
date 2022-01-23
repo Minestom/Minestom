@@ -81,11 +81,7 @@ public final class CommandParser {
                 // of correct argument(s) and do not check the next syntax argument
                 syntaxCorrect = false;
                 if (syntaxesSuggestions != null) {
-                    CommandSuggestionHolder suggestionHolder = new CommandSuggestionHolder();
-                    suggestionHolder.syntax = syntax;
-                    suggestionHolder.argumentSyntaxException = argumentResult.argumentSyntaxException;
-                    suggestionHolder.argIndex = argIndex;
-                    syntaxesSuggestions.put(argIndex, suggestionHolder);
+                    syntaxesSuggestions.put(argIndex, new CommandSuggestionHolder(syntax, argumentResult.argumentSyntaxException, argIndex));
                 }
                 break;
             }
@@ -95,12 +91,7 @@ public final class CommandParser {
         if (syntaxCorrect) {
             if (commandArguments.length == argumentValueMap.size() || useRemaining) {
                 if (validSyntaxes != null) {
-                    ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
-                    validSyntaxHolder.commandString = commandString;
-                    validSyntaxHolder.syntax = syntax;
-                    validSyntaxHolder.argumentResults = argumentValueMap;
-
-                    validSyntaxes.add(validSyntaxHolder);
+                    validSyntaxes.add(new ValidSyntaxHolder(commandString, syntax, argumentValueMap));
                 }
             }
         }
@@ -126,7 +117,7 @@ public final class CommandParser {
         CommandContext finalContext = null;
 
         for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
-            final Map<Argument<?>, ArgumentParser.ArgumentResult> argsValues = validSyntaxHolder.argumentResults;
+            final Map<Argument<?>, ArgumentParser.ArgumentResult> argsValues = validSyntaxHolder.argumentResults();
 
             final int argsSize = argsValues.size();
 
@@ -136,7 +127,7 @@ public final class CommandParser {
                 maxArguments = argsSize;
 
                 // Fill arguments map
-                finalContext = new CommandContext(validSyntaxHolder.commandString);
+                finalContext = new CommandContext(validSyntaxHolder.commandString());
                 for (var entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
                     final ArgumentParser.ArgumentResult argumentResult = entry.getValue();
@@ -197,13 +188,7 @@ public final class CommandParser {
                 // Save result
                 if ((!forceCorrect || argumentResult.correct) &&
                         argumentPredicate.test(argument)) {
-                    ArgumentQueryResult queryResult = new ArgumentQueryResult();
-                    queryResult.syntax = syntax;
-                    queryResult.argument = argument;
-                    queryResult.context = context;
-                    queryResult.input = argumentResult.rawArg;
-
-                    maxArg = queryResult;
+                    maxArg = new ArgumentQueryResult(syntax, argument, context, argumentResult.rawArg);
                     maxArgIndex = argIndex;
                 }
 

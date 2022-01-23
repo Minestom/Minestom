@@ -199,7 +199,7 @@ public class CommandDispatcher {
             final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, context);
             if (finalValidSyntax != null) {
                 // A fully correct syntax has been found, use it
-                final CommandSyntax syntax = finalValidSyntax.syntax;
+                final CommandSyntax syntax = finalValidSyntax.syntax();
 
                 parsedCommand.syntax = syntax;
                 parsedCommand.executor = syntax.getExecutor();
@@ -215,9 +215,9 @@ public class CommandDispatcher {
         if (!syntaxesSuggestions.isEmpty()) {
             final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
             final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-            final CommandSyntax syntax = suggestionHolder.syntax;
-            final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
-            final int argIndex = suggestionHolder.argIndex;
+            final CommandSyntax syntax = suggestionHolder.syntax();
+            final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException();
+            final int argIndex = suggestionHolder.argIndex();
 
             // Found the closest syntax with at least 1 correct argument
             final Argument<?> argument = syntax.getArguments()[argIndex];

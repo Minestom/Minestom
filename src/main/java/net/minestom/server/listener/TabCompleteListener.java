@@ -41,11 +41,11 @@ public class TabCompleteListener {
             return;
         }
 
-        final Argument<?> argument = queryResult.argument;
+        final Argument<?> argument = queryResult.argument();
 
         final SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
         if (suggestionCallback != null) {
-            final String input = queryResult.input;
+            final String input = queryResult.input();
             final int inputLength = input.length();
 
             final int commandLength = Arrays.stream(split).map(String::length).reduce(0, Integer::sum) +
@@ -55,7 +55,7 @@ public class TabCompleteListener {
             final int start = commandLength - inputLength + 1 - trailingSpaces;
 
             Suggestion suggestion = new Suggestion(input, start, inputLength);
-            suggestionCallback.apply(player, queryResult.context, suggestion);
+            suggestionCallback.apply(player, queryResult.context(), suggestion);
 
             player.getPlayerConnection().sendPacket(new TabCompletePacket(packet.transactionId(), suggestion.getStart(), suggestion.getLength(),
                     suggestion.getEntries().stream()
