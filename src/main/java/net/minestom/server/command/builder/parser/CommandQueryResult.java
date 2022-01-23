@@ -2,8 +2,10 @@ package net.minestom.server.command.builder.parser;
 
 import net.minestom.server.command.builder.Command;
 
-public class CommandQueryResult {
-    public Command command;
-    public String commandName;
-    public String[] args;
+import java.util.List;
+
+public record CommandQueryResult(List<Command> parents,
+                                 Command command,
+                                 String commandName,
+                                 String[] args) {
 }

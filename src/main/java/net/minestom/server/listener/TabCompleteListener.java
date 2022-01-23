@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -26,25 +27,25 @@ public class TabCompleteListener {
         String commandName = split[0];
         String args = commandString.replaceFirst(Pattern.quote(commandName), "");
 
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(MinecraftServer.getCommandManager().getDispatcher(), commandString);
         if (commandQueryResult == null) {
             // Command not found
             return;
         }
 
-        final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE), false,
+        final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
+                commandQueryResult.args(), commandString, text.endsWith(StringUtils.SPACE), false,
                 CommandSyntax::hasSuggestion, Argument::hasSuggestion);
         if (queryResult == null) {
             // Suggestible argument not found
             return;
         }
 
-        final Argument<?> argument = queryResult.argument;
+        final Argument<?> argument = queryResult.argument();
 
         final SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
         if (suggestionCallback != null) {
-            final String input = queryResult.input;
+            final String input = queryResult.input();
             final int inputLength = input.length();
 
             final int commandLength = Arrays.stream(split).map(String::length).reduce(0, Integer::sum) +
@@ -54,7 +55,7 @@ public class TabCompleteListener {
             final int start = commandLength - inputLength + 1 - trailingSpaces;
 
             Suggestion suggestion = new Suggestion(input, start, inputLength);
-            suggestionCallback.apply(player, queryResult.context, suggestion);
+            suggestionCallback.apply(player, queryResult.context(), suggestion);
 
             player.getPlayerConnection().sendPacket(new TabCompletePacket(packet.transactionId(), suggestion.getStart(), suggestion.getLength(),
                     suggestion.getEntries().stream()
