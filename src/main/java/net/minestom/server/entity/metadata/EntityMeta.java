@@ -185,8 +185,9 @@ public class EntityMeta {
     }
 
     protected void consumeEntity(Consumer<Entity> consumer) {
-        if (!this.entityRef.refersTo(null)) {
-            consumer.accept(this.entityRef.get());
+        Entity entity = this.entityRef.get();
+        if (entity != null) {
+            consumer.accept(entity);
         }
     }
 
