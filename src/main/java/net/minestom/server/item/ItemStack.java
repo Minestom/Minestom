@@ -168,7 +168,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withLore(@NotNull List<@NotNull Component> lore) {
+    public @NotNull ItemStack withLore(@NotNull List<? extends Component> lore) {
         return builder().lore(lore).build();
     }
 
