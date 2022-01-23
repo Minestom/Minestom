@@ -2,9 +2,11 @@ package net.minestom.server.entity.player;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.api.TestConnection;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
@@ -12,6 +14,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,6 +50,33 @@ public class PlayerIntegrationTest {
         assertEquals(isFlying, player.isFlying());
         assertEquals(isAllowFlying, player.isAllowFlying());
         assertEquals(isInstantBreak, player.isInstantBreak());
+    }
+
+    @Test
+    public void playerJoinPackets(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        
+        final var packets = List.of(
+            JoinGamePacket.class, ServerDifficultyPacket.class, SpawnPositionPacket.class,
+            DeclareCommandsPacket.class, EntityPropertiesPacket.class, EntityStatusPacket.class,
+            UpdateHealthPacket.class, PlayerAbilitiesPacket.class
+        );
+        final List<TestConnection.PacketTracker<?>> trackers = new ArrayList<>();
+        for (var packet : packets) {
+            trackers.add(connection.trackIncoming(packet));
+        }
+
+        var trackerAll = connection.trackIncoming(ServerPacket.class);
+
+        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        assertEquals(instance, player.getInstance());
+        assertEquals(new Pos(0, 40, 0), player.getPosition());
+
+        for (var tracker : trackers) {
+            assertEquals(1, tracker.collect().size());
+        }
+        assertTrue(trackerAll.collect().size() > packets.size());
     }
 
     /**
