@@ -21,14 +21,16 @@ public class AgeableMobMeta extends PathfinderMobMeta {
         if (isBaby() == value) {
             return;
         }
-        if (this.entity != null) {
-            BoundingBox bb = this.entity.getBoundingBox();
+        this.consumeEntity((entity) -> {
+            BoundingBox bb = entity.getBoundingBox();
             if (value) {
-                setBoundingBox(bb.getWidth() / 2, bb.getHeight() / 2);
+                double width = bb.getWidth() / 2;
+                entity.setBoundingBox(width, bb.getHeight() / 2, width);
             } else {
-                setBoundingBox(bb.getWidth() * 2, bb.getHeight() * 2);
+                double width = bb.getWidth() * 2;
+                entity.setBoundingBox(width, bb.getHeight() * 2, width);
             }
-        }
+        });
         super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }
 
