@@ -6,6 +6,8 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 public class EntityMeta {
     public static final byte OFFSET = 0;
     public static final byte MAX_OFFSET = OFFSET + 8;
@@ -18,7 +20,7 @@ public class EntityMeta {
     private final static byte HAS_GLOWING_EFFECT_BIT = 0x40;
     private final static byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
 
-    protected final @Nullable Entity entity;
+    private final @Nullable Entity entity;
     protected final Metadata metadata;
 
     public EntityMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
@@ -181,14 +183,10 @@ public class EntityMeta {
         setMask(index, mask);
     }
 
-    protected void setBoundingBox(double x, double y, double z) {
+    protected void consumeEntity(Consumer<Entity> consumer) {
         if (this.entity != null) {
-            this.entity.setBoundingBox(x, y, z);
+            consumer.accept(this.entity);
         }
-    }
-
-    protected void setBoundingBox(double width, double height) {
-        setBoundingBox(width, height, width);
     }
 
 }
