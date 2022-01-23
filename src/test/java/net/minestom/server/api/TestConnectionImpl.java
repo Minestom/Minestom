@@ -36,7 +36,7 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
+    public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos, @NotNull Consumer<Player> loginCallback) {
         AtomicReference<EventListener<PlayerLoginEvent>> listenerRef = new AtomicReference<>();
         var listener = EventListener.builder(PlayerLoginEvent.class)
                 .handler(event -> {
@@ -44,6 +44,7 @@ final class TestConnectionImpl implements TestConnection {
                         event.setSpawningInstance(instance);
                         event.getPlayer().setRespawnPoint(pos);
                         process.eventHandler().removeListener(listenerRef.get());
+                        loginCallback.accept(event.getPlayer());
                     }
                 }).build();
         listenerRef.set(listener);

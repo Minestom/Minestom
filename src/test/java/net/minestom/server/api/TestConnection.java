@@ -11,11 +11,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public interface TestConnection {
-    @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos);
+    @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos, @NotNull Consumer<Player> loginCallback);
+
+    default @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
+        return connect(instance, pos, (player) -> {
+        });
+    }
 
     <T extends ServerPacket> @NotNull PacketTracker<T> trackIncoming(@NotNull Class<T> type);
 
-    default @NotNull PacketTracker<ServerPacket> trackIncoming(){
+    default @NotNull PacketTracker<ServerPacket> trackIncoming() {
         return trackIncoming(ServerPacket.class);
     }
 
