@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata.other;
 
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.MobMeta;
@@ -18,8 +19,10 @@ public class SlimeMeta extends MobMeta {
     }
 
     public void setSize(int value) {
-        float boxSize = 0.51000005f * value;
-        setBoundingBox(boxSize, boxSize);
+        this.consumeEntity((entity) -> {
+            float boxSize = 0.51000005f * value;
+            entity.setBoundingBox(boxSize, boxSize, boxSize);
+        });
         super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
     }
 
