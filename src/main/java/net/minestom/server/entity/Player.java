@@ -1242,28 +1242,33 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
                     new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
 
-            if (updateAbilities) {
-                switch (gameMode) {
-                    case CREATIVE -> {
-                        this.allowFlying = true;
-                        this.instantBreak = true;
-                        this.setInvulnerable(true); // This also sends the abilities packet
-                    }
-                    case SPECTATOR -> {
-                        this.allowFlying = true;
-                        this.flying = true;
-                        this.instantBreak = false;
-                        this.setInvulnerable(true); // This also sends the abilities packet
-                    }
-                    default -> {
-                        this.allowFlying = false;
-                        this.flying = false;
-                        this.instantBreak = false;
-                        this.setInvulnerable(false); // This also sends the abilities packet
-                    }
-                }
-            } else {
+             if (!updateAbilities) {
                 refreshAbilities(); // Make sure the client has the correct abilities
+            }
+        }
+
+        // Update abilities even if the player hasn't spawned, this is necessary so that
+        // creative mode players will have their correct abilities if setGameMode is
+        // called before init
+        if (updateAbilities) {
+            switch (gameMode) {
+                case CREATIVE -> {
+                    this.allowFlying = true;
+                    this.instantBreak = true;
+                    this.setInvulnerable(true); // This also sends the abilities packet
+                }
+                case SPECTATOR -> {
+                    this.allowFlying = true;
+                    this.flying = true;
+                    this.instantBreak = false;
+                    this.setInvulnerable(true); // This also sends the abilities packet
+                }
+                default -> {
+                    this.allowFlying = false;
+                    this.flying = false;
+                    this.instantBreak = false;
+                    this.setInvulnerable(false); // This also sends the abilities packet
+                }
             }
         }
     }
@@ -1513,10 +1518,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         this.permissionLevel = permissionLevel;
 
-        // Magic values: https://wiki.vg/Entity_statuses#Player
-        // TODO remove magic values
-        final byte permissionLevelStatus = (byte) (24 + permissionLevel);
-        triggerStatus(permissionLevelStatus);
+        // Condition to prevent sending the packets before spawning the player
+        if (isActive()) {
+            // Magic values: https://wiki.vg/Entity_statuses#Player
+            // TODO remove magic values
+            final byte permissionLevelStatus = (byte) (24 + permissionLevel);
+            triggerStatus(permissionLevelStatus);
+        }
     }
 
     /**
