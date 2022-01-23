@@ -1220,54 +1220,38 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Changes the player {@link GameMode}.
+     * Changes the player {@link GameMode}
      *
      * @param gameMode the new player GameMode
      */
     public void setGameMode(@NotNull GameMode gameMode) {
-        this.setGameMode(gameMode, true);
-    }
-
-    /**
-     * Changes the player {@link GameMode}, optionally updating the players' abilities to sync with the client
-     *
-     * @param gameMode the new player GameMode
-     */
-    public void setGameMode(@NotNull GameMode gameMode, boolean updateAbilities) {
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId()));
             sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
                     new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
-
-            if (!updateAbilities) {
-                refreshAbilities(); // Make sure the client has the correct abilities
-            }
         }
 
-        // Update abilities even if the player hasn't spawned, this is necessary so that
-        // creative mode players will have their correct abilities if setGameMode is
-        // called before init
-        if (updateAbilities) {
-            switch (gameMode) {
-                case CREATIVE -> {
-                    this.allowFlying = true;
-                    this.instantBreak = true;
-                    this.setInvulnerable(true); // This also sends the abilities packet
-                }
-                case SPECTATOR -> {
-                    this.allowFlying = true;
-                    this.flying = true;
-                    this.instantBreak = false;
-                    this.setInvulnerable(true); // This also sends the abilities packet
-                }
-                default -> {
-                    this.allowFlying = false;
-                    this.flying = false;
-                    this.instantBreak = false;
-                    this.setInvulnerable(false); // This also sends the abilities packet
-                }
+        // The client updates their abilities based on the GameMode
+        // The following will ensure there isn't desync
+        switch (gameMode) {
+            case CREATIVE -> {
+                this.allowFlying = true;
+                this.instantBreak = true;
+                this.setInvulnerable(true); // This also sends the abilities packet
+            }
+            case SPECTATOR -> {
+                this.allowFlying = true;
+                this.flying = true;
+                this.instantBreak = false;
+                this.setInvulnerable(true); // This also sends the abilities packet
+            }
+            default -> {
+                this.allowFlying = false;
+                this.flying = false;
+                this.instantBreak = false;
+                this.setInvulnerable(false); // This also sends the abilities packet
             }
         }
     }
