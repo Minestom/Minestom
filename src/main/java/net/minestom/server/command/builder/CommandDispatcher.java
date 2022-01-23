@@ -116,7 +116,7 @@ public class CommandDispatcher {
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(this, commandString);
         // Check if the command exists
         if (commandQueryResult == null) {
             return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);

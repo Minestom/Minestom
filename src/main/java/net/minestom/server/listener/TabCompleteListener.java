@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -26,7 +27,7 @@ public class TabCompleteListener {
         String commandName = split[0];
         String args = commandString.replaceFirst(Pattern.quote(commandName), "");
 
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(MinecraftServer.getCommandManager().getDispatcher(), commandString);
         if (commandQueryResult == null) {
             // Command not found
             return;

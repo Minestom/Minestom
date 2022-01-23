@@ -202,7 +202,7 @@ public final class CommandManager {
             String input = pair.left();
             NodeMaker.Request request = pair.right();
 
-            final CommandQueryResult commandQueryResult = CommandParser.findCommand(input);
+            final CommandQueryResult commandQueryResult = CommandParser.findCommand(dispatcher, input);
             if (commandQueryResult == null) {
                 // Invalid command, return root node
                 request.retrieve(0);

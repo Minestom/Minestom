@@ -1,10 +1,9 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.StringUtils;
@@ -21,11 +20,9 @@ import static net.minestom.server.command.builder.parser.ArgumentParser.validate
  */
 public class CommandParser {
 
-    private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
-
     @Nullable
-    public static CommandQueryResult findCommand(@Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
-        Command command = parentCommand == null ? COMMAND_MANAGER.getDispatcher().findCommand(commandName) : parentCommand;
+    public static CommandQueryResult findCommand(@NotNull CommandDispatcher dispatcher, @Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
+        Command command = parentCommand == null ? dispatcher.findCommand(commandName) : parentCommand;
         if (command == null) {
             return null;
         }
@@ -44,7 +41,7 @@ public class CommandParser {
                     commandQueryResult.command = subcommand;
                     commandQueryResult.commandName = subCommandName;
                     commandQueryResult.args = subArgs;
-                    return findCommand(subcommand, subCommandName, subArgs);
+                    return findCommand(dispatcher, subcommand, subCommandName, subArgs);
                 }
             }
         }
@@ -53,13 +50,13 @@ public class CommandParser {
     }
 
     @Nullable
-    public static CommandQueryResult findCommand(@NotNull String input) {
+    public static CommandQueryResult findCommand(@NotNull CommandDispatcher dispatcher, @NotNull String input) {
         final String[] parts = input.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
         String[] args = new String[parts.length - 1];
         System.arraycopy(parts, 1, args, 0, args.length);
-        return CommandParser.findCommand(null, commandName, args);
+        return CommandParser.findCommand(dispatcher, null, commandName, args);
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
