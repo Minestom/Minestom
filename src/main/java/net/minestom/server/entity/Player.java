@@ -438,7 +438,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Sends necessary packets to synchronize player data after a {@link RespawnPacket}
      */
-    public void refreshPlayer() {
+    private void refreshClientStateAfterRespawn() {
         this.playerConnection.sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         this.playerConnection.sendPacket(new SetExperiencePacket(exp, level, 0));
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level
@@ -913,7 +913,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
-        refreshPlayer();
+        refreshClientStateAfterRespawn();
 
         {
             // Remove player
@@ -1276,7 +1276,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionType = dimensionType;
         sendPacket(new RespawnPacket(dimensionType, dimensionType.getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true));
-        refreshPlayer();
+        refreshClientStateAfterRespawn();
     }
 
     /**
