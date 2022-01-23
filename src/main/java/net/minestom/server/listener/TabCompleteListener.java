@@ -33,8 +33,8 @@ public class TabCompleteListener {
             return;
         }
 
-        final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE), false,
+        final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
+                commandQueryResult.args(), commandString, text.endsWith(StringUtils.SPACE), false,
                 CommandSyntax::hasSuggestion, Argument::hasSuggestion);
         if (queryResult == null) {
             // Suggestible argument not found

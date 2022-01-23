@@ -121,7 +121,7 @@ public class CommandConditionTest {
 
             called.set(false);
             dispatcher.execute(sender2, "name sub");
-            assertFalse(called.get());
+            assertFalse(called.get(), "Subcommand execution should have been cancelled by parent command condition");
         }
     }
 

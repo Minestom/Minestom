@@ -18,45 +18,37 @@ import static net.minestom.server.command.builder.parser.ArgumentParser.validate
 /**
  * Class used to parse complete command inputs.
  */
-public class CommandParser {
+public final class CommandParser {
 
-    @Nullable
-    public static CommandQueryResult findCommand(@NotNull CommandDispatcher dispatcher, @Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
+    private static @Nullable CommandQueryResult recursiveCommandQuery(@NotNull CommandDispatcher dispatcher,
+                                                                      List<Command> parents,
+                                                                      @Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
         Command command = parentCommand == null ? dispatcher.findCommand(commandName) : parentCommand;
-        if (command == null) {
-            return null;
-        }
+        if (command == null) return null;
 
-        CommandQueryResult commandQueryResult = new CommandQueryResult();
-        commandQueryResult.command = command;
-        commandQueryResult.commandName = commandName;
-        commandQueryResult.args = args;
-
+        CommandQueryResult commandQueryResult = new CommandQueryResult(parents, command, commandName, args);
         // Search for subcommand
         if (args.length > 0) {
             final String subCommandName = args[0];
             for (Command subcommand : command.getSubcommands()) {
                 if (Command.isValidName(subcommand, subCommandName)) {
                     final String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                    commandQueryResult.command = subcommand;
-                    commandQueryResult.commandName = subCommandName;
-                    commandQueryResult.args = subArgs;
-                    return findCommand(dispatcher, subcommand, subCommandName, subArgs);
+                    parents.add(command);
+                    return recursiveCommandQuery(dispatcher, parents, subcommand, subCommandName, subArgs);
                 }
             }
         }
-
         return commandQueryResult;
     }
 
-    @Nullable
-    public static CommandQueryResult findCommand(@NotNull CommandDispatcher dispatcher, @NotNull String input) {
+    public static @Nullable CommandQueryResult findCommand(@NotNull CommandDispatcher dispatcher, @NotNull String input) {
         final String[] parts = input.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
         String[] args = new String[parts.length - 1];
         System.arraycopy(parts, 1, args, 0, args.length);
-        return CommandParser.findCommand(dispatcher, null, commandName, args);
+        List<Command> parents = new ArrayList<>();
+        return recursiveCommandQuery(dispatcher, parents, null, commandName, args);
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,

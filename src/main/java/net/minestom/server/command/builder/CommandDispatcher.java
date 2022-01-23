@@ -121,12 +121,10 @@ public class CommandDispatcher {
         if (commandQueryResult == null) {
             return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
         }
-        final Command command = commandQueryResult.command;
-
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand(command, commandName, commandQueryResult.args, commandString, result);
+        findParsedCommand( commandQueryResult, commandName, commandString, result);
 
         // Cache result
         this.cache.put(commandString, result);
@@ -134,27 +132,18 @@ public class CommandDispatcher {
         return result;
     }
 
-    private @Nullable ParsedCommand findParsedCommand(@NotNull Command command,
-                                                      @NotNull String commandName, @NotNull String[] args,
+    private @NotNull ParsedCommand findParsedCommand(@NotNull CommandQueryResult commandQueryResult,
+                                                      @NotNull String commandName,
                                                       @NotNull String commandString,
                                                       @NotNull CommandResult result) {
+        final Command command = commandQueryResult.command();
+        String[] args = commandQueryResult.args();
         final boolean hasArgument = args.length > 0;
-
-        // Search for subcommand
-        if (hasArgument) {
-            final String firstArgument = args[0];
-            for (Command subcommand : command.getSubcommands()) {
-                if (Command.isValidName(subcommand, firstArgument)) {
-                    return findParsedCommand(subcommand,
-                            firstArgument, Arrays.copyOfRange(args, 1, args.length),
-                            commandString, result);
-                }
-            }
-        }
 
         final String input = commandName + StringUtils.SPACE + String.join(StringUtils.SPACE, args);
 
         ParsedCommand parsedCommand = new ParsedCommand();
+        parsedCommand.parents = commandQueryResult.parents();
         parsedCommand.command = command;
         parsedCommand.commandString = commandString;
 

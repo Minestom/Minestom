@@ -209,11 +209,11 @@ public final class CommandManager {
                 continue;
             }
 
-            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, input, false, true, syntax -> true, argument -> true);
+            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
+                    commandQueryResult.args(), input, false, true, syntax -> true, argument -> true);
             if (queryResult == null) {
                 // Invalid argument, return command node (default to root)
-                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
+                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command(), 0);
                 request.retrieve(commandNode);
                 continue;
             }
