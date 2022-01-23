@@ -1241,7 +1241,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
                     new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
 
-             if (!updateAbilities) {
+            if (!updateAbilities) {
                 refreshAbilities(); // Make sure the client has the correct abilities
             }
         }
