@@ -1233,25 +1233,24 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
         }
 
-        // The client updates their abilities based on the GameMode
-        // The following will ensure there isn't desync
+        // The client updates their abilities based on the GameMode as follows
         switch (gameMode) {
             case CREATIVE -> {
                 this.allowFlying = true;
                 this.instantBreak = true;
-                this.setInvulnerable(true); // This also sends the abilities packet
+                this.invulnerable = true;
             }
             case SPECTATOR -> {
                 this.allowFlying = true;
-                this.flying = true;
                 this.instantBreak = false;
-                this.setInvulnerable(true); // This also sends the abilities packet
+                this.invulnerable = true;
+                this.flying = true;
             }
             default -> {
                 this.allowFlying = false;
-                this.flying = false;
                 this.instantBreak = false;
-                this.setInvulnerable(false); // This also sends the abilities packet
+                this.invulnerable = false;
+                this.flying = false;
             }
         }
     }
