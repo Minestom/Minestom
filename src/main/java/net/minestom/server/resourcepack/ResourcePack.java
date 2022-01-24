@@ -31,8 +31,8 @@ public class ResourcePack {
         return optional(url, hash, null);
     }
 
-    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component forcedMessage) {
-        return new ResourcePack(url, hash, true, forcedMessage);
+    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component prompt) {
+        return new ResourcePack(url, hash, true, prompt);
     }
 
     public static ResourcePack forced(@NotNull String url, @Nullable String hash) {
