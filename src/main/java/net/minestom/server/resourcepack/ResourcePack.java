@@ -23,8 +23,12 @@ public class ResourcePack {
         this.prompt = prompt;
     }
 
+    public static ResourcePack optional(@NotNull String url, @Nullable String hash, @Nullable Component prompt) {
+        return new ResourcePack(url, hash, false, prompt);
+    }
+
     public static ResourcePack optional(@NotNull String url, @Nullable String hash) {
-        return new ResourcePack(url, hash, false, null);
+        return optional(url, hash, null);
     }
 
     public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component forcedMessage) {
