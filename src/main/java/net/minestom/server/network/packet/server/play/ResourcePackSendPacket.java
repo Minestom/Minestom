@@ -9,7 +9,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public record ResourcePackSendPacket(String url, String hash, boolean forced,
-                                     Component forcedMessage) implements ServerPacket {
+                                     Component prompt) implements ServerPacket {
     public ResourcePackSendPacket(BinaryReader reader) {
         this(reader.readSizedString(), reader.readSizedString(), reader.readBoolean(),
                 reader.readBoolean() ? reader.readComponent() : null);
@@ -17,7 +17,7 @@ public record ResourcePackSendPacket(String url, String hash, boolean forced,
 
     public ResourcePackSendPacket(@NotNull ResourcePack resourcePack) {
         this(resourcePack.getUrl(), resourcePack.getHash(), resourcePack.isForced(),
-                resourcePack.getForcedMessage());
+                resourcePack.getPrompt());
     }
 
     @Override
@@ -25,9 +25,9 @@ public record ResourcePackSendPacket(String url, String hash, boolean forced,
         writer.writeSizedString(url);
         writer.writeSizedString(hash);
         writer.writeBoolean(forced);
-        if (forcedMessage != null) {
+        if (prompt != null) {
             writer.writeBoolean(true);
-            writer.writeComponent(forcedMessage);
+            writer.writeComponent(prompt);
         } else {
             writer.writeBoolean(false);
         }

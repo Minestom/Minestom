@@ -13,14 +13,14 @@ public class ResourcePack {
     private final String url;
     private final String hash;
     private final boolean forced;
-    private final Component forcedMessage;
+    private final Component prompt;
 
-    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, @Nullable Component forcedMessage) {
+    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, @Nullable Component prompt) {
         this.url = url;
         // Optional, set to empty if null
         this.hash = hash == null ? "" : hash;
         this.forced = forced;
-        this.forcedMessage = forcedMessage;
+        this.prompt = prompt;
     }
 
     public static ResourcePack optional(@NotNull String url, @Nullable String hash) {
@@ -60,7 +60,7 @@ public class ResourcePack {
         return forced;
     }
 
-    public @Nullable Component getForcedMessage() {
-        return forcedMessage;
+    public @Nullable Component getPrompt() {
+        return prompt;
     }
 }
