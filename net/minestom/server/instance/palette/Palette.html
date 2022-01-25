@@ -111,7 +111,7 @@ extends <a href="../../utils/binary/Writeable.html" title="interface in net.mine
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -131,10 +131,10 @@ extends <a href="../../utils/binary/Writeable.html" title="interface in net.mine
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#clone()" class="member-name-link">clone</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#data()" class="member-name-link">data</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#count()" class="member-name-link">count</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Returns the payload of this palette.</div>
+<div class="block">Returns the number of entries in this palette.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#dimension()" class="member-name-link">dimension</a>()</code></div>
@@ -156,9 +156,9 @@ extends <a href="../../utils/binary/Writeable.html" title="interface in net.mine
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#maxBitsPerEntry()" class="member-name-link">maxBitsPerEntry</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#maxSize()" class="member-name-link">maxSize</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#maxSize()" class="member-name-link">maxSize</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Returns the maximum number of entries in this palette.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
@@ -185,11 +185,6 @@ extends <a href="../../utils/binary/Writeable.html" title="interface in net.mine
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setAll(net.minestom.server.instance.palette.Palette.EntrySupplier)" class="member-name-link">setAll</a><wbr>(@NotNull <a href="Palette.EntrySupplier.html" title="interface in net.minestom.server.instance.palette">Palette.EntrySupplier</a>&nbsp;supplier)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#size()" class="member-name-link">size</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Returns the number of entries in this palette.</div>
-</div>
 </div>
 </div>
 </div>
@@ -290,9 +285,9 @@ extends <a href="../../utils/binary/Writeable.html" title="interface in net.mine
 </section>
 </li>
 <li>
-<section class="detail" id="size()">
-<h3>size</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">size</span>()</div>
+<section class="detail" id="count()">
+<h3>count</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">count</span>()</div>
 <div class="block">Returns the number of entries in this palette.</div>
 </section>
 </li>
@@ -304,35 +299,22 @@ extends <a href="../../utils/binary/Writeable.html" title="interface in net.mine
 </section>
 </li>
 <li>
-<section class="detail" id="data()">
-<h3>data</h3>
-<div class="member-signature"><span class="return-type">long[]</span>&nbsp;<span class="element-name">data</span>()</div>
-<div class="block">Returns the payload of this palette.
- <p>
- The size of each element is defined by <a href="#bitsPerEntry()"><code>bitsPerEntry()</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the palette payload</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="maxBitsPerEntry()">
 <h3>maxBitsPerEntry</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">maxBitsPerEntry</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="maxSize()">
-<h3>maxSize</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">maxSize</span>()</div>
-<div class="block">Returns the maximum number of entries in this palette.</div>
-</section>
-</li>
-<li>
 <section class="detail" id="dimension()">
 <h3>dimension</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">dimension</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="maxSize()">
+<h3>maxSize</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">maxSize</span>()</div>
+<div class="block">Returns the maximum number of entries in this palette.</div>
 </section>
 </li>
 <li>
