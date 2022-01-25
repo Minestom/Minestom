@@ -1,11 +1,11 @@
 package net.minestom.server.utils.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,7 +88,7 @@ public class BlockUtils {
             }
             index++;
         }
-        return ArrayUtils.toMap(keys, values, entryCount);
+        return new Object2ObjectArrayMap<>(keys, values, entryCount);
     }
 
     public static @Nullable NBTCompound extractClientNbt(@NotNull Block block) {

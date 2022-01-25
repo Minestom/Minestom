@@ -68,11 +68,9 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         final String query = stateEntry.getKey();
                         final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                         final var propertyMap = BlockUtils.parseProperties(query);
-
+                        assert keys.length == propertyMap.size();
                         int[] propertiesArray = new int[keys.length];
-                        int i = 0;
                         for (var entry : propertyMap.entrySet()) {
-                            final int entryIndex = i++;
                             final int keyIndex = ArrayUtils.indexOf(keys, entry.getKey());
                             if (keyIndex == -1) {
                                 throw new IllegalArgumentException("Unknown property key: " + entry.getKey());
@@ -81,7 +79,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                             if (valueIndex == -1) {
                                 throw new IllegalArgumentException("Unknown property value: " + entry.getValue());
                             }
-                            propertiesArray[entryIndex] = valueIndex;
+                            propertiesArray[keyIndex] = valueIndex;
                         }
 
                         final BlockImpl block = new BlockImpl(Registry.block(namespace, object, stateOverride),
