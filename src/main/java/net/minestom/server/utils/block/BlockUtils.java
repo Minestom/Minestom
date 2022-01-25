@@ -81,8 +81,8 @@ public class BlockUtils {
                 if (equalIndex != -1 && equalIndex < index) {
                     final String key = query.substring(start, equalIndex).trim();
                     final String value = query.substring(equalIndex + 1, index).trim();
-                    keys[entryCount] = key.intern();
-                    values[entryCount++] = value.intern();
+                    keys[entryCount] = key;
+                    values[entryCount++] = value;
                 }
                 start = index + 1;
             }
