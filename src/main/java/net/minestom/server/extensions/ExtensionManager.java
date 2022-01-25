@@ -715,8 +715,10 @@ public class ExtensionManager {
 
         for (String dependentID : dependents) {
             Extension dependentExt = extensions.get(dependentID.toLowerCase());
-            LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
-            unload(dependentExt);
+            if ( dependentExt != null ) { // check if extension isn't already unloaded.
+                LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
+                unload(dependentExt);
+            }
         }
 
         LOGGER.info("Unloading extension {}", extensionName);
