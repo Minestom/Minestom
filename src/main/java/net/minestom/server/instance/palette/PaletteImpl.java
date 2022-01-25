@@ -28,7 +28,6 @@ final class PaletteImpl implements Palette, Cloneable {
     // Specific to this palette type
     private final int dimension;
     private final int dimensionBitCount;
-    private final int size;
     private final int maxBitsPerEntry;
     private final int bitsIncrement;
 
@@ -39,7 +38,7 @@ final class PaletteImpl implements Palette, Cloneable {
 
     private int count = 0;
 
-    private long[] values = new long[0];
+    private long[] values;
     // palette index = value
     private IntArrayList paletteToValueList;
     // value = palette index
@@ -49,7 +48,6 @@ final class PaletteImpl implements Palette, Cloneable {
         this.dimensionBitCount = validateDimension(dimension);
 
         this.dimension = dimension;
-        this.size = dimension * dimension * dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
         this.bitsIncrement = bitsIncrement;
 
@@ -70,7 +68,7 @@ final class PaletteImpl implements Palette, Cloneable {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
         final long[] values = this.values;
-        if (values.length == 0) {
+        if (values == null) {
             // Section is not loaded, return default value
             return 0;
         }
@@ -105,7 +103,7 @@ final class PaletteImpl implements Palette, Cloneable {
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         long[] values = this.values;
-        if (values.length == 0) {
+        if (values == null) {
             if (placedAir) {
                 // Section is empty and method is trying to place an air block, stop unnecessary computation
                 return;
@@ -142,7 +140,7 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void fill(int value) {
         if (value == 0) {
-            this.values = new long[0];
+            this.values = null;
             this.count = 0;
             return;
         }
@@ -150,7 +148,7 @@ final class PaletteImpl implements Palette, Cloneable {
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         long[] values = this.values;
-        if (values.length == 0) {
+        if (values == null) {
             this.values = values = new long[valuesLength(bitsPerEntry)];
         }
         long block = 0;
@@ -223,7 +221,7 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     @Override
-    public int size() {
+    public int count() {
         return count;
     }
 
@@ -238,25 +236,15 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     @Override
-    public int maxSize() {
-        return size;
-    }
-
-    @Override
     public int dimension() {
         return dimension;
-    }
-
-    @Override
-    public long[] data() {
-        return values;
     }
 
     @Override
     public @NotNull Palette clone() {
         try {
             PaletteImpl palette = (PaletteImpl) super.clone();
-            palette.values = values.clone();
+            palette.values = values != null ? values.clone() : null;
             palette.paletteToValueList = paletteToValueList.clone();
             palette.valueToPaletteMap = valueToPaletteMap.clone();
             palette.count = count;
@@ -283,7 +271,7 @@ final class PaletteImpl implements Palette, Cloneable {
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
         final long[] values = this.values;
         final int dimension = this.dimension;
-        if (values.length == 0) {
+        if (values == null) {
             if (consumeEmpty) {
                 // No values, give all 0 to make the consumer happy
                 for (int y = 0; y < dimension; y++)
@@ -296,7 +284,7 @@ final class PaletteImpl implements Palette, Cloneable {
         final int bitsPerEntry = this.bitsPerEntry;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        final int size = this.size;
+        final int size = maxSize();
         final int dimensionMinus = dimension - 1;
         final int[] ids = hasPalette ? paletteToValueList.elements() : null;
         final int dimensionBitCount = this.dimensionBitCount;
@@ -333,12 +321,12 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     private void updateAll(int[] paletteValues) {
-        final int size = this.size;
+        final int size = maxSize();
         assert paletteValues.length >= size;
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         long[] values = this.values;
-        if (values.length == 0) {
+        if (values == null) {
             this.values = values = new long[valuesLength(bitsPerEntry)];
         }
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
@@ -400,7 +388,7 @@ final class PaletteImpl implements Palette, Cloneable {
 
     int valuesLength(int bitsPerEntry) {
         int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        return (size + valuesPerLong - 1) / valuesPerLong;
+        return (maxSize() + valuesPerLong - 1) / valuesPerLong;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {

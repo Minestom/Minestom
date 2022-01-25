@@ -27,32 +27,32 @@ public class PaletteTest {
         for (Palette palette : palettes) {
             final int dimension = palette.dimension();
             assertEquals(0, palette.get(0, 0, 0), "Default value should be 0");
-            assertEquals(0, palette.size());
+            assertEquals(0, palette.count());
             palette.set(0, 0, 0, 64);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(64, palette.get(dimension, 0, 0), "Coordinate must be rounded to the palette dimension");
-            assertEquals(1, palette.size());
+            assertEquals(1, palette.count());
 
             palette.set(1, 0, 0, 65);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(65, palette.get(1, 0, 0));
-            assertEquals(2, palette.size());
+            assertEquals(2, palette.count());
 
             palette.set(0, 1, 0, 66);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(65, palette.get(1, 0, 0));
             assertEquals(66, palette.get(0, 1, 0));
-            assertEquals(3, palette.size());
+            assertEquals(3, palette.count());
 
             palette.set(0, 0, 1, 67);
             assertEquals(64, palette.get(0, 0, 0));
             assertEquals(65, palette.get(1, 0, 0));
             assertEquals(66, palette.get(0, 1, 0));
             assertEquals(67, palette.get(0, 0, 1));
-            assertEquals(4, palette.size());
+            assertEquals(4, palette.count());
 
             palette.set(0, 0, 1, 68);
-            assertEquals(4, palette.size());
+            assertEquals(4, palette.count());
         }
     }
 
@@ -93,13 +93,13 @@ public class PaletteTest {
     public void fill() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
-            assertEquals(0, palette.size());
+            assertEquals(0, palette.count());
             palette.set(0, 0, 0, 5);
-            assertEquals(1, palette.size());
+            assertEquals(1, palette.count());
             assertEquals(5, palette.get(0, 0, 0));
             palette.fill(6);
             assertEquals(6, palette.get(0, 0, 0));
-            assertEquals(palette.maxSize(), palette.size());
+            assertEquals(palette.maxSize(), palette.count());
             for (int x = 0; x < palette.dimension(); x++) {
                 for (int y = 0; y < palette.dimension(); y++) {
                     for (int z = 0; z < palette.dimension(); z++) {
@@ -109,7 +109,7 @@ public class PaletteTest {
             }
 
             palette.fill(0);
-            assertEquals(0, palette.size());
+            assertEquals(0, palette.count());
             for (int x = 0; x < palette.dimension(); x++) {
                 for (int y = 0; y < palette.dimension(); y++) {
                     for (int z = 0; z < palette.dimension(); z++) {
@@ -133,7 +133,7 @@ public class PaletteTest {
                     }
                 }
             }
-            assertEquals(palette.maxSize(), palette.size());
+            assertEquals(palette.maxSize(), palette.count());
             // Verify
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
@@ -181,12 +181,12 @@ public class PaletteTest {
                 assertTrue(points.add(new Vec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z + ", dimension " + palette.dimension());
                 return count.incrementAndGet();
             });
-            assertEquals(palette.maxSize(), palette.size());
-            assertEquals(palette.size(), count.get());
+            assertEquals(palette.maxSize(), palette.count());
+            assertEquals(palette.count(), count.get());
 
             count.set(0);
             palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
-            assertEquals(count.get(), palette.size());
+            assertEquals(count.get(), palette.count());
 
             // Replacing
             count.set(0);
@@ -194,7 +194,7 @@ public class PaletteTest {
                 assertEquals(count.incrementAndGet(), value);
                 return count.get();
             });
-            assertEquals(count.get(), palette.size());
+            assertEquals(count.get(), palette.count());
 
             count.set(0);
             palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));

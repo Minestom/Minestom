@@ -42,30 +42,23 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     /**
      * Returns the number of entries in this palette.
      */
-    int size();
+    int count();
 
     /**
      * Returns the number of bits used per entry.
      */
     int bitsPerEntry();
 
-    /**
-     * Returns the payload of this palette.
-     * <p>
-     * The size of each element is defined by {@link #bitsPerEntry()}.
-     *
-     * @return the palette payload
-     */
-    long[] data();
-
     int maxBitsPerEntry();
+
+    int dimension();
 
     /**
      * Returns the maximum number of entries in this palette.
      */
-    int maxSize();
-
-    int dimension();
+    default int maxSize() {
+        return dimension() * dimension() * dimension();
+    }
 
     @NotNull Palette clone();
 
