@@ -128,22 +128,22 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void visibleEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
-        for (List<T> entities : references(chunkX, chunkZ, target)) {
+        for (List<T> entities : references(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(), target)) {
             if (entities.isEmpty()) continue;
             for (T entity : entities) query.consume(entity);
         }
     }
 
     @Override
-    public @NotNull <T extends Entity> List<List<T>> references(int chunkX, int chunkZ, @NotNull Target<T> target) {
+    public @NotNull <T extends Entity> List<List<T>> references(int chunkX, int chunkZ, int range, @NotNull Target<T> target) {
         // Gets reference to all chunk entities lists within the range
         // This is used to avoid a map lookup per chunk
         final TargetEntry<T> entry = (TargetEntry<T>) entries[target.ordinal()];
-        return entry.chunkRangeEntities.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ),
+        var rangeRef = entry.references.computeIfAbsent(range, integer -> Long2ObjectSyncMap.hashmap());
+        return rangeRef.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ),
                 chunkIndex -> {
                     List<List<T>> entities = new ArrayList<>();
-                    ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex),
-                            MinecraftServer.getChunkViewDistance(),
+                    ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex), range,
                             (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.get())));
                     return List.copyOf(entities);
                 });
@@ -177,7 +177,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Chunk index -> entities inside it
         private final Long2ObjectSyncMap<List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
         // Chunk index -> lists of visible entities (references to chunkEntities entries)
-        private final Long2ObjectSyncMap<List<List<T>>> chunkRangeEntities = Long2ObjectSyncMap.hashmap();
+        private final Int2ObjectSyncMap<Long2ObjectSyncMap<List<List<T>>>> references = Int2ObjectSyncMap.hashmap();
 
         TargetEntry(Target<T> target) {
             this.target = target;

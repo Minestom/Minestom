@@ -2,6 +2,7 @@ package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -55,8 +56,9 @@ public final class ViewEngine {
         synchronized (mutex) {
             this.tracker = tracker;
             if (tracker != null) {
-                this.viewableOption.references = tracker.references(point, EntityTracker.Target.PLAYERS);
-                this.viewerOption.references = tracker.references(point, EntityTracker.Target.ENTITIES);
+                final int range = entity != null ? MinecraftServer.getEntityViewDistance() : MinecraftServer.getChunkViewDistance();
+                this.viewableOption.references = tracker.references(point, range, EntityTracker.Target.PLAYERS);
+                this.viewerOption.references = tracker.references(point, range, EntityTracker.Target.ENTITIES);
             } else {
                 this.viewableOption.references = null;
                 this.viewerOption.references = null;
