@@ -383,7 +383,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void writeBufferSync(@NotNull ByteBuffer buffer, int index, int length) {
         if (encrypted) { // Encryption support
-            ByteBuffer output = PacketUtils.localBuffer();
+            ByteBuffer output = PooledBuffers.tempBuffer();
             try {
                 this.encryptCipher.update(buffer.slice(index, length), output);
                 buffer = output.flip();
