@@ -143,7 +143,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 chunkIndex -> {
                     List<List<T>> entities = new ArrayList<>();
                     ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex),
-                            MinecraftServer.getEntityViewDistance(),
+                            MinecraftServer.getChunkViewDistance(),
                             (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.get())));
                     return List.copyOf(entities);
                 });
