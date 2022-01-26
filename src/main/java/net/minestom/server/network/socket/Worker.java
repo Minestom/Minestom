@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.PooledBuffers;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -18,14 +19,12 @@ import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.Inflater;
 
 @ApiStatus.Internal
 public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
     final Selector selector;
-    private final Context context = new Context();
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
@@ -62,12 +61,12 @@ public final class Worker extends MinestomThread {
                     if (!key.isReadable()) return;
                     PlayerSocketConnection connection = connectionMap.get(channel);
                     try {
-                        BinaryBuffer readBuffer = context.readBuffer.clear();
+                        BinaryBuffer readBuffer = BinaryBuffer.wrap(PooledBuffers.packetBuffer());
                         // Consume last incomplete packet
                         connection.consumeCache(readBuffer);
                         // Read & process
                         readBuffer.readChannel(channel);
-                        connection.processPackets(context, server.packetProcessor());
+                        connection.processPackets(readBuffer, server.packetProcessor());
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
@@ -111,14 +110,5 @@ public final class Worker extends MinestomThread {
 
     public MessagePassingQueue<Runnable> queue() {
         return queue;
-    }
-
-    /**
-     * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
-     */
-    public static final class Context {
-        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
-        public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
-        public final Inflater inflater = new Inflater();
     }
 }

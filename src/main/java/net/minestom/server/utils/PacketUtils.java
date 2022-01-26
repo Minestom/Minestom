@@ -18,7 +18,6 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.PooledBuffers;
@@ -161,8 +160,7 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static ReadResult readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
-                                         @NotNull Worker.Context context) throws DataFormatException {
+    public static ReadResult readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed) throws DataFormatException {
         List<PacketPayload> packets = new ArrayList<>();
         BinaryBuffer remaining = null;
         while (readBuffer.readableBytes() > 0) {
@@ -186,9 +184,9 @@ public final class PacketUtils {
                         decompressedSize = payloadLength;
                     } else {
                         // Decompress to content buffer
-                        content = context.contentBuffer.clear();
+                        content = BinaryBuffer.wrap(PooledBuffers.tempBuffer());
                         decompressedSize = dataLength;
-                        Inflater inflater = context.inflater;
+                        Inflater inflater = new Inflater(); // TODO: Pool?
                         inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
                         inflater.inflate(content.asByteBuffer(0, dataLength));
                         inflater.reset();

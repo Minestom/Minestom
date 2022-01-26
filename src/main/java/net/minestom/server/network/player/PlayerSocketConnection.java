@@ -85,8 +85,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         PooledBuffers.registerBuffers(this, waitingBuffers);
     }
 
-    public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
-        final BinaryBuffer readBuffer = workerContext.readBuffer;
+    public void processPackets(BinaryBuffer readBuffer, PacketProcessor packetProcessor) {
         // Decrypt data
         if (encrypted) {
             final Cipher cipher = decryptCipher;
@@ -100,7 +99,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         // Read all packets
         try {
-            var result = PacketUtils.readPackets(readBuffer, compressed, workerContext);
+            var result = PacketUtils.readPackets(readBuffer, compressed);
             this.cacheBuffer = result.remaining();
             for (var packet : result.packets()) {
                 var id = packet.id();

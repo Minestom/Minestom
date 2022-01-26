@@ -33,6 +33,13 @@ public final class BinaryBuffer {
         return new BinaryBuffer(ByteBuffer.allocateDirect(size));
     }
 
+    @ApiStatus.Internal
+    public static BinaryBuffer wrap(ByteBuffer buffer) {
+        assert buffer.isDirect();
+        return new BinaryBuffer(buffer);
+    }
+
+
     public static BinaryBuffer copy(BinaryBuffer buffer) {
         final int size = buffer.readableBytes();
         final var temp = ByteBuffer.allocateDirect(size)
