@@ -158,7 +158,6 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
-        if (getViewers().isEmpty()) return;
         sendPacketToViewers(chunkCache);
     }
 
