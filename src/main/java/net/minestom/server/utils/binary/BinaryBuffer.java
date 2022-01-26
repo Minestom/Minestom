@@ -44,7 +44,9 @@ public final class BinaryBuffer {
         final int size = buffer.readableBytes();
         final var temp = ByteBuffer.allocateDirect(size)
                 .put(buffer.asByteBuffer(0, size));
-        return new BinaryBuffer(temp);
+        BinaryBuffer newBuffer = new BinaryBuffer(temp);
+        newBuffer.writerOffset = size;
+        return newBuffer;
     }
 
     public void write(ByteBuffer buffer, int index, int length) {
@@ -57,7 +59,7 @@ public final class BinaryBuffer {
     }
 
     public void write(BinaryBuffer buffer) {
-        write(buffer.asByteBuffer(buffer.readerOffset, buffer.writerOffset));
+        write(buffer.asByteBuffer(buffer.readerOffset, buffer.writerOffset - buffer.readerOffset));
     }
 
     public int readVarInt() {
@@ -138,8 +140,8 @@ public final class BinaryBuffer {
         return this;
     }
 
-    public ByteBuffer asByteBuffer(int reader, int writer) {
-        return nioBuffer.slice(reader, writer);
+    public ByteBuffer asByteBuffer(int reader, int length) {
+        return nioBuffer.slice(reader, length);
     }
 
     @ApiStatus.Internal
@@ -161,7 +163,7 @@ public final class BinaryBuffer {
     }
 
     public void readChannel(ReadableByteChannel channel) throws IOException {
-        final int count = channel.read(nioBuffer.slice(readerOffset, capacity - readerOffset));
+        final int count = channel.read(nioBuffer.slice(writerOffset, capacity - writerOffset));
         if (count == -1) {
             // EOS
             throw new IOException("Disconnected");
