@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) implements ClientPreplayPacket {
-    private static final String MOJANG_AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined").concat("?username=%s&serverId=%s");
     private static final Gson GSON = new Gson();
 
     public EncryptionResponsePacket(BinaryReader reader) {
@@ -59,7 +58,7 @@ public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) 
             final String serverId = new BigInteger(digestedData).toString(16);
             final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
 
-            final String url = String.format(MOJANG_AUTH_URL, username, serverId);
+            final String url = String.format(MojangAuth.AUTH_URL, username, serverId);
             // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
 
             final HttpClient client = HttpClient.newHttpClient();
