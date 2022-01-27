@@ -25,7 +25,7 @@ final class TestConnectionImpl implements TestConnection {
     private final ServerProcess process;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
 
-    private final List<TrackerImpl<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
+    private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
     public TestConnectionImpl(Env env) {
         this.env = env;
@@ -57,8 +57,8 @@ final class TestConnectionImpl implements TestConnection {
 
     @Override
     public @NotNull <T extends ServerPacket> Collector<T> trackIncoming(@NotNull Class<T> type) {
-        var tracker = new TrackerImpl<>(type);
-        this.incomingTrackers.add(TrackerImpl.class.cast(tracker));
+        var tracker = new IncomingCollector<>(type);
+        this.incomingTrackers.add(IncomingCollector.class.cast(tracker));
         return tracker;
     }
 
@@ -82,11 +82,11 @@ final class TestConnectionImpl implements TestConnection {
         }
     }
 
-    final class TrackerImpl<T extends ServerPacket> implements Collector<T> {
+    final class IncomingCollector<T extends ServerPacket> implements Collector<T> {
         private final Class<T> type;
         private final List<T> packets = new CopyOnWriteArrayList<>();
 
-        public TrackerImpl(Class<T> type) {
+        public IncomingCollector(Class<T> type) {
             this.type = type;
         }
 

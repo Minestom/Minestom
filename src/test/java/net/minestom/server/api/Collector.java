@@ -18,4 +18,10 @@ public interface Collector<T> {
         assertInstanceOf(type, element, "Expected type " + type.getSimpleName() + ", got " + element.getClass().getSimpleName());
         consumer.accept((P) element);
     }
+
+    default void assertSingle(@NotNull Consumer<T> consumer) {
+        List<T> elements = collect();
+        assertEquals(1, elements.size(), "Expected 1 element, got " + elements);
+        consumer.accept(elements.get(0));
+    }
 }
