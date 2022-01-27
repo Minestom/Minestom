@@ -20,9 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-
 final class TestConnectionImpl implements TestConnection {
     private final Env env;
     private final ServerProcess process;
@@ -59,7 +56,7 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public @NotNull <T extends ServerPacket> PacketTracker<T> trackIncoming(@NotNull Class<T> type) {
+    public @NotNull <T extends ServerPacket> Collector<T> trackIncoming(@NotNull Class<T> type) {
         var tracker = new TrackerImpl<>(type);
         this.incomingTrackers.add(TrackerImpl.class.cast(tracker));
         return tracker;
@@ -85,7 +82,7 @@ final class TestConnectionImpl implements TestConnection {
         }
     }
 
-    final class TrackerImpl<T extends ServerPacket> implements PacketTracker<T> {
+    final class TrackerImpl<T extends ServerPacket> implements Collector<T> {
         private final Class<T> type;
         private final List<T> packets = new CopyOnWriteArrayList<>();
 
@@ -97,15 +94,6 @@ final class TestConnectionImpl implements TestConnection {
         public @NotNull List<T> collect() {
             incomingTrackers.remove(this);
             return List.copyOf(packets);
-        }
-
-        @Override
-        public <P extends T> void assertSingle(Class<P> packetType, Consumer<P> consumer) {
-            var packets = collect();
-            assertEquals(1, packets.size(), "Expected 1 packet, got " + packets);
-            var packet = packets.get(0);
-            assertInstanceOf(packetType, packet, "Expected packet of type " + packetType.getSimpleName() + ", got " + packet.getClass().getSimpleName());
-            consumer.accept((P) packet);
         }
     }
 }
