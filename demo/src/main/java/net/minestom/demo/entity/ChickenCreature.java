@@ -1,10 +1,11 @@
 package net.minestom.demo.entity;
 
-import com.google.common.collect.ImmutableList;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
+
+import java.util.List;
 
 public class ChickenCreature extends EntityCreature {
 
@@ -12,12 +13,12 @@ public class ChickenCreature extends EntityCreature {
         super(EntityType.CHICKEN);
 
         addAIGroup(
-                ImmutableList.of(
+                List.of(
 //                        new DoNothingGoal(this, 500, 0.1f),
 //                        new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND),
                         new RandomStrollGoal(this, 2)
                 ),
-                ImmutableList.of(
+                List.of(
 //                        new LastEntityDamagerTarget(this, 15),
 //                        new ClosestEntityTarget(this, 15, LivingEntity.class)
                 )

@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.bundles.flare)
 
     // Libraries
-    api(libs.guava)
     api(libs.gson)
     implementation(libs.jcTools)
     // Path finding
