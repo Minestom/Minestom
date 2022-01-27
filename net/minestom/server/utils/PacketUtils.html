@@ -187,10 +187,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Sends a packet to an audience.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#writeFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket,boolean)" class="member-name-link">writeFramedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#writeFramedPacket(java.nio.ByteBuffer,int,net.minestom.server.utils.binary.Writeable,int)" class="member-name-link">writeFramedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
+ int&nbsp;id,
+ @NotNull <a href="binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>&nbsp;writeable,
+ int&nbsp;compressionThreshold)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#writeFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket,boolean)" class="member-name-link">writeFramedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
  boolean&nbsp;compression)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -358,6 +364,17 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
  boolean&nbsp;compression)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="writeFramedPacket(java.nio.ByteBuffer,int,net.minestom.server.utils.binary.Writeable,int)">
+<h3>writeFramedPacket</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeFramedPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
+ int&nbsp;id,
+ @NotNull
+ @NotNull <a href="binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>&nbsp;writeable,
+ int&nbsp;compressionThreshold)</span></div>
 </section>
 </li>
 <li>
