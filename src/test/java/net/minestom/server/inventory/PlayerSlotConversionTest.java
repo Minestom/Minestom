@@ -6,7 +6,7 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test conversion between packet slots & internal ones (used in events and inventory methods)
+ * Test conversion from packet slots to internal ones (used in events and inventory methods)
  */
 public class PlayerSlotConversionTest {
 
