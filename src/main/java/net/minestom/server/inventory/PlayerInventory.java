@@ -4,14 +4,17 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
+import net.minestom.server.inventory.click.ClickProcessor;
+import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickResult;
+import net.minestom.server.inventory.click.DragHelper;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
@@ -186,33 +189,25 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
+        final var tmp = handlePreClick(this, player, convertedSlot, ClickType.LEFT_CLICK, getCursorItem(), getItemStack(convertedSlot));
+        if (tmp.cancelled()) {
             update();
             return false;
         }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setCursorItem(clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
-        return true;
+        return handleResult(ClickProcessor.left(convertedSlot, tmp.clicked(), tmp.cursor()),
+                this::setCursorItem, ClickType.LEFT_CLICK);
     }
 
     @Override
     public boolean rightClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
+        final var tmp = handlePreClick(this, player, convertedSlot, ClickType.RIGHT_CLICK, getCursorItem(), getItemStack(convertedSlot));
+        if (tmp.cancelled()) {
             update();
             return false;
         }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setCursorItem(clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
-        return true;
+        return handleResult(ClickProcessor.right(convertedSlot, tmp.clicked(), tmp.cursor()),
+                this::setCursorItem, ClickType.RIGHT_CLICK);
     }
 
     @Override
@@ -228,98 +223,98 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
         final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.drop(player, this,
-                all, convertedSlot, button, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
+        var drop = ClickProcessor.drop(all, slot, button, clicked, cursor);
+
+        player.dropItem(drop.drop());
+        if (outsideDrop) {
+            setCursorItem(drop.remaining());
+        } else {
+            setItemStack(convertedSlot, drop.remaining());
         }
-        final ItemStack resultClicked = clickResult.getClicked();
-        if (resultClicked != null && !outsideDrop) {
-            setItemStack(convertedSlot, resultClicked);
-        }
-        setCursorItem(clickResult.getCursor());
+        // TODO events
         return true;
     }
 
     @Override
     public boolean shiftClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
-        final int start = hotBarClick ? 9 : 0;
-        final int end = hotBarClick ? getSize() - 9 : 8;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(
-                this, this,
-                start, end, 1,
-                player, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setCursorItem(clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
+        final ItemStack shifted = getItemStack(convertedSlot);
+        return handleResult(ClickProcessor.shiftWithinPlayer(this, convertedSlot, shifted),
+                itemStack -> setItemStack(convertedSlot, itemStack), ClickType.SHIFT_CLICK);
     }
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
-        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
-        final ItemStack cursorItem = getCursorItem();
-        if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack heldItem = getItemStack(convertedKey);
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, convertedKey, clicked, heldItem);
-        if (clickResult.isCancel()) {
+        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
+        final var tmp = handlePreClick(this, player, convertedSlot, ClickType.CHANGE_HELD,
+                getCursorItem(), getItemStack(convertedSlot));
+        if (tmp.cancelled()) {
             update();
             return false;
         }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setItemStack(convertedKey, clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
-        return true;
+        return handleResult(ClickProcessor.held(this, this, convertedSlot, tmp.clicked(), convertedKey, getItemStack(convertedKey)),
+                itemStack -> setItemStack(convertedSlot, itemStack), ClickType.CHANGE_HELD);
     }
+
+    private final DragHelper dragHelper = new DragHelper();
 
     @Override
     public boolean dragging(@NotNull Player player, int slot, int button) {
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
-        final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                convertPlayerInventorySlot(slot, OFFSET), button, clicked, cursor);
-        if (clickResult == null || clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setCursorItem(clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+        return dragHelper.test(player, slot, button, convertedSlot, this,
+                // Start
+                (clickType) -> {
+                    final var tmp = handlePreClick(this, player, -999, clickType,
+                            getCursorItem(), ItemStack.AIR);
+                    if (tmp.cancelled()) {
+                        update();
+                        return false;
+                    }
+                    return true;
+                },
+                // Step
+                (clickType) -> {
+                    final var tmp = handlePreClick(this, player, convertedSlot, clickType,
+                            getCursorItem(), getItemStack(convertedSlot));
+                    return !tmp.cancelled();
+                },
+                // End
+                (clickType, entries) -> {
+                    // Handle each individual drag
+                    var slots = entries.stream().map(DragHelper.Entry::slot).toList();
+                    // Handle last drag
+                    {
+                        final int lastSlot = entries.get(entries.size() - 1).slot();
+                        final var tmp = handlePreClick(this, player, lastSlot, clickType,
+                                getCursorItem(), getItemStack(lastSlot));
+                        if (tmp.cancelled()) {
+                            update();
+                            return false;
+                        }
+                    }
+                    if (clickType == ClickType.END_LEFT_DRAGGING) {
+                        return handleResult(ClickProcessor.leftDragWithinPlayer(this, getCursorItem(), slots),
+                                this::setCursorItem, clickType);
+                    } else {
+                        return handleResult(ClickProcessor.rightDragWithinPlayer(this, getCursorItem(), slots),
+                                this::setCursorItem, clickType);
+                    }
+                });
     }
 
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setCursorItem(clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
+        return handleResult(ClickProcessor.doubleWithinPlayer(this, getCursorItem()),
+                this::setCursorItem, ClickType.DOUBLE_CLICK);
+    }
+
+    private boolean handleResult(ClickResult.Single result, Consumer<ItemStack> remainingSetter, ClickType clickType) {
+        result.changedSlots().forEach((slot, itemStack) -> {
+            setItemStack(slot, itemStack);
+            callClickEvent(player, null, slot, clickType, itemStack, getCursorItem());
+        });
+        remainingSetter.accept(result.remaining());
         return true;
-    }
-
-    private void setItemStackFromPacketSlot(int slot, @NotNull ItemStack itemStack) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        setItemStack(convertedSlot, itemStack);
-    }
-
-    private ItemStack getItemStackFromPacketSlot(int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        return itemStacks[convertedSlot];
     }
 }

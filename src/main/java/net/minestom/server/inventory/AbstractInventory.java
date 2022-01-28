@@ -1,10 +1,13 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
-import net.minestom.server.inventory.click.InventoryClickProcessor;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.condition.InventoryCondition;
+import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -33,8 +36,6 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
 
     // list of conditions/callbacks assigned to this inventory
     protected final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
-    // the click processor which process all the clicks in the inventory
-    protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     private final TagHandler tagHandler = TagHandler.newHandler();
 
@@ -254,5 +255,48 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
+    }
+
+    record ClickTemp(ItemStack cursor, ItemStack clicked, boolean cancelled) {
+    }
+
+    ClickTemp handlePreClick(AbstractInventory inventory, Player player, int slot, ClickType clickType,
+                             ItemStack cursor, ItemStack clicked) {
+        Inventory eventInventory = inventory instanceof PlayerInventory ? null : (Inventory) inventory;
+        boolean cancelled = false;
+        // Reset the didCloseInventory field
+        // Wait for inventory conditions + events to possibly close the inventory
+        player.UNSAFE_changeDidCloseInventory(false);
+        // InventoryPreClickEvent
+        {
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(eventInventory, player, slot, clickType,
+                    clicked, cursor);
+            EventDispatcher.call(inventoryPreClickEvent);
+            cursor = inventoryPreClickEvent.getCursorItem();
+            clicked = inventoryPreClickEvent.getClickedItem();
+            if (inventoryPreClickEvent.isCancelled()) {
+                cancelled = true;
+            }
+        }
+        // Inventory conditions
+        {
+            final List<InventoryCondition> inventoryConditions = getInventoryConditions();
+            for (InventoryCondition inventoryCondition : inventoryConditions) {
+                var result = new InventoryConditionResult(clicked, cursor);
+                inventoryCondition.accept(player, slot, clickType, result);
+
+                cursor = result.getCursorItem();
+                clicked = result.getClickedItem();
+                if (result.isCancel()) {
+                    cancelled = true;
+                }
+            }
+            // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
+            if (player.didCloseInventory()) {
+                cancelled = true;
+                player.UNSAFE_changeDidCloseInventory(false);
+            }
+        }
+        return new ClickTemp(cursor, clicked, cancelled);
     }
 }
