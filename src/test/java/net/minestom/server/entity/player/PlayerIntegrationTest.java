@@ -1,8 +1,8 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.api.Collector;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
-import net.minestom.server.api.TestConnection;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
@@ -17,7 +17,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class PlayerIntegrationTest {
@@ -56,13 +57,13 @@ public class PlayerIntegrationTest {
     public void playerJoinPackets(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        
+
         final var packets = List.of(
-            JoinGamePacket.class, ServerDifficultyPacket.class, SpawnPositionPacket.class,
-            DeclareCommandsPacket.class, EntityPropertiesPacket.class, EntityStatusPacket.class,
-            UpdateHealthPacket.class, PlayerAbilitiesPacket.class
+                JoinGamePacket.class, ServerDifficultyPacket.class, SpawnPositionPacket.class,
+                DeclareCommandsPacket.class, EntityPropertiesPacket.class, EntityStatusPacket.class,
+                UpdateHealthPacket.class, PlayerAbilitiesPacket.class
         );
-        final List<TestConnection.PacketTracker<?>> trackers = new ArrayList<>();
+        final List<Collector<?>> trackers = new ArrayList<>();
         for (var packet : packets) {
             trackers.add(connection.trackIncoming(packet));
         }
