@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientSettingsPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;locale, byte&nbsp;viewDistance, @NotNull <a href="../../../../message/ChatMessageType.html" title="enum class in net.minestom.server.message">ChatMessageType</a>&nbsp;chatMessageType, boolean&nbsp;chatColors, byte&nbsp;displayedSkinParts, <a href="../../../../entity/Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand, boolean&nbsp;disableTextFiltering, boolean&nbsp;allowsListing)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientSettingsPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;locale, byte&nbsp;viewDistance, @NotNull <a href="../../../../message/ChatMessageType.html" title="enum class in net.minestom.server.message">ChatMessageType</a>&nbsp;chatMessageType, boolean&nbsp;chatColors, byte&nbsp;displayedSkinParts, <a href="../../../../entity/Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand, boolean&nbsp;enableTextFiltering, boolean&nbsp;allowsListing)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span></div>
 </section>
@@ -102,7 +102,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
  boolean&nbsp;chatColors,
  byte&nbsp;displayedSkinParts,
  <a href="../../../../entity/Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand,
- boolean&nbsp;disableTextFiltering,
+ boolean&nbsp;enableTextFiltering,
  boolean&nbsp;allowsListing)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientSettingsPacket</code> record class.</div>
@@ -138,15 +138,15 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>chatMessageType</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disableTextFiltering()" class="member-name-link">disableTextFiltering</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayedSkinParts()" class="member-name-link">displayedSkinParts</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>disableTextFiltering</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayedSkinParts()" class="member-name-link">displayedSkinParts</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>displayedSkinParts</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enableTextFiltering()" class="member-name-link">enableTextFiltering</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>enableTextFiltering</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -212,7 +212,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
  byte&nbsp;displayedSkinParts,
  @NotNull
  <a href="../../../../entity/Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand,
- boolean&nbsp;disableTextFiltering,
+ boolean&nbsp;enableTextFiltering,
  boolean&nbsp;allowsListing)</span></div>
 <div class="block">Creates an instance of a <code>ClientSettingsPacket</code> record class.</div>
 <dl class="notes">
@@ -223,7 +223,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <dd><code>chatColors</code> - the value for the <code>chatColors</code> record component</dd>
 <dd><code>displayedSkinParts</code> - the value for the <code>displayedSkinParts</code> record component</dd>
 <dd><code>mainHand</code> - the value for the <code>mainHand</code> record component</dd>
-<dd><code>disableTextFiltering</code> - the value for the <code>disableTextFiltering</code> record component</dd>
+<dd><code>enableTextFiltering</code> - the value for the <code>enableTextFiltering</code> record component</dd>
 <dd><code>allowsListing</code> - the value for the <code>allowsListing</code> record component</dd>
 </dl>
 </section>
@@ -368,13 +368,13 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="disableTextFiltering()">
-<h3>disableTextFiltering</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">disableTextFiltering</span>()</div>
-<div class="block">Returns the value of the <code>disableTextFiltering</code> record component.</div>
+<section class="detail" id="enableTextFiltering()">
+<h3>enableTextFiltering</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">enableTextFiltering</span>()</div>
+<div class="block">Returns the value of the <code>enableTextFiltering</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>disableTextFiltering</code> record component</dd>
+<dd>the value of the <code>enableTextFiltering</code> record component</dd>
 </dl>
 </section>
 </li>

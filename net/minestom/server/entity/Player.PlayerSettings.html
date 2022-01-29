@@ -109,6 +109,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowServerListings()" class="member-name-link">allowServerListings</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enableTextFiltering()" class="member-name-link">enableTextFiltering</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../message/ChatMessageType.html" title="enum class in net.minestom.server.message">ChatMessageType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChatMessageType()" class="member-name-link">getChatMessageType</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -138,12 +144,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets if the player has chat colors enabled.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refresh(java.lang.String,byte,net.minestom.server.message.ChatMessageType,boolean,byte,net.minestom.server.entity.Player.MainHand)" class="member-name-link">refresh</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;locale,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refresh(java.lang.String,byte,net.minestom.server.message.ChatMessageType,boolean,byte,net.minestom.server.entity.Player.MainHand,boolean,boolean)" class="member-name-link">refresh</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;locale,
  byte&nbsp;viewDistance,
  <a href="../message/ChatMessageType.html" title="enum class in net.minestom.server.message">ChatMessageType</a>&nbsp;chatMessageType,
  boolean&nbsp;chatColors,
  byte&nbsp;displayedSkinParts,
- <a href="Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand)</code></div>
+ <a href="Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand,
+ boolean&nbsp;enableTextFiltering,
+ boolean&nbsp;allowServerListings)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the player settings internally.</div>
 </div>
@@ -241,14 +249,28 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="refresh(java.lang.String,byte,net.minestom.server.message.ChatMessageType,boolean,byte,net.minestom.server.entity.Player.MainHand)">
+<section class="detail" id="enableTextFiltering()">
+<h3>enableTextFiltering</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">enableTextFiltering</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="allowServerListings()">
+<h3>allowServerListings</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">allowServerListings</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="refresh(java.lang.String,byte,net.minestom.server.message.ChatMessageType,boolean,byte,net.minestom.server.entity.Player.MainHand,boolean,boolean)">
 <h3>refresh</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">refresh</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;locale,
  byte&nbsp;viewDistance,
  <a href="../message/ChatMessageType.html" title="enum class in net.minestom.server.message">ChatMessageType</a>&nbsp;chatMessageType,
  boolean&nbsp;chatColors,
  byte&nbsp;displayedSkinParts,
- <a href="Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand)</span></div>
+ <a href="Player.MainHand.html" title="enum class in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand,
+ boolean&nbsp;enableTextFiltering,
+ boolean&nbsp;allowServerListings)</span></div>
 <div class="block">Changes the player settings internally.
  <p>
  WARNING: the player will not be noticed by this change, probably unsafe.</div>
