@@ -44,7 +44,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -87,24 +87,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="PacketUtils.PacketPayload.html" class="type-name-link" title="class in net.minestom.server.utils">PacketUtils.PacketPayload</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="PacketUtils.ReadResult.html" class="type-name-link" title="class in net.minestom.server.utils">PacketUtils.ReadResult</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -162,9 +144,10 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
  @Nullable <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PacketUtils.ReadResult.html" title="class in net.minestom.server.utils">PacketUtils.ReadResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readPackets(net.minestom.server.utils.binary.BinaryBuffer,boolean)" class="member-name-link">readPackets</a><wbr>(@NotNull <a href="binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;readBuffer,
- boolean&nbsp;compressed)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readPackets(net.minestom.server.utils.binary.BinaryBuffer,boolean,java.util.function.BiConsumer)" class="member-name-link">readPackets</a><wbr>(@NotNull <a href="binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;readBuffer,
+ boolean&nbsp;compressed,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&gt;&nbsp;payloadConsumer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendGroupedPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
@@ -343,12 +326,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="readPackets(net.minestom.server.utils.binary.BinaryBuffer,boolean)">
+<section class="detail" id="readPackets(net.minestom.server.utils.binary.BinaryBuffer,boolean,java.util.function.BiConsumer)">
 <h3>readPackets</h3>
 <div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PacketUtils.ReadResult.html" title="class in net.minestom.server.utils">PacketUtils.ReadResult</a></span>&nbsp;<span class="element-name">readPackets</span><wbr><span class="parameters">(@NotNull
+@Nullable
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@Nullable <a href="binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a></span>&nbsp;<span class="element-name">readPackets</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;readBuffer,
- boolean&nbsp;compressed)</span>
+ boolean&nbsp;compressed,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&gt;&nbsp;payloadConsumer)</span>
                                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/zip/DataFormatException.html" title="class or interface in java.util.zip" class="external-link">DataFormatException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
