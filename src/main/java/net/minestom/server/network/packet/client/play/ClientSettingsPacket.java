@@ -11,6 +11,11 @@ public record ClientSettingsPacket(@NotNull String locale, byte viewDistance,
                                    @NotNull ChatMessageType chatMessageType, boolean chatColors,
                                    byte displayedSkinParts, @NotNull Player.MainHand mainHand,
                                    boolean disableTextFiltering, boolean allowsListing) implements ClientPacket {
+    public ClientSettingsPacket {
+        if (locale.length() > 128)
+            throw new IllegalArgumentException("Locale cannot be longer than 128 characters.");
+    }
+
     public ClientSettingsPacket(BinaryReader reader) {
         this(reader.readSizedString(128), reader.readByte(),
                 ChatMessageType.fromPacketID(reader.readVarInt()), reader.readBoolean(),
@@ -20,8 +25,6 @@ public record ClientSettingsPacket(@NotNull String locale, byte viewDistance,
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        if (locale.length() > 128)
-            throw new IllegalArgumentException("Locale cannot be longer than 128 characters.");
         writer.writeSizedString(locale);
         writer.writeByte(viewDistance);
         writer.writeVarInt(chatMessageType.getPacketID());
