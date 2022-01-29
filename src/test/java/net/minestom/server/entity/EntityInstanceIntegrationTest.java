@@ -33,20 +33,6 @@ public class EntityInstanceIntegrationTest {
     }
 
     @Test
-    public void playerJoinPacket(Env env) {
-        var instance = env.createFlatInstance();
-        var connection = env.createConnection();
-        var tracker = connection.trackIncoming(JoinGamePacket.class);
-        var tracker2 = connection.trackIncoming(ServerPacket.class);
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        assertEquals(instance, player.getInstance());
-        assertEquals(new Pos(0, 40, 0), player.getPosition());
-
-        assertEquals(1, tracker.collect().size());
-        assertTrue(tracker2.collect().size() > 1);
-    }
-
-    @Test
     public void playerSwitch(Env env) {
         var instance = env.createFlatInstance();
         var instance2 = env.createFlatInstance();
