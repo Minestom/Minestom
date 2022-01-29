@@ -2024,6 +2024,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
+        private boolean enableTextFiltering;
+        private boolean allowServerListings;
 
         public PlayerSettings() {
             viewDistance = 2;
@@ -2078,6 +2080,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return mainHand;
         }
 
+        public boolean enableTextFiltering() { return enableTextFiltering; }
+
+        public boolean allowServerListings() { return allowServerListings; }
+
         /**
          * Changes the player settings internally.
          * <p>
@@ -2091,13 +2097,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          * @param mainHand           the player main hand
          */
         public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
-                            byte displayedSkinParts, MainHand mainHand) {
+                            byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
             this.viewDistance = viewDistance;
             this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
+            this.enableTextFiltering = enableTextFiltering;
+            this.allowServerListings = allowServerListings;
 
             // TODO: Use the metadata object here
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));

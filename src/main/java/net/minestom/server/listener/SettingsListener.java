@@ -9,7 +9,7 @@ public final class SettingsListener {
     public static void listener(ClientSettingsPacket packet, Player player) {
         Player.PlayerSettings settings = player.getSettings();
         final byte viewDistance = (byte) Math.abs(packet.viewDistance());
-        settings.refresh(packet.locale(), viewDistance, packet.chatMessageType(), packet.chatColors(), packet.displayedSkinParts(), packet.mainHand());
+        settings.refresh(packet.locale(), viewDistance, packet.chatMessageType(), packet.chatColors(), packet.displayedSkinParts(), packet.mainHand(), packet.enableTextFiltering(), packet.allowsListing());
         EventDispatcher.call(new PlayerSettingsChangeEvent(player));
     }
 }

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record ClientSettingsPacket(@NotNull String locale, byte viewDistance,
                                    @NotNull ChatMessageType chatMessageType, boolean chatColors,
                                    byte displayedSkinParts, @NotNull Player.MainHand mainHand,
-                                   boolean disableTextFiltering, boolean allowsListing) implements ClientPacket {
+                                   boolean enableTextFiltering, boolean allowsListing) implements ClientPacket {
     public ClientSettingsPacket {
         if (locale.length() > 128)
             throw new IllegalArgumentException("Locale cannot be longer than 128 characters.");
@@ -31,7 +31,7 @@ public record ClientSettingsPacket(@NotNull String locale, byte viewDistance,
         writer.writeBoolean(chatColors);
         writer.writeByte(displayedSkinParts);
         writer.writeVarInt(mainHand.ordinal());
-        writer.writeBoolean(disableTextFiltering);
+        writer.writeBoolean(enableTextFiltering);
         writer.writeBoolean(allowsListing);
     }
 }
