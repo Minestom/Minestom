@@ -1229,7 +1229,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId()));
-            sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
+            PacketUtils.broadcastPacket(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE,
                     new PlayerInfoPacket.UpdateGameMode(getUuid(), gameMode)));
         }
 
