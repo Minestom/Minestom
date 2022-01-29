@@ -99,23 +99,19 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         // Read all packets
         try {
-            var result = PacketUtils.readPackets(readBuffer, compressed);
-            this.cacheBuffer = result.remaining();
-            for (var packet : result.packets()) {
-                var id = packet.id();
-                var payload = packet.payload();
-                try {
-                    packetProcessor.process(this, id, payload);
-                } catch (Exception e) {
-                    // Error while reading the packet
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    break;
-                } finally {
-                    if (payload.position() != payload.limit()) {
-                        LOGGER.warn("WARNING: Packet 0x{} not fully read ({})", Integer.toHexString(id), payload);
-                    }
-                }
-            }
+            this.cacheBuffer = PacketUtils.readPackets(readBuffer, compressed,
+                    (id, payload) -> {
+                        try {
+                            packetProcessor.process(this, id, payload);
+                        } catch (Exception e) {
+                            // Error while reading the packet
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        } finally {
+                            if (payload.position() != payload.limit()) {
+                                LOGGER.warn("WARNING: Packet 0x{} not fully read ({})", Integer.toHexString(id), payload);
+                            }
+                        }
+                    });
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             disconnect();
