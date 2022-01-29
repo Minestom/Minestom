@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.network.packet.client.play.ClientPluginMessagePacket;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
@@ -9,6 +10,9 @@ import net.minestom.server.utils.binary.PooledBuffers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +30,15 @@ public class SocketReadTest {
         var wrapper = BinaryBuffer.wrap(buffer);
         wrapper.reset(0, buffer.position());
 
-        var result = PacketUtils.readPackets(wrapper, compressed);
-        assertNull(result.remaining());
+        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
+        var remaining = PacketUtils.readPackets(wrapper, compressed,
+                (integer, payload) -> packets.add(Pair.of(integer, payload)));
+        assertNull(remaining);
 
-        var packets = result.packets();
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
-        assertEquals(0x0A, rawPacket.id());
-        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.payload()));
+        assertEquals(0x0A, rawPacket.left());
+        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -50,14 +55,15 @@ public class SocketReadTest {
         var wrapper = BinaryBuffer.wrap(buffer);
         wrapper.reset(0, buffer.position());
 
-        var result = PacketUtils.readPackets(wrapper, compressed);
-        assertNull(result.remaining());
+        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
+        var remaining = PacketUtils.readPackets(wrapper, compressed,
+                (integer, payload) -> packets.add(Pair.of(integer, payload)));
+        assertNull(remaining);
 
-        var packets = result.packets();
         assertEquals(2, packets.size());
         for (var rawPacket : packets) {
-            assertEquals(0x0A, rawPacket.id());
-            var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.payload()));
+            assertEquals(0x0A, rawPacket.left());
+            var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
             assertEquals("channel", readPacket.channel());
             assertEquals(2000, readPacket.data().length);
         }
@@ -77,16 +83,16 @@ public class SocketReadTest {
         var wrapper = BinaryBuffer.wrap(buffer);
         wrapper.reset(0, buffer.position());
 
-        var result = PacketUtils.readPackets(wrapper, compressed);
-        var remaining = result.remaining();
+        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
+        var remaining = PacketUtils.readPackets(wrapper, compressed,
+                (integer, payload) -> packets.add(Pair.of(integer, payload)));
         assertNotNull(remaining);
         assertEquals(Utils.getVarIntSize(200), remaining.readableBytes());
 
-        var packets = result.packets();
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
-        assertEquals(0x0A, rawPacket.id());
-        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.payload()));
+        assertEquals(0x0A, rawPacket.left());
+        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -105,16 +111,16 @@ public class SocketReadTest {
         var wrapper = BinaryBuffer.wrap(buffer);
         wrapper.reset(0, buffer.position());
 
-        var result = PacketUtils.readPackets(wrapper, compressed);
-        var remaining = result.remaining();
+        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
+        var remaining = PacketUtils.readPackets(wrapper, compressed,
+                (integer, payload) -> packets.add(Pair.of(integer, payload)));
         assertNotNull(remaining);
         assertEquals(1, remaining.readableBytes());
 
-        var packets = result.packets();
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
-        assertEquals(0x0A, rawPacket.id());
-        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.payload()));
+        assertEquals(0x0A, rawPacket.left());
+        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }

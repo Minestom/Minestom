@@ -29,11 +29,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -161,8 +160,8 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static ReadResult readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed) throws DataFormatException {
-        List<PacketPayload> packets = new ArrayList<>();
+    public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
+                                           BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
         BinaryBuffer remaining = null;
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
@@ -196,7 +195,11 @@ public final class PacketUtils {
                 // Slice packet
                 ByteBuffer payload = content.asByteBuffer(content.readerOffset(), decompressedSize);
                 final int packetId = Utils.readVarInt(payload);
-                packets.add(new PacketPayload(packetId, payload));
+                try {
+                    payloadConsumer.accept(packetId, payload);
+                } catch (Exception e) {
+                    // Empty
+                }
                 // Position buffer to read the next packet
                 readBuffer.readerOffset(readerStart + packetLength);
             } catch (BufferUnderflowException e) {
@@ -205,13 +208,7 @@ public final class PacketUtils {
                 break;
             }
         }
-        return new ReadResult(packets, remaining);
-    }
-
-    public record ReadResult(List<PacketPayload> packets, BinaryBuffer remaining) {
-    }
-
-    public record PacketPayload(int id, ByteBuffer payload) {
+        return remaining;
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
