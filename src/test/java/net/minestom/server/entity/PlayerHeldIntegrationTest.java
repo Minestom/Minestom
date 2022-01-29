@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -43,14 +42,12 @@ public class PlayerHeldIntegrationTest {
         assertEquals(0, player.getHeldSlot());
 
         player.addPacketToQueue(new ClientHeldItemChangePacket((short) 1));
-        var tracker = env.trackEvent(PlayerChangeHeldSlotEvent.class, EventFilter.PLAYER, player);
-        env.tick();
-
-        tracker.assertSingle(event -> {
+        var listener = env.listen(PlayerChangeHeldSlotEvent.class);
+        listener.followup(event -> {
             assertEquals(player, event.getPlayer());
             assertEquals(1, event.getSlot());
         });
-
+        player.interpretPacketQueue();
         assertEquals(ItemStack.of(Material.STONE), player.getItemInMainHand());
         assertEquals(1, player.getHeldSlot());
     }

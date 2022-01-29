@@ -24,6 +24,8 @@ public interface Env {
 
     <E extends Event, H> @NotNull Collector<E> trackEvent(@NotNull Class<E> eventType, @NotNull EventFilter<? super E, H> filter, @NotNull H actor);
 
+    <E extends Event> @NotNull FlexibleListener<E> listen(@NotNull Class<E> eventType);
+
     default void tick() {
         process().ticker().tick(System.nanoTime());
     }

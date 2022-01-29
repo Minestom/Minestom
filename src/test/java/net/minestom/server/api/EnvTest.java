@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 @ExtendWith(EnvParameterResolver.class)
 @ExtendWith(EnvBefore.class)
+@ExtendWith(EnvCleaner.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface EnvTest {
