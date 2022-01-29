@@ -2080,9 +2080,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return mainHand;
         }
 
-        public boolean getTextFilteringEnabled() { return enableTextFiltering; }
+        public boolean enableTextFiltering() { return enableTextFiltering; }
 
-        public boolean getAllowsListing() { return allowServerListings; }
+        public boolean allowServerListings() { return allowServerListings; }
 
         /**
          * Changes the player settings internally.
