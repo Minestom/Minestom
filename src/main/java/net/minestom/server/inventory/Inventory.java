@@ -295,6 +295,9 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
+        if (key == 40) {
+            key = PlayerInventoryUtils.OFFHAND_SLOT;
+        }
         final ItemStack heldItem = playerInventory.getItemStack(key);
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player,
                 isInWindow ? this : playerInventory, clickSlot, key, clicked, heldItem);

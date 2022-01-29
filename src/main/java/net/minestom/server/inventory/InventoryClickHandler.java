@@ -47,7 +47,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      *
      * @param player the player who clicked
      * @param slot   the slot number
-     * @param key    the held slot (0-8) pressed
+     * @param key    the held slot (0-8 or 40 for offhand) pressed
      * @return true if the click hasn't been cancelled, false otherwise
      */
     boolean changeHeld(@NotNull Player player, int slot, int key);

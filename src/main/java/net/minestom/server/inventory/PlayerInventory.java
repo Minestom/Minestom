@@ -278,6 +278,9 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+        if (key == 40) {
+            key = OFFHAND_SLOT;
+        }
         final ItemStack heldItem = getItemStack(key);
         final ItemStack clicked = getItemStack(convertedSlot);
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, key, clicked, heldItem);
