@@ -1966,7 +1966,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param lagCompensation whether another packet is sent later to remove cooldown (incase the server lags)
      */
     public void setCooldown(Material material, int ticks, boolean lagCompensation) {
-        final SetCooldownPacket packet = new SetCooldownPacket(material.id(), 0);
+        final SetCooldownPacket packet = new SetCooldownPacket(material.id(), ticks);
         playerConnection.sendPacket(packet);
 
         if (!lagCompensation) return;
