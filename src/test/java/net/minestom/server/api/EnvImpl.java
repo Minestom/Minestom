@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 final class EnvImpl implements Env {
     private final ServerProcess process;
@@ -80,19 +81,23 @@ final class EnvImpl implements Env {
         }
 
         @Override
-        public void setHandler(@NotNull Consumer<E> handler) {
+        public void followup(@NotNull Consumer<E> handler) {
+            updateHandler(handler);
+        }
+
+        @Override
+        public void failFollowup() {
+            updateHandler(e -> fail("Event " + e.getClass().getSimpleName() + " was not expected"));
+        }
+
+        void updateHandler(@NotNull Consumer<E> handler) {
+            check();
             this.initialized = true;
             this.called = false;
             this.handler = e -> {
                 handler.accept(e);
                 this.called = true;
             };
-        }
-
-        @Override
-        public void followup(@NotNull Consumer<E> handler) {
-            check();
-            setHandler(handler);
         }
 
         void check() {
