@@ -21,12 +21,24 @@ public class EntityRemovalIntegrationTest {
         var connection = env.createConnection();
         connection.connect(instance, new Pos(0, 40, 0)).join();
 
-        var entity = new TestEntity(2, TimeUnit.SERVER_TICK);
+        var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
 
         var tracker = connection.trackIncoming(DestroyEntitiesPacket.class);
         entity.remove();
         tracker.assertSingle(packet -> assertEquals(List.of(entity.getEntityId()), packet.entityIds()));
+    }
+
+    @Test
+    public void instanceRemoval(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 40, 0)).join();
+        assertFalse(entity.isRemoved());
+
+        entity.remove();
+        assertTrue(entity.isRemoved());
+        assertFalse(instance.getEntities().contains(entity), "Entity must not be in the instance anymore");
     }
 
     @Test
