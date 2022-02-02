@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntUnaryOperator;
 
-interface PaletteSpecialization extends Palette {
+interface SpecializedPalette extends Palette {
     @Override
     default int bitsPerEntry() {
         throw new UnsupportedOperationException();
@@ -15,7 +15,10 @@ interface PaletteSpecialization extends Palette {
         throw new UnsupportedOperationException();
     }
 
-    interface Immutable extends PaletteSpecialization {
+    @Override
+    @NotNull SpecializedPalette clone();
+
+    interface Immutable extends SpecializedPalette {
         @Override
         default void set(int x, int y, int z, int value) {
             throw new UnsupportedOperationException();

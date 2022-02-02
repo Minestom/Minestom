@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntUnaryOperator;
 
+/**
+ * Palette that switches between its backend based on the use case.
+ */
 final class AdaptivePalette implements Palette {
     final int dimension;
     final int dimensionBitCount;
@@ -12,7 +15,7 @@ final class AdaptivePalette implements Palette {
     final int defaultBitsPerEntry;
     final int bitsIncrement;
 
-    private Palette palette;
+    private SpecializedPalette palette;
 
     AdaptivePalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
         this.dimensionBitCount = validateDimension(dimension);
@@ -59,7 +62,7 @@ final class AdaptivePalette implements Palette {
 
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
-        Palette newPalette = new FlexiblePalette(this);
+        SpecializedPalette newPalette = new FlexiblePalette(this);
         newPalette.setAll(supplier);
         this.palette = newPalette;
     }

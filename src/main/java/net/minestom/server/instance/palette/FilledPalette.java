@@ -3,7 +3,10 @@ package net.minestom.server.instance.palette;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-record FilledPalette(int dimension, int value) implements PaletteSpecialization.Immutable {
+/**
+ * Palette containing a single value. Useful for both empty and full palettes.
+ */
+record FilledPalette(int dimension, int value) implements SpecializedPalette.Immutable {
     @Override
     public int get(int x, int y, int z) {
         return value;
@@ -29,13 +32,13 @@ record FilledPalette(int dimension, int value) implements PaletteSpecialization.
     }
 
     @Override
-    public @NotNull Palette clone() {
+    public @NotNull SpecializedPalette clone() {
         return this;
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte((byte) 1);
+        writer.writeByte((byte) 1); // bitsPerEntry
         // Palette
         writer.writeVarInt(1);
         writer.writeVarInt(value);

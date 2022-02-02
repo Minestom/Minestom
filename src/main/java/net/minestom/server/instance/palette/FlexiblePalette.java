@@ -10,7 +10,10 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
-final class FlexiblePalette implements Palette, Cloneable {
+/**
+ * Palette able to take any value anywhere. May consume more memory than required.
+ */
+final class FlexiblePalette implements SpecializedPalette, Cloneable {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
     private static final int[] MAGIC_MASKS;
     private static final int[] VALUES_PER_LONG;
@@ -227,7 +230,7 @@ final class FlexiblePalette implements Palette, Cloneable {
     }
 
     @Override
-    public @NotNull Palette clone() {
+    public @NotNull SpecializedPalette clone() {
         try {
             FlexiblePalette palette = (FlexiblePalette) super.clone();
             palette.values = values != null ? values.clone() : null;
