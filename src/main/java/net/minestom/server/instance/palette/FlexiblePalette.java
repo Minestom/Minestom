@@ -42,10 +42,10 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     // value = palette index
     private Int2IntOpenHashMap valueToPaletteMap;
 
-    FlexiblePalette(AdaptivePalette adaptivePalette) {
+    FlexiblePalette(AdaptivePalette adaptivePalette, int bitsPerEntry) {
         this.adaptivePalette = adaptivePalette;
 
-        this.bitsPerEntry = adaptivePalette.defaultBitsPerEntry;
+        this.bitsPerEntry = bitsPerEntry;
         this.hasPalette = bitsPerEntry <= maxBitsPerEntry();
 
         this.paletteToValueList = new IntArrayList(1);
@@ -53,15 +53,17 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         this.valueToPaletteMap = new Int2IntOpenHashMap(1);
         this.valueToPaletteMap.put(0, 0);
         this.valueToPaletteMap.defaultReturnValue(-1);
+
+        this.values = new long[valuesLength(bitsPerEntry)];
+    }
+
+    FlexiblePalette(AdaptivePalette adaptivePalette) {
+        this(adaptivePalette, adaptivePalette.defaultBitsPerEntry);
     }
 
     @Override
     public int get(int x, int y, int z) {
         final long[] values = this.values;
-        if (values == null) {
-            // Section is not loaded, return default value
-            return 0;
-        }
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         final int dimension = dimension();
@@ -91,15 +93,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         final int dimension = dimension();
-        long[] values = this.values;
-        if (values == null) {
-            if (placedAir) {
-                // Section is empty and method is trying to place an air block, stop unnecessary computation
-                return;
-            }
-            // Initialize the section
-            this.values = values = new long[valuesLength(bitsPerEntry)];
-        }
+        final long[] values = this.values;
         // Change to palette value
         final int sectionIndex = getSectionIndex(x % dimension, y % dimension, z % dimension);
         final int index = sectionIndex / valuesPerLong;
@@ -129,17 +123,14 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     @Override
     public void fill(int value) {
         if (value == 0) {
-            this.values = null;
+            Arrays.fill(values, 0);
             this.count = 0;
             return;
         }
         value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        long[] values = this.values;
-        if (values == null) {
-            this.values = values = new long[valuesLength(bitsPerEntry)];
-        }
+        final long[] values = this.values;
         long block = 0;
         for (int i = 0; i < valuesPerLong; i++)
             block |= (long) value << i * bitsPerEntry;
@@ -260,16 +251,6 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
         final long[] values = this.values;
         final int dimension = this.dimension();
-        if (values == null) {
-            if (consumeEmpty) {
-                // No values, give all 0 to make the consumer happy
-                for (int y = 0; y < dimension; y++)
-                    for (int z = 0; z < dimension; z++)
-                        for (int x = 0; x < dimension; x++)
-                            consumer.accept(x, y, z, 0);
-            }
-            return;
-        }
         final int bitsPerEntry = this.bitsPerEntry;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
@@ -314,10 +295,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         assert paletteValues.length >= size;
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        long[] values = this.values;
-        if (values == null) {
-            this.values = values = new long[valuesLength(bitsPerEntry)];
-        }
+        final long[] values = this.values;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         for (int i = 0; i < values.length; i++) {
             long block = values[i];
@@ -334,8 +312,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     }
 
     private void resize(int newBitsPerEntry) {
-        FlexiblePalette palette = new FlexiblePalette(adaptivePalette);
-        palette.bitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
+        FlexiblePalette palette = new FlexiblePalette(adaptivePalette, fixBitsPerEntry(newBitsPerEntry));
         palette.lastPaletteIndex = lastPaletteIndex;
         palette.paletteToValueList = paletteToValueList;
         palette.valueToPaletteMap = valueToPaletteMap;
