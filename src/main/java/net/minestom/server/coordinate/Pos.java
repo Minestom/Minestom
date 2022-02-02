@@ -66,6 +66,11 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         return new Pos(x, y, z, yaw, pitch);
     }
 
+    @Contract(pure = true)
+    public @NotNull Pos withView(@NotNull Pos pos) {
+        return withView(pos.yaw(), pos.pitch());
+    }
+
     /**
      * Sets the yaw and pitch to point
      * in the direction of the point.
