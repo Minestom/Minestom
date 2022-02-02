@@ -10,7 +10,7 @@ import java.util.function.IntUnaryOperator;
  * <p>
  * 0 is the default value.
  */
-public sealed interface Palette extends Writeable permits PaletteImpl {
+public interface Palette extends Writeable {
     static Palette blocks() {
         return newPalette(16, 8, 6, 1);
     }
@@ -20,7 +20,7 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     }
 
     static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitIncrement) {
-        return new PaletteImpl(dimension, maxBitsPerEntry, bitsPerEntry, bitIncrement);
+        return new AdaptivePalette(dimension, maxBitsPerEntry, bitsPerEntry, bitIncrement);
     }
 
     int get(int x, int y, int z);
