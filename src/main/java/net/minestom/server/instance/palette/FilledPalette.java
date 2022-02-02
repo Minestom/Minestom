@@ -45,6 +45,7 @@ record FilledPalette(int dimension, int value) implements SpecializedPalette.Imm
         // Data
         final int length = maxSize() / 64;
         writer.writeVarInt(length);
+        // TODO: may be possible to write everything in one call instead of a loop
         for (int i = 0; i < length; i++) writer.writeLong(0);
     }
 }
