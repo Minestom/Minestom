@@ -123,10 +123,14 @@ final class AdaptivePalette implements Palette {
         if (currentPalette instanceof FlexiblePalette flexiblePalette) {
             final int count = flexiblePalette.count();
             if (count == 0) {
-                currentPalette = new FilledPalette(dimension, 0);
-                this.palette = currentPalette;
+                return (this.palette = new FilledPalette(dimension, 0));
+            } else if (count == flexiblePalette.maxSize()) {
+                var palette = flexiblePalette.paletteToValueList;
+                if (palette.size() == 2 && palette.getInt(0) == 0) {
+                    // first element is air, second should be the value the palette is filled with
+                    return (this.palette = new FilledPalette(dimension, palette.getInt(1)));
+                }
             }
-            // TODO optimize the case where the palette is filled with a single value
         }
         return currentPalette;
     }
