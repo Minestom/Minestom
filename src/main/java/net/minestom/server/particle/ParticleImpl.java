@@ -8,7 +8,7 @@ import java.util.Collection;
 
 record ParticleImpl(NamespaceID namespace, int id) implements Particle {
     private static final Registry.Container<Particle> CONTAINER = Registry.createContainer(Registry.Resource.PARTICLES,
-            (namespace, object) -> new ParticleImpl(NamespaceID.from(namespace), ((Number) object.get("id")).intValue()));
+            (namespace, properties) -> new ParticleImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static Particle get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
