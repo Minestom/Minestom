@@ -404,6 +404,7 @@ public final class Registry {
     }
 
     public interface Entry {
+        @ApiStatus.Experimental
         Properties custom();
     }
 
