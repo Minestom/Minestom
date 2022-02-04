@@ -1,10 +1,13 @@
 package net.minestom.server.utils.collection;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+@ApiStatus.Internal
 public final class MergedMap<K, V> extends AbstractMap<K, V> {
     private final Map<K, V> first, second;
 
