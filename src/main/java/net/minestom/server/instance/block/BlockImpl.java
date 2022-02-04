@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.function.Function;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
-                 int @NotNull [] propertiesArray,
+                 byte @NotNull [] propertiesArray,
                  @Nullable NBTCompound nbt,
                  @Nullable BlockHandler handler) implements Block {
     // Block state -> block object
@@ -70,13 +70,13 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                         final var propertyMap = BlockUtils.parseProperties(query);
                         assert keys.length == propertyMap.size();
-                        int[] propertiesArray = new int[keys.length];
+                        byte[] propertiesArray = new byte[keys.length];
                         for (var entry : propertyMap.entrySet()) {
                             final int keyIndex = ArrayUtils.indexOf(keys, entry.getKey());
                             if (keyIndex == -1) {
                                 throw new IllegalArgumentException("Unknown property key: " + entry.getKey());
                             }
-                            final int valueIndex = ArrayUtils.indexOf(values[keyIndex], entry.getValue());
+                            final byte valueIndex = (byte) ArrayUtils.indexOf(values[keyIndex], entry.getValue());
                             if (valueIndex == -1) {
                                 throw new IllegalArgumentException("Unknown property value: " + entry.getValue());
                             }
@@ -138,7 +138,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         if (keyIndex == -1) {
             throw new IllegalArgumentException("Property " + property + " is not valid for block " + this);
         }
-        final int valueIndex = ArrayUtils.indexOf(values[keyIndex], value);
+        final byte valueIndex = (byte) ArrayUtils.indexOf(values[keyIndex], value);
         if (valueIndex == -1) {
             throw new IllegalArgumentException("Value " + value + " is not valid for property " + property + " of block " + this);
         }
@@ -154,13 +154,13 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         final String[][] values = PROPERTIES_VALUES.get(id());
         assert keys != null;
         assert values != null;
-        int[] result = this.propertiesArray.clone();
+        byte[] result = this.propertiesArray.clone();
         for (var entry : properties.entrySet()) {
             final int keyIndex = ArrayUtils.indexOf(keys, entry.getKey());
             if (keyIndex == -1) {
                 throw new IllegalArgumentException("Property " + entry.getKey() + " is not valid for block " + this);
             }
-            final int valueIndex = ArrayUtils.indexOf(values[keyIndex], entry.getValue());
+            final byte valueIndex = (byte) ArrayUtils.indexOf(values[keyIndex], entry.getValue());
             if (valueIndex == -1) {
                 throw new IllegalArgumentException("Value " + entry.getValue() + " is not valid for property " + entry.getKey() + " of block " + this);
             }
@@ -226,7 +226,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         return Objects.hash(stateId(), nbt, handler);
     }
 
-    private Block compute(int[] properties) {
+    private Block compute(byte[] properties) {
         if (Arrays.equals(propertiesArray, properties)) return this;
         BlockImpl block = possibleProperties().get(new PropertiesHolder(properties));
         if (block == null)
@@ -235,10 +235,10 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     }
 
     private static final class PropertiesHolder {
-        private final int[] properties;
+        private final byte[] properties;
         private final int hashCode;
 
-        public PropertiesHolder(int[] properties) {
+        public PropertiesHolder(byte[] properties) {
             this.properties = properties;
             this.hashCode = Arrays.hashCode(properties);
         }
