@@ -284,7 +284,7 @@ public final class PacketUtils {
             PooledBuffers.registerBuffer(this, buffer);
         }
 
-        private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
@@ -307,7 +307,7 @@ public final class PacketUtils {
             }
         }
 
-        private void process(Viewable viewable) {
+        private synchronized void process(Viewable viewable) {
             if (buffer.writerOffset() == 0) return;
             ByteBuffer copy = ByteBuffer.allocateDirect(buffer.writerOffset());
             copy.put(buffer.asByteBuffer(0, copy.capacity()));
