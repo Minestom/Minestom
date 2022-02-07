@@ -398,7 +398,7 @@ public final class Registry {
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getInt("color"),
-                    main.getBoolean("instant"),
+                    main.getBoolean("instantaneous"),
                     custom);
         }
     }
