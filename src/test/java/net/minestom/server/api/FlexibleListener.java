@@ -11,6 +11,12 @@ public interface FlexibleListener<E extends Event> {
      */
     void followup(@NotNull Consumer<E> handler);
 
+    default void followup() {
+        followup(event -> {
+            // Empty
+        });
+    }
+
     /**
      * Fails if an event is received. Valid until the next followup call.
      */

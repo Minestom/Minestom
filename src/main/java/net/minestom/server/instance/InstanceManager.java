@@ -114,12 +114,12 @@ public final class InstanceManager {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
                 instance.getChunks().forEach(instance::unloadChunk);
+                var dispatcher = MinecraftServer.process().dispatcher();
+                instance.getChunks().forEach(dispatcher::deletePartition);
             }
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            var dispatcher = MinecraftServer.process().dispatcher();
-            instance.getChunks().forEach(dispatcher::deletePartition);
         }
     }
 
