@@ -242,7 +242,7 @@ public final class ViewEngine {
                 int size = manualViewers.size();
                 if (entity != null) return size + viewableOption.bitSet.size();
                 // Non-entity fallback
-                size += ViewEngine.this.viewableOption.references().filter(ViewEngine.this::validAutoViewer).count();
+                size += viewableOption.references().filter(ViewEngine.this::validAutoViewer).count();
                 return size;
             }
         }
@@ -253,7 +253,7 @@ public final class ViewEngine {
                 if (!manualViewers.isEmpty()) return false;
                 if (entity != null) return viewableOption.bitSet.isEmpty();
                 // Non-entity fallback
-                return ViewEngine.this.viewableOption.references().noneMatch(ViewEngine.this::validAutoViewer);
+                return viewableOption.references().noneMatch(ViewEngine.this::validAutoViewer);
             }
         }
 
@@ -264,7 +264,7 @@ public final class ViewEngine {
                 if (manualViewers.contains(player)) return true;
                 if (entity != null) return viewableOption.isRegistered(player);
                 // Non-entity fallback
-                return ViewEngine.this.viewableOption.references().anyMatch(ViewEngine.this::validAutoViewer);
+                return viewableOption.references().anyMatch(ViewEngine.this::validAutoViewer);
             }
         }
 
@@ -278,7 +278,7 @@ public final class ViewEngine {
                     return;
                 }
                 // Non-entity fallback
-                ViewEngine.this.viewableOption.references().filter(ViewEngine.this::validAutoViewer).forEach(action);
+                viewableOption.references().filter(ViewEngine.this::validAutoViewer).forEach(action);
             }
         }
 
