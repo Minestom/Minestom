@@ -129,7 +129,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
 
         @Override
         public void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
-            viewEngine.updateTracker(point, tracker);
+            viewEngine.updateTracker(instance, point, tracker);
         }
     };
 

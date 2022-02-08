@@ -7,16 +7,18 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.EntityTracker;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Defines which players are able to see this element.
@@ -24,9 +26,12 @@ import java.util.function.Predicate;
 @ApiStatus.Internal
 public final class ViewEngine {
     private final Entity entity;
-    private final Set<Player> manualViewers = ConcurrentHashMap.newKeySet();
+    private final int range;
+    private final Set<Player> manualViewers = new HashSet<>();
 
+    private Instance instance;
     private EntityTracker tracker;
+    private Point lastPoint;
 
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
@@ -40,8 +45,9 @@ public final class ViewEngine {
                       Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
                       Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
         this.entity = entity;
-        this.viewableOption = new Option<>(Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
-        this.viewerOption = new Option<>(Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
+        this.range = entity != null ? MinecraftServer.getEntityViewDistance() : MinecraftServer.getChunkViewDistance();
+        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
+        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
     }
 
     public ViewEngine(@Nullable Entity entity) {
@@ -52,17 +58,11 @@ public final class ViewEngine {
         this(null);
     }
 
-    public void updateTracker(@NotNull Point point, @Nullable EntityTracker tracker) {
+    public void updateTracker(@NotNull Instance instance, @NotNull Point point, @Nullable EntityTracker tracker) {
         synchronized (mutex) {
+            this.instance = instance;
+            this.lastPoint = point;
             this.tracker = tracker;
-            if (tracker != null) {
-                final int range = entity != null ? MinecraftServer.getEntityViewDistance() : MinecraftServer.getChunkViewDistance();
-                this.viewableOption.references = tracker.references(point, range, EntityTracker.Target.PLAYERS);
-                this.viewerOption.references = tracker.references(point, range, EntityTracker.Target.ENTITIES);
-            } else {
-                this.viewableOption.references = null;
-                this.viewerOption.references = null;
-            }
         }
     }
 
@@ -127,6 +127,8 @@ public final class ViewEngine {
     public final class Option<T extends Entity> {
         @SuppressWarnings("rawtypes")
         private static final AtomicIntegerFieldUpdater<Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(Option.class, "auto");
+        // Entities that should be tracked from this option
+        private final EntityTracker.Target<T> target;
         // The condition that must be met for this option to be considered auto.
         private final Predicate<T> loopPredicate;
         // The consumers to be called when an entity is added/removed.
@@ -135,13 +137,12 @@ public final class ViewEngine {
         public final IntSet bitSet = new IntOpenHashSet();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
-        // References from the entity trackers.
-        private List<List<T>> references;
         // The custom rule used to determine if an entity is viewable.
         private Predicate<T> predicate = entity -> true;
 
-        public Option(Predicate<T> loopPredicate,
+        public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
+            this.target = target;
             this.loopPredicate = loopPredicate;
             this.addition = addition;
             this.removal = removal;
@@ -171,8 +172,8 @@ public final class ViewEngine {
             final boolean previous = UPDATER.getAndSet(this, autoViewable ? 1 : 0) == 1;
             if (previous != autoViewable) {
                 synchronized (mutex) {
-                    if (autoViewable) update(references, loopPredicate, addition);
-                    else update(references, this::isRegistered, removal);
+                    if (autoViewable) update(loopPredicate, addition);
+                    else update(this::isRegistered, removal);
                 }
             }
         }
@@ -186,7 +187,7 @@ public final class ViewEngine {
 
         public void updateRule() {
             synchronized (mutex) {
-                update(references, loopPredicate, entity -> {
+                update(loopPredicate, entity -> {
                     final boolean result = predicate.test(entity);
                     if (result != isRegistered(entity)) {
                         if (result) addition.accept(entity);
@@ -196,19 +197,32 @@ public final class ViewEngine {
             }
         }
 
-        private void update(List<List<T>> references,
-                            Predicate<T> visibilityPredicate,
+        private void update(Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
-            if (tracker == null || references == null) return;
-            for (List<T> entities : references) {
-                if (entities.isEmpty()) continue;
-                for (T entity : entities) {
-                    if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) continue;
-                    if (entity instanceof Player player && manualViewers.contains(player)) continue;
-                    if (entity.getVehicle() != null) continue;
-                    action.accept(entity);
+            references().forEach(entity -> {
+                if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) return;
+                if (entity instanceof Player player && manualViewers.contains(player)) return;
+                if (entity.getVehicle() != null) return;
+                action.accept(entity);
+            });
+        }
+
+        private Stream<T> references() {
+            if (tracker == null) return Stream.empty();
+            var references = tracker.references(lastPoint, range, target);
+            var result = references.stream().flatMap(Collection::stream);
+            if (instance != null && instance instanceof InstanceContainer container) {
+                // References from shared instances must be added to the result.
+                var shared = container.getSharedInstances();
+                if (!shared.isEmpty()) {
+                    var tmp = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
+                        var ref = inst.getEntityTracker().references(lastPoint, range, target);
+                        ref.forEach(consumer);
+                    }).flatMap(Collection::stream);
+                    result = Stream.concat(result, tmp);
                 }
             }
+            return result;
         }
     }
 
@@ -228,15 +242,7 @@ public final class ViewEngine {
                 int size = manualViewers.size();
                 if (entity != null) return size + viewableOption.bitSet.size();
                 // Non-entity fallback
-                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
-                if (auto != null) {
-                    for (List<Player> players : auto) {
-                        if (players.isEmpty()) continue;
-                        for (Player player : players) {
-                            if (validAutoViewer(player)) size++;
-                        }
-                    }
-                }
+                size += ViewEngine.this.viewableOption.references().filter(ViewEngine.this::validAutoViewer).count();
                 return size;
             }
         }
@@ -247,16 +253,7 @@ public final class ViewEngine {
                 if (!manualViewers.isEmpty()) return false;
                 if (entity != null) return viewableOption.bitSet.isEmpty();
                 // Non-entity fallback
-                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
-                if (auto != null) {
-                    for (List<Player> players : auto) {
-                        if (players.isEmpty()) continue;
-                        for (Player player : players) {
-                            if (validAutoViewer(player)) return false;
-                        }
-                    }
-                }
-                return true;
+                return ViewEngine.this.viewableOption.references().noneMatch(ViewEngine.this::validAutoViewer);
             }
         }
 
@@ -267,14 +264,7 @@ public final class ViewEngine {
                 if (manualViewers.contains(player)) return true;
                 if (entity != null) return viewableOption.isRegistered(player);
                 // Non-entity fallback
-                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
-                if (auto != null) {
-                    for (List<Player> players : auto) {
-                        if (players.isEmpty()) continue;
-                        if (players.contains(player) && validAutoViewer(player)) return true;
-                    }
-                }
-                return false;
+                return ViewEngine.this.viewableOption.references().anyMatch(ViewEngine.this::validAutoViewer);
             }
         }
 
@@ -288,15 +278,7 @@ public final class ViewEngine {
                     return;
                 }
                 // Non-entity fallback
-                final List<List<Player>> auto = ViewEngine.this.viewableOption.references;
-                if (auto != null && viewableOption.isAuto()) {
-                    for (List<Player> players : auto) {
-                        if (players.isEmpty()) continue;
-                        for (Player player : players) {
-                            if (validAutoViewer(player)) action.accept(player);
-                        }
-                    }
-                }
+                ViewEngine.this.viewableOption.references().filter(ViewEngine.this::validAutoViewer).forEach(action);
             }
         }
 
