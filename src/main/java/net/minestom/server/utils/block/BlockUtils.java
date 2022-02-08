@@ -74,11 +74,10 @@ public class BlockUtils {
         final int length = query.length() - 1;
         int start = 1;
         int index = 1;
-        while (index < length) {
-            if (query.charAt(index) == ',' || index == length - 1) {
-                if (index + 1 == length) index++;
+        while (index <= length) {
+            if (query.charAt(index) == ',' || index == length) {
                 final int equalIndex = query.indexOf('=', start);
-                if (equalIndex != -1 && equalIndex < index) {
+                if (equalIndex != -1) {
                     final String key = query.substring(start, equalIndex).trim();
                     final String value = query.substring(equalIndex + 1, index).trim();
                     keys[entryCount] = key;
