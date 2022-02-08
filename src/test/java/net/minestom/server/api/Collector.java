@@ -11,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 public interface Collector<T> {
     @NotNull List<@NotNull T> collect();
 
+    default void assertEmpty() {
+        List<T> elements = collect();
+        assertEquals(0, elements.size(), "Expected 0 element, got " + elements);
+    }
+
     default <P extends T> void assertSingle(@NotNull Class<P> type, @NotNull Consumer<P> consumer) {
         List<T> elements = collect();
         assertEquals(1, elements.size(), "Expected 1 element, got " + elements);
