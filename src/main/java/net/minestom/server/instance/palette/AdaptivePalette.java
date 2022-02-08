@@ -51,8 +51,7 @@ final class AdaptivePalette implements Palette {
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
-        Palette palette = switchFlexible();
-        palette.set(x, y, z, value);
+        flexiblePalette().set(x, y, z, value);
     }
 
     @Override
@@ -72,14 +71,12 @@ final class AdaptivePalette implements Palette {
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
-        Palette palette = switchFlexible();
-        palette.replace(x, y, z, operator);
+        flexiblePalette().replace(x, y, z, operator);
     }
 
     @Override
     public void replaceAll(@NotNull EntryFunction function) {
-        Palette palette = switchFlexible();
-        palette.replaceAll(function);
+        flexiblePalette().replaceAll(function);
     }
 
     @Override
@@ -135,8 +132,8 @@ final class AdaptivePalette implements Palette {
         return currentPalette;
     }
 
-    Palette switchFlexible() {
-        var currentPalette = this.palette;
+    Palette flexiblePalette() {
+        SpecializedPalette currentPalette = this.palette;
         if (currentPalette instanceof FilledPalette filledPalette) {
             currentPalette = new FlexiblePalette(this);
             currentPalette.fill(filledPalette.value());
