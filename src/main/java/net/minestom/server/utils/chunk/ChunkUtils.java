@@ -37,7 +37,7 @@ public final class ChunkUtils {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
-            // WARNING: if auto-load is disabled and no chunks are loaded beforehand, player will be stuck.
+            // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
             instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
                     .thenAccept((chunk) -> {
                         OptionalCallback.execute(eachCallback, chunk);
@@ -93,8 +93,12 @@ public final class ChunkUtils {
      * @return the chunk X or Z based on the argument
      */
     public static int getChunkCoordinate(double xz) {
-        // Assume chunk horizontal size being 16 (4 bits)
-        return (int) Math.floor(xz) >> 4;
+        return getChunkCoordinate((int) Math.floor(xz));
+    }
+
+    public static int getChunkCoordinate(int xz) {
+        // Assume chunk/section size being 16 (4 bits)
+        return xz >> 4;
     }
 
     /**
