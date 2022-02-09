@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.client.login;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -90,8 +89,8 @@ public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) 
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        ByteArrayData.encodeByteArray(writer, sharedSecret);
-        ByteArrayData.encodeByteArray(writer, verifyToken);
+        writer.writeByteArray(sharedSecret);
+        writer.writeByteArray(verifyToken);
     }
 
     private SecretKey getSecretKey() {

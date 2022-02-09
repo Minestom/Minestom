@@ -3,7 +3,6 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.data.DataManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -19,7 +18,6 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.storage.StorageManager;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.world.DimensionTypeManager;
@@ -149,10 +147,4 @@ public interface ServerProcess {
     interface Ticker {
         void tick(long nanoTime);
     }
-
-    @Deprecated
-    @NotNull StorageManager storage();
-
-    @Deprecated
-    @NotNull DataManager data();
 }

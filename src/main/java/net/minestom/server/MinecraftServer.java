@@ -3,7 +3,6 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.data.DataManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -19,7 +18,6 @@ import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.storage.StorageManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
@@ -197,16 +195,6 @@ public final class MinecraftServer {
 
     public static RecipeManager getRecipeManager() {
         return serverProcess.recipe();
-    }
-
-    @Deprecated
-    public static StorageManager getStorageManager() {
-        return serverProcess.storage();
-    }
-
-    @Deprecated
-    public static DataManager getDataManager() {
-        return serverProcess.data();
     }
 
     public static TeamManager getTeamManager() {

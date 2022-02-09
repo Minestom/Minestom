@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -36,8 +35,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Creates and register an {@link InstanceContainer}
-     * with the specified {@link DimensionType} and {@link StorageLocation}.
+     * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
      *
      * @param dimensionType the {@link DimensionType} of the instance
      * @param loader        the chunk loader

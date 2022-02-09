@@ -19,7 +19,6 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -369,7 +368,7 @@ public class InstanceContainer extends Instance {
      * Copies all the chunks of this instance and create a new instance container with all of them.
      * <p>
      * Chunks are copied with {@link Chunk#copy(Instance, int, int)},
-     * {@link UUID} is randomized, {@link DimensionType} is passed over and the {@link StorageLocation} is null.
+     * {@link UUID} is randomized and {@link DimensionType} is passed over.
      *
      * @return an {@link InstanceContainer} with the exact same chunks as 'this'
      * @see #getSrcInstance() to retrieve the "creation source" of the copied instance

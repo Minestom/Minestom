@@ -3,7 +3,6 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.data.DataManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -22,8 +21,6 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.storage.StorageManager;
 import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
@@ -51,8 +48,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final BlockManager block;
     private final CommandManager command;
     private final RecipeManager recipe;
-    private final StorageManager storage;
-    private final DataManager data;
     private final TeamManager team;
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
@@ -80,8 +75,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.block = new BlockManager();
         this.command = new CommandManager();
         this.recipe = new RecipeManager();
-        this.storage = new StorageManager();
-        this.data = new DataManager();
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
@@ -120,16 +113,6 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull RecipeManager recipe() {
         return recipe;
-    }
-
-    @Override
-    public @NotNull StorageManager storage() {
-        return storage;
-    }
-
-    @Override
-    public @NotNull DataManager data() {
-        return data;
     }
 
     @Override
@@ -257,7 +240,6 @@ final class ServerProcessImpl implements ServerProcess {
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
-        storage.getLoadedLocations().forEach(StorageLocation::close);
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         MinestomTerminal.stop();
