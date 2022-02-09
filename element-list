@@ -20,9 +20,6 @@ net.minestom.server.command.builder.exception
 net.minestom.server.command.builder.parser
 net.minestom.server.command.builder.suggestion
 net.minestom.server.coordinate
-net.minestom.server.data
-net.minestom.server.data.type
-net.minestom.server.data.type.array
 net.minestom.server.effects
 net.minestom.server.entity
 net.minestom.server.entity.ai
@@ -117,7 +114,6 @@ net.minestom.server.resourcepack
 net.minestom.server.scoreboard
 net.minestom.server.sound
 net.minestom.server.statistic
-net.minestom.server.storage
 net.minestom.server.tag
 net.minestom.server.terminal
 net.minestom.server.thread
