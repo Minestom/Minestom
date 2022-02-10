@@ -374,8 +374,4 @@ public final class MinecraftServer {
     public static void stopCleanly() {
         serverProcess.stop();
     }
-
-    private static int getThreadCount(@NotNull String property, int count) {
-        return Integer.getInteger(property, Math.max(1, count));
-    }
 }
