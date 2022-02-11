@@ -598,7 +598,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
             return;
         }
 
-        if (this instanceof ItemEntity) {
+        if (entityType == EntityTypes.ITEM || entityType == EntityType.FALLING_BLOCK) {
             // TODO find other exceptions
             this.previousPosition = this.position;
             this.position = finalVelocityPosition;
