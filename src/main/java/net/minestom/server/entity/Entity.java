@@ -129,7 +129,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
 
         @Override
         public void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
-            viewEngine.updateTracker(point, tracker);
+            viewEngine.updateTracker(instance, point, tracker);
         }
     };
 
@@ -598,7 +598,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
             return;
         }
 
-        if (this instanceof ItemEntity) {
+        if (entityType == EntityTypes.ITEM || entityType == EntityType.FALLING_BLOCK) {
             // TODO find other exceptions
             this.previousPosition = this.position;
             this.position = finalVelocityPosition;
@@ -1453,7 +1453,11 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      * @param temporalUnit the unit of the delay
      */
     public void scheduleRemove(long delay, @NotNull TemporalUnit temporalUnit) {
-        scheduleRemove(Duration.of(delay, temporalUnit));
+        if (temporalUnit == TimeUnit.SERVER_TICK) {
+            scheduleRemove(TaskSchedule.tick((int) delay));
+        } else {
+            scheduleRemove(Duration.of(delay, temporalUnit));
+        }
     }
 
     /**
@@ -1462,7 +1466,11 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
      * @param delay the time before removing the entity
      */
     public void scheduleRemove(Duration delay) {
-        this.scheduler.buildTask(this::remove).delay(TaskSchedule.duration(delay)).schedule();
+        scheduleRemove(TaskSchedule.duration(delay));
+    }
+
+    private void scheduleRemove(TaskSchedule schedule) {
+        this.scheduler.buildTask(this::remove).delay(schedule).schedule();
     }
 
     protected @NotNull Vec getVelocityForPacket() {

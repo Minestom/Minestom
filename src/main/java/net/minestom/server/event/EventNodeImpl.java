@@ -218,6 +218,46 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         return parent;
     }
 
+    @Override
+    public String toString() {
+        return createStringGraph(createGraph());
+    }
+
+    Graph createGraph() {
+        synchronized (GLOBAL_CHILD_LOCK) {
+            List<Graph> children = this.children.stream().map(EventNodeImpl::createGraph).toList();
+            return new Graph(getName(), getEventType().getSimpleName(), getPriority(), children);
+        }
+    }
+
+    static String createStringGraph(Graph graph) {
+        StringBuilder buffer = new StringBuilder();
+        genToStringTree(buffer, "", "", graph);
+        return buffer.toString();
+    }
+
+    private static void genToStringTree(StringBuilder buffer, String prefix, String childrenPrefix, Graph graph) {
+        buffer.append(prefix);
+        buffer.append(String.format("%s - EventType: %s - Priority: %d", graph.name(), graph.eventType(), graph.priority()));
+        buffer.append('\n');
+        var nextNodes = graph.children();
+        for (Iterator<? extends @NotNull Graph> iterator = nextNodes.iterator(); iterator.hasNext(); ) {
+            Graph next = iterator.next();
+            if (iterator.hasNext()) {
+                genToStringTree(buffer, childrenPrefix + '\u251C' + '\u2500' + " ", childrenPrefix + '\u2502' + "   ", next);
+            } else {
+                genToStringTree(buffer, childrenPrefix + '\u2514' + '\u2500' + " ", childrenPrefix + "    ", next);
+            }
+        }
+    }
+
+    record Graph(String name, String eventType, int priority,
+                 List<Graph> children) {
+        public Graph {
+            children = children.stream().sorted(Comparator.comparingInt(Graph::priority)).toList();
+        }
+    }
+
     private void invalidateEventsFor(EventNodeImpl<? super T> node) {
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);

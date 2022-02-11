@@ -50,7 +50,6 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
     @Override
     public HoverEvent.@NotNull ShowEntity deserializeShowEntity(@NotNull Component input, Codec.Decoder<Component, String, ? extends RuntimeException> componentDecoder) throws IOException {
         final String raw = PlainTextComponentSerializer.plainText().serialize(input);
-
         try {
             final NBT nbt = MinestomAdventure.NBT_CODEC.decode(raw);
             if (!(nbt instanceof NBTCompound contents)) throw new IOException("contents were not a compound");
@@ -82,7 +81,7 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
             }
         });
 
-        if(exception.get() != null) {
+        if (exception.get() != null) {
             throw new IOException(exception.get());
         }
 
@@ -90,7 +89,7 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
     }
 
     @Override
-    public @NotNull Component serializeShowEntity(HoverEvent.@NotNull ShowEntity input, Codec.Encoder<Component, String, ? extends RuntimeException> componentEncoder) throws IOException {
+    public @NotNull Component serializeShowEntity(HoverEvent.@NotNull ShowEntity input, Codec.Encoder<Component, String, ? extends RuntimeException> componentEncoder) {
         final NBTCompound tag = NBT.Compound(t -> {
             t.setString(ENTITY_ID, input.id().toString());
             t.setString(ENTITY_TYPE, input.type().asString());

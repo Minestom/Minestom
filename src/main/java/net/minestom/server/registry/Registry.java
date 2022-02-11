@@ -26,28 +26,28 @@ import java.util.function.Supplier;
  */
 public final class Registry {
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
-        return new BlockEntry(namespace, jsonObject, override);
+    public static BlockEntry block(String namespace, @NotNull Properties main) {
+        return new BlockEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
-    public static MaterialEntry material(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
-        return new MaterialEntry(namespace, jsonObject, override);
+    public static MaterialEntry material(String namespace, @NotNull Properties main) {
+        return new MaterialEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
-    public static EntityEntry entity(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
-        return new EntityEntry(namespace, jsonObject, override);
+    public static EntityEntry entity(String namespace, @NotNull Properties main) {
+        return new EntityEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
-        return new EnchantmentEntry(namespace, jsonObject, override);
+    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
+        return new EnchantmentEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(String namespace, @NotNull Map<String, Object> jsonObject, Map<String, Object> override) {
-        return new PotionEffectEntry(namespace, jsonObject, override);
+    public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
+        return new PotionEffectEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -73,8 +73,8 @@ public final class Registry {
         ObjectArray<T> ids = new ObjectArray<>(entries.size());
         for (var entry : entries.entrySet()) {
             final String namespace = entry.getKey();
-            final Map<String, Object> object = entry.getValue();
-            final T value = loader.get(namespace, object);
+            final Properties properties = Properties.fromMap(entry.getValue());
+            final T value = loader.get(namespace, properties);
             ids.set(value.id(), value);
             namespaces.put(value.name(), value);
         }
@@ -119,7 +119,7 @@ public final class Registry {
         }
 
         public interface Loader<T extends ProtocolObject> {
-            T get(String namespace, Map<String, Object> object);
+            T get(String namespace, Properties properties);
         }
     }
 
@@ -148,7 +148,7 @@ public final class Registry {
         }
     }
 
-    public static class BlockEntry extends Entry {
+    public static final class BlockEntry implements Entry {
         private final NamespaceID namespace;
         private final int id;
         private final int stateId;
@@ -164,33 +164,34 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
+        private final Properties custom;
 
-        private BlockEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
-            super(main, override);
+        private BlockEntry(String namespace, Properties main, Properties custom) {
+            this.custom = custom;
             this.namespace = NamespaceID.from(namespace);
-            this.id = getInt("id");
-            this.stateId = getInt("stateId");
-            this.translationKey = getString("translationKey");
-            this.hardness = getDouble("hardness");
-            this.explosionResistance = getDouble("explosionResistance");
-            this.friction = getDouble("friction");
-            this.speedFactor = getDouble("speedFactor", 1);
-            this.jumpFactor = getDouble("jumpFactor", 1);
-            this.air = getBoolean("air", false);
-            this.solid = getBoolean("solid");
-            this.liquid = getBoolean("liquid", false);
+            this.id = main.getInt("id");
+            this.stateId = main.getInt("stateId");
+            this.translationKey = main.getString("translationKey");
+            this.hardness = main.getDouble("hardness");
+            this.explosionResistance = main.getDouble("explosionResistance");
+            this.friction = main.getDouble("friction");
+            this.speedFactor = main.getDouble("speedFactor", 1);
+            this.jumpFactor = main.getDouble("jumpFactor", 1);
+            this.air = main.getBoolean("air", false);
+            this.solid = main.getBoolean("solid");
+            this.liquid = main.getBoolean("liquid", false);
             {
-                Map<String, Object> blockEntity = element("blockEntity");
+                Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
-                    this.blockEntity = (String) blockEntity.get("namespace");
-                    this.blockEntityId = ((Number) blockEntity.get("id")).intValue();
+                    this.blockEntity = blockEntity.getString("namespace");
+                    this.blockEntityId = blockEntity.getInt("id");
                 } else {
                     this.blockEntity = null;
                     this.blockEntityId = 0;
                 }
             }
             {
-                final String materialNamespace = getString("correspondingItem", null);
+                final String materialNamespace = main.getString("correspondingItem", null);
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
             }
         }
@@ -258,9 +259,14 @@ public final class Registry {
         public @Nullable Material material() {
             return materialSupplier.get();
         }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
     }
 
-    public static class MaterialEntry extends Entry {
+    public static final class MaterialEntry implements Entry {
         private final NamespaceID namespace;
         private final int id;
         private final String translationKey;
@@ -269,25 +275,25 @@ public final class Registry {
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
+        private final Properties custom;
 
-        private MaterialEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
-            super(main, override);
+        private MaterialEntry(String namespace, Properties main, Properties custom) {
+            this.custom = custom;
             this.namespace = NamespaceID.from(namespace);
-            this.id = getInt("id");
-            this.translationKey = getString("translationKey");
-            this.maxStackSize = getInt("maxStackSize", 64);
-            this.maxDamage = getInt("maxDamage", 0);
-            this.isFood = getBoolean("edible", false);
+            this.id = main.getInt("id");
+            this.translationKey = main.getString("translationKey");
+            this.maxStackSize = main.getInt("maxStackSize", 64);
+            this.maxDamage = main.getInt("maxDamage", 0);
+            this.isFood = main.getBoolean("edible", false);
             {
-                final String blockNamespace = getString("correspondingBlock", null);
+                final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
             }
 
             {
-                final Map<String, Object> armorProperties = element("armorProperties");
+                final Properties armorProperties = main.section("armorProperties");
                 if (armorProperties != null) {
-                    final String slot = (String) armorProperties.get("slot");
-                    switch (slot) {
+                    switch (armorProperties.getString("slot")) {
                         case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
                         case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
                         case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
@@ -335,206 +341,71 @@ public final class Registry {
         public @Nullable EquipmentSlot equipmentSlot() {
             return equipmentSlot;
         }
-    }
 
-    public static class EntityEntry extends Entry {
-        private final NamespaceID namespace;
-        private final int id;
-        private final String translationKey;
-        private final double width;
-        private final double height;
-        private final double drag;
-        private final double acceleration;
-        private final EntitySpawnType spawnType;
-
-        private EntityEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
-            super(main, override);
-            this.namespace = NamespaceID.from(namespace);
-            this.id = getInt("id");
-            this.translationKey = getString("translationKey");
-            this.width = getDouble("width");
-            this.height = getDouble("height");
-            this.drag = getDouble("drag", 0.02);
-            this.acceleration = getDouble("acceleration", 0.08);
-            this.spawnType = EntitySpawnType.valueOf(getString("packetType").toUpperCase(Locale.ROOT));
-        }
-
-        public @NotNull NamespaceID namespace() {
-            return namespace;
-        }
-
-        public int id() {
-            return id;
-        }
-
-        public String translationKey() {
-            return translationKey;
-        }
-
-        public double width() {
-            return width;
-        }
-
-        public double height() {
-            return height;
-        }
-
-        public double drag() {
-            return drag;
-        }
-
-        public double acceleration() {
-            return acceleration;
-        }
-
-        public EntitySpawnType spawnType() {
-            return spawnType;
+        @Override
+        public Properties custom() {
+            return custom;
         }
     }
 
-    public static class EnchantmentEntry extends Entry {
-        private final NamespaceID namespace;
-        private final int id;
-        private final String translationKey;
-        private final double maxLevel;
-        private final boolean isCursed;
-        private final boolean isDiscoverable;
-        private final boolean isTradeable;
-        private final boolean isTreasureOnly;
-
-        private EnchantmentEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
-            super(main, override);
-            this.namespace = NamespaceID.from(namespace);
-            this.id = getInt("id");
-            this.translationKey = getString("translationKey");
-            this.maxLevel = getDouble("maxLevel");
-            this.isCursed = getBoolean("curse", false);
-            this.isDiscoverable = getBoolean("discoverable", true);
-            this.isTradeable = getBoolean("tradeable", true);
-            this.isTreasureOnly = getBoolean("treasureOnly", false);
-        }
-
-        public @NotNull NamespaceID namespace() {
-            return namespace;
-        }
-
-        public int id() {
-            return id;
-        }
-
-        public String translationKey() {
-            return translationKey;
-        }
-
-        public double maxLevel() {
-            return maxLevel;
-        }
-
-        public boolean isCursed() {
-            return isCursed;
-        }
-
-        public boolean isDiscoverable() {
-            return isDiscoverable;
-        }
-
-        public boolean isTradeable() {
-            return isTradeable;
-        }
-
-        public boolean isTreasureOnly() {
-            return isTreasureOnly;
+    public record EntityEntry(NamespaceID namespace, int id,
+                              String translationKey,
+                              double width, double height,
+                              double drag, double acceleration,
+                              EntitySpawnType spawnType,
+                              Properties custom) implements Entry {
+        public EntityEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getString("translationKey"),
+                    main.getDouble("width"),
+                    main.getDouble("height"),
+                    main.getDouble("drag", 0.02),
+                    main.getDouble("acceleration", 0.08),
+                    EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
+                    custom);
         }
     }
 
-    public static class PotionEffectEntry extends Entry {
-        private final NamespaceID namespace;
-        private final int id;
-        private final String translationKey;
-        private final int color;
-        private final boolean isInstantaneous;
-
-        private PotionEffectEntry(String namespace, Map<String, Object> main, Map<String, Object> override) {
-            super(main, override);
-            this.namespace = NamespaceID.from(namespace);
-            this.id = getInt("id");
-            this.translationKey = getString("translationKey");
-            this.color = getInt("color");
-            this.isInstantaneous = getBoolean("instantaneous");
-        }
-
-        public @NotNull NamespaceID namespace() {
-            return namespace;
-        }
-
-        public int id() {
-            return id;
-        }
-
-        public String translationKey() {
-            return translationKey;
-        }
-
-        public int color() {
-            return color;
-        }
-
-        public boolean isInstantaneous() {
-            return isInstantaneous;
+    public record EnchantmentEntry(NamespaceID namespace, int id,
+                                   String translationKey,
+                                   double maxLevel,
+                                   boolean isCursed,
+                                   boolean isDiscoverable,
+                                   boolean isTradeable,
+                                   boolean isTreasureOnly,
+                                   Properties custom) implements Entry {
+        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getString("translationKey"),
+                    main.getDouble("maxLevel"),
+                    main.getBoolean("isCursed", false),
+                    main.getBoolean("isDiscoverable", true),
+                    main.getBoolean("isTradeable", true),
+                    main.getBoolean("isTreasureOnly", false),
+                    custom);
         }
     }
 
-    public static class Entry {
-        private final Map<String, Object> main, override;
-
-        private Entry(Map<String, Object> main, Map<String, Object> override) {
-            this.main = main;
-            this.override = override;
+    public record PotionEffectEntry(NamespaceID namespace, int id,
+                                    String translationKey,
+                                    int color,
+                                    boolean isInstantaneous,
+                                    Properties custom) implements Entry {
+        public PotionEffectEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getString("translationKey"),
+                    main.getInt("color"),
+                    main.getBoolean("instantaneous"),
+                    custom);
         }
+    }
 
-        public String getString(String name, String defaultValue) {
-            var element = element(name);
-            return element != null ? (String) element : defaultValue;
-        }
-
-        public String getString(String name) {
-            return element(name);
-        }
-
-        public double getDouble(String name, double defaultValue) {
-            var element = element(name);
-            return element != null ? ((Number) element).doubleValue() : defaultValue;
-        }
-
-        public double getDouble(String name) {
-            return ((Number) element(name)).doubleValue();
-        }
-
-        public int getInt(String name, int defaultValue) {
-            var element = element(name);
-            return element != null ? ((Number) element).intValue() : defaultValue;
-        }
-
-        public int getInt(String name) {
-            return ((Number) element(name)).intValue();
-        }
-
-        public boolean getBoolean(String name, boolean defaultValue) {
-            var element = element(name);
-            return element != null ? (boolean) element : defaultValue;
-        }
-
-        public boolean getBoolean(String name) {
-            return element(name);
-        }
-
-        protected <T> T element(String name) {
-            Object result;
-            if (override != null && (result = override.get(name)) != null) {
-                return (T) result;
-            }
-            return (T) main.get(name);
-        }
+    public interface Entry {
+        @ApiStatus.Experimental
+        Properties custom();
     }
 
     private static Object readObject(JsonReader reader) throws IOException {
@@ -544,19 +415,117 @@ public final class Registry {
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
-                yield List.copyOf(list);
+                yield list;
             }
             case BEGIN_OBJECT -> {
                 Map<String, Object> map = new HashMap<>();
                 reader.beginObject();
-                while (reader.hasNext()) map.put(reader.nextName().intern(), readObject(reader));
+                while (reader.hasNext()) map.put(reader.nextName(), readObject(reader));
                 reader.endObject();
-                yield Map.copyOf(map);
+                yield map;
             }
-            case STRING -> reader.nextString().intern();
+            case STRING -> reader.nextString();
             case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
             case BOOLEAN -> reader.nextBoolean();
             default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
         };
+    }
+
+    record PropertiesMap(Map<String, Object> map) implements Properties {
+        @Override
+        public String getString(String name, String defaultValue) {
+            var element = element(name);
+            return element != null ? (String) element : defaultValue;
+        }
+
+        @Override
+        public String getString(String name) {
+            return element(name);
+        }
+
+        @Override
+        public double getDouble(String name, double defaultValue) {
+            var element = element(name);
+            return element != null ? ((Number) element).doubleValue() : defaultValue;
+        }
+
+        @Override
+        public double getDouble(String name) {
+            return ((Number) element(name)).doubleValue();
+        }
+
+        @Override
+        public int getInt(String name, int defaultValue) {
+            var element = element(name);
+            return element != null ? ((Number) element).intValue() : defaultValue;
+        }
+
+        @Override
+        public int getInt(String name) {
+            return ((Number) element(name)).intValue();
+        }
+
+        @Override
+        public boolean getBoolean(String name, boolean defaultValue) {
+            var element = element(name);
+            return element != null ? (boolean) element : defaultValue;
+        }
+
+        @Override
+        public boolean getBoolean(String name) {
+            return element(name);
+        }
+
+        @Override
+        public Properties section(String name) {
+            Map<String, Object> map = element(name);
+            if (map == null) return null;
+            return new PropertiesMap(map);
+        }
+
+        @Override
+        public Map<String, Object> asMap() {
+            return map;
+        }
+
+        private <T> T element(String name) {
+            //noinspection unchecked
+            return (T) map.get(name);
+        }
+    }
+
+    public interface Properties extends Iterable<Map.Entry<String, Object>> {
+        static Properties fromMap(Map<String, Object> map) {
+            return new PropertiesMap(map);
+        }
+
+        String getString(String name, String defaultValue);
+
+        String getString(String name);
+
+        double getDouble(String name, double defaultValue);
+
+        double getDouble(String name);
+
+        int getInt(String name, int defaultValue);
+
+        int getInt(String name);
+
+        boolean getBoolean(String name, boolean defaultValue);
+
+        boolean getBoolean(String name);
+
+        Properties section(String name);
+
+        Map<String, Object> asMap();
+
+        @Override
+        default @NotNull Iterator<Map.Entry<String, Object>> iterator() {
+            return asMap().entrySet().iterator();
+        }
+
+        default int size() {
+            return asMap().size();
+        }
     }
 }

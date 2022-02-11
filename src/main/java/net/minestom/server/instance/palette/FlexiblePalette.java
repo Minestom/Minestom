@@ -10,7 +10,10 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
-final class PaletteImpl implements Palette, Cloneable {
+/**
+ * Palette able to take any value anywhere. May consume more memory than required.
+ */
+final class FlexiblePalette implements SpecializedPalette, Cloneable {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
     private static final int[] MAGIC_MASKS;
     private static final int[] VALUES_PER_LONG;
@@ -26,54 +29,44 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     // Specific to this palette type
-    private final int dimension;
-    private final int dimensionBitCount;
-    private final int maxBitsPerEntry;
-    private final int bitsIncrement;
-
+    private final AdaptivePalette adaptivePalette;
     private int bitsPerEntry;
 
     private boolean hasPalette;
     private int lastPaletteIndex = 1; // First index is air
-
     private int count = 0;
 
     private long[] values;
     // palette index = value
-    private IntArrayList paletteToValueList;
+    IntArrayList paletteToValueList;
     // value = palette index
     private Int2IntOpenHashMap valueToPaletteMap;
 
-    PaletteImpl(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
-        this.dimensionBitCount = validateDimension(dimension);
-
-        this.dimension = dimension;
-        this.maxBitsPerEntry = maxBitsPerEntry;
-        this.bitsIncrement = bitsIncrement;
+    FlexiblePalette(AdaptivePalette adaptivePalette, int bitsPerEntry) {
+        this.adaptivePalette = adaptivePalette;
 
         this.bitsPerEntry = bitsPerEntry;
-
-        this.hasPalette = bitsPerEntry <= maxBitsPerEntry;
+        this.hasPalette = bitsPerEntry <= maxBitsPerEntry();
 
         this.paletteToValueList = new IntArrayList(1);
         this.paletteToValueList.add(0);
         this.valueToPaletteMap = new Int2IntOpenHashMap(1);
         this.valueToPaletteMap.put(0, 0);
         this.valueToPaletteMap.defaultReturnValue(-1);
+
+        this.values = new long[valuesLength(bitsPerEntry)];
+    }
+
+    FlexiblePalette(AdaptivePalette adaptivePalette) {
+        this(adaptivePalette, adaptivePalette.defaultBitsPerEntry);
     }
 
     @Override
     public int get(int x, int y, int z) {
-        if (x < 0 || y < 0 || z < 0) {
-            throw new IllegalArgumentException("Coordinates must be positive");
-        }
         final long[] values = this.values;
-        if (values == null) {
-            // Section is not loaded, return default value
-            return 0;
-        }
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int dimension = dimension();
 
         final int sectionIdentifier = getSectionIndex(x % dimension, y % dimension, z % dimension);
         final int index = sectionIdentifier / valuesPerLong;
@@ -95,22 +88,12 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public void set(int x, int y, int z, int value) {
-        if (x < 0 || y < 0 || z < 0) {
-            throw new IllegalArgumentException("Coordinates must be positive");
-        }
         final boolean placedAir = value == 0;
         if (!placedAir) value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        long[] values = this.values;
-        if (values == null) {
-            if (placedAir) {
-                // Section is empty and method is trying to place an air block, stop unnecessary computation
-                return;
-            }
-            // Initialize the section
-            this.values = values = new long[valuesLength(bitsPerEntry)];
-        }
+        final int dimension = dimension();
+        final long[] values = this.values;
         // Change to palette value
         final int sectionIndex = getSectionIndex(x % dimension, y % dimension, z % dimension);
         final int index = sectionIndex / valuesPerLong;
@@ -140,17 +123,14 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void fill(int value) {
         if (value == 0) {
-            this.values = null;
+            Arrays.fill(values, 0);
             this.count = 0;
             return;
         }
         value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        long[] values = this.values;
-        if (values == null) {
-            this.values = values = new long[valuesLength(bitsPerEntry)];
-        }
+        final long[] values = this.values;
         long block = 0;
         for (int i = 0; i < valuesPerLong; i++)
             block |= (long) value << i * bitsPerEntry;
@@ -161,7 +141,7 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
         int[] cache = sizeCache(maxSize());
-        final int dimension = this.dimension;
+        final int dimension = dimension();
         // Fill cache with values
         int fillValue = -1;
         int count = 0;
@@ -232,18 +212,18 @@ final class PaletteImpl implements Palette, Cloneable {
 
     @Override
     public int maxBitsPerEntry() {
-        return maxBitsPerEntry;
+        return adaptivePalette.maxBitsPerEntry();
     }
 
     @Override
     public int dimension() {
-        return dimension;
+        return adaptivePalette.dimension();
     }
 
     @Override
-    public @NotNull Palette clone() {
+    public @NotNull SpecializedPalette clone() {
         try {
-            PaletteImpl palette = (PaletteImpl) super.clone();
+            FlexiblePalette palette = (FlexiblePalette) super.clone();
             palette.values = values != null ? values.clone() : null;
             palette.paletteToValueList = paletteToValueList.clone();
             palette.valueToPaletteMap = valueToPaletteMap.clone();
@@ -258,36 +238,26 @@ final class PaletteImpl implements Palette, Cloneable {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) bitsPerEntry);
-        if (bitsPerEntry <= maxBitsPerEntry) { // Palette index
+        if (bitsPerEntry <= maxBitsPerEntry()) { // Palette index
             writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
         }
         writer.writeLongArray(values);
     }
 
     private int fixBitsPerEntry(int bitsPerEntry) {
-        return bitsPerEntry > maxBitsPerEntry ? 15 : bitsPerEntry;
+        return bitsPerEntry > maxBitsPerEntry() ? 15 : bitsPerEntry;
     }
 
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
         final long[] values = this.values;
-        final int dimension = this.dimension;
-        if (values == null) {
-            if (consumeEmpty) {
-                // No values, give all 0 to make the consumer happy
-                for (int y = 0; y < dimension; y++)
-                    for (int z = 0; z < dimension; z++)
-                        for (int x = 0; x < dimension; x++)
-                            consumer.accept(x, y, z, 0);
-            }
-            return;
-        }
+        final int dimension = this.dimension();
         final int bitsPerEntry = this.bitsPerEntry;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
         final int[] ids = hasPalette ? paletteToValueList.elements() : null;
-        final int dimensionBitCount = this.dimensionBitCount;
+        final int dimensionBitCount = adaptivePalette.dimensionBitCount;
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
@@ -325,10 +295,7 @@ final class PaletteImpl implements Palette, Cloneable {
         assert paletteValues.length >= size;
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        long[] values = this.values;
-        if (values == null) {
-            this.values = values = new long[valuesLength(bitsPerEntry)];
-        }
+        final long[] values = this.values;
         final int magicMask = MAGIC_MASKS[bitsPerEntry];
         for (int i = 0; i < values.length; i++) {
             long block = values[i];
@@ -345,8 +312,7 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     private void resize(int newBitsPerEntry) {
-        newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
-        PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry, bitsIncrement);
+        FlexiblePalette palette = new FlexiblePalette(adaptivePalette, fixBitsPerEntry(newBitsPerEntry));
         palette.lastPaletteIndex = lastPaletteIndex;
         palette.paletteToValueList = paletteToValueList;
         palette.valueToPaletteMap = valueToPaletteMap;
@@ -363,7 +329,7 @@ final class PaletteImpl implements Palette, Cloneable {
         final int lastPaletteIndex = this.lastPaletteIndex;
         if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
-            resize(bitsPerEntry + bitsIncrement);
+            resize(bitsPerEntry + adaptivePalette.bitsIncrement);
             return getPaletteIndex(value);
         }
         final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
@@ -374,6 +340,7 @@ final class PaletteImpl implements Palette, Cloneable {
     }
 
     int getSectionIndex(int x, int y, int z) {
+        final int dimensionBitCount = adaptivePalette.dimensionBitCount;
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
@@ -393,16 +360,5 @@ final class PaletteImpl implements Palette, Cloneable {
 
     static int maxPaletteSize(int bitsPerEntry) {
         return 1 << bitsPerEntry;
-    }
-
-    private static int validateDimension(int dimension) {
-        if (dimension <= 1) {
-            throw new IllegalArgumentException("Dimension must be greater 1");
-        }
-        double log2 = Math.log(dimension) / Math.log(2);
-        if ((int) Math.ceil(log2) != (int) Math.floor(log2)) {
-            throw new IllegalArgumentException("Dimension must be a power of 2");
-        }
-        return (int) log2;
     }
 }

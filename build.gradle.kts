@@ -44,6 +44,7 @@ tasks {
 dependencies {
     // Junit Testing Framework
     testImplementation(libs.junit.api)
+    testImplementation(libs.junit.params)
     testRuntimeOnly(libs.junit.engine)
     // Only here to ensure J9 module support for extensions and our classloaders
     testCompileOnly(libs.mockito.core)
@@ -60,7 +61,6 @@ dependencies {
     implementation(libs.bundles.flare)
 
     // Libraries
-    api(libs.guava)
     api(libs.gson)
     implementation(libs.jcTools)
     // Path finding

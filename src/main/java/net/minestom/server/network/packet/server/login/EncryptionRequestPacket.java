@@ -11,8 +11,8 @@ public record EncryptionRequestPacket(@NotNull String serverId,
                                       byte @NotNull [] verifyToken) implements ServerPacket {
     public EncryptionRequestPacket(BinaryReader reader) {
         this(reader.readSizedString(),
-                reader.readBytes(reader.readVarInt()),
-                reader.readBytes(reader.readVarInt()));
+                reader.readByteArray(),
+                reader.readByteArray());
     }
 
     @Override

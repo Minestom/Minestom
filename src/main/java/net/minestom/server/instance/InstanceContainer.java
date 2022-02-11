@@ -17,11 +17,12 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
+import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -29,6 +30,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
@@ -136,7 +138,14 @@ public class InstanceContainer extends Instance {
             executeNeighboursBlockPlacementRule(blockPosition);
 
             // Refresh player chunk block
-            chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
+            {
+                chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
+                var registry = block.registry();
+                if (registry.isBlockEntity()) {
+                    final NBTCompound data = BlockUtils.extractClientNbt(block);
+                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                }
+            }
 
             if (previousHandler != null) {
                 // Previous destroy
@@ -369,7 +378,7 @@ public class InstanceContainer extends Instance {
      * Copies all the chunks of this instance and create a new instance container with all of them.
      * <p>
      * Chunks are copied with {@link Chunk#copy(Instance, int, int)},
-     * {@link UUID} is randomized, {@link DimensionType} is passed over and the {@link StorageLocation} is null.
+     * {@link UUID} is randomized and {@link DimensionType} is passed over.
      *
      * @return an {@link InstanceContainer} with the exact same chunks as 'this'
      * @see #getSrcInstance() to retrieve the "creation source" of the copied instance

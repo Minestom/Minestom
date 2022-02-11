@@ -3,6 +3,8 @@ package net.minestom.server.api;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventFilter;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
@@ -19,6 +21,10 @@ public interface Env {
     @NotNull ServerProcess process();
 
     @NotNull TestConnection createConnection();
+
+    <E extends Event, H> @NotNull Collector<E> trackEvent(@NotNull Class<E> eventType, @NotNull EventFilter<? super E, H> filter, @NotNull H actor);
+
+    <E extends Event> @NotNull FlexibleListener<E> listen(@NotNull Class<E> eventType);
 
     default void tick() {
         process().ticker().tick(System.nanoTime());

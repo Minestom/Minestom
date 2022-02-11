@@ -131,6 +131,10 @@ public class BinaryReader extends InputStream {
         return bytes;
     }
 
+    public byte[] readByteArray() {
+        return readBytes(readVarInt());
+    }
+
     public String[] readSizedStringArray(int maxLength) {
         final int size = readVarInt();
         String[] strings = new String[size];

@@ -39,8 +39,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Creates and register an {@link InstanceContainer}
-     * with the specified {@link DimensionType} and {@link StorageLocation}.
+     * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
      *
      * @param dimensionType the {@link DimensionType} of the instance
      * @param loader        the chunk loader
@@ -120,12 +119,12 @@ public final class InstanceManager {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
                 instance.getChunks().forEach(instance::unloadChunk);
+                var dispatcher = MinecraftServer.process().dispatcher();
+                instance.getChunks().forEach(dispatcher::deletePartition);
             }
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            var dispatcher = MinecraftServer.process().dispatcher();
-            instance.getChunks().forEach(dispatcher::deletePartition);
         }
     }
 

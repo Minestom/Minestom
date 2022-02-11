@@ -6,7 +6,7 @@ import net.minestom.server.utils.binary.Writeable;
 /**
  * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(SendablePacket)}.
  * <p>
- * Packets are value-based, and should therefore be reliant on identity.
+ * Packets are value-based, and should therefore not be reliant on identity.
  */
 public non-sealed interface ServerPacket extends Writeable, SendablePacket {
 

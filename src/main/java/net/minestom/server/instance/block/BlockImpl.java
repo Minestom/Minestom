@@ -9,6 +9,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.ObjectArray;
 import net.minestom.server.utils.block.BlockUtils;
+import net.minestom.server.utils.collection.MergedMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -20,7 +21,7 @@ import java.util.*;
 import java.util.function.Function;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
-                 @NotNull int[] propertiesArray,
+                 byte @NotNull [] propertiesArray,
                  @Nullable NBTCompound nbt,
                  @Nullable BlockHandler handler) implements Block {
     // Block state -> block object
@@ -32,20 +33,21 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     // Block id -> Map<PropertiesValues, Block>
     private static final ObjectArray<Map<PropertiesHolder, BlockImpl>> POSSIBLE_STATES = new ObjectArray<>();
     private static final Registry.Container<Block> CONTAINER = Registry.createContainer(Registry.Resource.BLOCKS,
-            (namespace, object) -> {
-                final int blockId = ((Number) object.get("id")).intValue();
-                final var stateObject = (Map<String, Object>) object.get("states");
+            (namespace, properties) -> {
+                final int blockId = properties.getInt("id");
+                final Registry.Properties stateObject = properties.section("states");
 
                 // Retrieve properties
                 String[] keys = new String[0];
                 String[][] values = new String[0][];
                 {
-                    var properties = (Map<String, Object>) object.get("properties");
-                    if (properties != null) {
-                        keys = new String[properties.size()];
-                        values = new String[properties.size()][];
+                    Registry.Properties stateProperties = properties.section("properties");
+                    if (stateProperties != null) {
+                        final int stateCount = stateProperties.size();
+                        keys = new String[stateCount];
+                        values = new String[stateCount][];
                         int i = 0;
-                        for (var entry : properties.entrySet()) {
+                        for (var entry : stateProperties) {
                             final int entryIndex = i++;
                             keys[entryIndex] = entry.getKey();
 
@@ -59,30 +61,30 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
                 // Retrieve block states
                 {
-                    final var stateEntries = stateObject.entrySet();
-                    final int propertiesCount = stateEntries.size();
+                    final int propertiesCount = stateObject.size();
                     PropertiesHolder[] propertiesKeys = new PropertiesHolder[propertiesCount];
                     BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
                     int propertiesOffset = 0;
-                    for (var stateEntry : stateEntries) {
+                    for (var stateEntry : stateObject) {
                         final String query = stateEntry.getKey();
                         final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                         final var propertyMap = BlockUtils.parseProperties(query);
                         assert keys.length == propertyMap.size();
-                        int[] propertiesArray = new int[keys.length];
+                        byte[] propertiesArray = new byte[keys.length];
                         for (var entry : propertyMap.entrySet()) {
                             final int keyIndex = ArrayUtils.indexOf(keys, entry.getKey());
                             if (keyIndex == -1) {
                                 throw new IllegalArgumentException("Unknown property key: " + entry.getKey());
                             }
-                            final int valueIndex = ArrayUtils.indexOf(values[keyIndex], entry.getValue());
+                            final byte valueIndex = (byte) ArrayUtils.indexOf(values[keyIndex], entry.getValue());
                             if (valueIndex == -1) {
                                 throw new IllegalArgumentException("Unknown property value: " + entry.getValue());
                             }
                             propertiesArray[keyIndex] = valueIndex;
                         }
 
-                        final BlockImpl block = new BlockImpl(Registry.block(namespace, object, stateOverride),
+                        var mainProperties = Registry.Properties.fromMap(new MergedMap<>(properties.asMap(), stateOverride));
+                        final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
                                 propertiesArray, null, null);
                         BLOCK_STATE_MAP.set(block.stateId(), block);
                         propertiesKeys[propertiesOffset] = new PropertiesHolder(propertiesArray);
@@ -91,7 +93,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                     POSSIBLE_STATES.set(blockId, ArrayUtils.toMap(propertiesKeys, blocksValues, propertiesOffset));
                 }
                 // Register default state
-                final int defaultState = ((Number) object.get("defaultStateId")).intValue();
+                final int defaultState = properties.getInt("defaultStateId");
                 return getState(defaultState);
             });
     private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
@@ -136,7 +138,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         if (keyIndex == -1) {
             throw new IllegalArgumentException("Property " + property + " is not valid for block " + this);
         }
-        final int valueIndex = ArrayUtils.indexOf(values[keyIndex], value);
+        final byte valueIndex = (byte) ArrayUtils.indexOf(values[keyIndex], value);
         if (valueIndex == -1) {
             throw new IllegalArgumentException("Value " + value + " is not valid for property " + property + " of block " + this);
         }
@@ -152,13 +154,13 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         final String[][] values = PROPERTIES_VALUES.get(id());
         assert keys != null;
         assert values != null;
-        int[] result = this.propertiesArray.clone();
+        byte[] result = this.propertiesArray.clone();
         for (var entry : properties.entrySet()) {
             final int keyIndex = ArrayUtils.indexOf(keys, entry.getKey());
             if (keyIndex == -1) {
                 throw new IllegalArgumentException("Property " + entry.getKey() + " is not valid for block " + this);
             }
-            final int valueIndex = ArrayUtils.indexOf(values[keyIndex], entry.getValue());
+            final byte valueIndex = (byte) ArrayUtils.indexOf(values[keyIndex], entry.getValue());
             if (valueIndex == -1) {
                 throw new IllegalArgumentException("Value " + entry.getValue() + " is not valid for property " + entry.getKey() + " of block " + this);
             }
@@ -224,7 +226,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         return Objects.hash(stateId(), nbt, handler);
     }
 
-    private Block compute(int[] properties) {
+    private Block compute(byte[] properties) {
         if (Arrays.equals(propertiesArray, properties)) return this;
         BlockImpl block = possibleProperties().get(new PropertiesHolder(properties));
         if (block == null)
@@ -233,10 +235,10 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     }
 
     private static final class PropertiesHolder {
-        private final int[] properties;
+        private final byte[] properties;
         private final int hashCode;
 
-        public PropertiesHolder(int[] properties) {
+        public PropertiesHolder(byte[] properties) {
             this.properties = properties;
             this.hashCode = Arrays.hashCode(properties);
         }

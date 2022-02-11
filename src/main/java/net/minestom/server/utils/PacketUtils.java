@@ -21,6 +21,7 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.PooledBuffers;
+import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.cache.LocalCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +29,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -160,8 +160,8 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static ReadResult readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed) throws DataFormatException {
-        List<PacketPayload> packets = new ArrayList<>();
+    public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
+                                           BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
         BinaryBuffer remaining = null;
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
@@ -195,7 +195,11 @@ public final class PacketUtils {
                 // Slice packet
                 ByteBuffer payload = content.asByteBuffer(content.readerOffset(), decompressedSize);
                 final int packetId = Utils.readVarInt(payload);
-                packets.add(new PacketPayload(packetId, payload));
+                try {
+                    payloadConsumer.accept(packetId, payload);
+                } catch (Exception e) {
+                    // Empty
+                }
                 // Position buffer to read the next packet
                 readBuffer.readerOffset(readerStart + packetLength);
             } catch (BufferUnderflowException e) {
@@ -204,24 +208,26 @@ public final class PacketUtils {
                 break;
             }
         }
-        return new ReadResult(packets, remaining);
-    }
-
-    public record ReadResult(List<PacketPayload> packets, BinaryBuffer remaining) {
-    }
-
-    public record PacketPayload(int id, ByteBuffer payload) {
+        return remaining;
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
+        writeFramedPacket(buffer, packet.getId(), packet,
+                compression ? MinecraftServer.getCompressionThreshold() : 0);
+    }
+
+    public static void writeFramedPacket(@NotNull ByteBuffer buffer,
+                                         int id,
+                                         @NotNull Writeable writeable,
+                                         int compressionThreshold) {
         BinaryWriter writerView = BinaryWriter.view(buffer); // ensure that the buffer is not resized
-        if (!compression) {
+        if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-            Utils.writeVarInt(buffer, packet.getId());
-            packet.write(writerView);
+            Utils.writeVarInt(buffer, id);
+            writeable.write(writerView);
             final int finalSize = buffer.position() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             return;
@@ -231,10 +237,10 @@ public final class PacketUtils {
         final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
 
         final int contentStart = buffer.position();
-        Utils.writeVarInt(buffer, packet.getId());
-        packet.write(writerView);
+        Utils.writeVarInt(buffer, id);
+        writeable.write(writerView);
         final int packetSize = buffer.position() - contentStart;
-        final boolean compressed = packetSize >= MinecraftServer.getCompressionThreshold();
+        final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
             // Packet large enough, compress it
             final ByteBuffer input = PooledBuffers.tempBuffer().put(0, buffer, contentStart, packetSize);
@@ -278,7 +284,7 @@ public final class PacketUtils {
             PooledBuffers.registerBuffer(this, buffer);
         }
 
-        private void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             final ByteBuffer framedPacket = createFramedPacket(serverPacket);
             final int packetSize = framedPacket.limit();
             if (packetSize >= buffer.capacity()) {
@@ -301,7 +307,7 @@ public final class PacketUtils {
             }
         }
 
-        private void process(Viewable viewable) {
+        private synchronized void process(Viewable viewable) {
             if (buffer.writerOffset() == 0) return;
             ByteBuffer copy = ByteBuffer.allocateDirect(buffer.writerOffset());
             copy.put(buffer.asByteBuffer(0, copy.capacity()));

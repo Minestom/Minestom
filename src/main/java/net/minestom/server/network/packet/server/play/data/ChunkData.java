@@ -24,8 +24,7 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
     }
 
     public ChunkData(BinaryReader reader) {
-        this((NBTCompound) reader.readTag(),
-                reader.readBytes(reader.readVarInt()),
+        this((NBTCompound) reader.readTag(), reader.readByteArray(),
                 readBlockEntities(reader));
     }
 
