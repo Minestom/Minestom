@@ -28,7 +28,7 @@ public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) 
     private static final Gson GSON = new Gson();
 
     public EncryptionResponsePacket(BinaryReader reader) {
-        this(reader.readBytes(reader.readVarInt()), reader.readBytes(reader.readVarInt()));
+        this(reader.readByteArray(), reader.readByteArray());
     }
 
     @Override

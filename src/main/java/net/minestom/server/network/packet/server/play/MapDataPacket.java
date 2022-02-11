@@ -40,7 +40,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         byte rows = reader.readByte();
         byte x = reader.readByte();
         byte z = reader.readByte();
-        byte[] data = reader.readBytes(reader.readVarInt());
+        byte[] data = reader.readByteArray();
         return new MapDataPacket(mapId, scale, locked,
                 trackingPosition, icons, new ColorContent(columns, rows, x, z,
                 data));
@@ -86,7 +86,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
                                byte @NotNull [] data) implements Writeable {
         public ColorContent(BinaryReader reader) {
             this(reader.readByte(), reader.readByte(), reader.readByte(), reader.readByte(),
-                    reader.readBytes(reader.readVarInt()));
+                    reader.readByteArray());
         }
 
         public void write(BinaryWriter writer) {
