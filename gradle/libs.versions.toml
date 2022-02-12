@@ -62,16 +62,16 @@ tinylog-impl = { group = "org.tinylog", name = "tinylog-impl", version.ref = "ti
 tinylog-slf4j = { group = "org.tinylog", name = "slf4j-tinylog", version.ref = "tinylog" }
 
 # Terminal
-jline = { group = "org.jline", name = "jline", version.ref = "jline"}
+jline = { group = "org.jline", name = "jline", version.ref = "jline" }
 jline-jansi = { group = "org.jline", name = "jline-terminal-jansi", version.ref = "jline" }
 
 # Performance / Data Structures
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
-flare = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = "flare"}
-flare-fastutil = { group = "space.vectrix.flare", name = "flare", version.ref = "flare"}
+flare = { group = "space.vectrix.flare", name = "flare", version.ref = "flare" }
+flare-fastutil = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = "flare" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools"}
+jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools" }
 
 # Test
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
@@ -86,8 +86,8 @@ javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet"
 jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNoise" }
 
 # JMH
-jmh-core = { group = "org.openjdk.jmh", name= "jmh-core", version.ref = "jmh" }
-jmh-annotationprocessor = { group = "org.openjdk.jmh", name= "jmh-generator-annprocess", version.ref = "jmh" }
+jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
+jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
 
 [bundles]
 
