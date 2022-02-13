@@ -256,13 +256,6 @@ public final class ViewEngine {
                 viewableOption.references().forEach(action);
             }
         }
-
-        @Override
-        public Stream<Player> stream() {
-            synchronized (mutex) {
-                return viewableOption.references();
-            }
-        }
     }
 
     final class EntitySet extends AbstractSet<Player> {
@@ -302,18 +295,6 @@ public final class ViewEngine {
             synchronized (mutex) {
                 viewableOption.bitSet.forEach((int id) -> action.accept((Player) Entity.getEntity(id)));
             }
-        }
-
-        @Override
-        public Stream<Player> stream() {
-            synchronized (mutex) {
-                return viewableOption.bitSet.intStream().mapToObj(operand -> (Player) Entity.getEntity(operand));
-            }
-        }
-
-        @Override
-        public Stream<Player> parallelStream() {
-            return stream().parallel();
         }
     }
 }
