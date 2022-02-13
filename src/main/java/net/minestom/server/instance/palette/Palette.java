@@ -57,7 +57,8 @@ public interface Palette extends Writeable {
      * Returns the maximum number of entries in this palette.
      */
     default int maxSize() {
-        return dimension() * dimension() * dimension();
+        final int dimension = dimension();
+        return dimension * dimension * dimension;
     }
 
     @NotNull Palette clone();
