@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Phaser;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -22,7 +21,7 @@ public class ThreadDispatcherTest {
         final AtomicInteger counter = new AtomicInteger();
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
         assertEquals(1, dispatcher.threads().size());
-        assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(new Phaser(), 1)));
+        assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(1)));
 
         var partition = new Object();
         Tickable element = (time) -> counter.incrementAndGet();
