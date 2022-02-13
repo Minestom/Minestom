@@ -88,7 +88,6 @@ public final class Server {
                 }
             }
             try {
-                serverSocket.close();
                 if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
                     Files.deleteIfExists(unixDomainSocketAddress.getPath());
                 }
@@ -104,6 +103,11 @@ public final class Server {
 
     public void stop() {
         this.stop = true;
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
         this.selector.wakeup();
         this.workers.forEach(worker -> worker.selector.wakeup());
     }

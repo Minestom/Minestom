@@ -22,7 +22,7 @@ public class ServerProcessTest {
     @Test
     public void tick() {
         var process = MinecraftServer.updateProcess();
-        process.start(new InetSocketAddress("localhost", 25567));
+        process.start(new InetSocketAddress("localhost", 25565));
         var ticker = process.ticker();
         assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));
         assertDoesNotThrow(process::stop);
