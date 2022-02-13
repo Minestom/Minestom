@@ -63,6 +63,16 @@ public class EventNodeTest {
     }
 
     @Test
+    public void testHandle() {
+        var node = EventNode.all("main");
+        var handle = node.getHandle(EventTest.class);
+        assertSame(handle, node.getHandle(EventTest.class));
+
+        var handle1 = node.getHandle(CancellableTest.class);
+        assertSame(handle1, node.getHandle(CancellableTest.class));
+    }
+
+    @Test
     public void testCancellable() {
         var node = EventNode.all("main");
         AtomicBoolean result = new AtomicBoolean(false);

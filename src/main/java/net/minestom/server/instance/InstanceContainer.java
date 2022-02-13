@@ -8,7 +8,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -274,7 +273,7 @@ public class InstanceContainer extends Instance {
                 .whenComplete((chunk, throwable) -> {
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
-                    GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunk));
+                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                     synchronized (loadingChunks) {
                         this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
                     }

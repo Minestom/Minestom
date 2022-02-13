@@ -42,10 +42,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
-        //noinspection unchecked
-        return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
-                aClass -> new Handle<>(this, (Class<T>) aClass));
+        Handle<E> handle = (Handle<E>) handleMap.get(handleType);
+        if (handle != null) return handle;
+        var tmp = new Handle<>(this, (Class<T>) handleType);
+        handle = (Handle<E>) handleMap.putIfAbsent(handleType, tmp);
+        return handle != null ? handle : (ListenerHandle<E>) tmp;
     }
 
     @Override

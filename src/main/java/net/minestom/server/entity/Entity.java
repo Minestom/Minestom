@@ -15,7 +15,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
@@ -545,7 +544,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
             update(time);
 
             ticks++;
-            GlobalHandles.ENTITY_TICK.call(new EntityTickEvent(this));
+            EventDispatcher.call(new EntityTickEvent(this));
 
             // remove expired effects
             effectTick(time);

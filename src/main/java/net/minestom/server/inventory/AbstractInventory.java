@@ -1,6 +1,6 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
@@ -81,9 +81,9 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             UNSAFE_itemInsert(slot, itemStack);
         }
         if (this instanceof PlayerInventory inv) {
-            GlobalHandles.PLAYER_INVENTORY_ITEM_CHANGE_EVENT.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
+            EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
         } else if (this instanceof Inventory inv) {
-            GlobalHandles.INVENTORY_ITEM_CHANGE_EVENT.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
+            EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
         }
     }
 
