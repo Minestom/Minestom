@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.SharedInstance;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +31,6 @@ public final class ViewEngine {
     private final Set<Player> manualViewers = new HashSet<>();
 
     private Instance instance;
-    private EntityTracker tracker;
     private Point lastPoint;
 
     // Decide if this entity should be viewable to X players
@@ -58,11 +58,10 @@ public final class ViewEngine {
         this(null);
     }
 
-    public void updateTracker(@NotNull Instance instance, @NotNull Point point, @Nullable EntityTracker tracker) {
+    public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
         synchronized (mutex) {
             this.instance = instance;
             this.lastPoint = point;
-            this.tracker = tracker;
         }
     }
 
@@ -208,18 +207,19 @@ public final class ViewEngine {
         }
 
         private Stream<T> references() {
-            if (tracker == null) return Stream.empty();
-            var references = tracker.references(lastPoint, range, target);
-            var result = references.stream().flatMap(Collection::stream);
-            if (instance != null && instance instanceof InstanceContainer container) {
+            final Instance instance = ViewEngine.this.instance;
+            if (instance == null) return Stream.empty();
+            var references = instance.getEntityTracker().references(lastPoint, range, target);
+            Stream<T> result = references.stream().flatMap(Collection::stream);
+            if (instance instanceof InstanceContainer container) {
                 // References from shared instances must be added to the result.
-                var shared = container.getSharedInstances();
+                final List<SharedInstance> shared = container.getSharedInstances();
                 if (!shared.isEmpty()) {
-                    var tmp = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
+                    Stream<T> sharedInstanceStream = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
                         var ref = inst.getEntityTracker().references(lastPoint, range, target);
                         ref.forEach(consumer);
                     }).flatMap(Collection::stream);
-                    result = Stream.concat(result, tmp);
+                    result = Stream.concat(result, sharedInstanceStream);
                 }
             }
             return result;

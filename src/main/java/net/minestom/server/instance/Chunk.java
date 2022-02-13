@@ -68,8 +68,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
 
-        final EntityTracker tracker = instance.getEntityTracker();
-        this.viewers.updateTracker(instance, toPosition(), tracker);
+        this.viewers.updateTracker(instance, toPosition());
     }
 
     /**
