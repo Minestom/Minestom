@@ -59,18 +59,16 @@ public class ThreadDispatcherTest {
         assertEquals(0, counter1.get());
         assertEquals(0, counter2.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(1, counter1.get());
-        assertEquals(1, counter2.get());
-
-        dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(2, counter1.get());
-        assertEquals(2, counter2.get());
+        for (int i = 0; i < 100; i++) {
+            dispatcher.updateAndAwait(System.currentTimeMillis());
+            assertEquals(i + 1, counter1.get());
+            assertEquals(i + 1, counter2.get());
+        }
 
         dispatcher.deletePartition(partition);
         dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(2, counter1.get());
-        assertEquals(2, counter2.get());
+        assertEquals(100, counter1.get());
+        assertEquals(100, counter2.get());
 
         dispatcher.shutdown();
     }
