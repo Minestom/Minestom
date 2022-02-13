@@ -227,7 +227,7 @@ public final class ViewEngine {
                     Stream<T> sharedInstanceStream = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
                         var ref = inst.getEntityTracker().references(lastPoint, range, target);
                         ref.forEach(consumer);
-                    }).flatMap(Collection::stream).distinct();
+                    }).flatMap(Collection::stream);
                     result = Stream.concat(result, sharedInstanceStream);
                 }
             }
