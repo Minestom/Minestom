@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -31,7 +32,6 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.zip.DataFormatException;
@@ -54,7 +54,7 @@ public final class PacketUtils {
     public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
 
     // Viewable packets
-    private static final ConcurrentMap<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = ConcurrentMap.class.cast(Caffeine.newBuilder().weakKeys().build().asMap());
+    private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
 
     private PacketUtils() {
     }
@@ -139,11 +139,8 @@ public final class PacketUtils {
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;
-        VIEWABLE_STORAGE_MAP.compute(viewable, (v, storage) -> {
-            if (storage == null) storage = new ViewableStorage();
-            storage.append(v, serverPacket, exception);
-            return storage;
-        });
+        ViewableStorage storage = VIEWABLE_STORAGE_MAP.get(viewable, (unused) -> new ViewableStorage());
+        storage.append(viewable, serverPacket, exception);
     }
 
     @ApiStatus.Experimental
@@ -154,14 +151,14 @@ public final class PacketUtils {
     @ApiStatus.Internal
     public static void flush() {
         if (VIEWABLE_PACKET) {
-            VIEWABLE_STORAGE_MAP.entrySet().parallelStream().forEach(entry ->
+            VIEWABLE_STORAGE_MAP.asMap().entrySet().parallelStream().forEach(entry ->
                     entry.getValue().process(entry.getKey()));
         }
     }
 
     @ApiStatus.Internal
     public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
-                                           BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
+                                                     BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
         BinaryBuffer remaining = null;
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
