@@ -56,7 +56,7 @@ public final class ThreadDispatcher<P> {
      *
      * @param time the tick time in milliseconds
      */
-    public void updateAndAwait(long time) {
+    public synchronized void updateAndAwait(long time) {
         // Update dispatcher
         this.updates.drain(update -> {
             if (update instanceof DispatchUpdate.PartitionLoad<P> chunkUpdate) {
