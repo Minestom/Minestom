@@ -33,7 +33,7 @@ public final class ThreadDispatcher<P> {
     private ThreadDispatcher(ThreadProvider<P> provider, int threadCount) {
         this.provider = provider;
         TickThread[] threads = new TickThread[threadCount];
-        Arrays.setAll(threads, i -> new TickThread(i));
+        Arrays.setAll(threads, TickThread::new);
         this.threads = List.of(threads);
         this.threads.forEach(Thread::start);
     }
