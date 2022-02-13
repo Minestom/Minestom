@@ -37,8 +37,6 @@ public class ServerAddressTest {
 
         assertDoesNotThrow(server::start);
         assertDoesNotThrow(server::stop);
-
-        Thread.sleep(250);
         assertFalse(Files.exists(address.getPath()), "The socket file should be deleted");
     }
 }

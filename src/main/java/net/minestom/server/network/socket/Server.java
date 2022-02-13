@@ -87,13 +87,6 @@ public final class Server {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
-            try {
-                if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
-                    Files.deleteIfExists(unixDomainSocketAddress.getPath());
-                }
-            } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
         }, "Ms-entrypoint").start();
     }
 
@@ -105,6 +98,9 @@ public final class Server {
         this.stop = true;
         try {
             this.serverSocket.close();
+            if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
+                Files.deleteIfExists(unixDomainSocketAddress.getPath());
+            }
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
