@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -38,14 +37,20 @@ public final class ViewEngine {
     // Decide if this entity should view X entities
     public final Option<Entity> viewerOption;
 
-    private final Set<Player> set = new SetImpl();
+    private final Set<Player> set;
     private final Object mutex = this;
 
     public ViewEngine(@Nullable Entity entity,
                       Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
                       Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
         this.entity = entity;
-        this.range = entity != null ? MinecraftServer.getEntityViewDistance() : MinecraftServer.getChunkViewDistance();
+        if (entity != null) {
+            this.range = MinecraftServer.getEntityViewDistance();
+            this.set = new EntitySet();
+        } else {
+            this.range = MinecraftServer.getChunkViewDistance();
+            this.set = new ChunkSet();
+        }
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
         this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
     }
@@ -68,14 +73,22 @@ public final class ViewEngine {
     public boolean manualAdd(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            return manualViewers.add(player);
+            if (manualViewers.add(player)) {
+                viewableOption.bitSet.add(player.getEntityId());
+                return true;
+            }
+            return false;
         }
     }
 
     public boolean manualRemove(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            return manualViewers.remove(player);
+            if (manualViewers.remove(player)) {
+                viewableOption.bitSet.remove(player.getEntityId());
+                return true;
+            }
+            return false;
         }
     }
 
@@ -109,10 +122,6 @@ public final class ViewEngine {
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
             if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
-    }
-
-    private boolean validAutoViewer(Player player) {
-        return entity == null || viewableOption.isRegistered(player);
     }
 
     public Object mutex() {
@@ -222,38 +231,61 @@ public final class ViewEngine {
                     result = Stream.concat(result, sharedInstanceStream);
                 }
             }
-            return result;
+            return result.distinct();
         }
     }
 
-    final class SetImpl extends AbstractSet<Player> {
-        private static final Object[] EMPTY = new Object[0];
-
+    final class ChunkSet extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
             synchronized (mutex) {
-                return Arrays.asList(toArray(Player[]::new)).iterator();
+                return viewableOption.references().toList().iterator();
             }
         }
 
         @Override
         public int size() {
             synchronized (mutex) {
-                int size = manualViewers.size();
-                if (entity != null) return size + viewableOption.bitSet.size();
-                // Non-entity fallback
-                size += viewableOption.references().filter(ViewEngine.this::validAutoViewer).count();
-                return size;
+                return (int) viewableOption.references().count();
+            }
+        }
+
+        @Override
+        public void forEach(Consumer<? super Player> action) {
+            synchronized (mutex) {
+                viewableOption.references().forEach(action);
+            }
+        }
+
+        @Override
+        public Stream<Player> stream() {
+            synchronized (mutex) {
+                return viewableOption.references();
+            }
+        }
+    }
+
+    final class EntitySet extends AbstractSet<Player> {
+        @Override
+        public @NotNull Iterator<Player> iterator() {
+            synchronized (mutex) {
+                return viewableOption.bitSet.intStream()
+                        .mapToObj(operand -> (Player) Entity.getEntity(operand))
+                        .toList().iterator();
+            }
+        }
+
+        @Override
+        public int size() {
+            synchronized (mutex) {
+                return viewableOption.bitSet.size();
             }
         }
 
         @Override
         public boolean isEmpty() {
             synchronized (mutex) {
-                if (!manualViewers.isEmpty()) return false;
-                if (entity != null) return viewableOption.bitSet.isEmpty();
-                // Non-entity fallback
-                return viewableOption.references().noneMatch(ViewEngine.this::validAutoViewer);
+                return viewableOption.bitSet.isEmpty();
             }
         }
 
@@ -261,53 +293,27 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                if (manualViewers.contains(player)) return true;
-                if (entity != null) return viewableOption.isRegistered(player);
-                // Non-entity fallback
-                return viewableOption.references().anyMatch(ViewEngine.this::validAutoViewer);
+                return viewableOption.isRegistered(player);
             }
         }
 
         @Override
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
-                if (!manualViewers.isEmpty()) manualViewers.forEach(action);
-                if (entity != null) {
-                    viewableOption.bitSet.forEach((int id) ->
-                            action.accept((Player) Entity.getEntity(id)));
-                    return;
-                }
-                // Non-entity fallback
-                viewableOption.references().filter(ViewEngine.this::validAutoViewer).forEach(action);
+                viewableOption.bitSet.forEach((int id) -> action.accept((Player) Entity.getEntity(id)));
             }
         }
 
         @Override
-        public @NotNull Object @NotNull [] toArray() {
+        public Stream<Player> stream() {
             synchronized (mutex) {
-                final int size = size();
-                if (size == 0) return EMPTY;
-                Object[] array = new Object[size];
-                AtomicInteger index = new AtomicInteger();
-                forEach(player -> array[index.getAndIncrement()] = player);
-                assert index.get() == size;
-                return array;
+                return viewableOption.bitSet.intStream().mapToObj(operand -> (Player) Entity.getEntity(operand));
             }
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <T> @NotNull T @NotNull [] toArray(@NotNull T @NotNull [] a) {
-            synchronized (mutex) {
-                final int size = size();
-                T[] array = a.length >= size ? a :
-                        (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
-
-                AtomicInteger index = new AtomicInteger();
-                forEach(player -> array[index.getAndIncrement()] = (T) player);
-                assert index.get() == size;
-                return array;
-            }
+        public Stream<Player> parallelStream() {
+            return stream().parallel();
         }
     }
 }

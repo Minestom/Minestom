@@ -48,6 +48,23 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
+    public void manualViewers(Env env) {
+        var instance = env.createFlatInstance();
+        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
+        var p2 = env.createPlayer(instance, new Pos(0, 42, 5_000));
+
+        assertEquals(0, p1.getViewers().size());
+        assertEquals(0, p2.getViewers().size());
+        p1.addViewer(p2);
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(0, p2.getViewers().size());
+
+        p2.teleport(new Pos(0, 42, 0)).join();
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(1, p2.getViewers().size());
+    }
+
+    @Test
     public void movements(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
