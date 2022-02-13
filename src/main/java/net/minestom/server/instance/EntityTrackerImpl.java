@@ -142,9 +142,11 @@ final class EntityTrackerImpl implements EntityTracker {
         var rangeRef = entry.references.computeIfAbsent(range, integer -> Long2ObjectSyncMap.hashmap());
         return rangeRef.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ),
                 chunkIndex -> {
-                    List<List<T>> entities = new ArrayList<>();
+                    final int count = ChunkUtils.getChunkCount(range);
+                    List<List<T>> entities = new ArrayList<>(count);
                     ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex), range,
                             (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.get())));
+                    assert entities.size() == count : "Expected " + count + " chunks, got " + entities.size();
                     return List.copyOf(entities);
                 });
     }
