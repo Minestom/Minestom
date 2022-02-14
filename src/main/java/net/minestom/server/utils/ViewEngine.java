@@ -29,9 +29,6 @@ public final class ViewEngine {
     private final int range;
     private final Set<Player> manualViewers = new HashSet<>();
 
-    private Instance instance;
-    private Point lastPoint;
-
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
     // Decide if this entity should view X entities
@@ -39,6 +36,8 @@ public final class ViewEngine {
 
     private final Set<Player> set;
     private final Object mutex = this;
+
+    private volatile TrackedLocation trackedLocation;
 
     public ViewEngine(@Nullable Entity entity,
                       Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
@@ -64,10 +63,10 @@ public final class ViewEngine {
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
-        synchronized (mutex) {
-            this.instance = instance;
-            this.lastPoint = point;
-        }
+        this.trackedLocation = instance != null ? new TrackedLocation(instance, point) : null;
+    }
+
+    record TrackedLocation(Instance instance, Point point) {
     }
 
     public boolean manualAdd(@NotNull Player player) {
@@ -189,20 +188,24 @@ public final class ViewEngine {
         public void updateRule(Predicate<T> predicate) {
             synchronized (mutex) {
                 this.predicate = predicate;
-                updateRule();
+                updateRule0(predicate);
             }
         }
 
         public void updateRule() {
             synchronized (mutex) {
-                update(loopPredicate, entity -> {
-                    final boolean result = predicate.test(entity);
-                    if (result != isRegistered(entity)) {
-                        if (result) addition.accept(entity);
-                        else removal.accept(entity);
-                    }
-                });
+                updateRule0(predicate);
             }
+        }
+
+        void updateRule0(Predicate<T> predicate) {
+            update(loopPredicate, entity -> {
+                final boolean result = predicate.test(entity);
+                if (result != isRegistered(entity)) {
+                    if (result) addition.accept(entity);
+                    else removal.accept(entity);
+                }
+            });
         }
 
         private void update(Predicate<T> visibilityPredicate,
@@ -216,16 +219,18 @@ public final class ViewEngine {
         }
 
         private Stream<T> references() {
-            final Instance instance = ViewEngine.this.instance;
-            if (instance == null) return Stream.empty();
-            var references = instance.getEntityTracker().references(lastPoint, range, target);
+            final TrackedLocation trackedLocation = ViewEngine.this.trackedLocation;
+            if (trackedLocation == null) return Stream.empty();
+            final Instance instance = trackedLocation.instance();
+            final Point point = trackedLocation.point();
+            var references = instance.getEntityTracker().references(point, range, target);
             Stream<T> result = references.stream().flatMap(Collection::stream);
             if (instance instanceof InstanceContainer container) {
                 // References from shared instances must be added to the result.
                 final List<SharedInstance> shared = container.getSharedInstances();
                 if (!shared.isEmpty()) {
                     Stream<T> sharedInstanceStream = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
-                        var ref = inst.getEntityTracker().references(lastPoint, range, target);
+                        var ref = inst.getEntityTracker().references(point, range, target);
                         ref.forEach(consumer);
                     }).flatMap(Collection::stream);
                     result = Stream.concat(result, sharedInstanceStream);
@@ -238,23 +243,17 @@ public final class ViewEngine {
     final class ChunkSet extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
-            synchronized (mutex) {
-                return viewableOption.references().toList().iterator();
-            }
+            return viewableOption.references().toList().iterator();
         }
 
         @Override
         public int size() {
-            synchronized (mutex) {
-                return (int) viewableOption.references().count();
-            }
+            return (int) viewableOption.references().count();
         }
 
         @Override
         public void forEach(Consumer<? super Player> action) {
-            synchronized (mutex) {
-                viewableOption.references().forEach(action);
-            }
+            viewableOption.references().forEach(action);
         }
     }
 
