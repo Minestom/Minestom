@@ -243,7 +243,7 @@ public final class ViewEngine {
     final class ChunkSet extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
-            return viewableOption.references().toList().iterator();
+            return viewableOption.references().iterator();
         }
 
         @Override
