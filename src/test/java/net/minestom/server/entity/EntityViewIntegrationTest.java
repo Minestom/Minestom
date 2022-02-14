@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,5 +128,35 @@ public class EntityViewIntegrationTest {
 
         assertEquals(1, p1.getViewers().size());
         assertEquals(0, p2.getViewers().size());
+    }
+
+    @Test
+    public void vehicle(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        var passenger = new Entity(EntityType.ZOMBIE);
+
+        var tracker = connection.trackIncoming(SpawnLivingEntityPacket.class);
+
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle.addPassenger(passenger);
+        // Verify packets
+        {
+            var results = tracker.collect();
+            assertEquals(2, results.size());
+            assertEquals(vehicle.getEntityId(), results.get(0).entityId());
+            assertEquals(passenger.getEntityId(), results.get(1).entityId());
+        }
+        // Verify viewers
+        {
+            assertEquals(0, player.getViewers().size());
+            assertEquals(1, vehicle.getViewers().size());
+            assertTrue(vehicle.isViewer(player));
+            assertEquals(1, passenger.getViewers().size());
+            assertTrue(passenger.isViewer(player));
+        }
     }
 }
