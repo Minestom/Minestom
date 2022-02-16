@@ -1549,6 +1549,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
+    @ApiStatus.Experimental
     public @NotNull EventNode<EntityEvent> eventNode() {
         return eventNode;
     }
