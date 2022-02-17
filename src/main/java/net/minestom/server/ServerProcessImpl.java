@@ -31,6 +31,7 @@ import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tinylog.provider.ProviderRegistry;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -245,6 +246,12 @@ final class ServerProcessImpl implements ServerProcess {
         MinestomTerminal.stop();
         dispatcher.shutdown();
         LOGGER.info("Minestom server stopped successfully.");
+        try {
+            ProviderRegistry.getLoggingProvider().shutdown();
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+            System.out.println("WARNING: Tinylog was exited while trying to clean up resources.");
+        }
     }
 
     @Override
