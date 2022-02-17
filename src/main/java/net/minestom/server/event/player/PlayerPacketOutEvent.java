@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Listen to outgoing packets.
+ * Listen to outgoing packets asynchronously.
  * <p>
  * Currently, do not support viewable packets.
  */
