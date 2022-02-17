@@ -104,7 +104,6 @@ public final class PacketUtils {
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
         if (players.isEmpty()) return;
-        if (!MinecraftServer.getPacketListenerManager().processServerPacket(packet, players)) return;
         // work out if the packet needs to be sent individually due to server-side translating
         final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
         players.forEach(player -> {

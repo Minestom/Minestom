@@ -6,16 +6,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -79,17 +75,6 @@ public final class PacketListenerManager {
             LOGGER.warn("Packet " + clazz + " does not have any default listener! (The issue comes from Minestom)");
         }
 
-        // TODO remove legacy
-        {
-            final PacketController packetController = new PacketController();
-            for (ClientPacketConsumer clientPacketConsumer : serverProcess.connection().getReceivePacketConsumers()) {
-                clientPacketConsumer.accept(player, packetController, packet);
-            }
-
-            if (packetController.isCancel())
-                return;
-        }
-
         // Event
         PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
         EventDispatcher.call(playerPacketEvent);
@@ -106,27 +91,6 @@ public final class PacketListenerManager {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }
-    }
-
-    /**
-     * Executes the consumers from {@link ConnectionManager#onPacketSend(ServerPacketConsumer)}.
-     *
-     * @param packet  the packet to process
-     * @param players the players which should receive the packet
-     * @return true if the packet is not cancelled, false otherwise
-     */
-    public boolean processServerPacket(@NotNull ServerPacket packet, @NotNull Collection<Player> players) {
-        final List<ServerPacketConsumer> consumers = serverProcess.connection().getSendPacketConsumers();
-        if (consumers.isEmpty()) {
-            return true;
-        }
-
-        final PacketController packetController = new PacketController();
-        for (ServerPacketConsumer serverPacketConsumer : consumers) {
-            serverPacketConsumer.accept(players, packetController, packet);
-        }
-
-        return !packetController.isCancel();
     }
 
     /**

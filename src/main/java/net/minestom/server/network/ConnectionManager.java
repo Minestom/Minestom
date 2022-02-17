@@ -8,8 +8,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.listener.manager.ClientPacketConsumer;
-import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
@@ -25,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
@@ -42,10 +39,6 @@ public final class ConnectionManager {
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
-    // All the consumers to call once a packet is received
-    private final List<ClientPacketConsumer> receiveClientPacketConsumers = new CopyOnWriteArrayList<>();
-    // All the consumers to call once a packet is sent
-    private final List<ServerPacketConsumer> sendClientPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
     private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
     // The player provider to have your own Player implementation
@@ -124,56 +117,6 @@ public final class ConnectionManager {
                 return player;
         }
         return null;
-    }
-
-    /**
-     * Gets all the listeners which are called for each packet received.
-     *
-     * @return a list of packet's consumers
-     * @deprecated see {@link net.minestom.server.event.player.PlayerPacketEvent}
-     */
-    @NotNull
-    @Deprecated
-    public List<ClientPacketConsumer> getReceivePacketConsumers() {
-        return receiveClientPacketConsumers;
-    }
-
-    /**
-     * Adds a consumer to call once a packet is received.
-     *
-     * @param clientPacketConsumer the packet consumer
-     * @deprecated listen to {@link net.minestom.server.event.player.PlayerPacketEvent}
-     */
-    @Deprecated
-    public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
-        this.receiveClientPacketConsumers.add(clientPacketConsumer);
-    }
-
-    /**
-     * Gets all the listeners which are called for each packet sent.
-     *
-     * @return a list of packet's consumers
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
-     */
-    @NotNull
-    @Deprecated
-    public List<ServerPacketConsumer> getSendPacketConsumers() {
-        return sendClientPacketConsumers;
-    }
-
-    /**
-     * Adds a consumer to call once a packet is sent.
-     *
-     * @param serverPacketConsumer the packet consumer
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
-     */
-    @Deprecated
-    public void onPacketSend(@NotNull ServerPacketConsumer serverPacketConsumer) {
-        this.sendClientPacketConsumers.add(serverPacketConsumer);
     }
 
     /**
