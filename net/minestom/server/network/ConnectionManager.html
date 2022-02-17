@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -142,20 +142,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves the current <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>, can be the default one if none is defined.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getReceivePacketConsumers()" class="member-name-link">getReceivePacketConsumers</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
-<div class="block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">see <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
-</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getSendPacketConsumers()" class="member-name-link">getSendPacketConsumers</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
-<div class="block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">all packet listening methods will ultimately be removed.</div>
-</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getShutdownText()" class="member-name-link">getShutdownText</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -165,20 +151,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleKeepAlive(long)" class="member-name-link">handleKeepAlive</a><wbr>(long&nbsp;tickStart)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates keep alive by checking the last keep alive packet and send a new one if needed.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)" class="member-name-link">onPacketReceive</a><wbr>(@NotNull <a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
-<div class="block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">listen to <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
-</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)" class="member-name-link">onPacketSend</a><wbr>(@NotNull <a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
-<div class="block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">all packet listening methods will ultimately be removed.</div>
-</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerPlayer(net.minestom.server.entity.Player)" class="member-name-link">registerPlayer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
@@ -331,74 +303,6 @@ loadScripts(document, 'script');</script>
 <dd><code>uuid</code> - the player UUID</dd>
 <dt>Returns:</dt>
 <dd>the first player who validate the UUID condition, null if none was found</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getReceivePacketConsumers()">
-<h3>getReceivePacketConsumers</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;</span>&nbsp;<span class="element-name">getReceivePacketConsumers</span>()</div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">see <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
-</div>
-<div class="block">Gets all the listeners which are called for each packet received.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>a list of packet's consumers</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">
-<h3>onPacketReceive</h3>
-<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onPacketReceive</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</span></div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">listen to <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
-</div>
-<div class="block">Adds a consumer to call once a packet is received.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>clientPacketConsumer</code> - the packet consumer</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getSendPacketConsumers()">
-<h3>getSendPacketConsumers</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&gt;</span>&nbsp;<span class="element-name">getSendPacketConsumers</span>()</div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">all packet listening methods will ultimately be removed.
- May or may not work depending on the packet.
- It is instead recommended to use a proxy, improving scalability and increasing server performance</div>
-</div>
-<div class="block">Gets all the listeners which are called for each packet sent.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>a list of packet's consumers</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">
-<h3>onPacketSend</h3>
-<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onPacketSend</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</span></div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">all packet listening methods will ultimately be removed.
- May or may not work depending on the packet.
- It is instead recommended to use a proxy, improving scalability and increasing server performance</div>
-</div>
-<div class="block">Adds a consumer to call once a packet is sent.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>serverPacketConsumer</code> - the packet consumer</dd>
 </dl>
 </section>
 </li>

@@ -126,16 +126,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Processes a packet by getting its <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager"><code>PacketListenerConsumer</code></a> and calling all the packet listeners.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)" class="member-name-link">processServerPacket</a><wbr>(@NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="../../network/packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;<br>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setListener(java.lang.Class,net.minestom.server.listener.manager.PacketListenerConsumer)" class="member-name-link">setListener</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;packetClass,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="../../network/packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;<br>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setListener(java.lang.Class,net.minestom.server.listener.manager.PacketListenerConsumer)" class="member-name-link">setListener</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;packetClass,
  @NotNull <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager">PacketListenerConsumer</a>&lt;T&gt;&nbsp;consumer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the listener of a packet.</div>
 </div>
 </div>
@@ -197,23 +191,6 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>packet</code> - the received packet</dd>
 <dd><code>player</code> - the player who sent the packet</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)">
-<h3>processServerPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">processServerPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</span></div>
-<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>packet</code> - the packet to process</dd>
-<dd><code>players</code> - the players which should receive the packet</dd>
-<dt>Returns:</dt>
-<dd>true if the packet is not cancelled, false otherwise</dd>
 </dl>
 </section>
 </li>

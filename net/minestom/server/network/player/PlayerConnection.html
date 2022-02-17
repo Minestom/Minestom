@@ -207,15 +207,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the player linked to this connection.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">shouldSendPacket</a><wbr>(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates values related to the network connection.</div>
 </div>
 </div>
@@ -295,18 +292,10 @@ loadScripts(document, 'script');</script>
 <h3>sendPacket</h3>
 <div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</span></div>
-<div class="block">Serializes the packet and send it to the client.
- <p>
- Also responsible for executing <a href="../ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a> consumers.</div>
+<div class="block">Serializes the packet and send it to the client.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>packet</code> - the packet to send</dd>
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>shouldSendPacket(ServerPacket)</code></a></li>
-</ul>
-</dd>
 </dl>
 </section>
 </li>
@@ -333,13 +322,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Flush waiting data to the connection.
  <p>
  Might not do anything depending on the implementation.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">
-<h3>shouldSendPacket</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">shouldSendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</span></div>
 </section>
 </li>
 <li>
