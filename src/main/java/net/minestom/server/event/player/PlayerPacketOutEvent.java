@@ -3,8 +3,15 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Listen to outgoing packets.
+ * <p>
+ * Currently, do not support viewable packets.
+ */
+@ApiStatus.Experimental
 public class PlayerPacketOutEvent implements PlayerEvent {
 
     private final Player player;
