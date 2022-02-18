@@ -226,7 +226,7 @@ public final class ViewEngine {
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
-            Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(Math.max(lastSize, 16));
+            Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
             // Current Instance
             for (var reference : instance.getEntityTracker().references(point, range, target)) {
                 if (reference.isEmpty()) continue;
