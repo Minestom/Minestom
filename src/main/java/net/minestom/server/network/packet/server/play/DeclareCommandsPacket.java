@@ -8,29 +8,26 @@ import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-public class DeclareCommandsPacket implements ServerPacket {
+import java.util.List;
 
-    public Node[] nodes = new Node[0];
-    public int rootIndex;
+public record DeclareCommandsPacket(@NotNull List<Node> nodes,
+                                    int rootIndex) implements ServerPacket {
+    public DeclareCommandsPacket {
+        nodes = List.copyOf(nodes);
+    }
 
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(nodes.length);
-        for (Node node : nodes) {
-            node.write(writer);
-        }
-        writer.writeVarInt(rootIndex);
+    public DeclareCommandsPacket(@NotNull BinaryReader reader) {
+        this(reader.readVarIntList(r -> {
+            Node node = new Node();
+            node.read(r);
+            return node;
+        }), reader.readVarInt());
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        int nodeCount = reader.readVarInt();
-        nodes = new Node[nodeCount];
-        for (int i = 0; i < nodeCount; i++) {
-            nodes[i] = new Node();
-            nodes[i].read(reader);
-        }
-        rootIndex = reader.readVarInt();
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarIntList(nodes, BinaryWriter::write);
+        writer.writeVarInt(rootIndex);
     }
 
     @Override
@@ -38,8 +35,7 @@ public class DeclareCommandsPacket implements ServerPacket {
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
-    public static class Node implements Writeable, Readable {
-
+    public static final class Node implements Writeable, Readable {
         public byte flags;
         public int[] children = new int[0];
         public int redirectedNode; // Only if flags & 0x08
@@ -52,6 +48,9 @@ public class DeclareCommandsPacket implements ServerPacket {
         public void write(@NotNull BinaryWriter writer) {
             writer.writeByte(flags);
 
+            if (children != null && children.length > 262114) {
+                throw new RuntimeException("Children length " + children.length + " is bigger than the maximum allowed " + 262114);
+            }
             writer.writeVarIntArray(children);
 
             if ((flags & 0x08) != 0) {
@@ -97,42 +96,30 @@ public class DeclareCommandsPacket implements ServerPacket {
         }
 
         private byte[] getProperties(BinaryReader reader, String parser) {
-            switch (parser) {
-                case "brigadier:double":
-                    return reader.extractBytes(() -> {
-                        byte flags = reader.readByte();
-                        if ((flags & 0x01) == 0x01) {
-                            reader.readDouble(); // min
-                        }
-                        if ((flags & 0x02) == 0x02) {
-                            reader.readDouble(); // max
-                        }
-                    });
-
-                case "brigadier:integer":
-                    return reader.extractBytes(() -> {
-                        byte flags = reader.readByte();
-                        if ((flags & 0x01) == 0x01) {
-                            reader.readInt(); // min
-                        }
-                        if ((flags & 0x02) == 0x02) {
-                            reader.readInt(); // max
-                        }
-                    });
-
-                case "brigadier:string":
-                    return reader.extractBytes(reader::readVarInt);
-
-                case "brigadier:entity":
-                case "brigadier:score_holder":
-                    return reader.extractBytes(reader::readByte);
-
-                case "brigadier:range":
-                    return reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
-
-                default:
-                    return new byte[0]; // unknown
-            }
+            return switch (parser) {
+                case "brigadier:double" -> reader.extractBytes(() -> {
+                    byte flags = reader.readByte();
+                    if ((flags & 0x01) == 0x01) {
+                        reader.readDouble(); // min
+                    }
+                    if ((flags & 0x02) == 0x02) {
+                        reader.readDouble(); // max
+                    }
+                });
+                case "brigadier:integer" -> reader.extractBytes(() -> {
+                    byte flags = reader.readByte();
+                    if ((flags & 0x01) == 0x01) {
+                        reader.readInt(); // min
+                    }
+                    if ((flags & 0x02) == 0x02) {
+                        reader.readInt(); // max
+                    }
+                });
+                case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
+                case "brigadier:entity", "brigadier:score_holder" -> reader.extractBytes(reader::readByte);
+                case "brigadier:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+                default -> new byte[0]; // unknown
+            };
         }
 
         private boolean isLiteral() {
@@ -142,35 +129,17 @@ public class DeclareCommandsPacket implements ServerPacket {
         private boolean isArgument() {
             return (flags & 0b10) != 0;
         }
-
     }
 
     public static byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
-        byte result = (byte) type.mask;
-
-        if (executable) {
-            result |= 0x04;
-        }
-
-        if (redirect) {
-            result |= 0x08;
-        }
-
-        if (suggestionType) {
-            result |= 0x10;
-        }
+        byte result = (byte) type.ordinal();
+        if (executable) result |= 0x04;
+        if (redirect) result |= 0x08;
+        if (suggestionType) result |= 0x10;
         return result;
     }
 
     public enum NodeType {
-        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
-
-        private final int mask;
-
-        NodeType(int mask) {
-            this.mask = mask;
-        }
-
+        ROOT, LITERAL, ARGUMENT, NONE;
     }
-
 }

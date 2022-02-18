@@ -1,8 +1,8 @@
 package net.minestom.server.entity.metadata.water.fish;
 
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class PufferfishMeta extends AbstractFishMeta {
@@ -24,17 +24,13 @@ public class PufferfishMeta extends AbstractFishMeta {
     }
 
     private void updateBoundingBox(State state) {
-        switch (state) {
-            case UNPUFFED:
-                setBoundingBox(.35D, .35D);
-                break;
-            case SEMI_PUFFED:
-                setBoundingBox(.5D, .5D);
-                break;
-            default:
-                setBoundingBox(.7D, .7D);
-                break;
-        }
+        this.consumeEntity((entity) -> {
+            switch (state) {
+                case UNPUFFED -> entity.setBoundingBox(.35D, .35D, .35D);
+                case SEMI_PUFFED -> entity.setBoundingBox(.5D, .5D, .5D);
+                default -> entity.setBoundingBox(.7D, .7D, .7D);
+            }
+        });
     }
 
     public enum State {

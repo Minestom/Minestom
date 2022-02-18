@@ -1,9 +1,9 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,40 +35,26 @@ public final class InstanceManager {
     }
 
     /**
-     * Creates and register an {@link InstanceContainer}
-     * with the specified {@link DimensionType} and {@link StorageLocation}.
+     * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
      *
-     * @param dimensionType   the {@link DimensionType} of the instance
-     * @param storageLocation the {@link StorageLocation} of the instance, can be null
+     * @param dimensionType the {@link DimensionType} of the instance
+     * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
-    @NotNull
-    public InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable StorageLocation storageLocation) {
-        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, storageLocation);
+    @ApiStatus.Experimental
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
+        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
         registerInstance(instanceContainer);
         return instanceContainer;
     }
 
-    /**
-     * Creates and register an {@link InstanceContainer} with the specified {@link StorageLocation}.
-     *
-     * @param storageLocation the {@link StorageLocation} of the instance, can be null
-     * @return the created {@link InstanceContainer}
-     */
-    @NotNull
-    public InstanceContainer createInstanceContainer(@Nullable StorageLocation storageLocation) {
-        return createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
+        return createInstanceContainer(dimensionType, null);
     }
 
-    /**
-     * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
-     *
-     * @param dimensionType the {@link DimensionType} of the instance
-     * @return the created {@link InstanceContainer}
-     */
-    @NotNull
-    public InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
-        return createInstanceContainer(dimensionType, null);
+    @ApiStatus.Experimental
+    public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
+        return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
 
     /**
@@ -76,9 +62,8 @@ public final class InstanceManager {
      *
      * @return the created {@link InstanceContainer}
      */
-    @NotNull
-    public InstanceContainer createInstanceContainer() {
-        return createInstanceContainer(DimensionType.OVERWORLD);
+    public @NotNull InstanceContainer createInstanceContainer() {
+        return createInstanceContainer(DimensionType.OVERWORLD, null);
     }
 
     /**
@@ -90,8 +75,7 @@ public final class InstanceManager {
      * @return the registered {@link SharedInstance}
      * @throws NullPointerException if {@code sharedInstance} doesn't have an {@link InstanceContainer} assigned to it
      */
-    @NotNull
-    public SharedInstance registerSharedInstance(@NotNull SharedInstance sharedInstance) {
+    public @NotNull SharedInstance registerSharedInstance(@NotNull SharedInstance sharedInstance) {
         final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
         Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
@@ -107,8 +91,7 @@ public final class InstanceManager {
      * @return the created {@link SharedInstance}
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
-    @NotNull
-    public SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer) {
+    public @NotNull SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer) {
         Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
         Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
 
@@ -125,22 +108,16 @@ public final class InstanceManager {
      */
     public void unregisterInstance(@NotNull Instance instance) {
         Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
-
         synchronized (instance) {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
-                InstanceContainer instanceContainer = (InstanceContainer) instance;
-
-                Set<Chunk> scheduledChunksToRemove = instanceContainer.scheduledChunksToRemove;
-                synchronized (scheduledChunksToRemove) {
-                    scheduledChunksToRemove.addAll(instanceContainer.getChunks());
-                    instanceContainer.UNSAFE_unloadChunks();
-                }
+                instance.getChunks().forEach(instance::unloadChunk);
+                var dispatcher = MinecraftServer.process().dispatcher();
+                instance.getChunks().forEach(dispatcher::deletePartition);
             }
-
+            // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            MinecraftServer.getUpdateManager().signalInstanceDelete(instance);
         }
     }
 
@@ -149,8 +126,7 @@ public final class InstanceManager {
      *
      * @return an unmodifiable {@link Set} containing all the registered instances
      */
-    @NotNull
-    public Set<Instance> getInstances() {
+    public @NotNull Set<@NotNull Instance> getInstances() {
         return Collections.unmodifiableSet(instances);
     }
 
@@ -160,8 +136,7 @@ public final class InstanceManager {
      * @param uuid UUID of the instance
      * @return the instance with the given UUID, null if not found
      */
-    @Nullable
-    public Instance getInstance(@NotNull UUID uuid) {
+    public @Nullable Instance getInstance(@NotNull UUID uuid) {
         Optional<Instance> instance = getInstances()
                 .stream()
                 .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
@@ -179,7 +154,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
-        MinecraftServer.getUpdateManager().signalInstanceCreate(instance);
+        var dispatcher = MinecraftServer.process().dispatcher();
+        instance.getChunks().forEach(dispatcher::createPartition);
     }
-
 }

@@ -7,7 +7,6 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * A provider of audiences. For complex returns, this instance is backed by
@@ -43,7 +42,7 @@ class SingleAudienceProvider implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList()));
+        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList());
     }
 
     @Override

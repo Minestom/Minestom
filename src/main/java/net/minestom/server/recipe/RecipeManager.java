@@ -9,21 +9,23 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class RecipeManager {
-    private final DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket();
+    private DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket(List.of());
     private final Set<Recipe> recipes = new CopyOnWriteArraySet<>();
+
+    public void addRecipes(@NotNull Recipe... recipe) {
+        if (recipes.addAll(List.of(recipe))) {
+            refreshRecipesPacket();
+        }
+    }
 
     public void addRecipe(@NotNull Recipe recipe) {
         if (this.recipes.add(recipe)) {
-            // TODO add to all players
-
             refreshRecipesPacket();
         }
     }
 
     public void removeRecipe(@NotNull Recipe recipe) {
         if (this.recipes.remove(recipe)) {
-            // TODO remove to all players
-
             refreshRecipesPacket();
         }
     }
@@ -42,19 +44,16 @@ public class RecipeManager {
         List<DeclareRecipesPacket.DeclaredRecipe> recipesCache = new ArrayList<>();
         for (Recipe recipe : recipes) {
             switch (recipe.recipeType) {
-                case SHAPELESS: {
+                case SHAPELESS -> {
                     ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
                                     shapelessRecipe.getRecipeId(),
                                     shapelessRecipe.getGroup(),
-                                    shapelessRecipe.getIngredients().toArray(new DeclareRecipesPacket.Ingredient[0]),
-                                    shapelessRecipe.getResult()
-                            )
-                    );
-                    break;
+                                    shapelessRecipe.getIngredients(),
+                                    shapelessRecipe.getResult()));
                 }
-                case SHAPED: {
+                case SHAPED -> {
                     ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
@@ -62,13 +61,10 @@ public class RecipeManager {
                                     shapedRecipe.getWidth(),
                                     shapedRecipe.getHeight(),
                                     shapedRecipe.getGroup(),
-                                    shapedRecipe.getIngredients().toArray(new DeclareRecipesPacket.Ingredient[0]),
-                                    shapedRecipe.getResult()
-                            )
-                    );
-                    break;
+                                    shapedRecipe.getIngredients(),
+                                    shapedRecipe.getResult()));
                 }
-                case SMELTING: {
+                case SMELTING -> {
                     SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredSmeltingRecipe(
@@ -77,12 +73,9 @@ public class RecipeManager {
                                     smeltingRecipe.getIngredient(),
                                     smeltingRecipe.getResult(),
                                     smeltingRecipe.getExperience(),
-                                    smeltingRecipe.getCookingTime()
-                            )
-                    );
-                    break;
+                                    smeltingRecipe.getCookingTime()));
                 }
-                case BLASTING: {
+                case BLASTING -> {
                     BlastingRecipe blastingRecipe = (BlastingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredBlastingRecipe(
@@ -91,12 +84,9 @@ public class RecipeManager {
                                     blastingRecipe.getIngredient(),
                                     blastingRecipe.getResult(),
                                     blastingRecipe.getExperience(),
-                                    blastingRecipe.getCookingTime()
-                            )
-                    );
-                    break;
+                                    blastingRecipe.getCookingTime()));
                 }
-                case SMOKING: {
+                case SMOKING -> {
                     SmokingRecipe smokingRecipe = (SmokingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredSmokingRecipe(
@@ -105,12 +95,9 @@ public class RecipeManager {
                                     smokingRecipe.getIngredient(),
                                     smokingRecipe.getResult(),
                                     smokingRecipe.getExperience(),
-                                    smokingRecipe.getCookingTime()
-                            )
-                    );
-                    break;
+                                    smokingRecipe.getCookingTime()));
                 }
-                case CAMPFIRE_COOKING: {
+                case CAMPFIRE_COOKING -> {
                     CampfireCookingRecipe campfireCookingRecipe = (CampfireCookingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredCampfireCookingRecipe(
@@ -119,39 +106,31 @@ public class RecipeManager {
                                     campfireCookingRecipe.getIngredient(),
                                     campfireCookingRecipe.getResult(),
                                     campfireCookingRecipe.getExperience(),
-                                    campfireCookingRecipe.getCookingTime()
-                            )
-                    );
-                    break;
+                                    campfireCookingRecipe.getCookingTime()));
                 }
-                case STONECUTTING: {
+                case STONECUTTING -> {
                     StonecutterRecipe stonecuttingRecipe = (StonecutterRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredStonecutterRecipe(
                                     stonecuttingRecipe.getRecipeId(),
                                     stonecuttingRecipe.getGroup(),
                                     stonecuttingRecipe.getIngredient(),
-                                    stonecuttingRecipe.getResult()
-                            )
-                    );
-                    break;
+                                    stonecuttingRecipe.getResult()));
                 }
-                case SMITHING: {
+                case SMITHING -> {
                     SmithingRecipe smithingRecipe = (SmithingRecipe) recipe;
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredSmithingRecipe(
                                     smithingRecipe.getRecipeId(),
                                     smithingRecipe.getBaseIngredient(),
                                     smithingRecipe.getAdditionIngredient(),
-                                    smithingRecipe.getResult()
-                            )
-                    );
-                    break;
+                                    smithingRecipe.getResult()));
                 }
             }
         }
 
-        declareRecipesPacket.recipes = recipesCache.toArray(new DeclareRecipesPacket.DeclaredRecipe[0]);
+        declareRecipesPacket = new DeclareRecipesPacket(recipesCache);
+        // TODO; refresh and update players recipes
     }
 
 }

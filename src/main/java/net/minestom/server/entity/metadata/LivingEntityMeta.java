@@ -1,9 +1,9 @@
 package net.minestom.server.entity.metadata;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +73,7 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     public void setArrowCount(int value) {
-        super.metadata.getIndex(OFFSET + 4, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
     }
 
     public int getHealthAddedByAbsorption() {
@@ -81,15 +81,15 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     public void setHealthAddedByAbsorption(int value) {
-        super.metadata.getIndex(OFFSET + 5, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
     }
 
     @Nullable
-    public BlockPosition getBedInWhichSleepingPosition() {
+    public Point getBedInWhichSleepingPosition() {
         return super.metadata.getIndex(OFFSET + 6, null);
     }
 
-    public void setBedInWhichSleepingPosition(@Nullable BlockPosition value) {
+    public void setBedInWhichSleepingPosition(@Nullable Point value) {
         super.metadata.setIndex(OFFSET + 6, Metadata.OptPosition(value));
     }
 

@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ParrotMeta extends TameableAnimalMeta {

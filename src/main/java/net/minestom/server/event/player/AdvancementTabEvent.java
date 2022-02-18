@@ -2,7 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * Called when a {@link Player} opens the advancement screens or switch the tab
  * and when he closes the screen.
  */
-public class AdvancementTabEvent implements PlayerEvent {
+public class AdvancementTabEvent implements PlayerEvent, EntityInstanceEvent {
 
     private final Player player;
     private final AdvancementAction action;

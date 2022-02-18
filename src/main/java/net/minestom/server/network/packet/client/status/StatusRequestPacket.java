@@ -10,23 +10,17 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class StatusRequestPacket implements ClientPreplayPacket {
+public record StatusRequestPacket() implements ClientPreplayPacket {
+    public StatusRequestPacket(BinaryReader reader) {
+        this();
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
         final ServerListPingType pingVersion = ServerListPingType.fromModernProtocolVersion(connection.getProtocolVersion());
         final ServerListPingEvent statusRequestEvent = new ServerListPingEvent(connection, pingVersion);
-        EventDispatcher.callCancellable(statusRequestEvent, () -> {
-            final ResponsePacket responsePacket = new ResponsePacket();
-            responsePacket.jsonResponse = pingVersion.getPingResponse(statusRequestEvent.getResponseData());
-
-            connection.sendPacket(responsePacket);
-        });
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        // Empty
+        EventDispatcher.callCancellable(statusRequestEvent, () ->
+                connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getResponseData()))));
     }
 
     @Override

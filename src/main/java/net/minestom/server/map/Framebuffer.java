@@ -2,6 +2,8 @@ package net.minestom.server.map;
 
 import net.minestom.server.network.packet.server.play.MapDataPacket;
 
+import java.util.List;
+
 /**
  * Framebuffer to render to a map
  */
@@ -12,11 +14,11 @@ public interface Framebuffer {
 
     byte[] toMapColors();
 
-    default void preparePacket(MapDataPacket packet) {
-        preparePacket(packet, 0, 0, WIDTH, HEIGHT);
+    default MapDataPacket preparePacket(int mapId) {
+        return preparePacket(mapId, 0, 0, WIDTH, HEIGHT);
     }
 
-    default void preparePacket(MapDataPacket packet, int minX, int minY, int width, int height) {
+    default MapDataPacket preparePacket(int mapId, int minX, int minY, int width, int height) {
         byte[] colors;
         if (minX == 0 && minY == 0 && width == WIDTH && height == HEIGHT) {
             colors = toMapColors();
@@ -30,13 +32,11 @@ public interface Framebuffer {
                 }
             }
         }
-
-        packet.columns = (short) width;
-        packet.rows = (short) height;
-        packet.icons = new MapDataPacket.Icon[0];
-        packet.x = (byte) minX;
-        packet.z = (byte) minY;
-        packet.data = colors;
+        return new MapDataPacket(mapId, (byte) 0, false,
+                false, List.of(),
+                new MapDataPacket.ColorContent((byte) width, (byte) height,
+                        (byte) minX, (byte) minY,
+                        colors));
     }
 
     static int index(int x, int z) {

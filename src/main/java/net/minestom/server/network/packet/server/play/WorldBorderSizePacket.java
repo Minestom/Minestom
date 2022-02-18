@@ -6,19 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldBorderSizePacket implements ServerPacket {
-
-    public double diameter;
-
-    public static WorldBorderSizePacket of(double diameter) {
-        WorldBorderSizePacket packet = new WorldBorderSizePacket();
-        packet.diameter = diameter;
-        return packet;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.diameter = reader.readDouble();
+public record WorldBorderSizePacket(double diameter) implements ServerPacket {
+    public WorldBorderSizePacket(BinaryReader reader) {
+        this(reader.readDouble());
     }
 
     @Override

@@ -5,7 +5,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.utils.Position;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +61,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
     @Override
     public void start() {
-        final Position targetPosition = this.cachedTarget.getPosition();
+        final Point targetPosition = this.cachedTarget.getPosition();
         entityCreature.getNavigator().setPathTo(targetPosition);
     }
 
@@ -81,6 +81,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Attack the target entity
             if (entityCreature.getDistance(target) <= range) {
+                entityCreature.lookAt(target);
                 if (!Cooldown.hasCooldown(time, lastHit, delay)) {
                     entityCreature.attack(target, true);
                     this.lastHit = time;
@@ -90,9 +91,9 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Move toward the target entity
             Navigator navigator = entityCreature.getNavigator();
-            final Position pathPosition = navigator.getPathPosition();
-            final Position targetPosition = target.getPosition();
-            if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
+            final var pathPosition = navigator.getPathPosition();
+            final var targetPosition = target.getPosition();
+            if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
                 if (this.cooldown.isReady(time)) {
                     this.cooldown.refreshLastUpdate(time);
                     navigator.setPathTo(targetPosition);

@@ -6,23 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityStatusPacket implements ServerPacket {
-
-    public int entityId;
-    public byte status;
-
-    public EntityStatusPacket() {}
+public record EntityStatusPacket(int entityId, byte status) implements ServerPacket {
+    public EntityStatusPacket(BinaryReader reader) {
+        this(reader.readInt(), reader.readByte());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(entityId);
         writer.writeByte(status);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readInt();
-        status = reader.readByte();
     }
 
     @Override

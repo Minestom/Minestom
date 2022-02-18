@@ -7,25 +7,15 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.Difficulty;
 import org.jetbrains.annotations.NotNull;
 
-public class ServerDifficultyPacket implements ServerPacket {
-
-    public Difficulty difficulty;
-    public boolean locked;
-
-    public ServerDifficultyPacket() {
-        difficulty = Difficulty.NORMAL;
+public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean locked) implements ServerPacket {
+    public ServerDifficultyPacket(BinaryReader reader) {
+        this(Difficulty.values()[reader.readByte()], reader.readBoolean());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) difficulty.ordinal());
         writer.writeBoolean(locked);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        difficulty = Difficulty.values()[reader.readByte()];
-        locked = reader.readBoolean();
     }
 
     @Override

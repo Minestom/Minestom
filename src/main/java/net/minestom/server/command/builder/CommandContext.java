@@ -102,15 +102,12 @@ public class CommandContext {
     }
 
     protected void retrieveDefaultValues(@Nullable Map<String, Supplier<Object>> defaultValuesMap) {
-        if (defaultValuesMap == null)
-            return;
-
-        for (Map.Entry<String, Supplier<Object>> entry : defaultValuesMap.entrySet()) {
+        if (defaultValuesMap == null) return;
+        for (var entry : defaultValuesMap.entrySet()) {
             final String key = entry.getKey();
             if (!args.containsKey(key)) {
                 final var supplier = entry.getValue();
                 this.args.put(key, supplier.get());
-
             }
         }
     }

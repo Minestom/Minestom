@@ -1,66 +1,48 @@
 package net.minestom.server.network;
 
-import io.netty.channel.Channel;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.listener.manager.ClientPacketConsumer;
-import net.minestom.server.listener.manager.ServerPacketConsumer;
-import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Manages the connected clients.
  */
 public final class ConnectionManager {
-
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
-    private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
+    private final MessagePassingQueue<Player> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
-    // All the consumers to call once a packet is received
-    private final List<ClientPacketConsumer> receiveClientPacketConsumers = new CopyOnWriteArrayList<>();
-    // All the consumers to call once a packet is sent
-    private final List<ServerPacketConsumer> sendClientPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
-    private UuidProvider uuidProvider;
+    private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
     // The player provider to have your own Player implementation
-    private PlayerProvider playerProvider;
-    // The consumers to call once a player connect, mostly used to init events
-    private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
+    private volatile PlayerProvider playerProvider = Player::new;
 
     private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
 
@@ -113,8 +95,7 @@ public final class ConnectionManager {
      * @param username the player username (ignoreCase)
      * @return the first player who validate the username condition, null if none was found
      */
-    @Nullable
-    public Player getPlayer(@NotNull String username) {
+    public @Nullable Player getPlayer(@NotNull String username) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUsername().equalsIgnoreCase(username))
                 return player;
@@ -130,108 +111,12 @@ public final class ConnectionManager {
      * @param uuid the player UUID
      * @return the first player who validate the UUID condition, null if none was found
      */
-    @Nullable
-    public Player getPlayer(@NotNull UUID uuid) {
+    public @Nullable Player getPlayer(@NotNull UUID uuid) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUuid().equals(uuid))
                 return player;
         }
         return null;
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players who validate the condition {@code condition}.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @param condition   the condition to receive the message
-     * @deprecated Use {@link Audiences#players(Predicate)}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
-        if (condition == null) {
-            Audiences.players().sendMessage(jsonMessage);
-        } else {
-            Audiences.players(condition).sendMessage(jsonMessage);
-        }
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link Audiences#players()}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        this.broadcastMessage(jsonMessage, null);
-    }
-
-    private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
-        Collection<Player> recipients;
-
-        // Get the recipients
-        if (condition == null) {
-            recipients = getOnlinePlayers();
-        } else {
-            recipients = new ArrayList<>();
-            getOnlinePlayers().forEach(player -> {
-                final boolean result = condition.isValid(player);
-                if (result)
-                    recipients.add(player);
-            });
-        }
-
-        return recipients;
-    }
-
-    /**
-     * Gets all the listeners which are called for each packet received.
-     *
-     * @return a list of packet's consumers
-     * @deprecated see {@link net.minestom.server.event.player.PlayerPacketEvent}
-     */
-    @NotNull
-    @Deprecated
-    public List<ClientPacketConsumer> getReceivePacketConsumers() {
-        return receiveClientPacketConsumers;
-    }
-
-    /**
-     * Adds a consumer to call once a packet is received.
-     *
-     * @param clientPacketConsumer the packet consumer
-     * @deprecated listen to {@link net.minestom.server.event.player.PlayerPacketEvent}
-     */
-    @Deprecated
-    public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
-        this.receiveClientPacketConsumers.add(clientPacketConsumer);
-    }
-
-    /**
-     * Gets all the listeners which are called for each packet sent.
-     *
-     * @return a list of packet's consumers
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
-     */
-    @NotNull
-    @Deprecated
-    public List<ServerPacketConsumer> getSendPacketConsumers() {
-        return sendClientPacketConsumers;
-    }
-
-    /**
-     * Adds a consumer to call once a packet is sent.
-     *
-     * @param serverPacketConsumer the packet consumer
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
-     */
-    @Deprecated
-    public void onPacketSend(@NotNull ServerPacketConsumer serverPacketConsumer) {
-        this.sendClientPacketConsumers.add(serverPacketConsumer);
     }
 
     /**
@@ -246,7 +131,7 @@ public final class ConnectionManager {
      * @see #getPlayerConnectionUuid(PlayerConnection, String)
      */
     public void setUuidProvider(@Nullable UuidProvider uuidProvider) {
-        this.uuidProvider = uuidProvider;
+        this.uuidProvider = uuidProvider != null ? uuidProvider : (playerConnection, username) -> UUID.randomUUID();
     }
 
     /**
@@ -259,10 +144,7 @@ public final class ConnectionManager {
      * @return the uuid based on {@code playerConnection}
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
-    @NotNull
-    public UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
-        if (uuidProvider == null)
-            return UUID.randomUUID();
+    public @NotNull UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
         return uuidProvider.provide(playerConnection, username);
     }
 
@@ -272,7 +154,7 @@ public final class ConnectionManager {
      * @param playerProvider the new {@link PlayerProvider}, can be set to null to apply the default provider
      */
     public void setPlayerProvider(@Nullable PlayerProvider playerProvider) {
-        this.playerProvider = playerProvider;
+        this.playerProvider = playerProvider != null ? playerProvider : Player::new;
     }
 
     /**
@@ -280,59 +162,8 @@ public final class ConnectionManager {
      *
      * @return the current {@link PlayerProvider}
      */
-    @NotNull
-    public PlayerProvider getPlayerProvider() {
-        return playerProvider == null ? playerProvider = Player::new : playerProvider;
-    }
-
-    /**
-     * Those are all the consumers called when a new {@link Player} join.
-     *
-     * @return an unmodifiable list containing all the {@link Player} initialization consumer
-     */
-    @NotNull
-    public List<Consumer<Player>> getPlayerInitializations() {
-        return Collections.unmodifiableList(playerInitializations);
-    }
-
-    /**
-     * Adds a new player initialization consumer. Those are called when a {@link Player} join,
-     * mainly to add event callbacks to the player.
-     * <p>
-     * This callback should be exclusively used to add event listeners since it is called directly after a
-     * player join (before any chunk is sent) and the client behavior can therefore be unpredictable.
-     * You can add your "init" code in {@link net.minestom.server.event.player.PlayerLoginEvent}
-     * or even {@link AsyncPlayerPreLoginEvent}.
-     *
-     * @param playerInitialization the {@link Player} initialization consumer
-     * @deprecated use the event API instead
-     */
-    @Deprecated
-    public void addPlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
-        this.playerInitializations.add(playerInitialization);
-    }
-
-    /**
-     * Removes an existing player initialization consumer.
-     * <p>
-     * Removal of player initializations should be done by reference, and not cloning.
-     *
-     * @param playerInitialization the {@link Player} initialization consumer
-     */
-    public void removePlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
-        this.playerInitializations.remove(playerInitialization);
-    }
-
-    /**
-     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
-     *
-     * @return the kick reason in case on a shutdown
-     * @deprecated Use {@link #getShutdownText()}
-     */
-    @Deprecated
-    @NotNull
-    public JsonMessage getShutdownTextJson() {
-        return JsonMessage.fromComponent(shutdownText);
+    public @NotNull PlayerProvider getPlayerProvider() {
+        return playerProvider;
     }
 
     /**
@@ -340,21 +171,8 @@ public final class ConnectionManager {
      *
      * @return the kick reason in case on a shutdown
      */
-    @NotNull
-    public Component getShutdownText() {
+    public @NotNull Component getShutdownText() {
         return shutdownText;
-    }
-
-    /**
-     * Changes the kick reason in case of a shutdown.
-     *
-     * @param shutdownText the new shutdown kick reason
-     * @see #getShutdownTextJson()
-     * @deprecated Use {@link #setShutdownText(Component)}
-     */
-    @Deprecated
-    public void setShutdownText(@NotNull JsonMessage shutdownText) {
-        this.shutdownText = shutdownText.asComponent();
     }
 
     /**
@@ -367,14 +185,6 @@ public final class ConnectionManager {
         this.shutdownText = shutdownText;
     }
 
-    /**
-     * Adds a new {@link Player} in the players list.
-     * Is currently used at
-     * {@link LoginStartPacket#process(PlayerConnection)}
-     * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}.
-     *
-     * @param player the player to add
-     */
     public synchronized void registerPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
@@ -388,13 +198,10 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
-    public void removePlayer(@NotNull PlayerConnection connection) {
-        final Player player = this.connectionPlayerMap.get(connection);
-        if (player == null)
-            return;
-
+    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
+        final Player player = this.connectionPlayerMap.remove(connection);
+        if (player == null) return;
         this.players.remove(player);
-        this.connectionPlayerMap.remove(connection);
     }
 
     /**
@@ -407,68 +214,38 @@ public final class ConnectionManager {
      * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
     public void startPlayState(@NotNull Player player, boolean register) {
-        // Init player (register events)
-        for (Consumer<Player> playerInitialization : getPlayerInitializations()) {
-            playerInitialization.accept(player);
-        }
-
         AsyncUtils.runAsync(() -> {
-            String username = player.getUsername();
-            UUID uuid = player.getUuid();
-
+            final PlayerConnection playerConnection = player.getPlayerConnection();
             // Call pre login event
-            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, username, uuid);
+            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
-
             // Close the player channel if he has been disconnected (kick)
-            final boolean online = player.isOnline();
-            if (!online) {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
-
-                if (playerConnection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) playerConnection).getChannel().flush();
-                }
-
+            if (!player.isOnline()) {
+                playerConnection.flush();
                 //playerConnection.disconnect();
                 return;
             }
-
             // Change UUID/Username based on the event
             {
                 final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
                 final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
-
                 if (!player.getUsername().equals(eventUsername)) {
                     player.setUsernameField(eventUsername);
-                    username = eventUsername;
                 }
-
                 if (!player.getUuid().equals(eventUuid)) {
                     player.setUuid(eventUuid);
-                    uuid = eventUuid;
                 }
             }
-
             // Send login success packet
-            {
-                final PlayerConnection connection = player.getPlayerConnection();
-
-                LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
-                if (connection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) connection).writeAndFlush(loginSuccessPacket);
-                } else {
-                    connection.sendPacket(loginSuccessPacket);
-                }
-
-                connection.setConnectionState(ConnectionState.PLAY);
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                socketConnection.writeAndFlush(loginSuccessPacket);
+            } else {
+                playerConnection.sendPacket(loginSuccessPacket);
             }
-
-            // Add the player to the waiting list
-            addWaitingPlayer(player);
-
-            if (register) {
-                registerPlayer(player);
-            }
+            playerConnection.setConnectionState(ConnectionState.PLAY);
+            if (register) registerPlayer(player);
+            this.waitingPlayers.relaxedOffer(player);
         });
     }
 
@@ -479,29 +256,25 @@ public final class ConnectionManager {
      * @return the newly created player object
      * @see #startPlayState(Player, boolean)
      */
-    @NotNull
-    public Player startPlayState(@NotNull PlayerConnection connection,
-                                 @NotNull UUID uuid, @NotNull String username,
-                                 boolean register) {
-        final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
+    public @NotNull Player startPlayState(@NotNull PlayerConnection connection,
+                                          @NotNull UUID uuid, @NotNull String username,
+                                          boolean register) {
+        final Player player = playerProvider.createPlayer(uuid, username, connection);
         startPlayState(player, register);
-
         return player;
     }
 
     /**
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
-    public void shutdown() {
+    public synchronized void shutdown() {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
-            if (playerConnection instanceof NettyPlayerConnection) {
-                final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                final Channel channel = nettyPlayerConnection.getChannel();
-                channel.writeAndFlush(disconnectPacket);
-                channel.close();
-            }
+            playerConnection.sendPacket(disconnectPacket);
+            playerConnection.flush();
+            player.remove();
+            playerConnection.disconnect();
         }
         this.players.clear();
         this.connectionPlayerMap.clear();
@@ -511,8 +284,14 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        // Connect waiting players
-        waitingPlayersTick();
+        this.waitingPlayers.drain(waitingPlayer -> {
+            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
+            EventDispatcher.call(loginEvent);
+            final Instance spawningInstance = loginEvent.getSpawningInstance();
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+            // Spawn the player at Player#getRespawnPoint
+            waitingPlayer.UNSAFE_init(spawningInstance);
+        });
     }
 
     /**
@@ -532,34 +311,5 @@ public final class ConnectionManager {
                 player.kick(TIMEOUT_TEXT);
             }
         }
-    }
-
-    /**
-     * Adds connected clients after the handshake (used to free the networking threads).
-     */
-    private void waitingPlayersTick() {
-        Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.poll()) != null) {
-
-            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
-            EventDispatcher.call(loginEvent);
-            final Instance spawningInstance = loginEvent.getSpawningInstance();
-
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
-
-            waitingPlayer.UNSAFE_init(spawningInstance);
-
-            // Spawn the player at Player#getRespawnPoint during the next instance tick
-            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
-        }
-    }
-
-    /**
-     * Adds a player into the waiting list, to be handled during the next server tick.
-     *
-     * @param player the {@link Player player} to add into the waiting list
-     */
-    public void addWaitingPlayer(@NotNull Player player) {
-        this.waitingPlayers.add(player);
     }
 }

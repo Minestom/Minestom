@@ -2,8 +2,6 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 
@@ -52,46 +50,10 @@ public class TeamBuilder {
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
-     * @deprecated Use {@link #updatePrefix(Component)}}
-     */
-    @Deprecated
-    public TeamBuilder updatePrefix(String prefix) {
-        return this.updatePrefix(Component.text(prefix));
-    }
-
-    /**
-     * Updates the prefix of the {@link Team}.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updatePrefix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updatePrefix(JsonMessage prefix) {
-        return this.updatePrefix(prefix.asComponent());
-    }
-
-    /**
-     * Updates the prefix of the {@link Team}.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
      */
     public TeamBuilder updatePrefix(Component prefix) {
         this.team.updatePrefix(prefix);
         return this;
-    }
-
-    /**
-     * Updates the color of the {@link Team}.
-     *
-     * @param color The new color
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamColor(NamedTextColor)}
-     */
-    @Deprecated
-    public TeamBuilder updateTeamColor(ChatColor color) {
-        return this.updateTeamColor(NamedTextColor.nearestTo(color.asTextColor()));
     }
 
     /**
@@ -110,58 +72,10 @@ public class TeamBuilder {
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
-     * @deprecated Use {@link #updateSuffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateSuffix(String suffix) {
-        return this.updateSuffix(Component.text(suffix));
-    }
-
-    /**
-     * Updates the suffix of the {@link Team}.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateSuffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateSuffix(JsonMessage suffix) {
-        return this.updateSuffix(suffix.asComponent());
-    }
-
-    /**
-     * Updates the suffix of the {@link Team}.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
      */
     public TeamBuilder updateSuffix(Component suffix) {
         this.team.updateSuffix(suffix);
         return this;
-    }
-
-    /**
-     * Updates the display name of the {@link Team}.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateTeamDisplayName(String displayName) {
-        return this.updateTeamDisplayName(Component.text(displayName));
-    }
-
-    /**
-     * Updates the display name of the {@link Team}.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateTeamDisplayName(JsonMessage displayName) {
-        return this.updateTeamDisplayName(displayName.asComponent());
     }
 
     /**
@@ -214,7 +128,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder updateAllowFriendlyFire() {
-        return this.updateFriendlyFlags((byte) 0x01);
+        this.team.updateAllowFriendlyFire(true);
+        return this;
     }
 
     /**
@@ -223,35 +138,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder updateSeeInvisiblePlayers() {
-        return this.updateFriendlyFlags((byte) 0x01);
-    }
-
-    /**
-     * Changes the prefix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #prefix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder prefix(String prefix) {
-        return this.prefix(Component.text(prefix));
-    }
-
-    /**
-     * Changes the prefix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #prefix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder prefix(JsonMessage prefix) {
-        return this.prefix(prefix.asComponent());
+        this.team.updateSeeInvisiblePlayers(true);
+        return this;
     }
 
     /**
@@ -274,34 +162,6 @@ public class TeamBuilder {
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
-     * @deprecated Use {@link #suffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder suffix(String suffix) {
-        return this.suffix(Component.text(suffix));
-    }
-
-    /**
-     * Changes the suffix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #suffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder suffix(JsonMessage suffix) {
-        return this.suffix(suffix.asComponent());
-    }
-
-    /**
-     * Changes the suffix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
      */
     public TeamBuilder suffix(Component suffix) {
         this.team.setSuffix(suffix);
@@ -315,52 +175,10 @@ public class TeamBuilder {
      *
      * @param color The new team color
      * @return this builder, for chaining
-     * @deprecated Use {@link #teamColor(NamedTextColor)}
-     */
-    @Deprecated
-    public TeamBuilder teamColor(ChatColor color) {
-        return this.teamColor(NamedTextColor.nearestTo(color.asTextColor()));
-    }
-
-    /**
-     * Changes the color of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param color The new team color
-     * @return this builder, for chaining
      */
     public TeamBuilder teamColor(NamedTextColor color) {
         this.team.setTeamColor(color);
         return this;
-    }
-
-    /**
-     * Changes the display name of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #teamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder teamDisplayName(String displayName) {
-        return this.teamDisplayName(Component.text(displayName));
-    }
-
-    /**
-     * Changes the display name of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #teamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder teamDisplayName(JsonMessage displayName) {
-        return this.teamDisplayName(displayName.asComponent());
     }
 
     /**
@@ -423,7 +241,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder allowFriendlyFire() {
-        return this.friendlyFlags((byte) 0x01);
+        this.team.setAllowFriendlyFire(true);
+        return this;
     }
 
     /**
@@ -434,7 +253,8 @@ public class TeamBuilder {
      * @return this builder, for chaining
      */
     public TeamBuilder seeInvisiblePlayers() {
-        return this.friendlyFlags((byte) 0x01);
+        this.team.setSeeInvisiblePlayers(true);
+        return this;
     }
 
     /**

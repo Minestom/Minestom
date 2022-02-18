@@ -1,9 +1,9 @@
 package net.minestom.server.extras.mojangAuth;
 
 import net.minestom.server.MinecraftServer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -12,10 +12,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.*;
 
 public final class MojangCrypt {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(MojangCrypt.class);
 
-    @Nullable
-    public static KeyPair generateKeyPair() {
+    public static @Nullable KeyPair generateKeyPair() {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(1024);
@@ -27,8 +26,7 @@ public final class MojangCrypt {
         }
     }
 
-    @Nullable
-    public static byte[] digestData(String data, PublicKey publicKey, SecretKey secretKey) {
+    public static byte @Nullable [] digestData(String data, PublicKey publicKey, SecretKey secretKey) {
         try {
             return digestData("SHA-1", data.getBytes("ISO_8859_1"), secretKey.getEncoded(), publicKey.getEncoded());
         } catch (UnsupportedEncodingException e) {
@@ -37,15 +35,12 @@ public final class MojangCrypt {
         }
     }
 
-    @Nullable
-    private static byte[] digestData(String algorithm, byte[]... data) {
+    private static byte @Nullable [] digestData(String algorithm, byte[]... data) {
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
-
             for (byte[] bytes : data) {
                 digest.update(bytes);
             }
-
             return digest.digest();
         } catch (NoSuchAlgorithmException e) {
             MinecraftServer.getExceptionManager().handleException(e);
@@ -67,7 +62,6 @@ public final class MojangCrypt {
         } catch (IllegalBlockSizeException | BadPaddingException var4) {
             MinecraftServer.getExceptionManager().handleException(var4);
         }
-
         LOGGER.error("Cipher data failed!");
         return null;
     }
@@ -80,7 +74,6 @@ public final class MojangCrypt {
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException var4) {
             MinecraftServer.getExceptionManager().handleException(var4);
         }
-
         LOGGER.error("Cipher creation failed!");
         return null;
     }

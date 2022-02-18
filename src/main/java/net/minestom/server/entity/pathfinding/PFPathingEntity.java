@@ -5,18 +5,19 @@ import com.extollit.gaming.ai.path.model.IPathingEntity;
 import com.extollit.gaming.ai.path.model.Passibility;
 import com.extollit.linalg.immutable.Vec3d;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class PFPathingEntity implements IPathingEntity {
-
+@ApiStatus.Internal
+public final class PFPathingEntity implements IPathingEntity {
     private final Navigator navigator;
     private final Entity entity;
 
     private float searchRange;
-    private Position targetPosition;
 
     // Capacities
     private boolean fireResistant;
@@ -34,10 +35,6 @@ public class PFPathingEntity implements IPathingEntity {
         this.entity = navigator.getEntity();
 
         this.searchRange = getAttributeValue(Attribute.FOLLOW_RANGE);
-    }
-
-    public Position getTargetPosition() {
-        return targetPosition;
     }
 
     @Override
@@ -193,18 +190,18 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
-        this.targetPosition = new Position(position.x, position.y, position.z);
-
-        final double entityY = entity.getPosition().getY();
-        if (entityY < targetPosition.getY()) {
+        final Point targetPosition = new Vec(position.x, position.y, position.z);
+        this.navigator.moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
+        final double entityY = entity.getPosition().y();
+        if (entityY < targetPosition.y()) {
             this.navigator.jump(1);
         }
     }
 
     @Override
     public Vec3d coordinates() {
-        final Position position = entity.getPosition();
-        return new Vec3d(position.getX(), position.getY(), position.getZ());
+        final var position = entity.getPosition();
+        return new Vec3d(position.x(), position.y(), position.z());
     }
 
     @Override

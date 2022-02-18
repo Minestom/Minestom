@@ -1,7 +1,6 @@
 package net.minestom.server.advancements;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -10,7 +9,7 @@ import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,26 +41,6 @@ public class Advancement {
 
     // Packet
     private AdvancementsPacket.Criteria criteria;
-
-    /**
-     * @deprecated Use {@link #Advancement(Component, Component, ItemStack, FrameType, float, float)}
-     */
-    @Deprecated
-    public Advancement(@NotNull JsonMessage title, JsonMessage description,
-                       @NotNull ItemStack icon, @NotNull FrameType frameType,
-                       float x, float y) {
-        this(title.asComponent(), description.asComponent(), icon, frameType, x, y);
-    }
-
-    /**
-     * @deprecated Use {@link #Advancement(Component, Component, Material, FrameType, float, float)}
-     */
-    @Deprecated
-    public Advancement(@NotNull JsonMessage title, @NotNull JsonMessage description,
-                       @NotNull Material icon, @NotNull FrameType frameType,
-                       float x, float y) {
-        this(title, description, ItemStack.of(icon), frameType, x, y);
-    }
 
     public Advancement(@NotNull Component title, Component description,
                        @NotNull ItemStack icon, @NotNull FrameType frameType,
@@ -106,8 +85,7 @@ public class Advancement {
      *
      * @return the {@link AdvancementTab} linked to this advancement, null if not linked to anything yet
      */
-    @Nullable
-    public AdvancementTab getTab() {
+    public @Nullable AdvancementTab getTab() {
         return tab;
     }
 
@@ -125,18 +103,6 @@ public class Advancement {
     }
 
     /**
-     * Gets the title of the advancement.
-     *
-     * @return the advancement title
-     * @deprecated Use {@link #getTitle()}
-     */
-    @NotNull
-    @Deprecated
-    public JsonMessage getTitleJson() {
-        return JsonMessage.fromComponent(title);
-    }
-
-    /**
      * Changes the advancement title.
      *
      * @param title the new title
@@ -147,37 +113,12 @@ public class Advancement {
     }
 
     /**
-     * Changes the advancement title.
-     *
-     * @param title the new title
-     * @deprecated Use {@link #setTitle(Component)}
-     */
-    @Deprecated
-    public void setTitle(@NotNull JsonMessage title) {
-        this.title = title.asComponent();
-        update();
-    }
-
-    /**
      * Gets the description of the advancement.
      *
      * @return the description title
      */
-    @NotNull
-    public Component getDescription() {
+    public @NotNull Component getDescription() {
         return description;
-    }
-
-    /**
-     * Gets the description of the advancement.
-     *
-     * @return the description title
-     * @deprecated Use {@link #getDescription()}
-     */
-    @NotNull
-    @Deprecated
-    public JsonMessage getDescriptionJson() {
-        return JsonMessage.fromComponent(description);
     }
 
     /**
@@ -191,24 +132,11 @@ public class Advancement {
     }
 
     /**
-     * Changes the description title.
-     *
-     * @param description the new description
-     * @deprecated Use {@link #setDescription(Component)}
-     */
-    @Deprecated
-    public void setDescription(@NotNull JsonMessage description) {
-        this.description = description.asComponent();
-        update();
-    }
-
-    /**
      * Gets the advancement icon.
      *
      * @return the advancement icon
      */
-    @NotNull
-    public ItemStack getIcon() {
+    public @NotNull ItemStack getIcon() {
         return icon;
     }
 
@@ -356,33 +284,14 @@ public class Advancement {
         this.parent = parent;
     }
 
-    @NotNull
-    protected AdvancementsPacket.ProgressMapping toProgressMapping() {
-        AdvancementsPacket.ProgressMapping progressMapping = new AdvancementsPacket.ProgressMapping();
-        {
-            AdvancementsPacket.AdvancementProgress advancementProgress = new AdvancementsPacket.AdvancementProgress();
-            advancementProgress.criteria = new AdvancementsPacket.Criteria[]{criteria};
-
-            progressMapping.key = identifier;
-            progressMapping.value = advancementProgress;
-        }
-        return progressMapping;
+    protected @NotNull AdvancementsPacket.ProgressMapping toProgressMapping() {
+        final var advancementProgress = new AdvancementsPacket.AdvancementProgress(List.of(criteria));
+        return new AdvancementsPacket.ProgressMapping(identifier, advancementProgress);
     }
 
-    @NotNull
-    protected AdvancementsPacket.DisplayData toDisplayData() {
-        AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
-        displayData.x = x;
-        displayData.y = y;
-        displayData.title = title;
-        displayData.description = description;
-        displayData.icon = icon;
-        displayData.frameType = frameType;
-        displayData.flags = getFlags();
-        if (background != null) {
-            displayData.backgroundTexture = background;
-        }
-        return displayData;
+    protected @NotNull AdvancementsPacket.DisplayData toDisplayData() {
+        return new AdvancementsPacket.DisplayData(title, description, icon,
+                frameType, getFlags(), background, x, y);
     }
 
     /**
@@ -390,31 +299,13 @@ public class Advancement {
      *
      * @return the mapping of this advancement
      */
-    @NotNull
-    protected AdvancementsPacket.AdvancementMapping toMapping() {
-        AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
-        {
-            AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement();
-            mapping.key = getIdentifier();
-            mapping.value = adv;
-
-            final Advancement parent = getParent();
-            if (parent != null) {
-                adv.parentIdentifier = parent.getIdentifier();
-            }
-
-            adv.displayData = toDisplayData();
-            adv.criterions = new String[]{criteria.criterionIdentifier};
-
-            AdvancementsPacket.Requirement requirement = new AdvancementsPacket.Requirement();
-            {
-                requirement.requirements = new String[]{criteria.criterionIdentifier};
-            }
-            adv.requirements = new AdvancementsPacket.Requirement[]{requirement};
-
-        }
-
-        return mapping;
+    protected @NotNull AdvancementsPacket.AdvancementMapping toMapping() {
+        final Advancement parent = getParent();
+        final String parentIdentifier = parent != null ? parent.getIdentifier() : null;
+        AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement(parentIdentifier, toDisplayData(),
+                List.of(criteria.criterionIdentifier()),
+                List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))));
+        return new AdvancementsPacket.AdvancementMapping(getIdentifier(), adv);
     }
 
     /**
@@ -423,16 +314,8 @@ public class Advancement {
      * @return the packet to add this advancement
      */
     protected AdvancementsPacket getUpdatePacket() {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-
-        final AdvancementsPacket.AdvancementMapping mapping = toMapping();
-
-        advancementsPacket.identifiersToRemove = new String[]{};
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{mapping};
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{toProgressMapping()};
-
-        return advancementsPacket;
+        return new AdvancementsPacket(false, List.of(toMapping()),
+                List.of(), List.of(toProgressMapping()));
     }
 
     /**
@@ -451,34 +334,16 @@ public class Advancement {
     }
 
     protected void updateCriteria() {
-        this.criteria = new AdvancementsPacket.Criteria();
-        {
-            AdvancementsPacket.CriterionProgress progress = new AdvancementsPacket.CriterionProgress();
-            progress.achieved = achieved;
-            if (achieved) {
-                progress.dateOfAchieving = new Date(System.currentTimeMillis()).getTime();
-            }
-            this.criteria.criterionProgress = progress;
-            this.criteria.criterionIdentifier = identifier;
-        }
+        final Long achievedDate = achieved ? System.currentTimeMillis() : null;
+        final var progress = new AdvancementsPacket.CriterionProgress(achievedDate);
+        this.criteria = new AdvancementsPacket.Criteria(identifier, progress);
     }
 
     private int getFlags() {
         byte result = 0;
-
-        if (background != null) {
-            result |= 0x1;
-        }
-
-        if (hasToast()) {
-            result |= 0x2;
-        }
-
-        if (isHidden()) {
-            result |= 0x4;
-        }
-
+        if (background != null) result |= 0x1;
+        if (hasToast()) result |= 0x2;
+        if (isHidden()) result |= 0x4;
         return result;
     }
-
 }

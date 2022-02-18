@@ -6,25 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class CraftRecipeResponse implements ServerPacket {
-
-    public byte windowId;
-    public String recipe;
-
-    public CraftRecipeResponse() {
-        recipe = "";
+public record CraftRecipeResponse(byte windowId, String recipe) implements ServerPacket {
+    public CraftRecipeResponse(BinaryReader reader) {
+        this(reader.readByte(), reader.readSizedString());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
         writer.writeSizedString(recipe);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        windowId = reader.readByte();
-        recipe = reader.readSizedString();
     }
 
     @Override

@@ -1,9 +1,9 @@
 package net.minestom.server.entity.metadata.other;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,12 +15,11 @@ public class EndCrystalMeta extends EntityMeta {
         super(entity, metadata);
     }
 
-    @Nullable
-    public BlockPosition getBeamTarget() {
+    public @Nullable Point getBeamTarget() {
         return super.metadata.getIndex(OFFSET, null);
     }
 
-    public void setBeamTarget(@Nullable BlockPosition value) {
+    public void setBeamTarget(@Nullable Point value) {
         super.metadata.setIndex(OFFSET, Metadata.OptPosition(value));
     }
 

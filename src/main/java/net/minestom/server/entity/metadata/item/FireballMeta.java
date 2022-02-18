@@ -4,7 +4,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.ProjectileMeta;
-import net.minestom.server.entity.metadata.golem.AbstractGolemMeta;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

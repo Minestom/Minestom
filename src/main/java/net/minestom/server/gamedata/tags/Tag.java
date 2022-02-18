@@ -1,32 +1,34 @@
 package net.minestom.server.gamedata.tags;
 
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.Material;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Represents a group of items, blocks, fluids, entity types or function.
  * Immutable by design
  */
-public class Tag {
-
-    public static final Tag EMPTY = new Tag(NamespaceID.from("minestom:empty"));
+public final class Tag {
     private final NamespaceID name;
-
-    private Set<NamespaceID> values;
+    private final Set<NamespaceID> values;
 
     /**
      * Creates a new empty tag. This does not cache the tag.
      */
     public Tag(NamespaceID name) {
         this.name = name;
-        values = new HashSet<>();
-        lockValues();
+        this.values = new HashSet<>();
     }
 
     /**
@@ -35,42 +37,10 @@ public class Tag {
     public Tag(NamespaceID name, Set<NamespaceID> values) {
         this.name = name;
         this.values = new HashSet<>(values);
-        lockValues();
     }
 
     /**
-     * Creates a new tag with the contents of the container
-     *
-     * @param manager       Used to load tag contents (as tags are valid values inside 'values')
-     * @param lowerPriority Tag contents from lower priority data packs. If 'replace' is false in 'container',
-     *                      appends the contents of that pack to the one being constructed
-     * @param container
-     */
-    public Tag(TagManager manager, NamespaceID name, String type, Tag lowerPriority, TagContainer container) throws FileNotFoundException {
-        this.name = name;
-        values = new HashSet<>();
-        if (!container.replace) {
-            values.addAll(lowerPriority.values);
-        }
-        Objects.requireNonNull(container.values, "Attempted to load from a TagContainer with no 'values' array");
-        for (String line : container.values) {
-            if (line.startsWith("#")) { // pull contents from a tag
-                Tag subtag = manager.load(NamespaceID.from(line.substring(1)), type);
-                values.addAll(subtag.values);
-            } else {
-                values.add(NamespaceID.from(line));
-            }
-        }
-
-        lockValues();
-    }
-
-    private void lockValues() {
-        values = Set.copyOf(values);
-    }
-
-    /**
-     * Checks whether the given id in inside this tag
+     * Checks whether the given id in inside this tag.
      *
      * @param id the id to check against
      * @return 'true' iif this tag contains the given id
@@ -85,40 +55,55 @@ public class Tag {
      * @return immutable set of values present in this tag
      */
     public Set<NamespaceID> getValues() {
-        return values;
+        return Collections.unmodifiableSet(values);
     }
 
     /**
      * Returns the name of this tag
-     *
-     * @return
      */
     public NamespaceID getName() {
         return name;
     }
 
-    public enum BasicTypes {
-        BLOCKS("minecraft:block"),
-        ITEMS("minecraft:item"),
-        FLUIDS("minecraft:fluid"),
-        ENTITY_TYPES("minecraft:entity_type"),
-        GAME_EVENTS("minecraft:game_event");
+    public enum BasicType {
+        BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
+                name -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),
+        ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
+                name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
+        FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
+                name -> Registries.getFluid(name).ordinal()),
+        ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
+                name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
+        GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
+                name -> Registries.getFluid(name).ordinal());
 
-        private final static BasicTypes[] VALUES = values();
+        private final static BasicType[] VALUES = values();
         private final String identifier;
+        private final Registry.Resource resource;
+        private final Function<String, Integer> function;
 
-        BasicTypes(@NotNull String identifier) {
+        BasicType(@NotNull String identifier,
+                  @NotNull Registry.Resource resource,
+                  @NotNull Function<String, Integer> function) {
             this.identifier = identifier;
+            this.resource = resource;
+            this.function = function;
         }
 
-        @NotNull
-        public String getIdentifier() {
+        public @NotNull String getIdentifier() {
             return identifier;
         }
 
-        @Nullable
-        public static BasicTypes fromIdentifer(@NotNull String identifier) {
-            for (BasicTypes value : VALUES) {
+        public Registry.Resource getResource() {
+            return resource;
+        }
+
+        public Function<String, Integer> getFunction() {
+            return function;
+        }
+
+        public static @Nullable Tag.BasicType fromIdentifer(@NotNull String identifier) {
+            for (BasicType value : VALUES) {
                 if (value.identifier.equals(identifier)) {
                     return value;
                 }

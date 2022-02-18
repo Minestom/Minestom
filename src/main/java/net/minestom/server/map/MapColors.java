@@ -1,10 +1,8 @@
 package net.minestom.server.map;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public enum MapColors {
@@ -74,7 +72,7 @@ public enum MapColors {
 
     private static final ConcurrentHashMap<Integer, PreciseMapColor> rgbMap = new ConcurrentHashMap<>();
     // only used if mappingStrategy == ColorMappingStrategy.PRECISE
-    private static PreciseMapColor[] rgbArray = null;
+    private static volatile PreciseMapColor[] rgbArray = null;
 
     private static final ColorMappingStrategy mappingStrategy;
     private static final String MAPPING_ARGUMENT = "minestom.map.rgbmapping";
@@ -187,16 +185,8 @@ public enum MapColors {
 
     private static void fillRGBArray() {
         rgbArray = new PreciseMapColor[0xFFFFFF + 1];
-        MinestomThread threads = new MinestomThread(Runtime.getRuntime().availableProcessors(), "RGBMapping", true);
         for (int rgb = 0; rgb <= 0xFFFFFF; rgb++) {
-            int finalRgb = rgb;
-            threads.execute(() -> rgbArray[finalRgb] = mapColor(finalRgb));
-        }
-        try {
-            threads.shutdown();
-            threads.awaitTermination(100, TimeUnit.MINUTES);
-        } catch (Throwable t) {
-            MinecraftServer.getExceptionManager().handleException(t);
+            rgbArray[rgb] = mapColor(rgb);
         }
     }
 

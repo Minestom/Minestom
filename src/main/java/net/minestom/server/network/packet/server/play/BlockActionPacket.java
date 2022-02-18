@@ -1,21 +1,21 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockActionPacket implements ServerPacket {
+public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
+                                byte actionParam, int blockId) implements ServerPacket {
+    public BlockActionPacket(Point blockPosition, byte actionId, byte actionParam, Block block) {
+        this(blockPosition, actionId, actionParam, block.id());
+    }
 
-    public BlockPosition blockPosition;
-    public byte actionId;
-    public byte actionParam;
-    public int blockId;
-
-    public BlockActionPacket() {
-        blockPosition = new BlockPosition(0,0,0);
+    public BlockActionPacket(BinaryReader reader) {
+        this(reader.readBlockPosition(), reader.readByte(), reader.readByte(), reader.readVarInt());
     }
 
     @Override
@@ -24,14 +24,6 @@ public class BlockActionPacket implements ServerPacket {
         writer.writeByte(actionId);
         writer.writeByte(actionParam);
         writer.writeVarInt(blockId);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        blockPosition = reader.readBlockPosition();
-        actionId = reader.readByte();
-        actionParam = reader.readByte();
-        blockId = reader.readVarInt();
     }
 
     @Override

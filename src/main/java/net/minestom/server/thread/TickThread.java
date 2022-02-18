@@ -1,29 +1,87 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.Tickable;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.Chunk;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.Phaser;
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Thread responsible for ticking {@link net.minestom.server.instance.Chunk chunks} and {@link net.minestom.server.entity.Entity entities}.
+ * Thread responsible for ticking {@link Chunk chunks} and {@link Entity entities}.
  * <p>
- * Created in {@link ThreadProvider}, and awaken every tick with a task to execute.
+ * Created in {@link ThreadDispatcher}, and awaken every tick with a task to execute.
  */
-public class TickThread extends Thread {
-
-    protected final BatchRunnable runnable;
+@ApiStatus.Internal
+public final class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
+    private volatile boolean stop;
 
-    public TickThread(@NotNull BatchRunnable runnable, int number) {
-        super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
-        this.runnable = runnable;
+    private CountDownLatch latch;
+    private long tickTime;
+    private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
-        this.runnable.setLinkedThread(this);
+    public TickThread(int number) {
+        super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
+    }
+
+    @Override
+    public void run() {
+        LockSupport.park(this);
+        while (!stop) {
+            this.lock.lock();
+            try {
+                tick();
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+            this.lock.unlock();
+            // #acquire() callbacks
+            this.latch.countDown();
+            LockSupport.park(this);
+        }
+    }
+
+    private void tick() {
+        for (ThreadDispatcher.Partition entry : entries) {
+            final List<Tickable> elements = entry.elements();
+            if (elements.isEmpty()) continue;
+            for (Tickable element : elements) {
+                if (lock.hasQueuedThreads()) {
+                    this.lock.unlock();
+                    // #acquire() callbacks should be called here
+                    this.lock.lock();
+                }
+                try {
+                    element.tick(tickTime);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+        }
+    }
+
+    void startTick(CountDownLatch latch, long tickTime) {
+        if (entries.isEmpty()) {
+            // Nothing to tick
+            latch.countDown();
+            return;
+        }
+        this.latch = latch;
+        this.tickTime = tickTime;
+        this.stop = false;
+        LockSupport.unpark(this);
+    }
+
+    public Collection<ThreadDispatcher.Partition> entries() {
+        return entries;
     }
 
     /**
@@ -31,60 +89,12 @@ public class TickThread extends Thread {
      *
      * @return the thread lock
      */
-    public @NotNull ReentrantLock getLock() {
+    public @NotNull ReentrantLock lock() {
         return lock;
     }
 
-    /**
-     * Shutdowns the thread. Cannot be undone.
-     */
-    public void shutdown() {
-        this.runnable.stop = true;
+    void shutdown() {
+        this.stop = true;
         LockSupport.unpark(this);
-    }
-
-    protected static class BatchRunnable implements Runnable {
-        private static final AtomicReferenceFieldUpdater<BatchRunnable, TickContext> CONTEXT_UPDATER =
-                AtomicReferenceFieldUpdater.newUpdater(BatchRunnable.class, TickContext.class, "tickContext");
-
-        private volatile boolean stop;
-        private TickThread tickThread;
-
-        private volatile TickContext tickContext;
-
-        @Override
-        public void run() {
-            Check.notNull(tickThread, "The linked BatchThread cannot be null!");
-            while (!stop) {
-                final TickContext localContext = tickContext;
-                // The context is necessary to control the tick rates
-                if (localContext != null) {
-                    // Execute tick
-                    CONTEXT_UPDATER.compareAndSet(this, localContext, null);
-                    localContext.runnable.run();
-                    localContext.phaser.arriveAndDeregister();
-                }
-                LockSupport.park(this);
-            }
-        }
-
-        protected void startTick(@NotNull Phaser phaser, @NotNull Runnable runnable) {
-            this.tickContext = new TickContext(phaser, runnable);
-            LockSupport.unpark(tickThread);
-        }
-
-        private void setLinkedThread(TickThread tickThread) {
-            this.tickThread = tickThread;
-        }
-    }
-
-    private static class TickContext {
-        private final Phaser phaser;
-        private final Runnable runnable;
-
-        private TickContext(@NotNull Phaser phaser, @NotNull Runnable runnable) {
-            this.phaser = phaser;
-            this.runnable = runnable;
-        }
     }
 }

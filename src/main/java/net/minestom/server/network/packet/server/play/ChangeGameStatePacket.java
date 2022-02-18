@@ -6,25 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ChangeGameStatePacket implements ServerPacket {
-
-    public Reason reason;
-    public float value;
-
-    public ChangeGameStatePacket() {
-        reason = Reason.NO_RESPAWN_BLOCK;
+public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket {
+    public ChangeGameStatePacket(BinaryReader reader) {
+        this(Reason.values()[reader.readByte()], reader.readFloat());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) reason.ordinal());
         writer.writeFloat(value);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        reason = Reason.values()[reader.readByte()];
-        value = reader.readFloat();
     }
 
     @Override
@@ -46,5 +36,4 @@ public class ChangeGameStatePacket implements ServerPacket {
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
         ENABLE_RESPAWN_SCREEN
     }
-
 }

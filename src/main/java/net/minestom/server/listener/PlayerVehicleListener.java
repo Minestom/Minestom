@@ -6,25 +6,22 @@ import net.minestom.server.entity.metadata.other.BoatMeta;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
-import net.minestom.server.utils.Position;
 
 public class PlayerVehicleListener {
 
     public static void steerVehicleListener(ClientSteerVehiclePacket packet, Player player) {
-        final byte flags = packet.flags;
+        final byte flags = packet.flags();
         final boolean jump = (flags & 0x1) != 0;
         final boolean unmount = (flags & 0x2) != 0;
-        player.refreshVehicleSteer(packet.sideways, packet.forward, jump, unmount);
+        player.refreshVehicleSteer(packet.sideways(), packet.forward(), jump, unmount);
     }
 
     public static void vehicleMoveListener(ClientVehicleMovePacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
-
         if (vehicle == null)
             return;
 
-        final Position newPosition = new Position((float) packet.x, (float) packet.y, (float) packet.z, packet.yaw, packet.pitch);
-        vehicle.refreshPosition(newPosition);
+        vehicle.refreshPosition(packet.position());
 
         // This packet causes weird screen distortion
         /*VehicleMovePacket vehicleMovePacket = new VehicleMovePacket();
@@ -39,13 +36,8 @@ public class PlayerVehicleListener {
 
     public static void boatSteerListener(ClientSteerBoatPacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
-
-        if (!(vehicle.getEntityMeta() instanceof BoatMeta))
-            return;
-
-        BoatMeta boat = (BoatMeta) vehicle.getEntityMeta();
-        boat.setLeftPaddleTurning(packet.leftPaddleTurning);
-        boat.setRightPaddleTurning(packet.rightPaddleTurning);
+        if (!(vehicle.getEntityMeta() instanceof BoatMeta boat)) return;
+        boat.setLeftPaddleTurning(packet.leftPaddleTurning());
+        boat.setRightPaddleTurning(packet.rightPaddleTurning());
     }
-
 }

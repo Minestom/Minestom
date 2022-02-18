@@ -1,9 +1,8 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.PlayerEvent;
-import net.minestom.server.utils.Position;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerRespawnEvent implements PlayerEvent {
 
     private final Player player;
-    private Position respawnPosition;
+    private Pos respawnPosition;
 
     public PlayerRespawnEvent(@NotNull Player player) {
         this.player = player;
@@ -27,8 +26,7 @@ public class PlayerRespawnEvent implements PlayerEvent {
      *
      * @return the respawn position
      */
-    @NotNull
-    public Position getRespawnPosition() {
+    public @NotNull Pos getRespawnPosition() {
         return respawnPosition;
     }
 
@@ -37,7 +35,7 @@ public class PlayerRespawnEvent implements PlayerEvent {
      *
      * @param respawnPosition the new respawn position
      */
-    public void setRespawnPosition(@NotNull Position respawnPosition) {
+    public void setRespawnPosition(@NotNull Pos respawnPosition) {
         this.respawnPosition = respawnPosition;
     }
 

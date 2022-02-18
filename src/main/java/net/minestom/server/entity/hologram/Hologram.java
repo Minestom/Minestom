@@ -2,13 +2,12 @@ package net.minestom.server.entity.hologram;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +24,7 @@ public class Hologram implements Viewable {
     private final Entity entity;
     private final float yOffset;
 
-    private Position position;
+    private Pos position;
     private Component text;
 
     private boolean removed;
@@ -36,35 +35,8 @@ public class Hologram implements Viewable {
      * @param instance      The instance where the hologram should be spawned.
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
-     * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
-     * @deprecated Use {@link #Hologram(Instance, Position, Component, boolean)}
      */
-    @Deprecated
-    public Hologram(Instance instance, Position spawnPosition, JsonMessage text, boolean autoViewable) {
-        this(instance, spawnPosition, text.asComponent(), autoViewable);
-    }
-
-    /**
-     * Constructs a new {@link Hologram} with the given parameters.
-     *
-     * @param instance      The instance where the hologram should be spawned.
-     * @param spawnPosition The spawn position of this hologram.
-     * @param text          The text of this hologram.
-     * @deprecated Use {@link #Hologram(Instance, Position, Component)}
-     */
-    @Deprecated
-    public Hologram(Instance instance, Position spawnPosition, JsonMessage text) {
-        this(instance, spawnPosition, text, true);
-    }
-
-    /**
-     * Constructs a new {@link Hologram} with the given parameters.
-     *
-     * @param instance      The instance where the hologram should be spawned.
-     * @param spawnPosition The spawn position of this hologram.
-     * @param text          The text of this hologram.
-     */
-    public Hologram(Instance instance, Position spawnPosition, Component text) {
+    public Hologram(Instance instance, Pos spawnPosition, Component text) {
         this(instance, spawnPosition, text, true);
     }
 
@@ -76,7 +48,7 @@ public class Hologram implements Viewable {
      * @param text          The text of this hologram.
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
      */
-    public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable) {
+    public Hologram(Instance instance, Pos spawnPosition, Component text, boolean autoViewable) {
         this(instance, spawnPosition, text, autoViewable, false);
     }
 
@@ -88,14 +60,14 @@ public class Hologram implements Viewable {
      * @param text          The text of this hologram.
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
      */
-    public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable, boolean marker) {
+    public Hologram(Instance instance, Pos spawnPosition, Component text, boolean autoViewable, boolean marker) {
         this.entity = new Entity(EntityType.ARMOR_STAND);
 
         ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
 
         armorStandMeta.setNotifyAboutChanges(false);
 
-        if(marker) {
+        if (marker) {
             this.yOffset = MARKER_OFFSET_Y;
             armorStandMeta.setMarker(true);
         } else {
@@ -109,7 +81,7 @@ public class Hologram implements Viewable {
 
         armorStandMeta.setNotifyAboutChanges(true);
 
-        this.entity.setInstance(instance, spawnPosition.clone().add(0, this.yOffset, 0));
+        this.entity.setInstance(instance, spawnPosition.add(0, this.yOffset, 0));
         this.entity.setAutoViewable(autoViewable);
 
         this.position = spawnPosition;
@@ -121,7 +93,7 @@ public class Hologram implements Viewable {
      *
      * @return the hologram's position
      */
-    public Position getPosition() {
+    public Pos getPosition() {
         return position;
     }
 
@@ -130,22 +102,10 @@ public class Hologram implements Viewable {
      *
      * @param position the new hologram's position
      */
-    public void setPosition(Position position) {
+    public void setPosition(Pos position) {
         checkRemoved();
-        position.add(0, this.yOffset, 0);
-        this.position = position;
-        this.entity.teleport(position);
-    }
-
-    /**
-     * Gets the hologram text.
-     *
-     * @return the hologram text
-     * @deprecated Use {@link #getText()}
-     */
-    @Deprecated
-    public JsonMessage getTextJson() {
-        return JsonMessage.fromComponent(text);
+        this.position = position.add(0, this.yOffset, 0);
+        this.entity.teleport(this.position);
     }
 
     /**
@@ -155,17 +115,6 @@ public class Hologram implements Viewable {
      */
     public Component getText() {
         return text;
-    }
-
-    /**
-     * Changes the hologram text.
-     *
-     * @param text the new hologram text
-     * @deprecated Use {@link #setText(Component)}
-     */
-    @Deprecated
-    public void setText(JsonMessage text) {
-        this.setText(text.asComponent());
     }
 
     /**

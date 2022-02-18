@@ -12,30 +12,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.UnaryOperator;
 
-public class DisconnectPacket implements ComponentHoldingServerPacket {
-    public Component message;
-
-    /**
-     * Creates a new disconnect packet with a given message.
-     *
-     * @param message the message
-     */
-    public DisconnectPacket(@NotNull Component message) {
-        this.message = message;
-    }
-
-    private DisconnectPacket() {
-        this(Component.text("Disconnected."));
+public record DisconnectPacket(@NotNull Component message) implements ComponentHoldingServerPacket {
+    public DisconnectPacket(BinaryReader reader) {
+        this(reader.readComponent());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeComponent(message);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        message = reader.readComponent();
     }
 
     @Override

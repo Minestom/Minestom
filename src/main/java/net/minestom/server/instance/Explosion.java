@@ -1,8 +1,8 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public abstract class Explosion {
      * @param instance instance to perform this explosion in
      * @return list of blocks that will be broken.
      */
-    protected abstract List<BlockPosition> prepare(Instance instance);
+    protected abstract List<Point> prepare(Instance instance);
 
     /**
      * Performs the explosion and send the corresponding packet
@@ -56,31 +56,23 @@ public abstract class Explosion {
      * @param instance instance to perform this explosion in
      */
     public void apply(@NotNull Instance instance) {
-        List<BlockPosition> blocks = prepare(instance);
-        ExplosionPacket packet = new ExplosionPacket();
-        packet.x = getCenterX();
-        packet.y = getCenterY();
-        packet.z = getCenterZ();
-        packet.radius = getStrength();
-        packet.playerMotionX = 0.0f; // TODO: figure out why this is here
-        packet.playerMotionY = 0.0f; // TODO: figure out why this is here
-        packet.playerMotionZ = 0.0f; // TODO: figure out why this is here
-
-        packet.records = new byte[3 * blocks.size()];
+        List<Point> blocks = prepare(instance);
+        byte[] records = new byte[3 * blocks.size()];
         for (int i = 0; i < blocks.size(); i++) {
-            final BlockPosition pos = blocks.get(i);
+            final var pos = blocks.get(i);
             instance.setBlock(pos, Block.AIR);
-            final byte x = (byte) (pos.getX() - Math.floor(getCenterX()));
-            final byte y = (byte) (pos.getY() - Math.floor(getCenterY()));
-            final byte z = (byte) (pos.getZ() - Math.floor(getCenterZ()));
-            packet.records[i * 3 + 0] = x;
-            packet.records[i * 3 + 1] = y;
-            packet.records[i * 3 + 2] = z;
+            final byte x = (byte) (pos.x() - Math.floor(getCenterX()));
+            final byte y = (byte) (pos.y() - Math.floor(getCenterY()));
+            final byte z = (byte) (pos.z() - Math.floor(getCenterZ()));
+            records[i * 3 + 0] = x;
+            records[i * 3 + 1] = y;
+            records[i * 3 + 2] = z;
         }
 
-        postExplosion(instance, blocks, packet);
-
         // TODO send only to close players
+        ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
+                records, 0, 0, 0);
+        postExplosion(instance, blocks, packet);
         PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
 
         postSend(instance, blocks);
@@ -96,7 +88,7 @@ public abstract class Explosion {
      *                 stored in the packet before this call, but you are free to modify 'records' to modify the blocks sent to the client.
      *                 Just be careful, you might just crash the server or the client. Or you're lucky, both at the same time.
      */
-    protected void postExplosion(Instance instance, List<BlockPosition> blocks, ExplosionPacket packet) {
+    protected void postExplosion(Instance instance, List<Point> blocks, ExplosionPacket packet) {
     }
 
     /**
@@ -106,6 +98,6 @@ public abstract class Explosion {
      * @param instance the instance in which the explosion occurs
      * @param blocks   the block positions returned by prepare
      */
-    protected void postSend(Instance instance, List<BlockPosition> blocks) {
+    protected void postSend(Instance instance, List<Point> blocks) {
     }
 }

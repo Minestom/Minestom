@@ -2,12 +2,8 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.UniqueIdUtils;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +17,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * An object which manages all the {@link Team}'s
  */
 public final class TeamManager {
-
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     /**
      * Represents all registered teams
@@ -43,8 +37,7 @@ public final class TeamManager {
      */
     protected void registerNewTeam(@NotNull Team team) {
         this.teams.add(team);
-
-        PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), team.createTeamsCreationPacket());
+        PacketUtils.broadcastPacket(team.createTeamsCreationPacket());
     }
 
     /**
@@ -67,7 +60,7 @@ public final class TeamManager {
      */
     public boolean deleteTeam(@NotNull Team team) {
         // Sends to all online players a team destroy packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), team.createTeamDestructionPacket());
+        PacketUtils.broadcastPacket(team.createTeamDestructionPacket());
         return this.teams.remove(team);
     }
 
@@ -92,27 +85,12 @@ public final class TeamManager {
     }
 
     /**
-     * Creates a {@link Team} with the registry name, prefix, suffix and the team color
+     * Creates a {@link Team} with the registry name, prefix, suffix and the team format
      *
      * @param name      The registry name
      * @param prefix    The team prefix
-     * @param teamColor The team color
-     * @param suffix    The team suffix
-     * @return the created {@link Team} with a prefix, teamColor and suffix
-     * @deprecated Use {@link #createTeam(String, Component, NamedTextColor, Component)}
-     */
-    @Deprecated
-    public Team createTeam(String name, JsonMessage prefix, ChatColor teamColor, JsonMessage suffix) {
-        return this.createTeam(name, prefix.asComponent(), NamedTextColor.nearestTo(teamColor.asTextColor()), suffix.asComponent());
-    }
-
-    /**
-     * Creates a {@link Team} with the registry name, prefix, suffix and the team format
-     *
-     * @param name       The registry name
-     * @param prefix     The team prefix
      * @param teamColor The team format
-     * @param suffix     The team suffix
+     * @param suffix    The team suffix
      * @return the created {@link Team} with a prefix, teamColor and suffix
      */
     public Team createTeam(String name, Component prefix, NamedTextColor teamColor, Component suffix) {
@@ -126,22 +104,6 @@ public final class TeamManager {
      * @param displayName The display name
      * @param prefix      The team prefix
      * @param teamColor   The team color
-     * @param suffix      The team suffix
-     * @return the created {@link Team} with a prefix, teamColor, suffix and the display name
-     * @deprecated Use {@link #createTeam(String, Component, Component, NamedTextColor, Component)}
-     */
-    @Deprecated
-    public Team createTeam(String name, JsonMessage displayName, JsonMessage prefix, ChatColor teamColor, JsonMessage suffix) {
-        return this.createTeam(name, displayName.asComponent(), prefix.asComponent(), NamedTextColor.nearestTo(teamColor.asTextColor()), suffix.asComponent());
-    }
-
-    /**
-     * Creates a {@link Team} with the registry name, display name, prefix, suffix and the team colro
-     *
-     * @param name        The registry name
-     * @param displayName The display name
-     * @param prefix      The team prefix
-     * @param teamColor  The team color
      * @param suffix      The team suffix
      * @return the created {@link Team} with a prefix, teamColor, suffix and the display name
      */

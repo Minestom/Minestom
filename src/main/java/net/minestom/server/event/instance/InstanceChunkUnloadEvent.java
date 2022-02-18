@@ -1,6 +1,7 @@
 package net.minestom.server.event.instance;
 
 import net.minestom.server.event.trait.InstanceEvent;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,12 +11,11 @@ import org.jetbrains.annotations.NotNull;
 public class InstanceChunkUnloadEvent implements InstanceEvent {
 
     private final Instance instance;
-    private final int chunkX, chunkZ;
+    private final Chunk chunk;
 
-    public InstanceChunkUnloadEvent(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public InstanceChunkUnloadEvent(@NotNull Instance instance, @NotNull Chunk chunk) {
         this.instance = instance;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
+        this.chunk = chunk;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class InstanceChunkUnloadEvent implements InstanceEvent {
      * @return the chunk X
      */
     public int getChunkX() {
-        return chunkX;
+        return chunk.getChunkX();
     }
 
     /**
@@ -38,6 +38,15 @@ public class InstanceChunkUnloadEvent implements InstanceEvent {
      * @return the chunk Z
      */
     public int getChunkZ() {
-        return chunkZ;
+        return chunk.getChunkZ();
+    }
+
+    /**
+     * Gets the chunk.
+     *
+     * @return the chunk.
+     */
+    public @NotNull Chunk getChunk() {
+        return chunk;
     }
 }

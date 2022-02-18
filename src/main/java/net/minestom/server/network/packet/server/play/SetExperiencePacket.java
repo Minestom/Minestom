@@ -6,26 +6,16 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetExperiencePacket implements ServerPacket {
-
-    public float percentage;
-    public int level;
-    public int totalExperience;
-
-    public SetExperiencePacket() {}
+public record SetExperiencePacket(float percentage, int level, int totalExperience) implements ServerPacket {
+    public SetExperiencePacket(BinaryReader reader) {
+        this(reader.readFloat(), reader.readVarInt(), reader.readVarInt());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeFloat(percentage);
         writer.writeVarInt(level);
         writer.writeVarInt(totalExperience);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        percentage = reader.readFloat();
-        level = reader.readVarInt();
-        totalExperience = reader.readVarInt();
     }
 
     @Override

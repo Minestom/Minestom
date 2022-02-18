@@ -5,13 +5,9 @@ import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
@@ -28,8 +24,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * This object represents a team on a scoreboard that has a common display theme and other properties.
  */
 public class Team implements PacketGroupingAudience {
-
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+    private static final byte ALLOW_FRIENDLY_FIRE_BIT = 0x01;
+    private static final byte SEE_INVISIBLE_PLAYERS_BIT = 0x02;
 
     /**
      * A collection of all registered entities who are on the team.
@@ -115,13 +111,10 @@ public class Team implements PacketGroupingAudience {
         this.members.add(member);
 
         // Initializes add player packet
-        final TeamsPacket addPlayerPacket = new TeamsPacket();
-        addPlayerPacket.teamName = this.teamName;
-        addPlayerPacket.action = TeamsPacket.Action.ADD_PLAYERS_TEAM;
-        addPlayerPacket.entities = members.toArray(new String[0]);
-
+        final TeamsPacket addPlayerPacket = new TeamsPacket(teamName,
+                new TeamsPacket.AddEntitiesToTeamAction(members));
         // Sends to all online players the add player packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), addPlayerPacket);
+        PacketUtils.broadcastPacket(addPlayerPacket);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
@@ -134,13 +127,10 @@ public class Team implements PacketGroupingAudience {
      */
     public void removeMember(@NotNull String member) {
         // Initializes remove player packet
-        final TeamsPacket removePlayerPacket = new TeamsPacket();
-        removePlayerPacket.teamName = this.teamName;
-        removePlayerPacket.action = TeamsPacket.Action.REMOVE_PLAYERS_TEAM;
-        removePlayerPacket.entities = new String[]{member};
-
+        final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
+                new TeamsPacket.RemoveEntitiesToTeamAction(new String[]{member}));
         // Sends to all online player teh remove player packet
-        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), removePlayerPacket);
+        PacketUtils.broadcastPacket(removePlayerPacket);
 
         // Removes the member from the team
         this.members.remove(member);
@@ -155,33 +145,9 @@ public class Team implements PacketGroupingAudience {
      * <b>Warning:</b> This is only changed <b>server side</b>.
      *
      * @param teamDisplayName The new display name
-     * @deprecated Use {@link #setTeamDisplayName(Component)}
-     */
-    @Deprecated
-    public void setTeamDisplayName(JsonMessage teamDisplayName) {
-        this.setTeamDisplayName(teamDisplayName.asComponent());
-    }
-
-    /**
-     * Changes the display name of the team.
-     * <br><br>
-     * <b>Warning:</b> This is only changed <b>server side</b>.
-     *
-     * @param teamDisplayName The new display name
      */
     public void setTeamDisplayName(Component teamDisplayName) {
         this.teamDisplayName = teamDisplayName;
-    }
-
-    /**
-     * Changes the display name of the team and sends an update packet.
-     *
-     * @param teamDisplayName The new display name
-     * @deprecated Use {@link #updateTeamDisplayName(Component)}
-     */
-    @Deprecated
-    public void updateTeamDisplayName(JsonMessage teamDisplayName) {
-        this.updateTeamDisplayName(teamDisplayName.asComponent());
     }
 
     /**
@@ -244,35 +210,10 @@ public class Team implements PacketGroupingAudience {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param color The new team color
-     * @see #updateTeamColor(ChatColor)
-     * @deprecated Use {@link #setTeamColor(NamedTextColor)}
-     */
-    @Deprecated
-    public void setTeamColor(@NotNull ChatColor color) {
-        this.setTeamColor(NamedTextColor.nearestTo(color.asTextColor()));
-    }
-
-    /**
-     * Changes the color of the team.
-     * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>.
-     *
-     * @param color The new team color
      * @see #updateTeamColor(NamedTextColor)
      */
     public void setTeamColor(@NotNull NamedTextColor color) {
         this.teamColor = color;
-    }
-
-    /**
-     * Changes the color of the team and sends an update packet.
-     *
-     * @param chatColor The new team color
-     * @deprecated Use {@link #updateTeamColor(NamedTextColor)}
-     */
-    @Deprecated
-    public void updateTeamColor(@NotNull ChatColor chatColor) {
-        this.updateTeamColor(NamedTextColor.nearestTo(chatColor.asTextColor()));
     }
 
     /**
@@ -291,33 +232,9 @@ public class Team implements PacketGroupingAudience {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param prefix The new prefix
-     * @deprecated Use {@link #setPrefix(Component)}
-     */
-    @Deprecated
-    public void setPrefix(JsonMessage prefix) {
-        this.setPrefix(prefix.asComponent());
-    }
-
-    /**
-     * Changes the prefix of the team.
-     * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>.
-     *
-     * @param prefix The new prefix
      */
     public void setPrefix(Component prefix) {
         this.prefix = prefix;
-    }
-
-    /**
-     * Changes the prefix of the team and sends an update packet.
-     *
-     * @param prefix The new prefix
-     * @deprecated Use {@link #updatePrefix(Component)}
-     */
-    @Deprecated
-    public void updatePrefix(JsonMessage prefix) {
-        this.updatePrefix(prefix.asComponent());
     }
 
     /**
@@ -336,33 +253,9 @@ public class Team implements PacketGroupingAudience {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param suffix The new suffix
-     * @deprecated Use {@link #setSuffix(Component)}
-     */
-    @Deprecated
-    public void setSuffix(JsonMessage suffix) {
-        this.setSuffix(suffix.asComponent());
-    }
-
-    /**
-     * Changes the suffix of the team.
-     * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>.
-     *
-     * @param suffix The new suffix
      */
     public void setSuffix(Component suffix) {
         this.suffix = suffix;
-    }
-
-    /**
-     * Changes the suffix of the team and sends an update packet.
-     *
-     * @param suffix The new suffix
-     * @deprecated Use {@link #updateSuffix(Component)}
-     */
-    @Deprecated
-    public void updateSuffix(JsonMessage suffix) {
-        this.updateSuffix(suffix.asComponent());
     }
 
     /**
@@ -396,6 +289,44 @@ public class Team implements PacketGroupingAudience {
         this.sendUpdatePacket();
     }
 
+    private boolean getFriendlyFlagBit(byte index) {
+        return (this.friendlyFlags & index) == index;
+    }
+
+    private void setFriendlyFlagBit(byte index, boolean value) {
+        if (value) {
+            this.friendlyFlags |= index;
+        } else {
+            this.friendlyFlags &= ~index;
+        }
+    }
+
+    public void setAllowFriendlyFire(boolean value) {
+        this.setFriendlyFlagBit(ALLOW_FRIENDLY_FIRE_BIT, value);
+    }
+
+    public void updateAllowFriendlyFire(boolean value) {
+        this.setAllowFriendlyFire(value);
+        this.sendUpdatePacket();
+    }
+
+    public boolean isAllowFriendlyFire() {
+        return this.getFriendlyFlagBit(ALLOW_FRIENDLY_FIRE_BIT);
+    }
+
+    public void setSeeInvisiblePlayers(boolean value) {
+        this.setFriendlyFlagBit(SEE_INVISIBLE_PLAYERS_BIT, value);
+    }
+
+    public void updateSeeInvisiblePlayers(boolean value) {
+        this.setSeeInvisiblePlayers(value);
+        this.sendUpdatePacket();
+    }
+
+    public boolean isSeeInvisiblePlayers() {
+        return this.getFriendlyFlagBit(SEE_INVISIBLE_PLAYERS_BIT);
+    }
+
     /**
      * Gets the registry name of the team.
      *
@@ -410,21 +341,10 @@ public class Team implements PacketGroupingAudience {
      *
      * @return the packet to add the team
      */
-    @NotNull
-    public TeamsPacket createTeamsCreationPacket() {
-        TeamsPacket teamsCreationPacket = new TeamsPacket();
-        teamsCreationPacket.teamName = teamName;
-        teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsCreationPacket.teamDisplayName = this.teamDisplayName;
-        teamsCreationPacket.friendlyFlags = this.friendlyFlags;
-        teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
-        teamsCreationPacket.collisionRule = this.collisionRule;
-        teamsCreationPacket.teamColor = this.teamColor;
-        teamsCreationPacket.teamPrefix = this.prefix;
-        teamsCreationPacket.teamSuffix = this.suffix;
-        teamsCreationPacket.entities = this.members.toArray(new String[0]);
-
-        return teamsCreationPacket;
+    public @NotNull TeamsPacket createTeamsCreationPacket() {
+        final var info = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
+        return new TeamsPacket(teamName, info);
     }
 
     /**
@@ -432,12 +352,8 @@ public class Team implements PacketGroupingAudience {
      *
      * @return the packet to remove the team
      */
-    @NotNull
-    public TeamsPacket createTeamDestructionPacket() {
-        TeamsPacket teamsPacket = new TeamsPacket();
-        teamsPacket.teamName = teamName;
-        teamsPacket.action = TeamsPacket.Action.REMOVE_TEAM;
-        return teamsPacket;
+    public @NotNull TeamsPacket createTeamDestructionPacket() {
+        return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
     }
 
     /**
@@ -445,20 +361,8 @@ public class Team implements PacketGroupingAudience {
      *
      * @return an unmodifiable {@link Set} of registered players
      */
-    @NotNull
-    public Set<String> getMembers() {
+    public @NotNull Set<String> getMembers() {
         return Collections.unmodifiableSet(members);
-    }
-
-    /**
-     * Gets the display name of the team.
-     *
-     * @return the display name
-     * @deprecated Use {@link #getTeamDisplayName()}
-     */
-    @Deprecated
-    public JsonMessage getTeamDisplayNameJson() {
-        return JsonMessage.fromComponent(this.teamDisplayName);
     }
 
     /**
@@ -484,8 +388,7 @@ public class Team implements PacketGroupingAudience {
      *
      * @return the tag visibility
      */
-    @NotNull
-    public NameTagVisibility getNameTagVisibility() {
+    public @NotNull NameTagVisibility getNameTagVisibility() {
         return nameTagVisibility;
     }
 
@@ -494,8 +397,7 @@ public class Team implements PacketGroupingAudience {
      *
      * @return the collision rule
      */
-    @NotNull
-    public CollisionRule getCollisionRule() {
+    public @NotNull CollisionRule getCollisionRule() {
         return collisionRule;
     }
 
@@ -503,33 +405,9 @@ public class Team implements PacketGroupingAudience {
      * Gets the color of the team.
      *
      * @return the team color
-     * @deprecated Use {@link #getTeamColor()}
      */
-    @Deprecated
-    @NotNull
-    public ChatColor getTeamColorOld() {
-        return ChatColor.fromId(AdventurePacketConvertor.getNamedTextColorValue(teamColor));
-    }
-
-    /**
-     * Gets the color of the team.
-     *
-     * @return the team color
-     */
-    @NotNull
-    public NamedTextColor getTeamColor() {
+    public @NotNull NamedTextColor getTeamColor() {
         return teamColor;
-    }
-
-    /**
-     * Gets the prefix of the team.
-     *
-     * @return the team prefix
-     * @deprecated Use {@link #getPrefix()}
-     */
-    @Deprecated
-    public JsonMessage getPrefixJson() {
-        return JsonMessage.fromComponent(prefix);
     }
 
     /**
@@ -545,38 +423,18 @@ public class Team implements PacketGroupingAudience {
      * Gets the suffix of the team.
      *
      * @return the suffix team
-     * @deprecated Use {@link #getSuffix()}
-     */
-    @Deprecated
-    public JsonMessage getSuffixJson() {
-        return JsonMessage.fromComponent(suffix);
-    }
-
-    /**
-     * Gets the suffix of the team.
-     *
-     * @return the suffix team
      */
     public Component getSuffix() {
         return suffix;
     }
 
     /**
-     * Sends an {@link TeamsPacket.Action#UPDATE_TEAM_INFO} packet.
+     * Sends an {@link TeamsPacket.UpdateTeamAction} action packet.
      */
     public void sendUpdatePacket() {
-        final TeamsPacket updatePacket = new TeamsPacket();
-        updatePacket.teamName = this.teamName;
-        updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = this.teamDisplayName;
-        updatePacket.friendlyFlags = this.friendlyFlags;
-        updatePacket.nameTagVisibility = this.nameTagVisibility;
-        updatePacket.collisionRule = this.collisionRule;
-        updatePacket.teamColor = this.teamColor;
-        updatePacket.teamPrefix = this.prefix;
-        updatePacket.teamSuffix = this.suffix;
-
-        PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), updatePacket);
+        final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix);
+        PacketUtils.broadcastPacket(new TeamsPacket(teamName, info));
     }
 
     @Override

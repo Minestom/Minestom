@@ -1,9 +1,12 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
+
+@ApiStatus.Internal
 public final class MathUtils {
 
     private MathUtils() {
-
     }
 
     public static int square(int num) {
@@ -95,11 +98,8 @@ public final class MathUtils {
         return (a % b + b) % b;
     }
 
-    public static Integer tryParse(String string) {
-        try {
-            return Integer.parseInt(string);
-        } catch (NumberFormatException ignored) {
-            return null;
-        }
+    public static int bitsToRepresent(int n) {
+        Check.argCondition(n < 1, "n must be greater than 0");
+        return Integer.SIZE - Integer.numberOfLeadingZeros(n);
     }
 }

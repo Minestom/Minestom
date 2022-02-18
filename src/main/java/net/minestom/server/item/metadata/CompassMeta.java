@@ -1,24 +1,28 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
-import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTByte;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTString;
 
-import java.util.function.Supplier;
+import java.util.Map;
 
 public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
 
     private final boolean lodestoneTracked;
     private final String lodestoneDimension;
-    private final Position lodestonePosition;
+    private final Point lodestonePosition;
 
     protected CompassMeta(ItemMetaBuilder metaBuilder,
                           boolean lodestoneTracked,
                           @Nullable String lodestoneDimension,
-                          @Nullable Position lodestonePosition) {
+                          @Nullable Point lodestonePosition) {
         super(metaBuilder);
         this.lodestoneTracked = lodestoneTracked;
         this.lodestoneDimension = lodestoneDimension;
@@ -33,7 +37,7 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
         return lodestoneDimension;
     }
 
-    public @Nullable Position getLodestonePosition() {
+    public @Nullable Point getLodestonePosition() {
         return lodestonePosition;
     }
 
@@ -41,43 +45,34 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
         private boolean lodestoneTracked;
         private String lodestoneDimension;
-        private Position lodestonePosition;
+        private Point lodestonePosition;
 
         public Builder lodestoneTracked(boolean lodestoneTracked) {
             this.lodestoneTracked = lodestoneTracked;
-            mutateNbt(compound -> compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0)));
+            mutableNbt().setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
             return this;
         }
 
         public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
             this.lodestoneDimension = lodestoneDimension;
-
-            mutateNbt(compound -> {
-                if (lodestoneDimension != null) {
-                    compound.setString("LodestoneDimension", lodestoneDimension);
-                } else {
-                    compound.removeTag("LodestoneDimension");
-                }
-            });
-
+            if (lodestoneDimension != null) {
+                mutableNbt().setString("LodestoneDimension", lodestoneDimension);
+            } else {
+                mutableNbt().remove("LodestoneDimension");
+            }
             return this;
         }
 
-        public Builder lodestonePosition(@Nullable Position lodestonePosition) {
+        public Builder lodestonePosition(@Nullable Point lodestonePosition) {
             this.lodestonePosition = lodestonePosition;
-
-            mutateNbt(compound -> {
-                if (lodestonePosition != null) {
-                    NBTCompound posCompound = new NBTCompound();
-                    posCompound.setInt("X", (int) lodestonePosition.getX());
-                    posCompound.setInt("Y", (int) lodestonePosition.getY());
-                    posCompound.setInt("Z", (int) lodestonePosition.getZ());
-                    compound.set("LodestonePos", posCompound);
-                } else {
-                    compound.removeTag("LodestonePos");
-                }
-            });
-
+            if (lodestonePosition != null) {
+                mutableNbt().set("LodestonePos", NBT.Compound(Map.of(
+                        "X", NBT.Int(lodestonePosition.blockX()),
+                        "Y", NBT.Int(lodestonePosition.blockY()),
+                        "Z", NBT.Int(lodestonePosition.blockZ()))));
+            } else {
+                mutableNbt().remove("LodestonePos");
+            }
             return this;
         }
 
@@ -88,24 +83,18 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("LodestoneTracked")) {
-                lodestoneTracked(nbtCompound.getByte("LodestoneTracked") == 1);
+            if (nbtCompound.get("LodestoneTracked") instanceof NBTByte tracked) {
+                this.lodestoneTracked = tracked.asBoolean();
             }
-            if (nbtCompound.containsKey("LodestoneDimension")) {
-                lodestoneDimension(nbtCompound.getString("LodestoneDimension"));
+            if (nbtCompound.get("LodestoneDimension") instanceof NBTString dimension) {
+                this.lodestoneDimension = dimension.getValue();
             }
-            if (nbtCompound.containsKey("LodestonePos")) {
-                final NBTCompound posCompound = nbtCompound.getCompound("LodestonePos");
+            if (nbtCompound.get("LodestonePos") instanceof NBTCompound posCompound) {
                 final int x = posCompound.getInt("X");
                 final int y = posCompound.getInt("Y");
                 final int z = posCompound.getInt("Z");
-                lodestonePosition(new Position(x, y, z));
+                this.lodestonePosition = new Vec(x, y, z);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

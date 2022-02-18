@@ -6,25 +6,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldBorderLerpSizePacket implements ServerPacket {
-
-    public double oldDiameter;
-    public double newDiameter;
-    public long speed;
-
-    public static WorldBorderLerpSizePacket of(double oldDiameter, double newDiameter, long speed) {
-        WorldBorderLerpSizePacket packet = new WorldBorderLerpSizePacket();
-        packet.oldDiameter = oldDiameter;
-        packet.newDiameter = newDiameter;
-        packet.speed = speed;
-        return packet;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.oldDiameter = reader.readDouble();
-        this.newDiameter = reader.readDouble();
-        this.speed = reader.readVarLong();
+public record WorldBorderLerpSizePacket(double oldDiameter, double newDiameter, long speed) implements ServerPacket {
+    public WorldBorderLerpSizePacket(BinaryReader reader) {
+        this(reader.readDouble(), reader.readDouble(), reader.readVarLong());
     }
 
     @Override

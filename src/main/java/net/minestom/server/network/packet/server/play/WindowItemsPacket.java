@@ -7,40 +7,25 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class WindowItemsPacket implements ServerPacket {
+import java.util.List;
 
-    public byte windowId;
-    public ItemStack[] items;
+public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
+                                @NotNull ItemStack carriedItem) implements ServerPacket {
+    public WindowItemsPacket {
+        items = List.copyOf(items);
+    }
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public WindowItemsPacket() {}
+    public WindowItemsPacket(BinaryReader reader) {
+        this(reader.readByte(), reader.readVarInt(), reader.readVarIntList(BinaryReader::readItemStack),
+                reader.readItemStack());
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
-
-        if (items == null) {
-            writer.writeShort((short) 0);
-            return;
-        }
-
-        writer.writeShort((short) items.length);
-        for (ItemStack item : items) {
-            writer.writeItemStack(item);
-        }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        windowId = reader.readByte();
-
-        short length = reader.readShort();
-        items = new ItemStack[length];
-        for (int i = 0; i < length; i++) {
-            items[i] = reader.readItemStack();
-        }
+        writer.writeVarInt(stateId);
+        writer.writeVarIntList(items, BinaryWriter::writeItemStack);
+        writer.writeItemStack(carriedItem);
     }
 
     @Override

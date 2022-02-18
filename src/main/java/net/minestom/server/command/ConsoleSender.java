@@ -8,7 +8,7 @@ import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class ConsoleSender implements CommandSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleSender.class);
 
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
-    private final NBTCompound nbtCompound = new NBTCompound();
+    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
 
     @Override
     public void sendMessage(@NotNull String message) {

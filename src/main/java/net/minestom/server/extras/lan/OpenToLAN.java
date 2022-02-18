@@ -59,34 +59,30 @@ public class OpenToLAN {
      */
     public static boolean open(@NotNull OpenToLANConfig config) {
         Objects.requireNonNull(config, "config");
+        if (socket != null) return false;
 
-        if (socket != null) {
-            return false;
-        } else {
-            int port = config.port;
-
-            if (port == 0) {
-                try {
-                    port = NetworkUtils.getFreePort();
-                } catch (IOException e) {
-                    LOGGER.warn("Could not find an open port!", e);
-                    return false;
-                }
-            }
-
+        int port = config.port;
+        if (port == 0) {
             try {
-                socket = new DatagramSocket(port);
-            } catch (SocketException e) {
-                LOGGER.warn("Could not bind to the port!", e);
+                port = NetworkUtils.getFreePort();
+            } catch (IOException e) {
+                LOGGER.warn("Could not find an open port!", e);
                 return false;
             }
-
-            eventCooldown = new Cooldown(config.delayBetweenEvent);
-            task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
-                    .repeat(config.delayBetweenPings)
-                    .schedule();
-            return true;
         }
+
+        try {
+            socket = new DatagramSocket(port);
+        } catch (SocketException e) {
+            LOGGER.warn("Could not bind to the port!", e);
+            return false;
+        }
+
+        eventCooldown = new Cooldown(config.delayBetweenEvent);
+        task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
+                .repeat(config.delayBetweenPings)
+                .schedule();
+        return true;
     }
 
     /**
@@ -95,17 +91,13 @@ public class OpenToLAN {
      * @return {@code true} if it was closed, {@code false} if it was already closed
      */
     public static boolean close() {
-        if (socket == null) {
-            return false;
-        } else {
-            task.cancel();
-            socket.close();
+        if (socket == null) return false;
+        task.cancel();
+        socket.close();
 
-            task = null;
-            socket = null;
-
-            return true;
-        }
+        task = null;
+        socket = null;
+        return true;
     }
 
     /**
@@ -121,23 +113,21 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        if (MinecraftServer.getNettyServer().getPort() != 0) {
-            if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
-                final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-                EventDispatcher.call(event);
+        if (!MinecraftServer.getServer().isOpen()) return;
+        if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
+            final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
+            EventDispatcher.call(event);
 
-                final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
-                packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+            final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
+            packet = new DatagramPacket(data, data.length, PING_ADDRESS);
 
-                eventCooldown.refreshLastUpdate(System.currentTimeMillis());
-            }
+            eventCooldown.refreshLastUpdate(System.currentTimeMillis());
+        }
 
-
-            try {
-                socket.send(packet);
-            } catch (IOException e) {
-                LOGGER.warn("Could not send Open to LAN packet!", e);
-            }
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            LOGGER.warn("Could not send Open to LAN packet!", e);
         }
     }
 }

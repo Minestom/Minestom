@@ -1,8 +1,9 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 public class TurtleMeta extends AnimalMeta {
@@ -13,12 +14,11 @@ public class TurtleMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public BlockPosition getHomePosition() {
-        return super.metadata.getIndex(OFFSET, new BlockPosition(0, 0, 0));
+    public @NotNull Point getHomePosition() {
+        return super.metadata.getIndex(OFFSET, Vec.ZERO);
     }
 
-    public void setBlockPosition(@NotNull BlockPosition value) {
+    public void setBlockPosition(@NotNull Point value) {
         super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 
@@ -38,12 +38,11 @@ public class TurtleMeta extends AnimalMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
     }
 
-    @NotNull
-    public BlockPosition getTravelPosition() {
-        return super.metadata.getIndex(OFFSET + 3, new BlockPosition(0, 0, 0));
+    public @NotNull Point getTravelPosition() {
+        return super.metadata.getIndex(OFFSET + 3, Vec.ZERO);
     }
 
-    public void setTravelPosition(@NotNull BlockPosition value) {
+    public void setTravelPosition(@NotNull Point value) {
         super.metadata.setIndex(OFFSET + 3, Metadata.Position(value));
     }
 

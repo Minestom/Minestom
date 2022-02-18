@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 

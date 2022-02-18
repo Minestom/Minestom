@@ -6,8 +6,7 @@ import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-
-import java.util.function.Supplier;
+import org.jglrxavpok.hephaistos.nbt.NBTInt;
 
 public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provider<LeatherArmorMeta.Builder> {
 
@@ -32,7 +31,7 @@ public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provid
                 if (color != null) {
                     nbtCompound.setInt("color", color.asRGB());
                 } else {
-                    nbtCompound.removeTag("color");
+                    nbtCompound.remove("color");
                 }
             });
             return this;
@@ -45,17 +44,11 @@ public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("display")) {
-                final NBTCompound displayCompound = nbtCompound.getCompound("display");
-                if (displayCompound.containsKey("color")) {
-                    color(new Color(displayCompound.getInt("color")));
+            if (nbtCompound.get("display") instanceof NBTCompound displayCompound) {
+                if (displayCompound.get("color") instanceof NBTInt colorInt) {
+                    this.color = new Color(colorInt.getValue());
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

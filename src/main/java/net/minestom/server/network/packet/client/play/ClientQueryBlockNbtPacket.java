@@ -1,20 +1,14 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientQueryBlockNbtPacket extends ClientPlayPacket {
-
-    public int transactionId;
-    public BlockPosition blockPosition = new BlockPosition(0,0,0);
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.transactionId = reader.readVarInt();
-        this.blockPosition = reader.readBlockPosition();
+public record ClientQueryBlockNbtPacket(int transactionId, @NotNull Point blockPosition) implements ClientPacket {
+    public ClientQueryBlockNbtPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readBlockPosition());
     }
 
     @Override

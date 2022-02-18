@@ -5,26 +5,23 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public class AxisPlacementRule extends BlockPlacementRule {
 
-    protected final Block block;
-
-    public AxisPlacementRule(Block block) {
+    public AxisPlacementRule(@NotNull Block block) {
         super(block);
-        this.block = block;
     }
 
     @Override
-    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        return currentId;
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
+        return block;
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance,
-                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+    public Block blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
                             @NotNull Player pl) {
         String axis = "y";
         if (blockFace == BlockFace.WEST || blockFace == BlockFace.EAST) {
@@ -32,7 +29,6 @@ public class AxisPlacementRule extends BlockPlacementRule {
         } else if (blockFace == BlockFace.SOUTH || blockFace == BlockFace.NORTH) {
             axis = "z";
         }
-        return block.withProperties("axis=" + axis);
+        return block.withProperty("axis", axis);
     }
-
 }

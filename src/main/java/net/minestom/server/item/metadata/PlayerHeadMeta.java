@@ -6,12 +6,12 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider<PlayerHeadMeta.Builder> {
 
@@ -19,7 +19,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
     private final PlayerSkin playerSkin;
 
     protected PlayerHeadMeta(@NotNull ItemMetaBuilder metaBuilder, UUID skullOwner,
-                             PlayerSkin playerSkin) {
+                             @Nullable PlayerSkin playerSkin) {
         super(metaBuilder);
         this.skullOwner = skullOwner;
         this.playerSkin = playerSkin;
@@ -29,7 +29,7 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
         return skullOwner;
     }
 
-    public PlayerSkin getPlayerSkin() {
+    public @Nullable PlayerSkin getPlayerSkin() {
         return playerSkin;
     }
 
@@ -40,20 +40,26 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
 
         public Builder skullOwner(@Nullable UUID skullOwner) {
             this.skullOwner = skullOwner;
-            handleCompound("SkullOwner", nbtCompound -> {
-                nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner));
-            });
+            handleCompound("SkullOwner", nbtCompound ->
+                    nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner)));
             return this;
         }
 
         public Builder playerSkin(@Nullable PlayerSkin playerSkin) {
             this.playerSkin = playerSkin;
             handleCompound("SkullOwner", nbtCompound -> {
-                NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
-                String value = this.playerSkin.getTextures() == null ? "" : this.playerSkin.getTextures();
-                String signature = this.playerSkin.getSignature() == null ? "" : this.playerSkin.getSignature();
-                textures.add(new NBTCompound().setString("Value", value).setString("Signature", signature));
-                nbtCompound.set("Properties", new NBTCompound().set("textures", textures));
+                if (playerSkin == null) {
+                    nbtCompound.remove("Properties");
+                    return;
+                }
+
+                final String value = Objects.requireNonNullElse(this.playerSkin.textures(), "");
+                final String signature = Objects.requireNonNullElse(this.playerSkin.signature(), "");
+                NBTList<NBTCompound> textures = new NBTList<>(NBTType.TAG_Compound,
+                        List.of(NBT.Compound(Map.of(
+                                "Value", NBT.String(value),
+                                "Signature", NBT.String(signature)))));
+                nbtCompound.set("Properties", NBT.Compound(Map.of("textures", textures)));
             });
             return this;
         }
@@ -65,31 +71,19 @@ public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("SkullOwner")) {
-                NBTCompound skullOwnerCompound = nbtCompound.getCompound("SkullOwner");
-
-                if (skullOwnerCompound.containsKey("Id")) {
-                    skullOwner(Utils.intArrayToUuid(skullOwnerCompound.getIntArray("Id")));
+            if (nbtCompound.get("SkullOwner") instanceof NBTCompound skullOwnerCompound) {
+                if (skullOwnerCompound.get("Id") instanceof NBTIntArray id) {
+                    this.skullOwner = Utils.intArrayToUuid(id.getValue().copyArray());
                 }
 
-                if (skullOwnerCompound.containsKey("Properties")) {
-                    NBTCompound propertyCompound = skullOwnerCompound.getCompound("Properties");
-
-                    if (propertyCompound.containsKey("textures")) {
-                        NBTList<NBTCompound> textures = propertyCompound.getList("textures");
-                        if (textures != null) {
-                            NBTCompound nbt = textures.get(0);
-                            playerSkin(new PlayerSkin(nbt.getString("Value"), nbt.getString("Signature")));
-                        }
+                if (skullOwnerCompound.get("Properties") instanceof NBTCompound propertyCompound) {
+                    if (propertyCompound.get("textures") instanceof NBTList<?> textures &&
+                            textures.getSubtagType() == NBTType.TAG_Compound) {
+                        NBTCompound nbt = (NBTCompound) textures.get(0);
+                        this.playerSkin = new PlayerSkin(nbt.getString("Value"), nbt.getString("Signature"));
                     }
-
                 }
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

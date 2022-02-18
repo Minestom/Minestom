@@ -1,7 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player is finished eating.
  */
-public class PlayerEatEvent implements PlayerEvent {
+public class PlayerEatEvent implements PlayerEvent, EntityInstanceEvent {
 
     private final Player player;
     private final ItemStack foodItem;

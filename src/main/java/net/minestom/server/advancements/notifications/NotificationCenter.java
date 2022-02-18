@@ -3,11 +3,10 @@ package net.minestom.server.advancements.notifications;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.advancement.AdvancementUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.sql.Date;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Used to send one or multiples {@link Notification}.
@@ -16,9 +15,9 @@ import java.util.Collection;
  * <p>
  * You can simply create a {@link Notification} object and call {@link #send(Notification, Player)}.
  */
-public class NotificationCenter {
-
+public final class NotificationCenter {
     private static final String IDENTIFIER = "minestom:notification";
+    private static final AdvancementsPacket REMOVE_PACKET = new AdvancementsPacket(false, List.of(), List.of(IDENTIFIER), List.of());
 
     /**
      * Can't create an instance, use the static methods instead.
@@ -32,12 +31,9 @@ public class NotificationCenter {
      * @param notification the {@link Notification} to send
      * @param player       the player to send the notification to
      */
-    public static void send(Notification notification, Player player) {
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        playerConnection.sendPacket(getCreatePacket(notification));
-
-        playerConnection.sendPacket(AdvancementUtils.getRemovePacket(new String[]{IDENTIFIER}));
+    public static void send(@NotNull Notification notification, @NotNull Player player) {
+        player.sendPacket(createPacket(notification));
+        player.sendPacket(REMOVE_PACKET);
     }
 
     /**
@@ -46,7 +42,7 @@ public class NotificationCenter {
      * @param notification the {@link Notification} to send
      * @param players      the collection of players to send the notification to
      */
-    public static void send(Notification notification, Collection<Player> players) {
+    public static void send(@NotNull Notification notification, @NotNull Collection<Player> players) {
         // Can't use PacketWriterUtils because we need the packets to come in the correct order
         players.forEach(player -> send(notification, player));
     }
@@ -57,73 +53,25 @@ public class NotificationCenter {
      * @param notification the notification
      * @return the packet used to show the Toast
      */
-    private static AdvancementsPacket getCreatePacket(Notification notification) {
-        // For An advancement to be shown, it must have all of it's criteria achieved (progress 100%)
+    private static AdvancementsPacket createPacket(Notification notification) {
+        // For An advancement to be shown, it must have all of its criteria achieved (progress 100%)
         // Create a Criteria that we can set to 100% achieved.
-        // Criteria
+        final var displayData = new AdvancementsPacket.DisplayData(
+                notification.title(), Component.text("Articdive was here. #Minestom"),
+                notification.icon(), notification.frameType(),
+                0x6, null, 0f, 0f);
 
-        AdvancementsPacket.Criteria criteria = new AdvancementsPacket.Criteria();
-        {
-            AdvancementsPacket.CriterionProgress progress = new AdvancementsPacket.CriterionProgress();
-            progress.achieved = true;
-            progress.dateOfAchieving = new Date(System.currentTimeMillis()).getTime();
-            criteria.criterionProgress = progress;
-            criteria.criterionIdentifier = "minestom:some_criteria";
-        }
+        final var criteria = new AdvancementsPacket.Criteria("minestom:some_criteria",
+                new AdvancementsPacket.CriterionProgress(System.currentTimeMillis()));
 
-        // Now create an AdvancementsPacket that we can send:
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
+        final var advancement = new AdvancementsPacket.Advancement(null, displayData,
+                List.of(criteria.criterionIdentifier()),
+                List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))));
 
-        AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
-        {
-            // Get the advancement
-            AdvancementsPacket.Advancement advancement = new AdvancementsPacket.Advancement();
-            // Setup display data for the advancement
-            AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
-            {
-                displayData.title = notification.getTitle();
-                // Description is required, but never shown/seen so, small Easter egg.
-                displayData.description = Component.text("Articdive was here. #Minestom");
-                displayData.icon = notification.getIcon();
-                displayData.frameType = notification.getFrameType();
-                displayData.flags = 0x6;
-                // No background texture required as we are using 0x6
-                displayData.x = 0.0F;
-                displayData.y = 0.0F;
-            }
-            advancement.displayData = displayData;
-            // Add the criteria to the advancement
-            advancement.criterions = new String[]{criteria.criterionIdentifier};
-            // Add the requirement of the criteria to the advancement
-            AdvancementsPacket.Requirement requirement = new AdvancementsPacket.Requirement();
-            {
-                requirement.requirements = new String[]{criteria.criterionIdentifier};
-            }
-            advancement.requirements = new AdvancementsPacket.Requirement[]{requirement};
+        final var mapping = new AdvancementsPacket.AdvancementMapping(IDENTIFIER, advancement);
+        final var progressMapping = new AdvancementsPacket.ProgressMapping(IDENTIFIER,
+                new AdvancementsPacket.AdvancementProgress(List.of(criteria)));
 
-            mapping.key = IDENTIFIER;
-            mapping.value = advancement;
-        }
-        // Add the mapping to the main packet
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{mapping};
-
-
-        // We have no identifiers to remove.
-        advancementsPacket.identifiersToRemove = new String[]{};
-
-        // Now we need to set the player's progress for the criteria.
-        AdvancementsPacket.ProgressMapping progressMapping = new AdvancementsPacket.ProgressMapping();
-        {
-            AdvancementsPacket.AdvancementProgress advancementProgress = new AdvancementsPacket.AdvancementProgress();
-            advancementProgress.criteria = new AdvancementsPacket.Criteria[]{criteria};
-
-            progressMapping.key = IDENTIFIER;
-            progressMapping.value = advancementProgress;
-        }
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{progressMapping};
-
-        return advancementsPacket;
+        return new AdvancementsPacket(false, List.of(mapping), List.of(), List.of(progressMapping));
     }
-
 }
