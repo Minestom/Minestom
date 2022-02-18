@@ -23,7 +23,7 @@ public class LargeGraphics2DFramebuffer implements LargeFramebuffer {
     public LargeGraphics2DFramebuffer(int width, int height) {
         this.width = width;
         this.height = height;
-        backingImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        backingImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         renderer = backingImage.createGraphics();
         pixels = ((DataBufferInt) backingImage.getRaster().getDataBuffer()).getData();
     }

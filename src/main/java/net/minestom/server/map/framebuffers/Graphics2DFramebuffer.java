@@ -13,7 +13,7 @@ import java.awt.image.DataBufferInt;
 public class Graphics2DFramebuffer implements Framebuffer {
 
     private final byte[] colors = new byte[WIDTH * HEIGHT];
-    private final BufferedImage backingImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private final BufferedImage backingImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
     private final Graphics2D renderer;
     private final int[] pixels;
 
