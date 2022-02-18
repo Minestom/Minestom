@@ -191,7 +191,7 @@ public enum MapColors {
     }
 
     public static PreciseMapColor closestColor(int argb) {
-        if (argb << 24 == 0) return new PreciseMapColor(NONE, Multiplier.x1_00);
+        if ((0xFF & argb >> 24) == 0) return new PreciseMapColor(NONE, Multiplier.x1_00);
         int noAlpha = argb & 0xFFFFFF;
         if (mappingStrategy == ColorMappingStrategy.PRECISE) {
             if (rgbArray == null) {
