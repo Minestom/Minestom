@@ -1,6 +1,5 @@
-package map;
+package net.minestom.server.map;
 
-import net.minestom.server.map.MapColors;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
