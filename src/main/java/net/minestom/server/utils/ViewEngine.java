@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
@@ -18,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Defines which players are able to see this element.
@@ -218,25 +218,38 @@ public final class ViewEngine {
             });
         }
 
-        private Stream<T> references() {
+        private int lastSize;
+
+        private Collection<T> references() {
             final TrackedLocation trackedLocation = ViewEngine.this.trackedLocation;
-            if (trackedLocation == null) return Stream.empty();
+            if (trackedLocation == null) return List.of();
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
-            var references = instance.getEntityTracker().references(point, range, target);
-            Stream<T> result = references.stream().flatMap(Collection::stream);
-            if (instance instanceof InstanceContainer container) {
-                // References from shared instances must be added to the result.
-                final List<SharedInstance> shared = container.getSharedInstances();
-                if (!shared.isEmpty()) {
-                    Stream<T> sharedInstanceStream = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
-                        var ref = inst.getEntityTracker().references(point, range, target);
-                        ref.forEach(consumer);
-                    }).flatMap(Collection::stream);
-                    result = Stream.concat(result, sharedInstanceStream);
+
+            Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(Math.max(lastSize, 16));
+            // Current Instance
+            for (var reference : instance.getEntityTracker().references(point, range, target)) {
+                if (reference.isEmpty()) continue;
+                for (var entity : reference) {
+                    entityMap.putIfAbsent(entity.getEntityId(), entity);
                 }
             }
-            return result;
+            // Shared Instances
+            if (instance instanceof InstanceContainer container) {
+                final List<SharedInstance> shared = container.getSharedInstances();
+                if (!shared.isEmpty()) {
+                    for (var sharedInstance : shared) {
+                        for (var reference : sharedInstance.getEntityTracker().references(point, range, target)) {
+                            if (reference.isEmpty()) continue;
+                            for (var entity : reference) {
+                                entityMap.putIfAbsent(entity.getEntityId(), entity);
+                            }
+                        }
+                    }
+                }
+            }
+            this.lastSize = entityMap.size();
+            return entityMap.values();
         }
     }
 
@@ -248,7 +261,7 @@ public final class ViewEngine {
 
         @Override
         public int size() {
-            return (int) viewableOption.references().count();
+            return viewableOption.references().size();
         }
 
         @Override
