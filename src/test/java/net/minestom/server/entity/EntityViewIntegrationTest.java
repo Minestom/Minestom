@@ -97,40 +97,6 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void viewableRule(Env env) {
-        var instance = env.createFlatInstance();
-        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
-        p1.updateViewableRule(player -> player.getEntityId() == p1.getEntityId() + 1);
-
-        var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
-
-        assertEquals(1, p1.getViewers().size());
-        assertEquals(1, p2.getViewers().size());
-
-        p1.updateViewableRule(player -> false);
-
-        assertEquals(0, p1.getViewers().size());
-        assertEquals(1, p2.getViewers().size());
-    }
-
-    @Test
-    public void viewerRule(Env env) {
-        var instance = env.createFlatInstance();
-        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
-        p1.updateViewerRule(player -> player.getEntityId() == p1.getEntityId() + 1);
-
-        var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
-
-        assertEquals(1, p1.getViewers().size());
-        assertEquals(1, p2.getViewers().size());
-
-        p1.updateViewerRule(player -> false);
-
-        assertEquals(1, p1.getViewers().size());
-        assertEquals(0, p2.getViewers().size());
-    }
-
-    @Test
     public void vehicle(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
