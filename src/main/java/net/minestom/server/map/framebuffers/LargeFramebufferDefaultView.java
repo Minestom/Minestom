@@ -2,7 +2,7 @@ package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.LargeFramebuffer;
-import net.minestom.server.map.MapColors;
+import net.minestom.server.map.MapColor;
 
 public class LargeFramebufferDefaultView implements Framebuffer {
     private final LargeFramebuffer parent;
@@ -21,7 +21,7 @@ public class LargeFramebufferDefaultView implements Framebuffer {
     }
 
     private byte colorOrNone(int x, int y) {
-        if(!bounds(x, y)) return MapColors.NONE.baseColor();
+        if(!bounds(x, y)) return MapColor.NONE.baseColor();
         return parent.getMapColor(x, y);
     }
 

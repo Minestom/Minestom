@@ -51,6 +51,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static MapColorEntry mapColor(String namespace, @NotNull Properties main) {
+        return new MapColorEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -134,6 +139,7 @@ public final class Registry {
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
+        MAP_COLORS("map_colors.json"),
 
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
@@ -399,6 +405,18 @@ public final class Registry {
                     main.getString("translationKey"),
                     main.getInt("color"),
                     main.getBoolean("instantaneous"),
+                    custom);
+        }
+    }
+
+    public record MapColorEntry(NamespaceID namespace, int id, int red, int green, int blue,
+                                Properties custom) implements Entry {
+        public MapColorEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getInt("red"),
+                    main.getInt("green"),
+                    main.getInt("blue"),
                     custom);
         }
     }

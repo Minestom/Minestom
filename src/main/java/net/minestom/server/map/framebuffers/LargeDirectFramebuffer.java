@@ -2,13 +2,13 @@ package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.LargeFramebuffer;
-import net.minestom.server.map.MapColors;
+import net.minestom.server.map.MapColor;
 
 /**
  * {@link LargeFramebuffer} with direct access to the colors array.
  * <p>
  * This implementation does not throw errors when accessing out-of-bounds coordinates through sub-views, and will instead
- * use {@link MapColors#NONE}. This is only the case for sub-views, access through {@link #setMapColor(int, int, byte)}
+ * use {@link MapColor#NONE}. This is only the case for sub-views, access through {@link #setMapColor(int, int, byte)}
  * and {@link #getMapColor(int, int)} will throw an exception if out-of-bounds coordinates are inputted.
  */
 public class LargeDirectFramebuffer implements LargeFramebuffer {
