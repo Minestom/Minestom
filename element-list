@@ -126,7 +126,6 @@ net.minestom.server.utils.cache
 net.minestom.server.utils.callback
 net.minestom.server.utils.callback.validator
 net.minestom.server.utils.chunk
-net.minestom.server.utils.clone
 net.minestom.server.utils.collection
 net.minestom.server.utils.debug
 net.minestom.server.utils.entity
