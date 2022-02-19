@@ -6,6 +6,8 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -114,6 +116,24 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
+    public void viewableRuleUpdate(Env env) {
+        var instance = env.createFlatInstance();
+        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
+
+        AtomicBoolean enabled = new AtomicBoolean(false);
+        p1.updateViewableRule(player -> enabled.get());
+
+        var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
+        assertEquals(0, p1.getViewers().size());
+        assertEquals(1, p2.getViewers().size());
+
+        enabled.set(true);
+        p1.updateViewableRule();
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(1, p2.getViewers().size());
+    }
+
+    @Test
     public void viewerRule(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
@@ -128,6 +148,23 @@ public class EntityViewIntegrationTest {
 
         assertEquals(1, p1.getViewers().size());
         assertEquals(0, p2.getViewers().size());
+    }
+
+    @Test
+    public void viewerRuleUpdate(Env env) {
+        var instance = env.createFlatInstance();
+        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
+        AtomicBoolean enabled = new AtomicBoolean(false);
+        p1.updateViewerRule(player -> enabled.get());
+
+        var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(0, p2.getViewers().size());
+
+        enabled.set(true);
+        p1.updateViewerRule();
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(1, p2.getViewers().size());
     }
 
     @Test
