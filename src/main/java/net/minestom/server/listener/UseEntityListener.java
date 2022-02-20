@@ -12,7 +12,7 @@ public class UseEntityListener {
 
     public static void useEntityListener(ClientInteractEntityPacket packet, Player player) {
         final Entity entity = Entity.getEntity(packet.targetId());
-        if (entity == null || !entity.isViewer(player) || player.getDistance(entity) > 4)
+        if (entity == null || !entity.isViewer(player) || player.getDistance(entity) > 6)
             return;
 
         ClientInteractEntityPacket.Type type = packet.type();
