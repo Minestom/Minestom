@@ -74,7 +74,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(PooledBuffers.get());
-    private volatile BinaryBuffer cacheBuffer;
+    private BinaryBuffer cacheBuffer;
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
@@ -124,8 +124,9 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     public void consumeCache(BinaryBuffer buffer) {
-        if (cacheBuffer != null) {
-            buffer.write(cacheBuffer);
+        final BinaryBuffer cache = this.cacheBuffer;
+        if (cache != null) {
+            buffer.write(cache);
             this.cacheBuffer = null;
         }
     }
