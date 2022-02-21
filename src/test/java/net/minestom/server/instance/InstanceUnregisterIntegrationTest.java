@@ -6,6 +6,8 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.player.PlayerTickEvent;
 import org.junit.jupiter.api.Test;
 
+import java.lang.ref.WeakReference;
+
 @EnvTest
 public class InstanceUnregisterIntegrationTest {
 
@@ -29,5 +31,41 @@ public class InstanceUnregisterIntegrationTest {
         instanceManager.unregisterInstance(shared1);
         listener.followup();
         env.tick();
+    }
+
+    @Test
+    public void instanceGC(Env env) {
+        var instance = env.createFlatInstance();
+        var ref = new WeakReference<>(instance);
+        env.process().instance().unregisterInstance(instance);
+
+        //noinspection UnusedAssignment
+        instance = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void chunkGC(Env env) {
+        // Ensure that unregistering an instance does release its chunks
+        var instance = env.createFlatInstance();
+        var chunk = instance.loadChunk(0, 0).join();
+        var ref = new WeakReference<>(chunk);
+        instance.unloadChunk(chunk);
+        env.process().instance().unregisterInstance(instance);
+        env.tick(); // Required to remove the chunk from the thread dispatcher
+
+        //noinspection UnusedAssignment
+        chunk = null;
+        waitUntilCleared(ref);
+    }
+
+    private static void waitUntilCleared(WeakReference<?> ref) {
+        while (ref.get() != null) {
+            System.gc();
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ignore) {
+            }
+        }
     }
 }

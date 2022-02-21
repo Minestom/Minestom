@@ -5,18 +5,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.listener.manager.ServerPacketConsumer;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -84,11 +80,8 @@ public abstract class PlayerConnection {
 
     /**
      * Serializes the packet and send it to the client.
-     * <p>
-     * Also responsible for executing {@link ConnectionManager#onPacketSend(ServerPacketConsumer)} consumers.
      *
      * @param packet the packet to send
-     * @see #shouldSendPacket(ServerPacket)
      */
     public abstract void sendPacket(@NotNull SendablePacket packet);
 
@@ -109,11 +102,6 @@ public abstract class PlayerConnection {
      */
     public void flush() {
         // Empty
-    }
-
-    protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
-        return player == null ||
-                PACKET_LISTENER_MANAGER.processServerPacket(serverPacket, Collections.singleton(player));
     }
 
     /**

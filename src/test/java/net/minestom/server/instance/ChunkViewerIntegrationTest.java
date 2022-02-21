@@ -5,6 +5,7 @@ import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -36,7 +37,7 @@ public class ChunkViewerIntegrationTest {
     @Test
     public void renderDistance(Env env) {
         final int viewRadius = MinecraftServer.getChunkViewDistance();
-        final int viewLength = 1 + viewRadius * 2;
+        final int count = ChunkUtils.getChunkCount(viewRadius);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         // Check initial load
@@ -45,8 +46,7 @@ public class ChunkViewerIntegrationTest {
             var player = connection.connect(instance, new Pos(0, 40, 0)).join();
             assertEquals(instance, player.getInstance());
             assertEquals(new Pos(0, 40, 0), player.getPosition());
-
-            assertEquals(viewLength * viewLength, tracker.collect().size());
+            assertEquals(count, tracker.collect().size());
         }
         // Check chunk#sendChunk
         {
@@ -56,7 +56,7 @@ public class ChunkViewerIntegrationTest {
                     instance.getChunk(x, z).sendChunk();
                 }
             }
-            assertEquals(viewLength * viewLength, tracker.collect().size());
+            assertEquals(count, tracker.collect().size());
         }
     }
 }

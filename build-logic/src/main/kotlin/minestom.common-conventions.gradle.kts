@@ -21,8 +21,7 @@ tasks {
     }
     withType<Test> {
         useJUnitPlatform()
-        // Present until tests all succeed without
-        maxParallelForks = Runtime.getRuntime().availableProcessors()
-        setForkEvery(1)
+        // Viewable packets make tracking harder. Could be re-enabled later.
+        jvmArgs("-Dminestom.viewable-packet=false")
     }
 }

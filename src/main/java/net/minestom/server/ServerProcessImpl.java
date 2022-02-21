@@ -3,8 +3,8 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -276,7 +276,7 @@ final class ServerProcessImpl implements ServerProcess {
                 final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
                 final double tickTimeMs = (System.nanoTime() - nanoTime) / 1e6D;
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
-                GlobalHandles.SERVER_TICK_MONITOR_HANDLE.call(new ServerTickMonitorEvent(tickMonitor));
+                EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
                 Acquirable.resetAcquiringTime();
             }
         }

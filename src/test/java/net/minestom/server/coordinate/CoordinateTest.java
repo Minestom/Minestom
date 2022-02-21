@@ -1,39 +1,50 @@
 package net.minestom.server.coordinate;
 
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
+import static net.minestom.server.utils.chunk.ChunkUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CoordinateTest {
 
     @Test
     public void chunkIndex() {
-        var index = ChunkUtils.getChunkIndex(2, 5);
-        assertEquals(2, ChunkUtils.getChunkCoordX(index));
-        assertEquals(5, ChunkUtils.getChunkCoordZ(index));
+        var index = getChunkIndex(2, 5);
+        assertEquals(2, getChunkCoordX(index));
+        assertEquals(5, getChunkCoordZ(index));
 
-        index = ChunkUtils.getChunkIndex(-5, 25);
-        assertEquals(-5, ChunkUtils.getChunkCoordX(index));
-        assertEquals(25, ChunkUtils.getChunkCoordZ(index));
+        index = getChunkIndex(-5, 25);
+        assertEquals(-5, getChunkCoordX(index));
+        assertEquals(25, getChunkCoordZ(index));
 
-        index = ChunkUtils.getChunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
-        assertEquals(Integer.MAX_VALUE, ChunkUtils.getChunkCoordX(index));
-        assertEquals(Integer.MIN_VALUE, ChunkUtils.getChunkCoordZ(index));
+        index = getChunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
+        assertEquals(Integer.MAX_VALUE, getChunkCoordX(index));
+        assertEquals(Integer.MIN_VALUE, getChunkCoordZ(index));
     }
 
     @Test
     public void chunkCoordinate() {
-        assertEquals(1, ChunkUtils.getChunkCoordinate(16));
-        assertEquals(-1, ChunkUtils.getChunkCoordinate(-16));
-        assertEquals(3, ChunkUtils.getChunkCoordinate(48));
+        assertEquals(1, getChunkCoordinate(16));
+        assertEquals(-1, getChunkCoordinate(-16));
+        assertEquals(3, getChunkCoordinate(48));
 
-        assertEquals(4, ChunkUtils.getChunkCoordinate(65));
-        assertEquals(4, ChunkUtils.getChunkCoordinate(64));
-        assertEquals(3, ChunkUtils.getChunkCoordinate(63));
-        assertEquals(-2, ChunkUtils.getChunkCoordinate(-25));
-        assertEquals(23, ChunkUtils.getChunkCoordinate(380));
+        assertEquals(4, getChunkCoordinate(65));
+        assertEquals(4, getChunkCoordinate(64));
+        assertEquals(3, getChunkCoordinate(63));
+        assertEquals(-2, getChunkCoordinate(-25));
+        assertEquals(23, getChunkCoordinate(380));
+    }
+
+    @Test
+    public void chunkCount() {
+        assertEquals(289, getChunkCount(8));
+        assertEquals(169, getChunkCount(6));
+        assertEquals(121, getChunkCount(5));
+        assertEquals(9, getChunkCount(1));
+        assertEquals(1, getChunkCount(0));
+        assertThrows(IllegalArgumentException.class, () -> getChunkCount(-1));
     }
 
     @Test

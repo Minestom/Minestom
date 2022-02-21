@@ -11,7 +11,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -582,7 +582,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         // Tick event
         {
             // Process tick events
-            GlobalHandles.INSTANCE_TICK.call(new InstanceTickEvent(this, time, lastTickAge));
+            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge));
             // Set last tick age
             this.lastTickAge = time;
         }

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Phaser;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,15 +22,14 @@ import java.util.concurrent.locks.ReentrantLock;
 @ApiStatus.Internal
 public final class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
-    private final Phaser phaser;
     private volatile boolean stop;
 
+    private CountDownLatch latch;
     private long tickTime;
     private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
-    public TickThread(Phaser phaser, int number) {
+    public TickThread(int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
-        this.phaser = phaser;
     }
 
     @Override
@@ -45,7 +44,7 @@ public final class TickThread extends MinestomThread {
             }
             this.lock.unlock();
             // #acquire() callbacks
-            this.phaser.arriveAndDeregister();
+            this.latch.countDown();
             LockSupport.park(this);
         }
     }
@@ -69,10 +68,13 @@ public final class TickThread extends MinestomThread {
         }
     }
 
-    void startTick(long tickTime) {
-        if (entries.isEmpty())
-            return; // Nothing to tick
-        this.phaser.register();
+    void startTick(CountDownLatch latch, long tickTime) {
+        if (entries.isEmpty()) {
+            // Nothing to tick
+            latch.countDown();
+            return;
+        }
+        this.latch = latch;
         this.tickTime = tickTime;
         this.stop = false;
         LockSupport.unpark(this);

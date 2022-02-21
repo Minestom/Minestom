@@ -25,6 +25,7 @@ public record PlayerSkin(String textures, String signature) {
     @Blocking
     public static @Nullable PlayerSkin fromUuid(@NotNull String uuid) {
         final JsonObject jsonObject = MojangUtils.fromUuid(uuid);
+        if (jsonObject == null) return null;
         final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
         for (JsonElement jsonElement : propertiesArray) {
             final JsonObject propertyObject = jsonElement.getAsJsonObject();
@@ -46,6 +47,7 @@ public record PlayerSkin(String textures, String signature) {
     @Blocking
     public static @Nullable PlayerSkin fromUsername(@NotNull String username) {
         final JsonObject jsonObject = MojangUtils.fromUsername(username);
+        if (jsonObject == null) return null;
         final String uuid = jsonObject.get("id").getAsString();
         // Retrieve the skin data from the mojang uuid
         return fromUuid(uuid);

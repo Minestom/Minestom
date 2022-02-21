@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,6 +49,23 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
+    public void manualViewers(Env env) {
+        var instance = env.createFlatInstance();
+        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
+        var p2 = env.createPlayer(instance, new Pos(0, 42, 5_000));
+
+        assertEquals(0, p1.getViewers().size());
+        assertEquals(0, p2.getViewers().size());
+        p1.addViewer(p2);
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(0, p2.getViewers().size());
+
+        p2.teleport(new Pos(0, 42, 0)).join();
+        assertEquals(1, p1.getViewers().size());
+        assertEquals(1, p2.getViewers().size());
+    }
+
+    @Test
     public void movements(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
@@ -79,36 +97,50 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void viewableRule(Env env) {
+    public void livingVehicle(Env env) {
         var instance = env.createFlatInstance();
-        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
-        p1.updateViewableRule(player -> player.getEntityId() == p1.getEntityId() + 1);
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
 
-        var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        var passenger = new Entity(EntityType.ZOMBIE);
 
-        assertEquals(1, p1.getViewers().size());
-        assertEquals(1, p2.getViewers().size());
+        var tracker = connection.trackIncoming(SpawnLivingEntityPacket.class);
 
-        p1.updateViewableRule(player -> false);
-
-        assertEquals(0, p1.getViewers().size());
-        assertEquals(1, p2.getViewers().size());
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle.addPassenger(passenger);
+        // Verify packets
+        {
+            var results = tracker.collect();
+            assertEquals(2, results.size());
+            assertEquals(vehicle.getEntityId(), results.get(0).entityId());
+            assertEquals(passenger.getEntityId(), results.get(1).entityId());
+        }
+        // Verify viewers
+        {
+            assertEquals(0, player.getViewers().size());
+            assertEquals(1, vehicle.getViewers().size());
+            assertTrue(vehicle.isViewer(player));
+            assertEquals(1, passenger.getViewers().size());
+            assertTrue(passenger.isViewer(player));
+        }
     }
 
     @Test
-    public void viewerRule(Env env) {
+    public void vehicleInheritance(Env env) {
         var instance = env.createFlatInstance();
-        var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
-        p1.updateViewerRule(player -> player.getEntityId() == p1.getEntityId() + 1);
+        var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
+        var p2 = env.createPlayer(instance, new Pos(0, 40, 0));
 
-        var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle.addPassenger(p1);
 
-        assertEquals(1, p1.getViewers().size());
-        assertEquals(1, p2.getViewers().size());
+        var vehicle2 = new Entity(EntityType.ZOMBIE);
+        vehicle2.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle2.addPassenger(p2);
 
-        p1.updateViewerRule(player -> false);
-
-        assertEquals(1, p1.getViewers().size());
-        assertEquals(0, p2.getViewers().size());
+        assertEquals(2, vehicle.getViewers().size());
+        assertEquals(2, vehicle2.getViewers().size());
     }
 }

@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
@@ -9,16 +10,15 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.SharedInstance;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Defines which players are able to see this element.
@@ -29,23 +29,27 @@ public final class ViewEngine {
     private final int range;
     private final Set<Player> manualViewers = new HashSet<>();
 
-    private Instance instance;
-    private EntityTracker tracker;
-    private Point lastPoint;
-
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
     // Decide if this entity should view X entities
     public final Option<Entity> viewerOption;
 
-    private final Set<Player> set = new SetImpl();
+    private final Set<Player> set;
     private final Object mutex = this;
+
+    private volatile TrackedLocation trackedLocation;
 
     public ViewEngine(@Nullable Entity entity,
                       Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
                       Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
         this.entity = entity;
-        this.range = entity != null ? MinecraftServer.getEntityViewDistance() : MinecraftServer.getChunkViewDistance();
+        if (entity != null) {
+            this.range = MinecraftServer.getEntityViewDistance();
+            this.set = new EntitySet();
+        } else {
+            this.range = MinecraftServer.getChunkViewDistance();
+            this.set = new ChunkSet();
+        }
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
         this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
     }
@@ -58,25 +62,32 @@ public final class ViewEngine {
         this(null);
     }
 
-    public void updateTracker(@NotNull Instance instance, @NotNull Point point, @Nullable EntityTracker tracker) {
-        synchronized (mutex) {
-            this.instance = instance;
-            this.lastPoint = point;
-            this.tracker = tracker;
-        }
+    public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
+        this.trackedLocation = instance != null ? new TrackedLocation(instance, point) : null;
+    }
+
+    record TrackedLocation(Instance instance, Point point) {
     }
 
     public boolean manualAdd(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            return manualViewers.add(player);
+            if (manualViewers.add(player)) {
+                viewableOption.bitSet.add(player.getEntityId());
+                return true;
+            }
+            return false;
         }
     }
 
     public boolean manualRemove(@NotNull Player player) {
         if (player == this.entity) return false;
         synchronized (mutex) {
-            return manualViewers.remove(player);
+            if (manualViewers.remove(player)) {
+                viewableOption.bitSet.remove(player.getEntityId());
+                return true;
+            }
+            return false;
         }
     }
 
@@ -94,26 +105,23 @@ public final class ViewEngine {
     }
 
     public void handleAutoViewAddition(Entity entity) {
-        handleAutoView(entity, viewerOption.addition, viewableOption.addition);
+        handleAutoView(entity, viewerOption.addition, viewableOption.addition, false);
     }
 
     public void handleAutoViewRemoval(Entity entity) {
-        handleAutoView(entity, viewerOption.removal, viewableOption.removal);
+        handleAutoView(entity, viewerOption.removal, viewableOption.removal, true);
     }
 
-    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
-        if (entity.getVehicle() != null)
-            return; // Passengers are handled by the vehicle, inheriting its viewing settings
+    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable,
+                                boolean requirement) {
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
+            assert viewerOption.isRegistered(entity) == requirement : "Entity is already registered";
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
+            assert viewableOption.isRegistered(player) == requirement : "Entity is already registered";
             if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
-    }
-
-    private boolean validAutoViewer(Player player) {
-        return entity == null || viewableOption.isRegistered(player);
     }
 
     public Object mutex() {
@@ -181,20 +189,24 @@ public final class ViewEngine {
         public void updateRule(Predicate<T> predicate) {
             synchronized (mutex) {
                 this.predicate = predicate;
-                updateRule();
+                updateRule0(predicate);
             }
         }
 
         public void updateRule() {
             synchronized (mutex) {
-                update(loopPredicate, entity -> {
-                    final boolean result = predicate.test(entity);
-                    if (result != isRegistered(entity)) {
-                        if (result) addition.accept(entity);
-                        else removal.accept(entity);
-                    }
-                });
+                updateRule0(predicate);
             }
+        }
+
+        void updateRule0(Predicate<T> predicate) {
+            update(loopPredicate, entity -> {
+                final boolean result = predicate.test(entity);
+                if (result != isRegistered(entity)) {
+                    if (result) addition.accept(entity);
+                    else removal.accept(entity);
+                }
+            });
         }
 
         private void update(Predicate<T> visibilityPredicate,
@@ -207,53 +219,79 @@ public final class ViewEngine {
             });
         }
 
-        private Stream<T> references() {
-            if (tracker == null) return Stream.empty();
-            var references = tracker.references(lastPoint, range, target);
-            var result = references.stream().flatMap(Collection::stream);
-            if (instance != null && instance instanceof InstanceContainer container) {
-                // References from shared instances must be added to the result.
-                var shared = container.getSharedInstances();
-                if (!shared.isEmpty()) {
-                    var tmp = shared.stream().<List<T>>mapMulti((inst, consumer) -> {
-                        var ref = inst.getEntityTracker().references(lastPoint, range, target);
-                        ref.forEach(consumer);
-                    }).flatMap(Collection::stream);
-                    result = Stream.concat(result, tmp);
+        private int lastSize;
+
+        private Collection<T> references() {
+            final TrackedLocation trackedLocation = ViewEngine.this.trackedLocation;
+            if (trackedLocation == null) return List.of();
+            final Instance instance = trackedLocation.instance();
+            final Point point = trackedLocation.point();
+
+            Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
+            // Current Instance
+            for (var reference : instance.getEntityTracker().references(point, range, target)) {
+                if (reference.isEmpty()) continue;
+                for (var entity : reference) {
+                    entityMap.putIfAbsent(entity.getEntityId(), entity);
                 }
             }
-            return result;
+            // Shared Instances
+            if (instance instanceof InstanceContainer container) {
+                final List<SharedInstance> shared = container.getSharedInstances();
+                if (!shared.isEmpty()) {
+                    for (var sharedInstance : shared) {
+                        for (var reference : sharedInstance.getEntityTracker().references(point, range, target)) {
+                            if (reference.isEmpty()) continue;
+                            for (var entity : reference) {
+                                entityMap.putIfAbsent(entity.getEntityId(), entity);
+                            }
+                        }
+                    }
+                }
+            }
+            this.lastSize = entityMap.size();
+            return entityMap.values();
         }
     }
 
-    final class SetImpl extends AbstractSet<Player> {
-        private static final Object[] EMPTY = new Object[0];
+    final class ChunkSet extends AbstractSet<Player> {
+        @Override
+        public @NotNull Iterator<Player> iterator() {
+            return viewableOption.references().iterator();
+        }
 
+        @Override
+        public int size() {
+            return viewableOption.references().size();
+        }
+
+        @Override
+        public void forEach(Consumer<? super Player> action) {
+            viewableOption.references().forEach(action);
+        }
+    }
+
+    final class EntitySet extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
             synchronized (mutex) {
-                return Arrays.asList(toArray(Player[]::new)).iterator();
+                return viewableOption.bitSet.intStream()
+                        .mapToObj(operand -> (Player) Entity.getEntity(operand))
+                        .toList().iterator();
             }
         }
 
         @Override
         public int size() {
             synchronized (mutex) {
-                int size = manualViewers.size();
-                if (entity != null) return size + viewableOption.bitSet.size();
-                // Non-entity fallback
-                size += viewableOption.references().filter(ViewEngine.this::validAutoViewer).count();
-                return size;
+                return viewableOption.bitSet.size();
             }
         }
 
         @Override
         public boolean isEmpty() {
             synchronized (mutex) {
-                if (!manualViewers.isEmpty()) return false;
-                if (entity != null) return viewableOption.bitSet.isEmpty();
-                // Non-entity fallback
-                return viewableOption.references().noneMatch(ViewEngine.this::validAutoViewer);
+                return viewableOption.bitSet.isEmpty();
             }
         }
 
@@ -261,52 +299,14 @@ public final class ViewEngine {
         public boolean contains(Object o) {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
-                if (manualViewers.contains(player)) return true;
-                if (entity != null) return viewableOption.isRegistered(player);
-                // Non-entity fallback
-                return viewableOption.references().anyMatch(ViewEngine.this::validAutoViewer);
+                return viewableOption.isRegistered(player);
             }
         }
 
         @Override
         public void forEach(Consumer<? super Player> action) {
             synchronized (mutex) {
-                if (!manualViewers.isEmpty()) manualViewers.forEach(action);
-                if (entity != null) {
-                    viewableOption.bitSet.forEach((int id) ->
-                            action.accept((Player) Entity.getEntity(id)));
-                    return;
-                }
-                // Non-entity fallback
-                viewableOption.references().filter(ViewEngine.this::validAutoViewer).forEach(action);
-            }
-        }
-
-        @Override
-        public @NotNull Object @NotNull [] toArray() {
-            synchronized (mutex) {
-                final int size = size();
-                if (size == 0) return EMPTY;
-                Object[] array = new Object[size];
-                AtomicInteger index = new AtomicInteger();
-                forEach(player -> array[index.getAndIncrement()] = player);
-                assert index.get() == size;
-                return array;
-            }
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T> @NotNull T @NotNull [] toArray(@NotNull T @NotNull [] a) {
-            synchronized (mutex) {
-                final int size = size();
-                T[] array = a.length >= size ? a :
-                        (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
-
-                AtomicInteger index = new AtomicInteger();
-                forEach(player -> array[index.getAndIncrement()] = (T) player);
-                assert index.get() == size;
-                return array;
+                viewableOption.bitSet.forEach((int id) -> action.accept((Player) Entity.getEntity(id)));
             }
         }
     }

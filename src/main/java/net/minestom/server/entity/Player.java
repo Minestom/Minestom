@@ -32,7 +32,6 @@ import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -125,7 +124,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             try {
                 if (chunk != null) {
                     chunk.sendChunk(this);
-                    GlobalHandles.PLAYER_CHUNK_LOAD.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+                    EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
                 }
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
@@ -135,7 +134,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-        GlobalHandles.PLAYER_CHUNK_UNLOAD.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
+        EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
 
     private final AtomicInteger teleportId = new AtomicInteger();
@@ -362,7 +361,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Tick event
-        GlobalHandles.PLAYER_TICK.call(new PlayerTickEvent(this));
+        EventDispatcher.call(new PlayerTickEvent(this));
     }
 
     @Override
