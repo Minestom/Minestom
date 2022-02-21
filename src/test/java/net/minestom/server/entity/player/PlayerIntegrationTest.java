@@ -43,6 +43,11 @@ public class PlayerIntegrationTest {
         assertAbilities(player, false, false, false, false);
         player.setGameMode(GameMode.SURVIVAL);
         assertAbilities(player, false, false, false, false);
+
+        player.setGameMode(GameMode.SPECTATOR);
+        player.setFlyingSpeed(1.0f);
+        player.setGameMode(GameMode.CREATIVE);
+        assertEquals(player.getFlyingSpeed(), 0.05f);
     }
 
     private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
