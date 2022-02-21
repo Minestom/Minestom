@@ -450,7 +450,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player) passenger.viewEngine.viewableOption.addition.accept(player);
+                if (passenger != player) passenger.updateNewViewer(player);
             }
             player.sendPacket(getPassengersPacket());
         }
@@ -469,7 +469,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player) passenger.viewEngine.viewableOption.removal.accept(player);
+                if (passenger != player) passenger.updateOldViewer(player);
             }
         }
         player.sendPacket(destroyPacketCache);
