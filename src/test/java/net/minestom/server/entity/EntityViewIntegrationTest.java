@@ -97,7 +97,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void vehicle(Env env) {
+    public void livingVehicle(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -124,5 +124,23 @@ public class EntityViewIntegrationTest {
             assertEquals(1, passenger.getViewers().size());
             assertTrue(passenger.isViewer(player));
         }
+    }
+
+    @Test
+    public void vehicleInheritance(Env env) {
+        var instance = env.createFlatInstance();
+        var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
+        var p2 = env.createPlayer(instance, new Pos(0, 40, 0));
+
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle.addPassenger(p1);
+
+        var vehicle2 = new Entity(EntityType.ZOMBIE);
+        vehicle2.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle2.addPassenger(p2);
+
+        assertEquals(2, vehicle.getViewers().size());
+        assertEquals(2, vehicle2.getViewers().size());
     }
 }

@@ -113,8 +113,6 @@ public final class ViewEngine {
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
-        if (entity.getVehicle() != null)
-            return; // Passengers are handled by the vehicle, inheriting its viewing settings
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
