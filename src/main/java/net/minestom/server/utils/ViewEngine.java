@@ -105,18 +105,21 @@ public final class ViewEngine {
     }
 
     public void handleAutoViewAddition(Entity entity) {
-        handleAutoView(entity, viewerOption.addition, viewableOption.addition);
+        handleAutoView(entity, viewerOption.addition, viewableOption.addition, false);
     }
 
     public void handleAutoViewRemoval(Entity entity) {
-        handleAutoView(entity, viewerOption.removal, viewableOption.removal);
+        handleAutoView(entity, viewerOption.removal, viewableOption.removal, true);
     }
 
-    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
+    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable,
+                                boolean requirement) {
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
+            assert viewerOption.isRegistered(entity) == requirement : "Entity is already registered";
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
+            assert viewableOption.isRegistered(player) == requirement : "Entity is already registered";
             if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
     }
