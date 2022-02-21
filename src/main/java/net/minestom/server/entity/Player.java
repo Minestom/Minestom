@@ -1252,6 +1252,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 this.flying = false;
             }
         }
+        this.flyingSpeed = 0.05f; // reset flying speed
     }
 
     /**
