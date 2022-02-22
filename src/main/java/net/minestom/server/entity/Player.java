@@ -1252,6 +1252,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 this.flying = false;
             }
         }
+        // Make sure that the player is in the PLAY state and synchronize their flight speed.
+        if (isActive()) {
+            refreshAbilities();
+        }
     }
 
     /**
