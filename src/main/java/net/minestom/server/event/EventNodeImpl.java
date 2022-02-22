@@ -20,7 +20,13 @@ import java.util.function.Consumer;
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final Map<Class<? extends T>, Handle<T>> handleMap = new ConcurrentHashMap<>();
+    private final ClassValue<Handle<T>> handleMap = new ClassValue<>() {
+        @Override
+        protected Handle<T> computeValue(Class<?> type) {
+            //noinspection unchecked
+            return new Handle<>((Class<T>) type);
+        }
+    };
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     private final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
     private final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
@@ -44,11 +50,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
-        Handle<E> handle = (Handle<E>) handleMap.get(handleType);
-        if (handle != null) return handle;
-        var tmp = new Handle<>(this, (Class<T>) handleType);
-        handle = (Handle<E>) handleMap.putIfAbsent(handleType, tmp);
-        return handle != null ? handle : (ListenerHandle<E>) tmp;
+        return (ListenerHandle<E>) handleMap.get(handleType);
     }
 
     @Override
@@ -273,8 +275,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
-            Handle<? super T> handle = handleMap.get(type);
-            if (handle != null) Handle.UPDATED.setRelease(handle, false);
+            ListenerHandle<T> handle = getHandle((Class<T>) type);
+            Handle.UPDATED.setRelease(handle, false);
         });
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
@@ -304,25 +306,24 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         final Set<Consumer<T>> bindingConsumers = new CopyOnWriteArraySet<>();
     }
 
-    static final class Handle<E extends Event> implements ListenerHandle<E> {
+    @SuppressWarnings("unchecked")
+    final class Handle<E extends Event> implements ListenerHandle<E> {
         private static final VarHandle UPDATED;
 
         static {
             try {
-                UPDATED = MethodHandles.lookup().findVarHandle(Handle.class, "updated", boolean.class);
+                UPDATED = MethodHandles.lookup().findVarHandle(EventNodeImpl.Handle.class, "updated", boolean.class);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new IllegalStateException(e);
             }
         }
 
-        private final EventNodeImpl<E> node;
         private final Class<E> eventType;
         private Consumer<E> listener = null;
         @SuppressWarnings("unused")
         private boolean updated; // Use the UPDATED var handle
 
-        Handle(EventNodeImpl<E> node, Class<E> eventType) {
-            this.node = node;
+        Handle(Class<E> eventType) {
             this.eventType = eventType;
         }
 
@@ -354,6 +355,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         private @Nullable Consumer<E> createConsumer() {
+            var node = (EventNodeImpl<E>) EventNodeImpl.this;
             // Standalone listeners
             List<Consumer<E>> listeners = new ArrayList<>();
             forTargetEvents(eventType, type -> {
@@ -444,6 +446,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
          * The goal is to limit the amount of map lookup.
          */
         private @Nullable Consumer<E> mappedConsumer() {
+            var node = (EventNodeImpl<E>) EventNodeImpl.this;
             final var mappedNodeCache = node.mappedNodeCache;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
@@ -486,6 +489,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         void callListener(@NotNull EventListener<E> listener, E event) {
+            var node = (EventNodeImpl<E>) EventNodeImpl.this;
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
