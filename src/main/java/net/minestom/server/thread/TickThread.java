@@ -50,14 +50,17 @@ public final class TickThread extends MinestomThread {
     }
 
     private void tick() {
+        final ReentrantLock lock = this.lock;
+        final long tickTime = this.tickTime;
         for (ThreadDispatcher.Partition entry : entries) {
+            assert entry.thread() == this;
             final List<Tickable> elements = entry.elements();
             if (elements.isEmpty()) continue;
             for (Tickable element : elements) {
                 if (lock.hasQueuedThreads()) {
-                    this.lock.unlock();
+                    lock.unlock();
                     // #acquire() callbacks should be called here
-                    this.lock.lock();
+                    lock.lock();
                 }
                 try {
                     element.tick(tickTime);
