@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -18,8 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.forDifferingChunksInRange;
-import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
+import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class EntityTrackerImpl implements EntityTracker {
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
@@ -140,11 +138,11 @@ final class EntityTrackerImpl implements EntityTracker {
         // This is used to avoid a map lookup per chunk
         final TargetEntry<T> entry = (TargetEntry<T>) entries[target.ordinal()];
         var rangeRef = entry.references.computeIfAbsent(range, integer -> Long2ObjectSyncMap.hashmap());
-        return rangeRef.computeIfAbsent(ChunkUtils.getChunkIndex(chunkX, chunkZ),
+        return rangeRef.computeIfAbsent(getChunkIndex(chunkX, chunkZ),
                 chunkIndex -> {
-                    final int count = ChunkUtils.getChunkCount(range);
+                    final int count = getChunkCount(range);
                     List<List<T>> entities = new ArrayList<>(count);
-                    ChunkUtils.forChunksInRange(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex), range,
+                    forChunksInRange(chunkX, chunkZ, range,
                             (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.get())));
                     assert entities.size() == count : "Expected " + count + " chunks, got " + entities.size();
                     return List.copyOf(entities);
@@ -155,7 +153,7 @@ final class EntityTrackerImpl implements EntityTracker {
     public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
         final int chunkRange = Math.abs((int) (range / Chunk.CHUNK_SECTION_SIZE)) + 1;
         final double squaredRange = range * range;
-        ChunkUtils.forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+        forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
             var chunkEntities = chunkEntities(chunkX, chunkZ, target);
             chunkEntities.forEach(entity -> {
                 final Point position = entityPositions.get(entity.getEntityId());
