@@ -15,13 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class EntityTrackerImpl implements EntityTracker {
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
-    private static final Supplier<List<Entity>> LIST_SUPPLIER = CopyOnWriteArrayList::new;
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
@@ -120,7 +118,7 @@ final class EntityTrackerImpl implements EntityTracker {
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = entries[target.ordinal()];
         //noinspection unchecked
-        var chunkEntities = (List<T>) entry.chunkEntities.computeIfAbsent(getChunkIndex(chunkX, chunkZ), i -> LIST_SUPPLIER.get());
+        var chunkEntities = (List<T>) entry.chunkEntities(getChunkIndex(chunkX, chunkZ));
         return Collections.unmodifiableList(chunkEntities);
     }
 
@@ -142,8 +140,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 chunkIndex -> {
                     final int count = getChunkCount(range);
                     List<List<T>> entities = new ArrayList<>(count);
-                    forChunksInRange(chunkX, chunkZ, range,
-                            (x, z) -> entities.add(entry.chunkEntities.computeIfAbsent(getChunkIndex(x, z), i -> (List<T>) LIST_SUPPLIER.get())));
+                    forChunksInRange(chunkX, chunkZ, range, (x, z) -> entities.add(entry.chunkEntities(getChunkIndex(x, z))));
                     assert entities.size() == count : "Expected " + count + " chunks, got " + entities.size();
                     return List.copyOf(entities);
                 });
@@ -183,8 +180,12 @@ final class EntityTrackerImpl implements EntityTracker {
             this.target = target;
         }
 
+        List<T> chunkEntities(long index) {
+            return chunkEntities.computeIfAbsent(index, i -> (List<T>) new CopyOnWriteArrayList());
+        }
+
         void addToChunk(long index, T entity) {
-            this.chunkEntities.computeIfAbsent(index, i -> (List<T>) LIST_SUPPLIER.get()).add(entity);
+            chunkEntities(index).add(entity);
         }
 
         void removeFromChunk(long index, T entity) {
