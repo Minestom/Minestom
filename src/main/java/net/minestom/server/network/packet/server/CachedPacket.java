@@ -47,12 +47,8 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public @NotNull ServerPacket packet() {
-        @SuppressWarnings("unchecked")
-        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getAcquire(this);
-        FramedPacket cache;
-        if (ref != null && (cache = ref.get()) != null)
-            return cache.packet(); // Avoid potential packet allocation
-        return packetSupplier.get();
+        FramedPacket cache = updatedCache();
+        return cache != null ? cache.packet() : packetSupplier.get();
     }
 
     public @NotNull ByteBuffer body() {
