@@ -311,7 +311,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         }
     }
 
-    private void resize(int newBitsPerEntry) {
+    void resize(int newBitsPerEntry) {
         FlexiblePalette palette = new FlexiblePalette(adaptivePalette, fixBitsPerEntry(newBitsPerEntry));
         palette.lastPaletteIndex = lastPaletteIndex;
         palette.paletteToValueList = paletteToValueList;

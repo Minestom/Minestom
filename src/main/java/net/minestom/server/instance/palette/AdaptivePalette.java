@@ -1,5 +1,8 @@
 package net.minestom.server.instance.palette;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +18,7 @@ final class AdaptivePalette implements Palette {
     final int defaultBitsPerEntry;
     final int bitsIncrement;
 
-    private SpecializedPalette palette;
+    SpecializedPalette palette;
 
     AdaptivePalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
         this.dimensionBitCount = validateDimension(dimension);
@@ -121,11 +124,16 @@ final class AdaptivePalette implements Palette {
             final int count = flexiblePalette.count();
             if (count == 0) {
                 return (this.palette = new FilledPalette(dimension, 0));
-            } else if (count == flexiblePalette.maxSize()) {
-                var palette = flexiblePalette.paletteToValueList;
-                if (palette.size() == 2 && palette.getInt(0) == 0) {
-                    // first element is air, second should be the value the palette is filled with
-                    return (this.palette = new FilledPalette(dimension, palette.getInt(1)));
+            } else {
+                // Find all entries and compress the palette
+                IntSet entries = new IntOpenHashSet(flexiblePalette.paletteToValueList.size());
+                currentPalette.getAll((x, y, z, value) -> entries.add(value));
+                final int bitsPerEntry = MathUtils.bitsToRepresent(entries.size());
+                if (bitsPerEntry == 1) {
+                    return (this.palette = new FilledPalette(dimension, entries.iterator().nextInt()));
+                } else {
+                    flexiblePalette.resize(bitsPerEntry);
+                    return flexiblePalette;
                 }
             }
         }

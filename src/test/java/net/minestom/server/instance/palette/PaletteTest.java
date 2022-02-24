@@ -1,8 +1,7 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.palette;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
