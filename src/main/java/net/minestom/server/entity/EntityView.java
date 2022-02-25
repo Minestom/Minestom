@@ -7,8 +7,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.SharedInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -223,19 +221,8 @@ final class EntityView {
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            // Current Instance
             instance.getEntityTracker().nearbyEntities(point, RANGE, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
-            // Shared Instances
-            if (instance instanceof InstanceContainer container) {
-                final List<SharedInstance> shared = container.getSharedInstances();
-                if (!shared.isEmpty()) {
-                    for (var sharedInstance : shared) {
-                        sharedInstance.getEntityTracker().nearbyEntities(point, RANGE, target,
-                                (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
-                    }
-                }
-            }
             this.lastSize = entityMap.size();
             return entityMap.values();
         }
