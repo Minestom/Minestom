@@ -2,7 +2,6 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -115,25 +114,29 @@ final class AdaptivePalette implements Palette {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        optimizedPalette().write(writer);
+        final SpecializedPalette optimized = optimizedPalette();
+        this.palette = optimized;
+        optimized.write(writer);
     }
 
-    Palette optimizedPalette() {
+    SpecializedPalette optimizedPalette() {
         var currentPalette = this.palette;
         if (currentPalette instanceof FlexiblePalette flexiblePalette) {
             final int count = flexiblePalette.count();
             if (count == 0) {
-                return (this.palette = new FilledPalette(dimension, 0));
+                return new FilledPalette(dimension, 0);
             } else {
                 // Find all entries and compress the palette
                 IntSet entries = new IntOpenHashSet(flexiblePalette.paletteToValueList.size());
                 currentPalette.getAll((x, y, z, value) -> entries.add(value));
-                final int bitsPerEntry = MathUtils.bitsToRepresent(entries.size());
-                if (bitsPerEntry == 1) {
-                    return (this.palette = new FilledPalette(dimension, entries.iterator().nextInt()));
+                if (entries.size() == 1) {
+                    return new FilledPalette(dimension, entries.iterator().nextInt());
                 } else {
-                    flexiblePalette.resize(bitsPerEntry);
-                    return flexiblePalette;
+                    // FIXME: client rendering
+                    //final int bitsPerEntry = MathUtils.bitsToRepresent(entries.size());
+                    //flexiblePalette.resize(bitsPerEntry);
+                    //assert flexiblePalette.bitsPerEntry() == bitsPerEntry;
+                    //return flexiblePalette;
                 }
             }
         }
