@@ -67,7 +67,7 @@ public class PaletteOptimizationTest {
             optimized.write(writer);
             int length2 = writer.toByteArray().length;
 
-            System.out.println("debug: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " " + length1 + " " + length2);
+            //System.out.println("debug: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " " + length1 + " " + length2);
             assertTrue(length1 >= length2, "Optimized palette is bigger than the original one: " + length1 + " : " + length2);
         }
     }
