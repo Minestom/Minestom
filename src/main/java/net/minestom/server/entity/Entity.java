@@ -40,7 +40,6 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -135,7 +134,7 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
         }
     };
 
-    protected final ViewEngine viewEngine = new ViewEngine(this,
+    protected final EntityView viewEngine = new EntityView(this,
             player -> {
                 // Add viewable
                 var lock1 = player.getEntityId() < getEntityId() ? player : this;

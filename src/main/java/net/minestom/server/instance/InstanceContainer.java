@@ -21,6 +21,7 @@ import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -272,6 +273,10 @@ public class InstanceContainer extends Instance {
                 // cache the retrieved chunk
                 .whenComplete((chunk, throwable) -> {
                     // TODO run in the instance thread?
+                    chunk.getSections().forEach(section -> {
+                        section.biomePalette().write(new BinaryWriter());
+                        section.blockPalette().write(new BinaryWriter());
+                    });
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                     synchronized (loadingChunks) {
