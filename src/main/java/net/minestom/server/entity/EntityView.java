@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 final class EntityView {
+    private static final int RANGE = MinecraftServer.getEntityViewDistance() * 16;
     private final Entity entity;
-    private final int range = MinecraftServer.getEntityViewDistance() * 16;
     private final Set<Player> manualViewers = new HashSet<>();
 
     // Decide if this entity should be viewable to X players
@@ -27,17 +27,42 @@ final class EntityView {
     // Decide if this entity should view X entities
     public final Option<Entity> viewerOption;
 
-    private final Set<Player> set = new SetImpl();
+    final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
     private volatile TrackedLocation trackedLocation;
 
-    public EntityView(Entity entity,
-                      Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
-                      Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
+    public EntityView(Entity entity) {
         this.entity = entity;
-        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
-        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
+        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
+                player -> {
+                    // Add viewable
+                    var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+                    var lock2 = lock1 == entity ? player : entity;
+                    synchronized (lock1.viewEngine.mutex) {
+                        synchronized (lock2.viewEngine.mutex) {
+                            if (!entity.viewEngine.viewableOption.predicate(player) ||
+                                    !player.viewEngine.viewerOption.predicate(entity)) return;
+                            entity.viewEngine.viewableOption.register(player);
+                            player.viewEngine.viewerOption.register(entity);
+                        }
+                    }
+                    entity.updateNewViewer(player);
+                }, player -> {
+            // Remove viewable
+            var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+            var lock2 = lock1 == entity ? player : entity;
+            synchronized (lock1.viewEngine.mutex) {
+                synchronized (lock2.viewEngine.mutex) {
+                    entity.viewEngine.viewableOption.unregister(player);
+                    player.viewEngine.viewerOption.unregister(entity);
+                }
+            }
+            entity.updateOldViewer(player);
+        });
+        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
+                entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
+                entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
@@ -100,14 +125,6 @@ final class EntityView {
             assert viewableOption.isRegistered(player) == requirement : "Entity is already registered";
             if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
-    }
-
-    public Object mutex() {
-        return mutex;
-    }
-
-    public Set<Player> asSet() {
-        return set;
     }
 
     public final class Option<T extends Entity> {
@@ -207,14 +224,14 @@ final class EntityView {
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
             // Current Instance
-            instance.getEntityTracker().nearbyEntities(point, range, target,
+            instance.getEntityTracker().nearbyEntities(point, RANGE, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             // Shared Instances
             if (instance instanceof InstanceContainer container) {
                 final List<SharedInstance> shared = container.getSharedInstances();
                 if (!shared.isEmpty()) {
                     for (var sharedInstance : shared) {
-                        sharedInstance.getEntityTracker().nearbyEntities(point, range, target,
+                        sharedInstance.getEntityTracker().nearbyEntities(point, RANGE, target,
                                 (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
                     }
                 }
