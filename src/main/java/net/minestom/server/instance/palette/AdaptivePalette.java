@@ -13,20 +13,16 @@ import java.util.function.IntUnaryOperator;
  */
 final class AdaptivePalette implements Palette {
     final int dimension;
-    final int dimensionBitCount;
     final int maxBitsPerEntry;
     final int defaultBitsPerEntry;
-    final int bitsIncrement;
 
     SpecializedPalette palette;
 
-    AdaptivePalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
-        this.dimensionBitCount = validateDimension(dimension);
-
+    AdaptivePalette(int dimension, int maxBitsPerEntry, int bitsPerEntry) {
+        validateDimension(dimension);
         this.dimension = dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
         this.defaultBitsPerEntry = bitsPerEntry;
-        this.bitsIncrement = bitsIncrement;
 
         this.palette = new FilledPalette(dimension, 0);
     }
@@ -132,8 +128,9 @@ final class AdaptivePalette implements Palette {
                 flexiblePalette.getAll((x, y, z, value) -> entries.add(value));
                 if (entries.size() == 1) {
                     return new FilledPalette(dimension, entries.iterator().nextInt());
-                } else {
-                    final int bitsPerEntry = Math.max(4, MathUtils.bitsToRepresent(entries.size() - 1));
+                } else if (flexiblePalette.bitsPerEntry() > defaultBitsPerEntry) {
+                    final int bitsPerEntry = MathUtils.bitsToRepresent(entries.size() - 1);
+                    assert bitsPerEntry < flexiblePalette.bitsPerEntry();
                     flexiblePalette.resize(bitsPerEntry);
                     return flexiblePalette;
                 }

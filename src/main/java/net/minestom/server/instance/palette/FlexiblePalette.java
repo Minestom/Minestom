@@ -30,6 +30,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     // Specific to this palette type
     private final AdaptivePalette adaptivePalette;
+    private final int dimensionBitCount;
     private int bitsPerEntry;
 
     private boolean hasPalette;
@@ -44,6 +45,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     FlexiblePalette(AdaptivePalette adaptivePalette, int bitsPerEntry) {
         this.adaptivePalette = adaptivePalette;
+        this.dimensionBitCount = (int) (Math.log(adaptivePalette.dimension()) / Math.log(2));
 
         this.bitsPerEntry = bitsPerEntry;
         this.hasPalette = bitsPerEntry <= maxBitsPerEntry();
@@ -257,7 +259,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
         final int[] ids = hasPalette ? paletteToValueList.elements() : null;
-        final int dimensionBitCount = adaptivePalette.dimensionBitCount;
+        final int dimensionBitCount = this.dimensionBitCount;
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
@@ -329,7 +331,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int lastPaletteIndex = this.lastPaletteIndex;
         if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
-            resize(bitsPerEntry + adaptivePalette.bitsIncrement);
+            resize(bitsPerEntry + 1);
             return getPaletteIndex(value);
         }
         final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
@@ -340,7 +342,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     }
 
     int getSectionIndex(int x, int y, int z) {
-        final int dimensionBitCount = adaptivePalette.dimensionBitCount;
+        final int dimensionBitCount = this.dimensionBitCount;
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
