@@ -13,6 +13,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Defines how {@link Entity entities} are tracked within an {@link Instance instance}.
@@ -43,54 +44,18 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                  @NotNull Target<T> target, @Nullable Update<T> update);
 
-    /**
-     * Gets the entities newly visible and invisible from one chunk to another.
-     */
-    <T extends Entity> void difference(int oldChunkX, int oldChunkZ,
-                                       int newChunkX, int newChunkZ,
-                                       @NotNull Target<T> target, @NotNull Update<T> update);
-
-    default <T extends Entity> void difference(@NotNull Point from, @NotNull Point to,
-                                               @NotNull Target<T> target, @NotNull Update<T> update) {
-        difference(from.chunkX(), from.chunkZ(), to.chunkX(), to.chunkZ(), target, update);
-    }
-
-    /**
-     * Returns a copy of the entities present in the specified chunk.
-     */
-    @ApiStatus.Experimental
     @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
 
-    @ApiStatus.Experimental
     @UnmodifiableView
     default <T extends Entity> @NotNull Collection<T> chunkEntities(@NotNull Point point, @NotNull Target<T> target) {
         return chunkEntities(point.chunkX(), point.chunkZ(), target);
     }
 
     /**
-     * Gets the entities present in range of the specified chunk.
-     * <p>
-     * This is used for auto-viewable features.
-     */
-    <T extends Entity> void visibleEntities(int chunkX, int chunkZ,
-                                            @NotNull Target<T> target, @NotNull Query<T> query);
-
-    default <T extends Entity> void visibleEntities(@NotNull Point point,
-                                                    @NotNull Target<T> target, @NotNull Query<T> query) {
-        visibleEntities(point.chunkX(), point.chunkZ(), target, query);
-    }
-
-    <T extends Entity> @NotNull List<List<T>> references(int chunkX, int chunkZ, int range, @NotNull Target<T> target);
-
-    default <T extends Entity> @NotNull List<List<T>> references(@NotNull Point point, int range, @NotNull Target<T> target) {
-        return references(point.chunkX(), point.chunkZ(), range, target);
-    }
-
-    /**
      * Gets the entities within a range.
      */
     <T extends Entity> void nearbyEntities(@NotNull Point point, double range,
-                                           @NotNull Target<T> target, @NotNull Query<T> query);
+                                           @NotNull Target<T> target, @NotNull Consumer<T> query);
 
     /**
      * Gets all the entities tracked by this class.
@@ -148,14 +113,5 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
         default void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
             // Empty
         }
-    }
-
-    /**
-     * Query entities.
-     * <p>
-     * This is not a functional interface, we reserve the right to add other methods.
-     */
-    interface Query<E extends Entity> {
-        void consume(E entity);
     }
 }

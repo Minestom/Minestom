@@ -10,10 +10,14 @@ import org.jetbrains.annotations.UnmodifiableView;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
@@ -24,7 +28,6 @@ final class EntityTrackerImpl implements EntityTracker {
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
     private final TargetEntry<Entity>[] entries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
-
     private final Int2ObjectSyncMap<Point> entityPositions = Int2ObjectSyncMap.hashmap();
 
     @Override
@@ -41,7 +44,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, this);
-            visibleEntities(point, target, newEntity -> {
+            nearbyEntities(point, MinecraftServer.getEntityViewDistance() * 16, target, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
@@ -62,7 +65,10 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, null);
-            visibleEntities(point, target, update::remove);
+            nearbyEntities(point, MinecraftServer.getEntityViewDistance() * 16, target, newEntity -> {
+                if (newEntity == entity) return;
+                update.remove(newEntity);
+            });
         }
     }
 
@@ -96,11 +102,50 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public <T extends Entity> void difference(int oldChunkX, int oldChunkZ,
-                                              int newChunkX, int newChunkZ,
-                                              @NotNull Target<T> target, @NotNull Update<T> update) {
+    public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = entries[target.ordinal()];
-        forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ,
+        //noinspection unchecked
+        var chunkEntities = (List<T>) entry.chunkEntities(getChunkIndex(chunkX, chunkZ));
+        return Collections.unmodifiableList(chunkEntities);
+    }
+
+    @Override
+    public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Consumer<T> query) {
+        final TargetEntry<Entity> entry = entries[target.ordinal()];
+        final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE);
+        if (range % 16 == 0) {
+            // Fast path for exact chunk range
+            forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+                var chunkEntities = (List<T>) entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
+                if (chunkEntities == null || chunkEntities.isEmpty()) return;
+                chunkEntities.forEach(query);
+            });
+        } else {
+            // Slow path for non-exact chunk range
+            final double squaredRange = range * range;
+            forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+                var chunkEntities = (List<T>) entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
+                if (chunkEntities == null || chunkEntities.isEmpty()) return;
+                chunkEntities.forEach(entity -> {
+                    final Point position = entityPositions.get(entity.getEntityId());
+                    if (point.distanceSquared(position) <= squaredRange) {
+                        query.accept(entity);
+                    }
+                });
+            });
+        }
+    }
+
+    @Override
+    public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
+        //noinspection unchecked
+        return (Set<T>) entries[target.ordinal()].entitiesView;
+    }
+
+    private <T extends Entity> void difference(Point oldPoint, Point newPoint,
+                                               @NotNull Target<T> target, @NotNull Update<T> update) {
+        final TargetEntry<Entity> entry = entries[target.ordinal()];
+        forDifferingChunksInRange(newPoint.chunkX(), newPoint.chunkZ(), oldPoint.chunkX(), oldPoint.chunkZ(),
                 MinecraftServer.getEntityViewDistance(), (chunkX, chunkZ) -> {
                     // Add
                     final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
@@ -114,67 +159,12 @@ final class EntityTrackerImpl implements EntityTracker {
                 });
     }
 
-    @Override
-    public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
-        //noinspection unchecked
-        var chunkEntities = (List<T>) entry.chunkEntities(getChunkIndex(chunkX, chunkZ));
-        return Collections.unmodifiableList(chunkEntities);
-    }
-
-    @Override
-    public <T extends Entity> void visibleEntities(int chunkX, int chunkZ, @NotNull Target<T> target, @NotNull Query<T> query) {
-        for (List<T> entities : references(chunkX, chunkZ, MinecraftServer.getEntityViewDistance(), target)) {
-            if (entities.isEmpty()) continue;
-            for (T entity : entities) query.consume(entity);
-        }
-    }
-
-    @Override
-    public @NotNull <T extends Entity> List<List<T>> references(int chunkX, int chunkZ, int range, @NotNull Target<T> target) {
-        // Gets reference to all chunk entities lists within the range
-        // This is used to avoid a map lookup per chunk
-        final TargetEntry<T> entry = (TargetEntry<T>) entries[target.ordinal()];
-        var rangeRef = entry.references.computeIfAbsent(range, integer -> Long2ObjectSyncMap.hashmap());
-        return rangeRef.computeIfAbsent(getChunkIndex(chunkX, chunkZ),
-                chunkIndex -> {
-                    final int count = getChunkCount(range);
-                    List<List<T>> entities = new ArrayList<>(count);
-                    forChunksInRange(chunkX, chunkZ, range, (x, z) -> entities.add(entry.chunkEntities(getChunkIndex(x, z))));
-                    assert entities.size() == count : "Expected " + count + " chunks, got " + entities.size();
-                    return List.copyOf(entities);
-                });
-    }
-
-    @Override
-    public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Query<T> query) {
-        final int chunkRange = Math.abs((int) (range / Chunk.CHUNK_SECTION_SIZE)) + 1;
-        final double squaredRange = range * range;
-        forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-            var chunkEntities = chunkEntities(chunkX, chunkZ, target);
-            chunkEntities.forEach(entity -> {
-                final Point position = entityPositions.get(entity.getEntityId());
-                if (point.distanceSquared(position) <= squaredRange) {
-                    query.consume(entity);
-                }
-            });
-        });
-    }
-
-    @Override
-    public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
-        //noinspection unchecked
-        return (Set<T>) entries[target.ordinal()].entitiesView;
-    }
-
     private static final class TargetEntry<T extends Entity> {
         private final EntityTracker.Target<T> target;
         private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
         private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
         // Chunk index -> entities inside it
         private final Long2ObjectSyncMap<List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
-        // Chunk index -> lists of visible entities (references to chunkEntities entries)
-        private final Int2ObjectSyncMap<Long2ObjectSyncMap<List<List<T>>>> references = Int2ObjectSyncMap.hashmap();
 
         TargetEntry(Target<T> target) {
             this.target = target;

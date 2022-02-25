@@ -44,10 +44,10 @@ public final class ViewEngine {
                       Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
         this.entity = entity;
         if (entity != null) {
-            this.range = MinecraftServer.getEntityViewDistance();
+            this.range = MinecraftServer.getEntityViewDistance() * 16;
             this.set = new EntitySet();
         } else {
-            this.range = MinecraftServer.getChunkViewDistance();
+            this.range = MinecraftServer.getChunkViewDistance() * 16;
             this.set = new ChunkSet();
         }
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
@@ -229,23 +229,15 @@ public final class ViewEngine {
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
             // Current Instance
-            for (var reference : instance.getEntityTracker().references(point, range, target)) {
-                if (reference.isEmpty()) continue;
-                for (var entity : reference) {
-                    entityMap.putIfAbsent(entity.getEntityId(), entity);
-                }
-            }
+            instance.getEntityTracker().nearbyEntities(point, range, target,
+                    (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             // Shared Instances
             if (instance instanceof InstanceContainer container) {
                 final List<SharedInstance> shared = container.getSharedInstances();
                 if (!shared.isEmpty()) {
                     for (var sharedInstance : shared) {
-                        for (var reference : sharedInstance.getEntityTracker().references(point, range, target)) {
-                            if (reference.isEmpty()) continue;
-                            for (var entity : reference) {
-                                entityMap.putIfAbsent(entity.getEntityId(), entity);
-                            }
-                        }
+                        sharedInstance.getEntityTracker().nearbyEntities(point, range, target,
+                                (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
                     }
                 }
             }
