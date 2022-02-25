@@ -1,17 +1,14 @@
-package net.minestom.server.utils;
+package net.minestom.server.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,13 +17,9 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/**
- * Defines which players are able to see this element.
- */
-@ApiStatus.Internal
-public final class ViewEngine {
+final class EntityView {
+    private static final int RANGE = MinecraftServer.getEntityViewDistance() * 16;
     private final Entity entity;
-    private final int range;
     private final Set<Player> manualViewers = new HashSet<>();
 
     // Decide if this entity should be viewable to X players
@@ -34,32 +27,42 @@ public final class ViewEngine {
     // Decide if this entity should view X entities
     public final Option<Entity> viewerOption;
 
-    private final Set<Player> set;
+    final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
     private volatile TrackedLocation trackedLocation;
 
-    public ViewEngine(@Nullable Entity entity,
-                      Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
-                      Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
+    public EntityView(Entity entity) {
         this.entity = entity;
-        if (entity != null) {
-            this.range = MinecraftServer.getEntityViewDistance() * 16;
-            this.set = new EntitySet();
-        } else {
-            this.range = MinecraftServer.getChunkViewDistance() * 16;
-            this.set = new ChunkSet();
-        }
-        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
-        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
-    }
-
-    public ViewEngine(@Nullable Entity entity) {
-        this(entity, null, null, null, null);
-    }
-
-    public ViewEngine() {
-        this(null);
+        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
+                player -> {
+                    // Add viewable
+                    var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+                    var lock2 = lock1 == entity ? player : entity;
+                    synchronized (lock1.viewEngine.mutex) {
+                        synchronized (lock2.viewEngine.mutex) {
+                            if (!entity.viewEngine.viewableOption.predicate(player) ||
+                                    !player.viewEngine.viewerOption.predicate(entity)) return;
+                            entity.viewEngine.viewableOption.register(player);
+                            player.viewEngine.viewerOption.register(entity);
+                        }
+                    }
+                    entity.updateNewViewer(player);
+                }, player -> {
+            // Remove viewable
+            var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+            var lock2 = lock1 == entity ? player : entity;
+            synchronized (lock1.viewEngine.mutex) {
+                synchronized (lock2.viewEngine.mutex) {
+                    entity.viewEngine.viewableOption.unregister(player);
+                    player.viewEngine.viewerOption.unregister(entity);
+                }
+            }
+            entity.updateOldViewer(player);
+        });
+        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
+                entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
+                entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
@@ -124,17 +127,9 @@ public final class ViewEngine {
         }
     }
 
-    public Object mutex() {
-        return mutex;
-    }
-
-    public Set<Player> asSet() {
-        return set;
-    }
-
     public final class Option<T extends Entity> {
         @SuppressWarnings("rawtypes")
-        private static final AtomicIntegerFieldUpdater<Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(Option.class, "auto");
+        private static final AtomicIntegerFieldUpdater<EntityView.Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(EntityView.Option.class, "auto");
         // Entities that should be tracked from this option
         private final EntityTracker.Target<T> target;
         // The condition that must be met for this option to be considered auto.
@@ -212,7 +207,7 @@ public final class ViewEngine {
         private void update(Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             references().forEach(entity -> {
-                if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) return;
+                if (entity == EntityView.this.entity || !visibilityPredicate.test(entity)) return;
                 if (entity instanceof Player player && manualViewers.contains(player)) return;
                 if (entity.getVehicle() != null) return;
                 action.accept(entity);
@@ -222,21 +217,21 @@ public final class ViewEngine {
         private int lastSize;
 
         private Collection<T> references() {
-            final TrackedLocation trackedLocation = ViewEngine.this.trackedLocation;
+            final TrackedLocation trackedLocation = EntityView.this.trackedLocation;
             if (trackedLocation == null) return List.of();
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
             // Current Instance
-            instance.getEntityTracker().nearbyEntities(point, range, target,
+            instance.getEntityTracker().nearbyEntities(point, RANGE, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             // Shared Instances
             if (instance instanceof InstanceContainer container) {
                 final List<SharedInstance> shared = container.getSharedInstances();
                 if (!shared.isEmpty()) {
                     for (var sharedInstance : shared) {
-                        sharedInstance.getEntityTracker().nearbyEntities(point, range, target,
+                        sharedInstance.getEntityTracker().nearbyEntities(point, RANGE, target,
                                 (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
                     }
                 }
@@ -246,24 +241,7 @@ public final class ViewEngine {
         }
     }
 
-    final class ChunkSet extends AbstractSet<Player> {
-        @Override
-        public @NotNull Iterator<Player> iterator() {
-            return viewableOption.references().iterator();
-        }
-
-        @Override
-        public int size() {
-            return viewableOption.references().size();
-        }
-
-        @Override
-        public void forEach(Consumer<? super Player> action) {
-            viewableOption.references().forEach(action);
-        }
-    }
-
-    final class EntitySet extends AbstractSet<Player> {
+    final class SetImpl extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
             synchronized (mutex) {
