@@ -2,6 +2,7 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -128,15 +129,13 @@ final class AdaptivePalette implements Palette {
             } else {
                 // Find all entries and compress the palette
                 IntSet entries = new IntOpenHashSet(flexiblePalette.paletteToValueList.size());
-                currentPalette.getAll((x, y, z, value) -> entries.add(value));
+                flexiblePalette.getAll((x, y, z, value) -> entries.add(value));
                 if (entries.size() == 1) {
                     return new FilledPalette(dimension, entries.iterator().nextInt());
                 } else {
-                    // FIXME: client rendering
-                    //final int bitsPerEntry = MathUtils.bitsToRepresent(entries.size());
-                    //flexiblePalette.resize(bitsPerEntry);
-                    //assert flexiblePalette.bitsPerEntry() == bitsPerEntry;
-                    //return flexiblePalette;
+                    final int bitsPerEntry = Math.max(4, MathUtils.bitsToRepresent(entries.size() - 1));
+                    flexiblePalette.resize(bitsPerEntry);
+                    return flexiblePalette;
                 }
             }
         }
