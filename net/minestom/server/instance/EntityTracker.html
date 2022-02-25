@@ -91,18 +91,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Interface</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="EntityTracker.Query.html" class="type-name-link" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;<a href="EntityTracker.Query.html" title="type parameter in EntityTracker.Query">E</a> extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="EntityTracker.Target.html" class="type-name-link" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;<a href="EntityTracker.Target.html" title="type parameter in EntityTracker.Target">E</a> extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
 <div class="col-last even-row-color">
-<div class="block">Query entities.</div>
-</div>
-<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="EntityTracker.Target.html" class="type-name-link" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;<a href="EntityTracker.Target.html" title="type parameter in EntityTracker.Target">E</a> extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Represents the type of entity you want to retrieve.</div>
 </div>
-<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="EntityTracker.Update.html" class="type-name-link" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;<a href="EntityTracker.Update.html" title="type parameter in EntityTracker.Update">E</a> extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="EntityTracker.Update.html" class="type-name-link" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;<a href="EntityTracker.Update.html" title="type parameter in EntityTracker.Update">E</a> extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Callback to know the newly visible entities and those to remove.</div>
 </div>
 </div>
@@ -123,28 +118,10 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#chunkEntities(int,int,net.minestom.server.instance.EntityTracker.Target)" class="member-name-link">chunkEntities</a><wbr>(int&nbsp;chunkX,
  int&nbsp;chunkZ,
  @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Returns a copy of the entities present in the specified chunk.</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>@UnmodifiableView @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#chunkEntities(net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target)" class="member-name-link">chunkEntities</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
  @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#difference(int,int,int,int,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Update)" class="member-name-link">difference</a><wbr>(int&nbsp;oldChunkX,
- int&nbsp;oldChunkZ,
- int&nbsp;newChunkX,
- int&nbsp;newChunkZ,
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull <a href="EntityTracker.Update.html" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;T&gt;&nbsp;update)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the entities newly visible and invisible from one chunk to another.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#difference(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Update)" class="member-name-link">difference</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;from,
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;to,
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull <a href="EntityTracker.Update.html" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;T&gt;&nbsp;update)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @UnmodifiableView @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#entities()" class="member-name-link">entities</a>()</code></div>
@@ -164,27 +141,16 @@ loadScripts(document, 'script');</script>
  position is in a different chunk.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#nearbyEntities(net.minestom.server.coordinate.Point,double,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Query)" class="member-name-link">nearbyEntities</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#nearbyEntities(net.minestom.server.coordinate.Point,double,net.minestom.server.instance.EntityTracker.Target,java.util.function.Consumer)" class="member-name-link">nearbyEntities</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
  double&nbsp;range,
  @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull <a href="EntityTracker.Query.html" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;T&gt;&nbsp;query)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;T&gt;&nbsp;query)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Gets the entities within a range.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="EntityTracker.html" title="interface in net.minestom.server.instance">EntityTracker</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#newTracker()" class="member-name-link">newTracker</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#references(int,int,int,net.minestom.server.instance.EntityTracker.Target)" class="member-name-link">references</a><wbr>(int&nbsp;chunkX,
- int&nbsp;chunkZ,
- int&nbsp;range,
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#references(net.minestom.server.coordinate.Point,int,net.minestom.server.instance.EntityTracker.Target)" class="member-name-link">references</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
- int&nbsp;range,
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Update)" class="member-name-link">register</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
@@ -200,19 +166,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Unregister an entity tracking.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#visibleEntities(int,int,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Query)" class="member-name-link">visibleEntities</a><wbr>(int&nbsp;chunkX,
- int&nbsp;chunkZ,
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull <a href="EntityTracker.Query.html" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;T&gt;&nbsp;query)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the entities present in range of the specified chunk.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#visibleEntities(net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Query)" class="member-name-link">visibleEntities</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull <a href="EntityTracker.Query.html" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;T&gt;&nbsp;query)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -276,48 +229,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="difference(int,int,int,int,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Update)">
-<h3>difference</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">difference</span><wbr><span class="parameters">(int&nbsp;oldChunkX,
- int&nbsp;oldChunkZ,
- int&nbsp;newChunkX,
- int&nbsp;newChunkZ,
- @NotNull
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull
- @NotNull <a href="EntityTracker.Update.html" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;T&gt;&nbsp;update)</span></div>
-<div class="block">Gets the entities newly visible and invisible from one chunk to another.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="difference(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Update)">
-<h3>difference</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">difference</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;from,
- @NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;to,
- @NotNull
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull
- @NotNull <a href="EntityTracker.Update.html" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;T&gt;&nbsp;update)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="chunkEntities(int,int,net.minestom.server.instance.EntityTracker.Target)">
 <h3>chunkEntities</h3>
-<div class="member-signature"><span class="annotations">@Experimental
-</span><span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">@UnmodifiableView <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;T&gt;</span>&nbsp;<span class="element-name">chunkEntities</span><wbr><span class="parameters">(int&nbsp;chunkX,
+<div class="member-signature"><span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">@UnmodifiableView <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;T&gt;</span>&nbsp;<span class="element-name">chunkEntities</span><wbr><span class="parameters">(int&nbsp;chunkX,
  int&nbsp;chunkZ,
  @NotNull
  @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</span></div>
-<div class="block">Returns a copy of the entities present in the specified chunk.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="chunkEntities(net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target)">
 <h3>chunkEntities</h3>
-<div class="member-signature"><span class="annotations">@Experimental
-@NotNull
+<div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>
 <span class="return-type">@UnmodifiableView @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;T&gt;</span>&nbsp;<span class="element-name">chunkEntities</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
@@ -326,54 +249,7 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="visibleEntities(int,int,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Query)">
-<h3>visibleEntities</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">visibleEntities</span><wbr><span class="parameters">(int&nbsp;chunkX,
- int&nbsp;chunkZ,
- @NotNull
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull
- @NotNull <a href="EntityTracker.Query.html" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;T&gt;&nbsp;query)</span></div>
-<div class="block">Gets the entities present in range of the specified chunk.
- <p>
- This is used for auto-viewable features.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="visibleEntities(net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Query)">
-<h3>visibleEntities</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">visibleEntities</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
- @NotNull
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
- @NotNull
- @NotNull <a href="EntityTracker.Query.html" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;T&gt;&nbsp;query)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="references(int,int,int,net.minestom.server.instance.EntityTracker.Target)">
-<h3>references</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">references</span><wbr><span class="parameters">(int&nbsp;chunkX,
- int&nbsp;chunkZ,
- int&nbsp;range,
- @NotNull
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="references(net.minestom.server.coordinate.Point,int,net.minestom.server.instance.EntityTracker.Target)">
-<h3>references</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">references</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
- int&nbsp;range,
- @NotNull
- @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="nearbyEntities(net.minestom.server.coordinate.Point,double,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Query)">
+<section class="detail" id="nearbyEntities(net.minestom.server.coordinate.Point,double,net.minestom.server.instance.EntityTracker.Target,java.util.function.Consumer)">
 <h3>nearbyEntities</h3>
 <div class="member-signature"><span class="type-parameters">&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">nearbyEntities</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
@@ -381,7 +257,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="EntityTracker.Target.html" title="interface in net.minestom.server.instance">EntityTracker.Target</a>&lt;T&gt;&nbsp;target,
  @NotNull
- @NotNull <a href="EntityTracker.Query.html" title="interface in net.minestom.server.instance">EntityTracker.Query</a>&lt;T&gt;&nbsp;query)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;T&gt;&nbsp;query)</span></div>
 <div class="block">Gets the entities within a range.</div>
 </section>
 </li>
