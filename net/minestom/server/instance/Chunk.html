@@ -180,7 +180,7 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addViewer(net.minestom.server.entity.Player)" class="member-name-link">addViewer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the player to the viewing collection.</div>
+<div class="block">Adds a viewer.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copy(net.minestom.server.instance.Instance,int,int)" class="member-name-link">copy</a><wbr>(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
@@ -256,7 +256,7 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeViewer(net.minestom.server.entity.Player)" class="member-name-link">removeViewer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Removes the player from the viewing collection.</div>
+<div class="block">Removes a viewer.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#reset()" class="member-name-link">reset</a>()</code></div>
@@ -751,14 +751,15 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <h3>addViewer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">addViewer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
-<div class="block">Adds the player to the viewing collection. Chunk packet must be sent manually.</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
+<div class="block">Adds a viewer.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">addViewer</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the viewer to add</dd>
 <dt>Returns:</dt>
-<dd>true if the player has just been added to the viewer collection</dd>
+<dd>true if the player has been added, false otherwise (could be because he is already a viewer)</dd>
 </dl>
 </section>
 </li>
@@ -767,14 +768,15 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <h3>removeViewer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeViewer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
-<div class="block">Removes the player from the viewing collection. Chunk packet must be sent manually.</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
+<div class="block">Removes a viewer.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the viewer to remove</dd>
 <dt>Returns:</dt>
-<dd>true if the player has just been removed to the viewer collection</dd>
+<dd>true if the player has been removed, false otherwise (could be because he was not a viewer)</dd>
 </dl>
 </section>
 </li>
