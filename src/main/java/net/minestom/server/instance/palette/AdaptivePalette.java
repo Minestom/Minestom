@@ -126,11 +126,12 @@ final class AdaptivePalette implements Palette {
                 // Find all entries and compress the palette
                 IntSet entries = new IntOpenHashSet(flexiblePalette.paletteToValueList.size());
                 flexiblePalette.getAll((x, y, z, value) -> entries.add(value));
+                final int currentBitsPerEntry = flexiblePalette.bitsPerEntry();
+                final int bitsPerEntry;
                 if (entries.size() == 1) {
                     return new FilledPalette(dimension, entries.iterator().nextInt());
-                } else if (flexiblePalette.bitsPerEntry() > defaultBitsPerEntry) {
-                    final int bitsPerEntry = MathUtils.bitsToRepresent(entries.size() - 1);
-                    assert bitsPerEntry < flexiblePalette.bitsPerEntry();
+                } else if (currentBitsPerEntry > defaultBitsPerEntry &&
+                        (bitsPerEntry = MathUtils.bitsToRepresent(entries.size() - 1)) < currentBitsPerEntry) {
                     flexiblePalette.resize(bitsPerEntry);
                     return flexiblePalette;
                 }
