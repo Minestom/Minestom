@@ -17,7 +17,7 @@ public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potio
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeByte((byte) potionEffect.id());
+        writer.writeVarInt(potionEffect.id());
     }
 
     @Override

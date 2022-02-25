@@ -33,9 +33,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
             writer.writeByte((byte) -1);
         }
 
-        //array of worlds
-        writer.writeVarInt(1);
-        writer.writeSizedString("minestom:world");
+        writer.writeVarIntList(worlds, BinaryWriter::writeSizedString);
 
         writer.writeNBT("", dimensionCodec);
         writer.writeNBT("", dimension);

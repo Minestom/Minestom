@@ -94,7 +94,7 @@ public class DimensionType {
     public static DimensionType fromNBT(NBTCompound nbt) {
         return DimensionType.builder(NamespaceID.from(nbt.getString("name")))
                 .ambientLight(nbt.getFloat("ambient_light"))
-                .infiniburn(NamespaceID.from(nbt.getString("infiniburn")))
+                .infiniburn(NamespaceID.from(nbt.getString("infiniburn").replaceFirst("#", "")))
                 .natural(nbt.getByte("natural") != 0)
                 .ceilingEnabled(nbt.getByte("has_ceiling") != 0)
                 .skylightEnabled(nbt.getByte("has_skylight") != 0)
@@ -121,7 +121,7 @@ public class DimensionType {
     public NBTCompound toNBT() {
         return NBT.Compound(nbt -> {
             nbt.setFloat("ambient_light", ambientLight);
-            nbt.setString("infiniburn", infiniburn.toString());
+            nbt.setString("infiniburn", "#" + infiniburn.toString());
             nbt.setByte("natural", (byte) (natural ? 0x01 : 0x00));
             nbt.setByte("has_ceiling", (byte) (ceilingEnabled ? 0x01 : 0x00));
             nbt.setByte("has_skylight", (byte) (skylightEnabled ? 0x01 : 0x00));
