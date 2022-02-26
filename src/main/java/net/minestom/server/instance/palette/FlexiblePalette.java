@@ -3,6 +3,7 @@ package net.minestom.server.instance.palette;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,11 +31,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     // Specific to this palette type
     private final AdaptivePalette adaptivePalette;
-    private final int dimensionBitCount;
     private int bitsPerEntry;
-
-    private boolean hasPalette;
-    private int lastPaletteIndex = 1; // First index is air
     private int count = 0;
 
     private long[] values;
@@ -45,10 +42,8 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     FlexiblePalette(AdaptivePalette adaptivePalette, int bitsPerEntry) {
         this.adaptivePalette = adaptivePalette;
-        this.dimensionBitCount = (int) (Math.log(adaptivePalette.dimension()) / Math.log(2));
 
         this.bitsPerEntry = bitsPerEntry;
-        this.hasPalette = bitsPerEntry <= maxBitsPerEntry();
 
         this.paletteToValueList = new IntArrayList(1);
         this.paletteToValueList.add(0);
@@ -56,7 +51,8 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         this.valueToPaletteMap.put(0, 0);
         this.valueToPaletteMap.defaultReturnValue(-1);
 
-        this.values = new long[valuesLength(bitsPerEntry)];
+        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        this.values = new long[(maxSize() + valuesPerLong - 1) / valuesPerLong];
     }
 
     FlexiblePalette(AdaptivePalette adaptivePalette) {
@@ -75,7 +71,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int bitIndex = sectionIdentifier % valuesPerLong * bitsPerEntry;
         final short value = (short) (values[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry]);
         // Change to palette value and return
-        return hasPalette ? paletteToValueList.getInt(value) : value;
+        return hasPalette() ? paletteToValueList.getInt(value) : value;
     }
 
     @Override
@@ -258,8 +254,8 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
-        final int[] ids = hasPalette ? paletteToValueList.elements() : null;
-        final int dimensionBitCount = this.dimensionBitCount;
+        final int[] ids = hasPalette() ? paletteToValueList.elements() : null;
+        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
@@ -315,20 +311,17 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     void resize(int newBitsPerEntry) {
         FlexiblePalette palette = new FlexiblePalette(adaptivePalette, fixBitsPerEntry(newBitsPerEntry));
-        palette.lastPaletteIndex = lastPaletteIndex;
         palette.paletteToValueList = paletteToValueList;
         palette.valueToPaletteMap = valueToPaletteMap;
         getAll(palette::set);
         this.bitsPerEntry = palette.bitsPerEntry;
-        this.hasPalette = palette.hasPalette;
-        this.lastPaletteIndex = palette.lastPaletteIndex;
         this.count = palette.count;
         this.values = palette.values;
     }
 
     private int getPaletteIndex(int value) {
-        if (!hasPalette) return value;
-        final int lastPaletteIndex = this.lastPaletteIndex;
+        if (!hasPalette()) return value;
+        final int lastPaletteIndex = this.paletteToValueList.size();
         if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
             // Palette is full, must resize
             resize(bitsPerEntry + 1);
@@ -336,13 +329,16 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         }
         final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
         if (lookup != -1) return lookup;
-        this.lastPaletteIndex = lastPaletteIndex + 1;
         this.paletteToValueList.add(value);
         return lastPaletteIndex;
     }
 
+    boolean hasPalette() {
+        return bitsPerEntry <= maxBitsPerEntry();
+    }
+
     int getSectionIndex(int x, int y, int z) {
-        final int dimensionBitCount = this.dimensionBitCount;
+        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension() - 1);
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
@@ -353,11 +349,6 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
             WRITE_CACHE.set(cache);
         }
         return cache;
-    }
-
-    int valuesLength(int bitsPerEntry) {
-        int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        return (maxSize() + valuesPerLong - 1) / valuesPerLong;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {
