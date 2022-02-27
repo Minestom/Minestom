@@ -18,7 +18,7 @@ public class TestPermissions {
 
     private Player player;
 
-    private Permission permission1, permission2;
+    private Permission permission1, permission2, permission3;
 
     @BeforeEach
     public void init() {
@@ -42,6 +42,8 @@ public class TestPermissions {
         );
 
         permission2 = new Permission("perm.name2");
+
+        permission3 = new Permission("perm.test.*");
     }
 
     @Test
@@ -60,6 +62,15 @@ public class TestPermissions {
 
         player.addPermission(permission2);
         assertTrue(player.hasPermission(permission2));
+    }
+
+    @Test
+    public void hasPermissionWildcard() {
+        assertFalse(player.hasPermission(permission3));
+
+        player.addPermission(permission3);
+
+        assertTrue(player.hasPermission(permission3));
     }
 
     @Test
