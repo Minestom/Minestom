@@ -32,7 +32,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     // Specific to this palette type
     private final AdaptivePalette adaptivePalette;
     private int bitsPerEntry;
-    private int count = 0;
+    private int count;
 
     private long[] values;
     // palette index = value
@@ -315,8 +315,8 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         palette.valueToPaletteMap = valueToPaletteMap;
         getAll(palette::set);
         this.bitsPerEntry = palette.bitsPerEntry;
-        this.count = palette.count;
         this.values = palette.values;
+        assert this.count == palette.count;
     }
 
     private int getPaletteIndex(int value) {
