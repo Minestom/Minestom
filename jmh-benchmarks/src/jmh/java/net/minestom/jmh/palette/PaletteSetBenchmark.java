@@ -21,7 +21,7 @@ public class PaletteSetBenchmark {
 
     @Setup
     public void setup() {
-        palette = Palette.newPalette(dimension, 15, 4, 1);
+        palette = Palette.newPalette(dimension, 15, 4);
     }
 
     @Benchmark
