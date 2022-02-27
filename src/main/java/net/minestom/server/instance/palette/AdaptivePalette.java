@@ -12,18 +12,14 @@ import java.util.function.IntUnaryOperator;
  * Palette that switches between its backend based on the use case.
  */
 final class AdaptivePalette implements Palette {
-    final int dimension;
-    final int maxBitsPerEntry;
-    final int defaultBitsPerEntry;
-
+    final byte dimension, defaultBitsPerEntry, maxBitsPerEntry;
     SpecializedPalette palette;
 
-    AdaptivePalette(int dimension, int maxBitsPerEntry, int bitsPerEntry) {
+    AdaptivePalette(byte dimension, byte maxBitsPerEntry, byte bitsPerEntry) {
         validateDimension(dimension);
         this.dimension = dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
         this.defaultBitsPerEntry = bitsPerEntry;
-
         this.palette = new FilledPalette(dimension, 0);
     }
 
@@ -132,7 +128,7 @@ final class AdaptivePalette implements Palette {
                     return new FilledPalette(dimension, entries.iterator().nextInt());
                 } else if (currentBitsPerEntry > defaultBitsPerEntry &&
                         (bitsPerEntry = MathUtils.bitsToRepresent(entries.size() - 1)) < currentBitsPerEntry) {
-                    flexiblePalette.resize(bitsPerEntry);
+                    flexiblePalette.resize((byte) bitsPerEntry);
                     return flexiblePalette;
                 }
             }

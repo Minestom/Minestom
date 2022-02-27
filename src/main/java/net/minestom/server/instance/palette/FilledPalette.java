@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Palette containing a single value. Useful for both empty and full palettes.
  */
-record FilledPalette(int dimension, int value) implements SpecializedPalette.Immutable {
+record FilledPalette(byte dim, int value) implements SpecializedPalette.Immutable {
     @Override
     public int get(int x, int y, int z) {
         return value;
@@ -14,10 +14,11 @@ record FilledPalette(int dimension, int value) implements SpecializedPalette.Imm
 
     @Override
     public void getAll(@NotNull EntryConsumer consumer) {
-        final int dimension = dimension();
-        for (int y = 0; y < dimension; y++)
-            for (int z = 0; z < dimension; z++)
-                for (int x = 0; x < dimension; x++)
+        final byte dimension = this.dim;
+        final int value = this.value;
+        for (byte y = 0; y < dimension; y++)
+            for (byte z = 0; z < dimension; z++)
+                for (byte x = 0; x < dimension; x++)
                     consumer.accept(x, y, z, value);
     }
 
@@ -29,6 +30,11 @@ record FilledPalette(int dimension, int value) implements SpecializedPalette.Imm
     @Override
     public int count() {
         return value != 0 ? maxSize() : 0;
+    }
+
+    @Override
+    public int dimension() {
+        return dim;
     }
 
     @Override

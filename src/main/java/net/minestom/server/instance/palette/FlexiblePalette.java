@@ -31,7 +31,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     // Specific to this palette type
     private final AdaptivePalette adaptivePalette;
-    private int bitsPerEntry;
+    private byte bitsPerEntry;
     private int count;
 
     private long[] values;
@@ -40,7 +40,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     // value = palette index
     private Int2IntOpenHashMap valueToPaletteMap;
 
-    FlexiblePalette(AdaptivePalette adaptivePalette, int bitsPerEntry) {
+    FlexiblePalette(AdaptivePalette adaptivePalette, byte bitsPerEntry) {
         this.adaptivePalette = adaptivePalette;
 
         this.bitsPerEntry = bitsPerEntry;
@@ -235,15 +235,11 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte((byte) bitsPerEntry);
+        writer.writeByte(bitsPerEntry);
         if (bitsPerEntry <= maxBitsPerEntry()) { // Palette index
             writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
         }
         writer.writeLongArray(values);
-    }
-
-    private int fixBitsPerEntry(int bitsPerEntry) {
-        return bitsPerEntry > maxBitsPerEntry() ? 15 : bitsPerEntry;
     }
 
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
@@ -309,8 +305,9 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         }
     }
 
-    void resize(int newBitsPerEntry) {
-        FlexiblePalette palette = new FlexiblePalette(adaptivePalette, fixBitsPerEntry(newBitsPerEntry));
+    void resize(byte newBitsPerEntry) {
+        newBitsPerEntry = newBitsPerEntry > maxBitsPerEntry() ? 15 : newBitsPerEntry;
+        FlexiblePalette palette = new FlexiblePalette(adaptivePalette, newBitsPerEntry);
         palette.paletteToValueList = paletteToValueList;
         palette.valueToPaletteMap = valueToPaletteMap;
         getAll(palette::set);
@@ -322,9 +319,10 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     private int getPaletteIndex(int value) {
         if (!hasPalette()) return value;
         final int lastPaletteIndex = this.paletteToValueList.size();
-        if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
+        final byte bpe = this.bitsPerEntry;
+        if (lastPaletteIndex >= maxPaletteSize(bpe)) {
             // Palette is full, must resize
-            resize(bitsPerEntry + 1);
+            resize((byte) (bpe + 1));
             return getPaletteIndex(value);
         }
         final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);

@@ -20,7 +20,7 @@ public interface Palette extends Writeable {
     }
 
     static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry) {
-        return new AdaptivePalette(dimension, maxBitsPerEntry, bitsPerEntry);
+        return new AdaptivePalette((byte) dimension, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
     }
 
     int get(int x, int y, int z);
