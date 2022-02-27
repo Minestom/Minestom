@@ -67,6 +67,15 @@ public interface PermissionHandler {
             if (permissionLoop.equals(permission)) {
                 return true;
             }
+
+            if (permissionLoop.getPermissionName().endsWith(".*")) {
+
+                // Remove (.*) from the end of the string
+                String permissionPrefix = permissionLoop.getPermissionName().substring(0, permission.getPermissionName().length() - 2);
+
+                if (permission.getPermissionName().startsWith(permissionPrefix))
+                    return true;
+            }
         }
         return false;
     }
