@@ -278,16 +278,15 @@ public class DynamicChunk extends Chunk {
                 }
             }
             // Retrieve the block from state id
-            final Section section = sections[ChunkUtils.getChunkCoordinate(y) + minSection];
+            final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
             final int blockStateId = section.blockPalette()
                     .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
-            if (blockStateId == -1) return Block.AIR; // Section is empty
             return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
         }
 
         @Override
         public @NotNull Biome getBiome(int x, int y, int z) {
-            final Section section = sections[ChunkUtils.getChunkCoordinate(y) + minSection];
+            final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
             final int id = section.biomePalette()
                     .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
             return MinecraftServer.getBiomeManager().getById(id);
