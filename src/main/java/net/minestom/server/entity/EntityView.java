@@ -233,6 +233,7 @@ final class EntityView {
             Player[] players;
             synchronized (mutex) {
                 var bitSet = viewableOption.bitSet;
+                if (bitSet.isEmpty()) return Collections.emptyIterator();
                 players = new Player[bitSet.size()];
                 int i = 0;
                 for (IntIterator it = bitSet.intIterator(); it.hasNext(); ) {
