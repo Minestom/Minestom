@@ -1532,15 +1532,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
         return scheduler;
     }
 
-    private EntitySnapshotImpl snapshot;
-
     @Override
-    public @NotNull EntitySnapshot snapshot() {
-        return snapshot;
-    }
-
-    @Override
-    public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public @NotNull EntitySnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Chunk chunk = currentChunk;
         IntList viewersId = new IntArrayList();
         IntList passengersId = new IntArrayList();
@@ -1551,7 +1544,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
             this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
         }
         final Entity vehicle = this.vehicle;
-        this.snapshot = new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
+        return new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 TagReadable.fromCompound(nbtCompound.toCompound()));

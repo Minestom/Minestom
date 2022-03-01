@@ -615,15 +615,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         return scheduler;
     }
 
-    private InstanceSnapshotImpl snapshot;
-
     @Override
-    public @NotNull InstanceSnapshot snapshot() {
-        return snapshot;
-    }
-
-    @Override
-    public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap =
                 updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
         Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap = new Int2ObjectOpenHashMap<>();
@@ -634,7 +627,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
             final Set<Entity> entities = entityTracker.entities();
             for (Entity entity : entities) {
                 final Chunk chunk = entity.getChunk();
-                if (chunk == null) return;
+                if (chunk == null) continue;
                 final int id = entity.getEntityId();
                 final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
                 AtomicReference<? extends EntitySnapshot> reference = updater.reference(entity);
@@ -652,8 +645,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
             playersMap.trim();
             playersChunk.trim();
         }
-
-        this.snapshot = new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
+        return new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
                 chunksMap, MappedCollection.plainReferences(chunksMap.values()),
                 entitiesMap, MappedCollection.plainReferences(entitiesMap.values()), entitiesChunk,
                 playersMap, MappedCollection.plainReferences(playersMap.values()), playersChunk,
