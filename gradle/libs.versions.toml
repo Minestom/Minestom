@@ -17,9 +17,9 @@ jline = "3.21.0"
 
 # Performance / Data Structures
 caffeine = "3.0.5"
-fastutil = "8.5.6"
-flare = "2.0.0"
-gson = "2.8.9"
+fastutil = "8.5.8"
+flare = "2.0.1"
+gson = "2.9.0"
 jcTools = "3.3.0"
 
 # Test
