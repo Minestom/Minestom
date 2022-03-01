@@ -1546,8 +1546,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
         IntList passengersId = new IntArrayList();
         {
             // Viewers
-            var bitSet = viewEngine.viewableOption.bitSet;
-            bitSet.forEach((int id) -> viewersId.add(id));
+            this.viewEngine.viewableOption.bitSet.forEach(viewersId::add);
             // Passengers
             this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
         }
