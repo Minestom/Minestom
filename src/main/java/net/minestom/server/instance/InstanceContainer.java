@@ -273,7 +273,7 @@ public class InstanceContainer extends Instance {
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
-                    assert future != null : "Future should not be null";
+                    assert future == completableFuture;
                     future.complete(chunk);
                 });
         if (loader.supportsParallelLoading()) {
