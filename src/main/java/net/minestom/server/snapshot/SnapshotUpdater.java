@@ -19,18 +19,6 @@ import java.util.stream.Collectors;
  * Implementations do not need to be thread-safe and cannot be re-used.
  */
 public sealed interface SnapshotUpdater permits SnapshotUpdaterImpl {
-    /**
-     * Updates the snapshot of the given snapshotable.
-     * <p>
-     * Method must be called during a safe-point (when the server state is stable).
-     *
-     * @param snapshotable the snapshot container
-     * @param <T>          the snapshot type
-     * @return the new updated snapshot
-     */
-    static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
-        return SnapshotUpdaterImpl.update(snapshotable);
-    }
 
     <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable);
 

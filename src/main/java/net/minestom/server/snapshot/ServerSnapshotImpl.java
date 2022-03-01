@@ -16,7 +16,7 @@ record ServerSnapshotImpl(Collection<InstanceSnapshot> instances) implements Ser
     static ServerSnapshot update() {
         final ServerProcess process = MinecraftServer.process();
         final Set<Instance> instances = process.instance().getInstances();
-        return SnapshotUpdater.update(updater -> {
+        return SnapshotUpdaterImpl.update(updater -> {
             List<AtomicReference<InstanceSnapshot>> list = new ArrayList<>();
             instances.forEach(instance -> list.add(updater.reference(instance)));
             return new ServerSnapshotImpl(MappedCollection.plainReferences(list));

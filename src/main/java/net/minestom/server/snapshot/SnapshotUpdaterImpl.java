@@ -12,21 +12,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class SnapshotUpdaterImpl implements SnapshotUpdater {
-    private static final Map<Snapshotable, AtomicReference<Snapshot>> REF_CACHE = new ConcurrentHashMap<>();
+    private final Map<Snapshotable, AtomicReference<Snapshot>> referenceMap = new ConcurrentHashMap<>();
     private List<Entry> queue = new ArrayList<>();
 
     static synchronized <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);
         updater.update();
-        REF_CACHE.clear();
         return (T) ref.getPlain();
     }
 
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
         //noinspection unchecked
-        return (AtomicReference<T>) REF_CACHE.computeIfAbsent(snapshotable, snap -> {
+        return (AtomicReference<T>) referenceMap.computeIfAbsent(snapshotable, snap -> {
             AtomicReference<Snapshot> ref = new AtomicReference<>();
             var entry = new Entry(snap, ref);
             synchronized (this) {
