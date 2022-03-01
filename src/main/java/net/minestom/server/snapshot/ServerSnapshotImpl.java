@@ -1,6 +1,7 @@
 package net.minestom.server.snapshot;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.collection.MappedCollection;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,8 @@ record ServerSnapshotImpl(Collection<InstanceSnapshot> instances) implements Ser
     }
 
     static ServerSnapshot update() {
-        final Set<Instance> instances = MinecraftServer.getInstanceManager().getInstances();
+        final ServerProcess process = MinecraftServer.process();
+        final Set<Instance> instances = process.instance().getInstances();
         var updater = new SnapshotUpdaterImpl();
         updater.update();
         AtomicReference<ServerSnapshot> snapshotRef = new AtomicReference<>();
@@ -38,6 +40,7 @@ record ServerSnapshotImpl(Collection<InstanceSnapshot> instances) implements Ser
         });
         final ServerSnapshot snapshot = snapshotRef.getPlain();
         assert snapshot != null;
+        ServerSnapshotImpl.snapshot = snapshot;
         return snapshot;
     }
 }
