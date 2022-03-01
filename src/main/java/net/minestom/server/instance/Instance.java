@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
@@ -17,13 +19,16 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
+import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -31,12 +36,14 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -50,7 +57,7 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, Snapshotable, TagHandler, PacketGroupingAudience {
 
     private boolean registered;
 
@@ -606,6 +613,93 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Scheduler scheduler() {
         return scheduler;
+    }
+
+    private InstanceSnapshotImpl snapshot;
+
+    @Override
+    public @NotNull InstanceSnapshot snapshot() {
+        return snapshot;
+    }
+
+    @Override
+    public void updateSnapshot(@NotNull SnapshotUpdater updater) {
+        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap =
+                updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
+        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap = new Int2ObjectOpenHashMap<>();
+        Long2ObjectOpenHashMap<List<AtomicReference<EntitySnapshot>>> entitiesChunk = new Long2ObjectOpenHashMap<>();
+        Int2ObjectOpenHashMap<AtomicReference<PlayerSnapshot>> playersMap = new Int2ObjectOpenHashMap<>();
+        Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> playersChunk = new Long2ObjectOpenHashMap<>();
+        {
+            final Set<Entity> entities = entityTracker.entities();
+            for (Entity entity : entities) {
+                final Chunk chunk = entity.getChunk();
+                if (chunk == null) return;
+                final int id = entity.getEntityId();
+                final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
+                AtomicReference<? extends EntitySnapshot> reference = updater.reference(entity);
+                entitiesMap.put(id, (AtomicReference<EntitySnapshot>) reference);
+                entitiesChunk.computeIfAbsent(chunkIndex, k -> new ArrayList<>())
+                        .add((AtomicReference<EntitySnapshot>) reference);
+                if (entity instanceof Player) {
+                    playersMap.put(id, (AtomicReference<PlayerSnapshot>) reference);
+                    playersChunk.computeIfAbsent(chunkIndex, k -> new ArrayList<>())
+                            .add((AtomicReference<PlayerSnapshot>) reference);
+                }
+            }
+            entitiesMap.trim();
+            entitiesChunk.trim();
+            playersMap.trim();
+            playersChunk.trim();
+        }
+
+        this.snapshot = new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
+                chunksMap, MappedCollection.plainReferences(chunksMap.values()),
+                entitiesMap, MappedCollection.plainReferences(entitiesMap.values()), entitiesChunk,
+                playersMap, MappedCollection.plainReferences(playersMap.values()), playersChunk,
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
+    }
+
+    private record InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
+                                        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
+                                        Collection<ChunkSnapshot> chunks,
+                                        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap,
+                                        Collection<EntitySnapshot> entities,
+                                        Long2ObjectOpenHashMap<List<AtomicReference<EntitySnapshot>>> chunkEntities,
+                                        Int2ObjectOpenHashMap<AtomicReference<PlayerSnapshot>> playersMap,
+                                        Collection<PlayerSnapshot> players,
+                                        Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> chunkPlayers,
+                                        TagReadable tagReadable) implements InstanceSnapshot {
+        @Override
+        public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
+            var ref = chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+            return Objects.requireNonNull(ref, "Chunk not found").getPlain();
+        }
+
+        @Override
+        public @UnknownNullability EntitySnapshot entity(int entityId) {
+            return entitiesMap.get(entityId).getPlain();
+        }
+
+        @Override
+        public @NotNull Collection<@NotNull EntitySnapshot> chunkEntities(int chunkX, int chunkZ) {
+            return MappedCollection.plainReferences(chunkEntities.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)));
+        }
+
+        @Override
+        public @UnknownNullability PlayerSnapshot player(int playerId) {
+            return playersMap.get(playerId).getPlain();
+        }
+
+        @Override
+        public @NotNull Collection<@NotNull PlayerSnapshot> chunkPlayers(int chunkX, int chunkZ) {
+            return MappedCollection.plainReferences(chunkPlayers.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)));
+        }
+
+        @Override
+        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+            return tagReadable.getTag(tag);
+        }
     }
 
     /**

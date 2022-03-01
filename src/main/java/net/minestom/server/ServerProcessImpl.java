@@ -21,6 +21,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
+import net.minestom.server.snapshot.ServerSnapshot;
 import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
@@ -278,6 +279,13 @@ final class ServerProcessImpl implements ServerProcess {
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                 EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
                 Acquirable.resetAcquiringTime();
+            }
+
+            // TODO remove
+            {
+                ServerSnapshot.update();
+                var snapshot = ServerSnapshot.get();
+                System.out.println("test "+snapshot.instances().size());
             }
         }
 
