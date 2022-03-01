@@ -283,9 +283,8 @@ final class ServerProcessImpl implements ServerProcess {
 
             // TODO remove
             {
-                ServerSnapshot.update();
-                var snapshot = ServerSnapshot.get();
-                System.out.println("test "+snapshot.instances().size());
+                var snapshot = ServerSnapshot.update();
+                System.out.println("test " + snapshot.instances().size());
             }
         }
 

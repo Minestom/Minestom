@@ -2,7 +2,6 @@
 
 package net.minestom.server.snapshot;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -17,8 +16,7 @@ public interface ServerSnapshot extends Snapshot {
         return ServerSnapshotImpl.get();
     }
 
-    @ApiStatus.Internal
-    static void update() {
-        ServerSnapshotImpl.update();
+    static ServerSnapshot update() {
+        return ServerSnapshotImpl.update();
     }
 }
