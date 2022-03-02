@@ -1,9 +1,10 @@
 package net.minestom.server.snapshot;
 
+import net.minestom.server.entity.GameMode;
 import org.jetbrains.annotations.NotNull;
 
 public interface PlayerSnapshot extends EntitySnapshot {
-    @NotNull InventorySnapshot inventory();
+    @NotNull String username();
 
-    @NotNull InventorySnapshot openInventory();
+    @NotNull GameMode gameMode();
 }
