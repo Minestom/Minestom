@@ -15,7 +15,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     private final Map<Snapshotable, AtomicReference<Snapshot>> referenceMap = new ConcurrentHashMap<>();
     private List<Entry> queue = new ArrayList<>();
 
-    static synchronized <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
+    static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);
         updater.update();

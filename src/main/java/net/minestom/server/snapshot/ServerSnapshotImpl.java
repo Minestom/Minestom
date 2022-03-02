@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.collection.MappedCollection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,10 +17,13 @@ record ServerSnapshotImpl(Collection<InstanceSnapshot> instances) implements Ser
     static ServerSnapshot update() {
         final ServerProcess process = MinecraftServer.process();
         final Set<Instance> instances = process.instance().getInstances();
-        return SnapshotUpdaterImpl.update(updater -> {
-            List<AtomicReference<InstanceSnapshot>> list = new ArrayList<>();
-            instances.forEach(instance -> list.add(updater.reference(instance)));
-            return new ServerSnapshotImpl(MappedCollection.plainReferences(list));
+        return SnapshotUpdaterImpl.update(new Snapshotable() {
+            @Override
+            public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+                List<AtomicReference<InstanceSnapshot>> list = new ArrayList<>();
+                instances.forEach(instance -> list.add(updater.reference(instance)));
+                return new ServerSnapshotImpl(MappedCollection.plainReferences(list));
+            }
         });
     }
 }
