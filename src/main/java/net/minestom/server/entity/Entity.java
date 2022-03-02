@@ -1,7 +1,5 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -1535,14 +1533,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
     @Override
     public @NotNull EntitySnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Chunk chunk = currentChunk;
-        IntList viewersId = new IntArrayList();
-        IntList passengersId = new IntArrayList();
-        {
-            // Viewers
-            this.viewEngine.viewableOption.bitSet.forEach(viewersId::add);
-            // Passengers
-            this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
-        }
+        final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
+        final int[] passengersId = this.passengers.stream().mapToInt(Entity::getEntityId).toArray();
         final Entity vehicle = this.vehicle;
         return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),

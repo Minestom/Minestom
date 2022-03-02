@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.snapshot.ChunkSnapshot;
@@ -9,7 +8,7 @@ import net.minestom.server.snapshot.InstanceSnapshot;
 import net.minestom.server.snapshot.PlayerSnapshot;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.collection.MappedCollection;
+import net.minestom.server.utils.collection.IntMappedArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,10 +19,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 final class EntitySnapshotImpl {
 
-     record Entity(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
-                                      AtomicReference<InstanceSnapshot> instanceRef, int chunkX, int chunkZ,
-                                      IntList viewersId, IntList passengersId, int vehicleId,
-                                      TagReadable tagReadable) implements EntitySnapshot {
+    record Entity(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
+                  AtomicReference<InstanceSnapshot> instanceRef, int chunkX, int chunkZ,
+                  int[] viewersId, int[] passengersId, int vehicleId,
+                  TagReadable tagReadable) implements EntitySnapshot {
         @Override
         public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
             return tagReadable.getTag(tag);
@@ -41,23 +40,23 @@ final class EntitySnapshotImpl {
 
         @Override
         public @NotNull Collection<@NotNull PlayerSnapshot> viewers() {
-            return new MappedCollection<>(viewersId, id -> instance().player(id));
+            return new IntMappedArray<>(viewersId, id -> (PlayerSnapshot) instance().server().entity(id));
         }
 
         @Override
         public @NotNull Collection<@NotNull EntitySnapshot> passengers() {
-            return new MappedCollection<>(passengersId, id -> instance().entity(id));
+            return new IntMappedArray<>(passengersId, id -> instance().server().entity(id));
         }
 
         @Override
         public @Nullable EntitySnapshot vehicle() {
             if (vehicleId == -1) return null;
-            return instance().entity(vehicleId);
+            return instance().server().entity(vehicleId);
         }
     }
 
-     record Player(EntitySnapshot snapshot, String username,
-                                      GameMode gameMode) implements PlayerSnapshot {
+    record Player(EntitySnapshot snapshot, String username,
+                  GameMode gameMode) implements PlayerSnapshot {
         @Override
         public @NotNull EntityType type() {
             return snapshot.type();

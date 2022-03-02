@@ -15,6 +15,7 @@ import java.util.Objects;
 import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
 
 public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
+
     @NotNull DimensionType dimensionType();
 
     long worldAge();
@@ -41,15 +42,7 @@ public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, 
 
     @NotNull Collection<@NotNull ChunkSnapshot> chunks();
 
-    @UnknownNullability EntitySnapshot entity(int entityId);
-
-    @NotNull Collection<@NotNull EntitySnapshot> chunkEntities(int chunkX, int chunkZ);
-
     @NotNull Collection<@NotNull EntitySnapshot> entities();
 
-    @UnknownNullability PlayerSnapshot player(int playerId);
-
-    @NotNull Collection<@NotNull PlayerSnapshot> chunkPlayers(int chunkX, int chunkZ);
-
-    @NotNull Collection<@NotNull PlayerSnapshot> players();
+    @NotNull ServerSnapshot server();
 }

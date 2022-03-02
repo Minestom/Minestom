@@ -1,10 +1,9 @@
 package net.minestom.server.instance;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
@@ -616,38 +615,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     @Override
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        final AtomicReference<ServerSnapshot> server = updater.reference(MinecraftServer.process());
         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap =
                 updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
-        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap = new Int2ObjectOpenHashMap<>();
-        Long2ObjectOpenHashMap<List<AtomicReference<EntitySnapshot>>> entitiesChunk = new Long2ObjectOpenHashMap<>();
-        Int2ObjectOpenHashMap<AtomicReference<PlayerSnapshot>> playersMap = new Int2ObjectOpenHashMap<>();
-        Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> playersChunk = new Long2ObjectOpenHashMap<>();
-        {
-            final Set<Entity> entities = entityTracker.entities();
-            for (Entity entity : entities) {
-                final Chunk chunk = entity.getChunk();
-                if (chunk == null) continue;
-                final int id = entity.getEntityId();
-                final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
-                AtomicReference<? extends EntitySnapshot> reference = updater.reference(entity);
-                entitiesMap.put(id, (AtomicReference<EntitySnapshot>) reference);
-                entitiesChunk.computeIfAbsent(chunkIndex, k -> new ArrayList<>())
-                        .add((AtomicReference<EntitySnapshot>) reference);
-                if (entity instanceof Player) {
-                    playersMap.put(id, (AtomicReference<PlayerSnapshot>) reference);
-                    playersChunk.computeIfAbsent(chunkIndex, k -> new ArrayList<>())
-                            .add((AtomicReference<PlayerSnapshot>) reference);
-                }
-            }
-            entitiesMap.trim();
-            entitiesChunk.trim();
-            playersMap.trim();
-            playersChunk.trim();
-        }
-        return new InstanceSnapshotImpl.Instance(getDimensionType(), getWorldAge(), getTime(),
-                chunksMap, MappedCollection.plainReferences(chunksMap.values()),
-                entitiesMap, MappedCollection.plainReferences(entitiesMap.values()), entitiesChunk,
-                playersMap, MappedCollection.plainReferences(playersMap.values()), playersChunk,
+        final int[] entities = entityTracker.entities().stream().mapToInt(Entity::getEntityId).toArray();
+        return new InstanceSnapshotImpl.Instance(server, getDimensionType(), getWorldAge(), getTime(),
+                chunksMap, MappedCollection.plainReferences(chunksMap.values()), entities,
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 

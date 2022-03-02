@@ -32,7 +32,6 @@ public class SnapshotIntegrationTest {
 
         assertEquals(0, inst.chunks().size());
         assertEquals(0, inst.entities().size());
-        assertEquals(0, inst.players().size());
     }
 
     @Test
