@@ -64,9 +64,10 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.PlayerSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -1963,65 +1964,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public @NotNull PlayerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final EntitySnapshot snapshot = super.updateSnapshot(updater);
-        return new PlayerSnapshotImpl(snapshot, username, gameMode);
-    }
-
-    private record PlayerSnapshotImpl(EntitySnapshot snapshot, String username,
-                                      GameMode gameMode) implements PlayerSnapshot {
-        @Override
-        public @NotNull EntityType type() {
-            return snapshot.type();
-        }
-
-        @Override
-        public @NotNull UUID uuid() {
-            return snapshot.uuid();
-        }
-
-        @Override
-        public int id() {
-            return snapshot.id();
-        }
-
-        @Override
-        public @NotNull Pos position() {
-            return snapshot.position();
-        }
-
-        @Override
-        public @NotNull Vec velocity() {
-            return snapshot.velocity();
-        }
-
-        @Override
-        public @NotNull InstanceSnapshot instance() {
-            return snapshot.instance();
-        }
-
-        @Override
-        public @NotNull ChunkSnapshot chunk() {
-            return snapshot.chunk();
-        }
-
-        @Override
-        public @NotNull Collection<@NotNull PlayerSnapshot> viewers() {
-            return snapshot.viewers();
-        }
-
-        @Override
-        public @NotNull Collection<@NotNull EntitySnapshot> passengers() {
-            return snapshot.passengers();
-        }
-
-        @Override
-        public @Nullable EntitySnapshot vehicle() {
-            return snapshot.vehicle();
-        }
-
-        @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-            return snapshot.getTag(tag);
-        }
+        return new EntitySnapshotImpl.Player(snapshot, username, gameMode);
     }
 
     /**

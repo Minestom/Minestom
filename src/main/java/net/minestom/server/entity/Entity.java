@@ -35,7 +35,9 @@ import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
@@ -47,7 +49,6 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.position.PositionUtils;
@@ -68,7 +69,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -1544,46 +1544,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
             this.passengers.forEach(entity -> passengersId.add(entity.getEntityId()));
         }
         final Entity vehicle = this.vehicle;
-        return new EntitySnapshotImpl(entityType, uuid, id, position, velocity,
+        return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 TagReadable.fromCompound(nbtCompound.toCompound()));
-    }
-
-    private record EntitySnapshotImpl(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
-                                      AtomicReference<InstanceSnapshot> instanceRef, int chunkX, int chunkZ,
-                                      IntList viewersId, IntList passengersId, int vehicleId,
-                                      TagReadable tagReadable) implements EntitySnapshot {
-        @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-            return tagReadable.getTag(tag);
-        }
-
-        @Override
-        public @NotNull InstanceSnapshot instance() {
-            return instanceRef.getPlain();
-        }
-
-        @Override
-        public @NotNull ChunkSnapshot chunk() {
-            return Objects.requireNonNull(instance().chunk(chunkX, chunkZ));
-        }
-
-        @Override
-        public @NotNull Collection<@NotNull PlayerSnapshot> viewers() {
-            return new MappedCollection<>(viewersId, id -> instance().player(id));
-        }
-
-        @Override
-        public @NotNull Collection<@NotNull EntitySnapshot> passengers() {
-            return new MappedCollection<>(passengersId, id -> instance().entity(id));
-        }
-
-        @Override
-        public @Nullable EntitySnapshot vehicle() {
-            if (vehicleId == -1) return null;
-            return instance().entity(vehicleId);
-        }
     }
 
     /**
