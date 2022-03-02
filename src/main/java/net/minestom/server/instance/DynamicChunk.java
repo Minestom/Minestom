@@ -14,7 +14,6 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
-import net.minestom.server.snapshot.InstanceSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -26,12 +25,10 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
 
@@ -250,50 +247,8 @@ public class DynamicChunk extends Chunk {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();
-        return new ChunkSnapshotImpl(minSection, chunkX, chunkZ,
+        return new InstanceSnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), updater.reference(instance),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
-
-    private record ChunkSnapshotImpl(int minSection, int chunkX, int chunkZ,
-                                     Section[] sections,
-                                     Int2ObjectOpenHashMap<Block> blockEntries,
-                                     AtomicReference<InstanceSnapshot> instanceRef,
-                                     TagReadable tagReadable) implements ChunkSnapshot {
-        @Override
-        public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-            // Verify if the block object is present
-            if (condition != Condition.TYPE) {
-                final Block entry = !blockEntries.isEmpty() ?
-                        blockEntries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
-                if (entry != null || condition == Condition.CACHED) {
-                    return entry;
-                }
-            }
-            // Retrieve the block from state id
-            final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
-            final int blockStateId = section.blockPalette()
-                    .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
-            return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
-        }
-
-        @Override
-        public @NotNull Biome getBiome(int x, int y, int z) {
-            final Section section = sections[ChunkUtils.getChunkCoordinate(y) - minSection];
-            final int id = section.biomePalette()
-                    .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
-            return MinecraftServer.getBiomeManager().getById(id);
-        }
-
-        @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-            return tagReadable.getTag(tag);
-        }
-
-        @Override
-        public @NotNull InstanceSnapshot instance() {
-            return instanceRef.getPlain();
-        }
-    }
-
 }

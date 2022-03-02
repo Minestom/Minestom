@@ -36,7 +36,6 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
@@ -645,53 +644,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
             playersMap.trim();
             playersChunk.trim();
         }
-        return new InstanceSnapshotImpl(getDimensionType(), getWorldAge(), getTime(),
+        return new InstanceSnapshotImpl.Instance(getDimensionType(), getWorldAge(), getTime(),
                 chunksMap, MappedCollection.plainReferences(chunksMap.values()),
                 entitiesMap, MappedCollection.plainReferences(entitiesMap.values()), entitiesChunk,
                 playersMap, MappedCollection.plainReferences(playersMap.values()), playersChunk,
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
-    }
-
-    private record InstanceSnapshotImpl(DimensionType dimensionType, long worldAge, long time,
-                                        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
-                                        Collection<ChunkSnapshot> chunks,
-                                        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entitiesMap,
-                                        Collection<EntitySnapshot> entities,
-                                        Long2ObjectOpenHashMap<List<AtomicReference<EntitySnapshot>>> chunkEntities,
-                                        Int2ObjectOpenHashMap<AtomicReference<PlayerSnapshot>> playersMap,
-                                        Collection<PlayerSnapshot> players,
-                                        Long2ObjectOpenHashMap<List<AtomicReference<PlayerSnapshot>>> chunkPlayers,
-                                        TagReadable tagReadable) implements InstanceSnapshot {
-        @Override
-        public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
-            var ref = chunksMap.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-            return Objects.requireNonNull(ref, "Chunk not found").getPlain();
-        }
-
-        @Override
-        public @UnknownNullability EntitySnapshot entity(int entityId) {
-            return entitiesMap.get(entityId).getPlain();
-        }
-
-        @Override
-        public @NotNull Collection<@NotNull EntitySnapshot> chunkEntities(int chunkX, int chunkZ) {
-            return MappedCollection.plainReferences(chunkEntities.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)));
-        }
-
-        @Override
-        public @UnknownNullability PlayerSnapshot player(int playerId) {
-            return playersMap.get(playerId).getPlain();
-        }
-
-        @Override
-        public @NotNull Collection<@NotNull PlayerSnapshot> chunkPlayers(int chunkX, int chunkZ) {
-            return MappedCollection.plainReferences(chunkPlayers.get(ChunkUtils.getChunkIndex(chunkX, chunkZ)));
-        }
-
-        @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-            return tagReadable.getTag(tag);
-        }
     }
 
     /**
