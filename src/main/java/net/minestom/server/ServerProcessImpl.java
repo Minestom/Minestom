@@ -274,7 +274,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     record SnapshotImpl(Collection<InstanceSnapshot> instances,
-                              Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs) implements ServerSnapshot {
+                        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs) implements ServerSnapshot {
         @Override
         public @NotNull Collection<EntitySnapshot> entities() {
             return MappedCollection.plainReferences(entityRefs.values());
@@ -313,12 +313,6 @@ final class ServerProcessImpl implements ServerProcess {
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                 EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
                 Acquirable.resetAcquiringTime();
-            }
-
-            // TODO remove
-            {
-                var snapshot = ServerSnapshot.update();
-                System.out.println("test " + snapshot.instances().size());
             }
         }
 
