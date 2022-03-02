@@ -18,6 +18,7 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -248,9 +249,8 @@ public class DynamicChunk extends Chunk {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();
-        final int[] entityIds = instance.getEntityTracker()
-                .chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES).stream()
-                .mapToInt(Entity::getEntityId).toArray();
+        var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
+        final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new InstanceSnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));

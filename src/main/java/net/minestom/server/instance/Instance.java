@@ -25,6 +25,7 @@ import net.minestom.server.tag.TagReadable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.collection.MappedCollection;
@@ -618,7 +619,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         final AtomicReference<ServerSnapshot> server = updater.reference(MinecraftServer.process());
         Map<Long, AtomicReference<ChunkSnapshot>> chunksMap =
                 updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
-        final int[] entities = entityTracker.entities().stream().mapToInt(Entity::getEntityId).toArray();
+        final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
         return new InstanceSnapshotImpl.Instance(server, getDimensionType(), getWorldAge(), getTime(),
                 chunksMap, MappedCollection.plainReferences(chunksMap.values()), entities,
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));

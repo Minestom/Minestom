@@ -43,6 +43,7 @@ import net.minestom.server.thread.Acquirable;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -1534,7 +1535,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
     public @NotNull EntitySnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Chunk chunk = currentChunk;
         final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
-        final int[] passengersId = this.passengers.stream().mapToInt(Entity::getEntityId).toArray();
+        final int[] passengersId = ArrayUtils.mapToIntArray(passengers, Entity::getEntityId);
         final Entity vehicle = this.vehicle;
         return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
