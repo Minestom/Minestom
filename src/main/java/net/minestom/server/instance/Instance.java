@@ -18,7 +18,10 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
@@ -28,7 +31,6 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -616,12 +618,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     @Override
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final AtomicReference<ServerSnapshot> server = updater.reference(MinecraftServer.process());
-        Map<Long, AtomicReference<ChunkSnapshot>> chunksMap =
-                updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
+        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
-        return new InstanceSnapshotImpl.Instance(server, getDimensionType(), getWorldAge(), getTime(),
-                chunksMap, MappedCollection.plainReferences(chunksMap.values()), entities,
+        return new InstanceSnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
+                getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
                 TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
     }
 

@@ -10,6 +10,7 @@ import net.minestom.server.snapshot.ServerSnapshot;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.collection.IntMappedArray;
+import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -28,13 +29,17 @@ final class InstanceSnapshotImpl {
     record Instance(AtomicReference<ServerSnapshot> serverRef,
                     DimensionType dimensionType, long worldAge, long time,
                     Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
-                    Collection<ChunkSnapshot> chunks,
                     int[] entitiesIds,
                     TagReadable tagReadable) implements InstanceSnapshot {
         @Override
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
             var ref = chunksMap.get(getChunkIndex(chunkX, chunkZ));
             return Objects.requireNonNull(ref, "Chunk not found").getPlain();
+        }
+
+        @Override
+        public @NotNull Collection<@NotNull ChunkSnapshot> chunks() {
+            return MappedCollection.plainReferences(chunksMap.values());
         }
 
         @Override
