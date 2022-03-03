@@ -24,15 +24,14 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
 
     @Override
     public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
-        //noinspection unchecked
-        return (AtomicReference<T>) referenceMap.computeIfAbsent(snapshotable, snap -> {
-            AtomicReference<Snapshot> ref = new AtomicReference<>();
-            var entry = new Entry(snap, ref);
+        AtomicReference<Snapshot> ref = new AtomicReference<>();
+        var prev = referenceMap.putIfAbsent(snapshotable, ref);
+        if (prev == null) {
             synchronized (this) {
-                this.queue.add(entry);
+                queue.add(new Entry(snapshotable, ref));
             }
-            return ref;
-        });
+        }
+        return (AtomicReference<T>) ref;
     }
 
     record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
