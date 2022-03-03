@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Represents a tab which can be shared between multiple players. Created using {@link AdvancementManager#createTab(String, AdvancementRoot)}.
@@ -158,7 +159,7 @@ public class AdvancementTab implements Viewable {
      * @param player the player
      */
     private void addPlayer(@NotNull Player player) {
-        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player.getUuid(), p -> new HashSet<>());
+        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player.getUuid(), p -> new CopyOnWriteArraySet<>());
         tabs.add(this);
     }
 

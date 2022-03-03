@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class AdvancementTest {
+public class AdvancementIntegrationTest {
 
     @Test
     public void addAndRemoveViewer(Env env) {

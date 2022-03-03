@@ -473,7 +473,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         {
             Set<AdvancementTab> advancementTabs = AdvancementTab.getTabs(this);
             if (advancementTabs != null) {
-                for (AdvancementTab advancementTab : new HashSet<>(advancementTabs)) {
+                for (AdvancementTab advancementTab : advancementTabs) {
                     advancementTab.removeViewer(this);
                 }
             }
