@@ -33,12 +33,17 @@ import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -72,7 +77,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, Schedulable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -1524,6 +1529,18 @@ public class Entity implements Viewable, Tickable, Schedulable, TagHandler, Perm
     @Override
     public @NotNull Scheduler scheduler() {
         return scheduler;
+    }
+
+    @Override
+    public @NotNull EntitySnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        final Chunk chunk = currentChunk;
+        final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
+        final int[] passengersId = ArrayUtils.mapToIntArray(passengers, Entity::getEntityId);
+        final Entity vehicle = this.vehicle;
+        return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
+                updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
+                viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
+                TagReadable.fromCompound(nbtCompound.toCompound()));
     }
 
     /**

@@ -11,7 +11,7 @@ import java.util.function.IntUnaryOperator;
 /**
  * Palette that switches between its backend based on the use case.
  */
-final class AdaptivePalette implements Palette {
+final class AdaptivePalette implements Palette, Cloneable {
     final byte dimension, defaultBitsPerEntry, maxBitsPerEntry;
     SpecializedPalette palette;
 

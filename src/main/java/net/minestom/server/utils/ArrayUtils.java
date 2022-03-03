@@ -4,7 +4,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 
 @ApiStatus.Internal
 public final class ArrayUtils {
@@ -23,6 +25,19 @@ public final class ArrayUtils {
             System.arraycopy(array, 0, result, startingPos, array.length);
             startingPos += array.length;
         }
+        return result;
+    }
+
+    public static <T> int[] mapToIntArray(Collection<T> collection, ToIntFunction<T> function) {
+        final int size = collection.size();
+        if (size == 0)
+            return new int[0];
+        int[] result = new int[size];
+        int i = 0;
+        for (T object : collection) {
+            result[i++] = function.applyAsInt(object);
+        }
+        assert i == size;
         return result;
     }
 
