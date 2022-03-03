@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -264,12 +265,12 @@ final class ServerProcessImpl implements ServerProcess {
     public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         List<AtomicReference<InstanceSnapshot>> instanceRefs = new ArrayList<>();
         Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs = new Int2ObjectOpenHashMap<>();
-        this.instance.getInstances().forEach(instance -> {
+        for (Instance instance : instance.getInstances()) {
             instanceRefs.add(updater.reference(instance));
-
-            var entities = instance.getEntityTracker().entities();
-            entities.forEach(entity -> entityRefs.put(entity.getEntityId(), updater.reference(entity)));
-        });
+            for (Entity entity : instance.getEntities()) {
+                entityRefs.put(entity.getEntityId(), updater.reference(entity));
+            }
+        }
         return new SnapshotImpl(MappedCollection.plainReferences(instanceRefs), entityRefs);
     }
 
