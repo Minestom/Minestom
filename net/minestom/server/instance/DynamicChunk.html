@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></code>, <code><a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code>, <code><a href="../world/biomes/Biome.Getter.html" title="interface in net.minestom.server.world.biomes">Biome.Getter</a></code>, <code><a href="../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></code></dd>
+<dd><code><a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></code>, <code><a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code>, <code><a href="../world/biomes/Biome.Getter.html" title="interface in net.minestom.server.world.biomes">Biome.Getter</a></code>, <code><a href="../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DynamicChunk</span>
@@ -206,6 +206,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes a chunk tick.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/ChunkSnapshot.html" title="interface in net.minestom.server.snapshot">ChunkSnapshot</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Updates the currently cached snapshot if required.</div>
 </div>
 </div>
 </div>
@@ -462,6 +467,27 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="Chunk.html#reset()">reset</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">
+<h3>updateSnapshot</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../snapshot/ChunkSnapshot.html" title="interface in net.minestom.server.snapshot">ChunkSnapshot</a></span>&nbsp;<span class="element-name">updateSnapshot</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../snapshot/Snapshotable.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">Snapshotable</a></code></span></div>
+<div class="block">Updates the currently cached snapshot if required.
+ The updater can be used to retrieve references to other snapshots while avoiding circular dependency.
+ Be careful to do not store <code>updater</code> anywhere as its data will change when building requested references.
+ <p>
+ This method is not thread-safe, and targeted at internal use
+ since its execution rely on safe-points (e.g. end of ticks)</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>updater</code> - the snapshot updater/context</dd>
+<dt>Returns:</dt>
+<dd>the updated snapshot</dd>
 </dl>
 </section>
 </li>

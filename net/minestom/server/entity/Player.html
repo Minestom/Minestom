@@ -81,7 +81,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/identity/Identified.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identified</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a></code>, <code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/identity/Identified.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identified</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a></code>, <code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -912,6 +912,11 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateOldViewer(net.minestom.server.entity.Player)" class="member-name-link">updateOldViewer</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a viewer must be destroyed.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/PlayerSnapshot.html" title="interface in net.minestom.server.snapshot">PlayerSnapshot</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Updates the currently cached snapshot if required.</div>
 </div>
 </div>
 </div>
@@ -2829,6 +2834,31 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <dd><code><a href="../adventure/Localizable.html#getLocale()">getLocale</a></code>&nbsp;in interface&nbsp;<code><a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a></code></dd>
 <dt>Returns:</dt>
 <dd>the locale, or <code>null</code> if they do not have a locale set</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">
+<h3>updateSnapshot</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../snapshot/PlayerSnapshot.html" title="interface in net.minestom.server.snapshot">PlayerSnapshot</a></span>&nbsp;<span class="element-name">updateSnapshot</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../snapshot/Snapshotable.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">Snapshotable</a></code></span></div>
+<div class="block">Updates the currently cached snapshot if required.
+ The updater can be used to retrieve references to other snapshots while avoiding circular dependency.
+ Be careful to do not store <code>updater</code> anywhere as its data will change when building requested references.
+ <p>
+ This method is not thread-safe, and targeted at internal use
+ since its execution rely on safe-points (e.g. end of ticks)</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../snapshot/Snapshotable.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">updateSnapshot</a></code>&nbsp;in interface&nbsp;<code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="Entity.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">updateSnapshot</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>updater</code> - the snapshot updater/context</dd>
+<dt>Returns:</dt>
+<dd>the updated snapshot</dd>
 </dl>
 </section>
 </li>

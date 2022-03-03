@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/ForwardingAudience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">ForwardingAudience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code>, <code><a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></code>, <code><a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/ForwardingAudience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">ForwardingAudience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code>, <code><a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></code>, <code><a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">Instance</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>, <a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a>, <a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>, <a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a>, <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a>, <a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></span></div>
+implements <a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>, <a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a>, <a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>, <a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a>, <a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a>, <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a>, <a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></span></div>
 <div class="block">Instances are what are called "worlds" in Minecraft, you can add an entity in it using <a href="../entity/Entity.html#setInstance(net.minestom.server.instance.Instance)"><code>Entity.setInstance(Instance)</code></a>.
  <p>
  An instance has entities and chunks, each instance contains its own entity list but the
@@ -436,6 +436,11 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unloadChunk(net.minestom.server.instance.Chunk)" class="member-name-link">unloadChunk</a><wbr>(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Schedules the removal of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, this method does not promise when it will be done.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/InstanceSnapshot.html" title="interface in net.minestom.server.snapshot">InstanceSnapshot</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Updates the currently cached snapshot if required.</div>
 </div>
 </div>
 </div>
@@ -1198,6 +1203,29 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../timer/Schedulable.html#scheduler()">scheduler</a></code>&nbsp;in interface&nbsp;<code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">
+<h3>updateSnapshot</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../snapshot/InstanceSnapshot.html" title="interface in net.minestom.server.snapshot">InstanceSnapshot</a></span>&nbsp;<span class="element-name">updateSnapshot</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../snapshot/Snapshotable.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">Snapshotable</a></code></span></div>
+<div class="block">Updates the currently cached snapshot if required.
+ The updater can be used to retrieve references to other snapshots while avoiding circular dependency.
+ Be careful to do not store <code>updater</code> anywhere as its data will change when building requested references.
+ <p>
+ This method is not thread-safe, and targeted at internal use
+ since its execution rely on safe-points (e.g. end of ticks)</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../snapshot/Snapshotable.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">updateSnapshot</a></code>&nbsp;in interface&nbsp;<code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>updater</code> - the snapshot updater/context</dd>
+<dt>Returns:</dt>
+<dd>the updated snapshot</dd>
 </dl>
 </section>
 </li>

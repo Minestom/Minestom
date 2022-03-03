@@ -112,6 +112,7 @@ net.minestom.server.recipe
 net.minestom.server.registry
 net.minestom.server.resourcepack
 net.minestom.server.scoreboard
+net.minestom.server.snapshot
 net.minestom.server.sound
 net.minestom.server.statistic
 net.minestom.server.tag
