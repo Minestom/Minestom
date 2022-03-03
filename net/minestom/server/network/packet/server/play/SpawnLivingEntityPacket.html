@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">SpawnLivingEntityPacket</span>(int&nbsp;entityId, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;entityUuid, int&nbsp;entityType, @NotNull <a href="../../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position, float&nbsp;headPitch, short&nbsp;velocityX, short&nbsp;velocityY, short&nbsp;velocityZ)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">SpawnLivingEntityPacket</span>(int&nbsp;entityId, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;entityUuid, int&nbsp;entityType, @NotNull <a href="../../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position, float&nbsp;headYaw, short&nbsp;velocityX, short&nbsp;velocityY, short&nbsp;velocityZ)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -100,7 +100,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;entityUuid,
  int&nbsp;entityType,
  @NotNull <a href="../../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
- float&nbsp;headPitch,
+ float&nbsp;headYaw,
  short&nbsp;velocityX,
  short&nbsp;velocityY,
  short&nbsp;velocityZ)</code></div>
@@ -154,9 +154,9 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="block">Returns a hash code value for this object.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#headPitch()" class="member-name-link">headPitch</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#headYaw()" class="member-name-link">headYaw</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>headPitch</code> record component.</div>
+<div class="block">Returns the value of the <code>headYaw</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#position()" class="member-name-link">position</a>()</code></div>
@@ -220,7 +220,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
  int&nbsp;entityType,
  @NotNull
  @NotNull <a href="../../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
- float&nbsp;headPitch,
+ float&nbsp;headYaw,
  short&nbsp;velocityX,
  short&nbsp;velocityY,
  short&nbsp;velocityZ)</span></div>
@@ -231,7 +231,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dd><code>entityUuid</code> - the value for the <code>entityUuid</code> record component</dd>
 <dd><code>entityType</code> - the value for the <code>entityType</code> record component</dd>
 <dd><code>position</code> - the value for the <code>position</code> record component</dd>
-<dd><code>headPitch</code> - the value for the <code>headPitch</code> record component</dd>
+<dd><code>headYaw</code> - the value for the <code>headYaw</code> record component</dd>
 <dd><code>velocityX</code> - the value for the <code>velocityX</code> record component</dd>
 <dd><code>velocityY</code> - the value for the <code>velocityY</code> record component</dd>
 <dd><code>velocityZ</code> - the value for the <code>velocityZ</code> record component</dd>
@@ -365,13 +365,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="headPitch()">
-<h3>headPitch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">headPitch</span>()</div>
-<div class="block">Returns the value of the <code>headPitch</code> record component.</div>
+<section class="detail" id="headYaw()">
+<h3>headYaw</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">headYaw</span>()</div>
+<div class="block">Returns the value of the <code>headYaw</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>headPitch</code> record component</dd>
+<dd>the value of the <code>headYaw</code> record component</dd>
 </dl>
 </section>
 </li>
