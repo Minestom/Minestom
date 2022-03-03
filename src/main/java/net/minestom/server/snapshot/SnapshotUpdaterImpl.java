@@ -30,8 +30,9 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
             synchronized (this) {
                 queue.add(new Entry(snapshotable, ref));
             }
+            return (AtomicReference<T>) ref;
         }
-        return (AtomicReference<T>) ref;
+        return (AtomicReference<T>) prev;
     }
 
     record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
