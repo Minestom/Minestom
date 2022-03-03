@@ -103,7 +103,7 @@ final class EntityView {
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return viewableOption.isAuto() && viewableOption.predictable && manualViewers.isEmpty();
+            return viewableOption.isAuto() && viewableOption.predicate == null && manualViewers.isEmpty();
         }
     }
 
@@ -138,9 +138,8 @@ final class EntityView {
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // The custom rule used to determine if an entity is viewable.
-        private Predicate<T> predicate = entity -> true;
-
-        private boolean predictable = true;
+        // null if auto-viewable
+        private Predicate<T> predicate = null;
 
         public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
@@ -155,7 +154,8 @@ final class EntityView {
         }
 
         public boolean predicate(T entity) {
-            return predicate.test(entity);
+            final Predicate<T> predicate = this.predicate;
+            return predicate == null || predicate.test(entity);
         }
 
         public boolean isRegistered(T entity) {
@@ -194,14 +194,19 @@ final class EntityView {
         }
 
         void updateRule0(Predicate<T> predicate) {
-            this.predictable = false;
-            update(loopPredicate, entity -> {
-                final boolean result = predicate.test(entity);
-                if (result != isRegistered(entity)) {
-                    if (result) addition.accept(entity);
-                    else removal.accept(entity);
-                }
-            });
+            if (predicate == null) {
+                update(loopPredicate, entity -> {
+                    if (!isRegistered(entity)) addition.accept(entity);
+                });
+            } else {
+                update(loopPredicate, entity -> {
+                    final boolean result = predicate.test(entity);
+                    if (result != isRegistered(entity)) {
+                        if (result) addition.accept(entity);
+                        else removal.accept(entity);
+                    }
+                });
+            }
         }
 
         private void update(Predicate<T> visibilityPredicate,

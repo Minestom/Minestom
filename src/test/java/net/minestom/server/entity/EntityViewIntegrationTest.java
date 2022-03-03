@@ -115,10 +115,10 @@ public class EntityViewIntegrationTest {
         }
         // CHANGE RULE
         {
-            // May cause all subsequent `hasPredictableViewers` to return false
-            // due to the server not able detect always-true predicate
             p.updateViewableRule(player -> false);
             assertFalse(p.hasPredictableViewers());
+            p.updateViewableRule(null);
+            assertTrue(p.hasPredictableViewers());
         }
     }
 

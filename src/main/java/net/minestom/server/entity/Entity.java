@@ -357,7 +357,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
     }
 
     @ApiStatus.Experimental
-    public void updateViewableRule(@NotNull Predicate<Player> predicate) {
+    public void updateViewableRule(@Nullable Predicate<Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
@@ -388,7 +388,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ta
     }
 
     @ApiStatus.Experimental
-    public void updateViewerRule(@NotNull Predicate<Entity> predicate) {
+    public void updateViewerRule(@Nullable Predicate<Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
