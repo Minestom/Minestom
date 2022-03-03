@@ -103,7 +103,7 @@ final class EntityView {
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return viewableOption.isAuto() && manualViewers.isEmpty();
+            return viewableOption.isAuto() && viewableOption.predictable && manualViewers.isEmpty();
         }
     }
 
@@ -139,6 +139,8 @@ final class EntityView {
         private volatile int auto = 1;
         // The custom rule used to determine if an entity is viewable.
         private Predicate<T> predicate = entity -> true;
+
+        private boolean predictable = true;
 
         public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
@@ -192,6 +194,7 @@ final class EntityView {
         }
 
         void updateRule0(Predicate<T> predicate) {
+            this.predictable = false;
             update(loopPredicate, entity -> {
                 final boolean result = predicate.test(entity);
                 if (result != isRegistered(entity)) {

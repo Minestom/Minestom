@@ -6,8 +6,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityViewIntegrationTest {
@@ -94,6 +93,33 @@ public class EntityViewIntegrationTest {
         p1.setAutoViewable(true);
         assertEquals(1, p1.getViewers().size());
         assertEquals(1, p2.getViewers().size());
+    }
+
+    @Test
+    public void predictableViewers(Env env) {
+        var instance = env.createFlatInstance();
+        var p = env.createPlayer(instance, new Pos(0, 42, 0));
+        assertTrue(p.hasPredictableViewers());
+        p.setAutoViewable(false);
+        assertFalse(p.hasPredictableViewers());
+        p.setAutoViewable(true);
+        assertTrue(p.hasPredictableViewers());
+        // MANUAL VIEWERS
+        {
+            var tmpPlayer = env.createPlayer(instance, new Pos(0, 42, 0));
+            p.addViewer(tmpPlayer);
+            assertFalse(p.hasPredictableViewers());
+            p.removeViewer(tmpPlayer);
+            tmpPlayer.remove();
+            assertTrue(p.hasPredictableViewers());
+        }
+        // CHANGE RULE
+        {
+            // May cause all subsequent `hasPredictableViewers` to return false
+            // due to the server not able detect always-true predicate
+            p.updateViewableRule(player -> false);
+            assertFalse(p.hasPredictableViewers());
+        }
     }
 
     @Test
