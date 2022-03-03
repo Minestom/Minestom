@@ -223,7 +223,7 @@ public final class CommandManager {
             request.retrieve(argumentNode);
         }
         // Add root node children
-        rootNode.children = ArrayUtils.toArray(rootChildren);
+        rootNode.children = rootChildren.toIntArray();
         return new DeclareCommandsPacket(nodes, 0);
     }
 
@@ -381,7 +381,7 @@ public final class CommandManager {
 
                             // Append to the last node
                             {
-                                final int[] children = ArrayUtils.toArray(argChildren);
+                                final int[] children = argChildren.toIntArray();
                                 for (DeclareCommandsPacket.Node lastNode : lastNodes) {
                                     lastNode.children = lastNode.children == null ?
                                             children :
@@ -422,7 +422,7 @@ public final class CommandManager {
             argumentIdentityMap.put(indexedArgument.argument, value);
         });
 
-        literalNode.children = ArrayUtils.toArray(cmdChildren);
+        literalNode.children = cmdChildren.toIntArray();
         return literalNode;
     }
 

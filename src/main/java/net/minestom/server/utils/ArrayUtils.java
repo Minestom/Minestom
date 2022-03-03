@@ -1,11 +1,12 @@
 package net.minestom.server.utils;
 
-import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 
 @ApiStatus.Internal
 public final class ArrayUtils {
@@ -27,8 +28,17 @@ public final class ArrayUtils {
         return result;
     }
 
-    public static void removeElement(@NotNull Object[] arr, int index) {
-        System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
+    public static <T> int[] mapToIntArray(Collection<T> collection, ToIntFunction<T> function) {
+        final int size = collection.size();
+        if (size == 0)
+            return new int[0];
+        int[] result = new int[size];
+        int i = 0;
+        for (T object : collection) {
+            result[i++] = function.applyAsInt(object);
+        }
+        assert i == size;
+        return result;
     }
 
     public static <K, V> Map<K, V> toMap(@NotNull K[] keys, @NotNull V[] values, int length) {
@@ -57,12 +67,6 @@ public final class ArrayUtils {
                     keys[7], values[7], keys[8], values[8], keys[9], values[9]);
             default -> Map.copyOf(new Object2ObjectArrayMap<>(keys, values, length));
         };
-    }
-
-    public static int @NotNull [] toArray(@NotNull IntList list) {
-        int[] array = new int[list.size()];
-        list.getElements(0, array, 0, array.length);
-        return array;
     }
 
     private static final int INDEX_NOT_FOUND = -1;

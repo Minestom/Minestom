@@ -8,7 +8,7 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.ObjectArray;
+import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;

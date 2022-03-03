@@ -1,5 +1,8 @@
 package net.minestom.server.instance.palette;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,23 +11,15 @@ import java.util.function.IntUnaryOperator;
 /**
  * Palette that switches between its backend based on the use case.
  */
-final class AdaptivePalette implements Palette {
-    final int dimension;
-    final int dimensionBitCount;
-    final int maxBitsPerEntry;
-    final int defaultBitsPerEntry;
-    final int bitsIncrement;
+final class AdaptivePalette implements Palette, Cloneable {
+    final byte dimension, defaultBitsPerEntry, maxBitsPerEntry;
+    SpecializedPalette palette;
 
-    private SpecializedPalette palette;
-
-    AdaptivePalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitsIncrement) {
-        this.dimensionBitCount = validateDimension(dimension);
-
+    AdaptivePalette(byte dimension, byte maxBitsPerEntry, byte bitsPerEntry) {
+        validateDimension(dimension);
         this.dimension = dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
         this.defaultBitsPerEntry = bitsPerEntry;
-        this.bitsIncrement = bitsIncrement;
-
         this.palette = new FilledPalette(dimension, 0);
     }
 
@@ -112,20 +107,29 @@ final class AdaptivePalette implements Palette {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        optimizedPalette().write(writer);
+        final SpecializedPalette optimized = optimizedPalette();
+        this.palette = optimized;
+        optimized.write(writer);
     }
 
-    Palette optimizedPalette() {
+    SpecializedPalette optimizedPalette() {
         var currentPalette = this.palette;
         if (currentPalette instanceof FlexiblePalette flexiblePalette) {
             final int count = flexiblePalette.count();
             if (count == 0) {
-                return (this.palette = new FilledPalette(dimension, 0));
-            } else if (count == flexiblePalette.maxSize()) {
-                var palette = flexiblePalette.paletteToValueList;
-                if (palette.size() == 2 && palette.getInt(0) == 0) {
-                    // first element is air, second should be the value the palette is filled with
-                    return (this.palette = new FilledPalette(dimension, palette.getInt(1)));
+                return new FilledPalette(dimension, 0);
+            } else {
+                // Find all entries and compress the palette
+                IntSet entries = new IntOpenHashSet(flexiblePalette.paletteToValueList.size());
+                flexiblePalette.getAll((x, y, z, value) -> entries.add(value));
+                final int currentBitsPerEntry = flexiblePalette.bitsPerEntry();
+                final int bitsPerEntry;
+                if (entries.size() == 1) {
+                    return new FilledPalette(dimension, entries.iterator().nextInt());
+                } else if (currentBitsPerEntry > defaultBitsPerEntry &&
+                        (bitsPerEntry = MathUtils.bitsToRepresent(entries.size() - 1)) < currentBitsPerEntry) {
+                    flexiblePalette.resize((byte) bitsPerEntry);
+                    return flexiblePalette;
                 }
             }
         }
@@ -142,14 +146,8 @@ final class AdaptivePalette implements Palette {
         return currentPalette;
     }
 
-    private static int validateDimension(int dimension) {
-        if (dimension <= 1) {
-            throw new IllegalArgumentException("Dimension must be greater 1");
-        }
-        double log2 = Math.log(dimension) / Math.log(2);
-        if ((int) Math.ceil(log2) != (int) Math.floor(log2)) {
-            throw new IllegalArgumentException("Dimension must be a power of 2");
-        }
-        return (int) log2;
+    private static void validateDimension(int dimension) {
+        if (dimension <= 1 || (dimension & dimension - 1) != 0)
+            throw new IllegalArgumentException("Dimension must be a positive power of 2");
     }
 }

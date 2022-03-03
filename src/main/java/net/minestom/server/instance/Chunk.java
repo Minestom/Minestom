@@ -8,9 +8,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.utils.ViewEngine;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -35,7 +35,7 @@ import java.util.UUID;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, TagHandler {
+public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, TagHandler, Snapshotable {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
@@ -51,7 +51,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    private final ViewEngine viewers = new ViewEngine();
+    private final ChunkView viewers;
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
@@ -67,8 +67,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.shouldGenerate = shouldGenerate;
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
-
-        this.viewers.updateTracker(instance, toPosition());
+        this.viewers = new ChunkView(instance, toPosition());
     }
 
     /**
@@ -268,31 +267,19 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
     }
 
-    /**
-     * Adds the player to the viewing collection. Chunk packet must be sent manually.
-     *
-     * @param player the viewer to add
-     * @return true if the player has just been added to the viewer collection
-     */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        return viewers.manualAdd(player);
+        throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
-    /**
-     * Removes the player from the viewing collection. Chunk packet must be sent manually.
-     *
-     * @param player the viewer to remove
-     * @return true if the player has just been removed to the viewer collection
-     */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        return viewers.manualRemove(player);
+        throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        return viewers.asSet();
+        return viewers.set;
     }
 
     @Override

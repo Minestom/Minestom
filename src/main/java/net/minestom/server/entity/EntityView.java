@@ -1,17 +1,13 @@
-package net.minestom.server.utils;
+package net.minestom.server.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.SharedInstance;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,13 +16,9 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/**
- * Defines which players are able to see this element.
- */
-@ApiStatus.Internal
-public final class ViewEngine {
+final class EntityView {
+    private static final int RANGE = MinecraftServer.getEntityViewDistance() * 16;
     private final Entity entity;
-    private final int range;
     private final Set<Player> manualViewers = new HashSet<>();
 
     // Decide if this entity should be viewable to X players
@@ -34,32 +26,43 @@ public final class ViewEngine {
     // Decide if this entity should view X entities
     public final Option<Entity> viewerOption;
 
-    private final Set<Player> set;
+    final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
     private volatile TrackedLocation trackedLocation;
 
-    public ViewEngine(@Nullable Entity entity,
-                      Consumer<Player> autoViewableAddition, Consumer<Player> autoViewableRemoval,
-                      Consumer<Entity> autoViewerAddition, Consumer<Entity> autoViewerRemoval) {
+    public EntityView(Entity entity) {
         this.entity = entity;
-        if (entity != null) {
-            this.range = MinecraftServer.getEntityViewDistance();
-            this.set = new EntitySet();
-        } else {
-            this.range = MinecraftServer.getChunkViewDistance();
-            this.set = new ChunkSet();
-        }
-        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities, autoViewableAddition, autoViewableRemoval);
-        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable, autoViewerAddition, autoViewerRemoval);
-    }
-
-    public ViewEngine(@Nullable Entity entity) {
-        this(entity, null, null, null, null);
-    }
-
-    public ViewEngine() {
-        this(null);
+        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
+                player -> {
+                    // Add viewable
+                    var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+                    var lock2 = lock1 == entity ? player : entity;
+                    synchronized (lock1.viewEngine.mutex) {
+                        synchronized (lock2.viewEngine.mutex) {
+                            if (!entity.viewEngine.viewableOption.predicate(player) ||
+                                    !player.viewEngine.viewerOption.predicate(entity)) return;
+                            entity.viewEngine.viewableOption.register(player);
+                            player.viewEngine.viewerOption.register(entity);
+                        }
+                    }
+                    entity.updateNewViewer(player);
+                },
+                player -> {
+                    // Remove viewable
+                    var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+                    var lock2 = lock1 == entity ? player : entity;
+                    synchronized (lock1.viewEngine.mutex) {
+                        synchronized (lock2.viewEngine.mutex) {
+                            entity.viewEngine.viewableOption.unregister(player);
+                            player.viewEngine.viewerOption.unregister(entity);
+                        }
+                    }
+                    entity.updateOldViewer(player);
+                });
+        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
+                entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
+                entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
@@ -100,41 +103,30 @@ public final class ViewEngine {
     public boolean hasPredictableViewers() {
         // Verify if this entity's viewers can be predicted from surrounding entities
         synchronized (mutex) {
-            return viewableOption.isAuto() && manualViewers.isEmpty();
+            return viewableOption.isAuto() && viewableOption.predicate == null && manualViewers.isEmpty();
         }
     }
 
     public void handleAutoViewAddition(Entity entity) {
-        handleAutoView(entity, viewerOption.addition, viewableOption.addition, false);
+        handleAutoView(entity, viewerOption.addition, viewableOption.addition);
     }
 
     public void handleAutoViewRemoval(Entity entity) {
-        handleAutoView(entity, viewerOption.removal, viewableOption.removal, true);
+        handleAutoView(entity, viewerOption.removal, viewableOption.removal);
     }
 
-    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable,
-                                boolean requirement) {
+    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
-            assert viewerOption.isRegistered(entity) == requirement : "Entity is already registered";
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
-            assert viewableOption.isRegistered(player) == requirement : "Entity is already registered";
             if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
     }
 
-    public Object mutex() {
-        return mutex;
-    }
-
-    public Set<Player> asSet() {
-        return set;
-    }
-
     public final class Option<T extends Entity> {
         @SuppressWarnings("rawtypes")
-        private static final AtomicIntegerFieldUpdater<Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(Option.class, "auto");
+        private static final AtomicIntegerFieldUpdater<EntityView.Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(EntityView.Option.class, "auto");
         // Entities that should be tracked from this option
         private final EntityTracker.Target<T> target;
         // The condition that must be met for this option to be considered auto.
@@ -146,7 +138,8 @@ public final class ViewEngine {
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // The custom rule used to determine if an entity is viewable.
-        private Predicate<T> predicate = entity -> true;
+        // null if auto-viewable
+        private Predicate<T> predicate = null;
 
         public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
@@ -161,7 +154,8 @@ public final class ViewEngine {
         }
 
         public boolean predicate(T entity) {
-            return predicate.test(entity);
+            final Predicate<T> predicate = this.predicate;
+            return predicate == null || predicate.test(entity);
         }
 
         public boolean isRegistered(T entity) {
@@ -200,19 +194,25 @@ public final class ViewEngine {
         }
 
         void updateRule0(Predicate<T> predicate) {
-            update(loopPredicate, entity -> {
-                final boolean result = predicate.test(entity);
-                if (result != isRegistered(entity)) {
-                    if (result) addition.accept(entity);
-                    else removal.accept(entity);
-                }
-            });
+            if (predicate == null) {
+                update(loopPredicate, entity -> {
+                    if (!isRegistered(entity)) addition.accept(entity);
+                });
+            } else {
+                update(loopPredicate, entity -> {
+                    final boolean result = predicate.test(entity);
+                    if (result != isRegistered(entity)) {
+                        if (result) addition.accept(entity);
+                        else removal.accept(entity);
+                    }
+                });
+            }
         }
 
         private void update(Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
             references().forEach(entity -> {
-                if (entity == ViewEngine.this.entity || !visibilityPredicate.test(entity)) return;
+                if (entity == EntityView.this.entity || !visibilityPredicate.test(entity)) return;
                 if (entity instanceof Player player && manualViewers.contains(player)) return;
                 if (entity.getVehicle() != null) return;
                 action.accept(entity);
@@ -222,63 +222,36 @@ public final class ViewEngine {
         private int lastSize;
 
         private Collection<T> references() {
-            final TrackedLocation trackedLocation = ViewEngine.this.trackedLocation;
+            final TrackedLocation trackedLocation = EntityView.this.trackedLocation;
             if (trackedLocation == null) return List.of();
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            // Current Instance
-            for (var reference : instance.getEntityTracker().references(point, range, target)) {
-                if (reference.isEmpty()) continue;
-                for (var entity : reference) {
-                    entityMap.putIfAbsent(entity.getEntityId(), entity);
-                }
-            }
-            // Shared Instances
-            if (instance instanceof InstanceContainer container) {
-                final List<SharedInstance> shared = container.getSharedInstances();
-                if (!shared.isEmpty()) {
-                    for (var sharedInstance : shared) {
-                        for (var reference : sharedInstance.getEntityTracker().references(point, range, target)) {
-                            if (reference.isEmpty()) continue;
-                            for (var entity : reference) {
-                                entityMap.putIfAbsent(entity.getEntityId(), entity);
-                            }
-                        }
-                    }
-                }
-            }
+            instance.getEntityTracker().nearbyEntities(point, RANGE, target,
+                    (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             this.lastSize = entityMap.size();
             return entityMap.values();
         }
     }
 
-    final class ChunkSet extends AbstractSet<Player> {
+    final class SetImpl extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
-            return viewableOption.references().iterator();
-        }
-
-        @Override
-        public int size() {
-            return viewableOption.references().size();
-        }
-
-        @Override
-        public void forEach(Consumer<? super Player> action) {
-            viewableOption.references().forEach(action);
-        }
-    }
-
-    final class EntitySet extends AbstractSet<Player> {
-        @Override
-        public @NotNull Iterator<Player> iterator() {
+            Player[] players;
             synchronized (mutex) {
-                return viewableOption.bitSet.intStream()
-                        .mapToObj(operand -> (Player) Entity.getEntity(operand))
-                        .toList().iterator();
+                var bitSet = viewableOption.bitSet;
+                if (bitSet.isEmpty()) return Collections.emptyIterator();
+                players = new Player[bitSet.size()];
+                int i = 0;
+                for (IntIterator it = bitSet.intIterator(); it.hasNext(); ) {
+                    final int id = it.nextInt();
+                    final Player player = (Player) Entity.getEntity(id);
+                    assert player != null;
+                    players[i++] = player;
+                }
             }
+            return Arrays.asList(players).iterator();
         }
 
         @Override
@@ -300,13 +273,6 @@ public final class ViewEngine {
             if (!(o instanceof Player player)) return false;
             synchronized (mutex) {
                 return viewableOption.isRegistered(player);
-            }
-        }
-
-        @Override
-        public void forEach(Consumer<? super Player> action) {
-            synchronized (mutex) {
-                viewableOption.bitSet.forEach((int id) -> action.accept((Player) Entity.getEntity(id)));
             }
         }
     }

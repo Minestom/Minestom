@@ -12,15 +12,15 @@ import java.util.function.IntUnaryOperator;
  */
 public interface Palette extends Writeable {
     static Palette blocks() {
-        return newPalette(16, 8, 6, 1);
+        return newPalette(16, 8, 4);
     }
 
     static Palette biomes() {
-        return newPalette(4, 2, 1, 1);
+        return newPalette(4, 3, 1);
     }
 
-    static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitIncrement) {
-        return new AdaptivePalette(dimension, maxBitsPerEntry, bitsPerEntry, bitIncrement);
+    static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry) {
+        return new AdaptivePalette((byte) dimension, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
     }
 
     int get(int x, int y, int z);

@@ -169,6 +169,12 @@ public class EntityTrackerTest {
         entities.add(ent3);
         tracker.nearbyEntities(Vec.ZERO, 50, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
+
+        // Chunk border
+        tracker.move(ent1, new Vec(16, 0, 0), EntityTracker.Target.ENTITIES, updater);
+        entities.add(ent1);
+        tracker.nearbyEntities(new Vec(15, 0, 0), 2, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
     }
 
     @Test

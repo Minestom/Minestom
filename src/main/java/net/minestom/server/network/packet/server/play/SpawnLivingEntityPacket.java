@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public record SpawnLivingEntityPacket(int entityId, @NotNull UUID entityUuid, int entityType,
-                                      @NotNull Pos position, float headPitch,
+                                      @NotNull Pos position, float headYaw,
                                       short velocityX, short velocityY, short velocityZ) implements ServerPacket {
     public SpawnLivingEntityPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readUuid(), reader.readVarInt(),
@@ -32,7 +32,7 @@ public record SpawnLivingEntityPacket(int entityId, @NotNull UUID entityUuid, in
 
         writer.writeByte((byte) (position.yaw() * 256 / 360));
         writer.writeByte((byte) (position.pitch() * 256 / 360));
-        writer.writeByte((byte) (headPitch * 256 / 360));
+        writer.writeByte((byte) (headYaw * 256 / 360));
 
         writer.writeShort(velocityX);
         writer.writeShort(velocityY);

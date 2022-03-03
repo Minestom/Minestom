@@ -64,6 +64,9 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.PlayerSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
@@ -1252,6 +1255,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 this.flying = false;
             }
         }
+        // Make sure that the player is in the PLAY state and synchronize their flight speed.
+        if (isActive()) {
+            refreshAbilities();
+        }
     }
 
     /**
@@ -1952,6 +1959,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final String locale = settings.locale;
         if (locale == null) return null;
         return Locale.forLanguageTag(locale.replace("_", "-"));
+    }
+
+    @Override
+    public @NotNull PlayerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        final EntitySnapshot snapshot = super.updateSnapshot(updater);
+        return new EntitySnapshotImpl.Player(snapshot, username, gameMode);
     }
 
     /**

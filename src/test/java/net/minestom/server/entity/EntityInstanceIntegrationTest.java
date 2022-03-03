@@ -3,15 +3,12 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.JoinGamePacket;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityInstanceIntegrationTest {
@@ -22,6 +19,7 @@ public class EntityInstanceIntegrationTest {
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
+        assertEquals(new Pos(0, 42, 0), entity.getPosition());
     }
 
     @Test

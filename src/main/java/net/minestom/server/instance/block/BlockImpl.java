@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.ObjectArray;
+import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.MergedMap;
 import org.jetbrains.annotations.NotNull;

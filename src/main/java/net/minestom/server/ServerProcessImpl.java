@@ -1,8 +1,10 @@
 package net.minestom.server;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -21,20 +23,30 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
+import net.minestom.server.snapshot.ServerSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
     private final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
@@ -250,6 +262,33 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public boolean isAlive() {
         return started.get() && !stopped.get();
+    }
+
+    @Override
+    public @NotNull ServerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        List<AtomicReference<InstanceSnapshot>> instanceRefs = new ArrayList<>();
+        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs = new Int2ObjectOpenHashMap<>();
+        for (Instance instance : instance.getInstances()) {
+            instanceRefs.add(updater.reference(instance));
+            for (Entity entity : instance.getEntities()) {
+                entityRefs.put(entity.getEntityId(), updater.reference(entity));
+            }
+        }
+        return new SnapshotImpl(MappedCollection.plainReferences(instanceRefs), entityRefs);
+    }
+
+    record SnapshotImpl(Collection<InstanceSnapshot> instances,
+                        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs) implements ServerSnapshot {
+        @Override
+        public @NotNull Collection<EntitySnapshot> entities() {
+            return MappedCollection.plainReferences(entityRefs.values());
+        }
+
+        @Override
+        public @UnknownNullability EntitySnapshot entity(int id) {
+            var ref = entityRefs.get(id);
+            return ref != null ? ref.getPlain() : null;
+        }
     }
 
     private final class TickerImpl implements Ticker {

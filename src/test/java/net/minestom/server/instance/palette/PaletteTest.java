@@ -1,8 +1,7 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.palette;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -72,7 +71,7 @@ public class PaletteTest {
 
     @Test
     public void resize() {
-        Palette palette = Palette.newPalette(16, 5, 2, 1);
+        Palette palette = Palette.newPalette(16, 5, 2);
         palette.set(0, 0, 0, 1);
         assertEquals(2, palette.bitsPerEntry());
         palette.set(0, 0, 1, 2);
@@ -253,7 +252,7 @@ public class PaletteTest {
 
     @Test
     public void replaceLoop() {
-        var palette = Palette.newPalette(2, 15, 4, 1);
+        var palette = Palette.newPalette(2, 15, 4);
         palette.setAll((x, y, z) -> x + y + z);
         final int dimension = palette.dimension();
         for (int x = 0; x < dimension; x++) {
@@ -267,21 +266,21 @@ public class PaletteTest {
 
     @Test
     public void dimension() {
-        assertThrows(Exception.class, () -> Palette.newPalette(-4, 5, 3, 1));
-        assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3, 1));
-        assertThrows(Exception.class, () -> Palette.newPalette(1, 5, 3, 1));
-        assertDoesNotThrow(() -> Palette.newPalette(2, 5, 3, 1));
-        assertThrows(Exception.class, () -> Palette.newPalette(3, 5, 3, 1));
-        assertDoesNotThrow(() -> Palette.newPalette(4, 5, 3, 1));
-        assertThrows(Exception.class, () -> Palette.newPalette(6, 5, 3, 1));
-        assertDoesNotThrow(() -> Palette.newPalette(16, 5, 3, 1));
+        assertThrows(Exception.class, () -> Palette.newPalette(-4, 5, 3));
+        assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3));
+        assertThrows(Exception.class, () -> Palette.newPalette(1, 5, 3));
+        assertDoesNotThrow(() -> Palette.newPalette(2, 5, 3));
+        assertThrows(Exception.class, () -> Palette.newPalette(3, 5, 3));
+        assertDoesNotThrow(() -> Palette.newPalette(4, 5, 3));
+        assertThrows(Exception.class, () -> Palette.newPalette(6, 5, 3));
+        assertDoesNotThrow(() -> Palette.newPalette(16, 5, 3));
     }
 
     private static List<Palette> testPalettes() {
         return List.of(
-                Palette.newPalette(2, 5, 3, 1),
-                Palette.newPalette(4, 5, 3, 1),
-                Palette.newPalette(8, 5, 3, 1),
-                Palette.newPalette(16, 5, 3, 1));
+                Palette.newPalette(2, 5, 3),
+                Palette.newPalette(4, 5, 3),
+                Palette.newPalette(8, 5, 3),
+                Palette.newPalette(16, 5, 3));
     }
 }

@@ -1,4 +1,4 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.collection;
 
 import org.jetbrains.annotations.ApiStatus;
 
