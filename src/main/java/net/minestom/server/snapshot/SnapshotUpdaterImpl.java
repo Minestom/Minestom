@@ -19,7 +19,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);
         updater.update();
-        return (T) ref.getPlain();
+        return (T) ref.get();
     }
 
     @Override
@@ -44,7 +44,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
             queue = new ArrayList<>();
             temp.parallelStream().forEach(entry -> {
                 Snapshotable snap = entry.snapshotable;
-                entry.ref.setPlain(Objects.requireNonNull(snap.updateSnapshot(this), "Snapshot must not be null after an update!"));
+                entry.ref.set(Objects.requireNonNull(snap.updateSnapshot(this), "Snapshot must not be null after an update!"));
             });
         }
     }

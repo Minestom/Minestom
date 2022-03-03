@@ -23,7 +23,10 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
+import net.minestom.server.snapshot.ServerSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
@@ -262,7 +265,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public @NotNull ServerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         List<AtomicReference<InstanceSnapshot>> instanceRefs = new ArrayList<>();
         Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs = new Int2ObjectOpenHashMap<>();
         for (Instance instance : instance.getInstances()) {
