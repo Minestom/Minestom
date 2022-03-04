@@ -1,6 +1,5 @@
 package net.minestom.server.collision;
 
-import com.google.common.collect.Lists;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -333,23 +332,23 @@ public class BoundingBox {
         final Set<Vec> front = new HashSet<>();
         final Set<Vec> back = new HashSet<>();
 
-        Lists.cartesianProduct(stepsX, stepsY).forEach(cross -> {
-            double i = cross.get(0);
-            double j = cross.get(1);
+        CartesianProduct.product(stepsX, stepsY).forEach(cross -> {
+            double i = (double) ((List<?>)cross).get(0);
+            double j = (double) ((List<?>)cross).get(1);
             front.add(new Vec(i, j, minZ));
             back.add(new Vec(i, j, maxZ));
         });
 
-        Lists.cartesianProduct(stepsY, stepsZ).forEach(cross -> {
-            double j = cross.get(0);
-            double k = cross.get(1);
+        CartesianProduct.product(stepsY, stepsZ).forEach(cross -> {
+            double j = (double) ((List<?>)cross).get(0);
+            double k = (double) ((List<?>)cross).get(1);
             left.add(new Vec(minX, j, k));
             right.add(new Vec(maxX, j, k));
         });
 
-        Lists.cartesianProduct(stepsX, stepsZ).forEach(cross -> {
-            double i = cross.get(0);
-            double k = cross.get(1);
+        CartesianProduct.product(stepsX, stepsZ).forEach(cross -> {
+            double i = (double) ((List<?>)cross).get(0);
+            double k = (double) ((List<?>)cross).get(1);
             bottom.add(new Vec(i, minY, k));
             top.add(new Vec(i, maxY, k));
         });

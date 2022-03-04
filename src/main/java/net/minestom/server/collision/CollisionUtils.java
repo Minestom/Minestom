@@ -10,6 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class CollisionUtils {
@@ -39,7 +40,7 @@ public final class CollisionUtils {
 
         // Check cache to see if the entity is standing on a block without moving.
         // If the entity isn't moving and the block below hasn't changed, return
-        if (entity.lastPhysicsResult != null) {
+        if (entity.lastPhysicsResult != null && entity.getInstance() != null) {
             if (entity.lastPhysicsResult.collisionY
                     && Math.signum(deltaPosition.y()) == Math.signum(entity.lastPhysicsResult.originalDelta.y())
                     && entity.getInstance().getBlock(entity.lastPhysicsResult.collidedBlockY, Block.Getter.Condition.TYPE) == entity.lastPhysicsResult.blockTypeY
