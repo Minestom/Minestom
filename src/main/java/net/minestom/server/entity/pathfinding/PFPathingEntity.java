@@ -206,12 +206,12 @@ public final class PFPathingEntity implements IPathingEntity {
 
     @Override
     public float width() {
-        return (float) entity.getBoundingBox().getWidth();
+        return (float) entity.getBoundingBox().width();
     }
 
     @Override
     public float height() {
-        return (float) entity.getBoundingBox().getHeight();
+        return (float) entity.getBoundingBox().height();
     }
 
     private float getAttributeValue(@NotNull Attribute attribute) {
