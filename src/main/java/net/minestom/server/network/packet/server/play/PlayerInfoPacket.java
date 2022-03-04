@@ -144,7 +144,7 @@ public record PlayerInfoPacket(@NotNull Action action,
         public void write(BinaryWriter writer) {
             writer.writeSizedString(name);
             writer.writeVarIntList(properties, BinaryWriter::write);
-            writer.writeVarInt(gameMode.getId());
+            writer.writeVarInt(gameMode.id());
             writer.writeVarInt(ping);
             writer.writeBoolean(displayName != null);
             if (displayName != null) writer.writeComponent(displayName);
@@ -189,7 +189,7 @@ public record PlayerInfoPacket(@NotNull Action action,
 
         @Override
         public void write(BinaryWriter writer) {
-            writer.writeVarInt(gameMode.getId());
+            writer.writeVarInt(gameMode.id());
         }
     }
 
