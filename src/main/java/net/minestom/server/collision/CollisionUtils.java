@@ -45,6 +45,7 @@ public final class CollisionUtils {
                     && Math.signum(deltaPosition.y()) == Math.signum(entity.lastPhysicsResult.originalDelta.y())
                     && entity.getInstance().getBlock(entity.lastPhysicsResult.collidedBlockY, Block.Getter.Condition.TYPE) == entity.lastPhysicsResult.blockTypeY
                     && deltaPosition.x() == 0 && deltaPosition.z() == 0
+                    && entity.getPosition().samePoint(entity.lastPhysicsResult.newPosition)
                     && entity.lastPhysicsResult.blockTypeY != Block.AIR) {
                 deltaPosition = deltaPosition.withY(0);
                 foundCollisionY = true;
