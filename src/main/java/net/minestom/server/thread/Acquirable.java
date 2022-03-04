@@ -37,12 +37,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      */
     @ApiStatus.Internal
     static long resetAcquiringTime() {
-        do {
-            final long acquiringTime = AcquirableImpl.WAIT_COUNTER_NANO.get();
-            if (AcquirableImpl.WAIT_COUNTER_NANO.compareAndSet(acquiringTime, 0)) {
-                return acquiringTime;
-            }
-        } while (true);
+        return AcquirableImpl.WAIT_COUNTER_NANO.getAndSet(0);
     }
 
     /**
