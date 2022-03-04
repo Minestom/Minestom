@@ -312,11 +312,10 @@ final class ServerProcessImpl implements ServerProcess {
 
             // Monitoring
             {
-                final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
+                final double acquisitionTimeMs = Acquirable.resetAcquiringTime() / 1e6D;
                 final double tickTimeMs = (System.nanoTime() - nanoTime) / 1e6D;
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                 EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
-                Acquirable.resetAcquiringTime();
             }
         }
 
