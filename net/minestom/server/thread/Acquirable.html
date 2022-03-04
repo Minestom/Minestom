@@ -102,45 +102,40 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Gets all the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a> being ticked in the current thread.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#getAcquiringTime()" class="member-name-link">getAcquiringTime</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
-<div class="block">Gets the time spent acquiring since last tick.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isLocal()" class="member-name-link">isLocal</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isLocal()" class="member-name-link">isLocal</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Gets if the acquirable element is local to this thread</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#local()" class="member-name-link">local</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#local()" class="member-name-link">local</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Retrieves the acquirable value if and only if the element
  is already present/ticked in the current thread.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="Acquired.html" title="class in net.minestom.server.thread">Acquired</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#lock()" class="member-name-link">lock</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="Acquired.html" title="class in net.minestom.server.thread">Acquired</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#lock()" class="member-name-link">lock</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Returns a new <a href="Acquired.html" title="class in net.minestom.server.thread"><code>Acquired</code></a> object which will be locked to the current thread.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(T)" class="member-name-link">of</a><wbr>(T&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(T)" class="member-name-link">of</a><wbr>(T&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates a new <a href="Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a> object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#resetAcquiringTime()" class="member-name-link">resetAcquiringTime</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
-<div class="block">Resets <a href="#getAcquiringTime()"><code>getAcquiringTime()</code></a>.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#resetAcquiringTime()" class="member-name-link">resetAcquiringTime</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Retrieve and reset acquiring time.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#sync(java.util.function.Consumer)" class="member-name-link">sync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;&nbsp;consumer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#sync(java.util.function.Consumer)" class="member-name-link">sync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="Acquirable.html" title="type parameter in Acquirable">T</a>&gt;&nbsp;consumer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Locks the acquirable element, execute <code>consumer</code> synchronously and unlock the thread.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="Acquirable.html" title="type parameter in Acquirable">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unwrap()" class="member-name-link">unwrap</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="Acquirable.html" title="type parameter in Acquirable">T</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unwrap()" class="member-name-link">unwrap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Unwrap the contained object unsafely.</div>
 </div>
 </div>
@@ -174,24 +169,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getAcquiringTime()">
-<h3>getAcquiringTime</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">getAcquiringTime</span>()</div>
-<div class="block">Gets the time spent acquiring since last tick.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the acquiring time</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="resetAcquiringTime()">
 <h3>resetAcquiringTime</h3>
 <div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">resetAcquiringTime</span>()</div>
-<div class="block">Resets <a href="#getAcquiringTime()"><code>getAcquiringTime()</code></a>.
- <p>
- Mostly for internal use.</div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">resetAcquiringTime</span>()</div>
+<div class="block">Retrieve and reset acquiring time.</div>
 </section>
 </li>
 <li>
