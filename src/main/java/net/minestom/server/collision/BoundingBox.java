@@ -251,7 +251,7 @@ public class BoundingBox {
         return depth;
     }
 
-    public @NotNull Faces faces() {
+    @NotNull Faces faces() {
         return faces;
     }
 
@@ -283,7 +283,7 @@ public class BoundingBox {
         X, Y, Z
     }
 
-    public record Faces(Map<Vec, List<Vec>> query) {
+    record Faces(Map<Vec, List<Vec>> query) {
         public Faces {
             query = Map.copyOf(query);
         }
