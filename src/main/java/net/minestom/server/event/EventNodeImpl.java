@@ -308,8 +308,6 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @SuppressWarnings("unchecked")
     final class Handle<E extends Event> implements ListenerHandle<E> {
-        // Represents the filters where the handler has a node
-        private static final List<EventFilter<?, ?>> HANDLER_FILTERS = List.of(EventFilter.ENTITY);
         private static final VarHandle UPDATED;
 
         static {
@@ -320,19 +318,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
         }
 
-        final Class<E> eventType;
+        private final Class<E> eventType;
         private Consumer<E> listener = null;
         @SuppressWarnings("unused")
         private boolean updated; // Use the UPDATED var handle
 
-        // Local nodes handling
-        private final EventFilter<E, EventHandler<? super E>>[] localFilters;
-
         Handle(Class<E> eventType) {
             this.eventType = eventType;
-            // Filters with EventHandler support
-            this.localFilters = (EventFilter<E, EventHandler<? super E>>[]) HANDLER_FILTERS.stream()
-                    .filter(filter -> filter.eventType().isAssignableFrom(eventType)).toArray(EventFilter[]::new);
         }
 
         @Override
