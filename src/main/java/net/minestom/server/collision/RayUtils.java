@@ -324,7 +324,7 @@ public class RayUtils {
             }
         }
 
-        writeTo.res = entryTime * 0.9999;
+        writeTo.res = entryTime * 0.99999;
         writeTo.normalx = normalx;
         writeTo.normaly = normaly;
         writeTo.normalz = normalz;

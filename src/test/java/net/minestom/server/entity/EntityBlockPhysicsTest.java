@@ -16,19 +16,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityBlockPhysicsTest {
-    private static Point precision = new Pos(0.001, 0.001, 0.001);
+    private static final Point precision = new Pos(0.01, 0.01, 0.01);
 
     private static boolean checkPoints(Point expected, Point actual, Point delta) {
         Point diff = expected.sub(actual);
 
-        return !(delta.x() > Math.abs(diff.x()))
-                && !(delta.y() > Math.abs(diff.y()))
-                && !(delta.z() > Math.abs(diff.z()));
+        return (delta.x() > Math.abs(diff.x()))
+                && (delta.y() > Math.abs(diff.y()))
+                && (delta.z() > Math.abs(diff.z()));
     }
 
     private static void assertEqualsPoint(Point expected, Point actual, Point delta) {
-        if (checkPoints(expected, actual, delta))
-            throw new AssertionFailedError("Points not within delta " + delta, expected, actual);
+        if (!checkPoints(expected, actual, delta))
+            throw new AssertionFailedError("Points not within delta " + expected + " " + actual, expected, actual);
     }
 
     @Test
@@ -69,8 +69,10 @@ public class EntityBlockPhysicsTest {
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
 
-        boolean isFirst = checkPoints(new Pos(10.7, 42, 0.7), new Vec(10, 0, 10), precision);
-        boolean isSecond = checkPoints(new Pos(0.7, 42, 10.7), new Vec(10, 0, 10), precision);
+        boolean isFirst = checkPoints(new Pos(10.7, 42, 0.7), res.newPosition(), precision);
+        boolean isSecond = checkPoints(new Pos(0.7, 42, 10.7), res.newPosition(), precision);
+
+        System.out.println(res.newPosition());
 
         // First and second are both valid, it depends on the implementation
         // If x collision is checked first then isFirst will be true
@@ -89,7 +91,20 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 11));
-        assertEqualsPoint(new Pos(0.7, 42, 11.701), res.newPosition(), new Pos(0.1, 0.1, 0.1));
+        assertEqualsPoint(new Pos(0.7, 42, 11.701), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckEdgeClip(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 0));
+        assertEqualsPoint(new Pos(0.7, 42, 0.7), res.newPosition(), precision);
     }
 
     @Test
@@ -117,5 +132,52 @@ public class EntityBlockPhysicsTest {
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
         assertEqualsPoint(new Pos(0, 42, 10), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckBlockMiss(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        instance.setBlock(0, 42, 2, Block.STONE);
+        instance.setBlock(2, 42, 0, Block.STONE);
+
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
+        assertEqualsPoint(new Pos(10, 42, 10), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckLargeVelocityMiss(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        final int distance = 20;
+        for (int x = 0; x < distance; ++x) instance.loadChunk(x, 0).join();
+
+        entity.setInstance(instance, new Pos(5, 42, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
+        assertEqualsPoint(new Pos((distance - 1) * 16 + 5, 42, 5), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckLargeVelocityHit(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        final int distance = 20;
+        for (int x = 0; x < distance; ++x) instance.loadChunk(x, 0).join();
+
+        instance.setBlock(distance * 8, 42, 5, Block.STONE);
+
+        entity.setInstance(instance, new Pos(5, 42, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
+        assertEqualsPoint(new Pos(distance * 8 - entity.getBoundingBox().width() / 2, 42, 5), res.newPosition(), precision);
     }
 }
