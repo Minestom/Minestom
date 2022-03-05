@@ -76,20 +76,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><a href="entity/package-summary.html">net.minestom.server.event.entity</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="handler/package-summary.html">net.minestom.server.event.handler</a></div>
+<div class="col-first even-row-color"><a href="instance/package-summary.html">net.minestom.server.event.instance</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="instance/package-summary.html">net.minestom.server.event.instance</a></div>
+<div class="col-first odd-row-color"><a href="inventory/package-summary.html">net.minestom.server.event.inventory</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="inventory/package-summary.html">net.minestom.server.event.inventory</a></div>
+<div class="col-first even-row-color"><a href="item/package-summary.html">net.minestom.server.event.item</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="item/package-summary.html">net.minestom.server.event.item</a></div>
+<div class="col-first odd-row-color"><a href="player/package-summary.html">net.minestom.server.event.player</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="player/package-summary.html">net.minestom.server.event.player</a></div>
+<div class="col-first even-row-color"><a href="server/package-summary.html">net.minestom.server.event.server</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="server/package-summary.html">net.minestom.server.event.server</a></div>
+<div class="col-first odd-row-color"><a href="trait/package-summary.html">net.minestom.server.event.trait</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="trait/package-summary.html">net.minestom.server.event.trait</a></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -116,24 +114,28 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Represents a filter for a specific <a href="Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> type.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Represents an element which can have <a href="Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> listeners assigned to it.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Represents an event listener (handler) in an event graph.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EventListener.Builder.html" title="class in net.minestom.server.event">EventListener.Builder</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="EventListener.Result.html" title="enum class in net.minestom.server.event">EventListener.Result</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EventListener.Builder.html" title="class in net.minestom.server.event">EventListener.Builder</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="EventListener.Result.html" title="enum class in net.minestom.server.event">EventListener.Result</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a single node in an event graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GlobalEventHandler.html" title="class in net.minestom.server.event">GlobalEventHandler</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GlobalEventHandler.html" title="class in net.minestom.server.event">GlobalEventHandler</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Object containing all the global event listeners.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a key to a listenable event, retrievable from <a href="EventNode.html#getHandle(java.lang.Class)"><code>EventNode.getHandle(Class)</code></a>.</div>
 </div>
 </div>
