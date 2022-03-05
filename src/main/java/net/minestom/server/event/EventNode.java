@@ -190,6 +190,10 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
         getHandle((Class<T>) event.getClass()).call(event);
     }
 
+    default boolean hasListener(@NotNull Class<? extends T> type) {
+        return getHandle(type).hasListener();
+    }
+
     /**
      * Gets the handle of an event type.
      *

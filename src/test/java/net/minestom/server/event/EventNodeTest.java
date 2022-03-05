@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.trait.CancellableEvent;
@@ -229,8 +230,11 @@ public class EventNodeTest {
 
         AtomicBoolean result = new AtomicBoolean(false);
         var itemNode = EventNode.type("item_node", EventFilter.ITEM);
+
+        assertFalse(node.hasListener(ItemTestEvent.class));
         itemNode.addListener(ItemTestEvent.class, event -> result.set(true));
         assertDoesNotThrow(() -> node.map(itemNode, item));
+        assertTrue(node.hasListener(ItemTestEvent.class));
 
         node.call(new ItemTestEvent(item));
         assertTrue(result.get());
@@ -247,22 +251,27 @@ public class EventNodeTest {
 
     @Test
     public void entityLocal() {
-        var node = new GlobalEventHandler();
+        var process = MinecraftServer.updateProcess();
+        var node = process.eventHandler();
         var entity = new Entity(EntityType.ZOMBIE);
 
         AtomicBoolean result = new AtomicBoolean(false);
         var listener = EventListener.of(EntityTestEvent.class, event -> result.set(true));
+
+        var handle = node.getHandle(EntityTestEvent.class);
+        assertFalse(handle.hasListener());
         entity.eventNode().addListener(listener);
+        assertTrue(handle.hasListener());
 
         assertFalse(result.get());
 
-        node.call(new EntityTestEvent(entity));
+        handle.call(new EntityTestEvent(entity));
         assertTrue(result.get());
 
         result.set(false);
         entity.eventNode().removeListener(listener);
 
-        node.call(new EntityTestEvent(entity));
+        handle.call(new EntityTestEvent(entity));
         assertFalse(result.get());
     }
 }

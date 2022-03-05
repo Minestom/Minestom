@@ -24,7 +24,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         @Override
         protected ListenerHandle<T> computeValue(Class<?> type) {
             //noinspection unchecked
-            return createHandle((Class<T>) type);
+            return new Handle<>((Class<T>) type);
         }
     };
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
@@ -45,10 +45,6 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         this.filter = filter;
         this.predicate = predicate;
         this.eventType = filter.eventType();
-    }
-
-    protected @NotNull ListenerHandle<T> createHandle(@NotNull Class<T> listenerType) {
-        return new Handle<>(listenerType);
     }
 
     @Override
@@ -311,7 +307,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @SuppressWarnings("unchecked")
-    non-sealed class Handle<E extends Event> implements ListenerHandle<E> {
+    final class Handle<E extends Event> implements ListenerHandle<E> {
+        // Represents the filters where the handler has a node
+        private static final List<EventFilter<?, ?>> HANDLER_FILTERS = List.of(EventFilter.ENTITY);
         private static final VarHandle UPDATED;
 
         static {
@@ -322,13 +320,19 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
         }
 
-        private final Class<E> eventType;
+        final Class<E> eventType;
         private Consumer<E> listener = null;
         @SuppressWarnings("unused")
         private boolean updated; // Use the UPDATED var handle
 
+        // Local nodes handling
+        private final EventFilter<E, EventHandler<? super E>>[] localFilters;
+
         Handle(Class<E> eventType) {
             this.eventType = eventType;
+            // Filters with EventHandler support
+            this.localFilters = (EventFilter<E, EventHandler<? super E>>[]) HANDLER_FILTERS.stream()
+                    .filter(filter -> filter.eventType().isAssignableFrom(eventType)).toArray(EventFilter[]::new);
         }
 
         @Override
