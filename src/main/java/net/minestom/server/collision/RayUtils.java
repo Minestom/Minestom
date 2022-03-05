@@ -127,60 +127,33 @@ public class RayUtils {
         // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
         // If the point is within the rectangle, we know the vector intersects the face.
 
-        int count = 0;
-        boolean globalHasCollision = false;
-
         // Intersect X
         if (ray.x() != 0) {
             // Left side of bounding box
             {
-                boolean hasCollision = false;
                 double xFac = bbOffMin.x() / ray.x();
                 double yix = ray.y() * xFac + rayStart.y();
                 double zix = ray.z() * xFac + rayStart.z();
 
                 // Check if ray passes through y/z plane
-                if (ray.x() > 0
-                        && yix >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
-                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    hasCollision = true;
-                    count += 1;
-                }
-
-                if (hasCollision
-                        && ray.x() > 0
-                        && yix > bb.minY() + bbOffsetY - bbOffH / 2
+                if (yix > bb.minY() + bbOffsetY - bbOffH / 2
                         && yix < bb.maxY() + bbOffsetY + bbOffH / 2
                         && zix > bb.minZ() + bbOffsetZ - bbOffD / 2
                         && zix < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    globalHasCollision = true;
+                    return true;
                 }
             }
             // Right side of bounding box
             {
-                boolean hasCollision = false;
                 double xFac = bbOffMax.x() / ray.x();
                 double yix = ray.y() * xFac + rayStart.y();
                 double zix = ray.z() * xFac + rayStart.z();
 
-                if (ray.x() > 0
-                        && yix >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
-                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    hasCollision = true;
-                    count += 1;
-                }
-
-                if (hasCollision
-                        && ray.x() < 0
-                        && yix > bb.minY() + bbOffsetY - bbOffH / 2
+                if (yix > bb.minY() + bbOffsetY - bbOffH / 2
                         && yix < bb.maxY() + bbOffsetY + bbOffH / 2
                         && zix > bb.minZ() + bbOffsetZ - bbOffD / 2
                         && zix < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    globalHasCollision = true;
+                    return true;
                 }
             }
         }
@@ -188,51 +161,27 @@ public class RayUtils {
         // Intersect Z
         if (ray.z() != 0) {
             {
-                boolean hasCollision = false;
                 double zFac = bbOffMin.z() / ray.z();
                 double xiz = ray.x() * zFac + rayStart.x();
                 double yiz = ray.y() * zFac + rayStart.y();
 
-                if (ray.x() > 0
-                        && xiz >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
-                    count += 1;
-                    hasCollision = true;
-                }
-
-                if (hasCollision
-                        && ray.z() > 0
-                        && xiz > bb.minX() + bbOffsetX - bbOffW / 2
+                if (xiz > bb.minX() + bbOffsetX - bbOffW / 2
                         && xiz < bb.maxX() + bbOffsetX + bbOffW / 2
                         && yiz > bb.minY() + bbOffsetY - bbOffH / 2
                         && yiz < bb.maxY() + bbOffsetY + bbOffH / 2) {
-                    globalHasCollision = true;
+                    return true;
                 }
             }
             {
-                boolean hasCollision = false;
                 double zFac = bbOffMax.z() / ray.z();
                 double xiz = ray.x() * zFac + rayStart.x();
                 double yiz = ray.y() * zFac + rayStart.y();
 
-                if (ray.x() > 0
-                        && xiz >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
-                    count += 1;
-                    hasCollision = true;
-                }
-
-                if (hasCollision
-                        && ray.z() < 0
-                        && xiz > bb.minX() + bbOffsetX - bbOffW / 2
+                if (xiz > bb.minX() + bbOffsetX - bbOffW / 2
                         && xiz < bb.maxX() + bbOffsetX + bbOffW / 2
                         && yiz > bb.minY() + bbOffsetY - bbOffH / 2
                         && yiz < bb.maxY() + bbOffsetY + bbOffH / 2) {
-                    globalHasCollision = true;
+                    return true;
                 }
             }
         }
@@ -240,64 +189,32 @@ public class RayUtils {
         // Intersect Y
         if (ray.y() != 0) {
             {
-                boolean hasCollision = false;
                 double yFac = bbOffMin.y() / ray.y();
                 double xiy = ray.x() * yFac + rayStart.x();
                 double ziy = ray.z() * yFac + rayStart.z();
 
-                if (ray.x() > 0
-                        && xiy >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    count += 1;
-                    hasCollision = true;
-                }
-
-                if (hasCollision
-                        && ray.y() > 0
-                        && xiy > bb.minX() + bbOffsetX - bbOffW / 2
+                if (xiy > bb.minX() + bbOffsetX - bbOffW / 2
                         && xiy < bb.maxX() + bbOffsetX + bbOffW / 2
                         && ziy > bb.minZ() + bbOffsetZ - bbOffD / 2
                         && ziy < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    globalHasCollision = true;
+                    return true;
                 }
             }
             {
-                boolean hasCollision = false;
                 double yFac = bbOffMax.y() / ray.y();
                 double xiy = ray.x() * yFac + rayStart.x();
                 double ziy = ray.z() * yFac + rayStart.z();
 
-                if (ray.x() > 0
-                        && xiy >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    count += 1;
-                    hasCollision = true;
-                }
-
-                if (hasCollision
-                        && ray.y() < 0
-                        && xiy > bb.minX() + bbOffsetX - bbOffW / 2
+                if (xiy > bb.minX() + bbOffsetX - bbOffW / 2
                         && xiy < bb.maxX() + bbOffsetX + bbOffW / 2
                         && ziy > bb.minZ() + bbOffsetZ - bbOffD / 2
                         && ziy < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
-                    globalHasCollision = true;
+                    return true;
                 }
             }
         }
 
-        // Number of intersection points
-        // 0 -> no collision
-        // 1 -> face
-        // 2 -> edge
-        // 3 -> corner
-
-        System.out.println(count + " a ");
-
-        return count <= 1 && globalHasCollision;
+        return false;
     }
 
     // Extended from 2d implementation found here https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/swept-aabb-collision-detection-and-response-r3084/

@@ -238,7 +238,7 @@ public final class CollisionUtils {
 
                 // Fast check to see if a collision happens
                 // Uses minkowski sum
-                boolean hasNoCollision = RayUtils.RayBoundingBoxIntersectCheck(
+                boolean hasCollision = RayUtils.RayBoundingBoxIntersectCheck(
                         deltaPosition,
                         bb,
                         correctedEntityPos,
@@ -247,12 +247,10 @@ public final class CollisionUtils {
                         boundingBox.height(),
                         boundingBox.depth());
 
-                if (hasNoCollision) continue;
+                if (!hasCollision) continue;
 
                 // Longer check to get result of collision
                 RayUtils.SweptAABB(boundingBox, bb, entityPosition, blockX, blockY, blockZ, deltaPosition.x(), deltaPosition.y(), deltaPosition.z(), tempResult);
-
-                System.out.println(tempResult.res);
 
                 // Update final result if the temp result collision is sooner than the current final result
                 if (tempResult.res < finalResult.res) {
