@@ -136,10 +136,10 @@ public class RayUtils {
                 double zix = ray.z() * xFac + rayStart.z();
 
                 // Check if ray passes through y/z plane
-                if (yix > bb.minY() + bbOffsetY - bbOffH / 2
-                        && yix < bb.maxY() + bbOffsetY + bbOffH / 2
-                        && zix > bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && zix < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (yix >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
+                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
@@ -149,10 +149,10 @@ public class RayUtils {
                 double yix = ray.y() * xFac + rayStart.y();
                 double zix = ray.z() * xFac + rayStart.z();
 
-                if (yix > bb.minY() + bbOffsetY - bbOffH / 2
-                        && yix < bb.maxY() + bbOffsetY + bbOffH / 2
-                        && zix > bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && zix < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (yix >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
+                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
@@ -165,10 +165,10 @@ public class RayUtils {
                 double xiz = ray.x() * zFac + rayStart.x();
                 double yiz = ray.y() * zFac + rayStart.y();
 
-                if (xiz > bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiz < bb.maxX() + bbOffsetX + bbOffW / 2
-                        && yiz > bb.minY() + bbOffsetY - bbOffH / 2
-                        && yiz < bb.maxY() + bbOffsetY + bbOffH / 2) {
+                if (xiz >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
                     return true;
                 }
             }
@@ -177,10 +177,10 @@ public class RayUtils {
                 double xiz = ray.x() * zFac + rayStart.x();
                 double yiz = ray.y() * zFac + rayStart.y();
 
-                if (xiz > bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiz < bb.maxX() + bbOffsetX + bbOffW / 2
-                        && yiz > bb.minY() + bbOffsetY - bbOffH / 2
-                        && yiz < bb.maxY() + bbOffsetY + bbOffH / 2) {
+                if (xiz >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
                     return true;
                 }
             }
@@ -193,10 +193,10 @@ public class RayUtils {
                 double xiy = ray.x() * yFac + rayStart.x();
                 double ziy = ray.z() * yFac + rayStart.z();
 
-                if (xiy > bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiy < bb.maxX() + bbOffsetX + bbOffW / 2
-                        && ziy > bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && ziy < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (xiy >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
@@ -205,10 +205,10 @@ public class RayUtils {
                 double xiy = ray.x() * yFac + rayStart.x();
                 double ziy = ray.z() * yFac + rayStart.z();
 
-                if (xiy > bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiy < bb.maxX() + bbOffsetX + bbOffW / 2
-                        && ziy > bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && ziy < bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (xiy >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
@@ -324,7 +324,7 @@ public class RayUtils {
             }
         }
 
-        writeTo.res = entryTime;
+        writeTo.res = entryTime * 0.9999;
         writeTo.normalx = normalx;
         writeTo.normaly = normaly;
         writeTo.normalz = normalz;

@@ -207,6 +207,10 @@ public final class CollisionUtils {
         deltaY = Math.abs(deltaY) < MIN_DELTA ? 0 : deltaY;
         deltaZ = Math.abs(deltaZ) < MIN_DELTA ? 0 : deltaZ;
 
+        finalX = Math.abs(finalX - entityPosition.x()) < MIN_DELTA ? entityPosition.x() : finalX;
+        finalY = Math.abs(finalY - entityPosition.y()) < MIN_DELTA ? entityPosition.y() : finalY;
+        finalZ = Math.abs(finalZ - entityPosition.z()) < MIN_DELTA ? entityPosition.z() : finalZ;
+
         return new PhysicsResult(new Pos(finalX, finalY, finalZ), new Vec(deltaX, deltaY, deltaZ), Math.abs(deltaY) <= MIN_DELTA, collisionX, collisionY, collisionZ, Vec.ZERO, finalResult.collisionBlock, finalResult.blockType);
     }
 
