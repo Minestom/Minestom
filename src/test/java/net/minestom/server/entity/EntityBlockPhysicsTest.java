@@ -7,19 +7,28 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityBlockPhysicsTest {
-    private double roundThreeDecimals(double d) {
-        return Math.round(d * 1000) / 1000.0;
+    private static Point precision = new Pos(0.001, 0.001, 0.001);
+
+    private static boolean checkPoints(Point expected, Point actual, Point delta) {
+        Point diff = expected.sub(actual);
+
+        return !(delta.x() > Math.abs(diff.x()))
+                && !(delta.y() > Math.abs(diff.y()))
+                && !(delta.z() > Math.abs(diff.z()));
     }
 
-    private Point roundPoint(Point p) {
-        return new Pos(roundThreeDecimals(p.x()), roundThreeDecimals(p.y()), roundThreeDecimals(p.z()));
+    private static void assertEqualsPoint(Point expected, Point actual, Point delta) {
+        if (checkPoints(expected, actual, delta))
+            throw new AssertionFailedError("Points not within delta " + delta, expected, actual);
     }
 
     @Test
@@ -32,7 +41,7 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
-        assertEquals(new Pos(0, 42, 0.7), roundPoint(res.newPosition()));
+        assertEqualsPoint(new Pos(0, 42, 0.7), res.newPosition(), precision);
     }
 
     @Test
@@ -45,7 +54,7 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
-        assertEquals(new Pos(0, 42.5, 0), roundPoint(res.newPosition()));
+        assertEqualsPoint(new Pos(0, 42.5, 0), res.newPosition(), precision);
     }
 
     @Test
@@ -59,10 +68,9 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
-        Point finalPoint = roundPoint(res.newPosition());
 
-        boolean isFirst = finalPoint.samePoint(new Pos(10.7, 42, 0.7));
-        boolean isSecond = finalPoint.samePoint(new Pos(0.7, 42, 10.7));
+        boolean isFirst = checkPoints(new Pos(10.7, 42, 0.7), new Vec(10, 0, 10), precision);
+        boolean isSecond = checkPoints(new Pos(0.7, 42, 10.7), new Vec(10, 0, 10), precision);
 
         // First and second are both valid, it depends on the implementation
         // If x collision is checked first then isFirst will be true
@@ -81,7 +89,7 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 11));
-        assertEquals(new Pos(0.7, 42, 11.701), roundPoint(res.newPosition()));
+        assertEqualsPoint(new Pos(0.7, 42, 11.701), res.newPosition(), new Pos(0.1, 0.1, 0.1));
     }
 
     @Test
@@ -96,7 +104,7 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(11,  0, 10));
-        assertEquals(new Pos(11.77, 42, 0.7), roundPoint(res.newPosition()));
+        assertEqualsPoint(new Pos(11.77, 42, 0.7), res.newPosition(), precision);
     }
 
     @Test
@@ -108,6 +116,6 @@ public class EntityBlockPhysicsTest {
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
-        assertEquals(new Pos(0, 42, 10), roundPoint(res.newPosition()));
+        assertEqualsPoint(new Pos(0, 42, 10), res.newPosition(), precision);
     }
 }
