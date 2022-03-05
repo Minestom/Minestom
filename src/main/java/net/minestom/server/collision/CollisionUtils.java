@@ -36,7 +36,7 @@ public final class CollisionUtils {
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
-        Pos collisionYBlock = Pos.ZERO;
+        Pos collisionYBlock = null;
         Block blockYType = Block.AIR;
 
         // Check cache to see if the entity is standing on a block without moving.
@@ -44,6 +44,7 @@ public final class CollisionUtils {
         if (entity.lastPhysicsResult != null && entity.getInstance() != null) {
             if (entity.lastPhysicsResult.collisionY
                     && Math.signum(deltaPosition.y()) == Math.signum(entity.lastPhysicsResult.originalDelta.y())
+                    && entity.lastPhysicsResult.collidedBlockY != null
                     && entity.getInstance().getBlock(entity.lastPhysicsResult.collidedBlockY, Block.Getter.Condition.TYPE) == entity.lastPhysicsResult.blockTypeY
                     && deltaPosition.x() == 0 && deltaPosition.z() == 0
                     && entity.getPosition().samePoint(entity.lastPhysicsResult.newPosition)
