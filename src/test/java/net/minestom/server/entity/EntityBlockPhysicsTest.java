@@ -7,7 +7,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
@@ -34,7 +33,7 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckCollision(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(0, 42, 1, Block.STONE);
+        instance.setBlock(0, 43, 1, Block.STONE);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -47,7 +46,7 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckSlab(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(0, 42, 0, Block.STONE_SLAB);
+        instance.setBlock(0, 43, 0, Block.STONE_SLAB);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0, 44, 0)).join();
@@ -60,8 +59,8 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckDiagonal(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(1, 42, 1, Block.STONE);
-        instance.setBlock(1, 42, 2, Block.STONE);
+        instance.setBlock(1, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 2, Block.STONE);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -83,8 +82,8 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckDirectSlide(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(1, 42, 1, Block.STONE);
-        instance.setBlock(1, 42, 2, Block.STONE);
+        instance.setBlock(1, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 2, Block.STONE);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0.69, 42, 0.69)).join();
@@ -97,7 +96,7 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckEdgeClip(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(1, 42, 1, Block.STONE);
+        instance.setBlock(1, 43, 1, Block.STONE);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
@@ -110,9 +109,9 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckSlide(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(1, 42, 1, Block.STONE);
-        instance.setBlock(1, 42, 2, Block.STONE);
-        instance.setBlock(1, 42, 3, Block.STONE);
+        instance.setBlock(1, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 2, Block.STONE);
+        instance.setBlock(1, 43, 3, Block.STONE);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -139,14 +138,48 @@ public class EntityBlockPhysicsTest {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);
 
-        instance.setBlock(0, 42, 2, Block.STONE);
-        instance.setBlock(2, 42, 0, Block.STONE);
+        instance.setBlock(0, 43, 2, Block.STONE);
+        instance.setBlock(2, 43, 0, Block.STONE);
 
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
         assertEqualsPoint(new Pos(10, 42, 10), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckBlockDirections(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        instance.setBlock(0, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 0, Block.STONE);
+
+        instance.setBlock(0, 43, -1, Block.STONE);
+        instance.setBlock(-1, 43, 0, Block.STONE);
+
+        instance.setBlock(0, 41, 0, Block.STONE);
+        instance.setBlock(0, 44, 0, Block.STONE);
+
+        entity.setInstance(instance, new Pos(0.5, 42, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult px = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 0));
+        CollisionUtils.PhysicsResult py = CollisionUtils.handlePhysics(entity, new Vec(0, 10, 0));
+        CollisionUtils.PhysicsResult pz = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
+
+        CollisionUtils.PhysicsResult nx = CollisionUtils.handlePhysics(entity, new Vec(-10, 0, 0));
+        CollisionUtils.PhysicsResult ny = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
+        CollisionUtils.PhysicsResult nz = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -10));
+
+        assertEqualsPoint(new Pos(0.7, 42, 0.5), px.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.5, 42.04, 0.5), py.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.5, 42, 0.7), pz.newPosition(), precision);
+
+        assertEqualsPoint(new Pos(0.3, 42, 0.5), nx.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.5, 42, 0.5), ny.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.5, 42, 0.3), nz.newPosition(), precision);
     }
 
     @Test
@@ -172,12 +205,12 @@ public class EntityBlockPhysicsTest {
         final int distance = 20;
         for (int x = 0; x < distance; ++x) instance.loadChunk(x, 0).join();
 
-        instance.setBlock(distance * 8, 42, 5, Block.STONE);
+        instance.setBlock(distance * 8, 43, 5, Block.STONE);
 
         entity.setInstance(instance, new Pos(5, 42, 5)).join();
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
-        assertEqualsPoint(new Pos(distance * 8 - entity.getBoundingBox().width() / 2, 42, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition(), precision);
     }
 }
