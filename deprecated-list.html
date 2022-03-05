@@ -52,7 +52,6 @@ loadScripts(document, 'script');</script>
 <h2 title="Contents">Contents</h2>
 <ul>
 <li><a href="#for-removal">Terminally Deprecated</a></li>
-<li><a href="#interface">Interfaces</a></li>
 <li><a href="#class">Classes</a></li>
 <li><a href="#field">Fields</a></li>
 <li><a href="#method">Methods</a></li>
@@ -70,33 +69,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/adventure/AdventurePacketConvertor.html#createSoundPacket(net.kyori.adventure.sound.Sound,net.kyori.adventure.sound.Sound.Emitter)"><code>AdventurePacketConvertor.createSoundPacket(Sound, Sound.Emitter)</code></a></div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/event/handler/EventHandler.html#getEventNode()">net.minestom.server.event.handler.EventHandler.getEventNode()</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#getPlayers()">net.minestom.server.ping.ResponseData.getPlayers()</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#getPlayers()">net.minestom.server.ping.ResponseData.getPlayers()</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#getEntries()"><code>ResponseData.getEntries()</code></a>. This return value is now unmodifiable and this operation is incredibly costly.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/utils/NBTUtils.html#SNBT_CODEC">net.minestom.server.utils.NBTUtils.SNBT_CODEC</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/utils/NBTUtils.html#SNBT_CODEC">net.minestom.server.utils.NBTUtils.SNBT_CODEC</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/adventure/MinestomAdventure.html#NBT_CODEC"><code>MinestomAdventure.NBT_CODEC</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/utils/time/TimeUnit.html#TICK">net.minestom.server.utils.time.TimeUnit.TICK</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/utils/time/TimeUnit.html#TICK">net.minestom.server.utils.time.TimeUnit.TICK</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Please use either <a href="net/minestom/server/utils/time/TimeUnit.html#SERVER_TICK"><code>TimeUnit.SERVER_TICK</code></a> or <a href="net/minestom/server/utils/time/TimeUnit.html#CLIENT_TICK"><code>TimeUnit.CLIENT_TICK</code></a></div>
 </div>
-</div>
-</div>
-</li>
-</ul>
-<ul class="block-list">
-<li>
-<div id="interface">
-<div class="caption"><span>Deprecated Interfaces</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Interface</div>
-<div class="table-header col-last">Description</div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">net.minestom.server.event.handler.EventHandler</a></div>
-<div class="col-last even-row-color"></div>
 </div>
 </div>
 </li>
@@ -200,94 +184,86 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="deprecation-comment">use <a href="net/minestom/server/entity/PlayerSkin.html#textures()"><code>PlayerSkin.textures()</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/event/GlobalEventHandler.html#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">net.minestom.server.event.GlobalEventHandler.addEventCallback<wbr>(Class&lt;V&gt;, EventCallback&lt;V&gt;)</a></div>
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/instance/Instance.html#getCreatures()">net.minestom.server.instance.Instance.getCreatures()</a></div>
+<div class="col-last even-row-color"></div>
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/instance/Instance.html#getExperienceOrbs()">net.minestom.server.instance.Instance.getExperienceOrbs()</a></div>
+<div class="col-last odd-row-color"></div>
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/inventory/InventoryType.html#getAdditionalSlot()">net.minestom.server.inventory.InventoryType.getAdditionalSlot()</a></div>
 <div class="col-last even-row-color">
-<div class="deprecation-comment">use <a href="net/minestom/server/event/EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)"><code>EventNode.addListener(Class, Consumer)</code></a></div>
-</div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/event/handler/EventHandler.html#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">net.minestom.server.event.handler.EventHandler.addEventCallback<wbr>(Class&lt;V&gt;, EventCallback&lt;V&gt;)</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/event/handler/EventHandler.html#getEventNode()">net.minestom.server.event.handler.EventHandler.getEventNode()</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/instance/Instance.html#getCreatures()">net.minestom.server.instance.Instance.getCreatures()</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/instance/Instance.html#getExperienceOrbs()">net.minestom.server.instance.Instance.getExperienceOrbs()</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/inventory/InventoryType.html#getAdditionalSlot()">net.minestom.server.inventory.InventoryType.getAdditionalSlot()</a></div>
-<div class="col-last odd-row-color">
 <div class="deprecation-comment">use <a href="net/minestom/server/inventory/InventoryType.html#getSize()"><code>InventoryType.getSize()</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/MinecraftServer.html#setChunkViewDistance(int)">net.minestom.server.MinecraftServer.setChunkViewDistance<wbr>(int)</a></div>
-<div class="col-last even-row-color">
-<div class="deprecation-comment">should instead be defined with a java property</div>
-</div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/MinecraftServer.html#setEntityViewDistance(int)">net.minestom.server.MinecraftServer.setEntityViewDistance<wbr>(int)</a></div>
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/MinecraftServer.html#setChunkViewDistance(int)">net.minestom.server.MinecraftServer.setChunkViewDistance<wbr>(int)</a></div>
 <div class="col-last odd-row-color">
 <div class="deprecation-comment">should instead be defined with a java property</div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.Iterable)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(Iterable&lt;Player&gt;)</a></div>
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/MinecraftServer.html#setEntityViewDistance(int)">net.minestom.server.MinecraftServer.setEntityViewDistance<wbr>(int)</a></div>
 <div class="col-last even-row-color">
+<div class="deprecation-comment">should instead be defined with a java property</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.Iterable)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(Iterable&lt;Player&gt;)</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#addEntries(java.util.Collection)"><code>ResponseData.addEntries(Collection)</code></a>}</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.String)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(String)</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.String)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(String)</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>ResponseData.addEntry(NamedAndIdentified)</code></a> with <a href="net/minestom/server/utils/identity/NamedAndIdentified.html#named(java.lang.String)"><code>NamedAndIdentified.named(String)</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.String,java.util.UUID)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(String, UUID)</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(java.lang.String,java.util.UUID)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(String, UUID)</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>ResponseData.addEntry(NamedAndIdentified)</code></a> with <a href="net/minestom/server/utils/identity/NamedAndIdentified.html#of(java.lang.String,java.util.UUID)"><code>NamedAndIdentified.of(String, UUID)</code></a></div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(net.minestom.server.entity.Player)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(Player)</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#addPlayer(net.minestom.server.entity.Player)">net.minestom.server.ping.ResponseData.addPlayer<wbr>(Player)</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>ResponseData.addEntry(NamedAndIdentified)</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#build()">net.minestom.server.ping.ResponseData.build()</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#build()">net.minestom.server.ping.ResponseData.build()</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ServerListPingType.html#getPingResponse(net.minestom.server.ping.ResponseData)"><code>ServerListPingType.getPingResponse(ResponseData)</code></a></div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#clearPlayers()">net.minestom.server.ping.ResponseData.clearPlayers()</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#clearPlayers()">net.minestom.server.ping.ResponseData.clearPlayers()</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#clearEntries()"><code>ResponseData.clearEntries()</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#getPlayers()">net.minestom.server.ping.ResponseData.getPlayers()</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#getPlayers()">net.minestom.server.ping.ResponseData.getPlayers()</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#getEntries()"><code>ResponseData.getEntries()</code></a>. This return value is now unmodifiable and this operation is incredibly costly.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#setDescription(java.lang.String)">net.minestom.server.ping.ResponseData.setDescription<wbr>(String)</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#setDescription(java.lang.String)">net.minestom.server.ping.ResponseData.setDescription<wbr>(String)</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/ping/ResponseData.html#setDescription(net.kyori.adventure.text.Component)"><code>ResponseData.setDescription(Component)</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/ping/ResponseData.html#setName(java.lang.String)">net.minestom.server.ping.ResponseData.setName<wbr>(String)</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/ping/ResponseData.html#setName(java.lang.String)">net.minestom.server.ping.ResponseData.setName<wbr>(String)</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">This is named incorrectly, use <a href="net/minestom/server/ping/ResponseData.html#setVersion(java.lang.String)"><code>ResponseData.setVersion(String)</code></a> instead</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/scoreboard/Scoreboard.html#getCreationObjectivePacket(java.lang.String,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">net.minestom.server.scoreboard.Scoreboard.getCreationObjectivePacket<wbr>(String, ScoreboardObjectivePacket.Type)</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/scoreboard/Scoreboard.html#getCreationObjectivePacket(java.lang.String,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">net.minestom.server.scoreboard.Scoreboard.getCreationObjectivePacket<wbr>(String, ScoreboardObjectivePacket.Type)</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/scoreboard/Scoreboard.html#getCreationObjectivePacket(net.kyori.adventure.text.Component,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)"><code>Scoreboard.getCreationObjectivePacket(Component, ScoreboardObjectivePacket.Type)</code></a></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/scoreboard/Sidebar.html#setTitle(java.lang.String)">net.minestom.server.scoreboard.Sidebar.setTitle<wbr>(String)</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/scoreboard/Sidebar.html#setTitle(java.lang.String)">net.minestom.server.scoreboard.Sidebar.setTitle<wbr>(String)</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="net/minestom/server/scoreboard/Sidebar.html#setTitle(net.kyori.adventure.text.Component)"><code>Sidebar.setTitle(Component)</code></a></div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/tag/Tag.html#ByteArray(java.lang.String)">net.minestom.server.tag.Tag.ByteArray<wbr>(String)</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/tag/Tag.html#ByteArray(java.lang.String)">net.minestom.server.tag.Tag.ByteArray<wbr>(String)</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">use <a href="net/minestom/server/tag/Tag.html#NBT(java.lang.String)"><code>Tag.NBT(String)</code></a> with <code>NBT.ByteArray(byte...)</code></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/tag/Tag.html#Custom(java.lang.String,net.minestom.server.tag.TagSerializer)">net.minestom.server.tag.Tag.Custom<wbr>(String, TagSerializer&lt;T&gt;)</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/tag/Tag.html#Custom(java.lang.String,net.minestom.server.tag.TagSerializer)">net.minestom.server.tag.Tag.Custom<wbr>(String, TagSerializer&lt;T&gt;)</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">use <a href="net/minestom/server/tag/Tag.html#Structure(java.lang.String,net.minestom.server.tag.TagSerializer)"><code>Tag.Structure(String, TagSerializer)</code></a> instead</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/tag/Tag.html#IntArray(java.lang.String)">net.minestom.server.tag.Tag.IntArray<wbr>(String)</a></div>
-<div class="col-last odd-row-color">
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/tag/Tag.html#IntArray(java.lang.String)">net.minestom.server.tag.Tag.IntArray<wbr>(String)</a></div>
+<div class="col-last even-row-color">
 <div class="deprecation-comment">use <a href="net/minestom/server/tag/Tag.html#NBT(java.lang.String)"><code>Tag.NBT(String)</code></a> with <code>NBT.IntArray(int...)</code></div>
 </div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/tag/Tag.html#LongArray(java.lang.String)">net.minestom.server.tag.Tag.LongArray<wbr>(String)</a></div>
-<div class="col-last even-row-color">
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/tag/Tag.html#LongArray(java.lang.String)">net.minestom.server.tag.Tag.LongArray<wbr>(String)</a></div>
+<div class="col-last odd-row-color">
 <div class="deprecation-comment">use <a href="net/minestom/server/tag/Tag.html#NBT(java.lang.String)"><code>Tag.NBT(String)</code></a> with <code>NBT.LongArray(long...)</code></div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/utils/NamespaceID.html#getDomain()">net.minestom.server.utils.NamespaceID.getDomain()</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/utils/NamespaceID.html#getPath()">net.minestom.server.utils.NamespaceID.getPath()</a></div>
+<div class="col-summary-item-name even-row-color"><a href="net/minestom/server/utils/NamespaceID.html#getDomain()">net.minestom.server.utils.NamespaceID.getDomain()</a></div>
 <div class="col-last even-row-color"></div>
+<div class="col-summary-item-name odd-row-color"><a href="net/minestom/server/utils/NamespaceID.html#getPath()">net.minestom.server.utils.NamespaceID.getPath()</a></div>
+<div class="col-last odd-row-color"></div>
 </div>
 </div>
 </li>

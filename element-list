@@ -49,7 +49,6 @@ net.minestom.server.entity.pathfinding
 net.minestom.server.entity.vehicle
 net.minestom.server.event
 net.minestom.server.event.entity
-net.minestom.server.event.handler
 net.minestom.server.event.instance
 net.minestom.server.event.inventory
 net.minestom.server.event.item
