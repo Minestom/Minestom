@@ -173,6 +173,12 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
         return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
+    @ApiStatus.Experimental
+    static <E extends Event> @NotNull EventNode<E> lazyMap(@NotNull Object owner,
+                                                           @NotNull EventFilter<E, ?> filter) {
+        return new EventNodeLazyImpl<>(owner, filter);
+    }
+
     private static <E extends Event, V> EventNode<E> create(@NotNull String name,
                                                             @NotNull EventFilter<E, V> filter,
                                                             @Nullable BiPredicate<E, V> predicate) {

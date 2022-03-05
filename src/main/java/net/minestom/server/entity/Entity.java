@@ -147,7 +147,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected final Set<Player> viewers = viewEngine.set;
     private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<EntityEvent> eventNode = EventNode.type(toString(), EventFilter.ENTITY);
+    private final EventNode<EntityEvent> eventNode = EventNode.lazyMap(this, EventFilter.ENTITY);
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -189,11 +189,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.gravityAcceleration = entityType.registry().acceleration();
         this.gravityDragPerTick = entityType.registry().drag();
-
-        // TODO replace to more efficient implementation
-        var process = MinecraftServer.process();
-        if (process == null) process = MinecraftServer.updateProcess();
-        process.eventHandler().map(eventNode, this);
     }
 
     public Entity(@NotNull EntityType entityType) {
