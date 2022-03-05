@@ -1,9 +1,6 @@
 package net.minestom.server.event;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.item.ItemStack;
@@ -45,13 +42,6 @@ public class EventNodeTest {
         @Override
         public @NotNull ItemStack getItemStack() {
             return item;
-        }
-    }
-
-    record EntityTestEvent(Entity entity) implements EntityEvent {
-        @Override
-        public @NotNull Entity getEntity() {
-            return entity;
         }
     }
 
@@ -242,27 +232,6 @@ public class EventNodeTest {
         result.set(false);
         assertTrue(node.unmap(item));
         node.call(new ItemTestEvent(item));
-        assertFalse(result.get());
-    }
-
-    @Test
-    public void entityLocal() {
-        var node = new GlobalEventHandler();
-        var entity = new Entity(EntityType.ZOMBIE);
-
-        AtomicBoolean result = new AtomicBoolean(false);
-        var listener = EventListener.of(EntityTestEvent.class, event -> result.set(true));
-        entity.eventNode().addListener(listener);
-
-        assertFalse(result.get());
-
-        node.call(new EntityTestEvent(entity));
-        assertTrue(result.get());
-
-        result.set(false);
-        entity.eventNode().removeListener(listener);
-
-        node.call(new EntityTestEvent(entity));
         assertFalse(result.get());
     }
 }

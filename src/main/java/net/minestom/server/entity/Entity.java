@@ -15,13 +15,9 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventHandler;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
-import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
@@ -81,7 +77,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -147,7 +143,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected final Set<Player> viewers = viewEngine.set;
     private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<EntityEvent> eventNode = EventNode.type(toString(), EventFilter.ENTITY);
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -1546,12 +1541,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 TagReadable.fromCompound(nbtCompound.toCompound()));
-    }
-
-    @Override
-    @ApiStatus.Experimental
-    public @NotNull EventNode<EntityEvent> eventNode() {
-        return eventNode;
     }
 
     /**
