@@ -38,6 +38,7 @@ public final class GlobalEventHandler extends EventNodeImpl<Event> {
                 var handle = filter.getHandler(event);
                 if (handle != null) handle.eventNode().call(event);
             }
+            // Global listeners
             super.call(event);
         }
     }
