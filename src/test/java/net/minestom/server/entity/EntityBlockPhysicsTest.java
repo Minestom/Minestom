@@ -8,7 +8,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,8 +25,9 @@ public class EntityBlockPhysicsTest {
     }
 
     private static void assertEqualsPoint(Point expected, Point actual, Point delta) {
-        if (!checkPoints(expected, actual, delta))
-            throw new AssertionFailedError("Points not within delta " + expected + " " + actual, expected, actual);
+        assertEquals(expected.x(), actual.x(), delta.x());
+        assertEquals(expected.y(), actual.y(), delta.y());
+        assertEquals(expected.z(), actual.z(), delta.z());
     }
 
     @Test
