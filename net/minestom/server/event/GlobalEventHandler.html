@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -115,11 +115,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Directly adds a child node to this node.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addListener(net.minestom.server.event.EventListener)" class="member-name-link">addListener</a><wbr>(@NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;listener)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createHandle(java.lang.Class)" class="member-name-link">createHandle</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;listenerType)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>&lt;V extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;<br>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)" class="member-name-link">addEventCallback</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;eventClass,
+ @NotNull <a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;V&gt;&nbsp;eventCallback)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">use <a href="EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)"><code>EventNode.addListener(Class, Consumer)</code></a></div>
+</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addListener(net.minestom.server.event.EventListener)" class="member-name-link">addListener</a><wbr>(@NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;listener)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;E extends T&gt;<br>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findChildren(java.lang.String,java.lang.Class)" class="member-name-link">findChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
@@ -228,11 +233,16 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="createHandle(java.lang.Class)">
-<h3>createHandle</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@NotNull <a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</span>&nbsp;<span class="element-name">createHandle</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;listenerType)</span></div>
+<section class="detail" id="addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">
+<h3>addEventCallback</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;V extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">addEventCallback</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;eventClass,
+ @NotNull
+ @NotNull <a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;V&gt;&nbsp;eventCallback)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">use <a href="EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)"><code>EventNode.addListener(Class, Consumer)</code></a></div>
+</div>
 </section>
 </li>
 <li>
