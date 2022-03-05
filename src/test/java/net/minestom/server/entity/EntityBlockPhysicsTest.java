@@ -46,7 +46,7 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckSlab(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(0, 43, 0, Block.STONE_SLAB);
+        instance.setBlock(0, 42, 0, Block.STONE_SLAB);
         var entity = new Entity(EntityTypes.ZOMBIE);
 
         entity.setInstance(instance, new Pos(0, 44, 0)).join();
@@ -212,5 +212,17 @@ public class EntityBlockPhysicsTest {
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
         assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckNoMove(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(5, 42, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
+        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition(), precision);
     }
 }

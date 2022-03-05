@@ -1,6 +1,5 @@
 package net.minestom.demo.commands;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -9,13 +8,9 @@ import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
-import net.minestom.server.extras.lan.OpenToLAN;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.location.RelativeVec;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class SummonCommand extends Command {
@@ -45,17 +40,6 @@ public class SummonCommand extends Command {
         final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
         //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
         entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
-
-        final Entity zombie = new Entity(EntityType.ZOMBIE);
-        zombie.setInstance(((Player) commandSender).getInstance(), new Pos(0, 40, 0));
-        ((Player) commandSender).getInstance().setBlock(1, 40, 1, Block.STONE);
-
-        MinecraftServer.getSchedulerManager()
-            .buildTask(() -> {
-                zombie.setVelocity(new Vec(10, 0, 10));
-            })
-            .delay(5, TimeUnit.SECOND)
-            .schedule();
     }
 
     @SuppressWarnings("unused")

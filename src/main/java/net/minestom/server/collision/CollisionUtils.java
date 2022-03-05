@@ -62,7 +62,11 @@ public final class CollisionUtils {
         double deltaZ = Math.abs(deltaPosition.z()) < MIN_DELTA ? 0 : deltaPosition.z();
 
         deltaPosition = new Vec(deltaX, deltaY, deltaZ);
-        if (deltaPosition.isZero()) return new PhysicsResult(entity.getPosition(), Vec.ZERO, entity.lastPhysicsResult.isOnGround, entity.lastPhysicsResult.collisionX, entity.lastPhysicsResult.collisionY, entity.lastPhysicsResult.collisionZ, originaDeltaPosition, entity.lastPhysicsResult.collidedBlockY, entity.lastPhysicsResult.blockTypeY);
+        if (deltaPosition.isZero())
+            if (entity.lastPhysicsResult != null)
+                return new PhysicsResult(entity.getPosition(), Vec.ZERO, entity.lastPhysicsResult.isOnGround, entity.lastPhysicsResult.collisionX, entity.lastPhysicsResult.collisionY, entity.lastPhysicsResult.collisionZ, originaDeltaPosition, entity.lastPhysicsResult.collidedBlockY, entity.lastPhysicsResult.blockTypeY);
+            else
+                return new PhysicsResult(entity.getPosition(), Vec.ZERO, false, false, false, false, originaDeltaPosition, null, Block.AIR);
 
         // Query faces to get the points needed for collision
         Vec queryVec = new Vec(Math.signum(deltaPosition.x()), Math.signum(deltaPosition.y()), Math.signum(deltaPosition.z()));
