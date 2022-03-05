@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static net.minestom.server.api.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventNodeMapTest {
@@ -80,15 +81,5 @@ public class EventNodeMapTest {
         //noinspection UnusedAssignment
         item = null;
         waitUntilCleared(ref);
-    }
-
-    private static void waitUntilCleared(WeakReference<?> ref) {
-        while (ref.get() != null) {
-            System.gc();
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ignore) {
-            }
-        }
     }
 }

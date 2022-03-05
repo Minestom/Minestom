@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
 
+import static net.minestom.server.api.TestUtils.waitUntilCleared;
+
 @EnvTest
 public class InstanceUnregisterIntegrationTest {
 
@@ -57,15 +59,5 @@ public class InstanceUnregisterIntegrationTest {
         //noinspection UnusedAssignment
         chunk = null;
         waitUntilCleared(ref);
-    }
-
-    private static void waitUntilCleared(WeakReference<?> ref) {
-        while (ref.get() != null) {
-            System.gc();
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ignore) {
-            }
-        }
     }
 }
