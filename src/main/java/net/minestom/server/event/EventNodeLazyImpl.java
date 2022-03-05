@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
@@ -18,13 +19,13 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
         }
     }
 
-    private final Object owner;
+    private final WeakReference<Object> owner;
     @SuppressWarnings("unused")
     private boolean mapped;
 
     EventNodeLazyImpl(@NotNull Object owner, @NotNull EventFilter<E, ?> filter) {
         super(owner.toString(), filter, null);
-        this.owner = owner;
+        this.owner = new WeakReference<>(owner);
     }
 
     @Override
@@ -59,6 +60,10 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
 
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
+            final Object owner = this.owner.get();
+            if (owner == null) {
+                throw new IllegalStateException("Node handle is null. Be sure to never cache a local node.");
+            }
             MinecraftServer.getGlobalEventHandler().map(this, owner);
         }
     }

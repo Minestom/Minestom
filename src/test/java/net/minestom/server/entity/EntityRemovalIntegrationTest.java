@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,23 @@ public class EntityRemovalIntegrationTest {
         //noinspection UnusedAssignment
         entity = null;
         env.tick(); // Required to remove the entity from the thread dispatcher
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void entityNodeGC(Env env) {
+        // Ensure that the entities GCed when a local listener is present
+        var node = env.process().eventHandler();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.eventNode().addListener(EntityTickEvent.class, event -> {
+        });
+        node.call(new EntityTickEvent(entity));
+
+        var ref = new WeakReference<>(entity);
+        entity.remove();
+        //noinspection UnusedAssignment
+        entity = null;
+        env.tick();
         waitUntilCleared(ref);
     }
 
