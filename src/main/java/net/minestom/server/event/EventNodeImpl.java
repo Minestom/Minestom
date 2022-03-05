@@ -20,11 +20,11 @@ import java.util.function.Consumer;
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final ClassValue<Handle<T>> handleMap = new ClassValue<>() {
+    private final ClassValue<ListenerHandle<T>> handleMap = new ClassValue<>() {
         @Override
-        protected Handle<T> computeValue(Class<?> type) {
+        protected ListenerHandle<T> computeValue(Class<?> type) {
             //noinspection unchecked
-            return new Handle<>((Class<T>) type);
+            return createHandle((Class<T>) type);
         }
     };
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
@@ -45,6 +45,10 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         this.filter = filter;
         this.predicate = predicate;
         this.eventType = filter.eventType();
+    }
+
+    protected @NotNull ListenerHandle<T> createHandle(@NotNull Class<T> listenerType) {
+        return new Handle<>(listenerType);
     }
 
     @Override
@@ -307,7 +311,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @SuppressWarnings("unchecked")
-    final class Handle<E extends Event> implements ListenerHandle<E> {
+    non-sealed class Handle<E extends Event> implements ListenerHandle<E> {
         private static final VarHandle UPDATED;
 
         static {
