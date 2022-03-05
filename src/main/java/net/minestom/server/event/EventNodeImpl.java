@@ -450,7 +450,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var mappedNodeCache = node.mappedNodeCache;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
-            Map<Object, Handle<E>> handlers = new HashMap<>(mappedNodeCache.size());
+            Map<Object, Handle<E>> handlers = new WeakHashMap<>(mappedNodeCache.size());
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
