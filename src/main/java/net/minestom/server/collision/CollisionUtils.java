@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class CollisionUtils {
+    // Minimum move amount, minimum final velocity
     private static final double MIN_DELTA = 0.001;
 
     /**
@@ -237,9 +238,9 @@ public final class CollisionUtils {
 
                 // Fast check to see if a collision happens
                 // Uses minkowski sum
-                boolean hasCollision = RayUtils.RayBoundingBoxIntersectCheck(deltaPosition,
+                boolean hasCollision = RayUtils.RayBoundingBoxIntersectCheck(
+                        deltaPosition,
                         bb,
-                        // Use true centre of entity bounding box. By default, centre is on the bottom of y axis. Add half of height to compensate
                         correctedEntityPos,
                         blockX, blockY, blockZ,
                         boundingBox.width(),

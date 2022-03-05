@@ -27,6 +27,47 @@ public class EntityBlockPhysicsTest {
     }
 
     @Test
+    public void entityPhysicsCheckSlab(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE_SLAB);
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(0, 44, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
+        assertEquals(new Pos(0, 42.5, 0), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDiagonal(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
+        assertEquals(new Pos(0.7, 42, 0.7), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckSlide(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+        instance.setBlock(1, 42, 2, Block.STONE);
+        instance.setBlock(1, 42, 3, Block.STONE);
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10,  0, 11));
+        assertEquals(new Pos(0.7, 42, 11.77), res.newPosition());
+    }
+
+    @Test
     public void entityPhysicsCheckNoCollision(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);

@@ -124,6 +124,9 @@ public class RayUtils {
         Vec bbOffMin = new Vec(bb.minX() - rayStart.x() + bbOffsetX - bbOffW / 2, bb.minY() - rayStart.y() + bbOffsetY - bbOffH / 2, bb.minZ() - rayStart.z() + bbOffsetZ - bbOffD / 2);
         Vec bbOffMax = new Vec(bb.maxX() - rayStart.x() + bbOffsetX + bbOffW / 2, bb.maxY() - rayStart.y() + bbOffsetY + bbOffH / 2, bb.maxZ() - rayStart.z() + bbOffsetZ + bbOffD / 2);
 
+        // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
+        // If the point is within the rectangle, we know the vector intersects the face.
+
         // Intersect X
         if (ray.x() != 0) {
             // Left side of bounding box
@@ -132,6 +135,7 @@ public class RayUtils {
                 double yix = ray.y() * xFac + rayStart.y();
                 double zix = ray.z() * xFac + rayStart.z();
 
+                // Check if ray passes through y/z plane
                 if (yix > bb.minY() + bbOffsetY - bbOffH / 2
                         && yix < bb.maxY() + bbOffsetY + bbOffH / 2
                         && zix > bb.minZ() + bbOffsetZ - bbOffD / 2
@@ -209,7 +213,6 @@ public class RayUtils {
                 }
             }
         }
-
 
         return false;
     }
