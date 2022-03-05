@@ -1,6 +1,8 @@
 package net.minestom.server.event;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.item.ItemStack;
@@ -42,6 +44,13 @@ public class EventNodeTest {
         @Override
         public @NotNull ItemStack getItemStack() {
             return item;
+        }
+    }
+
+    record EntityTestEvent(Entity entity) implements EntityEvent {
+        @Override
+        public @NotNull Entity getEntity() {
+            return entity;
         }
     }
 
@@ -209,29 +218,6 @@ public class EventNodeTest {
         result.set(false);
         node.unregister(binding);
         node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
-        assertFalse(result.get());
-    }
-
-    @Test
-    public void testMap() {
-        var item = ItemStack.of(Material.DIAMOND);
-        var node = EventNode.all("main");
-
-        AtomicBoolean result = new AtomicBoolean(false);
-        var itemNode = EventNode.type("item_node", EventFilter.ITEM);
-        itemNode.addListener(ItemTestEvent.class, event -> result.set(true));
-        assertDoesNotThrow(() -> node.map(itemNode, item));
-
-        node.call(new ItemTestEvent(item));
-        assertTrue(result.get());
-
-        result.set(false);
-        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_INGOT)));
-        assertFalse(result.get());
-
-        result.set(false);
-        assertTrue(node.unmap(item));
-        node.call(new ItemTestEvent(item));
         assertFalse(result.get());
     }
 }
