@@ -346,13 +346,12 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
     <E extends T, H> @NotNull EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter);
 
     /**
-     * Undo {@link #map(Object, EventFilter)}
+     * Prevents the node from {@link #map(Object, EventFilter)} to be called.
      *
      * @param value the value to unmap
-     * @return true if the value has been unmapped, false if nothing happened
      */
     @ApiStatus.Experimental
-    boolean unmap(@NotNull Object value);
+    void unmap(@NotNull Object value);
 
     @ApiStatus.Experimental
     void register(@NotNull EventBinding<? extends T> binding);

@@ -174,16 +174,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public boolean unmap(@NotNull Object value) {
+    public void unmap(@NotNull Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var mappedNode = this.mappedNodeCache.remove(value);
-            if (mappedNode == null) return false; // Mapped node not found
+            final var mappedNode = this.registeredMappedNode.remove(value);
+            if (mappedNode == null) return;
             final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
             childImpl.parent = null;
-            if (this.registeredMappedNode.remove(value) != null) {
-                childImpl.invalidateEventsFor(this);
-            }
-            return true;
+            childImpl.invalidateEventsFor(this);
         }
     }
 

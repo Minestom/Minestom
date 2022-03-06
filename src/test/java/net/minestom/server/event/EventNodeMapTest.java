@@ -23,6 +23,11 @@ public class EventNodeMapTest {
         var itemNode2 = node.map(item, EventFilter.ITEM);
         assertNotNull(itemNode1);
         assertSame(itemNode1, itemNode2);
+
+        // Node should still keep track of the mapping until GCed
+        // This is to ensure that we do not end up with multiple nodes theoretically mapping the same object
+        node.unmap(item);
+        assertSame(itemNode1, node.map(item, EventFilter.ITEM));
     }
 
     @Test
@@ -65,7 +70,7 @@ public class EventNodeMapTest {
         assertFalse(result.get());
 
         result.set(false);
-        assertTrue(node.unmap(item));
+        node.unmap(item);
         node.call(new EventNodeTest.ItemTestEvent(item));
         assertFalse(result.get());
     }
