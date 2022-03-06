@@ -18,7 +18,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
-    private static final Object GLOBAL_CHILD_LOCK = new Object();
+    static final Object GLOBAL_CHILD_LOCK = new Object();
 
     private final ClassValue<ListenerHandle<T>> handleMap = new ClassValue<>() {
         @Override
@@ -164,23 +164,11 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         return node;
     }
 
-    void mapRegistration(EventNodeLazyImpl<? extends T> node, Object value) {
-        synchronized (GLOBAL_CHILD_LOCK) {
-            var previous = this.registeredMappedNode.putIfAbsent(value, (EventNodeImpl<T>) node);
-            if (previous == null) {
-                node.invalidateEventsFor(this);
-            }
-        }
-    }
-
     @Override
     public void unmap(@NotNull Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var mappedNode = this.registeredMappedNode.remove(value);
-            if (mappedNode == null) return;
-            final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
-            childImpl.parent = null;
-            childImpl.invalidateEventsFor(this);
+            if (mappedNode != null) mappedNode.invalidateEventsFor(this);
         }
     }
 
@@ -274,6 +262,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     void invalidateEventsFor(EventNodeImpl<? super T> node) {
+        assert Thread.holdsLock(GLOBAL_CHILD_LOCK);
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);
         }

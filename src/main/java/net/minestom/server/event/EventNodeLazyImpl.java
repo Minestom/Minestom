@@ -65,7 +65,10 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
 
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
-            this.holder.mapRegistration(this, retrieveOwner());
+            synchronized (GLOBAL_CHILD_LOCK) {
+                var previous = this.holder.registeredMappedNode.putIfAbsent(retrieveOwner(), EventNodeImpl.class.cast(this));
+                if (previous == null) invalidateEventsFor(holder);
+            }
         }
     }
 
