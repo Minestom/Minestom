@@ -26,7 +26,8 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -109,26 +110,26 @@ public class BlockPlacementListener {
         }
 
         final Block placedBlock = useMaterial.block();
-        final Set<Entity> entities = instance.getChunkEntities(chunk);
+        final Collection<Entity> entities = instance.getNearbyEntities(placementPosition, 5);
+
         // Check if the player is trying to place a block in an entity
-        boolean intersect = player.getBoundingBox().intersectBlock(player.getPosition(), placementPosition);
-        if (!intersect && placedBlock.isSolid()) {
-            // TODO push entities too close to the position
-            for (Entity entity : entities) {
-                // 'player' has already been checked
-                if (entity == player ||
-                        entity.getEntityType() == EntityType.ITEM)
-                    continue;
-                // Marker Armor Stands should not prevent block placement
-                if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
-                    if (armorStandMeta.isMarker()) continue;
-                }
-                intersect = entity.getBoundingBox().intersectBlock(player.getPosition(), placementPosition);
-                if (intersect)
-                    break;
-            }
-        }
-        if (intersect) {
+        boolean intersectPlayer = Arrays.stream(placedBlock.registry().boundingBoxes())
+                .anyMatch(bb -> player.getBoundingBox().intersectBoundingBox(player.getPosition(), bb, placementPosition));
+
+        boolean hasIntersect = intersectPlayer || entities
+                .stream()
+                .filter(entity -> entity.getEntityType() != EntityType.ITEM)
+                .filter(entity -> {
+                    // Marker Armor Stands should not prevent block placement
+                    if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
+                        return !armorStandMeta.isMarker();
+                    }
+                    return true;
+                })
+                .anyMatch(entity ->
+                    Arrays.stream(placedBlock.registry().boundingBoxes()).anyMatch(bb -> entity.getBoundingBox().intersectBoundingBox(entity.getPosition(), bb, placementPosition)));
+
+        if (hasIntersect) {
             refresh(player, chunk);
             return;
         }
