@@ -146,9 +146,10 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPriority()" class="member-name-link">getPriority</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#map(net.minestom.server.event.EventNode,java.lang.Object)" class="member-name-link">map</a><wbr>(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;node,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;E extends T,<wbr>
+H&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#map(H,net.minestom.server.event.EventFilter)" class="member-name-link">map</a><wbr>(H&nbsp;value,
+ @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>H&gt;&nbsp;filter)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Maps a specific object to a node.</div>
 </div>
@@ -182,10 +183,10 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unmap(java.lang.Object)" class="member-name-link">unmap</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Undo <a href="EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)"><code>EventNode.map(EventNode, Object)</code></a></div>
+<div class="block">Prevents the node from <a href="EventNode.html#map(H,net.minestom.server.event.EventFilter)"><code>EventNode.map(Object, EventFilter)</code></a> to be called.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unregister(net.minestom.server.event.EventBinding)" class="member-name-link">unregister</a><wbr>(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;binding)</code></div>
@@ -387,40 +388,42 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="map(net.minestom.server.event.EventNode,java.lang.Object)">
-<h3>map</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">map</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;&nbsp;node,
+<section class="detail" id="map(H,net.minestom.server.event.EventFilter)">
+<h3 id="map(java.lang.Object,net.minestom.server.event.EventFilter)">map</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E extends T,<wbr>
+H&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</span>&nbsp;<span class="element-name">map</span><wbr><span class="parameters">(@NotNull
+ H&nbsp;value,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)">EventNode</a></code></span></div>
+ @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>H&gt;&nbsp;filter)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="EventNode.html#map(H,net.minestom.server.event.EventFilter)">EventNode</a></code></span></div>
 <div class="block">Maps a specific object to a node.
  <p>
  Be aware that such structure have huge performance penalty as they will
  always require a map lookup. Use only at last resort.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)">map</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dd><code><a href="EventNode.html#map(H,net.minestom.server.event.EventFilter)">map</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>node</code> - the node to map</dd>
 <dd><code>value</code> - the mapped value</dd>
+<dd><code>filter</code> - the filter to use</dd>
+<dt>Returns:</dt>
+<dd>the node (which may have already been registered) directly linked to <code>value</code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="unmap(java.lang.Object)">
 <h3>unmap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">unmap</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unmap</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="EventNode.html#unmap(java.lang.Object)">EventNode</a></code></span></div>
-<div class="block">Undo <a href="EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)"><code>EventNode.map(EventNode, Object)</code></a></div>
+<div class="block">Prevents the node from <a href="EventNode.html#map(H,net.minestom.server.event.EventFilter)"><code>EventNode.map(Object, EventFilter)</code></a> to be called.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="EventNode.html#unmap(java.lang.Object)">unmap</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>value</code> - the value to unmap</dd>
-<dt>Returns:</dt>
-<dd>true if the value has been unmapped, false if nothing happened</dd>
 </dl>
 </section>
 </li>

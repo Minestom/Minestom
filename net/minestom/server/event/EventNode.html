@@ -174,102 +174,99 @@ V&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.serv
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#hasListener(java.lang.Class)" class="member-name-link">hasListener</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#lazyMap(java.lang.Object,net.minestom.server.event.EventFilter)" class="member-name-link">lazyMap</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;owner,
- @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>?&gt;&nbsp;filter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#map(net.minestom.server.event.EventNode,java.lang.Object)" class="member-name-link">map</a><wbr>(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;node,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>,<wbr>
+H&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#map(H,net.minestom.server.event.EventFilter)" class="member-name-link">map</a><wbr>(H&nbsp;value,
+ @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>H&gt;&nbsp;filter)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Maps a specific object to a node.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(net.minestom.server.event.EventBinding)" class="member-name-link">register</a><wbr>(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;binding)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#removeChild(net.minestom.server.event.EventNode)" class="member-name-link">removeChild</a><wbr>(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;child)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(net.minestom.server.event.EventBinding)" class="member-name-link">register</a><wbr>(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;binding)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#removeChild(net.minestom.server.event.EventNode)" class="member-name-link">removeChild</a><wbr>(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;child)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Directly removes the given child from this node.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeChildren(java.lang.String)" class="member-name-link">removeChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeChildren(java.lang.String)" class="member-name-link">removeChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Recursively removes children with the given name starting at this node.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#removeChildren(java.lang.String,java.lang.Class)" class="member-name-link">removeChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#removeChildren(java.lang.String,java.lang.Class)" class="member-name-link">removeChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;eventType)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Recursively removes children with the given name and type starting at this node.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#removeListener(net.minestom.server.event.EventListener)" class="member-name-link">removeListener</a><wbr>(@NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;listener)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;<br>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)" class="member-name-link">replaceChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#removeListener(net.minestom.server.event.EventListener)" class="member-name-link">removeListener</a><wbr>(@NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;listener)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;<br>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)" class="member-name-link">replaceChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;eventType,
  @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;&nbsp;eventNode)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Replaces all children matching the given name and type recursively starting from this node.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#replaceChildren(java.lang.String,net.minestom.server.event.EventNode)" class="member-name-link">replaceChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#replaceChildren(java.lang.String,net.minestom.server.event.EventNode)" class="member-name-link">replaceChildren</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;eventNode)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Replaces all children matching the given name and type recursively starting from this node.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setPriority(int)" class="member-name-link">setPriority</a><wbr>(int&nbsp;priority)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#tag(java.lang.String,net.minestom.server.event.EventFilter,net.minestom.server.tag.Tag)" class="member-name-link">tag</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setPriority(int)" class="member-name-link">setPriority</a><wbr>(int&nbsp;priority)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#tag(java.lang.String,net.minestom.server.event.EventFilter,net.minestom.server.tag.Tag)" class="member-name-link">tag</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>? extends <a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>&gt;&nbsp;filter,
  @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates an event node which accepts any event of the given type which has a handler who
  has the given tag.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
 V&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#tag(java.lang.String,net.minestom.server.event.EventFilter,net.minestom.server.tag.Tag,java.util.function.Predicate)" class="member-name-link">tag</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#tag(java.lang.String,net.minestom.server.event.EventFilter,net.minestom.server.tag.Tag,java.util.function.Predicate)" class="member-name-link">tag</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>? extends <a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>&gt;&nbsp;filter,
  @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;V&gt;&nbsp;tag,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;@Nullable V&gt;&nbsp;consumer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates an event node which accepts any event of the given type which has a handler who
  has an applicable tag.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
-V&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#type(java.lang.String,net.minestom.server.event.EventFilter)" class="member-name-link">type</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>V&gt;&nbsp;filter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
-<div class="block">Creates an event node which accepts any event of the given type.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
 V&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#type(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.BiPredicate)" class="member-name-link">type</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#type(java.lang.String,net.minestom.server.event.EventFilter)" class="member-name-link">type</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>V&gt;&nbsp;filter)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Creates an event node which accepts any event of the given type.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
+V&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#type(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.BiPredicate)" class="member-name-link">type</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>V&gt;&nbsp;filter,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" title="class or interface in java.util.function" class="external-link">BiPredicate</a>&lt;E,<wbr>V&gt;&nbsp;predicate)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates an event node which accepts any event of the given type which passes
  the provided condition.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unmap(java.lang.Object)" class="member-name-link">unmap</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Undo <a href="#map(net.minestom.server.event.EventNode,java.lang.Object)"><code>map(EventNode, Object)</code></a></div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unregister(net.minestom.server.event.EventBinding)" class="member-name-link">unregister</a><wbr>(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;binding)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unmap(java.lang.Object)" class="member-name-link">unmap</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Prevents the node from <a href="#map(H,net.minestom.server.event.EventFilter)"><code>map(Object, EventFilter)</code></a> to be called.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unregister(net.minestom.server.event.EventBinding)" class="member-name-link">unregister</a><wbr>(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;binding)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,<wbr>
 V&gt;<br>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#value(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.Predicate)" class="member-name-link">value</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#value(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.Predicate)" class="member-name-link">value</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>V&gt;&nbsp;filter,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;V&gt;&nbsp;predicate)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates an event node which accepts any event of the given type which passes
  the provided condition.</div>
 </div>
@@ -498,18 +495,6 @@ V&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="EventNode.html" ti
 <dt>Returns:</dt>
 <dd>A node with an event type filter as well as a handler with the provided tag</dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="lazyMap(java.lang.Object,net.minestom.server.event.EventFilter)">
-<h3>lazyMap</h3>
-<div class="member-signature"><span class="annotations">@Internal
-@Experimental
-@NotNull
-</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</span>&nbsp;<span class="element-name">lazyMap</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;owner,
- @NotNull
- @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>?&gt;&nbsp;filter)</span></div>
 </section>
 </li>
 <li>
@@ -782,21 +767,25 @@ V&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="EventNode.html" ti
 </section>
 </li>
 <li>
-<section class="detail" id="map(net.minestom.server.event.EventNode,java.lang.Object)">
-<h3>map</h3>
+<section class="detail" id="map(H,net.minestom.server.event.EventFilter)">
+<h3 id="map(java.lang.Object,net.minestom.server.event.EventFilter)">map</h3>
 <div class="member-signature"><span class="annotations">@Experimental
-</span><span class="return-type">void</span>&nbsp;<span class="element-name">map</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;node,
+@NotNull
+</span><span class="type-parameters">&lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>,<wbr>
+H&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;</span>&nbsp;<span class="element-name">map</span><wbr><span class="parameters">(@NotNull
+ H&nbsp;value,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+ @NotNull <a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E,<wbr>H&gt;&nbsp;filter)</span></div>
 <div class="block">Maps a specific object to a node.
  <p>
  Be aware that such structure have huge performance penalty as they will
  always require a map lookup. Use only at last resort.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>node</code> - the node to map</dd>
 <dd><code>value</code> - the mapped value</dd>
+<dd><code>filter</code> - the filter to use</dd>
+<dt>Returns:</dt>
+<dd>the node (which may have already been registered) directly linked to <code>value</code></dd>
 </dl>
 </section>
 </li>
@@ -804,14 +793,12 @@ V&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="EventNode.html" ti
 <section class="detail" id="unmap(java.lang.Object)">
 <h3>unmap</h3>
 <div class="member-signature"><span class="annotations">@Experimental
-</span><span class="return-type">boolean</span>&nbsp;<span class="element-name">unmap</span><wbr><span class="parameters">(@NotNull
+</span><span class="return-type">void</span>&nbsp;<span class="element-name">unmap</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
-<div class="block">Undo <a href="#map(net.minestom.server.event.EventNode,java.lang.Object)"><code>map(EventNode, Object)</code></a></div>
+<div class="block">Prevents the node from <a href="#map(H,net.minestom.server.event.EventFilter)"><code>map(Object, EventFilter)</code></a> to be called.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - the value to unmap</dd>
-<dt>Returns:</dt>
-<dd>true if the value has been unmapped, false if nothing happened</dd>
 </dl>
 </section>
 </li>
