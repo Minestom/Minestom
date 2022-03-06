@@ -108,101 +108,107 @@ public class RayUtils {
 
     /**
      * Check if a bounding box intersects a ray
-     * @param rayDirection Ray to check
+     * @param ray Ray to check
      * @param bb Bounding box
      * @param rayStart Ray start position
+     * @param bbOffsetX Bounding box x
+     * @param bbOffsetY Bounding box y
+     * @param bbOffsetZ Bounding box z
+     * @param bbOffW Bounding box added width
+     * @param bbOffH Bounding box added height
+     * @param bbOffD Bounding box added depth
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean RayBoundingBoxIntersectCheck(Point rayDirection, Point rayStart, BoundingBox bb, Point bbOffset, BoundingBox bb2) {
+    public static boolean RayBoundingBoxIntersectCheck(Vec ray, BoundingBox bb, Point rayStart, int bbOffsetX, int bbOffsetY, int bbOffsetZ, double bbOffW, double bbOffH, double bbOffD) {
         // Translate bounding box
-        Point bbOffMin = new Vec(bb.minX() - rayStart.x() + bbOffset.x() - bb2.width() / 2, bb.minY() - rayStart.y() + bbOffset.y() - bb2.height() / 2, bb.minZ() - rayStart.z() + bbOffset.z() - bb2.depth() / 2);
-        Point bbOffMax = new Vec(bb.maxX() - rayStart.x() + bbOffset.x() + bb2.width() / 2, bb.maxY() - rayStart.y() + bbOffset.y() + bb2.height() / 2, bb.maxZ() - rayStart.z() + bbOffset.z() + bb2.depth() / 2);
+        Vec bbOffMin = new Vec(bb.minX() - rayStart.x() + bbOffsetX - bbOffW / 2, bb.minY() - rayStart.y() + bbOffsetY - bbOffH / 2, bb.minZ() - rayStart.z() + bbOffsetZ - bbOffD / 2);
+        Vec bbOffMax = new Vec(bb.maxX() - rayStart.x() + bbOffsetX + bbOffW / 2, bb.maxY() - rayStart.y() + bbOffsetY + bbOffH / 2, bb.maxZ() - rayStart.z() + bbOffsetZ + bbOffD / 2);
 
         // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
         // If the point is within the rectangle, we know the vector intersects the face.
 
         // Intersect X
-        if (rayDirection.x() != 0) {
+        if (ray.x() != 0) {
             // Left side of bounding box
             {
-                double xFac = bbOffMin.x() / rayDirection.x();
-                double yix = rayDirection.y() * xFac + rayStart.y();
-                double zix = rayDirection.z() * xFac + rayStart.z();
+                double xFac = bbOffMin.x() / ray.x();
+                double yix = ray.y() * xFac + rayStart.y();
+                double zix = ray.z() * xFac + rayStart.z();
 
                 // Check if ray passes through y/z plane
-                if (yix >= bb.minY() + bbOffset.y() - bb2.height() / 2
-                        && yix <= bb.maxY() + bbOffset.y() + bb2.height() / 2
-                        && zix >= bb.minZ() + bbOffset.z() - bb2.depth() / 2
-                        && zix <= bb.maxZ() + bbOffset.z() + bb2.depth() / 2) {
+                if (yix >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
+                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
             // Right side of bounding box
             {
-                double xFac = bbOffMax.x() / rayDirection.x();
-                double yix = rayDirection.y() * xFac + rayStart.y();
-                double zix = rayDirection.z() * xFac + rayStart.z();
+                double xFac = bbOffMax.x() / ray.x();
+                double yix = ray.y() * xFac + rayStart.y();
+                double zix = ray.z() * xFac + rayStart.z();
 
-                if (yix >= bb.minY() + bbOffset.y() - bb2.height() / 2
-                        && yix <= bb.maxY() + bbOffset.y() + bb2.height() / 2
-                        && zix >= bb.minZ() + bbOffset.z() - bb2.depth() / 2
-                        && zix <= bb.maxZ() + bbOffset.z() + bb2.depth() / 2) {
+                if (yix >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
+                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
         }
 
         // Intersect Z
-        if (rayDirection.z() != 0) {
+        if (ray.z() != 0) {
             {
-                double zFac = bbOffMin.z() / rayDirection.z();
-                double xiz = rayDirection.x() * zFac + rayStart.x();
-                double yiz = rayDirection.y() * zFac + rayStart.y();
+                double zFac = bbOffMin.z() / ray.z();
+                double xiz = ray.x() * zFac + rayStart.x();
+                double yiz = ray.y() * zFac + rayStart.y();
 
-                if (xiz >= bb.minX() + bbOffset.x() - bb2.width() / 2
-                        && xiz <= bb.maxX() + bbOffset.x() + bb2.width() / 2
-                        && yiz >= bb.minY() + bbOffset.y() - bb2.height() / 2
-                        && yiz <= bb.maxY() + bbOffset.y() + bb2.height() / 2) {
+                if (xiz >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
                     return true;
                 }
             }
             {
-                double zFac = bbOffMax.z() / rayDirection.z();
-                double xiz = rayDirection.x() * zFac + rayStart.x();
-                double yiz = rayDirection.y() * zFac + rayStart.y();
+                double zFac = bbOffMax.z() / ray.z();
+                double xiz = ray.x() * zFac + rayStart.x();
+                double yiz = ray.y() * zFac + rayStart.y();
 
-                if (xiz >= bb.minX() + bbOffset.x() - bb2.width() / 2
-                        && xiz <= bb.maxX() + bbOffset.x() + bb2.width() / 2
-                        && yiz >= bb.minY() + bbOffset.y() - bb2.height() / 2
-                        && yiz <= bb.maxY() + bbOffset.y() + bb2.height() / 2) {
+                if (xiz >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
+                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
                     return true;
                 }
             }
         }
 
         // Intersect Y
-        if (rayDirection.y() != 0) {
+        if (ray.y() != 0) {
             {
-                double yFac = bbOffMin.y() / rayDirection.y();
-                double xiy = rayDirection.x() * yFac + rayStart.x();
-                double ziy = rayDirection.z() * yFac + rayStart.z();
+                double yFac = bbOffMin.y() / ray.y();
+                double xiy = ray.x() * yFac + rayStart.x();
+                double ziy = ray.z() * yFac + rayStart.z();
 
-                if (xiy >= bb.minX() + bbOffset.x() - bb2.width() / 2
-                        && xiy <= bb.maxX() + bbOffset.x() + bb2.width() / 2
-                        && ziy >= bb.minZ() + bbOffset.z() - bb2.depth() / 2
-                        && ziy <= bb.maxZ() + bbOffset.z() + bb2.depth() / 2) {
+                if (xiy >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }
             {
-                double yFac = bbOffMax.y() / rayDirection.y();
-                double xiy = rayDirection.x() * yFac + rayStart.x();
-                double ziy = rayDirection.z() * yFac + rayStart.z();
+                double yFac = bbOffMax.y() / ray.y();
+                double xiy = ray.x() * yFac + rayStart.x();
+                double ziy = ray.z() * yFac + rayStart.z();
 
-                if (xiy >= bb.minX() + bbOffset.x() - bb2.width() / 2
-                        && xiy <= bb.maxX() + bbOffset.x() + bb2.width() / 2
-                        && ziy >= bb.minZ() + bbOffset.z() - bb2.depth() / 2
-                        && ziy <= bb.maxZ() + bbOffset.z() + bb2.depth() / 2) {
+                if (xiy >= bb.minX() + bbOffsetX - bbOffW / 2
+                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
+                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
+                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
                     return true;
                 }
             }

@@ -760,7 +760,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param depth  the bounding box Z size
      */
     public void setBoundingBox(double width, double height, double depth) {
-        this.boundingBox = new BoundingBox(width, height, depth);
+        this.boundingBox = new BoundingBox(width, height, depth, BoundingBox.BoundingBoxType.ENTITY);
     }
 
     /**

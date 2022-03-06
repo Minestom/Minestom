@@ -3,7 +3,6 @@ package net.minestom.server.registry;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.collision.BlockShape;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
@@ -168,7 +167,7 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
-        private final BlockShape blockShape;
+        private final BoundingBox[] boundingBoxes;
         private final Properties custom;
 
         private BlockEntry(String namespace, Properties main, Properties custom) {
@@ -185,8 +184,6 @@ public final class Registry {
             this.air = main.getBoolean("air", false);
             this.solid = main.getBoolean("solid");
             this.liquid = main.getBoolean("liquid", false);
-            this.blockShape = BlockShape.parseRegistry(main.getString("collisionShape"));
-
             {
                 Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
@@ -196,6 +193,38 @@ public final class Registry {
                     this.blockEntity = null;
                     this.blockEntityId = 0;
                 }
+            }
+            {
+                final String regex = "\\d.\\d{1,3}";
+                final String string = main.getString("collisionShape");
+
+                final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+                final Matcher matcher = pattern.matcher(string);
+
+                ArrayList<Double> vals = new ArrayList<>();
+                while (matcher.find()) {
+                    double newVal = Double.parseDouble(matcher.group());
+                    vals.add(newVal);
+                }
+
+                List<BoundingBox> boundingBoxes = new ArrayList<>();
+                final int count = vals.size() / 6;
+                for (int i = 0; i < count; ++i) {
+                    final double boundXSize = vals.get(3 + 6 * i) - vals.get(0 + 6 * i);
+                    final double boundYSize = vals.get(4 + 6 * i) - vals.get(1 + 6 * i);
+                    final double boundZSize = vals.get(5 + 6 * i) - vals.get(2 + 6 * i);
+
+                    final double minX, minY, minZ, maxX, maxY, maxZ;
+                    minX = vals.get(0 + 6 * i);
+                    maxX = vals.get(3 + 6 * i);
+                    minY = vals.get(1 + 6 * i);
+                    maxY = vals.get(4 + 6 * i);
+                    minZ = vals.get(2 + 6 * i);
+                    maxZ = vals.get(5 + 6 * i);
+
+                    boundingBoxes.add(new BoundingBox(boundXSize, boundYSize, boundZSize, BoundingBox.BoundingBoxType.BLOCK, minX, minY, minZ, maxX, maxY, maxZ));
+                }
+                this.boundingBoxes = boundingBoxes.toArray(BoundingBox[]::new);
             }
             {
                 final String materialNamespace = main.getString("correspondingItem", null);
@@ -267,8 +296,8 @@ public final class Registry {
             return materialSupplier.get();
         }
 
-        public BlockShape blockShape() {
-            return this.blockShape;
+        public BoundingBox[] boundingBoxes() {
+            return boundingBoxes;
         }
 
         @Override
@@ -379,7 +408,8 @@ public final class Registry {
                     new BoundingBox(
                             main.getDouble("width"),
                             main.getDouble("height"),
-                            main.getDouble("width")),
+                            main.getDouble("width"),
+                            BoundingBox.BoundingBoxType.ENTITY),
                     custom
             );
         }
