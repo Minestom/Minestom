@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class CollisionUtils {
@@ -27,7 +26,7 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec originaDeltaPosition) {
-        final BoundingBox.Faces faces = entity.getBoundingBox().faces();
+        final BoundingBoxUtils.Faces faces = entity.getBoundingBox().faces();
         Vec deltaPosition = originaDeltaPosition;
 
         // Allocate once and update values
@@ -242,19 +241,20 @@ public final class CollisionUtils {
         boolean hitBlock = false;
 
         if (checkBlock.isSolid()) {
-            for (int i = 0; i < checkBlock.registry().boundingBoxes().length; ++i) {
+            // Intersect
+            CollisionHelper.sweptIntercept(boundingBox, correctedEntityPos, checkBlock.registry().blockShape(), new Pos(blockX, blockY, blockZ), deltaPosition);
+
+            for (int i = 0; i < checkBlock.registry().blockShape(). boundingBoxes().length; ++i) {
                 BoundingBox bb = checkBlock.registry().boundingBoxes()[i];
 
                 // Fast check to see if a collision happens
                 // Uses minkowski sum
                 boolean hasCollision = RayUtils.RayBoundingBoxIntersectCheck(
                         deltaPosition,
-                        bb,
                         correctedEntityPos,
-                        blockX, blockY, blockZ,
-                        boundingBox.width(),
-                        boundingBox.height(),
-                        boundingBox.depth());
+                        bb,
+                        new Pos(blockX, blockY, blockZ),
+                        boundingBox);
 
                 if (!hasCollision) continue;
 

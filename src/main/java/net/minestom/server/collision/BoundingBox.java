@@ -14,37 +14,20 @@ import java.util.stream.Stream;
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
-public class BoundingBox {
+public class BoundingBox implements Collidable {
     private final double width, height, depth;
-    private final Faces faces;
-    private final BoundingBoxType type;
+    private final BoundingBoxUtils.Faces faces;
 
-    private final double minX, maxX, minY, maxY, minZ, maxZ;
-
-    public enum BoundingBoxType {
-        ENTITY, BLOCK
+    public boolean relativeCollision(Collidable boundingBox, Point point) {
+        return true;
     }
 
-    public BoundingBox(double width, double height, double depth, BoundingBoxType type) {
-        this(width, height, depth, type, -(width / 2), 0, -(depth / 2), (width / 2), height, (depth / 2));
-    }
-
-    public BoundingBox(double width, double height, double depth, BoundingBoxType type, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public BoundingBox(double width, double height, double depth) {
         this.width = width;
         this.height = height;
         this.depth = depth;
-        this.type = type;
 
-        this.minX = minX;
-        this.maxX = maxX;
-        this.minY = minY;
-        this.maxY = maxY;
-        this.minZ = minZ;
-        this.maxZ = maxZ;
-
-        if (this.type == BoundingBoxType.ENTITY)
-            this.faces = retrieveFaces();
-        else this.faces = null;
+        this.faces = BoundingBoxUtils.retrieveFaces(this);
     }
 
     /**
@@ -106,16 +89,6 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if the bounding box intersects at a point.
-     *
-     * @param blockPosition the position to check
-     * @return true if the bounding box intersects with the position, false otherwise
-     */
-    public boolean intersectBlock(@NotNull Point src, @NotNull Point blockPosition) {
-        return intersectBlock(src, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
-    }
-
-    /**
      * Used to know if the bounding box intersects (contains) a point.
      *
      * @param x x-coord of a point
@@ -140,82 +113,6 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if the bounding box intersects a line segment.
-     *
-     * @param x1 x-coord of first line segment point
-     * @param y1 y-coord of first line segment point
-     * @param z1 z-coord of first line segment point
-     * @param x2 x-coord of second line segment point
-     * @param y2 y-coord of second line segment point
-     * @param z2 z-coord of second line segment point
-     * @return true if the bounding box intersects with the line segment, false otherwise.
-     */
-    public boolean intersectLine(double x1, double y1, double z1, double x2, double y2, double z2) {
-        // originally from http://www.3dkingdoms.com/weekly/weekly.php?a=3
-        double x3 = minX();
-        double x4 = maxX();
-        double y3 = minY();
-        double y4 = maxY();
-        double z3 = minZ();
-        double z4 = maxZ();
-        if (x1 > x3 && x1 < x4 && y1 > y3 && y1 < y4 && z1 > z3 && z1 < z4) {
-            return true;
-        }
-        if (x1 < x3 && x2 < x3 || x1 > x4 && x2 > x4 ||
-                y1 < y3 && y2 < y3 || y1 > y4 && y2 > y4 ||
-                z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
-            return false;
-        }
-        return isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x4, x2 - x4, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y3, y2 - y3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y4, y2 - y4, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z3, z2 - z3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z4, z2 - z4, x1, y1, z1, x2, y2, z2));
-    }
-
-    /**
-     * Used to know if the bounding box intersects a line segment.
-     *
-     * @param lineStart first line segment point
-     * @param lineEnd   second line segment point
-     * @return true if the bounding box intersects with the line segment, false otherwise.
-     */
-    public boolean intersectLine(@NotNull Point lineStart, @NotNull Point lineEnd) {
-        return intersectLine(
-                Math.min(lineStart.x(), lineEnd.x()),
-                Math.min(lineStart.y(), lineEnd.y()),
-                Math.min(lineStart.z(), lineEnd.z()),
-                Math.max(lineStart.x(), lineEnd.x()),
-                Math.max(lineStart.y(), lineEnd.y()),
-                Math.max(lineStart.z(), lineEnd.z())
-        );
-    }
-
-    private @Nullable Vec getSegmentIntersection(double dst1, double dst2, double x1, double y1, double z1, double x2, double y2, double z2) {
-        if (dst1 == dst2 || dst1 * dst2 >= 0D) return null;
-        final double delta = dst1 / (dst1 - dst2);
-        return new Vec(
-                x1 + (x2 - x1) * delta,
-                y1 + (y2 - y1) * delta,
-                z1 + (z2 - z1) * delta
-        );
-    }
-
-    private boolean isInsideBoxWithAxis(Axis axis, @Nullable Vec intersection) {
-        if (intersection == null) return false;
-        double x1 = minX();
-        double x2 = maxX();
-        double y1 = minY();
-        double y2 = maxY();
-        double z1 = minZ();
-        double z2 = maxZ();
-        return axis == Axis.X && intersection.z() > z1 && intersection.z() < z2 && intersection.y() > y1 && intersection.y() < y2 ||
-                axis == Axis.Y && intersection.z() > z1 && intersection.z() < z2 && intersection.x() > x1 && intersection.x() < x2 ||
-                axis == Axis.Z && intersection.x() > x1 && intersection.x() < x2 && intersection.y() > y1 && intersection.y() < y2;
-    }
-
-    /**
      * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
      *
      * @param x the X offset
@@ -224,7 +121,7 @@ public class BoundingBox {
      * @return a new {@link BoundingBox} expanded
      */
     public @NotNull BoundingBox expand(double x, double y, double z) {
-        return new BoundingBox(this.width + x, this.height + y, this.depth + z, type);
+        return new BoundingBox(this.width + x, this.height + y, this.depth + z);
     }
 
     /**
@@ -236,7 +133,7 @@ public class BoundingBox {
      * @return a new bounding box contracted
      */
     public @NotNull BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(this.width - x, this.height - y, this.depth - z, type) ;
+        return new BoundingBox(this.width - x, this.height - y, this.depth - z) ;
     }
 
     public double width() {
@@ -251,145 +148,32 @@ public class BoundingBox {
         return depth;
     }
 
-    @NotNull Faces faces() {
+    @NotNull BoundingBoxUtils.Faces faces() {
         return faces;
     }
 
     public double minX() {
-        return minX;
+        return -width/2;
     }
 
     public double maxX() {
-        return maxX;
+        return width/2;
     }
 
     public double minY() {
-        return minY;
+        return 0;
     }
 
     public double maxY() {
-        return maxY;
+        return height;
     }
 
     public double minZ() {
-        return minZ;
+        return -depth/2;
     }
 
     public double maxZ() {
-        return maxZ;
+        return depth/2;
     }
 
-    private enum Axis {
-        X, Y, Z
-    }
-
-    record Faces(Map<Vec, List<Vec>> query) {
-        public Faces {
-            query = Map.copyOf(query);
-        }
-    }
-
-    private List<Vec> buildSet(Set<Vec> a) {
-        return a.stream().toList();
-    }
-
-    private List<Vec> buildSet(Set<Vec> a, Set<Vec> b) {
-        Set<Vec> allFaces = new HashSet<>();
-        Stream.of(a, b).forEach(allFaces::addAll);
-        return allFaces.stream().toList();
-    }
-
-    private List<Vec> buildSet(Set<Vec> a, Set<Vec> b, Set<Vec> c) {
-        Set<Vec> allFaces = new HashSet<>();
-        Stream.of(a, b, c).forEach(allFaces::addAll);
-        return allFaces.stream().toList();
-    }
-
-    private Faces retrieveFaces() {
-        double minX = minX();
-        double maxX = maxX();
-        double minY = minY();
-        double maxY = maxY();
-        double minZ = minZ();
-        double maxZ = maxZ();
-
-        // Calculate steppings for each axis
-        // Start at minimum, increase by step size until we reach maximum
-        // This is done to catch all blocks that are part of that axis
-        // Since this stops before max point is reached, we add the max point after
-        final List<Double> stepsX = IntStream.rangeClosed(0, (int)((maxX-minX))).mapToDouble(x -> x + minX).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-        final List<Double> stepsY = IntStream.rangeClosed(0, (int)((maxY-minY))).mapToDouble(x -> x + minY).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-        final List<Double> stepsZ = IntStream.rangeClosed(0, (int)((maxZ-minZ))).mapToDouble(x -> x + minZ).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-
-        stepsX.add(maxX);
-        stepsY.add(maxY);
-        stepsZ.add(maxZ);
-
-        final Set<Vec> bottom = new HashSet<>();
-        final Set<Vec> top = new HashSet<>();
-        final Set<Vec> left = new HashSet<>();
-        final Set<Vec> right = new HashSet<>();
-        final Set<Vec> front = new HashSet<>();
-        final Set<Vec> back = new HashSet<>();
-
-        CartesianProduct.product(stepsX, stepsY).forEach(cross -> {
-            double i = (double) ((List<?>)cross).get(0);
-            double j = (double) ((List<?>)cross).get(1);
-            front.add(new Vec(i, j, minZ));
-            back.add(new Vec(i, j, maxZ));
-        });
-
-        CartesianProduct.product(stepsY, stepsZ).forEach(cross -> {
-            double j = (double) ((List<?>)cross).get(0);
-            double k = (double) ((List<?>)cross).get(1);
-            left.add(new Vec(minX, j, k));
-            right.add(new Vec(maxX, j, k));
-        });
-
-        CartesianProduct.product(stepsX, stepsZ).forEach(cross -> {
-            double i = (double) ((List<?>)cross).get(0);
-            double k = (double) ((List<?>)cross).get(1);
-            bottom.add(new Vec(i, minY, k));
-            top.add(new Vec(i, maxY, k));
-        });
-
-        // X   -1 left    |  1 right
-        // Y   -1 bottom  |  1 top
-        // Z   -1 front   |  1 back
-        var query = new HashMap<Vec, List<Vec>>();
-        query.put(new Vec(0, 0, 0), List.of());
-
-        query.put(new Vec(-1, 0, 0), buildSet(left));
-        query.put(new Vec(1, 0, 0), buildSet(right));
-        query.put(new Vec(0, -1, 0), buildSet(bottom));
-        query.put(new Vec(0, 1, 0), buildSet(top));
-        query.put(new Vec(0, 0, -1), buildSet(front));
-        query.put(new Vec(0, 0, 1), buildSet(back));
-
-        query.put(new Vec(0, -1, -1), buildSet(bottom, front));
-        query.put(new Vec(0, -1, 1), buildSet(bottom, back));
-        query.put(new Vec(0, 1, -1), buildSet(top, front));
-        query.put(new Vec(0, 1, 1), buildSet(top, back));
-
-        query.put(new Vec(-1, -1, 0), buildSet(left, bottom));
-        query.put(new Vec(-1, 1, 0), buildSet(left, top));
-        query.put(new Vec(1, -1, 0), buildSet(right, bottom));
-        query.put(new Vec(1, 1, 0), buildSet(right, top));
-
-        query.put(new Vec(-1, 0, -1), buildSet(left, front));
-        query.put(new Vec(-1, 0, 1), buildSet(left, back));
-        query.put(new Vec(1, 0, -1), buildSet(right, front));
-        query.put(new Vec(1, 0, 1), buildSet(right, back));
-
-        query.put(new Vec(1, 1, 1), buildSet(right, top, back));
-        query.put(new Vec(1, 1, -1), buildSet(right, top, front));
-        query.put(new Vec(1, -1, 1), buildSet(right, bottom, back));
-        query.put(new Vec(1, -1, -1), buildSet(right, bottom, front));
-        query.put(new Vec(-1, 1, 1), buildSet(left, top, back));
-        query.put(new Vec(-1, 1, -1), buildSet(left, top, front));
-        query.put(new Vec(-1, -1, 1), buildSet(left, bottom, back));
-        query.put(new Vec(-1, -1, -1), buildSet(left, bottom, front));
-
-        return new Faces(query);
-    }
 }
