@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
@@ -19,12 +18,15 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
         }
     }
 
+    private final EventNodeImpl<? super E> holder;
     private final WeakReference<Object> owner;
     @SuppressWarnings("unused")
     private boolean mapped;
 
-    EventNodeLazyImpl(@NotNull Object owner, @NotNull EventFilter<E, ?> filter) {
+    EventNodeLazyImpl(@NotNull EventNodeImpl<? super E> holder,
+                      @NotNull Object owner, @NotNull EventFilter<E, ?> filter) {
         super(owner.toString(), filter, null);
+        this.holder = holder;
         this.owner = new WeakReference<>(owner);
     }
 
@@ -47,9 +49,12 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     }
 
     @Override
-    public void map(@NotNull EventNode<? extends E> node, @NotNull Object value) {
-        ensureMap();
-        super.map(node, value);
+    public @NotNull <E1 extends E, H> EventNode<E1> map(@NotNull H value, @NotNull EventFilter<E1, H> filter) {
+        final Object owner = retrieveOwner();
+        if (owner != value) {
+            throw new IllegalArgumentException("Cannot map an object to an already mapped node.");
+        }
+        return (EventNode<E1>) this;
     }
 
     @Override
@@ -60,11 +65,15 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
 
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
-            final Object owner = this.owner.get();
-            if (owner == null) {
-                throw new IllegalStateException("Node handle is null. Be sure to never cache a local node.");
-            }
-            MinecraftServer.getGlobalEventHandler().map(this, owner);
+            this.holder.mapRegistration(this, retrieveOwner());
         }
+    }
+
+    private Object retrieveOwner() {
+        final Object owner = this.owner.get();
+        if (owner == null) {
+            throw new IllegalStateException("Node handle is null. Be sure to never cache a local node.");
+        }
+        return owner;
     }
 }
