@@ -164,9 +164,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         return node;
     }
 
-    void mapRegistration(EventNodeLazyImpl<? extends T> node) {
+    void mapRegistration(EventNodeLazyImpl<? extends T> node, Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            var previous = this.registeredMappedNode.putIfAbsent(node.owner.get(), (EventNodeImpl<T>) node);
+            var previous = this.registeredMappedNode.putIfAbsent(value, (EventNodeImpl<T>) node);
             if (previous == null) {
                 node.invalidateEventsFor(this);
             }
@@ -178,10 +178,11 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var mappedNode = this.mappedNodeCache.remove(value);
             if (mappedNode == null) return false; // Mapped node not found
-            this.registeredMappedNode.remove(value);
             final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
             childImpl.parent = null;
-            childImpl.invalidateEventsFor(this);
+            if (this.registeredMappedNode.remove(value) != null) {
+                childImpl.invalidateEventsFor(this);
+            }
             return true;
         }
     }

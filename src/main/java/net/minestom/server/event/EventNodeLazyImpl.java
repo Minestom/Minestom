@@ -19,7 +19,7 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     }
 
     private final EventNodeImpl<? super E> holder;
-     final WeakReference<Object> owner;
+    private final WeakReference<Object> owner;
     @SuppressWarnings("unused")
     private boolean mapped;
 
@@ -50,8 +50,11 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
 
     @Override
     public @NotNull <E1 extends E, H> EventNode<E1> map(@NotNull H value, @NotNull EventFilter<E1, H> filter) {
-        ensureMap();
-        return super.map(value, filter);
+        final Object owner = retrieveOwner();
+        if (owner != value) {
+            throw new IllegalArgumentException("Cannot map an object to an already mapped node.");
+        }
+        return (EventNode<E1>) this;
     }
 
     @Override
@@ -62,11 +65,15 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
 
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
-            final Object owner = this.owner.get();
-            if (owner == null) {
-                throw new IllegalStateException("Node handle is null. Be sure to never cache a local node.");
-            }
-            holder.mapRegistration(this);
+            this.holder.mapRegistration(this, retrieveOwner());
         }
+    }
+
+    private Object retrieveOwner() {
+        final Object owner = this.owner.get();
+        if (owner == null) {
+            throw new IllegalStateException("Node handle is null. Be sure to never cache a local node.");
+        }
+        return owner;
     }
 }

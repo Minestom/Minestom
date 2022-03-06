@@ -37,6 +37,15 @@ public class EventNodeMapTest {
     }
 
     @Test
+    public void secondMap() {
+        var item = ItemStack.of(Material.DIAMOND);
+        var node = (EventNodeImpl<Event>) EventNode.all("main");
+        var itemNode = node.map(item, EventFilter.ITEM);
+        assertSame(itemNode, itemNode.map(item, EventFilter.ITEM));
+        assertThrows(Exception.class, () -> itemNode.map(ItemStack.AIR, EventFilter.ITEM));
+    }
+
+    @Test
     public void map() {
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
