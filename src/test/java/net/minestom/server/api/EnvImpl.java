@@ -4,7 +4,6 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
-import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -35,8 +34,7 @@ final class EnvImpl implements Env {
     @Override
     public @NotNull <E extends Event, H> Collector<E> trackEvent(@NotNull Class<E> eventType, @NotNull EventFilter<? super E, H> filter, @NotNull H actor) {
         var tracker = new EventCollector<E>(actor);
-        var node = EventNode.type("tracker", filter).addListener(eventType, tracker.events::add);
-        process.eventHandler().map(node, actor);
+        this.process.eventHandler().map(actor, filter).addListener(eventType, tracker.events::add);
         return tracker;
     }
 

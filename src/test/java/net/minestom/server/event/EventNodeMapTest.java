@@ -14,17 +14,38 @@ import static net.minestom.server.api.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventNodeMapTest {
+
+    @Test
+    public void uniqueMapping() {
+        var item = ItemStack.of(Material.DIAMOND);
+        var node = EventNode.all("main");
+        var itemNode1 = node.map(item, EventFilter.ITEM);
+        var itemNode2 = node.map(item, EventFilter.ITEM);
+        assertNotNull(itemNode1);
+        assertSame(itemNode1, itemNode2);
+    }
+
+    @Test
+    public void lazyRegistration() {
+        var item = ItemStack.of(Material.DIAMOND);
+        var node = (EventNodeImpl<Event>) EventNode.all("main");
+        var itemNode = node.map(item, EventFilter.ITEM);
+        assertFalse(node.registeredMappedNode.containsKey(item));
+        itemNode.addListener(EventNodeTest.ItemTestEvent.class, event -> {
+        });
+        assertTrue(node.registeredMappedNode.containsKey(item));
+    }
+
     @Test
     public void map() {
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
-        var itemNode = EventNode.type("item_node", EventFilter.ITEM);
+        var itemNode = node.map(item, EventFilter.ITEM);
 
         assertFalse(node.hasListener(EventNodeTest.ItemTestEvent.class));
         itemNode.addListener(EventNodeTest.ItemTestEvent.class, event -> result.set(true));
-        assertDoesNotThrow(() -> node.map(itemNode, item));
         assertTrue(node.hasListener(EventNodeTest.ItemTestEvent.class));
 
         node.call(new EventNodeTest.ItemTestEvent(item));
@@ -71,10 +92,9 @@ public class EventNodeMapTest {
         // Ensure that the mapped object gets GCed
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
-        var itemNode = EventNode.type("item_node", EventFilter.ITEM);
+        var itemNode = node.map(item, EventFilter.ITEM);
         itemNode.addListener(EventNodeTest.ItemTestEvent.class, event -> {
         });
-        node.map(itemNode, item);
         node.call(new EventNodeTest.ItemTestEvent(item));
 
         var ref = new WeakReference<>(item);

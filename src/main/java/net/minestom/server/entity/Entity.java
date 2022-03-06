@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.collision.BoundingBox;
@@ -147,7 +148,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected final Set<Player> viewers = viewEngine.set;
     private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<EntityEvent> eventNode = EventNode.lazyMap(this, EventFilter.ENTITY);
+    private final EventNode<EntityEvent> eventNode;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -189,6 +190,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.gravityAcceleration = entityType.registry().acceleration();
         this.gravityDragPerTick = entityType.registry().drag();
+
+        final ServerProcess process = MinecraftServer.process();
+        if (process != null) {
+            this.eventNode = process.eventHandler().map(this, EventFilter.ENTITY);
+        } else {
+            // Local nodes require a server process
+            this.eventNode = null;
+        }
     }
 
     public Entity(@NotNull EntityType entityType) {

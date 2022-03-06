@@ -27,16 +27,17 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             return new Handle<>((Class<T>) type);
         }
     };
-    private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
-    private final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
-    private final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
+    final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
+    final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
+    final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
+    final Map<Object, EventNodeImpl<T>> registeredMappedNode = new WeakHashMap<>();
 
-    private final String name;
-    private final EventFilter<T, ?> filter;
-    private final BiPredicate<T, Object> predicate;
-    private final Class<T> eventType;
-    private volatile int priority;
-    private volatile EventNodeImpl<? super T> parent;
+    final String name;
+    final EventFilter<T, ?> filter;
+    final BiPredicate<T, Object> predicate;
+    final Class<T> eventType;
+    volatile int priority;
+    volatile EventNodeImpl<? super T> parent;
 
     EventNodeImpl(@NotNull String name,
                   @NotNull EventFilter<T, ?> filter,
@@ -150,15 +151,25 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
+    public @NotNull <E extends T, H> EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter) {
+        EventNodeImpl<E> node;
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var nodeImpl = (EventNodeImpl<? extends T>) node;
-            Check.stateCondition(nodeImpl.parent != null, "Node already has a parent");
-            Check.stateCondition(Objects.equals(parent, nodeImpl), "Cannot map to self");
-            EventNodeImpl<T> previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
-            if (previous != null) previous.parent = null;
-            nodeImpl.parent = this;
-            nodeImpl.invalidateEventsFor(this);
+            node = new EventNodeLazyImpl<>(this, value, filter);
+            Check.stateCondition(node.parent != null, "Node already has a parent");
+            Check.stateCondition(Objects.equals(parent, node), "Cannot map to self");
+            EventNodeImpl<T> previous = this.mappedNodeCache.putIfAbsent(value, (EventNodeImpl<T>) node);
+            if (previous != null) return (EventNode<E>) previous;
+            node.parent = this;
+        }
+        return node;
+    }
+
+    void mapRegistration(EventNodeLazyImpl<? extends T> node) {
+        synchronized (GLOBAL_CHILD_LOCK) {
+            var previous = this.registeredMappedNode.putIfAbsent(node.owner.get(), (EventNodeImpl<T>) node);
+            if (previous == null) {
+                node.invalidateEventsFor(this);
+            }
         }
     }
 
@@ -167,6 +178,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var mappedNode = this.mappedNodeCache.remove(value);
             if (mappedNode == null) return false; // Mapped node not found
+            this.registeredMappedNode.remove(value);
             final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
             childImpl.parent = null;
             childImpl.invalidateEventsFor(this);
@@ -263,7 +275,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
     }
 
-    private void invalidateEventsFor(EventNodeImpl<? super T> node) {
+    void invalidateEventsFor(EventNodeImpl<? super T> node) {
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);
         }
@@ -442,12 +454,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         /**
-         * Create a consumer handling {@link EventNode#map(EventNode, Object)}.
+         * Create a consumer handling {@link EventNode#map(Object, EventFilter)}.
          * The goal is to limit the amount of map lookup.
          */
         private @Nullable Consumer<E> mappedConsumer() {
             var node = (EventNodeImpl<E>) EventNodeImpl.this;
-            final var mappedNodeCache = node.mappedNodeCache;
+            final var mappedNodeCache = node.registeredMappedNode;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
             Map<Object, Handle<E>> handlers = new WeakHashMap<>(mappedNodeCache.size());

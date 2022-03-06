@@ -173,13 +173,6 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
         return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
-    @ApiStatus.Internal
-    @ApiStatus.Experimental
-    static <E extends Event> @NotNull EventNode<E> lazyMap(@NotNull Object owner,
-                                                           @NotNull EventFilter<E, ?> filter) {
-        return new EventNodeLazyImpl<>(owner, filter);
-    }
-
     private static <E extends Event, V> EventNode<E> create(@NotNull String name,
                                                             @NotNull EventFilter<E, V> filter,
                                                             @Nullable BiPredicate<E, V> predicate) {
@@ -345,14 +338,15 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
      * Be aware that such structure have huge performance penalty as they will
      * always require a map lookup. Use only at last resort.
      *
-     * @param node  the node to map
-     * @param value the mapped value
+     * @param value  the mapped value
+     * @param filter the filter to use
+     * @return the node (which may have already been registered) directly linked to {@code value}
      */
     @ApiStatus.Experimental
-    void map(@NotNull EventNode<? extends T> node, @NotNull Object value);
+    <E extends T, H> @NotNull EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter);
 
     /**
-     * Undo {@link #map(EventNode, Object)}
+     * Undo {@link #map(Object, EventFilter)}
      *
      * @param value the value to unmap
      * @return true if the value has been unmapped, false if nothing happened

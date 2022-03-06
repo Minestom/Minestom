@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
@@ -19,12 +18,15 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
         }
     }
 
-    private final WeakReference<Object> owner;
+    private final EventNodeImpl<? super E> holder;
+     final WeakReference<Object> owner;
     @SuppressWarnings("unused")
     private boolean mapped;
 
-    EventNodeLazyImpl(@NotNull Object owner, @NotNull EventFilter<E, ?> filter) {
+    EventNodeLazyImpl(@NotNull EventNodeImpl<? super E> holder,
+                      @NotNull Object owner, @NotNull EventFilter<E, ?> filter) {
         super(owner.toString(), filter, null);
+        this.holder = holder;
         this.owner = new WeakReference<>(owner);
     }
 
@@ -47,9 +49,9 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     }
 
     @Override
-    public void map(@NotNull EventNode<? extends E> node, @NotNull Object value) {
+    public @NotNull <E1 extends E, H> EventNode<E1> map(@NotNull H value, @NotNull EventFilter<E1, H> filter) {
         ensureMap();
-        super.map(node, value);
+        return super.map(value, filter);
     }
 
     @Override
@@ -64,7 +66,7 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
             if (owner == null) {
                 throw new IllegalStateException("Node handle is null. Be sure to never cache a local node.");
             }
-            MinecraftServer.getGlobalEventHandler().map(this, owner);
+            holder.mapRegistration(this);
         }
     }
 }
