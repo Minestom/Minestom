@@ -71,8 +71,6 @@ public class EntityBlockPhysicsTest {
         boolean isFirst = checkPoints(new Pos(10.7, 42, 0.7), res.newPosition(), precision);
         boolean isSecond = checkPoints(new Pos(0.7, 42, 10.7), res.newPosition(), precision);
 
-        System.out.println(res.newPosition());
-
         // First and second are both valid, it depends on the implementation
         // If x collision is checked first then isFirst will be true
         // If z collision is checked first then isSecond will be true
