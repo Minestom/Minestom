@@ -9,6 +9,6 @@ public class CollisionHelper {
         return bb1.relativeCollision(bb2, bb1Pos.sub(bb2Pos));
     }
 
-    public static void sweptIntercept(BoundingBox entity, Pos entityPosition, BlockShape block, Pos blockPosition, Vec delta) {
+    public static void sweptIntercept(Collidable collidableMoving, Pos colledableMovingPosition, Collidable collidableStatic, Pos collidableStaticPosition, Vec delta) {
     }
 }
