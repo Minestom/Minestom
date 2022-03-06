@@ -393,7 +393,8 @@ public final class Registry {
                               double width, double height,
                               double drag, double acceleration,
                               EntitySpawnType spawnType,
-                              Properties custom, BoundingBox boundingBox) implements Entry {
+                              BoundingBox boundingBox,
+                              Properties custom) implements Entry {
 
         public EntityEntry(String namespace, Properties main, Properties custom) {
             this(NamespaceID.from(namespace),
@@ -404,11 +405,12 @@ public final class Registry {
                     main.getDouble("drag", 0.02),
                     main.getDouble("acceleration", 0.08),
                     EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    custom, new BoundingBox(
+                    new BoundingBox(
                             main.getDouble("width"),
                             main.getDouble("height"),
-                            main.getDouble("height"),
-                            BoundingBox.BoundingBoxType.ENTITY)
+                            main.getDouble("width"),
+                            BoundingBox.BoundingBoxType.ENTITY),
+                    custom
             );
         }
     }
