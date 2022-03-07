@@ -1,8 +1,5 @@
 package net.minestom.demo.commands;
 
-import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -11,17 +8,10 @@ import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.monitoring.TickMonitor;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.location.RelativeVec;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 public class SummonCommand extends Command {
 
@@ -47,16 +37,9 @@ public class SummonCommand extends Command {
     }
 
     private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
-        var instance = ((Player) commandSender).getInstance();
-        instance.setBlock(1, 42, -1, Block.STONE);
-        var entity = new Entity(EntityType.ZOMBIE);
-
-        entity.setInstance(instance, new Pos(-0.3, 42, -0.3)).join();
-        entity.setVelocity(new Vec(10, 0, -10));
-
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            System.out.println(entity.getPosition());
-        }).repeat(60, TimeUnit.SERVER_TICK).schedule();
+        final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
+        //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
+        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
     }
 
     @SuppressWarnings("unused")
