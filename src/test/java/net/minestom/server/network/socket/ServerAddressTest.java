@@ -1,6 +1,7 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.utils.NetworkUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class ServerAddressTest {
 
     @Test
     public void inetAddressTest() throws IOException {
-        InetSocketAddress address = new InetSocketAddress("localhost", 25565);
+        InetSocketAddress address = new InetSocketAddress("localhost", NetworkUtils.getFreePort());
         var server = new Server(new PacketProcessor());
         server.init(address);
         assertSame(address, server.socketAddress());
