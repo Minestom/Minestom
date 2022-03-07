@@ -34,8 +34,8 @@ public class EntityBlockPhysicsTest {
     public void entityPhysicsCheckCollision(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
 
@@ -47,8 +47,8 @@ public class EntityBlockPhysicsTest {
     public void entityPhysicsCheckSlab(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE_SLAB);
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 44, 0)).join();
         assertEquals(instance, entity.getInstance());
 
@@ -61,15 +61,15 @@ public class EntityBlockPhysicsTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 2, Block.STONE);
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
 
-        boolean isFirst = checkPoints(new Pos(10.7, 42, 0.7), res.newPosition(), precision);
-        boolean isSecond = checkPoints(new Pos(0.7, 42, 10.7), res.newPosition(), precision);
+        boolean isFirst = checkPoints(new Pos(10, 42, 0.7), res.newPosition(), precision);
+        boolean isSecond = checkPoints(new Pos(0.7, 42, 10), res.newPosition(), precision);
 
         // First and second are both valid, it depends on the implementation
         // If x collision is checked first then isFirst will be true
@@ -82,21 +82,40 @@ public class EntityBlockPhysicsTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 2, Block.STONE);
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0.69, 42, 0.69)).join();
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 11));
-        assertEqualsPoint(new Pos(0.7, 42, 11.701), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.7, 42, 11.69), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckCorner(Env env) {
+        var instance = env.createFlatInstance();
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+
+        instance.setBlock(5, 43, -5, Block.STONE);
+
+        entity.setInstance(instance, new Pos(-0.3, 42, -0.3)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, -10));
+
+        assertEqualsPoint(new Pos(4.7, 42, -10.3), res.newPosition(), precision);
     }
 
     @Test
     public void entityPhysicsCheckEdgeClip(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
 
@@ -110,20 +129,20 @@ public class EntityBlockPhysicsTest {
         instance.setBlock(1, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 2, Block.STONE);
         instance.setBlock(1, 43, 3, Block.STONE);
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(11,  0, 10));
-        assertEqualsPoint(new Pos(11.77, 42, 0.7), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(11, 42, 0.7), res.newPosition(), precision);
     }
 
     @Test
     public void entityPhysicsCheckNoCollision(Env env) {
         var instance = env.createFlatInstance();
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
 
@@ -134,11 +153,10 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckBlockMiss(Env env) {
         var instance = env.createFlatInstance();
-        var entity = new Entity(EntityTypes.ZOMBIE);
-
         instance.setBlock(0, 43, 2, Block.STONE);
         instance.setBlock(2, 43, 0, Block.STONE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
 
@@ -149,7 +167,6 @@ public class EntityBlockPhysicsTest {
     @Test
     public void entityPhysicsCheckBlockDirections(Env env) {
         var instance = env.createFlatInstance();
-        var entity = new Entity(EntityTypes.ZOMBIE);
 
         instance.setBlock(0, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 0, Block.STONE);
@@ -160,6 +177,7 @@ public class EntityBlockPhysicsTest {
         instance.setBlock(0, 41, 0, Block.STONE);
         instance.setBlock(0, 44, 0, Block.STONE);
 
+        var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0.5, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 

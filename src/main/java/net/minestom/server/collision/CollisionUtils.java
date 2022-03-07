@@ -25,13 +25,13 @@ public final class CollisionUtils {
      * @param entity the entity to move
      * @return the result of physics simulation
      */
-    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec originaDeltaPosition) {
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
         final BoundingBox.Faces faces = entity.getBoundingBox().faces();
-        Vec deltaPosition = originaDeltaPosition;
+        Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
-        final RayUtils.SweepResult finalResult = new RayUtils.SweepResult(1, 0, 0, 0, Pos.ZERO, Block.AIR);
-        final RayUtils.SweepResult tempResult = new RayUtils.SweepResult(1, 0, 0, 0, Pos.ZERO, Block.AIR);
+        final RayUtils.SweepResult finalResult = new RayUtils.SweepResult(1, 0, 0, 0);
+        final RayUtils.SweepResult tempResult = new RayUtils.SweepResult(1, 0, 0, 0);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
@@ -42,13 +42,13 @@ public final class CollisionUtils {
         // If the entity isn't moving and the block below hasn't changed, return
         if (entity.lastPhysicsResult != null && entity.getInstance() != null) {
             if (entity.lastPhysicsResult.collisionY
-                    && Math.signum(deltaPosition.y()) == Math.signum(entity.lastPhysicsResult.originalDelta.y())
+                    && Math.signum(remainingMove.y()) == Math.signum(entity.lastPhysicsResult.originalDelta.y())
                     && entity.lastPhysicsResult.collidedBlockY != null
                     && entity.getInstance().getBlock(entity.lastPhysicsResult.collidedBlockY, Block.Getter.Condition.TYPE) == entity.lastPhysicsResult.blockTypeY
-                    && deltaPosition.x() == 0 && deltaPosition.z() == 0
+                    && remainingMove.x() == 0 && remainingMove.z() == 0
                     && entity.getPosition().samePoint(entity.lastPhysicsResult.newPosition)
                     && entity.lastPhysicsResult.blockTypeY != Block.AIR) {
-                deltaPosition = deltaPosition.withY(0);
+                remainingMove = remainingMove.withY(0);
                 foundCollisionY = true;
                 collisionYBlock = entity.lastPhysicsResult.collidedBlockY;
                 blockYType = entity.lastPhysicsResult.blockTypeY;
@@ -57,22 +57,23 @@ public final class CollisionUtils {
 
         // If we're moving less than the MIN_DELTA value, set the velocity in that axis to 0.
         // This prevents tiny moves from wasting cpu time
-        double deltaX = Math.abs(deltaPosition.x()) < MIN_DELTA ? 0 : deltaPosition.x();
-        double deltaY = Math.abs(deltaPosition.y()) < MIN_DELTA ? 0 : deltaPosition.y();
-        double deltaZ = Math.abs(deltaPosition.z()) < MIN_DELTA ? 0 : deltaPosition.z();
+        double deltaX = Math.abs(remainingMove.x()) < MIN_DELTA ? 0 : remainingMove.x();
+        double deltaY = Math.abs(remainingMove.y()) < MIN_DELTA ? 0 : remainingMove.y();
+        double deltaZ = Math.abs(remainingMove.z()) < MIN_DELTA ? 0 : remainingMove.z();
 
-        deltaPosition = new Vec(deltaX, deltaY, deltaZ);
-        if (deltaPosition.isZero())
+        remainingMove = new Vec(deltaX, deltaY, deltaZ);
+
+        if (remainingMove.isZero())
             if (entity.lastPhysicsResult != null)
-                return new PhysicsResult(entity.getPosition(), Vec.ZERO, entity.lastPhysicsResult.isOnGround, entity.lastPhysicsResult.collisionX, entity.lastPhysicsResult.collisionY, entity.lastPhysicsResult.collisionZ, originaDeltaPosition, entity.lastPhysicsResult.collidedBlockY, entity.lastPhysicsResult.blockTypeY);
+                return new PhysicsResult(entity.getPosition(), Vec.ZERO, entity.lastPhysicsResult.isOnGround, entity.lastPhysicsResult.collisionX, entity.lastPhysicsResult.collisionY, entity.lastPhysicsResult.collisionZ, entityVelocity, entity.lastPhysicsResult.collidedBlockY, entity.lastPhysicsResult.blockTypeY);
             else
-                return new PhysicsResult(entity.getPosition(), Vec.ZERO, false, false, false, false, originaDeltaPosition, null, Block.AIR);
+                return new PhysicsResult(entity.getPosition(), Vec.ZERO, false, false, false, false, entityVelocity, null, Block.AIR);
 
         // Query faces to get the points needed for collision
-        Vec queryVec = new Vec(Math.signum(deltaPosition.x()), Math.signum(deltaPosition.y()), Math.signum(deltaPosition.z()));
+        Vec queryVec = new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z()));
         List<Vec> allFaces = faces.query().get(queryVec);
 
-        PhysicsResult res = handlePhysics(entity, deltaPosition, entity.getPosition(), allFaces, finalResult, tempResult);
+        PhysicsResult res = handlePhysics(entity, remainingMove, entity.getPosition(), allFaces, finalResult, tempResult);
 
         // Loop until no collisions are found.
         // When collisions are found, the collision axis is set to 0
@@ -91,7 +92,7 @@ public final class CollisionUtils {
                 foundCollisionY = true;
 
                 // If we are only moving in the y-axis
-                if (!res.collisionX && !res.collisionZ && originaDeltaPosition.x() == 0 && originaDeltaPosition.z() == 0) {
+                if (!res.collisionX && !res.collisionZ && entityVelocity.x() == 0 && entityVelocity.z() == 0) {
                     collisionYBlock = res.collidedBlockY;
                     blockYType = res.blockTypeY;
                 }
@@ -103,13 +104,13 @@ public final class CollisionUtils {
             // If the entity isn't moving, break
             if (res.newVelocity.isZero()) break;
 
-            queryVec = new Vec(Math.signum(deltaPosition.x()), Math.signum(deltaPosition.y()), Math.signum(deltaPosition.z()));
+            queryVec = new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z()));
             allFaces = faces.query().get(queryVec);
 
             res = handlePhysics(entity, res.newVelocity, res.newPosition, allFaces, finalResult, tempResult);
         }
 
-        return new PhysicsResult(res.newPosition, res.newVelocity, res.isOnGround, foundCollisionX, foundCollisionY, foundCollisionZ, originaDeltaPosition, collisionYBlock, blockYType);
+        return new PhysicsResult(res.newPosition, res.newVelocity, res.isOnGround, foundCollisionX, foundCollisionY, foundCollisionZ, entityVelocity, collisionYBlock, blockYType);
     }
 
     /**
@@ -190,6 +191,11 @@ public final class CollisionUtils {
             finalX = entityPosition.x() + finalResult.res * deltaX;
             finalY = entityPosition.y() + finalResult.res * deltaY;
             finalZ = entityPosition.z() + finalResult.res * deltaZ;
+
+            // Remaining delta
+            deltaX -= finalResult.res * deltaX;
+            deltaY -= finalResult.res * deltaY;
+            deltaZ -= finalResult.res * deltaZ;
 
             if (finalResult.normalx != 0) {
                 collisionX = true;

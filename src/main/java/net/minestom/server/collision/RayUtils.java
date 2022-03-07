@@ -329,7 +329,7 @@ public class RayUtils {
         public Pos collisionBlock;
         public Block blockType;
 
-        public SweepResult (double res, double normalx, double normaly, double normalz, Pos collisionBlock, Block blockType) {
+        public SweepResult(double res, double normalx, double normaly, double normalz) {
             this.res = res;
             this.normalx = normalx;
             this.normaly = normaly;
