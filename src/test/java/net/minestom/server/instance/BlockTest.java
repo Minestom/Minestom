@@ -33,7 +33,7 @@ public class BlockTest {
     }
 
     @Test
-    public void testProperty() {
+    public void validProperties() {
         Block block = Block.CHEST;
         assertEquals(block.properties(), Objects.requireNonNull(Block.fromBlockId(block.id())).properties());
 
@@ -48,8 +48,13 @@ public class BlockTest {
 
         assertEquals(block.withProperty("facing", "north").getProperty("facing"), "north");
         assertNotEquals(block.withProperty("facing", "north"), block.withProperty("facing", "south"));
+    }
 
+    @Test
+    public void invalidProperties() {
+        Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
+        assertThrows(Exception.class, () -> block.withProperties(Map.of("random", "randomKey")));
     }
 
     @Test

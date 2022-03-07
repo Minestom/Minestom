@@ -202,9 +202,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     private Block compute(byte[] properties) {
         if (Arrays.equals(propertiesArray, properties)) return this;
-        BlockImpl block = possibleProperties().get(new PropertiesHolder(properties));
-        if (block == null)
-            throw new IllegalArgumentException("Invalid properties: " + Arrays.toString(properties) + " for block " + this);
+        final BlockImpl block = possibleProperties().get(new PropertiesHolder(properties));
+        assert block != null;
         return nbt == null && handler == null ? block : new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
     }
 
