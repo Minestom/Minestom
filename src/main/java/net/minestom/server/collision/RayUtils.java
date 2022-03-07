@@ -54,7 +54,7 @@ public class RayUtils {
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, rayDirection, boundingBox, entityCentre, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
 
@@ -77,7 +77,7 @@ public class RayUtils {
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, rayDirection, boundingBox, entityCentre, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
 
@@ -100,7 +100,7 @@ public class RayUtils {
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, rayDirection, boundingBox, entityCentre, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
     }
@@ -108,17 +108,14 @@ public class RayUtils {
     /**
      * Check if a bounding box intersects a ray
      * @param rayDirection Ray to check
-     * @param bbMoving Bounding box
+     * @param bbStatic Bounding box
      * @param rayStart Ray start position
-     * @param bbOffW Bounding box added width
-     * @param bbOffH Bounding box added height
-     * @param bbOffD Bounding box added depth
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean RayBoundingBoxIntersectCheck(Vec rayDirection, BoundingBox bbMoving, Point rayStart, Point bbStaticOffset, double bbOffW, double bbOffH, double bbOffD) {
+    public static boolean RayBoundingBoxIntersectCheck(Point rayDirection, BoundingBox bbStatic, Point rayStart, Point bbStaticOffset, BoundingBox bbMoving) {
         // Translate bounding box
-        Vec bbOffMin = new Vec(bbMoving.minX() - rayStart.x() + bbStaticOffset.x() - bbOffW / 2, bbMoving.minY() - rayStart.y() + bbStaticOffset.y() - bbOffH / 2, bbMoving.minZ() - rayStart.z() + bbStaticOffset.z() - bbOffD / 2);
-        Vec bbOffMax = new Vec(bbMoving.maxX() - rayStart.x() + bbStaticOffset.x() + bbOffW / 2, bbMoving.maxY() - rayStart.y() + bbStaticOffset.y() + bbOffH / 2, bbMoving.maxZ() - rayStart.z() + bbStaticOffset.z() + bbOffD / 2);
+        Vec bbOffMin = new Vec(bbStatic.minX() - rayStart.x() + bbStaticOffset.x() - bbMoving.width() / 2, bbStatic.minY() - rayStart.y() + bbStaticOffset.y() - bbMoving.height() / 2, bbStatic.minZ() - rayStart.z() + bbStaticOffset.z() - bbMoving.depth() / 2);
+        Vec bbOffMax = new Vec(bbStatic.maxX() - rayStart.x() + bbStaticOffset.x() + bbMoving.width() / 2, bbStatic.maxY() - rayStart.y() + bbStaticOffset.y() + bbMoving.height() / 2, bbStatic.maxZ() - rayStart.z() + bbStaticOffset.z() + bbMoving.depth() / 2);
 
         // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
         // If the point is within the rectangle, we know the vector intersects the face.
@@ -132,10 +129,10 @@ public class RayUtils {
                 double zix = rayDirection.z() * xFac + rayStart.z();
 
                 // Check if ray passes through y/z plane
-                if (yix >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
-                        && yix <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2
-                        && zix >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
-                        && zix <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
+                if (yix >= bbStatic.minY() + bbStaticOffset.y() - bbMoving.height() / 2
+                        && yix <= bbStatic.maxY() + bbStaticOffset.y() + bbMoving.height() / 2
+                        && zix >= bbStatic.minZ() + bbStaticOffset.z() - bbMoving.depth() / 2
+                        && zix <= bbStatic.maxZ() + bbStaticOffset.z() + bbMoving.depth() / 2) {
                     return true;
                 }
             }
@@ -145,10 +142,10 @@ public class RayUtils {
                 double yix = rayDirection.y() * xFac + rayStart.y();
                 double zix = rayDirection.z() * xFac + rayStart.z();
 
-                if (yix >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
-                        && yix <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2
-                        && zix >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
-                        && zix <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
+                if (yix >= bbStatic.minY() + bbStaticOffset.y() - bbMoving.height() / 2
+                        && yix <= bbStatic.maxY() + bbStaticOffset.y() + bbMoving.height() / 2
+                        && zix >= bbStatic.minZ() + bbStaticOffset.z() - bbMoving.depth() / 2
+                        && zix <= bbStatic.maxZ() + bbStaticOffset.z() + bbMoving.depth() / 2) {
                     return true;
                 }
             }
@@ -161,10 +158,10 @@ public class RayUtils {
                 double xiz = rayDirection.x() * zFac + rayStart.x();
                 double yiz = rayDirection.y() * zFac + rayStart.y();
 
-                if (xiz >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
-                        && xiz <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
-                        && yiz >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
-                        && yiz <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2) {
+                if (xiz >= bbStatic.minX() + bbStaticOffset.x() - bbMoving.width() / 2
+                        && xiz <= bbStatic.maxX() + bbStaticOffset.x() + bbMoving.width() / 2
+                        && yiz >= bbStatic.minY() + bbStaticOffset.y() - bbMoving.height() / 2
+                        && yiz <= bbStatic.maxY() + bbStaticOffset.y() + bbMoving.height() / 2) {
                     return true;
                 }
             }
@@ -173,10 +170,10 @@ public class RayUtils {
                 double xiz = rayDirection.x() * zFac + rayStart.x();
                 double yiz = rayDirection.y() * zFac + rayStart.y();
 
-                if (xiz >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
-                        && xiz <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
-                        && yiz >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
-                        && yiz <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2) {
+                if (xiz >= bbStatic.minX() + bbStaticOffset.x() - bbMoving.width() / 2
+                        && xiz <= bbStatic.maxX() + bbStaticOffset.x() + bbMoving.width() / 2
+                        && yiz >= bbStatic.minY() + bbStaticOffset.y() - bbMoving.height() / 2
+                        && yiz <= bbStatic.maxY() + bbStaticOffset.y() + bbMoving.height() / 2) {
                     return true;
                 }
             }
@@ -189,10 +186,10 @@ public class RayUtils {
                 double xiy = rayDirection.x() * yFac + rayStart.x();
                 double ziy = rayDirection.z() * yFac + rayStart.z();
 
-                if (xiy >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
-                        && xiy <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
-                        && ziy >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
-                        && ziy <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
+                if (xiy >= bbStatic.minX() + bbStaticOffset.x() - bbMoving.width() / 2
+                        && xiy <= bbStatic.maxX() + bbStaticOffset.x() + bbMoving.width() / 2
+                        && ziy >= bbStatic.minZ() + bbStaticOffset.z() - bbMoving.depth() / 2
+                        && ziy <= bbStatic.maxZ() + bbStaticOffset.z() + bbMoving.depth() / 2) {
                     return true;
                 }
             }
@@ -201,10 +198,10 @@ public class RayUtils {
                 double xiy = rayDirection.x() * yFac + rayStart.x();
                 double ziy = rayDirection.z() * yFac + rayStart.z();
 
-                if (xiy >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
-                        && xiy <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
-                        && ziy >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
-                        && ziy <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
+                if (xiy >= bbStatic.minX() + bbStaticOffset.x() - bbMoving.width() / 2
+                        && xiy <= bbStatic.maxX() + bbStaticOffset.x() + bbMoving.width() / 2
+                        && ziy >= bbStatic.minZ() + bbStaticOffset.z() - bbMoving.depth() / 2
+                        && ziy <= bbStatic.maxZ() + bbStaticOffset.z() + bbMoving.depth() / 2) {
                     return true;
                 }
             }

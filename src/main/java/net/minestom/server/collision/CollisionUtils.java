@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class CollisionUtils {
@@ -141,35 +140,35 @@ public final class CollisionUtils {
                 Vec pointAfter = point.add(entityPosition).add(deltaPosition);
 
                 if (pointBefore.blockX() != pointAfter.blockX()) {
-                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
 
                     if (pointBefore.blockY() != pointAfter.blockY()) {
-                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                     }
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                     }
                 }
 
                 if (pointBefore.blockY() != pointAfter.blockY()) {
-                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
 
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                     }
                 }
 
                 if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                 }
 
-                CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
 
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
                         && pointBefore.blockZ() != pointAfter.blockZ()
                 )
-                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
             }
         } else {
             Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
@@ -224,43 +223,29 @@ public final class CollisionUtils {
      * @param blockX block x position
      * @param blockY block y position
      * @param blockZ block z position
+     * @param entityVelocity entity movement vector
+     * @param entityPosition entity position
+     * @param entityBoundingBox entity bounding box
      * @param instance entity instance
      * @param originChunk entity chunk
-     * @param deltaPosition entity movement vector
-     * @param boundingBox entity bounding box
-     * @param entityPosition entity position
-     * @param finalResult place to store final result of collision
      * @param tempResult place to store temporary result of collision
+     * @param finalResult place to store final result of collision
      * @return true if entity finds collision, other false
      */
-    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Instance instance, Chunk originChunk, Vec deltaPosition, BoundingBox boundingBox, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBox entityBoundingBox, Instance instance, Chunk originChunk, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         Block checkBlock = !ChunkUtils.isLoaded(c) ? Block.STONE : c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
 
         boolean hitBlock = false;
 
-        Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
+        Pos entityCentre = entityPosition.add(0, entityBoundingBox.height() / 2, 0);
+        Pos blockPos = new Pos(blockX, blockY, blockZ);
 
         if (checkBlock.isSolid()) {
-            for (int i = 0; i < checkBlock.registry().boundingBoxes().length; ++i) {
-                BoundingBox bb = checkBlock.registry().boundingBoxes()[i];
-
-                // Fast check to see if a collision happens
-                // Uses minkowski sum
-                boolean hasCollision = RayUtils.RayBoundingBoxIntersectCheck(
-                        deltaPosition,
-                        bb,
-                        entityCentre,
-                        new Pos(blockX, blockY, blockZ),
-                        boundingBox.width(),
-                        boundingBox.height(),
-                        boundingBox.depth());
-
-                if (!hasCollision) continue;
-
+            for (BoundingBox bb : entityBoundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos)) {
                 // Longer check to get result of collision
-                RayUtils.SweptAABB(boundingBox, bb, entityPosition, blockX, blockY, blockZ, deltaPosition.x(), deltaPosition.y(), deltaPosition.z(), tempResult);
+                RayUtils.SweptAABB(entityBoundingBox, bb, entityPosition, blockX, blockY, blockZ, entityVelocity.x(), entityVelocity.y(), entityVelocity.z(), tempResult);
 
                 // Update final result if the temp result collision is sooner than the current final result
                 if (tempResult.res < finalResult.res) {

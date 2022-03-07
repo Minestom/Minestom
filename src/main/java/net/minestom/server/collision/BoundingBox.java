@@ -28,7 +28,16 @@ public class BoundingBox {
     }
 
     public List<BoundingBox> intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos) {
-        return null;
+        return Arrays.stream(block.registry().boundingBoxes()).filter(bb -> {
+            // Fast check to see if a collision happens
+            // Uses minkowski sum
+            return RayUtils.RayBoundingBoxIntersectCheck(
+                    rayDirection,
+                    bb,
+                    rayStart,
+                    blockPos,
+                    this);
+        }).toList();
     }
 
     public enum BoundingBoxType {
