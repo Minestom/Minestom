@@ -10,205 +10,201 @@ import net.minestom.server.instance.block.Block;
 public class RayUtils {
     /**
      *
-     * @param vec Ray vector
-     * @param rayOffset Ray start point
+     * @param rayDirection Ray vector
+     * @param rayStart Ray start point
      * @param instance entity instance
      * @param originChunk entity chunk
-     * @param correctedEntityPos entity centre
      * @param boundingBox entity bounding box
-     * @param entityPosition position of entity
+     * @param entityCentre position of entity
      * @param tempResult place to store temporary result of collision
      * @param finalResult place to store final result of collision
      */
-    public static void Raycast(Vec vec, Point rayOffset, Instance instance, Chunk originChunk, Pos correctedEntityPos, BoundingBox boundingBox, Pos entityPosition, SweepResult tempResult, SweepResult finalResult) {
+    public static void Raycast(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
-        if (vec.x() != 0) {
+        if (rayDirection.x() != 0) {
             // Which direction we're stepping the block boundary in
-            double xStep = vec.x() < 0 ? -1 : 1;
+            double xStep = rayDirection.x() < 0 ? -1 : 1;
 
             // If we are going in the positive direction, the block that we stepped over is the one we want
-            int xFix = vec.x() > 0 ? 1 : 0;
+            int xFix = rayDirection.x() > 0 ? 1 : 0;
 
             // Total number of axis block boundaries that will be passed
-            int xStepCount = (int)Math.ceil((vec.x())/xStep) + xFix;
+            int xStepCount = (int)Math.ceil((rayDirection.x())/xStep) + xFix;
 
             int xStepsCompleted = xFix;
 
             while (xStepsCompleted <= xStepCount) {
                 // Get the axis value
-                int xi = (int) (xStepsCompleted*xStep + rayOffset.blockX());
-                double factor = (xi - rayOffset.x()) / vec.x();
+                int xi = (int) (xStepsCompleted*xStep + rayStart.blockX());
+                double factor = (xi - rayStart.x()) / rayDirection.x();
 
                 // Solve for y and z
-                int yi = (int) Math.floor(vec.y() * factor + rayOffset.y());
+                int yi = (int) Math.floor(rayDirection.y() * factor + rayStart.y());
 
                 // If the y distance is much greater than the collision point that is currently being used, break
-                if (Math.abs(vec.y()*finalResult.res) - Math.abs(entityPosition.y() - (yi)) < -2) break;
+                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(entityCentre.y() - (yi)) < -2) break;
 
-                int zi = (int) Math.floor(vec.z() * factor + rayOffset.z());
-                if (Math.abs(vec.z()*finalResult.res) - Math.abs(entityPosition.z() - (zi)) < -2) break;
+                int zi = (int) Math.floor(rayDirection.z() * factor + rayStart.z());
+                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(entityCentre.z() - (zi)) < -2) break;
 
                 xi -= xFix;
                 xStepsCompleted++;
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, vec, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, rayDirection, boundingBox, entityCentre, tempResult, finalResult)) break;
             }
         }
 
-        if (vec.z() != 0) {
-            double zStep = vec.z() < 0 ? -1 : 1;
-            int zFix = vec.z() > 0 ? 1 : 0;
+        if (rayDirection.z() != 0) {
+            double zStep = rayDirection.z() < 0 ? -1 : 1;
+            int zFix = rayDirection.z() > 0 ? 1 : 0;
             int zStepsCompleted = zFix;
-            int zStepCount = (int)Math.ceil((vec.z())/zStep) + zFix;
+            int zStepCount = (int)Math.ceil((rayDirection.z())/zStep) + zFix;
 
             while (zStepsCompleted <= zStepCount) {
-                int zi = (int) (zStepsCompleted*zStep + rayOffset.blockZ());
-                double factor = (zi - rayOffset.z()) / vec.z();
+                int zi = (int) (zStepsCompleted*zStep + rayStart.blockZ());
+                double factor = (zi - rayStart.z()) / rayDirection.z();
 
-                int xi = (int) Math.floor(vec.x() * factor + rayOffset.x());
-                if (Math.abs(vec.x()*finalResult.res) - Math.abs(entityPosition.x() - (xi)) < -2) break;
+                int xi = (int) Math.floor(rayDirection.x() * factor + rayStart.x());
+                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(entityCentre.x() - (xi)) < -2) break;
 
-                int yi = (int) Math.floor(vec.y() * factor + rayOffset.y());
-                if (Math.abs(vec.y()*finalResult.res) - Math.abs(entityPosition.y() - (yi)) < -2) break;
+                int yi = (int) Math.floor(rayDirection.y() * factor + rayStart.y());
+                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(entityCentre.y() - (yi)) < -2) break;
 
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, vec, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, rayDirection, boundingBox, entityCentre, tempResult, finalResult)) break;
             }
         }
 
-        if (vec.y() != 0) {
-            int yFix = vec.y() > 0 ? 1 : 0;
-            double yStep = vec.y() < 0 ? -1 : 1;
+        if (rayDirection.y() != 0) {
+            int yFix = rayDirection.y() > 0 ? 1 : 0;
+            double yStep = rayDirection.y() < 0 ? -1 : 1;
             int yStepsCompleted = yFix;
-            int yStepCount = (int)Math.ceil((vec.y())/yStep) + yFix;
+            int yStepCount = (int)Math.ceil((rayDirection.y())/yStep) + yFix;
 
             while (yStepsCompleted <= yStepCount) {
-                int yi = (int) (yStepsCompleted*yStep + rayOffset.blockY());
-                double factor = (yi - rayOffset.y()) / vec.y();
+                int yi = (int) (yStepsCompleted*yStep + rayStart.blockY());
+                double factor = (yi - rayStart.y()) / rayDirection.y();
 
-                int xi = (int) Math.floor(vec.x() * factor + rayOffset.x());
-                if (Math.abs(vec.x()*finalResult.res) - Math.abs(entityPosition.x() - (xi)) < -2) break;
+                int xi = (int) Math.floor(rayDirection.x() * factor + rayStart.x());
+                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(entityCentre.x() - (xi)) < -2) break;
 
-                int zi = (int) Math.floor(vec.z() * factor + rayOffset.z());
-                if (Math.abs(vec.z()*finalResult.res) - Math.abs(entityPosition.z() - (zi)) < -2) break;
+                int zi = (int) Math.floor(rayDirection.z() * factor + rayStart.z());
+                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(entityCentre.z() - (zi)) < -2) break;
 
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, vec, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, instance, originChunk, rayDirection, boundingBox, entityCentre, tempResult, finalResult)) break;
             }
         }
     }
 
     /**
      * Check if a bounding box intersects a ray
-     * @param ray Ray to check
-     * @param bb Bounding box
+     * @param rayDirection Ray to check
+     * @param bbMoving Bounding box
      * @param rayStart Ray start position
-     * @param bbOffsetX Bounding box x
-     * @param bbOffsetY Bounding box y
-     * @param bbOffsetZ Bounding box z
      * @param bbOffW Bounding box added width
      * @param bbOffH Bounding box added height
      * @param bbOffD Bounding box added depth
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean RayBoundingBoxIntersectCheck(Vec ray, BoundingBox bb, Point rayStart, int bbOffsetX, int bbOffsetY, int bbOffsetZ, double bbOffW, double bbOffH, double bbOffD) {
+    public static boolean RayBoundingBoxIntersectCheck(Vec rayDirection, BoundingBox bbMoving, Point rayStart, Point bbStaticOffset, double bbOffW, double bbOffH, double bbOffD) {
         // Translate bounding box
-        Vec bbOffMin = new Vec(bb.minX() - rayStart.x() + bbOffsetX - bbOffW / 2, bb.minY() - rayStart.y() + bbOffsetY - bbOffH / 2, bb.minZ() - rayStart.z() + bbOffsetZ - bbOffD / 2);
-        Vec bbOffMax = new Vec(bb.maxX() - rayStart.x() + bbOffsetX + bbOffW / 2, bb.maxY() - rayStart.y() + bbOffsetY + bbOffH / 2, bb.maxZ() - rayStart.z() + bbOffsetZ + bbOffD / 2);
+        Vec bbOffMin = new Vec(bbMoving.minX() - rayStart.x() + bbStaticOffset.x() - bbOffW / 2, bbMoving.minY() - rayStart.y() + bbStaticOffset.y() - bbOffH / 2, bbMoving.minZ() - rayStart.z() + bbStaticOffset.z() - bbOffD / 2);
+        Vec bbOffMax = new Vec(bbMoving.maxX() - rayStart.x() + bbStaticOffset.x() + bbOffW / 2, bbMoving.maxY() - rayStart.y() + bbStaticOffset.y() + bbOffH / 2, bbMoving.maxZ() - rayStart.z() + bbStaticOffset.z() + bbOffD / 2);
 
         // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
         // If the point is within the rectangle, we know the vector intersects the face.
 
         // Intersect X
-        if (ray.x() != 0) {
+        if (rayDirection.x() != 0) {
             // Left side of bounding box
             {
-                double xFac = bbOffMin.x() / ray.x();
-                double yix = ray.y() * xFac + rayStart.y();
-                double zix = ray.z() * xFac + rayStart.z();
+                double xFac = bbOffMin.x() / rayDirection.x();
+                double yix = rayDirection.y() * xFac + rayStart.y();
+                double zix = rayDirection.z() * xFac + rayStart.z();
 
                 // Check if ray passes through y/z plane
-                if (yix >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
-                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (yix >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
+                        && yix <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2
+                        && zix >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
+                        && zix <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
                     return true;
                 }
             }
             // Right side of bounding box
             {
-                double xFac = bbOffMax.x() / ray.x();
-                double yix = ray.y() * xFac + rayStart.y();
-                double zix = ray.z() * xFac + rayStart.z();
+                double xFac = bbOffMax.x() / rayDirection.x();
+                double yix = rayDirection.y() * xFac + rayStart.y();
+                double zix = rayDirection.z() * xFac + rayStart.z();
 
-                if (yix >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yix <= bb.maxY() + bbOffsetY + bbOffH / 2
-                        && zix >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && zix <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (yix >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
+                        && yix <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2
+                        && zix >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
+                        && zix <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
                     return true;
                 }
             }
         }
 
         // Intersect Z
-        if (ray.z() != 0) {
+        if (rayDirection.z() != 0) {
             {
-                double zFac = bbOffMin.z() / ray.z();
-                double xiz = ray.x() * zFac + rayStart.x();
-                double yiz = ray.y() * zFac + rayStart.y();
+                double zFac = bbOffMin.z() / rayDirection.z();
+                double xiz = rayDirection.x() * zFac + rayStart.x();
+                double yiz = rayDirection.y() * zFac + rayStart.y();
 
-                if (xiz >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
+                if (xiz >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
+                        && xiz <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
+                        && yiz >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
+                        && yiz <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2) {
                     return true;
                 }
             }
             {
-                double zFac = bbOffMax.z() / ray.z();
-                double xiz = ray.x() * zFac + rayStart.x();
-                double yiz = ray.y() * zFac + rayStart.y();
+                double zFac = bbOffMax.z() / rayDirection.z();
+                double xiz = rayDirection.x() * zFac + rayStart.x();
+                double yiz = rayDirection.y() * zFac + rayStart.y();
 
-                if (xiz >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiz <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && yiz >= bb.minY() + bbOffsetY - bbOffH / 2
-                        && yiz <= bb.maxY() + bbOffsetY + bbOffH / 2) {
+                if (xiz >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
+                        && xiz <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
+                        && yiz >= bbMoving.minY() + bbStaticOffset.y() - bbOffH / 2
+                        && yiz <= bbMoving.maxY() + bbStaticOffset.y() + bbOffH / 2) {
                     return true;
                 }
             }
         }
 
         // Intersect Y
-        if (ray.y() != 0) {
+        if (rayDirection.y() != 0) {
             {
-                double yFac = bbOffMin.y() / ray.y();
-                double xiy = ray.x() * yFac + rayStart.x();
-                double ziy = ray.z() * yFac + rayStart.z();
+                double yFac = bbOffMin.y() / rayDirection.y();
+                double xiy = rayDirection.x() * yFac + rayStart.x();
+                double ziy = rayDirection.z() * yFac + rayStart.z();
 
-                if (xiy >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (xiy >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
+                        && xiy <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
+                        && ziy >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
+                        && ziy <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
                     return true;
                 }
             }
             {
-                double yFac = bbOffMax.y() / ray.y();
-                double xiy = ray.x() * yFac + rayStart.x();
-                double ziy = ray.z() * yFac + rayStart.z();
+                double yFac = bbOffMax.y() / rayDirection.y();
+                double xiy = rayDirection.x() * yFac + rayStart.x();
+                double ziy = rayDirection.z() * yFac + rayStart.z();
 
-                if (xiy >= bb.minX() + bbOffsetX - bbOffW / 2
-                        && xiy <= bb.maxX() + bbOffsetX + bbOffW / 2
-                        && ziy >= bb.minZ() + bbOffsetZ - bbOffD / 2
-                        && ziy <= bb.maxZ() + bbOffsetZ + bbOffD / 2) {
+                if (xiy >= bbMoving.minX() + bbStaticOffset.x() - bbOffW / 2
+                        && xiy <= bbMoving.maxX() + bbStaticOffset.x() + bbOffW / 2
+                        && ziy >= bbMoving.minZ() + bbStaticOffset.z() - bbOffD / 2
+                        && ziy <= bbMoving.maxZ() + bbStaticOffset.z() + bbOffD / 2) {
                     return true;
                 }
             }

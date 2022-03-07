@@ -27,6 +27,10 @@ public class BoundingBox {
         return Arrays.stream(block.registry().boundingBoxes()).anyMatch(bb -> intersectBoundingBox(src, bb, dest));
     }
 
+    public List<BoundingBox> intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos) {
+        return null;
+    }
+
     public enum BoundingBoxType {
         ENTITY, BLOCK
     }

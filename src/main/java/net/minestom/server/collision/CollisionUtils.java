@@ -132,8 +132,6 @@ public final class CollisionUtils {
         double deltaY = deltaPosition.y();
         double deltaZ = deltaPosition.z();
 
-        Pos correctedEntityPos = entityPosition.add(0, boundingBox.height() / 2, 0);
-
         // If the movement is small we don't need to run the expensive ray casting.
         if (deltaPosition.length() < 1) {
             // Go through all points to check. See if the point after the move will be in a new block
@@ -143,40 +141,42 @@ public final class CollisionUtils {
                 Vec pointAfter = point.add(entityPosition).add(deltaPosition);
 
                 if (pointBefore.blockX() != pointAfter.blockX()) {
-                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
 
                     if (pointBefore.blockY() != pointAfter.blockY()) {
-                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
                     }
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
                     }
                 }
 
                 if (pointBefore.blockY() != pointAfter.blockY()) {
-                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
 
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
                     }
                 }
 
                 if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
                 }
 
-                CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
 
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
                         && pointBefore.blockZ() != pointAfter.blockZ()
                 )
-                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), instance, originChunk, deltaPosition, boundingBox, entityPosition, tempResult, finalResult);
             }
         } else {
+            Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
+
             // When large moves are done we need to raycast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
-                RayUtils.Raycast(deltaPosition, point.add(entityPosition), instance, originChunk, correctedEntityPos, boundingBox, entityPosition, tempResult, finalResult);
+                RayUtils.Raycast(deltaPosition, point.add(entityCentre), instance, originChunk, boundingBox, entityPosition, tempResult, finalResult);
             }
         }
 
@@ -227,19 +227,20 @@ public final class CollisionUtils {
      * @param instance entity instance
      * @param originChunk entity chunk
      * @param deltaPosition entity movement vector
-     * @param correctedEntityPos entity position from centre. By default entity position is from the bottom
      * @param boundingBox entity bounding box
      * @param entityPosition entity position
      * @param finalResult place to store final result of collision
      * @param tempResult place to store temporary result of collision
      * @return true if entity finds collision, other false
      */
-    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Instance instance, Chunk originChunk, Vec deltaPosition, Pos correctedEntityPos, BoundingBox boundingBox, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Instance instance, Chunk originChunk, Vec deltaPosition, BoundingBox boundingBox, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         Block checkBlock = !ChunkUtils.isLoaded(c) ? Block.STONE : c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
 
         boolean hitBlock = false;
+
+        Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
 
         if (checkBlock.isSolid()) {
             for (int i = 0; i < checkBlock.registry().boundingBoxes().length; ++i) {
@@ -250,8 +251,8 @@ public final class CollisionUtils {
                 boolean hasCollision = RayUtils.RayBoundingBoxIntersectCheck(
                         deltaPosition,
                         bb,
-                        correctedEntityPos,
-                        blockX, blockY, blockZ,
+                        entityCentre,
+                        new Pos(blockX, blockY, blockZ),
                         boundingBox.width(),
                         boundingBox.height(),
                         boundingBox.depth());
