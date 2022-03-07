@@ -1,8 +1,10 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +22,10 @@ public class BoundingBox {
     private final BoundingBoxType type;
 
     private final double minX, maxX, minY, maxY, minZ, maxZ;
+
+    public boolean intersectBlock(Point src, Block block, Point dest) {
+        return Arrays.stream(block.registry().boundingBoxes()).anyMatch(bb -> intersectBoundingBox(src, bb, dest));
+    }
 
     public enum BoundingBoxType {
         ENTITY, BLOCK
@@ -82,40 +88,6 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if the bounding box intersects at a block position.
-     *
-     * @param blockX the block X
-     * @param blockY the block Y
-     * @param blockZ the block Z
-     * @return true if the bounding box intersects with the position, false otherwise
-     */
-    public boolean intersectBlock(@NotNull Point src, int blockX, int blockY, int blockZ) {
-        final double offsetX = 1;
-        final double maxX = (double) blockX + offsetX;
-        final boolean checkX = minX() + src.x() < maxX && maxX() + src.x() > (double) blockX;
-        if (!checkX) return false;
-
-        final double maxY = (double) blockY + 0.99999;
-        final boolean checkY = minY() + src.y() < maxY && maxY() + src.y() > (double) blockY;
-        if (!checkY) return false;
-
-        final double offsetZ = 1;
-        final double maxZ = (double) blockZ + offsetZ;
-        // Z check
-        return minZ() + src.z() < maxZ && maxZ() + src.z() > (double) blockZ;
-    }
-
-    /**
-     * Used to know if the bounding box intersects at a point.
-     *
-     * @param blockPosition the position to check
-     * @return true if the bounding box intersects with the position, false otherwise
-     */
-    public boolean intersectBlock(@NotNull Point src, @NotNull Point blockPosition) {
-        return intersectBlock(src, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
-    }
-
-    /**
      * Used to know if the bounding box intersects (contains) a point.
      *
      * @param x x-coord of a point
@@ -137,82 +109,6 @@ public class BoundingBox {
      */
     public boolean intersectPoint(@NotNull Point src, @NotNull Point dest) {
         return intersectPoint(src, dest.x(), dest.y(), dest.z());
-    }
-
-    /**
-     * Used to know if the bounding box intersects a line segment.
-     *
-     * @param x1 x-coord of first line segment point
-     * @param y1 y-coord of first line segment point
-     * @param z1 z-coord of first line segment point
-     * @param x2 x-coord of second line segment point
-     * @param y2 y-coord of second line segment point
-     * @param z2 z-coord of second line segment point
-     * @return true if the bounding box intersects with the line segment, false otherwise.
-     */
-    public boolean intersectLine(double x1, double y1, double z1, double x2, double y2, double z2) {
-        // originally from http://www.3dkingdoms.com/weekly/weekly.php?a=3
-        double x3 = minX();
-        double x4 = maxX();
-        double y3 = minY();
-        double y4 = maxY();
-        double z3 = minZ();
-        double z4 = maxZ();
-        if (x1 > x3 && x1 < x4 && y1 > y3 && y1 < y4 && z1 > z3 && z1 < z4) {
-            return true;
-        }
-        if (x1 < x3 && x2 < x3 || x1 > x4 && x2 > x4 ||
-                y1 < y3 && y2 < y3 || y1 > y4 && y2 > y4 ||
-                z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
-            return false;
-        }
-        return isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x4, x2 - x4, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y3, y2 - y3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y4, y2 - y4, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z3, z2 - z3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z4, z2 - z4, x1, y1, z1, x2, y2, z2));
-    }
-
-    /**
-     * Used to know if the bounding box intersects a line segment.
-     *
-     * @param lineStart first line segment point
-     * @param lineEnd   second line segment point
-     * @return true if the bounding box intersects with the line segment, false otherwise.
-     */
-    public boolean intersectLine(@NotNull Point lineStart, @NotNull Point lineEnd) {
-        return intersectLine(
-                Math.min(lineStart.x(), lineEnd.x()),
-                Math.min(lineStart.y(), lineEnd.y()),
-                Math.min(lineStart.z(), lineEnd.z()),
-                Math.max(lineStart.x(), lineEnd.x()),
-                Math.max(lineStart.y(), lineEnd.y()),
-                Math.max(lineStart.z(), lineEnd.z())
-        );
-    }
-
-    private @Nullable Vec getSegmentIntersection(double dst1, double dst2, double x1, double y1, double z1, double x2, double y2, double z2) {
-        if (dst1 == dst2 || dst1 * dst2 >= 0D) return null;
-        final double delta = dst1 / (dst1 - dst2);
-        return new Vec(
-                x1 + (x2 - x1) * delta,
-                y1 + (y2 - y1) * delta,
-                z1 + (z2 - z1) * delta
-        );
-    }
-
-    private boolean isInsideBoxWithAxis(Axis axis, @Nullable Vec intersection) {
-        if (intersection == null) return false;
-        double x1 = minX();
-        double x2 = maxX();
-        double y1 = minY();
-        double y2 = maxY();
-        double z1 = minZ();
-        double z2 = maxZ();
-        return axis == Axis.X && intersection.z() > z1 && intersection.z() < z2 && intersection.y() > y1 && intersection.y() < y2 ||
-                axis == Axis.Y && intersection.z() > z1 && intersection.z() < z2 && intersection.x() > x1 && intersection.x() < x2 ||
-                axis == Axis.Z && intersection.x() > x1 && intersection.x() < x2 && intersection.y() > y1 && intersection.y() < y2;
     }
 
     /**
@@ -277,10 +173,6 @@ public class BoundingBox {
 
     public double maxZ() {
         return maxZ;
-    }
-
-    private enum Axis {
-        X, Y, Z
     }
 
     record Faces(Map<Vec, List<Vec>> query) {

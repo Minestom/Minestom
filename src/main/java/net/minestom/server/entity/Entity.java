@@ -647,7 +647,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
                         // checks that we are actually in the block, and not just here because of a rounding error
-                        if (boundingBox.intersectBlock(position, x, y, z)) {
+                        if (boundingBox.intersectBlock(position, block, new Pos(x, y, z))) {
                             // TODO: replace with check with custom block bounding box
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
