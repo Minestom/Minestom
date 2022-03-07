@@ -1,12 +1,10 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,66 +14,36 @@ import java.util.stream.Stream;
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
-public class BoundingBox {
+public class EntityBoundingBox implements Collidable {
     private final double width, height, depth;
     private final Faces faces;
-    private final BoundingBoxType type;
-
-    private final double minX, maxX, minY, maxY, minZ, maxZ;
 
     public boolean intersectBlock(Point src, Block block, Point dest) {
-        return Arrays.stream(block.registry().boundingBoxes()).anyMatch(bb -> intersectBoundingBox(src, bb, dest));
+        return block.registry().boundingBoxes().intersectEntity(src, this, dest);
     }
 
-    public List<BoundingBox> intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos) {
-        return Arrays.stream(block.registry().boundingBoxes()).filter(bb -> {
-            // Fast check to see if a collision happens
-            // Uses minkowski sum
-            return RayUtils.RayBoundingBoxIntersectCheck(
-                    rayDirection,
-                    bb,
-                    rayStart,
-                    blockPos,
-                    this);
-        }).toList();
+    public List<? extends Collidable> intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos) {
+        return block.registry().boundingBoxes().intersectEntitySwept(rayStart, rayDirection, blockPos, this);
     }
 
-    public enum BoundingBoxType {
-        ENTITY, BLOCK
-    }
-
-    public BoundingBox(double width, double height, double depth, BoundingBoxType type) {
-        this(width, height, depth, type, -(width / 2), 0, -(depth / 2), (width / 2), height, (depth / 2));
-    }
-
-    public BoundingBox(double width, double height, double depth, BoundingBoxType type, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public EntityBoundingBox(double width, double height, double depth) {
         this.width = width;
         this.height = height;
         this.depth = depth;
-        this.type = type;
 
-        this.minX = minX;
-        this.maxX = maxX;
-        this.minY = minY;
-        this.maxY = maxY;
-        this.minZ = minZ;
-        this.maxZ = maxZ;
-
-        if (this.type == BoundingBoxType.ENTITY)
-            this.faces = retrieveFaces();
-        else this.faces = null;
+        this.faces = retrieveFaces();
     }
 
     /**
-     * Used to know if two {@link BoundingBox} intersect with each other.
+     * Used to know if two {@link EntityBoundingBox} intersect with each other.
      *
-     * @param boundingBox the {@link BoundingBox} to check
-     * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
+     * @param entityBoundingBox the {@link EntityBoundingBox} to check
+     * @return true if the two {@link EntityBoundingBox} intersect with each other, false otherwise
      */
-    public boolean intersectBoundingBox(@NotNull Point src, @NotNull BoundingBox boundingBox, @NotNull Point dest) {
-        return (minX() + src.x() <= boundingBox.maxX() + dest.x() && maxX() + src.x() >= boundingBox.minX() + dest.x()) &&
-                (minY() + src.y() <= boundingBox.maxY() + dest.y() && maxY() + src.y() >= boundingBox.minY() + dest.y()) &&
-                (minZ() + src.z() <= boundingBox.maxZ() + dest.z() && maxZ() + src.z() >= boundingBox.minZ() + dest.z());
+    public boolean intersectCollidable(@NotNull Point src, @NotNull Collidable entityBoundingBox, @NotNull Point dest) {
+        return (minX() + src.x() <= entityBoundingBox.maxX() + dest.x() && maxX() + src.x() >= entityBoundingBox.minX() + dest.x()) &&
+                (minY() + src.y() <= entityBoundingBox.maxY() + dest.y() && maxY() + src.y() >= entityBoundingBox.minY() + dest.y()) &&
+                (minZ() + src.z() <= entityBoundingBox.maxZ() + dest.z() && maxZ() + src.z() >= entityBoundingBox.minZ() + dest.z());
     }
 
     @Override
@@ -91,13 +59,13 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
+     * Used to know if this {@link EntityBoundingBox} intersects with the bounding box of an entity.
      *
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
      */
     public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
-        return intersectBoundingBox(src, entity.getBoundingBox(), entity.getPosition());
+        return intersectCollidable(src, entity.getBoundingBox(), entity.getPosition());
     }
 
     /**
@@ -125,27 +93,27 @@ public class BoundingBox {
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
+     * Creates a new {@link EntityBoundingBox} linked to the same {@link Entity} with expanded size.
      *
      * @param x the X offset
      * @param y the Y offset
      * @param z the Z offset
-     * @return a new {@link BoundingBox} expanded
+     * @return a new {@link EntityBoundingBox} expanded
      */
-    public @NotNull BoundingBox expand(double x, double y, double z) {
-        return new BoundingBox(this.width + x, this.height + y, this.depth + z, type);
+    public @NotNull EntityBoundingBox expand(double x, double y, double z) {
+        return new EntityBoundingBox(this.width + x, this.height + y, this.depth + z);
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with contracted size.
+     * Creates a new {@link EntityBoundingBox} linked to the same {@link Entity} with contracted size.
      *
      * @param x the X offset
      * @param y the Y offset
      * @param z the Z offset
      * @return a new bounding box contracted
      */
-    public @NotNull BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(this.width - x, this.height - y, this.depth - z, type) ;
+    public @NotNull EntityBoundingBox contract(double x, double y, double z) {
+        return new EntityBoundingBox(this.width - x, this.height - y, this.depth - z) ;
     }
 
     public double width() {
@@ -165,27 +133,27 @@ public class BoundingBox {
     }
 
     public double minX() {
-        return minX;
+        return -width / 2;
     }
 
     public double maxX() {
-        return maxX;
+        return width / 2;
     }
 
     public double minY() {
-        return minY;
+        return 0;
     }
 
     public double maxY() {
-        return maxY;
+        return height;
     }
 
     public double minZ() {
-        return minZ;
+        return -depth / 2;
     }
 
     public double maxZ() {
-        return maxZ;
+        return depth / 2;
     }
 
     record Faces(Map<Vec, List<Vec>> query) {

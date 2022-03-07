@@ -14,12 +14,12 @@ public class RayUtils {
      * @param rayStart Ray start point
      * @param instance entity instance
      * @param originChunk entity chunk
-     * @param boundingBox entity bounding box
+     * @param entityBoundingBox entity bounding box
      * @param entityCentre position of entity
      * @param tempResult place to store temporary result of collision
      * @param finalResult place to store final result of collision
      */
-    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
+    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, EntityBoundingBox entityBoundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
@@ -54,7 +54,7 @@ public class RayUtils {
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, entityBoundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
 
@@ -77,7 +77,7 @@ public class RayUtils {
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, entityBoundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
 
@@ -100,7 +100,7 @@ public class RayUtils {
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, entityBoundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
     }
@@ -112,7 +112,7 @@ public class RayUtils {
      * @param rayStart Ray start position
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean RayBoundingBoxIntersectCheck(Point rayDirection, BoundingBox bbStatic, Point rayStart, Point bbStaticOffset, BoundingBox bbMoving) {
+    public static boolean RayBoundingBoxIntersectCheck(Point rayDirection, Collidable bbStatic, Point rayStart, Point bbStaticOffset, Collidable bbMoving) {
         // Translate bounding box
         Vec bbOffMin = new Vec(bbStatic.minX() - rayStart.x() + bbStaticOffset.x() - bbMoving.width() / 2, bbStatic.minY() - rayStart.y() + bbStaticOffset.y() - bbMoving.height() / 2, bbStatic.minZ() - rayStart.z() + bbStaticOffset.z() - bbMoving.depth() / 2);
         Vec bbOffMax = new Vec(bbStatic.maxX() - rayStart.x() + bbStaticOffset.x() + bbMoving.width() / 2, bbStatic.maxY() - rayStart.y() + bbStaticOffset.y() + bbMoving.height() / 2, bbStatic.maxZ() - rayStart.z() + bbStaticOffset.z() + bbMoving.depth() / 2);
@@ -211,7 +211,7 @@ public class RayUtils {
     }
 
     // Extended from 2d implementation found here https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/swept-aabb-collision-detection-and-response-r3084/
-    public static void SweptAABB(BoundingBox b1, BoundingBox b2, Point b1Pos, int b2PosX, int b2PosY, int b2PosZ, double vx, double vy, double vz, SweepResult writeTo) {
+    public static void SweptAABB(Collidable b1, Collidable b2, Point b1Pos, int b2PosX, int b2PosY, int b2PosZ, double vx, double vy, double vz, SweepResult writeTo) {
         double normalx, normaly, normalz;
 
         double xInvEntry, yInvEntry, zInvEntry;

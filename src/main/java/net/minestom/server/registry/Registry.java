@@ -3,7 +3,9 @@ package net.minestom.server.registry;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.BlockShape;
+import net.minestom.server.collision.BlockShapeImpl;
+import net.minestom.server.collision.EntityBoundingBox;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -20,8 +22,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Handles registry data, used by {@link ProtocolObject} implementations and is strictly internal.
@@ -167,7 +167,7 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
-        private final BoundingBox[] boundingBoxes;
+        private final BlockShape boundingBoxes;
         private final Properties custom;
 
         private BlockEntry(String namespace, Properties main, Properties custom) {
@@ -195,36 +195,8 @@ public final class Registry {
                 }
             }
             {
-                final String regex = "\\d.\\d{1,3}";
                 final String string = main.getString("collisionShape");
-
-                final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-                final Matcher matcher = pattern.matcher(string);
-
-                ArrayList<Double> vals = new ArrayList<>();
-                while (matcher.find()) {
-                    double newVal = Double.parseDouble(matcher.group());
-                    vals.add(newVal);
-                }
-
-                List<BoundingBox> boundingBoxes = new ArrayList<>();
-                final int count = vals.size() / 6;
-                for (int i = 0; i < count; ++i) {
-                    final double boundXSize = vals.get(3 + 6 * i) - vals.get(0 + 6 * i);
-                    final double boundYSize = vals.get(4 + 6 * i) - vals.get(1 + 6 * i);
-                    final double boundZSize = vals.get(5 + 6 * i) - vals.get(2 + 6 * i);
-
-                    final double minX, minY, minZ, maxX, maxY, maxZ;
-                    minX = vals.get(0 + 6 * i);
-                    maxX = vals.get(3 + 6 * i);
-                    minY = vals.get(1 + 6 * i);
-                    maxY = vals.get(4 + 6 * i);
-                    minZ = vals.get(2 + 6 * i);
-                    maxZ = vals.get(5 + 6 * i);
-
-                    boundingBoxes.add(new BoundingBox(boundXSize, boundYSize, boundZSize, BoundingBox.BoundingBoxType.BLOCK, minX, minY, minZ, maxX, maxY, maxZ));
-                }
-                this.boundingBoxes = boundingBoxes.toArray(BoundingBox[]::new);
+                this.boundingBoxes = BlockShapeImpl.parseBlockFromRegistry(string);
             }
             {
                 final String materialNamespace = main.getString("correspondingItem", null);
@@ -296,7 +268,7 @@ public final class Registry {
             return materialSupplier.get();
         }
 
-        public BoundingBox[] boundingBoxes() {
+        public BlockShape boundingBoxes() {
             return boundingBoxes;
         }
 
@@ -393,7 +365,7 @@ public final class Registry {
                               double width, double height,
                               double drag, double acceleration,
                               EntitySpawnType spawnType,
-                              BoundingBox boundingBox,
+                              EntityBoundingBox entityBoundingBox,
                               Properties custom) implements Entry {
 
         public EntityEntry(String namespace, Properties main, Properties custom) {
@@ -405,11 +377,10 @@ public final class Registry {
                     main.getDouble("drag", 0.02),
                     main.getDouble("acceleration", 0.08),
                     EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    new BoundingBox(
+                    new EntityBoundingBox(
                             main.getDouble("width"),
                             main.getDouble("height"),
-                            main.getDouble("width"),
-                            BoundingBox.BoundingBoxType.ENTITY),
+                            main.getDouble("width")),
                     custom
             );
         }

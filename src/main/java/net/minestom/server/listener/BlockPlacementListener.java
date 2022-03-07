@@ -26,7 +26,6 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 public class BlockPlacementListener {
@@ -113,8 +112,7 @@ public class BlockPlacementListener {
         final Collection<Entity> entities = instance.getNearbyEntities(placementPosition, 5);
 
         // Check if the player is trying to place a block in an entity
-        boolean intersectPlayer = Arrays.stream(placedBlock.registry().boundingBoxes())
-                .anyMatch(bb -> player.getBoundingBox().intersectBoundingBox(player.getPosition(), bb, placementPosition));
+        boolean intersectPlayer = placedBlock.registry().boundingBoxes().intersectEntity(player.getPosition(), player.getBoundingBox(), placementPosition);
 
         boolean hasIntersect = intersectPlayer || entities
                 .stream()
@@ -126,8 +124,7 @@ public class BlockPlacementListener {
                     }
                     return true;
                 })
-                .anyMatch(entity ->
-                    Arrays.stream(placedBlock.registry().boundingBoxes()).anyMatch(bb -> entity.getBoundingBox().intersectBoundingBox(entity.getPosition(), bb, placementPosition)));
+                .anyMatch(entity -> placedBlock.registry().boundingBoxes().intersectEntity(entity.getPosition(), entity.getBoundingBox(), placementPosition));
 
         if (hasIntersect) {
             refresh(player, chunk);
