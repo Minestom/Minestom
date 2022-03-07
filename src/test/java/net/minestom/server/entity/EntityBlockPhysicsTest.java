@@ -139,6 +139,19 @@ public class EntityBlockPhysicsTest {
     }
 
     @Test
+    public void entityPhysicsSmallMoveCollide(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 43, 1, Block.STONE);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.6, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.3,  0, 0));
+        assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition(), precision);
+    }
+
+    @Test
     public void entityPhysicsCheckNoCollision(Env env) {
         var instance = env.createFlatInstance();
 

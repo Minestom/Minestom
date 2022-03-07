@@ -176,7 +176,7 @@ public final class CollisionUtils {
 
             // When large moves are done we need to raycast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
-                RayUtils.Raycast(deltaPosition, point.add(entityCentre), instance, originChunk, boundingBox, entityPosition, tempResult, finalResult);
+                RayUtils.RaycastCollision(deltaPosition, point.add(entityCentre), instance, originChunk, boundingBox, entityPosition, tempResult, finalResult);
             }
         }
 
