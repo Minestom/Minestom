@@ -8,9 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BlockShapeImpl implements BlockShape {
-    private final List<BlockSection> blockSections;
+    private final List<? extends Collidable> blockSections;
 
-    public BlockShapeImpl(List<BlockSection> boundingBoxes) {
+    public BlockShapeImpl(List<? extends Collidable> boundingBoxes) {
         this.blockSections = boundingBoxes;
     }
 
@@ -54,11 +54,10 @@ public class BlockShapeImpl implements BlockShape {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.RayBoundingBoxIntersectCheck(
-                    rayDirection,
+                    moving, rayStart, rayDirection,
                     blockSection,
-                    rayStart,
-                    blockPos,
-                    moving);
+                    blockPos
+            );
         }).toList();
     }
 }

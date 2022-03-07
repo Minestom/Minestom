@@ -251,7 +251,7 @@ public final class CollisionUtils {
         if (checkBlock.isSolid()) {
             for (Collidable bb : entityBoundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos)) {
                 // Longer check to get result of collision
-                RayUtils.SweptAABB(entityBoundingBox, bb, entityPosition, blockX, blockY, blockZ, entityVelocity.x(), entityVelocity.y(), entityVelocity.z(), tempResult);
+                RayUtils.SweptAABB(entityBoundingBox, entityPosition, entityVelocity, bb, blockPos, tempResult);
 
                 // Update final result if the temp result collision is sooner than the current final result
                 if (tempResult.res < finalResult.res) {
