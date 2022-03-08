@@ -195,12 +195,12 @@ public final class Registry {
                 }
             }
             {
-                final String string = main.getString("collisionShape");
-                this.shape = ShapeImpl.parseBlockFromRegistry(string);
-            }
-            {
                 final String materialNamespace = main.getString("correspondingItem", null);
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
+            }
+            {
+                final String string = main.getString("collisionShape");
+                this.shape = ShapeImpl.parseBlockFromRegistry(string, this.materialSupplier);
             }
         }
 
@@ -301,7 +301,6 @@ public final class Registry {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
             }
-
             {
                 final Properties armorProperties = main.section("armorProperties");
                 if (armorProperties != null) {

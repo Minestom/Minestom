@@ -3,20 +3,24 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShapeImpl implements Shape {
     private final List<? extends Collidable> blockSections;
+    private final Supplier<Material> block;
 
-    public ShapeImpl(List<? extends Collidable> boundingBoxes) {
+    public ShapeImpl(List<? extends Collidable> boundingBoxes, Supplier<Material> block) {
         this.blockSections = boundingBoxes;
+        this.block = block;
     }
 
-    public static ShapeImpl parseBlockFromRegistry(String str) {
+    public static ShapeImpl parseBlockFromRegistry(String str, Supplier<Material> block) {
         final String regex = "\\d.\\d{1,3}";
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(str);
@@ -42,7 +46,7 @@ public class ShapeImpl implements Shape {
             boundingBoxes.add(new BlockSection(minX, minY, minZ, boundXSize, boundYSize, boundZSize));
         }
 
-        return new ShapeImpl(boundingBoxes);
+        return new ShapeImpl(boundingBoxes, block);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult, Block block) {
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
         List<? extends Collidable> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
@@ -75,7 +79,7 @@ public class ShapeImpl implements Shape {
                 finalResult.normaly = tempResult.normaly;
                 finalResult.normalz = tempResult.normalz;
                 finalResult.collisionBlock = blockPos;
-                finalResult.blockType = block;
+                finalResult.blockType = block.get().block();
             }
 
             hitBlock = true;
