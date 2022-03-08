@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata;
 
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.BoundingBoxImpl;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class AgeableMobMeta extends PathfinderMobMeta {
             return;
         }
         this.consumeEntity((entity) -> {
-            BoundingBox bb = entity.getBoundingBox();
+            BoundingBoxImpl bb = entity.getBoundingBox();
             if (value) {
                 double width = bb.width() / 2;
                 entity.setBoundingBox(width, bb.height() / 2, width);

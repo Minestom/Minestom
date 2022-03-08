@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.monster.zombie;
 
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.BoundingBoxImpl;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.monster.MonsterMeta;
@@ -23,7 +23,7 @@ public class ZombieMeta extends MonsterMeta {
             return;
         }
         this.consumeEntity((entity) -> {
-            BoundingBox bb = entity.getBoundingBox();
+            BoundingBoxImpl bb = entity.getBoundingBox();
             if (value) {
                 double width = bb.width() / 2;
                 entity.setBoundingBox(width, bb.height() / 2, width);

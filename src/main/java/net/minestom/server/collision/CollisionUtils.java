@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.collision.impl.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -27,12 +28,12 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        final BoundingBox.Faces faces = entity.getBoundingBox().faces();
+        final BoundingBoxImpl.Faces faces = entity.getBoundingBox().faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
-        final RayUtils.SweepResult finalResult = new RayUtils.SweepResult(1, 0, 0, 0);
-        final RayUtils.SweepResult tempResult = new RayUtils.SweepResult(1, 0, 0, 0);
+        final SweepResult finalResult = new SweepResult(1, 0, 0, 0);
+        final SweepResult tempResult = new SweepResult(1, 0, 0, 0);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
@@ -128,10 +129,10 @@ public final class CollisionUtils {
      * @param tempResult place to store temporary result of collision
      * @return result of physics calculation
      */
-    private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition, List<Vec> allFaces, RayUtils.SweepResult finalResult, RayUtils.SweepResult tempResult) {
+    private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition, List<Vec> allFaces, SweepResult finalResult, SweepResult tempResult) {
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
-        final BoundingBox boundingBox = entity.getBoundingBox();
+        final BoundingBoxImpl boundingBox = entity.getBoundingBox();
 
         double remainingX = deltaPosition.x();
         double remainingY = deltaPosition.y();
@@ -241,7 +242,7 @@ public final class CollisionUtils {
      * @param finalResult place to store final result of collision
      * @return true if entity finds collision, other false
      */
-    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox, Instance instance, Chunk originChunk, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBoxImpl boundingBox, Instance instance, Chunk originChunk, SweepResult tempResult, SweepResult finalResult) {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         Block checkBlock = !ChunkUtils.isLoaded(c) ? Block.STONE : c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
@@ -285,6 +286,6 @@ public final class CollisionUtils {
         };
     }
 
-    public record PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround, boolean collisionX, boolean collisionY, boolean collisionZ, Vec originalDelta, net.minestom.server.coordinate.Point collidedBlockY, Block blockTypeY) {
+    public record PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround, boolean collisionX, boolean collisionY, boolean collisionZ, Vec originalDelta, Point collidedBlockY, Block blockTypeY) {
     }
 }

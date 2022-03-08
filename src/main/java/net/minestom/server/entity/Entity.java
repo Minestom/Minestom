@@ -9,10 +9,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.BoundingBoxImpl;
 import net.minestom.server.collision.Collidable;
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.RayUtils;
+import net.minestom.server.collision.impl.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -78,7 +78,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 
 /**
  * Could be a player, a monster, or an object.
@@ -100,7 +99,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
-    private BoundingBox boundingBox;
+    private BoundingBoxImpl boundingBox;
     public CollisionUtils.PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
@@ -487,7 +486,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Works by changing the internal entity type field and by calling {@link #removeViewer(Player)}
      * followed by {@link #addViewer(Player)} to all current viewers.
      * <p>
-     * Be aware that this only change the visual of the entity, the {@link BoundingBox}
+     * Be aware that this only change the visual of the entity, the {@link BoundingBoxImpl}
      * will not be modified.
      *
      * @param entityType the new entity type
@@ -749,7 +748,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return the entity bounding box
      */
-    public @NotNull BoundingBox getBoundingBox() {
+    public @NotNull BoundingBoxImpl getBoundingBox() {
         return boundingBox;
     }
 
@@ -763,7 +762,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param depth  the bounding box Z size
      */
     public void setBoundingBox(double width, double height, double depth) {
-        this.boundingBox = new BoundingBox(width, height, depth);
+        this.boundingBox = new BoundingBoxImpl(width, height, depth);
     }
 
     /**
@@ -773,7 +772,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param boundingBox the new bounding box
      */
-    public void setBoundingBox(BoundingBox boundingBox) {
+    public void setBoundingBox(BoundingBoxImpl boundingBox) {
         this.boundingBox = boundingBox;
     }
 
@@ -1360,7 +1359,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets the entity eye height.
      * <p>
-     * Default to {@link BoundingBox#height()}x0.85
+     * Default to {@link BoundingBoxImpl#height()}x0.85
      *
      * @return the entity eye height
      */
@@ -1627,7 +1626,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
-        return RayUtils.RayBoundingBoxIntersectCheck(Collidable.ZERO, start, position.direction(), entity.boundingBox, entity.getPosition());
+        return RayUtils.BoundingBoxIntersectionCheck(Collidable.ZERO, start, position.direction(), entity.boundingBox, entity.getPosition());
     }
 
     /**
@@ -1647,7 +1646,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(e -> e != this
-                        && RayUtils.RayBoundingBoxIntersectCheck(Collidable.ZERO, start, position.direction(), e.boundingBox, e.getPosition())
+                        && RayUtils.BoundingBoxIntersectionCheck(Collidable.ZERO, start, position.direction(), e.boundingBox, e.getPosition())
                         && predicate.test(e))
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 

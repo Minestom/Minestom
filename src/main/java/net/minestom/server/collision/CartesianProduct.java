@@ -8,7 +8,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 
 // https://rosettacode.org/wiki/Cartesian_product_of_two_or_more_lists#Java
-public class CartesianProduct {
+class CartesianProduct {
     public static List<?> product(List<?>... a) {
         if (a.length >= 2) {
             List<?> product = a[0];

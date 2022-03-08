@@ -1,5 +1,9 @@
-package net.minestom.server.collision;
+package net.minestom.server.collision.impl;
 
+import net.minestom.server.collision.BoundingBoxImpl;
+import net.minestom.server.collision.Collidable;
+import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.SweepResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -19,7 +23,7 @@ public class RayUtils {
      * @param tempResult place to store temporary result of collision
      * @param finalResult place to store final result of collision
      */
-    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
+    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBoxImpl boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
@@ -112,7 +116,7 @@ public class RayUtils {
      * @param collidableStatic Bounding box
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean RayBoundingBoxIntersectCheck(Collidable collidableMoving, Point rayStart, Point rayDirection, Collidable collidableStatic, Point staticCollidableOffset) {
+    public static boolean BoundingBoxIntersectionCheck(Collidable collidableMoving, Point rayStart, Point rayDirection, Collidable collidableStatic, Point staticCollidableOffset) {
         // Translate bounding box
         Vec bbOffMin = new Vec(collidableStatic.minX() - rayStart.x() + staticCollidableOffset.x() - collidableMoving.width() / 2, collidableStatic.minY() - rayStart.y() + staticCollidableOffset.y() - collidableMoving.height() / 2, collidableStatic.minZ() - rayStart.z() + staticCollidableOffset.z() - collidableMoving.depth() / 2);
         Vec bbOffMax = new Vec(collidableStatic.maxX() - rayStart.x() + staticCollidableOffset.x() + collidableMoving.width() / 2, collidableStatic.maxY() - rayStart.y() + staticCollidableOffset.y() + collidableMoving.height() / 2, collidableStatic.maxZ() - rayStart.z() + staticCollidableOffset.z() + collidableMoving.depth() / 2);
@@ -345,19 +349,5 @@ public class RayUtils {
         writeTo.normalx = normalx;
         writeTo.normaly = normaly;
         writeTo.normalz = normalz;
-    }
-
-    public static class SweepResult {
-        public double res;
-        public double normalx, normaly, normalz;
-        public Point collisionBlock;
-        public Block blockType;
-
-        public SweepResult(double res, double normalx, double normaly, double normalz) {
-            this.res = res;
-            this.normalx = normalx;
-            this.normaly = normaly;
-            this.normalz = normalz;
-        }
     }
 }

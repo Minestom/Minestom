@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.collision.impl.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.Material;
 
@@ -48,16 +49,16 @@ public class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectEntity(Point position, BoundingBox boundingBox, Point blockPosition) {
+    public boolean intersectEntity(Point position, BoundingBoxImpl boundingBox, Point blockPosition) {
         return blockSections.stream().anyMatch(section -> boundingBox.intersectCollidable(position, section, blockPosition));
     }
 
     @Override
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBoxImpl moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
         List<? extends Collidable> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
-            return RayUtils.RayBoundingBoxIntersectCheck(
+            return RayUtils.BoundingBoxIntersectionCheck(
                     moving, rayStart, rayDirection,
                     blockSection,
                     blockPos
@@ -84,5 +85,22 @@ public class ShapeImpl implements Shape {
         }
 
         return hitBlock;
+    }
+
+    record BlockSection(double minX, double minY, double minZ, double width, double height, double depth) implements Collidable {
+        @Override
+        public double maxX() {
+            return minX + width;
+        }
+
+        @Override
+        public double maxY() {
+            return minY + height;
+        }
+
+        @Override
+        public double maxZ() {
+            return minZ + depth;
+        }
     }
 }

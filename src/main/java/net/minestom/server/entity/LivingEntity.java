@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.BoundingBoxImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
@@ -51,7 +51,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected DamageType lastDamageSource;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
-    protected BoundingBox expandedBoundingBox;
+    protected BoundingBoxImpl expandedBoundingBox;
 
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
 
