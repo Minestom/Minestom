@@ -110,7 +110,11 @@ public final class CollisionUtils {
             res = handlePhysics(entity, res.newVelocity, res.newPosition, allFaces, finalResult, tempResult);
         }
 
-        return new PhysicsResult(res.newPosition, res.newVelocity, res.isOnGround, foundCollisionX, foundCollisionY, foundCollisionZ, entityVelocity, collisionYBlock, blockYType);
+        double newDeltaX = foundCollisionX ? 0 : entityVelocity.x();
+        double newDeltaY = foundCollisionY ? 0 : entityVelocity.y();
+        double newDeltaZ = foundCollisionZ ? 0 : entityVelocity.z();
+
+        return new PhysicsResult(res.newPosition, new Vec(newDeltaX, newDeltaY, newDeltaZ), newDeltaY == 0 && entityVelocity.y() < 0, foundCollisionX, foundCollisionY, foundCollisionZ, entityVelocity, collisionYBlock, blockYType);
     }
 
     /**
@@ -128,9 +132,9 @@ public final class CollisionUtils {
         final Chunk originChunk = entity.getChunk();
         final EntityBoundingBox entityBoundingBox = entity.getBoundingBox();
 
-        double deltaX = deltaPosition.x();
-        double deltaY = deltaPosition.y();
-        double deltaZ = deltaPosition.z();
+        double remainingX = deltaPosition.x();
+        double remainingY = deltaPosition.y();
+        double remainingZ = deltaPosition.z();
 
         // If the movement is small we don't need to run the expensive ray casting.
         if (deltaPosition.length() < 1) {
@@ -180,48 +184,48 @@ public final class CollisionUtils {
             }
         }
 
-        double finalX = entityPosition.x() + deltaX;
-        double finalY = entityPosition.y() + deltaY;
-        double finalZ = entityPosition.z() + deltaZ;
+        double finalX = entityPosition.x() + remainingX;
+        double finalY = entityPosition.y() + remainingY;
+        double finalZ = entityPosition.z() + remainingZ;
 
         boolean collisionX = false, collisionY = false, collisionZ = false;
 
         if (finalResult != null) {
             // Update final position
-            finalX = entityPosition.x() + finalResult.res * deltaX;
-            finalY = entityPosition.y() + finalResult.res * deltaY;
-            finalZ = entityPosition.z() + finalResult.res * deltaZ;
+            finalX = entityPosition.x() + finalResult.res * remainingX;
+            finalY = entityPosition.y() + finalResult.res * remainingY;
+            finalZ = entityPosition.z() + finalResult.res * remainingZ;
 
             // Remaining delta
-            deltaX -= finalResult.res * deltaX;
-            deltaY -= finalResult.res * deltaY;
-            deltaZ -= finalResult.res * deltaZ;
+            remainingX -= finalResult.res * remainingX;
+            remainingY -= finalResult.res * remainingY;
+            remainingZ -= finalResult.res * remainingZ;
 
             if (finalResult.normalx != 0) {
                 collisionX = true;
-                deltaX = 0;
+                remainingX = 0;
             }
 
             if (finalResult.normaly != 0) {
                 collisionY = true;
-                deltaY = 0;
+                remainingY = 0;
             }
 
             if (finalResult.normalz != 0) {
                 collisionZ = true;
-                deltaZ = 0;
+                remainingZ = 0;
             }
         }
 
-        deltaX = Math.abs(deltaX) < MIN_DELTA ? 0 : deltaX;
-        deltaY = Math.abs(deltaY) < MIN_DELTA ? 0 : deltaY;
-        deltaZ = Math.abs(deltaZ) < MIN_DELTA ? 0 : deltaZ;
+        remainingX = Math.abs(remainingX) < MIN_DELTA ? 0 : remainingX;
+        remainingY = Math.abs(remainingY) < MIN_DELTA ? 0 : remainingY;
+        remainingZ = Math.abs(remainingZ) < MIN_DELTA ? 0 : remainingZ;
 
         finalX = Math.abs(finalX - entityPosition.x()) < MIN_DELTA ? entityPosition.x() : finalX;
         finalY = Math.abs(finalY - entityPosition.y()) < MIN_DELTA ? entityPosition.y() : finalY;
         finalZ = Math.abs(finalZ - entityPosition.z()) < MIN_DELTA ? entityPosition.z() : finalZ;
 
-        return new PhysicsResult(new Pos(finalX, finalY, finalZ), new Vec(deltaX, deltaY, deltaZ), Math.abs(deltaY) <= MIN_DELTA, collisionX, collisionY, collisionZ, Vec.ZERO, finalResult.collisionBlock, finalResult.blockType);
+        return new PhysicsResult(new Pos(finalX, finalY, finalZ), new Vec(remainingX, remainingY, remainingZ), collisionY, collisionX, collisionY, collisionZ, Vec.ZERO, finalResult.collisionBlock, finalResult.blockType);
     }
 
     /**

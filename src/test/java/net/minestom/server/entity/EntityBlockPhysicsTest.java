@@ -124,6 +124,19 @@ public class EntityBlockPhysicsTest {
     }
 
     @Test
+    public void entityPhysicsCheckOnGround(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.STONE);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 50, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -20, 0));
+        assertTrue(res.isOnGround());
+    }
+
+    @Test
     public void entityPhysicsCheckSlide(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
