@@ -1591,12 +1591,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-
     /**
      * Gets the line of sight of the entity.
      *
      * @param maxDistance The max distance to scan
-     * @return A list of {@link Point poiints} in this entities line of sight
+     * @return A list of {@link Point points} in this entities line of sight
      */
     public List<Point> getLineOfSight(int maxDistance) {
         Instance instance = getInstance();
