@@ -12,6 +12,7 @@ import net.minestom.server.Viewable;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.Collidable;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.collision.impl.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -100,7 +101,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     private BoundingBox boundingBox;
-    public CollisionUtils.PhysicsResult lastPhysicsResult = null;
+    private PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
 
@@ -569,7 +570,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
             this.lastPhysicsResult = physicsResult;
             this.onGround = physicsResult.isOnGround();
 

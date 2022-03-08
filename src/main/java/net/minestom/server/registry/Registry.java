@@ -3,9 +3,9 @@ package net.minestom.server.registry;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.collision.Shape;
-import net.minestom.server.collision.ShapeImpl;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -200,7 +200,7 @@ public final class Registry {
             }
             {
                 final String string = main.getString("collisionShape");
-                this.shape = ShapeImpl.parseBlockFromRegistry(string, this.materialSupplier);
+                this.shape = CollisionUtils.parseBlockShape(string, this.materialSupplier);
             }
         }
 

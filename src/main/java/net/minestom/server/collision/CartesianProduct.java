@@ -1,14 +1,14 @@
 package net.minestom.server.collision;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 
-import java.util.List;
-
 // https://rosettacode.org/wiki/Cartesian_product_of_two_or_more_lists#Java
-class CartesianProduct {
+final class CartesianProduct {
     public static List<?> product(List<?>... a) {
         if (a.length >= 2) {
             List<?> product = a[0];

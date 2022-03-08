@@ -10,16 +10,16 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ShapeImpl implements Shape {
+final class ShapeImpl implements Shape {
     private final List<? extends Collidable> blockSections;
     private final Supplier<Material> block;
 
-    public ShapeImpl(List<? extends Collidable> boundingBoxes, Supplier<Material> block) {
+    ShapeImpl(List<? extends Collidable> boundingBoxes, Supplier<Material> block) {
         this.blockSections = boundingBoxes;
         this.block = block;
     }
 
-    public static ShapeImpl parseBlockFromRegistry(String str, Supplier<Material> block) {
+    static ShapeImpl parseBlockFromRegistry(String str, Supplier<Material> block) {
         final String regex = "\\d.\\d{1,3}";
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(str);
@@ -87,7 +87,8 @@ public class ShapeImpl implements Shape {
         return hitBlock;
     }
 
-    record BlockSection(double minX, double minY, double minZ, double width, double height, double depth) implements Collidable {
+    record BlockSection(double minX, double minY, double minZ, double width, double height,
+                        double depth) implements Collidable {
         @Override
         public double maxX() {
             return minX + width;
