@@ -7,6 +7,7 @@ import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
@@ -108,6 +109,40 @@ public class EntityBlockPhysicsIntegrationTest {
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, -10));
 
         assertEqualsPoint(new Pos(4.7, 42, -10.3), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckEnclosedHit(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(7, 42, 7, Block.STONE);
+
+        var entity = new Entity(EntityTypes.SLIME);
+        SlimeMeta meta = (SlimeMeta) entity.entityMeta;
+        meta.setSize(5);
+
+        entity.setInstance(instance, new Pos(5, 44, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 0));
+
+        assertEqualsPoint(new Pos(5, 43, 5), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckEnclosedMiss(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(11, 43, 11, Block.STONE);
+
+        var entity = new Entity(EntityTypes.SLIME);
+        SlimeMeta meta = (SlimeMeta) entity.entityMeta;
+        meta.setSize(5);
+
+        entity.setInstance(instance, new Pos(5, 44, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 0));
+
+        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition(), precision);
     }
 
     @Test
