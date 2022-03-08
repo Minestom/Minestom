@@ -1627,19 +1627,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return false;
         }
 
-        final Vec start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
-        final Vec end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
-        final Vec direction = end.sub(start);
-        final int maxDistance = (int) Math.ceil(direction.length());
-
-        var it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
-        while (it.hasNext()) {
-            Block block = instance.getBlock(it.next());
-            if (!block.isAir() && !block.isLiquid()) {
-                return false;
-            }
-        }
-        return true;
+        final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
+        return RayUtils.RayBoundingBoxIntersectCheck(Collidable.ZERO, start, position.direction(), entity.boundingBox, entity.getPosition());
     }
 
     /**
@@ -1655,15 +1644,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return null;
         }
 
-        Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
-        Vec end = start.add(position.direction().mul(range));
+        final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(e -> e != this
-                        && RayUtils.RayBoundingBoxIntersectCheck(Collidable.ZERO, start, end.sub(start), e.boundingBox, e.getPosition())
+                        && RayUtils.RayBoundingBoxIntersectCheck(Collidable.ZERO, start, position.direction(), e.boundingBox, e.getPosition())
                         && predicate.test(e))
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
-        
+
         return nearby.orElse(null);
     }
 
