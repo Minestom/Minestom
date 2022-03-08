@@ -9,7 +9,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.collision.EntityBoundingBox;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -97,7 +97,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
-    private EntityBoundingBox entityBoundingBox;
+    private BoundingBox boundingBox;
     public CollisionUtils.PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
@@ -182,7 +182,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        setBoundingBox(entityType.registry().entityBoundingBox());
+        setBoundingBox(entityType.registry().boundingBox());
 
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
@@ -484,7 +484,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Works by changing the internal entity type field and by calling {@link #removeViewer(Player)}
      * followed by {@link #addViewer(Player)} to all current viewers.
      * <p>
-     * Be aware that this only change the visual of the entity, the {@link EntityBoundingBox}
+     * Be aware that this only change the visual of the entity, the {@link BoundingBox}
      * will not be modified.
      *
      * @param entityType the new entity type
@@ -628,12 +628,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private void touchTick() {
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
-        final int minX = (int) Math.floor(entityBoundingBox.minX() + position.x());
-        final int maxX = (int) Math.ceil(entityBoundingBox.maxX() + position.x());
-        final int minY = (int) Math.floor(entityBoundingBox.minY() + position.y());
-        final int maxY = (int) Math.ceil(entityBoundingBox.maxY() + position.y());
-        final int minZ = (int) Math.floor(entityBoundingBox.minZ() + position.z());
-        final int maxZ = (int) Math.ceil(entityBoundingBox.maxZ() + position.z());
+        final int minX = (int) Math.floor(boundingBox.minX() + position.x());
+        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
+        final int minY = (int) Math.floor(boundingBox.minY() + position.y());
+        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y());
+        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z());
+        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z());
 
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
@@ -647,7 +647,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
                         // checks that we are actually in the block, and not just here because of a rounding error
-                        if (entityBoundingBox.intersectBlock(position, block, new Pos(x, y, z))) {
+                        if (boundingBox.intersectBlock(position, block, new Pos(x, y, z))) {
                             // TODO: replace with check with custom block bounding box
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
@@ -746,8 +746,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return the entity bounding box
      */
-    public @NotNull EntityBoundingBox getBoundingBox() {
-        return entityBoundingBox;
+    public @NotNull BoundingBox getBoundingBox() {
+        return boundingBox;
     }
 
     /**
@@ -760,7 +760,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param depth  the bounding box Z size
      */
     public void setBoundingBox(double width, double height, double depth) {
-        this.entityBoundingBox = new EntityBoundingBox(width, height, depth);
+        this.boundingBox = new BoundingBox(width, height, depth);
     }
 
     /**
@@ -768,10 +768,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
-     * @param entityBoundingBox the new bounding box
+     * @param boundingBox the new bounding box
      */
-    public void setBoundingBox(EntityBoundingBox entityBoundingBox) {
-        this.entityBoundingBox = entityBoundingBox;
+    public void setBoundingBox(BoundingBox boundingBox) {
+        this.boundingBox = boundingBox;
     }
 
     /**
@@ -1357,12 +1357,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets the entity eye height.
      * <p>
-     * Default to {@link EntityBoundingBox#height()}x0.85
+     * Default to {@link BoundingBox#height()}x0.85
      *
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return entityBoundingBox.height() * 0.85;
+        return boundingBox.height() * 0.85;
     }
 
     /**
@@ -1656,7 +1656,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Vec end = start.add(position.direction().mul(range));
 
         List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(e -> e != this && e.entityBoundingBox.intersectPoint(start, end) && predicate.test(e)).toList();
+                .filter(e -> e != this && e.boundingBox.intersectPoint(start, end) && predicate.test(e)).toList();
         if (nearby.isEmpty()) {
             return null;
         }

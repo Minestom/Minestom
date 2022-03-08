@@ -14,12 +14,12 @@ public class RayUtils {
      * @param rayStart Ray start point
      * @param instance entity instance
      * @param originChunk entity chunk
-     * @param entityBoundingBox entity bounding box
+     * @param boundingBox entity bounding box
      * @param entityCentre position of entity
      * @param tempResult place to store temporary result of collision
      * @param finalResult place to store final result of collision
      */
-    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, EntityBoundingBox entityBoundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
+    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
@@ -54,7 +54,7 @@ public class RayUtils {
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, entityBoundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
 
@@ -77,7 +77,7 @@ public class RayUtils {
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, entityBoundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
 
@@ -100,7 +100,7 @@ public class RayUtils {
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, entityBoundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
             }
         }
     }

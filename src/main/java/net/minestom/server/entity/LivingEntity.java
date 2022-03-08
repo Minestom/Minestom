@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.collision.EntityBoundingBox;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
@@ -51,7 +51,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected DamageType lastDamageSource;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
-    protected EntityBoundingBox expandedEntityBoundingBox;
+    protected BoundingBox expandedBoundingBox;
 
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
 
@@ -203,11 +203,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            this.instance.getEntityTracker().nearbyEntities(position, expandedEntityBoundingBox.width(),
+            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        if (expandedEntityBoundingBox.intersectEntity(position, itemEntity)) {
+                        if (expandedBoundingBox.intersectEntity(position, itemEntity)) {
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                             EventDispatcher.callCancellable(pickupItemEvent, () -> {
                                 final ItemStack item = itemEntity.getItemStack();
@@ -523,7 +523,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void setBoundingBox(double x, double y, double z) {
         super.setBoundingBox(x, y, z);
-        this.expandedEntityBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
+        this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
     }
 
     /**

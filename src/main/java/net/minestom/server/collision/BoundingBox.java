@@ -15,19 +15,19 @@ import java.util.stream.Stream;
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
-public class EntityBoundingBox implements Collidable {
+public class BoundingBox implements Collidable {
     private final double width, height, depth;
     private final Faces faces;
 
     public boolean intersectBlock(Point src, Block block, Point dest) {
-        return block.registry().boundingBoxes().intersectEntity(src, this, dest);
+        return block.registry().shape().intersectEntity(src, this, dest);
     }
 
     public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
-        return block.registry().boundingBoxes().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult, block);
+        return block.registry().shape().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult, block);
     }
 
-    public EntityBoundingBox(double width, double height, double depth) {
+    public BoundingBox(double width, double height, double depth) {
         this.width = width;
         this.height = height;
         this.depth = depth;
@@ -36,10 +36,10 @@ public class EntityBoundingBox implements Collidable {
     }
 
     /**
-     * Used to know if two {@link EntityBoundingBox} intersect with each other.
+     * Used to know if two {@link BoundingBox} intersect with each other.
      *
-     * @param entityBoundingBox the {@link EntityBoundingBox} to check
-     * @return true if the two {@link EntityBoundingBox} intersect with each other, false otherwise
+     * @param entityBoundingBox the {@link BoundingBox} to check
+     * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
      */
     public boolean intersectCollidable(@NotNull Point src, @NotNull Collidable entityBoundingBox, @NotNull Point dest) {
         return (minX() + src.x() <= entityBoundingBox.maxX() + dest.x() && maxX() + src.x() >= entityBoundingBox.minX() + dest.x()) &&
@@ -60,7 +60,7 @@ public class EntityBoundingBox implements Collidable {
     }
 
     /**
-     * Used to know if this {@link EntityBoundingBox} intersects with the bounding box of an entity.
+     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
      *
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
@@ -94,27 +94,27 @@ public class EntityBoundingBox implements Collidable {
     }
 
     /**
-     * Creates a new {@link EntityBoundingBox} linked to the same {@link Entity} with expanded size.
+     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
      *
      * @param x the X offset
      * @param y the Y offset
      * @param z the Z offset
-     * @return a new {@link EntityBoundingBox} expanded
+     * @return a new {@link BoundingBox} expanded
      */
-    public @NotNull EntityBoundingBox expand(double x, double y, double z) {
-        return new EntityBoundingBox(this.width + x, this.height + y, this.depth + z);
+    public @NotNull BoundingBox expand(double x, double y, double z) {
+        return new BoundingBox(this.width + x, this.height + y, this.depth + z);
     }
 
     /**
-     * Creates a new {@link EntityBoundingBox} linked to the same {@link Entity} with contracted size.
+     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with contracted size.
      *
      * @param x the X offset
      * @param y the Y offset
      * @param z the Z offset
      * @return a new bounding box contracted
      */
-    public @NotNull EntityBoundingBox contract(double x, double y, double z) {
-        return new EntityBoundingBox(this.width - x, this.height - y, this.depth - z) ;
+    public @NotNull BoundingBox contract(double x, double y, double z) {
+        return new BoundingBox(this.width - x, this.height - y, this.depth - z) ;
     }
 
     public double width() {

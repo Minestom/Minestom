@@ -27,7 +27,7 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        final EntityBoundingBox.Faces faces = entity.getBoundingBox().faces();
+        final BoundingBox.Faces faces = entity.getBoundingBox().faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
@@ -131,7 +131,7 @@ public final class CollisionUtils {
     private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition, List<Vec> allFaces, RayUtils.SweepResult finalResult, RayUtils.SweepResult tempResult) {
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
-        final EntityBoundingBox entityBoundingBox = entity.getBoundingBox();
+        final BoundingBox boundingBox = entity.getBoundingBox();
 
         double remainingX = deltaPosition.x();
         double remainingY = deltaPosition.y();
@@ -146,42 +146,42 @@ public final class CollisionUtils {
                 Vec pointAfter = point.add(entityPosition).add(deltaPosition);
 
                 if (pointBefore.blockX() != pointAfter.blockX()) {
-                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
 
                     if (pointBefore.blockY() != pointAfter.blockY()) {
-                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                     }
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                     }
                 }
 
                 if (pointBefore.blockY() != pointAfter.blockY()) {
-                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
 
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                        CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                     }
                 }
 
                 if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
                 }
 
-                CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                CollisionUtils.checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
 
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
                         && pointBefore.blockZ() != pointAfter.blockZ()
                 )
-                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, entityBoundingBox, instance, originChunk, tempResult, finalResult);
+                    CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
             }
         } else {
-            Pos entityCentre = entityPosition.add(0, entityBoundingBox.height() / 2, 0);
+            Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
 
             // When large moves are done we need to raycast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
-                RayUtils.RaycastCollision(deltaPosition, point.add(entityCentre), instance, originChunk, entityBoundingBox, entityPosition, tempResult, finalResult);
+                RayUtils.RaycastCollision(deltaPosition, point.add(entityCentre), instance, originChunk, boundingBox, entityPosition, tempResult, finalResult);
             }
         }
 
@@ -236,25 +236,25 @@ public final class CollisionUtils {
      * @param blockZ block z position
      * @param entityVelocity entity movement vector
      * @param entityPosition entity position
-     * @param entityBoundingBox entity bounding box
+     * @param boundingBox entity bounding box
      * @param instance entity instance
      * @param originChunk entity chunk
      * @param tempResult place to store temporary result of collision
      * @param finalResult place to store final result of collision
      * @return true if entity finds collision, other false
      */
-    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, EntityBoundingBox entityBoundingBox, Instance instance, Chunk originChunk, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox, Instance instance, Chunk originChunk, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         Block checkBlock = !ChunkUtils.isLoaded(c) ? Block.STONE : c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
 
         boolean hitBlock = false;
 
-        Pos entityCentre = entityPosition.add(0, entityBoundingBox.height() / 2, 0);
+        Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
         Pos blockPos = new Pos(blockX, blockY, blockZ);
 
         if (checkBlock.isSolid()) {
-            hitBlock = hitBlock || entityBoundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos, entityPosition, tempResult, finalResult);
+            hitBlock = hitBlock || boundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos, entityPosition, tempResult, finalResult);
         }
 
         return hitBlock;

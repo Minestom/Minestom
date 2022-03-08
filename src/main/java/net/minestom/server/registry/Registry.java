@@ -3,9 +3,9 @@ package net.minestom.server.registry;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.collision.BlockShape;
-import net.minestom.server.collision.BlockShapeImpl;
-import net.minestom.server.collision.EntityBoundingBox;
+import net.minestom.server.collision.Shape;
+import net.minestom.server.collision.ShapeImpl;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -167,7 +167,7 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
-        private final BlockShape boundingBoxes;
+        private final Shape shape;
         private final Properties custom;
 
         private BlockEntry(String namespace, Properties main, Properties custom) {
@@ -196,7 +196,7 @@ public final class Registry {
             }
             {
                 final String string = main.getString("collisionShape");
-                this.boundingBoxes = BlockShapeImpl.parseBlockFromRegistry(string);
+                this.shape = ShapeImpl.parseBlockFromRegistry(string);
             }
             {
                 final String materialNamespace = main.getString("correspondingItem", null);
@@ -268,8 +268,8 @@ public final class Registry {
             return materialSupplier.get();
         }
 
-        public BlockShape boundingBoxes() {
-            return boundingBoxes;
+        public Shape shape() {
+            return shape;
         }
 
         @Override
@@ -365,7 +365,7 @@ public final class Registry {
                               double width, double height,
                               double drag, double acceleration,
                               EntitySpawnType spawnType,
-                              EntityBoundingBox entityBoundingBox,
+                              BoundingBox boundingBox,
                               Properties custom) implements Entry {
 
         public EntityEntry(String namespace, Properties main, Properties custom) {
@@ -377,7 +377,7 @@ public final class Registry {
                     main.getDouble("drag", 0.02),
                     main.getDouble("acceleration", 0.08),
                     EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    new EntityBoundingBox(
+                    new BoundingBox(
                             main.getDouble("width"),
                             main.getDouble("height"),
                             main.getDouble("width")),

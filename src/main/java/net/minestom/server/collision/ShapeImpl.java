@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BlockShapeImpl implements BlockShape {
+public class ShapeImpl implements Shape {
     private final List<? extends Collidable> blockSections;
 
-    public BlockShapeImpl(List<? extends Collidable> boundingBoxes) {
+    public ShapeImpl(List<? extends Collidable> boundingBoxes) {
         this.blockSections = boundingBoxes;
     }
 
-    public static BlockShapeImpl parseBlockFromRegistry(String str) {
+    public static ShapeImpl parseBlockFromRegistry(String str) {
         final String regex = "\\d.\\d{1,3}";
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(str);
@@ -42,16 +42,16 @@ public class BlockShapeImpl implements BlockShape {
             boundingBoxes.add(new BlockSection(minX, minY, minZ, boundXSize, boundYSize, boundZSize));
         }
 
-        return new BlockShapeImpl(boundingBoxes);
+        return new ShapeImpl(boundingBoxes);
     }
 
     @Override
-    public boolean intersectEntity(Point position, EntityBoundingBox boundingBox, Point blockPosition) {
+    public boolean intersectEntity(Point position, BoundingBox boundingBox, Point blockPosition) {
         return blockSections.stream().anyMatch(section -> boundingBox.intersectCollidable(position, section, blockPosition));
     }
 
     @Override
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, EntityBoundingBox moving, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult, Block block) {
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult, Block block) {
         List<? extends Collidable> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
