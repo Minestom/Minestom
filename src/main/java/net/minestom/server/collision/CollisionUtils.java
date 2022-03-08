@@ -28,7 +28,7 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        final BoundingBoxImpl.Faces faces = entity.getBoundingBox().faces();
+        final BoundingBox.Faces faces = entity.getBoundingBox().faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
@@ -132,7 +132,7 @@ public final class CollisionUtils {
     private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition, List<Vec> allFaces, SweepResult finalResult, SweepResult tempResult) {
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
-        final BoundingBoxImpl boundingBox = entity.getBoundingBox();
+        final BoundingBox boundingBox = entity.getBoundingBox();
 
         double remainingX = deltaPosition.x();
         double remainingY = deltaPosition.y();
@@ -242,7 +242,7 @@ public final class CollisionUtils {
      * @param finalResult place to store final result of collision
      * @return true if entity finds collision, other false
      */
-    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBoxImpl boundingBox, Instance instance, Chunk originChunk, SweepResult tempResult, SweepResult finalResult) {
+    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox, Instance instance, Chunk originChunk, SweepResult tempResult, SweepResult finalResult) {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         Block checkBlock = !ChunkUtils.isLoaded(c) ? Block.STONE : c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);

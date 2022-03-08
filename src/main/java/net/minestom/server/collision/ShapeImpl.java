@@ -49,12 +49,12 @@ public class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectEntity(Point position, BoundingBoxImpl boundingBox, Point blockPosition) {
+    public boolean intersectEntity(Point position, BoundingBox boundingBox, Point blockPosition) {
         return blockSections.stream().anyMatch(section -> boundingBox.intersectCollidable(position, section, blockPosition));
     }
 
     @Override
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBoxImpl moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
         List<? extends Collidable> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum

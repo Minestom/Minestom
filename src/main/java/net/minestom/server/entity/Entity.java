@@ -9,7 +9,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.collision.BoundingBoxImpl;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.Collidable;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.impl.RayUtils;
@@ -99,7 +99,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
-    private BoundingBoxImpl boundingBox;
+    private BoundingBox boundingBox;
     public CollisionUtils.PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
@@ -486,7 +486,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Works by changing the internal entity type field and by calling {@link #removeViewer(Player)}
      * followed by {@link #addViewer(Player)} to all current viewers.
      * <p>
-     * Be aware that this only change the visual of the entity, the {@link BoundingBoxImpl}
+     * Be aware that this only change the visual of the entity, the {@link BoundingBox}
      * will not be modified.
      *
      * @param entityType the new entity type
@@ -748,7 +748,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return the entity bounding box
      */
-    public @NotNull BoundingBoxImpl getBoundingBox() {
+    public @NotNull BoundingBox getBoundingBox() {
         return boundingBox;
     }
 
@@ -762,7 +762,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param depth  the bounding box Z size
      */
     public void setBoundingBox(double width, double height, double depth) {
-        this.boundingBox = new BoundingBoxImpl(width, height, depth);
+        this.boundingBox = new BoundingBox(width, height, depth);
     }
 
     /**
@@ -772,7 +772,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param boundingBox the new bounding box
      */
-    public void setBoundingBox(BoundingBoxImpl boundingBox) {
+    public void setBoundingBox(BoundingBox boundingBox) {
         this.boundingBox = boundingBox;
     }
 
@@ -1359,7 +1359,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets the entity eye height.
      * <p>
-     * Default to {@link BoundingBoxImpl#height()}x0.85
+     * Default to {@link BoundingBox#height()}x0.85
      *
      * @return the entity eye height
      */

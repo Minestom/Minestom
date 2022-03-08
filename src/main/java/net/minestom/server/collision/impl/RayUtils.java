@@ -1,6 +1,6 @@
 package net.minestom.server.collision.impl;
 
-import net.minestom.server.collision.BoundingBoxImpl;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.Collidable;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.SweepResult;
@@ -9,7 +9,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 
 public class RayUtils {
     /**
@@ -23,7 +22,7 @@ public class RayUtils {
      * @param tempResult place to store temporary result of collision
      * @param finalResult place to store final result of collision
      */
-    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBoxImpl boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
+    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
