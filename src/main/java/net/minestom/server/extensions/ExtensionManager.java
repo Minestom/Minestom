@@ -260,6 +260,8 @@ public final class ExtensionManager {
 
         // Download the extension only if it is not loaded already
         if (!Files.exists(artifactLocation)) {
+            LOGGER.info("Downloading maven dependency {}", coordinate);
+            //TODO transitive dependencies
             InputStream artifactStream = mavenResolver.resolve(coordinate).withoutTransitivity().asSingleInputStream();
             if (artifactStream == null) {
                 LOGGER.error("Unable to resolve {}", coordinate);
