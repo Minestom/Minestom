@@ -6,6 +6,11 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jboss.shrinkwrap.resolver.api.NonTransitiveResolutionStrategy;
+import org.jboss.shrinkwrap.resolver.api.ResolutionStrategy;
+import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,11 +18,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channel;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -190,9 +203,15 @@ public final class ExtensionManager {
         if (extensions.containsKey(extension.name().toLowerCase()))
             return true;
 
+        // Configure a maven resolver for this extension
+        ConfigurableMavenResolverSystem mavenResolver = Maven.configureResolver()
+                .withMavenCentralRepo(true);
+        for (Repository repo : extension.repositories())
+            mavenResolver.withRemoteRepo(repo.id(), repo.url(), "default");
+
         // Load dependencies
         for (Dependency dependency : extension.dependencies()) {
-            boolean loaded = loadDependency(extension, dependency, extensionsById);
+            boolean loaded = loadDependency(extension, dependency, extensionsById, mavenResolver);
             if (!loaded) {
                 LOGGER.error("Failed to load {}, dependency {} could was not loaded.", extension.name(), dependency.id());
                 return false;
@@ -220,7 +239,62 @@ public final class ExtensionManager {
         return true;
     }
 
-    private boolean loadDependency(ExtensionDescriptor target, Dependency dep, Map<String, ExtensionDescriptor> extensionsById) {
+    HierarchyClassLoader loadMavenDependency(ExtensionDescriptor extension, Dependency.Maven dependency, ConfigurableMavenResolverSystem mavenResolver) {
+        final String coordinate;
+        if (dependency.classifier() == null)
+            coordinate = String.format("%s:%s:%s", dependency.groupId(), dependency.artifactId(), dependency.version());
+        else
+            coordinate = String.format("%s:%s:jar:%s:%s", dependency.groupId(), dependency.artifactId(), dependency.classifier(), dependency.version());
+
+        // If already loaded by another extension, use that version.
+        if (externalDependencies.containsKey(coordinate)) {
+            return externalDependencies.get(coordinate);
+        }
+
+        Path artifactLocation = dependenciesFolder
+                .resolve(dependency.groupId())
+                .resolve(dependency.artifactId())
+                .resolve(dependency.version())
+                .resolve(String.format("%s-%s%s.jar", dependency.artifactId(), dependency.version(),
+                        (dependency.classifier() == null ? "" : "-" + dependency.classifier())));
+
+        // Download the extension only if it is not loaded already
+        if (!Files.exists(artifactLocation)) {
+            InputStream artifactStream = mavenResolver.resolve(coordinate).withoutTransitivity().asSingleInputStream();
+            if (artifactStream == null) {
+                LOGGER.error("Unable to resolve {}", coordinate);
+                LOGGER.error("Search path: [{}]", extension.repositories().stream()
+                        .map(Repository::url).collect(Collectors.joining(", ")));
+                return null;
+            }
+
+            try {
+                Files.createDirectories(artifactLocation.getParent());
+                try (ReadableByteChannel artifactData = Channels.newChannel(artifactStream);
+                     FileChannel out = FileChannel.open(artifactLocation, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+
+                    out.transferFrom(artifactData, 0, Long.MAX_VALUE);
+                }
+            } catch (IOException e) {
+                LOGGER.error("Failed to download dependency {}", coordinate, e);
+                return null;
+            }
+        }
+
+        // Create the classloader
+        try {
+            HierarchyClassLoader dependencyClassLoader = new HierarchyClassLoader(coordinate, new URL[]{artifactLocation.toUri().toURL()});
+            externalDependencies.put(coordinate, dependencyClassLoader);
+            return dependencyClassLoader;
+        } catch (MalformedURLException e) {
+            LOGGER.error("Failed to load dependency {}", coordinate, e);
+            return null;
+        }
+    }
+
+    private boolean loadDependency(ExtensionDescriptor target, Dependency dep,
+                                   Map<String, ExtensionDescriptor> extensionsById,
+                                   ConfigurableMavenResolverSystem mavenResolver) {
         // Load child and get classloader
         HierarchyClassLoader dependencyClassLoader = null;
         if (dep instanceof Dependency.Extension dependency) {
@@ -230,11 +304,11 @@ public final class ExtensionManager {
             if (!loaded) return false;
             dependencyClassLoader = descriptor.classLoader();
         } else if (dep instanceof Dependency.Maven dependency) {
-            Check.fail("Not implemented");
+            dependencyClassLoader = loadMavenDependency(target, dependency, mavenResolver);
         }
 
         // Add classloader to target
-        Check.stateCondition(dependencyClassLoader == null, "Something went wrong while loading a dependency. (extension={0},dependency={1})", target, dep);
+        Check.stateCondition(dependencyClassLoader == null, "An error occurred while loading a dependency. (extension={0}, dependency={1})", target, dep);
         target.classLoader().addChild(dependencyClassLoader);
         return true;
     }
