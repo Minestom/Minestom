@@ -1626,7 +1626,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
-        return RayUtils.BoundingBoxIntersectionCheck(Collidable.ZERO, start, position.direction(), entity.boundingBox, entity.getPosition());
+        return RayUtils.BoundingBoxRayIntersectionCheck(start, position.direction(), entity.boundingBox, entity.getPosition());
     }
 
     /**
@@ -1646,7 +1646,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(e -> e != this
-                        && RayUtils.BoundingBoxIntersectionCheck(Collidable.ZERO, start, position.direction(), e.boundingBox, e.getPosition())
+                        && RayUtils.BoundingBoxRayIntersectionCheck(start, position.direction(), e.boundingBox, e.getPosition())
                         && predicate.test(e))
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 

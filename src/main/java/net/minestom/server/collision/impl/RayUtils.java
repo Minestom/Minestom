@@ -235,8 +235,6 @@ public class RayUtils {
         return false;
     }
 
-    // Point rayDirection, Collidable bbStatic, Point rayStart, Point bbStaticOffset, Collidable bbMoving
-
     // Extended from 2d implementation found here https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/swept-aabb-collision-detection-and-response-r3084/
     public static void SweptAABB(Collidable collidableMoving, Point rayStart, Point rayDirection, Collidable collidableStatic, Point staticCollidableOffset, SweepResult writeTo) {
         double normalx, normaly, normalz;
@@ -348,5 +346,9 @@ public class RayUtils {
         writeTo.normalx = normalx;
         writeTo.normaly = normaly;
         writeTo.normalz = normalz;
+    }
+
+    public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
+        return BoundingBoxIntersectionCheck(Collidable.ZERO, start, direction, boundingBox, position);
     }
 }
