@@ -177,11 +177,9 @@ public final class CollisionUtils {
                     CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, tempResult, finalResult);
             }
         } else {
-            Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
-
             // When large moves are done we need to raycast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
-                RayUtils.RaycastCollision(deltaPosition, point.add(entityCentre), instance, originChunk, boundingBox, entityPosition, tempResult, finalResult);
+                RayUtils.RaycastCollision(deltaPosition, point.add(entityPosition), instance, originChunk, boundingBox, entityPosition, tempResult, finalResult);
             }
         }
 

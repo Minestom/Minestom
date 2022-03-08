@@ -136,6 +136,32 @@ public class EntityBlockPhysicsTest {
     }
 
     @Test
+    public void entityPhysicsCheckStairTop(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.ACACIA_STAIRS);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.4, 42.5, 0.9)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -1.2));
+        assertEqualsPoint(new Pos(0.4, 42.5, 0.8), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckStairTopSmall(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.ACACIA_STAIRS);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.4, 42.5, 0.9)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.2));
+        assertEqualsPoint(new Pos(0.4, 42.5, 0.8), res.newPosition(), precision);
+    }
+
+    @Test
     public void entityPhysicsCheckNotOnGround(Env env) {
         var instance = env.createFlatInstance();
 
