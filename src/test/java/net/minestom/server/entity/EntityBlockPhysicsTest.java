@@ -9,8 +9,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityBlockPhysicsTest {
@@ -134,6 +133,31 @@ public class EntityBlockPhysicsTest {
 
         CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -20, 0));
         assertTrue(res.isOnGround());
+    }
+
+    @Test
+    public void entityPhysicsCheckNotOnGround(Env env) {
+        var instance = env.createFlatInstance();
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 50, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -1, 0));
+        assertFalse(res.isOnGround());
+    }
+
+    @Test
+    public void entityPhysicsCheckNotOnGroundHitUp(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 60, 0, Block.STONE);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 50, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        CollisionUtils.PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 20, 0));
+        assertFalse(res.isOnGround());
     }
 
     @Test
