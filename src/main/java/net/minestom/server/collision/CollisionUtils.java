@@ -250,11 +250,10 @@ public final class CollisionUtils {
 
         boolean hitBlock = false;
 
-        Pos entityCentre = entityPosition.add(0, boundingBox.height() / 2, 0);
         Pos blockPos = new Pos(blockX, blockY, blockZ);
 
         if (checkBlock.isSolid()) {
-            hitBlock = hitBlock || boundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos, entityPosition, tempResult, finalResult);
+            hitBlock = boundingBox.intersectBlockSwept(entityPosition, entityVelocity, checkBlock, blockPos, tempResult, finalResult);
         }
 
         return hitBlock;

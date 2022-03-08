@@ -23,7 +23,8 @@ public class BoundingBox implements Collidable {
         return block.registry().shape().intersectEntity(src, this, dest);
     }
 
-    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+    public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+        Point rayStart = entityPosition.add(0, height() / 2, 0);
         return block.registry().shape().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult);
     }
 
