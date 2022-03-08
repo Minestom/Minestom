@@ -2,9 +2,7 @@ package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-
-import java.util.Arrays;
-import java.util.List;
+import net.minestom.server.instance.block.Block;
 
 public interface BlockShape {
     static BlockShapeImpl parseBlockFromRegistry(String str) {
@@ -12,5 +10,5 @@ public interface BlockShape {
     }
 
     boolean intersectEntity(Point position, EntityBoundingBox boundingBox, Point placementPosition);
-    List<? extends Collidable> intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, EntityBoundingBox moving);
+    boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, EntityBoundingBox moving, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult, Block block);
 }

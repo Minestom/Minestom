@@ -1,6 +1,8 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.instance.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +51,8 @@ public class BlockShapeImpl implements BlockShape {
     }
 
     @Override
-    public List<? extends Collidable> intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, EntityBoundingBox moving) {
-        return blockSections.stream().filter(blockSection -> {
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, EntityBoundingBox moving, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult, Block block) {
+        List<? extends Collidable> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.RayBoundingBoxIntersectCheck(
@@ -59,5 +61,26 @@ public class BlockShapeImpl implements BlockShape {
                     blockPos
             );
         }).toList();
+
+        boolean hitBlock = false;
+
+        for (Collidable bb : collidables) {
+            // Longer check to get result of collision
+            RayUtils.SweptAABB(moving, entityPosition, rayDirection, bb, blockPos, tempResult);
+
+            // Update final result if the temp result collision is sooner than the current final result
+            if (tempResult.res < finalResult.res) {
+                finalResult.res = tempResult.res;
+                finalResult.normalx = tempResult.normalx;
+                finalResult.normaly = tempResult.normaly;
+                finalResult.normalz = tempResult.normalz;
+                finalResult.collisionBlock = blockPos;
+                finalResult.blockType = block;
+            }
+
+            hitBlock = true;
+        }
+
+        return hitBlock;
     }
 }

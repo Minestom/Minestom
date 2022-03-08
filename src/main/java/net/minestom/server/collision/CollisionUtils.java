@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -35,7 +36,7 @@ public final class CollisionUtils {
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
-        Pos collisionYBlock = null;
+        Point collisionYBlock = null;
         Block blockYType = Block.AIR;
 
         // Check cache to see if the entity is standing on a block without moving.
@@ -253,22 +254,7 @@ public final class CollisionUtils {
         Pos blockPos = new Pos(blockX, blockY, blockZ);
 
         if (checkBlock.isSolid()) {
-            for (Collidable bb : entityBoundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos)) {
-                // Longer check to get result of collision
-                RayUtils.SweptAABB(entityBoundingBox, entityPosition, entityVelocity, bb, blockPos, tempResult);
-
-                // Update final result if the temp result collision is sooner than the current final result
-                if (tempResult.res < finalResult.res) {
-                    finalResult.res = tempResult.res;
-                    finalResult.normalx = tempResult.normalx;
-                    finalResult.normaly = tempResult.normaly;
-                    finalResult.normalz = tempResult.normalz;
-                    finalResult.collisionBlock = new Pos(blockX, blockY, blockZ);
-                    finalResult.blockType = checkBlock;
-                }
-
-                hitBlock = true;
-            }
+            hitBlock = hitBlock || entityBoundingBox.intersectBlockSwept(entityCentre, entityVelocity, checkBlock, blockPos, entityPosition, tempResult, finalResult);
         }
 
         return hitBlock;
@@ -302,6 +288,6 @@ public final class CollisionUtils {
         };
     }
 
-    public record PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround, boolean collisionX, boolean collisionY, boolean collisionZ, Vec originalDelta, Pos collidedBlockY, Block blockTypeY) {
+    public record PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround, boolean collisionX, boolean collisionY, boolean collisionZ, Vec originalDelta, net.minestom.server.coordinate.Point collidedBlockY, Block blockTypeY) {
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
@@ -22,8 +23,8 @@ public class EntityBoundingBox implements Collidable {
         return block.registry().boundingBoxes().intersectEntity(src, this, dest);
     }
 
-    public List<? extends Collidable> intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos) {
-        return block.registry().boundingBoxes().intersectEntitySwept(rayStart, rayDirection, blockPos, this);
+    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, Pos entityPosition, RayUtils.SweepResult tempResult, RayUtils.SweepResult finalResult) {
+        return block.registry().boundingBoxes().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult, block);
     }
 
     public EntityBoundingBox(double width, double height, double depth) {
