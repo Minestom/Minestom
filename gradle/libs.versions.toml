@@ -10,7 +10,7 @@ dependencyGetter = "v1.0.1"
 minestomData = "895581d464"
 hephaistos = "2.4.4"
 jetbrainsAnnotations = "23.0.0"
-shrinkwrap = "2.2.7"
+shrinkwrap = "3.1.4"
 
 # Terminal / Logging
 tinylog = "2.4.1"
