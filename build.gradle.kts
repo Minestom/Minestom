@@ -74,7 +74,7 @@ dependencies {
     api(libs.bundles.kotlin)
 
     // Extension Management System dependency handler.
-    api(libs.dependencyGetter)
+    implementation(libs.shrinkwrap)
 
     // Minestom Data (From MinestomDataGenerator)
     implementation(libs.minestomData)

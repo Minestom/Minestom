@@ -4,14 +4,16 @@ import net.minestom.server.extensions.Extension;
 
 public class TestExtension extends Extension {
     @Override
-    public void initialize() {
+    public LoadStatus initialize() {
         System.out.println("Initialize test extension");
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver", true, getOrigin().getClassLoader());
+            Class<?> driver = Class.forName("com.mysql.cj.jdbc.Driver", true, descriptor().classLoader());
+            System.out.println("MySQL driver class: " + driver.getName() + " (in " + driver.getClassLoader().getName() + ")");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return LoadStatus.SUCCESS;
     }
 
     @Override

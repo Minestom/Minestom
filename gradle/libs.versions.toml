@@ -10,6 +10,7 @@ dependencyGetter = "v1.0.1"
 minestomData = "895581d464"
 hephaistos = "2.4.2"
 jetbrainsAnnotations = "23.0.0"
+shrinkwrap = "2.2.7"
 
 # Terminal / Logging
 tinylog = "2.4.1"
@@ -55,6 +56,7 @@ hydrazine = { group = "com.github.MadMartian", name = "hydrazine-path-finding", 
 dependencyGetter = { group = "com.github.Minestom", name = "DependencyGetter", version.ref = "dependencyGetter" }
 minestomData = { group = "com.github.Minestom", name = "MinestomDataGenerator", version.ref = "minestomData" }
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
+shrinkwrap = { group = "org.jboss.shrinkwrap.resolver", name = "shrinkwrap-resolver-depchain", version.ref = "shrinkwrap" }
 
 # Logging
 tinylog-api = { group = "org.tinylog", name = "tinylog-api", version.ref = "tinylog" }
