@@ -114,18 +114,45 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsCheckEnclosedHit(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(7, 42, 7, Block.STONE);
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
+        instance.setBlock(8, 42, 8, Block.STONE);
 
         var entity = new Entity(EntityTypes.SLIME);
         SlimeMeta meta = (SlimeMeta) entity.entityMeta;
-        meta.setSize(5);
+        meta.setSize(10);
 
-        entity.setInstance(instance, new Pos(5, 44, 5)).join();
+        entity.setInstance(instance, new Pos(5, 50, 5)).join();
+
         assertEquals(instance, entity.getInstance());
 
-        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 0));
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -20, 0));
 
         assertEqualsPoint(new Pos(5, 43, 5), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckEnclosedHitSubBlock(Env env) {
+        var instance = env.createFlatInstance();
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
+        instance.setBlock(8, 42, 8, Block.LANTERN);
+
+        var entity = new Entity(EntityTypes.SLIME);
+        SlimeMeta meta = (SlimeMeta) entity.entityMeta;
+        meta.setSize(10);
+
+        entity.setInstance(instance, new Pos(5, 42.8, 5)).join();
+
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -0.4, 0));
+
+        assertEqualsPoint(new Pos(5, 42.56, 5), res.newPosition(), precision);
     }
 
     @Test

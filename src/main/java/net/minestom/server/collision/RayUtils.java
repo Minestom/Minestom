@@ -1,9 +1,5 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.Collidable;
-import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.SweepResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -43,14 +39,16 @@ class RayUtils {
                 int xi = (int) (xStepsCompleted*xStep + rayStart.blockX());
                 double factor = (xi - rayStart.x()) / rayDirection.x();
 
+                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
+
                 // Solve for y and z
                 int yi = (int) Math.floor(rayDirection.y() * factor + rayStart.y());
 
                 // If the y distance is much greater than the collision point that is currently being used, break
-                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(entityCentre.y() - (yi)) < -2) break;
+                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
 
                 int zi = (int) Math.floor(rayDirection.z() * factor + rayStart.z());
-                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(entityCentre.z() - (zi)) < -2) break;
+                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
 
                 xi -= xFix;
                 xStepsCompleted++;
@@ -71,11 +69,13 @@ class RayUtils {
                 int zi = (int) (zStepsCompleted*zStep + rayStart.blockZ());
                 double factor = (zi - rayStart.z()) / rayDirection.z();
 
+                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
+
                 int xi = (int) Math.floor(rayDirection.x() * factor + rayStart.x());
-                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(entityCentre.x() - (xi)) < -2) break;
+                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
 
                 int yi = (int) Math.floor(rayDirection.y() * factor + rayStart.y());
-                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(entityCentre.y() - (yi)) < -2) break;
+                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
 
                 zi -= zFix;
                 zStepsCompleted++;
@@ -94,11 +94,13 @@ class RayUtils {
                 int yi = (int) (yStepsCompleted*yStep + rayStart.blockY());
                 double factor = (yi - rayStart.y()) / rayDirection.y();
 
+                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
+
                 int xi = (int) Math.floor(rayDirection.x() * factor + rayStart.x());
-                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(entityCentre.x() - (xi)) < -2) break;
+                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
 
                 int zi = (int) Math.floor(rayDirection.z() * factor + rayStart.z());
-                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(entityCentre.z() - (zi)) < -2) break;
+                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
 
                 yi -= yFix;
                 yStepsCompleted++;
