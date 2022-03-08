@@ -1,6 +1,5 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.collision.impl.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;

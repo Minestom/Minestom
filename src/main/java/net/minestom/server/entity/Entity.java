@@ -10,10 +10,8 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.Collidable;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
-import net.minestom.server.collision.impl.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -1627,7 +1625,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
-        return RayUtils.BoundingBoxRayIntersectionCheck(start, position.direction(), entity.boundingBox, entity.getPosition());
+        return entity.boundingBox.BoundingBoxRayIntersectionCheck(start, position.direction(), entity.getPosition());
     }
 
     /**
@@ -1647,7 +1645,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(e -> e != this
-                        && RayUtils.BoundingBoxRayIntersectionCheck(start, position.direction(), e.boundingBox, e.getPosition())
+                        && e.boundingBox.BoundingBoxRayIntersectionCheck(start, position.direction(), e.getPosition())
                         && predicate.test(e))
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 

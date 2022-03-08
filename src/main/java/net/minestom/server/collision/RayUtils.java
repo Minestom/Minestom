@@ -1,4 +1,4 @@
-package net.minestom.server.collision.impl;
+package net.minestom.server.collision;
 
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.Collidable;
@@ -10,7 +10,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 
-public class RayUtils {
+class RayUtils {
     /**
      *
      * @param rayDirection Ray vector

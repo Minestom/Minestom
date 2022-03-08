@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
@@ -131,6 +132,10 @@ public class BoundingBox implements Collidable {
 
     public double maxZ() {
         return depth / 2;
+    }
+
+    public boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
+        return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }
 
     record Faces(Map<Vec, List<Vec>> query) {
