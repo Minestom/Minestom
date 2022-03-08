@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class EntityBlockPhysicsTest {
+public class EntityBlockPhysicsIntegrationTest {
     private static final Point precision = new Pos(0.01, 0.01, 0.01);
 
     private static boolean checkPoints(Point expected, Point actual, Point delta) {

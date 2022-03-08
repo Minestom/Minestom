@@ -123,7 +123,7 @@ public class RayUtils {
         double signumRayX = Math.signum(rayDirection.x());
         double signumRayY = Math.signum(rayDirection.y());
         double signumRayZ = Math.signum(rayDirection.z());
-        
+
         // Intersect X
         if (rayDirection.x() != 0) {
             // Left side of bounding box

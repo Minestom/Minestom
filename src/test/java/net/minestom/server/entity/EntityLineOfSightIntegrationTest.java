@@ -2,20 +2,14 @@ package net.minestom.server.entity;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.block.Block;
-import org.antlr.v4.runtime.atn.SemanticContext;
 import org.junit.jupiter.api.Test;
-
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
-public class EntityLineOfSightTest {
+public class EntityLineOfSightIntegrationTest {
     @Test
     public void entityPhysicsCheckLineOfSight(Env env) {
         var instance = env.createFlatInstance();
