@@ -10,7 +10,9 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.Collidable;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.RayUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -76,6 +78,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 /**
  * Could be a player, a monster, or an object.
@@ -1655,40 +1658,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
         Vec end = start.add(position.direction().mul(range));
 
-        List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(e -> e != this && e.boundingBox.intersectPoint(start, end) && predicate.test(e)).toList();
-        if (nearby.isEmpty()) {
-            return null;
-        }
-
-        Vec direction = end.sub(start);
-        int maxDistance = (int) Math.ceil(direction.length());
-        double maxVisibleDistanceSquared = direction.lengthSquared();
-
-        var iterator = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
-        while (iterator.hasNext()) {
-            Point blockPos = iterator.next();
-            Block block = instance.getBlock(blockPos);
-            if (!block.isAir() && !block.isLiquid()) {
-                maxVisibleDistanceSquared = blockPos.distanceSquared(position);
-                break;
-            }
-        }
-
-        Entity result = null;
-        double minDistanceSquared = 0D;
-        for (Entity entity : nearby) {
-            double distanceSquared = entity.getDistanceSquared(this);
-            if (result == null || minDistanceSquared > distanceSquared) {
-                result = entity;
-                minDistanceSquared = distanceSquared;
-            }
-        }
-        if (minDistanceSquared < maxVisibleDistanceSquared) {
-            return result;
-        } else {
-            return null;
-        }
+        Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
+                .filter(e -> e != this
+                        && RayUtils.RayBoundingBoxIntersectCheck(Collidable.ZERO, start, end.sub(start), e.boundingBox, e.getPosition())
+                        && predicate.test(e))
+                .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
+        
+        return nearby.orElse(null);
     }
 
     public enum Pose {

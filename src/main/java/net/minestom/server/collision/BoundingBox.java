@@ -71,30 +71,6 @@ public class BoundingBox implements Collidable {
     }
 
     /**
-     * Used to know if the bounding box intersects (contains) a point.
-     *
-     * @param x x-coord of a point
-     * @param y y-coord of a point
-     * @param z z-coord of a point
-     * @return true if the bounding box intersects (contains) with the point, false otherwise
-     */
-    public boolean intersectPoint(@NotNull Point src, double x, double y, double z) {
-        return (x >= minX() + src.x() && x <= maxX() + src.x()) &&
-                (y >= minY() + src.y() && y <= maxY() + src.y()) &&
-                (z >= minZ() + src.z() && z <= maxZ() + src.z());
-    }
-
-    /**
-     * Used to know if the bounding box intersects (contains) a point.
-     *
-     * @param dest the point to check
-     * @return true if the bounding box intersects (contains) with the point, false otherwise
-     */
-    public boolean intersectPoint(@NotNull Point src, @NotNull Point dest) {
-        return intersectPoint(src, dest.x(), dest.y(), dest.z());
-    }
-
-    /**
      * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
      *
      * @param x the X offset
