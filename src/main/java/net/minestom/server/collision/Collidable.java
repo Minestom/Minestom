@@ -59,4 +59,3 @@ public interface Collidable {
         }
     };
 }
-
