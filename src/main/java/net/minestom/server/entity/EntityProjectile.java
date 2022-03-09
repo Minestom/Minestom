@@ -172,9 +172,8 @@ public class EntityProjectile extends Entity {
             if (getAliveTicks() < 3) {
                 continue;
             }
-            final Pos finalPos = pos;
             Optional<Entity> victimOptional = entities.stream()
-                    .filter(entity -> entity.getBoundingBox().intersect(finalPos))
+                    .filter(entity -> getBoundingBox().intersectEntity(getPosition(), entity))
                     .findAny();
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();

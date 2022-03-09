@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -73,5 +75,14 @@ public class BlockTest {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.properties().put("facing", "north"));
         assertThrows(Exception.class, () -> block.withProperty("facing", "north").properties().put("facing", "south"));
+    }
+
+    @Test
+    public void testShape() {
+        Point start = Block.LANTERN.registry().collisionShape().relativeStart();
+        Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
+
+        assertEquals(start, new Vec(0.312, 0, 0.312));
+        assertEquals(end, new Vec(0.625, 0.437, 0.625));
     }
 }

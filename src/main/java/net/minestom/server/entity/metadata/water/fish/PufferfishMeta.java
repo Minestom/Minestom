@@ -1,6 +1,5 @@
 package net.minestom.server.entity.metadata.water.fish;
 
-import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;

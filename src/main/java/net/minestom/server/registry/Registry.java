@@ -3,6 +3,9 @@ package net.minestom.server.registry;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -164,6 +167,7 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
+        private final Shape shape;
         private final Properties custom;
 
         private BlockEntry(String namespace, Properties main, Properties custom) {
@@ -193,6 +197,10 @@ public final class Registry {
             {
                 final String materialNamespace = main.getString("correspondingItem", null);
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
+            }
+            {
+                final String string = main.getString("collisionShape");
+                this.shape = CollisionUtils.parseBlockShape(string, this.materialSupplier);
             }
         }
 
@@ -260,6 +268,10 @@ public final class Registry {
             return materialSupplier.get();
         }
 
+        public Shape collisionShape() {
+            return shape;
+        }
+
         @Override
         public Properties custom() {
             return custom;
@@ -289,7 +301,6 @@ public final class Registry {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
             }
-
             {
                 final Properties armorProperties = main.section("armorProperties");
                 if (armorProperties != null) {
@@ -353,6 +364,7 @@ public final class Registry {
                               double width, double height,
                               double drag, double acceleration,
                               EntitySpawnType spawnType,
+                              BoundingBox boundingBox,
                               Properties custom) implements Entry {
         public EntityEntry(String namespace, Properties main, Properties custom) {
             this(NamespaceID.from(namespace),
@@ -363,7 +375,12 @@ public final class Registry {
                     main.getDouble("drag", 0.02),
                     main.getDouble("acceleration", 0.08),
                     EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    custom);
+                    new BoundingBox(
+                            main.getDouble("width"),
+                            main.getDouble("height"),
+                            main.getDouble("width")),
+                    custom
+            );
         }
     }
 
