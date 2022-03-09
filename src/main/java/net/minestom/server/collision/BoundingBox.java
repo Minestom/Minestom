@@ -28,15 +28,19 @@ public final class BoundingBox implements Shape {
         this.offset = new Vec(-width / 2, 0, -depth / 2);
     }
 
+    @ApiStatus.Experimental
     public boolean intersectBlock(Point src, Block block, Point dest) {
         return block.registry().shape().intersectBox(src.sub(dest), this);
     }
 
-    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
-        return block.registry().shape().intersectBoxSwept(rayStart, rayDirection, blockPos, this, tempResult, finalResult);
+    @ApiStatus.Experimental
+    public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
+        Point rayStart = entityPosition.add(0, height() / 2, 0);
+        return block.registry().shape().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult);
     }
 
     @Override
+    @ApiStatus.Experimental
     public boolean intersectBox(Point positionRelative, BoundingBox boundingBox) {
         return (minX() + positionRelative.x() <= boundingBox.maxX() && maxX() + positionRelative.x() >= boundingBox.minX()) &&
                 (minY() + positionRelative.y() <= boundingBox.maxY() && maxY() + positionRelative.y() >= boundingBox.minY()) &&
@@ -44,29 +48,9 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
-        boolean isHit = RayUtils.BoundingBoxIntersectionCheck(
-                moving, rayStart, rayDirection,
-                this,
-                blockPos
-        );
-
-        if (!isHit) return false;
-
-        // Longer check to get result of collision
-        RayUtils.SweptAABB(moving, rayStart, rayDirection, this, blockPos, tempResult);
-
-        // Update final result if the temp result collision is sooner than the current final result
-        if (tempResult.res < finalResult.res) {
-            finalResult.res = tempResult.res;
-            finalResult.normalX = tempResult.normalX;
-            finalResult.normalY = tempResult.normalY;
-            finalResult.normalZ = tempResult.normalZ;
-            finalResult.collisionBlock = blockPos;
-            finalResult.blockType = null;
-        }
-
-        return true;
+    @ApiStatus.Experimental
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -75,6 +59,7 @@ public final class BoundingBox implements Shape {
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
      */
+    @ApiStatus.Experimental
     public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
         return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
     }
