@@ -3,6 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -86,12 +87,15 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
+        Point bbCentre = new Pos(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2, moving.minZ() + moving.depth() / 2);
+        Point rayCentre = rayStart.add(bbCentre);
+
         List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.BoundingBoxIntersectionCheck(
-                    moving, rayStart, rayDirection,
+                    moving, rayCentre, rayDirection,
                     blockSection,
                     blockPos
             );
@@ -101,7 +105,7 @@ final class ShapeImpl implements Shape {
 
         for (BoundingBox bb : collidables) {
             // Longer check to get result of collision
-            RayUtils.SweptAABB(moving, entityPosition, rayDirection, bb, blockPos, tempResult);
+            RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, blockPos, tempResult);
 
             // Update final result if the temp result collision is sooner than the current final result
             if (tempResult.res < finalResult.res) {

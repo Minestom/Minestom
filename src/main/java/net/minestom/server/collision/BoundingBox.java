@@ -32,9 +32,8 @@ public final class BoundingBox implements Shape {
         return block.registry().shape().intersectBox(src.sub(dest), this);
     }
 
-    public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
-        Point rayStart = entityPosition.add(0, height() / 2, 0);
-        return block.registry().shape().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult);
+    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
+        return block.registry().shape().intersectBoxSwept(rayStart, rayDirection, blockPos, this, tempResult, finalResult);
     }
 
     @Override
@@ -45,7 +44,7 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
         throw new UnsupportedOperationException();
     }
 
