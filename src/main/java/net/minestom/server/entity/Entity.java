@@ -648,10 +648,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
-                        Point blockPos = new Pos(x, y, z);
+                        final double triggerDelta = 0.01;
 
-                        // checks that we are actually in the block, and not just here because of a rounding error
-                        if (block.registry().shape().intersectBox(position.sub(blockPos).add(blockPos.mul(0.01)), boundingBox)) {
+                        // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
+                        Point blockPos = new Pos(x * (1 - triggerDelta), y * (1 - triggerDelta), z * (1 - triggerDelta));
+
+                        if (block.registry().shape().intersectBox(position.sub(blockPos), boundingBox)) {
                             // TODO: replace with check with custom block bounding box
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
