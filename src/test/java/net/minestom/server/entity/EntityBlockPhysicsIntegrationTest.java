@@ -2,14 +2,23 @@ package net.minestom.server.entity;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
+import net.minestom.server.collision.SweepResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -173,6 +182,24 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckEntityHit(Env env) {
+        Point z1 = new Pos(0, 0, 0);
+        Point z2 = new Pos(15, 0, 0);
+        Point z3 = new Pos(11, 0, 0);
+        Point movement = new Pos(20, 1, 0);
+
+        BoundingBox bb = new Entity(EntityTypes.ZOMBIE).getBoundingBox();
+
+        SweepResult sweepResultTemp = new SweepResult(1, 0, 0, 0);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0);
+
+        bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultTemp, sweepResultFinal);
+        bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultTemp, sweepResultFinal);
+
+        System.out.println(sweepResultFinal.getCollisionPoint());
+    }
+
+    @Test
     public void entityPhysicsCheckEdgeClip(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
@@ -183,6 +210,43 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 0));
         assertEqualsPoint(new Pos(0.7, 42, 0.7), res.newPosition(), precision);
+    }
+
+    @Test
+    public void entityPhysicsCheckTouchTick(Env env) {
+        var instance = env.createFlatInstance();
+
+        var handler = new BlockHandler() {
+            @Override
+            public void onTouch(@NotNull Touch touch) {
+                System.out.println(touch.getBlockPosition());
+            }
+
+            @Override
+            public @NotNull NamespaceID getNamespaceId() {
+                return NamespaceID.from("minestom:test");
+            }
+        };
+
+        instance.setBlock(0, 42, 0, Block.STONE.withHandler(handler));
+        instance.setBlock(0, 42, 1, Block.STONE.withHandler(handler));
+        instance.setBlock(0, 43, 1, Block.STONE.withHandler(handler));
+        instance.setBlock(0, 43, -1, Block.STONE.withHandler(handler));
+        instance.setBlock(1, 42, 1, Block.STONE.withHandler(handler));
+        instance.setBlock(1, 42, 0, Block.STONE.withHandler(handler));
+        instance.setBlock(0, 42, 10, Block.STONE.withHandler(handler));
+
+        // These points should be touched
+        // Vec[x=0.0, y=42.0, z=0.0]
+        // Vec[x=0.0, y=42.0, z=1.0]
+        // Vec[x=0.0, y=43.0, z=1.0]
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
+
+        entity.tick(0);
+
+        assertEquals(instance, entity.getInstance());
     }
 
     @Test

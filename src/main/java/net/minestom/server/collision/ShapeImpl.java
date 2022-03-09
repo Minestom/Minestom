@@ -3,7 +3,6 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -87,14 +86,14 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
         List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.BoundingBoxIntersectionCheck(
                     moving, rayStart, rayDirection,
                     blockSection,
-                    blockPos
+                    staticPos
             );
         }).toList();
 
@@ -102,7 +101,7 @@ final class ShapeImpl implements Shape {
 
         for (BoundingBox bb : collidables) {
             // Longer check to get result of collision
-            RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, blockPos, tempResult);
+            RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, staticPos, tempResult);
 
             // Update final result if the temp result collision is sooner than the current final result
             if (tempResult.res < finalResult.res) {
@@ -110,7 +109,7 @@ final class ShapeImpl implements Shape {
                 finalResult.normalX = tempResult.normalX;
                 finalResult.normalY = tempResult.normalY;
                 finalResult.normalZ = tempResult.normalZ;
-                finalResult.collisionBlock = blockPos;
+                finalResult.collisionBlock = staticPos;
                 finalResult.blockType = block.get().block();
             }
 

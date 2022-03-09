@@ -641,19 +641,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
                     if (!ChunkUtils.isLoaded(chunk))
                         continue;
+
                     final Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.CACHED);
-
-                    System.out.println(new Pos(x, y, z));
-
-
                     if (block == null)
                         continue;
+
                     final BlockHandler handler = block.handler();
-
                     if (handler != null) {
-                        // checks that we are actually in the block, and not just here because of a rounding error
+                        Point blockPos = new Pos(x, y, z);
 
-                        if (boundingBox.intersectBlock(position, block, new Pos(x, y, z))) {
+                        // checks that we are actually in the block, and not just here because of a rounding error
+                        if (block.registry().shape().intersectBox(position.sub(blockPos).add(blockPos.mul(0.01)), boundingBox)) {
                             // TODO: replace with check with custom block bounding box
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }

@@ -29,14 +29,8 @@ public final class BoundingBox implements Shape {
     }
 
     @ApiStatus.Experimental
-    public boolean intersectBlock(Point src, Block block, Point dest) {
-        return block.registry().shape().intersectBox(src.sub(dest), this);
-    }
-
-    @ApiStatus.Experimental
-    public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
-        Point rayStart = entityPosition.add(0, height() / 2, 0);
-        return block.registry().shape().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult);
+    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
+        return block.registry().shape().intersectBoxSwept(rayStart, rayDirection, blockPos, this, tempResult, finalResult);
     }
 
     @Override
@@ -49,8 +43,29 @@ public final class BoundingBox implements Shape {
 
     @Override
     @ApiStatus.Experimental
-    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
-        throw new UnsupportedOperationException();
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
+        boolean isHit = RayUtils.BoundingBoxIntersectionCheck(
+                moving, rayStart, rayDirection,
+                this,
+                staticPos
+        );
+
+        if (!isHit) return false;
+
+        // Longer check to get result of collision
+        RayUtils.SweptAABB(moving, rayStart, rayDirection, this, staticPos, tempResult);
+
+        // Update final result if the temp result collision is sooner than the current final result
+        if (tempResult.res < finalResult.res) {
+            finalResult.res = tempResult.res;
+            finalResult.normalX = tempResult.normalX;
+            finalResult.normalY = tempResult.normalY;
+            finalResult.normalZ = tempResult.normalZ;
+            finalResult.collisionBlock = staticPos;
+            finalResult.blockType = null;
+        }
+
+        return true;
     }
 
     /**
