@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class ShapeImpl implements Shape {
+    private static final Pattern PATTERN = Pattern.compile("\\d.\\d{1,3}", Pattern.MULTILINE);
     private final BoundingBox[] blockSections;
     private final Supplier<Material> block;
 
@@ -21,10 +22,7 @@ final class ShapeImpl implements Shape {
     }
 
     static ShapeImpl parseBlockFromRegistry(String str, Supplier<Material> block) {
-        final String regex = "\\d.\\d{1,3}";
-        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        final Matcher matcher = pattern.matcher(str);
-
+        final Matcher matcher = PATTERN.matcher(str);
         DoubleList vals = new DoubleArrayList();
         while (matcher.find()) {
             double newVal = Double.parseDouble(matcher.group());
@@ -90,9 +88,11 @@ final class ShapeImpl implements Shape {
             // Uses minkowski sum
             if (!RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos))
                 continue;
+
             // Longer check to get result of collision
             RayUtils.SweptAABB(moving, rayStart, rayDirection, blockSection, shapePos, tempResult);
             // Update final result if the temp result collision is sooner than the current final result
+
             if (tempResult.res < finalResult.res) {
                 finalResult.res = tempResult.res;
                 finalResult.normalX = tempResult.normalX;
