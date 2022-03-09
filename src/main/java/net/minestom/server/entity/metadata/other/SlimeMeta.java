@@ -19,7 +19,8 @@ public class SlimeMeta extends MobMeta {
 
     public void setSize(int value) {
         this.consumeEntity((entity) -> {
-            entity.setBoundingBox(value, value, value);
+            float boxSize = 0.51000005f * value;
+            entity.setBoundingBox(boxSize, boxSize, boxSize);
         });
         super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
     }
