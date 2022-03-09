@@ -87,14 +87,14 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult) {
         List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.BoundingBoxIntersectionCheck(
                     moving, rayStart, rayDirection,
                     blockSection,
-                    staticPos
+                    shapePos
             );
         }).toList();
 
@@ -102,7 +102,7 @@ final class ShapeImpl implements Shape {
 
         for (BoundingBox bb : collidables) {
             // Longer check to get result of collision
-            RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, staticPos, tempResult);
+            RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, shapePos, tempResult);
 
             // Update final result if the temp result collision is sooner than the current final result
             if (tempResult.res < finalResult.res) {
@@ -110,7 +110,7 @@ final class ShapeImpl implements Shape {
                 finalResult.normalX = tempResult.normalX;
                 finalResult.normalY = tempResult.normalY;
                 finalResult.normalZ = tempResult.normalZ;
-                finalResult.collidedShapePosition = staticPos;
+                finalResult.collidedShapePosition = shapePos;
                 finalResult.collidedShape = this;
                 finalResult.blockType = block.get().block();
             }

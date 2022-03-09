@@ -45,17 +45,17 @@ public final class BoundingBox implements Shape {
 
     @Override
     @ApiStatus.Experimental
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult) {
         boolean isHit = RayUtils.BoundingBoxIntersectionCheck(
                 moving, rayStart, rayDirection,
                 this,
-                staticPos
+                shapePos
         );
 
         if (!isHit) return false;
 
         // Longer check to get result of collision
-        RayUtils.SweptAABB(moving, rayStart, rayDirection, this, staticPos, tempResult);
+        RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, tempResult);
 
         // Update final result if the temp result collision is sooner than the current final result
         if (tempResult.res < finalResult.res) {
@@ -63,7 +63,7 @@ public final class BoundingBox implements Shape {
             finalResult.normalX = tempResult.normalX;
             finalResult.normalY = tempResult.normalY;
             finalResult.normalZ = tempResult.normalZ;
-            finalResult.collidedShapePosition = staticPos;
+            finalResult.collidedShapePosition = shapePos;
             finalResult.collidedShape = this;
             finalResult.blockType = null;
         }

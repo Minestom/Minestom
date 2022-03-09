@@ -18,12 +18,12 @@ public interface Shape {
      * Check if a moving shape will hit this shape
      * @param rayStart Position of the moving shape
      * @param rayDirection Movement vector
-     * @param staticPos Position of this shape
+     * @param shapePos Position of this shape
      * @param moving Bounding Box of moving shape
      * @param finalResult Stores final SweepResult
      * @return is an intersection found
      */
-    boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult finalResult);
+    boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult);
 
     /**
      * Relative Start
