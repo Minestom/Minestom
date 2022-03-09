@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -20,6 +21,13 @@ public final class BoundingBox implements Shape {
     Point offset;
     private Faces faces;
 
+    public BoundingBox(double width, double height, double depth) {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.offset = new Vec(-width / 2, 0, -depth / 2);
+    }
+
     public boolean intersectBlock(Point src, Block block, Point dest) {
         return block.registry().shape().intersectEntity(src, this, dest);
     }
@@ -27,13 +35,6 @@ public final class BoundingBox implements Shape {
     public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
         Point rayStart = entityPosition.add(0, height() / 2, 0);
         return block.registry().shape().intersectEntitySwept(rayStart, rayDirection, blockPos, this, entityPosition, tempResult, finalResult);
-    }
-
-    public BoundingBox(double width, double height, double depth) {
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
-        this.offset = new Vec(-width / 2, 0, -depth / 2);
     }
 
     @Override
@@ -46,14 +47,9 @@ public final class BoundingBox implements Shape {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public @NotNull Point relativeStart() {
-        return offset;
-    }
-
-    @Override
-    public @NotNull Point relativeEnd() {
-        return offset.add(width, height, depth);
+    @ApiStatus.Experimental
+    public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
+        return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }
 
     /**
@@ -62,10 +58,20 @@ public final class BoundingBox implements Shape {
      * @param entityBoundingBox the {@link BoundingBox} to check
      * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
      */
-    public boolean intersectCollidable(@NotNull Point src, @NotNull BoundingBox entityBoundingBox, @NotNull Point dest) {
+    boolean intersectCollidable(@NotNull Point src, @NotNull BoundingBox entityBoundingBox, @NotNull Point dest) {
         return (minX() + src.x() <= entityBoundingBox.maxX() + dest.x() && maxX() + src.x() >= entityBoundingBox.minX() + dest.x()) &&
                 (minY() + src.y() <= entityBoundingBox.maxY() + dest.y() && maxY() + src.y() >= entityBoundingBox.minY() + dest.y()) &&
                 (minZ() + src.z() <= entityBoundingBox.maxZ() + dest.z() && maxZ() + src.z() >= entityBoundingBox.minZ() + dest.z());
+    }
+
+    @Override
+    public @NotNull Point relativeStart() {
+        return offset;
+    }
+
+    @Override
+    public @NotNull Point relativeEnd() {
+        return offset.add(width, height, depth);
     }
 
     @Override
@@ -156,10 +162,6 @@ public final class BoundingBox implements Shape {
 
     public double maxZ() {
         return relativeEnd().z();
-    }
-
-    public boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
-        return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }
 
     record Faces(Map<Vec, List<Vec>> query) {
