@@ -75,9 +75,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">net.minestom.server.collision.BoundingBox</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">BoundingBox</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">BoundingBox</span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></span></div>
 <div class="block">See https://wiki.vg/Entity_metadata#Mobs_2</div>
 </section>
 <section class="summary">
@@ -90,13 +95,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,double,double,double)" class="member-name-link">BoundingBox</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Creates a <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to an <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> and with a specific size.</div>
-</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(double,double,double)" class="member-name-link">BoundingBox</a><wbr>(double&nbsp;width,
+ double&nbsp;height,
+ double&nbsp;depth)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -111,13 +113,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contract(double,double,double)" class="member-name-link">contract</a><wbr>(double&nbsp;x,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#boundingBoxRayIntersectionCheck(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Pos)" class="member-name-link">boundingBoxRayIntersectionCheck</a><wbr>(<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
+ <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
+ <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contract(double,double,double)" class="member-name-link">contract</a><wbr>(double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to the same <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with contracted size.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#depth()" class="member-name-link">depth</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expand(double,double,double)" class="member-name-link">expand</a><wbr>(double&nbsp;x,
  double&nbsp;y,
@@ -125,133 +135,63 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to the same <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with expanded size.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBackFace()" class="member-name-link">getBackFace</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the back of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBottomFace()" class="member-name-link">getBottomFace</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the bottom of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDepth()" class="member-name-link">getDepth</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the depth of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFrontFace()" class="member-name-link">getFrontFace</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the front of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeight()" class="member-name-link">getHeight</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the height of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLeftFace()" class="member-name-link">getLeftFace</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points on the left face of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxX()" class="member-name-link">getMaxX</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the max X based on <a href="#getWidth()"><code>getWidth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxY()" class="member-name-link">getMaxY</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the max Y based on <a href="#getHeight()"><code>getHeight()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxZ()" class="member-name-link">getMaxZ</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the max Z based on <a href="#getDepth()"><code>getDepth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMinX()" class="member-name-link">getMinX</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the min X based on <a href="#getWidth()"><code>getWidth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMinY()" class="member-name-link">getMinY</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the min Y based on the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMinZ()" class="member-name-link">getMinZ</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the min Z based on <a href="#getDepth()"><code>getDepth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRightFace()" class="member-name-link">getRightFace</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points on the right face of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTopFace()" class="member-name-link">getTopFace</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the top of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWidth()" class="member-name-link">getWidth</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the width of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#height()" class="member-name-link">height</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersect(double,double,double)" class="member-name-link">intersect</a><wbr>(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectBox(net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">intersectBox</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;positionRelative,
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if the bounding box intersects (contains) a point.</div>
+<div class="block">Checks if two bounding boxes intersect.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersect(double,double,double,double,double,double)" class="member-name-link">intersect</a><wbr>(double&nbsp;x1,
- double&nbsp;y1,
- double&nbsp;z1,
- double&nbsp;x2,
- double&nbsp;y2,
- double&nbsp;z2)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectBoxSwept(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox,net.minestom.server.collision.SweepResult)" class="member-name-link">intersectBoxSwept</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayStart,
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayDirection,
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;shapePos,
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;moving,
+ @NotNull net.minestom.server.collision.SweepResult&nbsp;finalResult)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if the bounding box intersects a line segment.</div>
+<div class="block">Checks if a moving bounding box will hit this shape.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersect(net.minestom.server.collision.BoundingBox)" class="member-name-link">intersect</a><wbr>(@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectEntity(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity)" class="member-name-link">intersectEntity</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;src,
+ @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if two <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersect with each other.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersect(net.minestom.server.coordinate.Point)" class="member-name-link">intersect</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if the bounding box intersects (contains) a point.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersect(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)" class="member-name-link">intersect</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;start,
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;end)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if the bounding box intersects a line segment.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersect(net.minestom.server.entity.Entity)" class="member-name-link">intersect</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to know if this <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersects with the bounding box of an entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectWithBlock(int,int,int)" class="member-name-link">intersectWithBlock</a><wbr>(int&nbsp;blockX,
- int&nbsp;blockY,
- int&nbsp;blockZ)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if the bounding box intersects at a block position.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectWithBlock(net.minestom.server.coordinate.Point)" class="member-name-link">intersectWithBlock</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxX()" class="member-name-link">maxX</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxY()" class="member-name-link">maxY</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxZ()" class="member-name-link">maxZ</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#minX()" class="member-name-link">minX</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#minY()" class="member-name-link">minY</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#minZ()" class="member-name-link">minZ</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relativeEnd()" class="member-name-link">relativeEnd</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to know if the bounding box intersects at a point.</div>
+<div class="block">Relative End</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relativeStart()" class="member-name-link">relativeStart</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Relative Start</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#width()" class="member-name-link">width</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -271,21 +211,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Entity,double,double,double)">
+<section class="detail" id="&lt;init&gt;(double,double,double)">
 <h3>BoundingBox</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BoundingBox</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z)</span></div>
-<div class="block">Creates a <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to an <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> and with a specific size.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>entity</code> - the linked entity</dd>
-<dd><code>x</code> - the width size</dd>
-<dd><code>y</code> - the height size</dd>
-<dd><code>z</code> - the depth size</dd>
-</dl>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BoundingBox</span><wbr><span class="parameters">(double&nbsp;width,
+ double&nbsp;height,
+ double&nbsp;depth)</span></div>
 </section>
 </li>
 </ul>
@@ -297,23 +227,63 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="intersect(net.minestom.server.collision.BoundingBox)">
-<h3>intersect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersect</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="intersectBox(net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
+<h3>intersectBox</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersectBox</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;positionRelative,
+ @NotNull
  @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</span></div>
-<div class="block">Used to know if two <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersect with each other.</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Shape.html#intersectBox(net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">Shape</a></code></span></div>
+<div class="block">Checks if two bounding boxes intersect.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Shape.html#intersectBox(net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">intersectBox</a></code>&nbsp;in interface&nbsp;<code><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>boundingBox</code> - the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> to check</dd>
+<dd><code>positionRelative</code> - Relative position of bounding box to check with</dd>
+<dd><code>boundingBox</code> - Bounding box to check for intersections with</dd>
 <dt>Returns:</dt>
-<dd>true if the two <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersect with each other, false otherwise</dd>
+<dd>is an intersection found</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="intersect(net.minestom.server.entity.Entity)">
-<h3>intersect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersect</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="intersectBoxSwept(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox,net.minestom.server.collision.SweepResult)">
+<h3>intersectBoxSwept</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersectBoxSwept</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayStart,
+ @NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayDirection,
+ @NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;shapePos,
+ @NotNull
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;moving,
+ @NotNull
+ @NotNull net.minestom.server.collision.SweepResult&nbsp;finalResult)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Shape.html#intersectBoxSwept(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox,net.minestom.server.collision.SweepResult)">Shape</a></code></span></div>
+<div class="block">Checks if a moving bounding box will hit this shape.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Shape.html#intersectBoxSwept(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox,net.minestom.server.collision.SweepResult)">intersectBoxSwept</a></code>&nbsp;in interface&nbsp;<code><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>rayStart</code> - Position of the moving shape</dd>
+<dd><code>rayDirection</code> - Movement vector</dd>
+<dd><code>shapePos</code> - Position of this shape</dd>
+<dd><code>moving</code> - Bounding Box of moving shape</dd>
+<dd><code>finalResult</code> - Stores final SweepResult</dd>
+<dt>Returns:</dt>
+<dd>is an intersection found</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="intersectEntity(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity)">
+<h3>intersectEntity</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersectEntity</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;src,
+ @NotNull
  @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</span></div>
 <div class="block">Used to know if this <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersects with the bounding box of an entity.</div>
 <dl class="notes">
@@ -325,104 +295,51 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="intersectWithBlock(int,int,int)">
-<h3>intersectWithBlock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersectWithBlock</span><wbr><span class="parameters">(int&nbsp;blockX,
- int&nbsp;blockY,
- int&nbsp;blockZ)</span></div>
-<div class="block">Used to know if the bounding box intersects at a block position.</div>
+<section class="detail" id="boundingBoxRayIntersectionCheck(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Pos)">
+<h3>boundingBoxRayIntersectionCheck</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">boundingBoxRayIntersectionCheck</span><wbr><span class="parameters">(<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
+ <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
+ <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="relativeStart()">
+<h3>relativeStart</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">relativeStart</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Shape.html#relativeStart()">Shape</a></code></span></div>
+<div class="block">Relative Start</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>blockX</code> - the block X</dd>
-<dd><code>blockY</code> - the block Y</dd>
-<dd><code>blockZ</code> - the block Z</dd>
+<dt>Specified by:</dt>
+<dd><code><a href="Shape.html#relativeStart()">relativeStart</a></code>&nbsp;in interface&nbsp;<code><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></dd>
 <dt>Returns:</dt>
-<dd>true if the bounding box intersects with the position, false otherwise</dd>
+<dd>Start of shape</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="intersectWithBlock(net.minestom.server.coordinate.Point)">
-<h3>intersectWithBlock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersectWithBlock</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</span></div>
-<div class="block">Used to know if the bounding box intersects at a point.</div>
+<section class="detail" id="relativeEnd()">
+<h3>relativeEnd</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">relativeEnd</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Shape.html#relativeEnd()">Shape</a></code></span></div>
+<div class="block">Relative End</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>blockPosition</code> - the position to check</dd>
+<dt>Specified by:</dt>
+<dd><code><a href="Shape.html#relativeEnd()">relativeEnd</a></code>&nbsp;in interface&nbsp;<code><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></dd>
 <dt>Returns:</dt>
-<dd>true if the bounding box intersects with the position, false otherwise</dd>
+<dd>End of shape</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="intersect(double,double,double)">
-<h3>intersect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersect</span><wbr><span class="parameters">(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z)</span></div>
-<div class="block">Used to know if the bounding box intersects (contains) a point.</div>
+<section class="detail" id="toString()">
+<h3>toString</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>x</code> - x-coord of a point</dd>
-<dd><code>y</code> - y-coord of a point</dd>
-<dd><code>z</code> - z-coord of a point</dd>
-<dt>Returns:</dt>
-<dd>true if the bounding box intersects (contains) with the point, false otherwise</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="intersect(net.minestom.server.coordinate.Point)">
-<h3>intersect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersect</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</span></div>
-<div class="block">Used to know if the bounding box intersects (contains) a point.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>point</code> - the point to check</dd>
-<dt>Returns:</dt>
-<dd>true if the bounding box intersects (contains) with the point, false otherwise</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="intersect(double,double,double,double,double,double)">
-<h3>intersect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersect</span><wbr><span class="parameters">(double&nbsp;x1,
- double&nbsp;y1,
- double&nbsp;z1,
- double&nbsp;x2,
- double&nbsp;y2,
- double&nbsp;z2)</span></div>
-<div class="block">Used to know if the bounding box intersects a line segment.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>x1</code> - x-coord of first line segment point</dd>
-<dd><code>y1</code> - y-coord of first line segment point</dd>
-<dd><code>z1</code> - z-coord of first line segment point</dd>
-<dd><code>x2</code> - x-coord of second line segment point</dd>
-<dd><code>y2</code> - y-coord of second line segment point</dd>
-<dd><code>z2</code> - z-coord of second line segment point</dd>
-<dt>Returns:</dt>
-<dd>true if the bounding box intersects with the line segment, false otherwise.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="intersect(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)">
-<h3>intersect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersect</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;start,
- @NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;end)</span></div>
-<div class="block">Used to know if the bounding box intersects a line segment.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>start</code> - first line segment point</dd>
-<dd><code>end</code> - second line segment point</dd>
-<dt>Returns:</dt>
-<dd>true if the bounding box intersects with the line segment, false otherwise.</dd>
+<dt>Overrides:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 </dl>
 </section>
 </li>
@@ -463,184 +380,57 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getWidth()">
-<h3>getWidth</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getWidth</span>()</div>
-<div class="block">Gets the width of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the width</dd>
-</dl>
+<section class="detail" id="width()">
+<h3>width</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">width</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getHeight()">
-<h3>getHeight</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getHeight</span>()</div>
-<div class="block">Gets the height of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the height</dd>
-</dl>
+<section class="detail" id="height()">
+<h3>height</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">height</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getDepth()">
-<h3>getDepth</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getDepth</span>()</div>
-<div class="block">Gets the depth of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the depth</dd>
-</dl>
+<section class="detail" id="depth()">
+<h3>depth</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">depth</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMinX()">
-<h3>getMinX</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getMinX</span>()</div>
-<div class="block">Gets the min X based on <a href="#getWidth()"><code>getWidth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the min X</dd>
-</dl>
+<section class="detail" id="minX()">
+<h3>minX</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">minX</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMaxX()">
-<h3>getMaxX</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getMaxX</span>()</div>
-<div class="block">Gets the max X based on <a href="#getWidth()"><code>getWidth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the max X</dd>
-</dl>
+<section class="detail" id="maxX()">
+<h3>maxX</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxX</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMinY()">
-<h3>getMinY</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getMinY</span>()</div>
-<div class="block">Gets the min Y based on the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the min Y</dd>
-</dl>
+<section class="detail" id="minY()">
+<h3>minY</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">minY</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMaxY()">
-<h3>getMaxY</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getMaxY</span>()</div>
-<div class="block">Gets the max Y based on <a href="#getHeight()"><code>getHeight()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the max Y</dd>
-</dl>
+<section class="detail" id="maxY()">
+<h3>maxY</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxY</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMinZ()">
-<h3>getMinZ</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getMinZ</span>()</div>
-<div class="block">Gets the min Z based on <a href="#getDepth()"><code>getDepth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the min Z</dd>
-</dl>
+<section class="detail" id="minZ()">
+<h3>minZ</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">minZ</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMaxZ()">
-<h3>getMaxZ</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getMaxZ</span>()</div>
-<div class="block">Gets the max Z based on <a href="#getDepth()"><code>getDepth()</code></a> and the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the max Z</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getBottomFace()">
-<h3>getBottomFace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</span>&nbsp;<span class="element-name">getBottomFace</span>()</div>
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the bottom of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the points at the bottom of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getTopFace()">
-<h3>getTopFace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</span>&nbsp;<span class="element-name">getTopFace</span>()</div>
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the top of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the points at the top of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getLeftFace()">
-<h3>getLeftFace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</span>&nbsp;<span class="element-name">getLeftFace</span>()</div>
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points on the left face of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the points on the left face of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getRightFace()">
-<h3>getRightFace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</span>&nbsp;<span class="element-name">getRightFace</span>()</div>
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points on the right face of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the points on the right face of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getFrontFace()">
-<h3>getFrontFace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</span>&nbsp;<span class="element-name">getFrontFace</span>()</div>
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the front of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the points at the front of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getBackFace()">
-<h3>getBackFace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&gt;</span>&nbsp;<span class="element-name">getBackFace</span>()</div>
-<div class="block">Gets an array of <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> representing the points at the back of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the points at the back of the <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="toString()">
-<h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
+<section class="detail" id="maxZ()">
+<h3>maxZ</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxZ</span>()</div>
 </section>
 </li>
 </ul>

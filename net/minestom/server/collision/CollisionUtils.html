@@ -44,7 +44,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -76,26 +76,13 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CollisionUtils</span>
+<div class="type-signature"><span class="annotations">@Internal
+@Experimental
+</span><span class="modifiers">public final class </span><span class="element-name type-name-label">CollisionUtils</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="CollisionUtils.PhysicsResult.html" class="type-name-link" title="class in net.minestom.server.collision">CollisionUtils.PhysicsResult</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -127,12 +114,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Applies world border collision.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CollisionUtils.PhysicsResult.html" title="class in net.minestom.server.collision">CollisionUtils.PhysicsResult</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;deltaPosition)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity,
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseBlockShape(java.lang.String,java.util.function.Supplier)" class="member-name-link">parseBlockShape</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;str,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&nbsp;block)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -165,19 +161,33 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)">
+<section class="detail" id="handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult)">
 <h3>handlePhysics</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CollisionUtils.PhysicsResult.html" title="class in net.minestom.server.collision">CollisionUtils.PhysicsResult</a></span>&nbsp;<span class="element-name">handlePhysics</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">handlePhysics</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;deltaPosition)</span></div>
-<div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity,
+ @Nullable
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult)</span></div>
+<div class="block">Moves an entity with physics applied (ie checking against blocks)
+ <p>
+ Works by getting all the full blocks that an entity could interact with.
+ All bounding boxes inside the full blocks are checked for collisions with the entity.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>entity</code> - the entity to move</dd>
 <dt>Returns:</dt>
 <dd>the result of physics simulation</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)">
+<h3>handlePhysics</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">handlePhysics</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</span></div>
 </section>
 </li>
 <li>
@@ -199,6 +209,13 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>the position with the world border collision applied (can be <code>newPosition</code> if not changed)</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="parseBlockShape(java.lang.String,java.util.function.Supplier)">
+<h3>parseBlockShape</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></span>&nbsp;<span class="element-name">parseBlockShape</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;str,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&nbsp;block)</span></div>
 </section>
 </li>
 </ul>

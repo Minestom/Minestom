@@ -563,9 +563,9 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Decides if surrounding entities must be visible.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBoundingBox(double,double,double)" class="member-name-link">setBoundingBox</a><wbr>(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBoundingBox(double,double,double)" class="member-name-link">setBoundingBox</a><wbr>(double&nbsp;width,
+ double&nbsp;height,
+ double&nbsp;depth)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the internal entity bounding box.</div>
 </div>
@@ -1405,17 +1405,17 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <li>
 <section class="detail" id="setBoundingBox(double,double,double)">
 <h3>setBoundingBox</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBoundingBox</span><wbr><span class="parameters">(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBoundingBox</span><wbr><span class="parameters">(double&nbsp;width,
+ double&nbsp;height,
+ double&nbsp;depth)</span></div>
 <div class="block">Changes the internal entity bounding box.
  <p>
  WARNING: this does not change the entity hit-box which is client-side.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>x</code> - the bounding box X size</dd>
-<dd><code>y</code> - the bounding box Y size</dd>
-<dd><code>z</code> - the bounding box Z size</dd>
+<dd><code>width</code> - the bounding box X size</dd>
+<dd><code>height</code> - the bounding box Y size</dd>
+<dd><code>depth</code> - the bounding box Z size</dd>
 </dl>
 </section>
 </li>
@@ -1987,7 +1987,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getEyeHeight</span>()</div>
 <div class="block">Gets the entity eye height.
  <p>
- Default to <a href="../collision/BoundingBox.html#getHeight()"><code>BoundingBox.getHeight()</code></a>x0.85</div>
+ Default to <a href="../collision/BoundingBox.html#height()"><code>BoundingBox.height()</code></a>x0.85</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the entity eye height</dd>
@@ -2274,7 +2274,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <dt>Parameters:</dt>
 <dd><code>maxDistance</code> - The max distance to scan</dd>
 <dt>Returns:</dt>
-<dd>A list of <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate"><code>poiints</code></a> in this entities line of sight</dd>
+<dd>A list of <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate"><code>points</code></a> in this entities line of sight</dd>
 </dl>
 </section>
 </li>
