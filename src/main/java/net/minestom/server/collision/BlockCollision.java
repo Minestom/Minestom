@@ -25,14 +25,13 @@ final class BlockCollision {
      * @param entity the entity to move
      * @return the result of physics simulation
      */
-    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult) {
+    static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
+                                       @Nullable PhysicsResult lastPhysicsResult) {
         final BoundingBox.Faces faces = entity.getBoundingBox().faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
         final SweepResult finalResult = new SweepResult(1, 0, 0, 0, null);
-        final SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
@@ -114,9 +113,9 @@ final class BlockCollision {
             res = handlePhysics(entity, res.newVelocity(), res.newPosition(), allFaces, finalResult);
         }
 
-        double newDeltaX = foundCollisionX ? 0 : entityVelocity.x();
-        double newDeltaY = foundCollisionY ? 0 : entityVelocity.y();
-        double newDeltaZ = foundCollisionZ ? 0 : entityVelocity.z();
+        final double newDeltaX = foundCollisionX ? 0 : entityVelocity.x();
+        final double newDeltaY = foundCollisionY ? 0 : entityVelocity.y();
+        final double newDeltaZ = foundCollisionZ ? 0 : entityVelocity.z();
 
         return new PhysicsResult(res.newPosition(), new Vec(newDeltaX, newDeltaY, newDeltaZ),
                 newDeltaY == 0 && entityVelocity.y() < 0,
@@ -133,7 +132,8 @@ final class BlockCollision {
      * @param finalResult    place to store final result of collision
      * @return result of physics calculation
      */
-    private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition, List<Vec> allFaces, SweepResult finalResult) {
+    private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition,
+                                               @NotNull List<Vec> allFaces, @NotNull SweepResult finalResult) {
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
         final BoundingBox boundingBox = entity.getBoundingBox();
@@ -177,48 +177,38 @@ final class BlockCollision {
 
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
-                        && pointBefore.blockZ() != pointAfter.blockZ()
-                )
+                        && pointBefore.blockZ() != pointAfter.blockZ())
                     CollisionUtils.checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
             }
         } else {
-            // When large moves are done we need to raycast to find all blocks that could intersect with the movement
+            // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
                 RayUtils.RaycastCollision(deltaPosition, point.add(entityPosition), instance, originChunk, boundingBox, entityPosition, finalResult);
             }
         }
 
-        double finalX = entityPosition.x() + remainingX;
-        double finalY = entityPosition.y() + remainingY;
-        double finalZ = entityPosition.z() + remainingZ;
+        double finalX = entityPosition.x() + finalResult.res * remainingX;
+        double finalY = entityPosition.y() + finalResult.res * remainingY;
+        double finalZ = entityPosition.z() + finalResult.res * remainingZ;
 
         boolean collisionX = false, collisionY = false, collisionZ = false;
 
-        if (finalResult != null) {
-            // Update final position
-            finalX = entityPosition.x() + finalResult.res * remainingX;
-            finalY = entityPosition.y() + finalResult.res * remainingY;
-            finalZ = entityPosition.z() + finalResult.res * remainingZ;
+        // Remaining delta
+        remainingX -= finalResult.res * remainingX;
+        remainingY -= finalResult.res * remainingY;
+        remainingZ -= finalResult.res * remainingZ;
 
-            // Remaining delta
-            remainingX -= finalResult.res * remainingX;
-            remainingY -= finalResult.res * remainingY;
-            remainingZ -= finalResult.res * remainingZ;
-
-            if (finalResult.normalX != 0) {
-                collisionX = true;
-                remainingX = 0;
-            }
-
-            if (finalResult.normalY != 0) {
-                collisionY = true;
-                remainingY = 0;
-            }
-
-            if (finalResult.normalZ != 0) {
-                collisionZ = true;
-                remainingZ = 0;
-            }
+        if (finalResult.normalX != 0) {
+            collisionX = true;
+            remainingX = 0;
+        }
+        if (finalResult.normalY != 0) {
+            collisionY = true;
+            remainingY = 0;
+        }
+        if (finalResult.normalZ != 0) {
+            collisionZ = true;
+            remainingZ = 0;
         }
 
         remainingX = Math.abs(remainingX) < MIN_DELTA ? 0 : remainingX;
@@ -229,6 +219,9 @@ final class BlockCollision {
         finalY = Math.abs(finalY - entityPosition.y()) < MIN_DELTA ? entityPosition.y() : finalY;
         finalZ = Math.abs(finalZ - entityPosition.z()) < MIN_DELTA ? entityPosition.z() : finalZ;
 
-        return new PhysicsResult(new Pos(finalX, finalY, finalZ), new Vec(remainingX, remainingY, remainingZ), collisionY, collisionX, collisionY, collisionZ, Vec.ZERO, finalResult.collidedShapePosition, finalResult.blockType);
+        return new PhysicsResult(new Pos(finalX, finalY, finalZ),
+                new Vec(remainingX, remainingY, remainingZ), collisionY,
+                collisionX, collisionY, collisionZ,
+                Vec.ZERO, finalResult.collidedShapePosition, finalResult.blockType);
     }
 }
