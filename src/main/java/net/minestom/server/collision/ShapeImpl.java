@@ -90,9 +90,11 @@ final class ShapeImpl implements Shape {
             // Uses minkowski sum
             if (!RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos))
                 continue;
+
             // Longer check to get result of collision
             RayUtils.SweptAABB(moving, rayStart, rayDirection, blockSection, shapePos, tempResult);
             // Update final result if the temp result collision is sooner than the current final result
+
             if (tempResult.res < finalResult.res) {
                 finalResult.res = tempResult.res;
                 finalResult.normalX = tempResult.normalX;

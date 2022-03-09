@@ -211,6 +211,25 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckEdgeClipSmall(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.6999, 42, 0.6999)).join();
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.702, 0, 0.702));
+
+        boolean isFirst = checkPoints(new Pos(1.402, 42, 0.7), res.newPosition());
+        boolean isSecond = checkPoints(new Pos(0.7, 42, 1.402), res.newPosition());
+
+        // First and second are both valid, it depends on the implementation
+        // If x collision is checked first then isFirst will be true
+        // If z collision is checked first then isSecond will be true
+        assertTrue(isFirst || isSecond);
+    }
+
+    @Test
     public void entityPhysicsCheckDoorSubBlockNorth(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "north", "open", "true"));
