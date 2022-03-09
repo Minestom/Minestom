@@ -148,14 +148,13 @@ final class BlockCollision {
             // Go through all points to check. See if the point after the move will be in a new block
             // If the point after is in a new block that new block needs to be checked, otherwise only check the current block
             for (Vec point : allFaces) {
-                final Vec pointBefore = point.add(entityPosition);
-                final Vec pointAfter = pointBefore.add(deltaPosition);
+                Vec pointBefore = point.add(entityPosition);
+                Vec pointAfter = point.add(entityPosition).add(deltaPosition);
 
                 if (pointBefore.blockX() != pointAfter.blockX()) {
                     checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
 
                     if (pointBefore.blockY() != pointAfter.blockY()) {
-                        // Change in X and Y block. Passes through block between X and Y
                         checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
                     }
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
@@ -175,12 +174,12 @@ final class BlockCollision {
                     checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
                 }
 
-                // If check has not been done above, do check here
+                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
                         && pointBefore.blockZ() != pointAfter.blockZ())
                     checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-
             }
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
@@ -247,15 +246,14 @@ final class BlockCollision {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         final Block checkBlock;
-
         if (ChunkUtils.isLoaded(c)) {
             checkBlock = c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
         } else {
             checkBlock = Block.STONE; // Generic full block
         }
         boolean hitBlock = false;
+        final Pos blockPos = new Pos(blockX, blockY, blockZ);
         if (checkBlock.isSolid()) {
-            final Vec blockPos = new Vec(blockX, blockY, blockZ);
             hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
         }
         return hitBlock;
