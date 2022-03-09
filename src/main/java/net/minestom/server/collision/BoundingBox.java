@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public final class BoundingBox implements Shape {
     private final double width, height, depth;
     Point offset;
-    final Faces faces;
+    private Faces faces;
 
     public boolean intersectBlock(Point src, Block block, Point dest) {
         return block.registry().shape().intersectEntity(src, this, dest);
@@ -33,9 +33,7 @@ public final class BoundingBox implements Shape {
         this.width = width;
         this.height = height;
         this.depth = depth;
-
         this.offset = new Vec(-width / 2, 0, -depth / 2);
-        this.faces = retrieveFaces();
     }
 
     @Override
@@ -129,6 +127,10 @@ public final class BoundingBox implements Shape {
     }
 
     @NotNull Faces faces() {
+        Faces faces = this.faces;
+        if (faces == null) {
+            this.faces = faces = retrieveFaces();
+        }
         return faces;
     }
 
