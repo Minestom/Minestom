@@ -8,15 +8,14 @@ import net.minestom.server.instance.Instance;
 
 class RayUtils {
     /**
-     *
      * @param rayDirection Ray vector
-     * @param rayStart Ray start point
-     * @param instance entity instance
-     * @param originChunk entity chunk
-     * @param boundingBox entity bounding box
+     * @param rayStart     Ray start point
+     * @param instance     entity instance
+     * @param originChunk  entity chunk
+     * @param boundingBox  entity bounding box
      * @param entityCentre position of entity
-     * @param tempResult place to store temporary result of collision
-     * @param finalResult place to store final result of collision
+     * @param tempResult   place to store temporary result of collision
+     * @param finalResult  place to store final result of collision
      */
     public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult tempResult, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
@@ -30,32 +29,33 @@ class RayUtils {
             int xFix = rayDirection.x() > 0 ? 1 : 0;
 
             // Total number of axis block boundaries that will be passed
-            int xStepCount = (int)Math.ceil((rayDirection.x())/xStep) + xFix;
+            int xStepCount = (int) Math.ceil((rayDirection.x()) / xStep) + xFix;
 
             int xStepsCompleted = xFix;
 
             while (xStepsCompleted <= xStepCount) {
                 // Get the axis value
-                int xi = (int) (xStepsCompleted*xStep + rayStart.blockX());
+                int xi = (int) (xStepsCompleted * xStep + rayStart.blockX());
                 double factor = (xi - rayStart.x()) / rayDirection.x();
 
-                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
+                if (Math.abs(rayDirection.x() * finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
 
                 // Solve for y and z
                 int yi = (int) Math.floor(rayDirection.y() * factor + rayStart.y());
 
                 // If the y distance is much greater than the collision point that is currently being used, break
-                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
+                if (Math.abs(rayDirection.y() * finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
 
                 int zi = (int) Math.floor(rayDirection.z() * factor + rayStart.z());
-                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
+                if (Math.abs(rayDirection.z() * finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
 
                 xi -= xFix;
                 xStepsCompleted++;
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult))
+                    break;
             }
         }
 
@@ -63,24 +63,25 @@ class RayUtils {
             double zStep = rayDirection.z() < 0 ? -1 : 1;
             int zFix = rayDirection.z() > 0 ? 1 : 0;
             int zStepsCompleted = zFix;
-            int zStepCount = (int)Math.ceil((rayDirection.z())/zStep) + zFix;
+            int zStepCount = (int) Math.ceil((rayDirection.z()) / zStep) + zFix;
 
             while (zStepsCompleted <= zStepCount) {
-                int zi = (int) (zStepsCompleted*zStep + rayStart.blockZ());
+                int zi = (int) (zStepsCompleted * zStep + rayStart.blockZ());
                 double factor = (zi - rayStart.z()) / rayDirection.z();
 
-                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
+                if (Math.abs(rayDirection.z() * finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
 
                 int xi = (int) Math.floor(rayDirection.x() * factor + rayStart.x());
-                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
+                if (Math.abs(rayDirection.x() * finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
 
                 int yi = (int) Math.floor(rayDirection.y() * factor + rayStart.y());
-                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
+                if (Math.abs(rayDirection.y() * finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
 
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult))
+                    break;
             }
         }
 
@@ -88,36 +89,38 @@ class RayUtils {
             int yFix = rayDirection.y() > 0 ? 1 : 0;
             double yStep = rayDirection.y() < 0 ? -1 : 1;
             int yStepsCompleted = yFix;
-            int yStepCount = (int)Math.ceil((rayDirection.y())/yStep) + yFix;
+            int yStepCount = (int) Math.ceil((rayDirection.y()) / yStep) + yFix;
 
             while (yStepsCompleted <= yStepCount) {
-                int yi = (int) (yStepsCompleted*yStep + rayStart.blockY());
+                int yi = (int) (yStepsCompleted * yStep + rayStart.blockY());
                 double factor = (yi - rayStart.y()) / rayDirection.y();
 
-                if (Math.abs(rayDirection.y()*finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
+                if (Math.abs(rayDirection.y() * finalResult.res) - Math.abs(rayStart.y() - (yi)) < -2) break;
 
                 int xi = (int) Math.floor(rayDirection.x() * factor + rayStart.x());
-                if (Math.abs(rayDirection.x()*finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
+                if (Math.abs(rayDirection.x() * finalResult.res) - Math.abs(rayStart.x() - (xi)) < -2) break;
 
                 int zi = (int) Math.floor(rayDirection.z() * factor + rayStart.z());
-                if (Math.abs(rayDirection.z()*finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
+                if (Math.abs(rayDirection.z() * finalResult.res) - Math.abs(rayStart.z() - (zi)) < -2) break;
 
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult)) break;
+                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, tempResult, finalResult))
+                    break;
             }
         }
     }
 
     /**
      * Check if a bounding box intersects a ray
-     * @param rayStart Ray start position
-     * @param rayDirection Ray to check
+     *
+     * @param rayStart         Ray start position
+     * @param rayDirection     Ray to check
      * @param collidableStatic Bounding box
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean BoundingBoxIntersectionCheck(Collidable collidableMoving, Point rayStart, Point rayDirection, Collidable collidableStatic, Point staticCollidableOffset) {
+    public static boolean BoundingBoxIntersectionCheck(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset) {
         // Translate bounding box
         Vec bbOffMin = new Vec(collidableStatic.minX() - rayStart.x() + staticCollidableOffset.x() - collidableMoving.width() / 2, collidableStatic.minY() - rayStart.y() + staticCollidableOffset.y() - collidableMoving.height() / 2, collidableStatic.minZ() - rayStart.z() + staticCollidableOffset.z() - collidableMoving.depth() / 2);
         Vec bbOffMax = new Vec(collidableStatic.maxX() - rayStart.x() + staticCollidableOffset.x() + collidableMoving.width() / 2, collidableStatic.maxY() - rayStart.y() + staticCollidableOffset.y() + collidableMoving.height() / 2, collidableStatic.maxZ() - rayStart.z() + staticCollidableOffset.z() + collidableMoving.depth() / 2);
@@ -238,7 +241,7 @@ class RayUtils {
     }
 
     // Extended from 2d implementation found here https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/swept-aabb-collision-detection-and-response-r3084/
-    public static void SweptAABB(Collidable collidableMoving, Point rayStart, Point rayDirection, Collidable collidableStatic, Point staticCollidableOffset, SweepResult writeTo) {
+    public static void SweptAABB(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult writeTo) {
         double normalx, normaly, normalz;
 
         double xInvEntry, yInvEntry, zInvEntry;
@@ -320,8 +323,7 @@ class RayUtils {
                 normaly = 0.0f;
                 normalz = 0.0f;
             }
-        }
-        else if (yEntry > zEntry) {
+        } else if (yEntry > zEntry) {
             if (yInvEntry < 0.0f) {
                 normalx = 0.0f;
                 normaly = 1.0f;
@@ -331,8 +333,7 @@ class RayUtils {
                 normaly = -1.0f;
                 normalz = 0.0f;
             }
-        }
-        else {
+        } else {
             if (zInvEntry < 0.0f) {
                 normalx = 0.0f;
                 normaly = 0.0f;
@@ -351,6 +352,6 @@ class RayUtils {
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        return BoundingBoxIntersectionCheck(Collidable.ZERO, start, direction, boundingBox, position);
+        return BoundingBoxIntersectionCheck(new BoundingBox(0, 0, 0), start, direction, boundingBox, position);
     }
 }

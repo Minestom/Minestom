@@ -15,8 +15,9 @@ import java.util.stream.Stream;
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
-public class BoundingBox implements Collidable {
+public final class BoundingBox implements Shape {
     private final double width, height, depth;
+    Point offset;
     final Faces faces;
 
     public boolean intersectBlock(Point src, Block block, Point dest) {
@@ -33,7 +34,28 @@ public class BoundingBox implements Collidable {
         this.height = height;
         this.depth = depth;
 
+        this.offset = new Vec(-width / 2, 0, -depth / 2);
         this.faces = retrieveFaces();
+    }
+
+    @Override
+    public boolean intersectEntity(Point position, BoundingBox boundingBox, Point placementPosition) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public @NotNull Point relativeStart() {
+        return offset;
+    }
+
+    @Override
+    public @NotNull Point relativeEnd() {
+        return offset.add(width, height, depth);
     }
 
     /**
@@ -42,7 +64,7 @@ public class BoundingBox implements Collidable {
      * @param entityBoundingBox the {@link BoundingBox} to check
      * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
      */
-    public boolean intersectCollidable(@NotNull Point src, @NotNull Collidable entityBoundingBox, @NotNull Point dest) {
+    public boolean intersectCollidable(@NotNull Point src, @NotNull BoundingBox entityBoundingBox, @NotNull Point dest) {
         return (minX() + src.x() <= entityBoundingBox.maxX() + dest.x() && maxX() + src.x() >= entityBoundingBox.minX() + dest.x()) &&
                 (minY() + src.y() <= entityBoundingBox.maxY() + dest.y() && maxY() + src.y() >= entityBoundingBox.minY() + dest.y()) &&
                 (minZ() + src.z() <= entityBoundingBox.maxZ() + dest.z() && maxZ() + src.z() >= entityBoundingBox.minZ() + dest.z());
@@ -91,7 +113,7 @@ public class BoundingBox implements Collidable {
      * @return a new bounding box contracted
      */
     public @NotNull BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(this.width - x, this.height - y, this.depth - z) ;
+        return new BoundingBox(this.width - x, this.height - y, this.depth - z);
     }
 
     public double width() {
@@ -111,27 +133,27 @@ public class BoundingBox implements Collidable {
     }
 
     public double minX() {
-        return -width / 2;
+        return relativeStart().x();
     }
 
     public double maxX() {
-        return width / 2;
+        return relativeEnd().x();
     }
 
     public double minY() {
-        return 0;
+        return relativeStart().y();
     }
 
     public double maxY() {
-        return height;
+        return relativeEnd().y();
     }
 
     public double minZ() {
-        return -depth / 2;
+        return relativeStart().z();
     }
 
     public double maxZ() {
-        return depth / 2;
+        return relativeEnd().z();
     }
 
     public boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
@@ -172,9 +194,9 @@ public class BoundingBox implements Collidable {
         // Start at minimum, increase by step size until we reach maximum
         // This is done to catch all blocks that are part of that axis
         // Since this stops before max point is reached, we add the max point after
-        final List<Double> stepsX = IntStream.rangeClosed(0, (int)((maxX-minX))).mapToDouble(x -> x + minX).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-        final List<Double> stepsY = IntStream.rangeClosed(0, (int)((maxY-minY))).mapToDouble(x -> x + minY).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-        final List<Double> stepsZ = IntStream.rangeClosed(0, (int)((maxZ-minZ))).mapToDouble(x -> x + minZ).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
+        final List<Double> stepsX = IntStream.rangeClosed(0, (int) ((maxX - minX))).mapToDouble(x -> x + minX).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
+        final List<Double> stepsY = IntStream.rangeClosed(0, (int) ((maxY - minY))).mapToDouble(x -> x + minY).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
+        final List<Double> stepsZ = IntStream.rangeClosed(0, (int) ((maxZ - minZ))).mapToDouble(x -> x + minZ).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
 
         stepsX.add(maxX);
         stepsY.add(maxY);
@@ -188,22 +210,22 @@ public class BoundingBox implements Collidable {
         final Set<Vec> back = new HashSet<>();
 
         CartesianProduct.product(stepsX, stepsY).forEach(cross -> {
-            double i = (double) ((List<?>)cross).get(0);
-            double j = (double) ((List<?>)cross).get(1);
+            double i = (double) ((List<?>) cross).get(0);
+            double j = (double) ((List<?>) cross).get(1);
             front.add(new Vec(i, j, minZ));
             back.add(new Vec(i, j, maxZ));
         });
 
         CartesianProduct.product(stepsY, stepsZ).forEach(cross -> {
-            double j = (double) ((List<?>)cross).get(0);
-            double k = (double) ((List<?>)cross).get(1);
+            double j = (double) ((List<?>) cross).get(0);
+            double k = (double) ((List<?>) cross).get(1);
             left.add(new Vec(minX, j, k));
             right.add(new Vec(maxX, j, k));
         });
 
         CartesianProduct.product(stepsX, stepsZ).forEach(cross -> {
-            double i = (double) ((List<?>)cross).get(0);
-            double k = (double) ((List<?>)cross).get(1);
+            double i = (double) ((List<?>) cross).get(0);
+            double k = (double) ((List<?>) cross).get(1);
             bottom.add(new Vec(i, minY, k));
             top.add(new Vec(i, maxY, k));
         });

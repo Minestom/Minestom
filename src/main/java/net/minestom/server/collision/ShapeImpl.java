@@ -1,7 +1,9 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class ShapeImpl implements Shape {
-    private final List<? extends Collidable> blockSections;
+    private final List<BoundingBox> blockSections;
     private final Supplier<Material> block;
 
-    ShapeImpl(List<? extends Collidable> boundingBoxes, Supplier<Material> block) {
+    ShapeImpl(List<BoundingBox> boundingBoxes, Supplier<Material> block) {
         this.blockSections = boundingBoxes;
         this.block = block;
     }
@@ -29,7 +31,7 @@ final class ShapeImpl implements Shape {
             vals.add(newVal);
         }
 
-        List<BlockSection> boundingBoxes = new ArrayList<>();
+        List<BoundingBox> boundingBoxes = new ArrayList<>();
         final int count = vals.size() / 6;
         for (int i = 0; i < count; ++i) {
             final double boundXSize = vals.get(3 + 6 * i) - vals.get(0 + 6 * i);
@@ -40,11 +42,25 @@ final class ShapeImpl implements Shape {
             minX = vals.get(0 + 6 * i);
             minY = vals.get(1 + 6 * i);
             minZ = vals.get(2 + 6 * i);
-
-            boundingBoxes.add(new BlockSection(minX, minY, minZ, boundXSize, boundYSize, boundZSize));
+            var bb = new BoundingBox(boundXSize, boundYSize, boundZSize);
+            bb.offset = new Vec(minX, minY, minZ);
+            assert bb.minX() == minX;
+            assert bb.minY() == minY;
+            assert bb.minZ() == minZ;
+            boundingBoxes.add(bb);
         }
 
         return new ShapeImpl(boundingBoxes, block);
+    }
+
+    @Override
+    public @NotNull Point relativeStart() {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point relativeEnd() {
+        return null;
     }
 
     @Override
@@ -54,7 +70,7 @@ final class ShapeImpl implements Shape {
 
     @Override
     public boolean intersectEntitySwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, Point entityPosition, SweepResult tempResult, SweepResult finalResult) {
-        List<? extends Collidable> collidables = blockSections.stream().filter(blockSection -> {
+        List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.BoundingBoxIntersectionCheck(
@@ -66,7 +82,7 @@ final class ShapeImpl implements Shape {
 
         boolean hitBlock = false;
 
-        for (Collidable bb : collidables) {
+        for (BoundingBox bb : collidables) {
             // Longer check to get result of collision
             RayUtils.SweptAABB(moving, entityPosition, rayDirection, bb, blockPos, tempResult);
 
@@ -84,23 +100,5 @@ final class ShapeImpl implements Shape {
         }
 
         return hitBlock;
-    }
-
-    record BlockSection(double minX, double minY, double minZ, double width, double height,
-                        double depth) implements Collidable {
-        @Override
-        public double maxX() {
-            return minX + width;
-        }
-
-        @Override
-        public double maxY() {
-            return minY + height;
-        }
-
-        @Override
-        public double maxZ() {
-            return minZ + depth;
-        }
     }
 }
