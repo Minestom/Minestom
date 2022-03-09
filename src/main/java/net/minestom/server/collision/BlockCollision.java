@@ -148,38 +148,20 @@ final class BlockCollision {
             // Go through all points to check. See if the point after the move will be in a new block
             // If the point after is in a new block that new block needs to be checked, otherwise only check the current block
             for (Vec point : allFaces) {
-                Vec pointBefore = point.add(entityPosition);
-                Vec pointAfter = point.add(entityPosition).add(deltaPosition);
-
-                if (pointBefore.blockX() != pointAfter.blockX()) {
-                    checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-
+                final Vec pointBefore = point.add(entityPosition);
+                final Vec pointAfter = pointBefore.add(deltaPosition);
+                if (!pointAfter.sameBlock(pointBefore)) {
+                    if (pointBefore.blockX() != pointAfter.blockX()) {
+                        checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                    }
                     if (pointBefore.blockY() != pointAfter.blockY()) {
-                        checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                        checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
                     }
                     if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                        checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
                     }
                 }
-
-                if (pointBefore.blockY() != pointAfter.blockY()) {
-                    checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-
-                    if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                        checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-                    }
-                }
-
-                if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                    checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-                }
-
                 checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-
-                if (pointBefore.blockX() != pointAfter.blockX()
-                        && pointBefore.blockY() != pointAfter.blockY()
-                        && pointBefore.blockZ() != pointAfter.blockZ())
-                    checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
             }
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
@@ -252,8 +234,8 @@ final class BlockCollision {
             checkBlock = Block.STONE; // Generic full block
         }
         boolean hitBlock = false;
-        final Pos blockPos = new Pos(blockX, blockY, blockZ);
         if (checkBlock.isSolid()) {
+            final Vec blockPos = new Vec(blockX, blockY, blockZ);
             hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
         }
         return hitBlock;
