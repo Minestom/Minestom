@@ -112,7 +112,7 @@ public class BlockPlacementListener {
         final Collection<Entity> entities = instance.getNearbyEntities(placementPosition, 5);
 
         // Check if the player is trying to place a block in an entity
-        boolean intersectPlayer = placedBlock.registry().shape().intersectEntity(player.getPosition(), player.getBoundingBox(), placementPosition);
+        boolean intersectPlayer = placedBlock.registry().shape().intersectBox(player.getPosition(), player.getBoundingBox(), placementPosition);
 
         boolean hasIntersect = intersectPlayer || entities
                 .stream()
@@ -124,7 +124,7 @@ public class BlockPlacementListener {
                     }
                     return true;
                 })
-                .anyMatch(entity -> placedBlock.registry().shape().intersectEntity(entity.getPosition(), entity.getBoundingBox(), placementPosition));
+                .anyMatch(entity -> placedBlock.registry().shape().intersectBox(entity.getPosition(), entity.getBoundingBox(), placementPosition));
 
         if (hasIntersect) {
             refresh(player, chunk);

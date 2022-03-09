@@ -29,7 +29,7 @@ public final class BoundingBox implements Shape {
     }
 
     public boolean intersectBlock(Point src, Block block, Point dest) {
-        return block.registry().shape().intersectEntity(src, this, dest);
+        return block.registry().shape().intersectBox(src, this, dest);
     }
 
     public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
@@ -38,8 +38,10 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    public boolean intersectEntity(Point position, BoundingBox boundingBox, Point placementPosition) {
-        throw new UnsupportedOperationException();
+    public boolean intersectBox(Point position, BoundingBox boundingBox, Point placementPosition) {
+        return (minX() + position.x() <= boundingBox.maxX() + placementPosition.x() && maxX() + position.x() >= boundingBox.minX() + placementPosition.x()) &&
+                (minY() + position.y() <= boundingBox.maxY() + placementPosition.y() && maxY() + position.y() >= boundingBox.minY() + placementPosition.y()) &&
+                (minZ() + position.z() <= boundingBox.maxZ() + placementPosition.z() && maxZ() + position.z() >= boundingBox.minZ() + placementPosition.z());
     }
 
     @Override
@@ -47,21 +49,19 @@ public final class BoundingBox implements Shape {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
+     *
+     * @param entity the entity to check the bounding box
+     * @return true if this bounding box intersects with the entity, false otherwise
+     */
+    public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
+        return intersectBox(src, entity.getBoundingBox(), entity.getPosition());
+    }
+
     @ApiStatus.Experimental
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
-    }
-
-    /**
-     * Used to know if two {@link BoundingBox} intersect with each other.
-     *
-     * @param entityBoundingBox the {@link BoundingBox} to check
-     * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
-     */
-    boolean intersectCollidable(@NotNull Point src, @NotNull BoundingBox entityBoundingBox, @NotNull Point dest) {
-        return (minX() + src.x() <= entityBoundingBox.maxX() + dest.x() && maxX() + src.x() >= entityBoundingBox.minX() + dest.x()) &&
-                (minY() + src.y() <= entityBoundingBox.maxY() + dest.y() && maxY() + src.y() >= entityBoundingBox.minY() + dest.y()) &&
-                (minZ() + src.z() <= entityBoundingBox.maxZ() + dest.z() && maxZ() + src.z() >= entityBoundingBox.minZ() + dest.z());
     }
 
     @Override
@@ -84,16 +84,6 @@ public final class BoundingBox implements Shape {
         result += "\n";
         result += "[" + minZ() + " : " + maxZ() + "]";
         return result;
-    }
-
-    /**
-     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
-     *
-     * @param entity the entity to check the bounding box
-     * @return true if this bounding box intersects with the entity, false otherwise
-     */
-    public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
-        return intersectCollidable(src, entity.getBoundingBox(), entity.getPosition());
     }
 
     /**

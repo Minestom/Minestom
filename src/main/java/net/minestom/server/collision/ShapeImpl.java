@@ -64,8 +64,8 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectEntity(Point position, BoundingBox boundingBox, Point blockPosition) {
-        return blockSections.stream().anyMatch(section -> boundingBox.intersectCollidable(position, section, blockPosition));
+    public boolean intersectBox(Point position, BoundingBox boundingBox, Point blockPosition) {
+        return blockSections.stream().anyMatch(section -> boundingBox.intersectBox(position, section, blockPosition));
     }
 
     @Override
