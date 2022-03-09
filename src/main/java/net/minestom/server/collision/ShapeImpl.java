@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 final class ShapeImpl implements Shape {
     private final List<BoundingBox> blockSections;
     private final Supplier<Material> block;
+    private static final SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
 
     ShapeImpl(List<BoundingBox> boundingBoxes, Supplier<Material> block) {
         this.blockSections = boundingBoxes;
@@ -86,7 +87,7 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult finalResult) {
         List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
@@ -109,7 +110,8 @@ final class ShapeImpl implements Shape {
                 finalResult.normalX = tempResult.normalX;
                 finalResult.normalY = tempResult.normalY;
                 finalResult.normalZ = tempResult.normalZ;
-                finalResult.collisionBlock = staticPos;
+                finalResult.collidedShapePosition = staticPos;
+                finalResult.collidedShape = this;
                 finalResult.blockType = block.get().block();
             }
 

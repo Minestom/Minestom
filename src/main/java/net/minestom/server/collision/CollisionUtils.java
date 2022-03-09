@@ -48,11 +48,10 @@ public final class CollisionUtils {
      * @param boundingBox    entity bounding box
      * @param instance       entity instance
      * @param originChunk    entity chunk
-     * @param tempResult     place to store temporary result of collision
      * @param finalResult    place to store final result of collision
      * @return true if entity finds collision, other false
      */
-    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox, Instance instance, Chunk originChunk, SweepResult tempResult, SweepResult finalResult) {
+    public static boolean checkBoundingBox(int blockX, int blockY, int blockZ, Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox, Instance instance, Chunk originChunk, SweepResult finalResult) {
         final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
         // Don't step if chunk isn't loaded yet
         Block checkBlock = !ChunkUtils.isLoaded(c) ? Block.STONE : c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
@@ -62,7 +61,7 @@ public final class CollisionUtils {
         Pos blockPos = new Pos(blockX, blockY, blockZ);
 
         if (checkBlock.isSolid()) {
-            hitBlock = boundingBox.intersectBlockSwept(entityPosition, entityVelocity, checkBlock, blockPos, tempResult, finalResult);
+            hitBlock = boundingBox.intersectBlockSwept(entityPosition, entityVelocity, checkBlock, blockPos, finalResult);
         }
 
         return hitBlock;

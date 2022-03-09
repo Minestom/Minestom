@@ -6,8 +6,9 @@ import net.minestom.server.instance.block.Block;
 public final class SweepResult {
     double res;
     double normalX, normalY, normalZ;
-    Point collisionBlock;
+    Point collidedShapePosition;
     Block blockType;
+    Shape collidedShape;
 
     /**
      * Store the result of a movement operation
@@ -16,14 +17,19 @@ public final class SweepResult {
      * @param normalY -1 if intersected on bottom, 1 if intersected on top
      * @param normalZ -1 if intersected on front, 1 if intersected on back
      */
-    public SweepResult(double res, double normalX, double normalY, double normalZ) {
+    public SweepResult(double res, double normalX, double normalY, double normalZ, Shape collidedShape) {
         this.res = res;
         this.normalX = normalX;
         this.normalY = normalY;
         this.normalZ = normalZ;
+        this.collidedShape = collidedShape;
     }
 
-    public Point getCollisionPoint() {
-        return collisionBlock;
+    public Point getCollidedShapePosition() {
+        return collidedShapePosition;
+    }
+
+    public Shape getCollidedShape() {
+        return collidedShape;
     }
 }

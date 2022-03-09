@@ -4,8 +4,6 @@ import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 @ApiStatus.Experimental
 public interface Shape {
     /**
@@ -22,11 +20,10 @@ public interface Shape {
      * @param rayDirection Movement vector
      * @param staticPos Position of this shape
      * @param moving Bounding Box of moving shape
-     * @param tempResult Stores temporary SweepResult
      * @param finalResult Stores final SweepResult
      * @return is an intersection found
      */
-    boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult);
+    boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult finalResult);
 
     /**
      * Relative Start

@@ -12,13 +12,9 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -190,13 +186,13 @@ public class EntityBlockPhysicsIntegrationTest {
 
         BoundingBox bb = new Entity(EntityTypes.ZOMBIE).getBoundingBox();
 
-        SweepResult sweepResultTemp = new SweepResult(1, 0, 0, 0);
-        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null);
 
-        bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultTemp, sweepResultFinal);
-        bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultTemp, sweepResultFinal);
+        bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultFinal);
+        bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultFinal);
 
-        assertEqualsPoint(new Pos(11, 0, 0), sweepResultFinal.getCollisionPoint(), precision);
+        assertEquals(new Pos(11, 0, 0), sweepResultFinal.getCollidedShapePosition());
+        assertEquals(sweepResultFinal.getCollidedShape(), bb);
     }
 
     @Test

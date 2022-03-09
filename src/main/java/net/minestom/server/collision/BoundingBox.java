@@ -17,6 +17,8 @@ import java.util.stream.Stream;
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public final class BoundingBox implements Shape {
+    private static final SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
+
     private final double width, height, depth;
     Point offset;
     private Faces faces;
@@ -29,8 +31,8 @@ public final class BoundingBox implements Shape {
     }
 
     @ApiStatus.Experimental
-    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
-        return block.registry().shape().intersectBoxSwept(rayStart, rayDirection, blockPos, this, tempResult, finalResult);
+    public boolean intersectBlockSwept(Point rayStart, Point rayDirection, Block block, Point blockPos, SweepResult finalResult) {
+        return block.registry().shape().intersectBoxSwept(rayStart, rayDirection, blockPos, this, finalResult);
     }
 
     @Override
@@ -43,7 +45,7 @@ public final class BoundingBox implements Shape {
 
     @Override
     @ApiStatus.Experimental
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point staticPos, BoundingBox moving, SweepResult finalResult) {
         boolean isHit = RayUtils.BoundingBoxIntersectionCheck(
                 moving, rayStart, rayDirection,
                 this,
@@ -61,7 +63,8 @@ public final class BoundingBox implements Shape {
             finalResult.normalX = tempResult.normalX;
             finalResult.normalY = tempResult.normalY;
             finalResult.normalZ = tempResult.normalZ;
-            finalResult.collisionBlock = staticPos;
+            finalResult.collidedShapePosition = staticPos;
+            finalResult.collidedShape = this;
             finalResult.blockType = null;
         }
 
