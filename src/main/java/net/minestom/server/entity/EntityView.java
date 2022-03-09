@@ -163,6 +163,7 @@ final class EntityView {
         }
 
         public void register(T entity) {
+            assert Entity.getEntity(entity.getEntityId()) == entity : "Unregistered entity shouldn't be registered as viewer";
             this.bitSet.add(entity.getEntityId());
         }
 
@@ -238,20 +239,18 @@ final class EntityView {
     final class SetImpl extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
-            Player[] players;
+            List<Player> players;
             synchronized (mutex) {
                 var bitSet = viewableOption.bitSet;
                 if (bitSet.isEmpty()) return Collections.emptyIterator();
-                players = new Player[bitSet.size()];
-                int i = 0;
+                players = new ArrayList<>(bitSet.size());
                 for (IntIterator it = bitSet.intIterator(); it.hasNext(); ) {
                     final int id = it.nextInt();
                     final Player player = (Player) Entity.getEntity(id);
-                    assert player != null;
-                    players[i++] = player;
+                    if (player != null) players.add(player);
                 }
             }
-            return Arrays.asList(players).iterator();
+            return players.iterator();
         }
 
         @Override
