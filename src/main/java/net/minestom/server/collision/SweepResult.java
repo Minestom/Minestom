@@ -3,7 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 
-public final class SweepResult {
+final class SweepResult {
     double res;
     double normalX, normalY, normalZ;
     Point collidedShapePosition;
@@ -12,7 +12,8 @@ public final class SweepResult {
 
     /**
      * Store the result of a movement operation
-     * @param res Percentage of move completed
+     *
+     * @param res     Percentage of move completed
      * @param normalX -1 if intersected on left, 1 if intersected on right
      * @param normalY -1 if intersected on bottom, 1 if intersected on top
      * @param normalZ -1 if intersected on front, 1 if intersected on back
@@ -23,13 +24,5 @@ public final class SweepResult {
         this.normalY = normalY;
         this.normalZ = normalZ;
         this.collidedShape = collidedShape;
-    }
-
-    public Point getCollidedShapePosition() {
-        return collidedShapePosition;
-    }
-
-    public Shape getCollidedShape() {
-        return collidedShape;
     }
 }
