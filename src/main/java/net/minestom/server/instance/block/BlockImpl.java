@@ -72,7 +72,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                             propertiesArray[keyIndex] = valueIndex;
                         }
 
-                        var mainProperties = Registry.Properties.fromMap(new MergedMap<>(properties.asMap(), stateOverride));
+                        var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
                         final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
                                 propertiesArray, null, null);
                         BLOCK_STATE_MAP.set(block.stateId(), block);
