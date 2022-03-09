@@ -89,9 +89,9 @@ final class ShapeImpl implements Shape {
             // Update final result if the temp result collision is sooner than the current final result
             if (tempResult.res < finalResult.res) {
                 finalResult.res = tempResult.res;
-                finalResult.normalx = tempResult.normalx;
-                finalResult.normaly = tempResult.normaly;
-                finalResult.normalz = tempResult.normalz;
+                finalResult.normalX = tempResult.normalX;
+                finalResult.normalY = tempResult.normalY;
+                finalResult.normalZ = tempResult.normalZ;
                 finalResult.collisionBlock = blockPos;
                 finalResult.blockType = block.get().block();
             }

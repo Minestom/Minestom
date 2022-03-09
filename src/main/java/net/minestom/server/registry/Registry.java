@@ -366,7 +366,6 @@ public final class Registry {
                               EntitySpawnType spawnType,
                               BoundingBox boundingBox,
                               Properties custom) implements Entry {
-
         public EntityEntry(String namespace, Properties main, Properties custom) {
             this(NamespaceID.from(namespace),
                     main.getInt("id"),

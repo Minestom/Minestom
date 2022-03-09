@@ -84,9 +84,9 @@ final class BlockCollision {
         while (res.collisionX() || res.collisionY() || res.collisionZ()) {
             // Reset final result
             finalResult.res = 1;
-            finalResult.normalx = 0;
-            finalResult.normaly = 0;
-            finalResult.normalz = 0;
+            finalResult.normalX = 0;
+            finalResult.normalY = 0;
+            finalResult.normalZ = 0;
 
             if (res.collisionX()) foundCollisionX = true;
             if (res.collisionZ()) foundCollisionZ = true;
@@ -205,17 +205,17 @@ final class BlockCollision {
             remainingY -= finalResult.res * remainingY;
             remainingZ -= finalResult.res * remainingZ;
 
-            if (finalResult.normalx != 0) {
+            if (finalResult.normalX != 0) {
                 collisionX = true;
                 remainingX = 0;
             }
 
-            if (finalResult.normaly != 0) {
+            if (finalResult.normalY != 0) {
                 collisionY = true;
                 remainingY = 0;
             }
 
-            if (finalResult.normalz != 0) {
+            if (finalResult.normalZ != 0) {
                 collisionZ = true;
                 remainingZ = 0;
             }

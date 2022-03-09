@@ -3,16 +3,16 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 
-public class SweepResult {
-    public double res;
-    public double normalx, normaly, normalz;
-    public Point collisionBlock;
-    public Block blockType;
+final class SweepResult {
+    double res;
+    double normalX, normalY, normalZ;
+    Point collisionBlock;
+    Block blockType;
 
-    public SweepResult(double res, double normalx, double normaly, double normalz) {
+    SweepResult(double res, double normalX, double normalY, double normalZ) {
         this.res = res;
-        this.normalx = normalx;
-        this.normaly = normaly;
-        this.normalz = normalz;
+        this.normalX = normalX;
+        this.normalY = normalY;
+        this.normalZ = normalZ;
     }
 }

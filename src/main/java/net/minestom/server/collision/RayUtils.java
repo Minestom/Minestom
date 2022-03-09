@@ -306,9 +306,9 @@ class RayUtils {
 
         if (entryTime > exitTime || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f)) {
             writeTo.res = 1;
-            writeTo.normalx = 0;
-            writeTo.normaly = 0;
-            writeTo.normalz = 0;
+            writeTo.normalX = 0;
+            writeTo.normalY = 0;
+            writeTo.normalZ = 0;
             return;
         }
 
@@ -346,9 +346,9 @@ class RayUtils {
         }
 
         writeTo.res = entryTime * 0.99999;
-        writeTo.normalx = normalx;
-        writeTo.normaly = normaly;
-        writeTo.normalz = normalz;
+        writeTo.normalX = normalx;
+        writeTo.normalY = normaly;
+        writeTo.normalZ = normalz;
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
