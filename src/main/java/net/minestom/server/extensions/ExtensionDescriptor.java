@@ -76,7 +76,8 @@ public interface ExtensionDescriptor {
             JsonElement dependenciesElement = json.get("dependencies");
             Check.argCondition(!dependenciesElement.isJsonArray(), "Dependencies must be an array, not: " + dependenciesElement);
             for (JsonElement dependencyElement : dependenciesElement.getAsJsonArray()) {
-                dependencies.add(Dependency.fromJson(dependencyElement));
+                Dependency loaded = Dependency.fromJson(dependencyElement);
+                if (loaded != null) dependencies.add(loaded);
             }
         }
 

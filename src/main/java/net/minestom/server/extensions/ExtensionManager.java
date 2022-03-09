@@ -10,7 +10,9 @@ import org.jboss.shrinkwrap.resolver.api.NonTransitiveResolutionStrategy;
 import org.jboss.shrinkwrap.resolver.api.ResolutionStrategy;
 import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.MavenResolvedArtifact;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
+import org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenCoordinate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -204,6 +206,7 @@ public final class ExtensionManager {
             return true;
 
         // Configure a maven resolver for this extension
+        //todo should search for maven in repo list because `withMavenCentralRepo` must be called like this, not just added as a repo (APPARENTLY)
         ConfigurableMavenResolverSystem mavenResolver = Maven.configureResolver()
                 .withMavenCentralRepo(true);
         for (Repository repo : extension.repositories())
@@ -251,47 +254,65 @@ public final class ExtensionManager {
             return externalDependencies.get(coordinate);
         }
 
-        Path artifactLocation = dependenciesFolder
-                .resolve(dependency.groupId())
-                .resolve(dependency.artifactId())
-                .resolve(dependency.version())
-                .resolve(String.format("%s-%s%s.jar", dependency.artifactId(), dependency.version(),
-                        (dependency.classifier() == null ? "" : "-" + dependency.classifier())));
+        // There are two notable pieces in the following segment.
+        // 1. We currently get metadata on server start even if we already have the dependency installed.
+        //    It means that a server cannot be started without an internet connection. This metadata should
+        //    be cached somewhere locally.
+        // 2. Transitive dependency classloaders are not shared between extensions. For example,
+        //    DepA depends on DepB, extension A depends on DepA, extension B depends on DepB.
+        //    They will have different versions of DepB. This could lead to issues, but the alternative
+        //    is to put every extension into its own classloader which could lead to really slow class
+        //    load times. Would need to do some benchmarking if this ever becomes an issue.
+        MavenResolvedArtifact[] resolved = mavenResolver.resolve(coordinate).withTransitivity().asResolvedArtifact();
+        URL[] files = new URL[resolved.length];
 
-        // Download the extension only if it is not loaded already
-        if (!Files.exists(artifactLocation)) {
-            LOGGER.info("Downloading maven dependency {}", coordinate);
-            //TODO transitive dependencies
-            InputStream artifactStream = mavenResolver.resolve(coordinate).withoutTransitivity().asSingleInputStream();
-            if (artifactStream == null) {
-                LOGGER.error("Unable to resolve {}", coordinate);
-                LOGGER.error("Search path: [{}]", extension.repositories().stream()
-                        .map(Repository::url).collect(Collectors.joining(", ")));
-                return null;
+        for (int i = 0; i < resolved.length; i++) {
+            MavenResolvedArtifact artifact = resolved[i];
+            MavenCoordinate info = artifact.getCoordinate();
+            Path artifactLocation = dependenciesFolder
+                    .resolve(info.getGroupId())
+                    .resolve(info.getArtifactId())
+                    .resolve(info.getVersion())
+                    .resolve(String.format("%s-%s%s.jar", info.getArtifactId(), info.getVersion(),
+                            (info.getClassifier().isEmpty() ? "" : "-" + info.getClassifier())));
+
+            // Download only if missing
+            if (!Files.exists(artifactLocation)) {
+                LOGGER.info("Downloading maven dependency {}", artifactLocation.getFileName());
+
+                InputStream artifactStream = artifact.asInputStream();
+                if (artifactStream == null) {
+                    LOGGER.error("Unable to resolve {}", coordinate);
+                    LOGGER.error("Search path: [{}]", extension.repositories().stream()
+                            .map(Repository::url).collect(Collectors.joining(", ")));
+                    return null;
+                }
+
+                try {
+                    Files.createDirectories(artifactLocation.getParent());
+                    try (ReadableByteChannel artifactData = Channels.newChannel(artifactStream);
+                         FileChannel out = FileChannel.open(artifactLocation, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+
+                        out.transferFrom(artifactData, 0, Long.MAX_VALUE);
+                    }
+                } catch (IOException e) {
+                    LOGGER.error("Failed to download dependency {}", coordinate, e);
+                    return null;
+                }
             }
 
             try {
-                Files.createDirectories(artifactLocation.getParent());
-                try (ReadableByteChannel artifactData = Channels.newChannel(artifactStream);
-                     FileChannel out = FileChannel.open(artifactLocation, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
-
-                    out.transferFrom(artifactData, 0, Long.MAX_VALUE);
-                }
-            } catch (IOException e) {
-                LOGGER.error("Failed to download dependency {}", coordinate, e);
+                files[i] = artifactLocation.toUri().toURL();
+            } catch (MalformedURLException e) {
+                LOGGER.error("Failed to create URL for {}", artifactLocation, e);
                 return null;
             }
         }
 
         // Create the classloader
-        try {
-            HierarchyClassLoader dependencyClassLoader = new HierarchyClassLoader(coordinate, new URL[]{artifactLocation.toUri().toURL()});
-            externalDependencies.put(coordinate, dependencyClassLoader);
-            return dependencyClassLoader;
-        } catch (MalformedURLException e) {
-            LOGGER.error("Failed to load dependency {}", coordinate, e);
-            return null;
-        }
+        HierarchyClassLoader dependencyClassLoader = new HierarchyClassLoader(coordinate, files);
+        externalDependencies.put(coordinate, dependencyClassLoader);
+        return dependencyClassLoader;
     }
 
     private boolean loadDependency(ExtensionDescriptor target, Dependency dep,
