@@ -88,14 +88,11 @@ final class ShapeImpl implements Shape {
 
     @Override
     public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult) {
-        Point bbCentre = new Pos(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2, moving.minZ() + moving.depth() / 2);
-        Point rayCentre = rayStart.add(bbCentre);
-
         List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             return RayUtils.BoundingBoxIntersectionCheck(
-                    moving, rayCentre, rayDirection,
+                    moving, rayStart, rayDirection,
                     blockSection,
                     blockPos
             );

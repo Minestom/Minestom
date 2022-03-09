@@ -120,10 +120,13 @@ class RayUtils {
      * @param collidableStatic Bounding box
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean BoundingBoxIntersectionCheck(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset) {
+    public static boolean BoundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset) {
+        Point bbCentre = new Pos(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2, moving.minZ() + moving.depth() / 2);
+        Point rayCentre = rayStart.add(bbCentre);
+
         // Translate bounding box
-        Vec bbOffMin = new Vec(collidableStatic.minX() - rayStart.x() + staticCollidableOffset.x() - collidableMoving.width() / 2, collidableStatic.minY() - rayStart.y() + staticCollidableOffset.y() - collidableMoving.height() / 2, collidableStatic.minZ() - rayStart.z() + staticCollidableOffset.z() - collidableMoving.depth() / 2);
-        Vec bbOffMax = new Vec(collidableStatic.maxX() - rayStart.x() + staticCollidableOffset.x() + collidableMoving.width() / 2, collidableStatic.maxY() - rayStart.y() + staticCollidableOffset.y() + collidableMoving.height() / 2, collidableStatic.maxZ() - rayStart.z() + staticCollidableOffset.z() + collidableMoving.depth() / 2);
+        Vec bbOffMin = new Vec(collidableStatic.minX() - rayCentre.x() + staticCollidableOffset.x() - moving.width() / 2, collidableStatic.minY() - rayCentre.y() + staticCollidableOffset.y() - moving.height() / 2, collidableStatic.minZ() - rayCentre.z() + staticCollidableOffset.z() - moving.depth() / 2);
+        Vec bbOffMax = new Vec(collidableStatic.maxX() - rayCentre.x() + staticCollidableOffset.x() + moving.width() / 2, collidableStatic.maxY() - rayCentre.y() + staticCollidableOffset.y() + moving.height() / 2, collidableStatic.maxZ() - rayCentre.z() + staticCollidableOffset.z() + moving.depth() / 2);
 
         // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
         // If the point is within the rectangle, we know the vector intersects the face.
@@ -137,33 +140,33 @@ class RayUtils {
             // Left side of bounding box
             {
                 double xFac = bbOffMin.x() / rayDirection.x();
-                double yix = rayDirection.y() * xFac + rayStart.y();
-                double zix = rayDirection.z() * xFac + rayStart.z();
+                double yix = rayDirection.y() * xFac + rayCentre.y();
+                double zix = rayDirection.z() * xFac + rayCentre.z();
 
                 // Check if ray passes through y/z plane
                 if (rayDirection.x() > 0
-                        && ((yix - rayStart.y()) * signumRayY) >= 0
-                        && ((zix - rayStart.z()) * signumRayZ) >= 0
-                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - collidableMoving.height() / 2
-                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + collidableMoving.height() / 2
-                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - collidableMoving.depth() / 2
-                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + collidableMoving.depth() / 2) {
+                        && ((yix - rayCentre.y()) * signumRayY) >= 0
+                        && ((zix - rayCentre.z()) * signumRayZ) >= 0
+                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
+                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
                     return true;
                 }
             }
             // Right side of bounding box
             {
                 double xFac = bbOffMax.x() / rayDirection.x();
-                double yix = rayDirection.y() * xFac + rayStart.y();
-                double zix = rayDirection.z() * xFac + rayStart.z();
+                double yix = rayDirection.y() * xFac + rayCentre.y();
+                double zix = rayDirection.z() * xFac + rayCentre.z();
 
                 if (rayDirection.x() < 0
-                        && ((yix - rayStart.y()) * signumRayY) >= 0
-                        && ((zix - rayStart.z()) * signumRayZ) >= 0
-                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - collidableMoving.height() / 2
-                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + collidableMoving.height() / 2
-                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - collidableMoving.depth() / 2
-                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + collidableMoving.depth() / 2) {
+                        && ((yix - rayCentre.y()) * signumRayY) >= 0
+                        && ((zix - rayCentre.z()) * signumRayZ) >= 0
+                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
+                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
                     return true;
                 }
             }
@@ -173,31 +176,31 @@ class RayUtils {
         if (rayDirection.z() != 0) {
             {
                 double zFac = bbOffMin.z() / rayDirection.z();
-                double xiz = rayDirection.x() * zFac + rayStart.x();
-                double yiz = rayDirection.y() * zFac + rayStart.y();
+                double xiz = rayDirection.x() * zFac + rayCentre.x();
+                double yiz = rayDirection.y() * zFac + rayCentre.y();
 
                 if (rayDirection.z() > 0
-                        && ((yiz - rayStart.y()) * signumRayY) >= 0
-                        && ((xiz - rayStart.x()) * signumRayX) >= 0
-                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - collidableMoving.width() / 2
-                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + collidableMoving.width() / 2
-                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - collidableMoving.height() / 2
-                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + collidableMoving.height() / 2) {
+                        && ((yiz - rayCentre.y()) * signumRayY) >= 0
+                        && ((xiz - rayCentre.x()) * signumRayX) >= 0
+                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
                     return true;
                 }
             }
             {
                 double zFac = bbOffMax.z() / rayDirection.z();
-                double xiz = rayDirection.x() * zFac + rayStart.x();
-                double yiz = rayDirection.y() * zFac + rayStart.y();
+                double xiz = rayDirection.x() * zFac + rayCentre.x();
+                double yiz = rayDirection.y() * zFac + rayCentre.y();
 
                 if (rayDirection.z() < 0
-                        && ((yiz - rayStart.y()) * signumRayY) >= 0
-                        && ((xiz - rayStart.x()) * signumRayX) >= 0
-                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - collidableMoving.width() / 2
-                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + collidableMoving.width() / 2
-                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - collidableMoving.height() / 2
-                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + collidableMoving.height() / 2) {
+                        && ((yiz - rayCentre.y()) * signumRayY) >= 0
+                        && ((xiz - rayCentre.x()) * signumRayX) >= 0
+                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
                     return true;
                 }
             }
@@ -207,31 +210,31 @@ class RayUtils {
         if (rayDirection.y() != 0) {
             {
                 double yFac = bbOffMin.y() / rayDirection.y();
-                double xiy = rayDirection.x() * yFac + rayStart.x();
-                double ziy = rayDirection.z() * yFac + rayStart.z();
+                double xiy = rayDirection.x() * yFac + rayCentre.x();
+                double ziy = rayDirection.z() * yFac + rayCentre.z();
 
                 if (rayDirection.y() > 0
-                        && ((ziy - rayStart.z()) * signumRayZ) >= 0
-                        && ((xiy - rayStart.x()) * signumRayX) >= 0
-                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - collidableMoving.width() / 2
-                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + collidableMoving.width() / 2
-                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - collidableMoving.depth() / 2
-                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + collidableMoving.depth() / 2) {
+                        && ((ziy - rayCentre.z()) * signumRayZ) >= 0
+                        && ((xiy - rayCentre.x()) * signumRayX) >= 0
+                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
                     return true;
                 }
             }
             {
                 double yFac = bbOffMax.y() / rayDirection.y();
-                double xiy = rayDirection.x() * yFac + rayStart.x();
-                double ziy = rayDirection.z() * yFac + rayStart.z();
+                double xiy = rayDirection.x() * yFac + rayCentre.x();
+                double ziy = rayDirection.z() * yFac + rayCentre.z();
 
                 if (rayDirection.y() < 0
-                        && ((ziy - rayStart.z()) * signumRayZ) >= 0
-                        && ((xiy - rayStart.x()) * signumRayX) >= 0
-                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - collidableMoving.width() / 2
-                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + collidableMoving.width() / 2
-                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - collidableMoving.depth() / 2
-                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + collidableMoving.depth() / 2) {
+                        && ((ziy - rayCentre.z()) * signumRayZ) >= 0
+                        && ((xiy - rayCentre.x()) * signumRayX) >= 0
+                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
                     return true;
                 }
             }
@@ -352,6 +355,7 @@ class RayUtils {
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
+        // TODO: BoundingBox.ZERO?
         return BoundingBoxIntersectionCheck(new BoundingBox(0, 0, 0), start, direction, boundingBox, position);
     }
 }
