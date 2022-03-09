@@ -29,7 +29,7 @@ public final class BoundingBox implements Shape {
     }
 
     public boolean intersectBlock(Point src, Block block, Point dest) {
-        return block.registry().shape().intersectBox(src, this, dest);
+        return block.registry().shape().intersectBox(src.sub(dest), this);
     }
 
     public boolean intersectBlockSwept(Point entityPosition, Point rayDirection, Block block, Point blockPos, SweepResult tempResult, SweepResult finalResult) {
@@ -38,10 +38,10 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    public boolean intersectBox(Point position, BoundingBox boundingBox, Point placementPosition) {
-        return (minX() + position.x() <= boundingBox.maxX() + placementPosition.x() && maxX() + position.x() >= boundingBox.minX() + placementPosition.x()) &&
-                (minY() + position.y() <= boundingBox.maxY() + placementPosition.y() && maxY() + position.y() >= boundingBox.minY() + placementPosition.y()) &&
-                (minZ() + position.z() <= boundingBox.maxZ() + placementPosition.z() && maxZ() + position.z() >= boundingBox.minZ() + placementPosition.z());
+    public boolean intersectBox(Point positionRelative, BoundingBox boundingBox) {
+        return (minX() + positionRelative.x() <= boundingBox.maxX() && maxX() + positionRelative.x() >= boundingBox.minX()) &&
+                (minY() + positionRelative.y() <= boundingBox.maxY() && maxY() + positionRelative.y() >= boundingBox.minY()) &&
+                (minZ() + positionRelative.z() <= boundingBox.maxZ() && maxZ() + positionRelative.z() >= boundingBox.minZ());
     }
 
     @Override
@@ -56,7 +56,7 @@ public final class BoundingBox implements Shape {
      * @return true if this bounding box intersects with the entity, false otherwise
      */
     public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
-        return intersectBox(src, entity.getBoundingBox(), entity.getPosition());
+        return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
     }
 
     @ApiStatus.Experimental
