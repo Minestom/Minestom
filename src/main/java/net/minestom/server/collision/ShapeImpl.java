@@ -1,21 +1,21 @@
 package net.minestom.server.collision;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class ShapeImpl implements Shape {
-    private final List<BoundingBox> blockSections;
+    private final BoundingBox[] blockSections;
     private final Supplier<Material> block;
 
-    ShapeImpl(List<BoundingBox> boundingBoxes, Supplier<Material> block) {
+    private ShapeImpl(BoundingBox[] boundingBoxes, Supplier<Material> block) {
         this.blockSections = boundingBoxes;
         this.block = block;
     }
@@ -25,30 +25,29 @@ final class ShapeImpl implements Shape {
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(str);
 
-        ArrayList<Double> vals = new ArrayList<>();
+        DoubleList vals = new DoubleArrayList();
         while (matcher.find()) {
             double newVal = Double.parseDouble(matcher.group());
             vals.add(newVal);
         }
 
-        List<BoundingBox> boundingBoxes = new ArrayList<>();
         final int count = vals.size() / 6;
+        BoundingBox[] boundingBoxes = new BoundingBox[count];
         for (int i = 0; i < count; ++i) {
-            final double boundXSize = vals.get(3 + 6 * i) - vals.get(0 + 6 * i);
-            final double boundYSize = vals.get(4 + 6 * i) - vals.get(1 + 6 * i);
-            final double boundZSize = vals.get(5 + 6 * i) - vals.get(2 + 6 * i);
+            final double minX = vals.getDouble(0 + 6 * i);
+            final double minY = vals.getDouble(1 + 6 * i);
+            final double minZ = vals.getDouble(2 + 6 * i);
 
-            final double minX, minY, minZ;
-            minX = vals.get(0 + 6 * i);
-            minY = vals.get(1 + 6 * i);
-            minZ = vals.get(2 + 6 * i);
+            final double boundXSize = vals.getDouble(3 + 6 * i) - minX;
+            final double boundYSize = vals.getDouble(4 + 6 * i) - minY;
+            final double boundZSize = vals.getDouble(5 + 6 * i) - minZ;
+
             final BoundingBox bb = new BoundingBox(boundXSize, boundYSize, boundZSize, new Vec(minX, minY, minZ));
             assert bb.minX() == minX;
             assert bb.minY() == minY;
             assert bb.minZ() == minZ;
-            boundingBoxes.add(bb);
+            boundingBoxes[i] = bb;
         }
-
         return new ShapeImpl(boundingBoxes, block);
     }
 
@@ -76,27 +75,23 @@ final class ShapeImpl implements Shape {
 
     @Override
     public boolean intersectBox(@NotNull Point position, @NotNull BoundingBox boundingBox) {
-        return blockSections.stream().anyMatch(section -> boundingBox.intersectBox(position, section));
+        for (BoundingBox blockSection : blockSections) {
+            if (boundingBox.intersectBox(position, blockSection)) return true;
+        }
+        return false;
     }
 
     @Override
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
-        List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
-            // Fast check to see if a collision happens
-            // Uses minkowski sum
-            return RayUtils.BoundingBoxIntersectionCheck(
-                    moving, rayStart, rayDirection,
-                    blockSection,
-                    shapePos
-            );
-        }).toList();
-
         boolean hitBlock = false;
         SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
-
-        for (BoundingBox bb : collidables) {
+        for (BoundingBox blockSection : blockSections) {
+            // Fast check to see if a collision happens
+            // Uses minkowski sum
+            if (!RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos))
+                continue;
             // Longer check to get result of collision
-            RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, shapePos, tempResult);
+            RayUtils.SweptAABB(moving, rayStart, rayDirection, blockSection, shapePos, tempResult);
             // Update final result if the temp result collision is sooner than the current final result
             if (tempResult.res < finalResult.res) {
                 finalResult.res = tempResult.res;
