@@ -53,7 +53,7 @@ class RayUtils {
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
                     break;
             }
         }
@@ -79,7 +79,7 @@ class RayUtils {
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
                     break;
             }
         }
@@ -105,7 +105,7 @@ class RayUtils {
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (CollisionUtils.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
                     break;
             }
         }
