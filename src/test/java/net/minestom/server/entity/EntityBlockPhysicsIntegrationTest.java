@@ -16,6 +16,9 @@ import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -212,10 +215,11 @@ public class EntityBlockPhysicsIntegrationTest {
     public void entityPhysicsCheckTouchTick(Env env) {
         var instance = env.createFlatInstance();
 
+        Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                System.out.println(touch.getBlockPosition());
+                assertTrue(positions.add(touch.getBlockPosition()));
             }
 
             @Override
@@ -232,15 +236,15 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(1, 42, 0, Block.STONE.withHandler(handler));
         instance.setBlock(0, 42, 10, Block.STONE.withHandler(handler));
 
-        // These points should be touched
-        // Vec[x=0.0, y=42.0, z=0.0]
-        // Vec[x=0.0, y=42.0, z=1.0]
-        // Vec[x=0.0, y=43.0, z=1.0]
-
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
 
         entity.tick(0);
+
+        assertEquals(positions, Set.of(
+                new Vec(0, 42, 0),
+                new Vec(0, 42, 1),
+                new Vec(0, 43, 1)));
 
         assertEquals(instance, entity.getInstance());
     }
