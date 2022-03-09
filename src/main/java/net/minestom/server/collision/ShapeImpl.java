@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -55,12 +56,28 @@ final class ShapeImpl implements Shape {
 
     @Override
     public @NotNull Point relativeStart() {
-        return null;
+        double minX = 1, minY = 1, minZ = 1;
+
+        for (BoundingBox blockSection : blockSections) {
+            if (blockSection.minX() < minX) minX = blockSection.minX();
+            if (blockSection.minY() < minY) minY = blockSection.minY();
+            if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
+        }
+
+        return new Pos(minX, minY, minZ);
     }
 
     @Override
     public @NotNull Point relativeEnd() {
-        return null;
+        double maxX = 1, maxY = 1, maxZ = 1;
+
+        for (BoundingBox blockSection : blockSections) {
+            if (blockSection.maxX() < maxX) maxX = blockSection.maxX();
+            if (blockSection.maxY() < maxY) maxY = blockSection.maxY();
+            if (blockSection.maxZ() < maxZ) maxZ = blockSection.maxZ();
+        }
+
+        return new Pos(maxX, maxY, maxZ);
     }
 
     @Override
