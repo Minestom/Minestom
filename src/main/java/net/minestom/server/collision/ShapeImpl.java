@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 final class ShapeImpl implements Shape {
     private final List<BoundingBox> blockSections;
     private final Supplier<Material> block;
-    private static final SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
 
     ShapeImpl(List<BoundingBox> boundingBoxes, Supplier<Material> block) {
         this.blockSections = boundingBoxes;
@@ -44,8 +43,7 @@ final class ShapeImpl implements Shape {
             minX = vals.get(0 + 6 * i);
             minY = vals.get(1 + 6 * i);
             minZ = vals.get(2 + 6 * i);
-            var bb = new BoundingBox(boundXSize, boundYSize, boundZSize);
-            bb.offset = new Vec(minX, minY, minZ);
+            final BoundingBox bb = new BoundingBox(boundXSize, boundYSize, boundZSize, new Vec(minX, minY, minZ));
             assert bb.minX() == minX;
             assert bb.minY() == minY;
             assert bb.minZ() == minZ;
@@ -58,36 +56,32 @@ final class ShapeImpl implements Shape {
     @Override
     public @NotNull Point relativeStart() {
         double minX = 1, minY = 1, minZ = 1;
-
         for (BoundingBox blockSection : blockSections) {
             if (blockSection.minX() < minX) minX = blockSection.minX();
             if (blockSection.minY() < minY) minY = blockSection.minY();
             if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
         }
-
         return new Pos(minX, minY, minZ);
     }
 
     @Override
     public @NotNull Point relativeEnd() {
         double maxX = 1, maxY = 1, maxZ = 1;
-
         for (BoundingBox blockSection : blockSections) {
             if (blockSection.maxX() < maxX) maxX = blockSection.maxX();
             if (blockSection.maxY() < maxY) maxY = blockSection.maxY();
             if (blockSection.maxZ() < maxZ) maxZ = blockSection.maxZ();
         }
-
         return new Pos(maxX, maxY, maxZ);
     }
 
     @Override
-    public boolean intersectBox(Point position, BoundingBox boundingBox) {
+    public boolean intersectBox(@NotNull Point position, @NotNull BoundingBox boundingBox) {
         return blockSections.stream().anyMatch(section -> boundingBox.intersectBox(position, section));
     }
 
     @Override
-    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult) {
+    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         List<BoundingBox> collidables = blockSections.stream().filter(blockSection -> {
             // Fast check to see if a collision happens
             // Uses minkowski sum
@@ -99,11 +93,10 @@ final class ShapeImpl implements Shape {
         }).toList();
 
         boolean hitBlock = false;
-
         for (BoundingBox bb : collidables) {
+            SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
             // Longer check to get result of collision
             RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, shapePos, tempResult);
-
             // Update final result if the temp result collision is sooner than the current final result
             if (tempResult.res < finalResult.res) {
                 finalResult.res = tempResult.res;
@@ -114,10 +107,8 @@ final class ShapeImpl implements Shape {
                 finalResult.collidedShape = this;
                 finalResult.blockType = block.get().block();
             }
-
             hitBlock = true;
         }
-
         return hitBlock;
     }
 }

@@ -7,32 +7,37 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Experimental
 public interface Shape {
     /**
-     * Check if two bounding boxes intersect
+     * Checks if two bounding boxes intersect.
+     *
      * @param positionRelative Relative position of bounding box to check with
-     * @param boundingBox Bounding box to check for intersections with
+     * @param boundingBox      Bounding box to check for intersections with
      * @return is an intersection found
      */
-    boolean intersectBox(Point positionRelative, BoundingBox boundingBox);
+    boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox);
 
     /**
-     * Check if a moving bounding box will hit this shape
-     * @param rayStart Position of the moving shape
+     * Checks if a moving bounding box will hit this shape.
+     *
+     * @param rayStart     Position of the moving shape
      * @param rayDirection Movement vector
-     * @param shapePos Position of this shape
-     * @param moving Bounding Box of moving shape
-     * @param finalResult Stores final SweepResult
+     * @param shapePos     Position of this shape
+     * @param moving       Bounding Box of moving shape
+     * @param finalResult  Stores final SweepResult
      * @return is an intersection found
      */
-    boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult);
+    boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection,
+                              @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult);
 
     /**
      * Relative Start
+     *
      * @return Start of shape
      */
     @NotNull Point relativeStart();
 
     /**
      * Relative End
+     *
      * @return End of shape
      */
     @NotNull Point relativeEnd();
