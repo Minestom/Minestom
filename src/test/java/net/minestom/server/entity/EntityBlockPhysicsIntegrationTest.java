@@ -122,7 +122,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         var entity = new Entity(EntityTypes.SLIME);
         SlimeMeta meta = (SlimeMeta) entity.entityMeta;
-        meta.setSize(10);
+        meta.setSize(20);
 
         entity.setInstance(instance, new Pos(5, 50, 5)).join();
 
@@ -144,7 +144,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         var entity = new Entity(EntityTypes.SLIME);
         SlimeMeta meta = (SlimeMeta) entity.entityMeta;
-        meta.setSize(10);
+        meta.setSize(20);
 
         entity.setInstance(instance, new Pos(5, 42.8, 5)).join();
 
