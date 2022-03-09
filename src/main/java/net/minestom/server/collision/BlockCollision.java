@@ -59,9 +59,9 @@ final class BlockCollision {
 
         // If we're moving less than the MIN_DELTA value, set the velocity in that axis to 0.
         // This prevents tiny moves from wasting cpu time
-        double deltaX = Math.abs(remainingMove.x()) < MIN_DELTA ? 0 : remainingMove.x();
-        double deltaY = Math.abs(remainingMove.y()) < MIN_DELTA ? 0 : remainingMove.y();
-        double deltaZ = Math.abs(remainingMove.z()) < MIN_DELTA ? 0 : remainingMove.z();
+        final double deltaX = Math.abs(remainingMove.x()) < MIN_DELTA ? 0 : remainingMove.x();
+        final double deltaY = Math.abs(remainingMove.y()) < MIN_DELTA ? 0 : remainingMove.y();
+        final double deltaZ = Math.abs(remainingMove.z()) < MIN_DELTA ? 0 : remainingMove.z();
 
         remainingMove = new Vec(deltaX, deltaY, deltaZ);
 
