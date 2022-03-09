@@ -195,6 +195,8 @@ public class EntityBlockPhysicsIntegrationTest {
 
         bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultTemp, sweepResultFinal);
         bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultTemp, sweepResultFinal);
+
+        assertEqualsPoint(new Pos(11, 0, 0), sweepResultFinal.getCollisionPoint(), precision);
     }
 
     @Test
