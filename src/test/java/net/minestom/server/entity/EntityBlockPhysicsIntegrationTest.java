@@ -23,20 +23,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityBlockPhysicsIntegrationTest {
-    private static final Point precision = new Pos(0.01, 0.01, 0.01);
+    private static final Point PRECISION = new Pos(0.01, 0.01, 0.01);
 
-    private static boolean checkPoints(Point expected, Point actual, Point delta) {
+    private static boolean checkPoints(Point expected, Point actual) {
         Point diff = expected.sub(actual);
 
-        return (delta.x() > Math.abs(diff.x()))
-                && (delta.y() > Math.abs(diff.y()))
-                && (delta.z() > Math.abs(diff.z()));
+        return (PRECISION.x() > Math.abs(diff.x()))
+                && (PRECISION.y() > Math.abs(diff.y()))
+                && (PRECISION.z() > Math.abs(diff.z()));
     }
 
-    private static void assertEqualsPoint(Point expected, Point actual, Point delta) {
-        assertEquals(expected.x(), actual.x(), delta.x());
-        assertEquals(expected.y(), actual.y(), delta.y());
-        assertEquals(expected.z(), actual.z(), delta.z());
+    private static void assertEqualsPoint(Point expected, Point actual) {
+        assertEquals(expected.x(), actual.x(), PRECISION.x());
+        assertEquals(expected.y(), actual.y(), PRECISION.y());
+        assertEquals(expected.z(), actual.z(), PRECISION.z());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
-        assertEqualsPoint(new Pos(0, 42, 0.7), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0, 42, 0.7), res.newPosition());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
-        assertEqualsPoint(new Pos(0, 42.5, 0), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0, 42.5, 0), res.newPosition());
     }
 
     @Test
@@ -77,8 +77,8 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
 
-        boolean isFirst = checkPoints(new Pos(10, 42, 0.7), res.newPosition(), precision);
-        boolean isSecond = checkPoints(new Pos(0.7, 42, 10), res.newPosition(), precision);
+        boolean isFirst = checkPoints(new Pos(10, 42, 0.7), res.newPosition());
+        boolean isSecond = checkPoints(new Pos(0.7, 42, 10), res.newPosition());
 
         // First and second are both valid, it depends on the implementation
         // If x collision is checked first then isFirst will be true
@@ -97,7 +97,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 11));
-        assertEqualsPoint(new Pos(0.7, 42, 11.69), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.7, 42, 11.69), res.newPosition());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, -10));
 
-        assertEqualsPoint(new Pos(4.7, 42, -10.3), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(4.7, 42, -10.3), res.newPosition());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -20, 0));
 
-        assertEqualsPoint(new Pos(5, 43, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(5, 43, 5), res.newPosition());
     }
 
     @Test
@@ -160,7 +160,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -0.4, 0));
 
-        assertEqualsPoint(new Pos(5, 42.56, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(5, 42.56, 5), res.newPosition());
     }
 
     @Test
@@ -177,7 +177,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 0));
 
-        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 0));
-        assertEqualsPoint(new Pos(0.7, 42, 0.7), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.7, 42, 0.7), res.newPosition());
     }
 
     @Test
@@ -272,7 +272,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -1.2));
-        assertEqualsPoint(new Pos(0.4, 42.5, 0.8), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.4, 42.5, 0.8), res.newPosition());
     }
 
     @Test
@@ -285,7 +285,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.2));
-        assertEqualsPoint(new Pos(0.4, 42.5, 0.8), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.4, 42.5, 0.8), res.newPosition());
     }
 
     @Test
@@ -325,7 +325,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(11, 0, 10));
-        assertEqualsPoint(new Pos(11, 42, 0.7), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(11, 42, 0.7), res.newPosition());
     }
 
     @Test
@@ -338,7 +338,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.3, 0, 0));
-        assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition());
     }
 
     @Test
@@ -350,7 +350,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
-        assertEqualsPoint(new Pos(0, 42, 10), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(0, 42, 10), res.newPosition());
     }
 
     @Test
@@ -364,7 +364,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
-        assertEqualsPoint(new Pos(10, 42, 10), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(10, 42, 10), res.newPosition());
     }
 
     @Test
@@ -392,13 +392,13 @@ public class EntityBlockPhysicsIntegrationTest {
         PhysicsResult ny = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
         PhysicsResult nz = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -10));
 
-        assertEqualsPoint(new Pos(0.7, 42, 0.5), px.newPosition(), precision);
-        assertEqualsPoint(new Pos(0.5, 42.04, 0.5), py.newPosition(), precision);
-        assertEqualsPoint(new Pos(0.5, 42, 0.7), pz.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.7, 42, 0.5), px.newPosition());
+        assertEqualsPoint(new Pos(0.5, 42.04, 0.5), py.newPosition());
+        assertEqualsPoint(new Pos(0.5, 42, 0.7), pz.newPosition());
 
-        assertEqualsPoint(new Pos(0.3, 42, 0.5), nx.newPosition(), precision);
-        assertEqualsPoint(new Pos(0.5, 42, 0.5), ny.newPosition(), precision);
-        assertEqualsPoint(new Pos(0.5, 42, 0.3), nz.newPosition(), precision);
+        assertEqualsPoint(new Pos(0.3, 42, 0.5), nx.newPosition());
+        assertEqualsPoint(new Pos(0.5, 42, 0.5), ny.newPosition());
+        assertEqualsPoint(new Pos(0.5, 42, 0.3), nz.newPosition());
     }
 
     @Test
@@ -413,7 +413,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
-        assertEqualsPoint(new Pos((distance - 1) * 16 + 5, 42, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos((distance - 1) * 16 + 5, 42, 5), res.newPosition());
     }
 
     @Test
@@ -430,7 +430,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
-        assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
     }
 
     @Test
@@ -442,6 +442,6 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
-        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition(), precision);
+        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition());
     }
 }
