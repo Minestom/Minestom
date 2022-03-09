@@ -15,7 +15,7 @@ public interface Shape {
     boolean intersectBox(Point positionRelative, BoundingBox boundingBox);
 
     /**
-     * Check if a moving shape will hit this shape
+     * Check if a moving bounding box will hit this shape
      * @param rayStart Position of the moving shape
      * @param rayDirection Movement vector
      * @param shapePos Position of this shape
