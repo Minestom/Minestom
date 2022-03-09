@@ -3,6 +3,8 @@ package net.minestom.server.entity.pathfinding;
 import com.extollit.gaming.ai.path.model.IBlockDescription;
 import com.extollit.gaming.ai.path.model.IBlockObject;
 import com.extollit.linalg.immutable.AxisAlignedBBox;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -32,9 +34,12 @@ public final class PFBlock implements IBlockDescription, IBlockObject {
 
     @Override
     public AxisAlignedBBox bounds() {
+        final Point blockStart = this.block.registry().collisionShape().relativeStart();
+        final Point blockEnd = this.block.registry().collisionShape().relativeEnd();
+
         return new AxisAlignedBBox(
-                0, 0, 0,
-                1, 1, 1
+                blockStart.x(), blockStart.y(), blockStart.z(),
+                blockEnd.x(), blockEnd.y(), blockEnd.z()
         );
     }
 
@@ -78,60 +83,10 @@ public final class PFBlock implements IBlockDescription, IBlockObject {
 
     @Override
     public boolean isFullyBounded() {
-        // TODO: Use Hitbox (would probably be faster as well)
-        // Return false for anything that does not have a full hitbox but impedes
-        // e.g. Anvils, Lilypads, Ladders, Walls, Fences, EnchantmentTables
-        // Fences & Walls
-        if (isFenceLike()) {
-            return false;
-        }
-        // Ladders and Vines
-        if (isClimbable()) {
-            return false;
-        }
-        // All doors/trapdoors.
-        if (isDoor()) {
-            return false;
-        }
-        if (block.name().startsWith("potted")) {
-            return false;
-        }
-        // Skulls & Heads
-        if (block.name().contains("skull") || block.name().contains("head")) {
-            // NOTE: blocks.getName().contains("head") also matches Piston_Head
-            // I could not find out by documentation if piston_head is fully bounded, I would presume it is NOT.
-            return false;
-        }
-        // Carpets
-        if (block.name().endsWith("carpet")) {
-            return false;
-        }
-        // Slabs
-        if (block.name().contains("slab")) {
-            return false;
-        }
-        // Beds
-        if (block.name().endsWith("bed")) {
-            return false;
-        }
-        // Glass Panes
-        if (block.name().endsWith("pane")) {
-            return false;
-        }
+        final Point blockStart = this.block.registry().collisionShape().relativeStart();
+        final Point blockEnd = this.block.registry().collisionShape().relativeEnd();
 
-        return !Block.CHORUS_FLOWER.compare(block) && !Block.CHORUS_PLANT.compare(block) && !Block.BAMBOO.compare(block)
-                && !Block.BAMBOO_SAPLING.compare(block) && !Block.SEA_PICKLE.compare(block)
-                && !Block.TURTLE_EGG.compare(block) && !Block.SNOW.compare(block) && !Block.FLOWER_POT.compare(block)
-                && !Block.LILY_PAD.compare(block) && !Block.ANVIL.compare(block) && !Block.CHIPPED_ANVIL.compare(block)
-                && !Block.DAMAGED_ANVIL.compare(block) && !Block.CAKE.compare(block) && !Block.CACTUS.compare(block)
-                && !Block.BREWING_STAND.compare(block) && !Block.LECTERN.compare(block)
-                && !Block.DAYLIGHT_DETECTOR.compare(block) && !Block.CAMPFIRE.compare(block)
-                && !Block.SOUL_CAMPFIRE.compare(block) && !Block.ENCHANTING_TABLE.compare(block)
-                && !Block.CHEST.compare(block) && !Block.ENDER_CHEST.compare(block) && !Block.GRINDSTONE.compare(block)
-                && !Block.TRAPPED_CHEST.compare(block) && !Block.SOUL_SAND.compare(block)
-                && !Block.SOUL_SOIL.compare(block) && !Block.LANTERN.compare(block) && !Block.COCOA.compare(block)
-                && !Block.CONDUIT.compare(block) && !Block.DIRT_PATH.compare(block) && !Block.FARMLAND.compare(block)
-                && !Block.END_ROD.compare(block) && !Block.STONECUTTER.compare(block) && !Block.BELL.compare(block);
+        return blockStart.x() == 0 && blockStart.y() == 0 && blockStart.z() == 0 && blockEnd.x() == 1 && blockEnd.y() == 1 && blockEnd.z() == 1;
     }
 
     @Override
