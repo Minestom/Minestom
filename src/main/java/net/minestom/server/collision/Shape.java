@@ -1,14 +1,17 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 @ApiStatus.Experimental
 public interface Shape {
+    /**
+     * Check if two bounding boxes intersect
+     * @param positionRelative Relative position of bounding box to check with
+     * @param boundingBox Bounding box to check for intersections with
+     * @return is an intersection found
+     */
     boolean intersectBox(Point positionRelative, BoundingBox boundingBox);
 
     /**
@@ -19,7 +22,7 @@ public interface Shape {
      * @param moving Bounding Box of moving shape
      * @param tempResult Stores temporary SweepResult
      * @param finalResult Stores final SweepResult
-     * @return is an intersect found
+     * @return is an intersection found
      */
     boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point blockPos, BoundingBox moving, SweepResult tempResult, SweepResult finalResult);
 
