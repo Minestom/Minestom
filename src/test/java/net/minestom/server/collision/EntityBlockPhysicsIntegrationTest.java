@@ -210,6 +210,19 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckDoorSubBlock(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.ACACIA_DOOR);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 0.2));
+        assertEqualsPoint(new Pos(0.5, 42, 0.512), res.newPosition());
+    }
+
+    @Test
     public void entityPhysicsCheckTouchTick(Env env) {
         var instance = env.createFlatInstance();
 
