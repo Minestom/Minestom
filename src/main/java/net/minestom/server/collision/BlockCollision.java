@@ -175,13 +175,12 @@ final class BlockCollision {
                     checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
                 }
 
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-
                 // If check has not been done above, do check here
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
                         && pointBefore.blockZ() != pointAfter.blockZ())
                     checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+
             }
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
