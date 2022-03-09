@@ -254,7 +254,7 @@ final class BlockCollision {
         boolean hitBlock = false;
         final Pos blockPos = new Pos(blockX, blockY, blockZ);
         if (checkBlock.isSolid()) {
-            hitBlock = checkBlock.registry().shape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
+            hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
         }
         return hitBlock;
     }

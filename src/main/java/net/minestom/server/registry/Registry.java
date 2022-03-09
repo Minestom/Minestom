@@ -268,7 +268,7 @@ public final class Registry {
             return materialSupplier.get();
         }
 
-        public Shape shape() {
+        public Shape collisionShape() {
             return shape;
         }
 
