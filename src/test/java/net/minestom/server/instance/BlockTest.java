@@ -1,7 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -82,7 +82,7 @@ public class BlockTest {
         Point start = Block.LANTERN.registry().shape().relativeStart();
         Point end = Block.LANTERN.registry().shape().relativeEnd();
 
-        assertEquals(start, new Pos(0.312, 0, 0.312));
-        assertEquals(end, new Pos(0.625, 0.437, 0.625));
+        assertEquals(start, new Vec(0.312, 0, 0.312));
+        assertEquals(end, new Vec(0.625, 0.437, 0.625));
     }
 }
