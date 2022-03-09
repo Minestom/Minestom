@@ -37,7 +37,7 @@ public final class PlatformUtils {
         if (raw.contains("x86")) {
             ARCH = "x86";
         } else if (raw.contains("amd64")) {
-            ARCH = "x64";
+            ARCH = "x86_64";
         } else if (raw.contains("aarch64")) {
             ARCH = "arm64";
         } else {

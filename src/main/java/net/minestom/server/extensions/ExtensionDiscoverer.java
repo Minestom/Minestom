@@ -153,7 +153,7 @@ public interface ExtensionDiscoverer {
                     }
                 } catch (Exception e) {
                     // todo
-//                    MinecraftServer.getExceptionManager().handleException(e);
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
             return discovered.stream();
