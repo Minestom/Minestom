@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -210,16 +211,93 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckDoorSubBlock(Env env) {
+    public void entityPhysicsCheckDoorSubBlockNorth(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(0, 42, 0, Block.ACACIA_DOOR);
+        Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "north", "open", "true"));
+
+        instance.setBlock(0, 42, 0, b);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0.5, 42, 0.5)).join();
+        entity.setInstance(instance, new Pos(0.5, 42.5, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 
-        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 0.2));
-        assertEqualsPoint(new Pos(0.5, 42, 0.512), res.newPosition());
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 0.4));
+        assertEqualsPoint(new Pos(0.5, 42.5, 0.512), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDoorSubBlockSouth(Env env) {
+        var instance = env.createFlatInstance();
+        Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "south", "open", "true"));
+
+        instance.setBlock(0, 42, 0, b);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42.5, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4));
+        assertEqualsPoint(new Pos(0.5, 42.5, 0.487), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDoorSubBlockWest(Env env) {
+        var instance = env.createFlatInstance();
+        Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "west", "open", "true"));
+
+        instance.setBlock(0, 42, 0, b);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42.5, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, 0));
+        assertEqualsPoint(new Pos(0.512, 42.5, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDoorSubBlockEast(Env env) {
+        var instance = env.createFlatInstance();
+        Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "east", "open", "true"));
+
+        instance.setBlock(0, 42, 0, b);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42.5, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(-0.6, 0, 0));
+        assertEqualsPoint(new Pos(0.487, 42.5, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDoorSubBlockUp(Env env) {
+        var instance = env.createFlatInstance();
+        Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("half", "top"));
+
+        instance.setBlock(0, 44, 0, b);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42.7, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0.4, 0));
+        assertEqualsPoint(new Pos(0.5, 42.862, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDoorSubBlockDown(Env env) {
+        var instance = env.createFlatInstance();
+        Block b = Block.ACACIA_TRAPDOOR;
+
+        instance.setBlock(0, 42, 0, b);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42.2, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -0.4, 0));
+        assertEqualsPoint(new Pos(0.5, 42.187, 0.5), res.newPosition());
     }
 
     @Test

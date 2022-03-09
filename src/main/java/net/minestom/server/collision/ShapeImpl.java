@@ -1,7 +1,6 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +60,7 @@ final class ShapeImpl implements Shape {
             if (blockSection.minY() < minY) minY = blockSection.minY();
             if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
         }
-        return new Pos(minX, minY, minZ);
+        return new Vec(minX, minY, minZ);
     }
 
     @Override
@@ -72,7 +71,7 @@ final class ShapeImpl implements Shape {
             if (blockSection.maxY() < maxY) maxY = blockSection.maxY();
             if (blockSection.maxZ() < maxZ) maxZ = blockSection.maxZ();
         }
-        return new Pos(maxX, maxY, maxZ);
+        return new Vec(maxX, maxY, maxZ);
     }
 
     @Override
@@ -93,8 +92,9 @@ final class ShapeImpl implements Shape {
         }).toList();
 
         boolean hitBlock = false;
+        SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
+
         for (BoundingBox bb : collidables) {
-            SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
             // Longer check to get result of collision
             RayUtils.SweptAABB(moving, rayStart, rayDirection, bb, shapePos, tempResult);
             // Update final result if the temp result collision is sooner than the current final result
