@@ -9,6 +9,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 /**
@@ -127,7 +128,7 @@ public class DamageType implements TagHandler {
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         synchronized (nbtLock) {
             return tag.read(nbt);
         }

@@ -53,7 +53,7 @@ final class InstanceSnapshotImpl {
         }
 
         @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
     }
@@ -90,7 +90,7 @@ final class InstanceSnapshotImpl {
         }
 
         @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
 

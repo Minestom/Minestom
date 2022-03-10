@@ -8,10 +8,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -236,7 +233,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return meta.getTag(tag);
     }
 

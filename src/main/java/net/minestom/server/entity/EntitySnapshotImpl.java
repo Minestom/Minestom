@@ -11,6 +11,7 @@ import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.collection.IntMappedArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -24,7 +25,7 @@ final class EntitySnapshotImpl {
                   int[] viewersId, int[] passengersId, int vehicleId,
                   TagReadable tagReadable) implements EntitySnapshot {
         @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
 
@@ -108,7 +109,7 @@ final class EntitySnapshotImpl {
         }
 
         @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
             return snapshot.getTag(tag);
         }
     }

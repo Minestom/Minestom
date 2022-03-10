@@ -8,6 +8,7 @@ import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return tag.read(nbtCompound);
     }
 

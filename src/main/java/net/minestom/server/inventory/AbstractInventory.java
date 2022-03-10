@@ -12,6 +12,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.MethodHandles;
@@ -250,7 +251,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         synchronized (nbtLock) {
             return tag.read(nbt);
         }

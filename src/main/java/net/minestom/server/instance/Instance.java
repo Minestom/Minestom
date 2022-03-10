@@ -38,6 +38,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
@@ -598,7 +599,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         synchronized (nbtLock) {
             return tag.read(nbt);
         }

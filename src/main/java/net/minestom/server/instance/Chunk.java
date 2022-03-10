@@ -16,6 +16,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.List;
@@ -283,7 +284,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return tag.read(nbt);
     }
 

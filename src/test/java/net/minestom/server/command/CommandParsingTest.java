@@ -7,6 +7,7 @@ import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -72,7 +73,7 @@ public class CommandParsingTest {
         }
 
         @Override
-        public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
             return null;
         }
 

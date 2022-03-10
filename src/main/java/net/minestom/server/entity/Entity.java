@@ -63,6 +63,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
@@ -1538,7 +1539,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return tag.read(nbtCompound);
     }
 

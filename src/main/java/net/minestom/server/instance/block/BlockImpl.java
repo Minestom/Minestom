@@ -12,6 +12,7 @@ import net.minestom.server.utils.collection.MergedMap;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
@@ -175,7 +176,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return tag.read(Objects.requireNonNullElse(nbt, NBTCompound.EMPTY));
     }
 
