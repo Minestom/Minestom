@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class RandomStrollGoal extends GoalSelector {
 
@@ -32,17 +36,25 @@ public class RandomStrollGoal extends GoalSelector {
 
     @Override
     public void start() {
-        int remainingAttempt = closePositions.size();
-        while (remainingAttempt-- > 0) {
-            final int index = random.nextInt(closePositions.size());
-            final Vec position = closePositions.get(index);
+        final int remainingAttempt = closePositions.size();
+        CompletableFuture.runAsync(() -> {
+            for (int i = 0; i < remainingAttempt; i++) {
+                final int index = random.nextInt(closePositions.size());
+                final Vec position = closePositions.get(index);
 
-            final var target = entityCreature.getPosition().add(position);
-            final boolean result = entityCreature.getNavigator().setPathTo(target);
-            if (result) {
-                break;
+                final var target = entityCreature.getPosition().add(position);
+                final CompletableFuture<Boolean> result = entityCreature.getNavigator().setPathTo(target);
+
+                try {
+                    final Boolean success = result.get(1, TimeUnit.SECONDS);
+
+                    if (success) {
+                        return;
+                    }
+                } catch (InterruptedException | ExecutionException | TimeoutException ignored) {
+                }
             }
-        }
+        });
     }
 
     @Override

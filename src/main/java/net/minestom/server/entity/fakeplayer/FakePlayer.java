@@ -118,14 +118,7 @@ public class FakePlayer extends Player implements NavigableEntity {
     public void update(long time) {
         super.update(time);
         // Path finding
-        this.navigator.tick();
-    }
-
-    @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
-        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
-
-        return super.setInstance(instance, spawnPosition);
+        this.navigator.tick(time);
     }
 
     @Override
@@ -144,9 +137,8 @@ public class FakePlayer extends Player implements NavigableEntity {
         handleTabList(connection);
     }
 
-    @NotNull
     @Override
-    public Navigator getNavigator() {
+    public @NotNull Navigator getNavigator() {
         return navigator;
     }
 

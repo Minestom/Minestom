@@ -191,7 +191,7 @@ public final class PFPathingEntity implements IPathingEntity {
     @Override
     public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
         final Point targetPosition = new Vec(position.x, position.y, position.z);
-        this.navigator.moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
+        this.navigator.moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED), false);
         final double entityY = entity.getPosition().y();
         if (entityY < targetPosition.y()) {
             this.navigator.jump(1);

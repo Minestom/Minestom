@@ -31,6 +31,7 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -121,11 +122,13 @@ public class PlayerInit {
             });
 
     static {
+        DimensionType fullbright = DimensionType.builder(NamespaceID.from("minestom:fullbright")).ambientLight(2.0F).build();
+        MinecraftServer.getDimensionTypeManager().addDimension(fullbright);
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(fullbright);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         if (false) {

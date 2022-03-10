@@ -48,17 +48,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         aiTick(time);
 
         // Path finding
-        this.navigator.tick();
+        this.navigator.tick(time);
 
         // Fire, item pickup, ...
         super.update(time);
-    }
-
-    @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
-        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
-
-        return super.setInstance(instance, spawnPosition);
     }
 
     @Override
