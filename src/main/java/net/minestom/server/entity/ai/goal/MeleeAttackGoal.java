@@ -4,11 +4,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
-import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.pathfinding.task.PathfindTask;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -24,6 +25,9 @@ public class MeleeAttackGoal extends GoalSelector {
     private long lastHit;
     private final double range;
     private final Duration delay;
+
+    // Pathfinding path
+    private @Nullable PathfindTask.Path path;
 
     private boolean stop;
     private Entity cachedTarget;
@@ -62,7 +66,7 @@ public class MeleeAttackGoal extends GoalSelector {
     @Override
     public void start() {
         final Point targetPosition = this.cachedTarget.getPosition();
-        entityCreature.getNavigator().setPathTo(targetPosition);
+        path = PathfindTask.moveTo(targetPosition).start(entityCreature);
     }
 
     @Override
@@ -90,13 +94,15 @@ public class MeleeAttackGoal extends GoalSelector {
             }
 
             // Move toward the target entity
-            Navigator navigator = entityCreature.getNavigator();
-            final var pathPosition = navigator.getPathPosition();
+            if (path == null) {
+                return;
+            }
+            final var pathPosition = path.nextPoint();
             final var targetPosition = target.getPosition();
             if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
                 if (this.cooldown.isReady(time)) {
                     this.cooldown.refreshLastUpdate(time);
-                    navigator.setPathTo(targetPosition);
+                    path.updateTarget(targetPosition);
                 }
             }
         }
@@ -110,6 +116,8 @@ public class MeleeAttackGoal extends GoalSelector {
     @Override
     public void end() {
         // Stop following the target
-        entityCreature.getNavigator().setPathTo(null);
+        if (path != null) {
+            path.updateTarget(null);
+        }
     }
 }

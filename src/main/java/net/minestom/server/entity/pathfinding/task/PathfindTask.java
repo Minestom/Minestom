@@ -1,13 +1,17 @@
 package net.minestom.server.entity.pathfinding.task;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.pathfinding.NavigableEntity;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.pathfinding.engine.PathfindingEngine;
 import net.minestom.server.entity.pathfinding.engine.PathfindingResult;
+import net.minestom.server.utils.PathfindUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Queue;
 
 /**
  * This class is used to represent a pathfinding task.
@@ -19,9 +23,9 @@ import java.util.concurrent.CompletableFuture;
  * - Flying to a position<br>
  * e.t.c.
  *
- * @param <E> The execution of the action
+ * @param <P> The path of the action
  */
-public abstract class PathfindTask<T extends NavigableEntity<?>, E extends PathfindTask.Execution<T>> {
+public abstract class PathfindTask<P extends PathfindTask.Path> {
 
     /////////
     // Api //
@@ -35,8 +39,18 @@ public abstract class PathfindTask<T extends NavigableEntity<?>, E extends Pathf
      * @param walkSpeed The speed to walk at.
      * @return The new pathfinding task.
      */
-    public static @NotNull StaticWalkTask walkTo(@NotNull Point target, double walkSpeed) {
-        return new StaticWalkTask(target, walkSpeed);
+    public static @NotNull WalkTask walkTo(@NotNull Point target, double walkSpeed) {
+        return new WalkTask(target, walkSpeed);
+    }
+
+    /**
+     * Creates a new pathfinding task used to walk and jump an entity to a fixed position.
+     * @param target The position to walk and jump to.
+     * @param walkSpeed The speed to walk at.
+     * @param jumpHeight The height to jump at.
+     */
+    public static @NotNull WalkAndJumpTask walkAndJumpTo(@NotNull Point target, double walkSpeed, double jumpHeight) {
+        return new WalkAndJumpTask(target, walkSpeed, jumpHeight);
     }
 
     /**
@@ -46,8 +60,22 @@ public abstract class PathfindTask<T extends NavigableEntity<?>, E extends Pathf
      * @param flySpeed The speed to fly at.
      * @return The new pathfinding task.
      */
-    public static @NotNull StaticFlyTask flyTo(@NotNull Point target, double flySpeed) {
-        return new StaticFlyTask(target, flySpeed);
+    public static @NotNull FlyTask flyTo(@NotNull Point target, double flySpeed) {
+        return new FlyTask(target, flySpeed);
+    }
+
+    public static @NotNull MovementTask<?> moveTo(@NotNull Point target) {
+        // TODO: Automatically select the best task
+        return new WalkAndJumpTask(target, Attribute.MOVEMENT_SPEED.defaultValue(), 1);
+    }
+
+    /**
+     * Creates a path object for this task, given an entity.
+     * @param entity The entity to pathfind.
+     * @return the path object associated with the entity's path.
+     */
+    public P start(@NotNull EntityCreature entity) {
+        return createPath(PathfindUtils.getEngine(entity), entity);
     }
 
     ////////////////////
@@ -55,91 +83,63 @@ public abstract class PathfindTask<T extends NavigableEntity<?>, E extends Pathf
     ////////////////////
 
     /**
-     * Creates the execution object for this task.
-     * @param navigator The navigator to use for pathfinding.
-     * @return the execution object associated with the completion of the stages of this task.
+     * Creates a path object for this task.
+     * @param engine The pathfinding engine.
+     * @param entity The entity to pathfind.
+     * @return the path object associated with the completion of the stages of this task.
      */
     @ApiStatus.Internal
-    public abstract @NotNull E createExecution(@NotNull T navigator);
+    protected abstract @NotNull P createPath(@NotNull PathfindingEngine engine, @NotNull Entity entity);
 
     /**
-     * This interface represents an immutable view into a pathfind execution.
+     * This class represents an immutable view into a running, or already completed pathfind.
      * <br><br>
-     * Deriving records from this interface is recommended, but assuredly not required.
+     * Derivatives of this class may give the ability to change various aspects of the path.
      */
-    public interface Execution<T extends NavigableEntity<?>> {
+    public abstract static class Path {
 
-        /**
-         * Returns the task this execution is handling.
-         * @return the task this execution is handling.
-         */
-        @NotNull PathfindTask<?, ?> task();
+        private final @NotNull PathfindingEngine engine;
+        private final @NotNull Entity entity;
 
-        /**
-         * Returns the navigator that this execution is running for.
-         * @return the navigator that this execution is running for.
-         */
-        @NotNull T navigator();
-
-        /**
-         * Returns the pathfinding engine that this execution uses.
-         * @return the pathfinding engine that this execution uses.
-         */
-        @NotNull PathfindingEngine<T> engine();
-
-        /**
-         * Returns the hibernation future of this execution.
-         * <br><br>
-         * The hibernation future will be completed when the execution wakes up from hibernation.
-         * An example of when this task wakes up would be when this execution reaches first in an entities pathfinding queue.
-         * @return the hibernation future of this execution.
-         */
-        @NotNull CompletableFuture<Void> hibernation();
-
-        /**
-         * Returns the completion future of this execution.
-         * <br><br>
-         * The completion future will be completed when the execution is completed.
-         * An example of this can be found in the {@link StaticMovementTask} class.
-         * Within this class, the completion future will be completed when the entity reaches the destination.
-         * @return the completion future of this execution.
-         */
-        @NotNull CompletableFuture<?> completion();
-
-        /**
-         * This function is called before the execution is woken from hibernation.
-         * If this function returns false, the execution will not be allowed to wake up.
-         * Otherwise, it will be allowed to wake up.
-         * <br><br>
-         * An example usecase is for executions that require entities to be on the ground.
-         */
-        default boolean allowWakeUp() {
-            return true;
+        protected Path(@NotNull PathfindingEngine engine, @NotNull Entity entity) {
+            this.engine = engine;
+            this.entity = entity;
         }
 
         /**
-         * This function is called when the execution is cancelled. Users of this method are expected to override
-         * and call super before doing anything else.
-         * <br>
-         * This cancellation should halt all computation and actions associated with this execution.
+         * Returns the next point to walk to from the current entity position.
+         * @return The next point to walk to, null if the path is finished, stuck, or not calculated yet.
          */
-        default void cancel() {
-            hibernation().cancel(true);
-            completion().cancel(true);
-        }
-    }
-
-    /**
-     * This interface represents an immutable view into a pathfind execution.
-     * <br><br>
-     * This interface differs in that it also provides access to a specific pathfind result.
-     */
-    public interface ExecutionWithResult<T extends NavigableEntity<?>> extends Execution<T> {
+        public abstract @Nullable Point nextPoint();
 
         /**
-         * Returns the result of the pathfinding.
-         * @return the result of the pathfinding.
+         * Updates the path's target position to the specified position.
+         * @param target The new target position, null to cancel the path.
          */
-        @NotNull CompletableFuture<PathfindingResult> result();
+        public abstract void updateTarget(@Nullable Point target);
+
+        /**
+         * Calculates the full path to the target point.
+         * <br><br>
+         * This is a blocking operation, generally only used for testing.
+         * @return The full path to the target point, null if the path cannot be calculated.
+         */
+        public abstract @Nullable Queue<Point> fullPath();
+
+        /**
+         * Returns the pathfinding engine associated with this path.
+         * @return The pathfinding engine associated with this path.
+         */
+        public @NotNull PathfindingEngine engine() {
+            return engine;
+        }
+
+        /**
+         * Returns the entity associated with this path.
+         * @return The entity associated with this path.
+         */
+        public @NotNull Entity entity() {
+            return entity;
+        }
     }
 }

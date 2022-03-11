@@ -3,7 +3,9 @@ package net.minestom.server.entity.ai.goal;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.pathfinding.task.PathfindTask;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -56,7 +58,8 @@ public class RandomLookAroundGoal extends GoalSelector {
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
         }
-        return entityCreature.getNavigator().getPathPosition() == null;
+        // TODO: Check if the entity is currently in a path.
+        return true;
     }
 
     @Override

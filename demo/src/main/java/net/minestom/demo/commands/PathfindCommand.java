@@ -8,7 +8,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.pathfinding.task.PathfindTask;
-import net.minestom.server.entity.pathfinding.task.StaticMovementTask;
+import net.minestom.server.entity.pathfinding.task.MovementTask;
 import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.List;
@@ -24,18 +24,7 @@ public class PathfindCommand extends Command {
                 this::usageE2E,
                 Entity("from"),
                 Entity("to"),
-                Word("task").from("walk", "fly")
-        );
-
-        addSyntax(
-                this::usageAllToMeThenRemove,
-                Literal("allToMeThenRemove")
-        );
-
-        addSyntax(
-                this::legacyAllToMeThenRemove,
-                Literal("legacy"),
-                Literal("allToMeThenRemove")
+                Word("task").from("walk", "fly", "walkAndJump")
         );
     }
 
@@ -55,55 +44,18 @@ public class PathfindCommand extends Command {
         Pos destination = toEntity.getPosition();
         destination = destination.add(toEntity.getBoundingBox().relativeStart());
 
-        StaticMovementTask movementTask = switch (task) {
+        MovementTask<?> movementTask = switch (task) {
             case "walk" -> PathfindTask.walkTo(destination, Attribute.MOVEMENT_SPEED.defaultValue());
+            case "walkAndJump" -> PathfindTask.walkAndJumpTo(destination, Attribute.MOVEMENT_SPEED.defaultValue(), 1);
             case "fly" -> PathfindTask.flyTo(destination, Attribute.MOVEMENT_SPEED.defaultValue());
+            case "auto" -> PathfindTask.moveTo(destination);
             default -> throw new IllegalArgumentException("Unknown task: " + task);
         };
 
         for (Entity fromEntity : fromList) {
             if (fromEntity instanceof EntityCreature creature) {
                 sender.sendMessage("Pathfinding from " + fromEntity + " to " + toEntity);
-                creature.schedulePathfind(movementTask);
-            }
-        }
-    }
-
-    private void usageAllToMeThenRemove(CommandSender sender, CommandContext context) {
-        if (!(sender instanceof Entity entity)) {
-            sender.sendMessage("You must be an entity to use this command");
-            return;
-        }
-
-        Pos destination = entity.getPosition();
-        destination = destination.add(entity.getBoundingBox().relativeStart());
-        StaticMovementTask task = PathfindTask.walkTo(destination, Attribute.MOVEMENT_SPEED.defaultValue());
-
-        for (Entity aEntity : entity.getInstance().getEntities()) {
-            if (aEntity instanceof EntityCreature creature) {
-                var execution = creature.schedulePathfind(task);
-                execution.completion().thenRun(aEntity::remove);
-            }
-        }
-    }
-
-    private void legacyAllToMeThenRemove(CommandSender sender, CommandContext context) {
-        if (!(sender instanceof Entity entity)) {
-            sender.sendMessage("You must be an entity to use this command");
-            return;
-        }
-
-        Pos destination = entity.getPosition();
-        destination = destination.add(
-                entity.getBoundingBox().width() / 2D,
-                0,
-                entity.getBoundingBox().depth() / 2D
-        );
-
-        for (Entity aEntity : entity.getInstance().getEntities()) {
-            if (aEntity instanceof EntityCreature creature) {
-                var execution = creature.getNavigator().setPathTo(destination);
-                execution.thenRun(aEntity::remove);
+                movementTask.start(creature);
             }
         }
     }

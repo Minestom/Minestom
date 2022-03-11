@@ -5,8 +5,9 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.pathfinding.task.PathfindTask;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 
@@ -17,6 +18,9 @@ public class FollowTargetGoal extends GoalSelector {
     private Point lastTargetPos;
 
     private Entity target;
+
+    // Pathfinding path
+    private @Nullable PathfindTask.Path path;
 
     /**
      * Creates a follow target goal object.
@@ -52,16 +56,14 @@ public class FollowTargetGoal extends GoalSelector {
             return;
         }
         this.entityCreature.setTarget(target);
-        Navigator navigator = entityCreature.getNavigator();
         this.lastTargetPos = target.getPosition();
         if (lastTargetPos.distance(entityCreature.getPosition()) < 2) {
             // Target is too far
             this.forceEnd = true;
-            navigator.setPathTo(null);
             return;
         }
-        if (navigator.getPathPosition() == null || !navigator.getPathPosition().samePoint(lastTargetPos)) {
-            navigator.setPathTo(lastTargetPos);
+        if (path == null) {
+            path = PathfindTask.moveTo(lastTargetPos).start(entityCreature);
         } else {
             forceEnd = true;
         }
@@ -78,7 +80,9 @@ public class FollowTargetGoal extends GoalSelector {
         if (targetPos != null && !targetPos.samePoint(lastTargetPos)) {
             this.lastUpdateTime = time;
             this.lastTargetPos = targetPos;
-            this.entityCreature.getNavigator().setPathTo(targetPos);
+            if (path != null) {
+                path.updateTarget(targetPos);
+            }
         }
     }
 
@@ -93,6 +97,8 @@ public class FollowTargetGoal extends GoalSelector {
 
     @Override
     public void end() {
-        this.entityCreature.getNavigator().setPathTo(null);
+        if (path != null) {
+            path.updateTarget(null);
+        }
     }
 }

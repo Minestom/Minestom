@@ -2,8 +2,10 @@ package net.minestom.server.entity.pathfinding.engine;
 
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.pathfinding.NavigableEntity;
+import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Predicate;
 
 /**
  * The engine to use while pathfinding.
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * pathfinding task. This means that pathfinding may be done in a separate thread if the implementation wants to force
  * it. If {@link #async} returns false, you will need to handle threading yourself.
  */
-public interface PathfindingEngine<N extends NavigableEntity<?>> {
+public interface PathfindingEngine {
 
     /**
      * Finds the path between these two static positions given a bounding box.
@@ -23,6 +25,7 @@ public interface PathfindingEngine<N extends NavigableEntity<?>> {
      * @return the result
      */
     @NotNull PathfindingResult findP2P(
+            @NotNull PathfindOptions options,
             @NotNull BoundingBox box,
             @NotNull Point start,
             @NotNull Point end
@@ -35,8 +38,9 @@ public interface PathfindingEngine<N extends NavigableEntity<?>> {
      * @param end the ending position
      * @return the result
      */
-    @NotNull PathfindingResult findN2P(
-            @NotNull N start,
+    @NotNull PathfindingResult findE2P(
+            @NotNull PathfindOptions options,
+            @NotNull Entity start,
             @NotNull Point end
     );
 
@@ -47,10 +51,11 @@ public interface PathfindingEngine<N extends NavigableEntity<?>> {
      * @param end the navigator to end at
      * @return the result
      */
-    @NotNull PathfindingResult findP2N(
+    @NotNull PathfindingResult findP2E(
+            @NotNull PathfindOptions options,
             @NotNull BoundingBox box,
             @NotNull Point start,
-            @NotNull N end
+            @NotNull Entity end
     );
 
     /**
@@ -60,9 +65,10 @@ public interface PathfindingEngine<N extends NavigableEntity<?>> {
      * @param end the navigator to end at
      * @return the result
      */
-    @NotNull PathfindingResult findN2N(
-            @NotNull N start,
-            @NotNull N end
+    @NotNull PathfindingResult findE2E(
+            @NotNull PathfindOptions options,
+            @NotNull Entity start,
+            @NotNull Entity end
     );
 
     /**
@@ -71,4 +77,15 @@ public interface PathfindingEngine<N extends NavigableEntity<?>> {
      * @return true if minestom should handle threading before calling the methods in this class, false otherwise.
      */
     boolean async();
+
+    record PathfindOptions(@NotNull CostProvider costProvider, @NotNull BlockedPredicate blockedPredicate, int maxDistance) {
+    }
+
+    interface CostProvider {
+        double getCost(@NotNull Point from, @NotNull Point to);
+    }
+
+    interface BlockedPredicate {
+        boolean isBlocked(@NotNull Point point);
+    }
 }

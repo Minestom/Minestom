@@ -1,14 +1,9 @@
 package net.minestom.server.entity;
 
-import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
-import net.minestom.server.entity.pathfinding.NavigableEntity;
-import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,16 +12,13 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
+public class EntityCreature extends LivingEntity implements EntityAI {
 
     private int removalAnimationDelay = 1000;
 
     private final Set<EntityAIGroup> aiGroups = new CopyOnWriteArraySet<>();
-
-    private final Navigator navigator = new Navigator(this);
 
     private Entity target;
 
@@ -46,9 +38,6 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     public void update(long time) {
         // AI
         aiTick(time);
-
-        // Path finding
-        this.navigator.tick(time);
 
         // Fire, item pickup, ...
         super.update(time);
@@ -109,12 +98,6 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
      */
     public void setTarget(@Nullable Entity target) {
         this.target = target;
-    }
-
-    @NotNull
-    @Override
-    public Navigator getNavigator() {
-        return navigator;
     }
 
     /**

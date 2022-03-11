@@ -1,12 +1,16 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.pathfinding.task.PathfindTask;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -20,6 +24,9 @@ public class RandomStrollGoal extends GoalSelector {
     private final int radius;
     private final List<Vec> closePositions;
     private final Random random = new Random();
+
+    // Pathfinding path
+    private @Nullable PathfindTask.Path path;
 
     private long lastStroll;
 
@@ -43,15 +50,16 @@ public class RandomStrollGoal extends GoalSelector {
                 final Vec position = closePositions.get(index);
 
                 final var target = entityCreature.getPosition().add(position);
-                final CompletableFuture<Boolean> result = entityCreature.getNavigator().setPathTo(target);
-
-                try {
-                    final Boolean success = result.get(1, TimeUnit.SECONDS);
-
-                    if (success) {
+                if (path == null) {
+                    path = PathfindTask.moveTo(target).start(entityCreature);
+                    Queue<Point> fullPath = path.fullPath();
+                    if (fullPath == null) {
+                        // Pathfind failed, go next
+                        path.updateTarget(null);
+                    } else {
+                        // Pathfind success, return
                         return;
                     }
-                } catch (InterruptedException | ExecutionException | TimeoutException ignored) {
                 }
             }
         });

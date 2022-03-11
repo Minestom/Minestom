@@ -1,15 +1,19 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.pathfinding.task.MovementTask;
+import net.minestom.server.entity.pathfinding.task.PathfindTask;
+import net.minestom.server.utils.PathfindUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -36,6 +40,9 @@ public class CombinedAttackGoal extends GoalSelector {
     private long lastAttack;
     private boolean stop;
     private Entity cachedTarget;
+
+    // Pathfinding path
+    private @Nullable PathfindTask.Path path;
 
     /**
      * @param entityCreature the entity to add the goal to.
@@ -146,7 +153,7 @@ public class CombinedAttackGoal extends GoalSelector {
 
     @Override
     public void start() {
-        this.entityCreature.getNavigator().setPathTo(this.cachedTarget.getPosition());
+        this.path = PathfindTask.moveTo(cachedTarget.getPosition()).start(entityCreature);
     }
 
     @Override
@@ -191,12 +198,14 @@ public class CombinedAttackGoal extends GoalSelector {
                 }
             }
         }
-        Navigator navigator = this.entityCreature.getNavigator();
-        final var pathPosition = navigator.getPathPosition();
+        if (path == null) {
+            return;
+        }
+        final Point pathPosition = path.nextPoint();
         // If we don't want to come close and we're already within desirable range, no movement is needed.
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
-                navigator.setPathTo(null);
+                path.updateTarget(null);
             }
             this.entityCreature.lookAt(target);
             return;
@@ -206,7 +215,7 @@ public class CombinedAttackGoal extends GoalSelector {
         if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
             if (this.cooldown.isReady(time)) {
                 this.cooldown.refreshLastUpdate(time);
-                navigator.setPathTo(targetPosition);
+                path.updateTarget(targetPosition);
             }
         }
     }
@@ -219,7 +228,9 @@ public class CombinedAttackGoal extends GoalSelector {
     @Override
     public void end() {
         // Stop following the target
-        this.entityCreature.getNavigator().setPathTo(null);
+        if (this.path != null) {
+            path.updateTarget(null);
+        }
     }
 
 }
