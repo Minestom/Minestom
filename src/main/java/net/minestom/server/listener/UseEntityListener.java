@@ -12,27 +12,16 @@ public class UseEntityListener {
 
     public static void useEntityListener(ClientInteractEntityPacket packet, Player player) {
         final Entity entity = Entity.getEntity(packet.targetId());
-        if (entity == null)
+        if (entity == null || !entity.isViewer(player) || player.getDistance(entity) > 6)
             return;
+
         ClientInteractEntityPacket.Type type = packet.type();
-
-        // Player cannot interact with entities he cannot see
-        if (!entity.isViewer(player))
-            return;
-
         if (type instanceof ClientInteractEntityPacket.Attack) {
             if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
                 return;
-            EntityAttackEvent entityAttackEvent = new EntityAttackEvent(player, entity);
-            EventDispatcher.call(entityAttackEvent);
-        } else if (type instanceof ClientInteractEntityPacket.Interact interact) {
-            PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, interact.hand());
-            EventDispatcher.call(playerEntityInteractEvent);
-        } else {
-            // TODO find difference with INTERACT
-            //PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);
-            //player.callEvent(PlayerEntityInteractEvent.class, playerEntityInteractEvent);
+            EventDispatcher.call(new EntityAttackEvent(player, entity));
+        } else if (type instanceof ClientInteractEntityPacket.InteractAt interactAt) {
+            EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, interactAt.hand()));
         }
     }
-
 }

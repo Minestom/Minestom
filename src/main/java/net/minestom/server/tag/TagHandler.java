@@ -3,6 +3,7 @@ package net.minestom.server.tag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 /**
@@ -22,7 +23,7 @@ public interface TagHandler extends TagReadable, TagWritable {
     static @NotNull TagHandler fromCompound(@NotNull MutableNBTCompound compound) {
         return new TagHandler() {
             @Override
-            public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+            public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
                 return tag.read(compound);
             }
 

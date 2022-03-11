@@ -21,5 +21,7 @@ tasks {
     }
     withType<Test> {
         useJUnitPlatform()
+        // Viewable packets make tracking harder. Could be re-enabled later.
+        jvmArgs("-Dminestom.viewable-packet=false")
     }
 }

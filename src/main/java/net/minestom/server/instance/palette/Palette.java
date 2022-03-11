@@ -10,17 +10,17 @@ import java.util.function.IntUnaryOperator;
  * <p>
  * 0 is the default value.
  */
-public sealed interface Palette extends Writeable permits PaletteImpl {
+public interface Palette extends Writeable {
     static Palette blocks() {
-        return newPalette(16, 8, 6, 1);
+        return newPalette(16, 8, 4);
     }
 
     static Palette biomes() {
-        return newPalette(4, 2, 2, 1);
+        return newPalette(4, 3, 1);
     }
 
-    static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry, int bitIncrement) {
-        return new PaletteImpl(dimension, maxBitsPerEntry, bitsPerEntry, bitIncrement);
+    static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry) {
+        return new AdaptivePalette((byte) dimension, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
     }
 
     int get(int x, int y, int z);
@@ -42,30 +42,24 @@ public sealed interface Palette extends Writeable permits PaletteImpl {
     /**
      * Returns the number of entries in this palette.
      */
-    int size();
+    int count();
 
     /**
      * Returns the number of bits used per entry.
      */
     int bitsPerEntry();
 
-    /**
-     * Returns the payload of this palette.
-     * <p>
-     * The size of each element is defined by {@link #bitsPerEntry()}.
-     *
-     * @return the palette payload
-     */
-    long[] data();
-
     int maxBitsPerEntry();
+
+    int dimension();
 
     /**
      * Returns the maximum number of entries in this palette.
      */
-    int maxSize();
-
-    int dimension();
+    default int maxSize() {
+        final int dimension = dimension();
+        return dimension * dimension * dimension;
+    }
 
     @NotNull Palette clone();
 

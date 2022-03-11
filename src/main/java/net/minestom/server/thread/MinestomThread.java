@@ -2,7 +2,6 @@ package net.minestom.server.thread;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -12,14 +11,6 @@ import java.util.function.Supplier;
 public class MinestomThread extends Thread {
     public static final AtomicInteger LOCAL_COUNT = new AtomicInteger();
     private Object[] locals = new Object[0];
-
-    public MinestomThread(@Nullable Runnable target, String name) {
-        super(target, name);
-    }
-
-    public MinestomThread(Runnable target) {
-        super(target);
-    }
 
     public MinestomThread(@NotNull String name) {
         super(name);

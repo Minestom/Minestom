@@ -1,8 +1,8 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.demo.generator.ChunkGeneratorDemo;
 import net.minestom.demo.generator.NoiseTestGenerator;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
@@ -17,10 +17,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.event.player.PlayerDeathEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -43,6 +40,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 public class PlayerInit {
 
@@ -114,6 +112,12 @@ public class PlayerInit {
                         })
                         .build();
                 player.getInventory().addItemStack(bundle);
+            })
+            .addListener(PlayerPacketOutEvent.class, event -> {
+                //System.out.println("out " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(PlayerPacketEvent.class, event -> {
+                //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             });
 
     static {
@@ -123,6 +127,14 @@ public class PlayerInit {
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+
+        if (false) {
+            System.out.println("start");
+            IntStream.range(0, 5000).forEach(value -> {
+                instanceContainer.loadChunk(0, value).join();
+            });
+            System.out.println("load end");
+        }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));

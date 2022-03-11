@@ -78,7 +78,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
     }
 
     @Contract("_ -> this")
-    public @NotNull ItemMetaBuilder lore(@NotNull List<@NotNull Component> lore) {
+    public @NotNull ItemMetaBuilder lore(@NotNull List<? extends Component> lore) {
         this.lore = new ArrayList<>(lore);
         handleCompound("display", nbtCompound -> {
             final NBTList<NBTString> loreNBT = NBT.List(NBTType.TAG_String,
@@ -86,7 +86,11 @@ public abstract class ItemMetaBuilder implements TagWritable {
                             .map(line -> new NBTString(GsonComponentSerializer.gson().serialize(line)))
                             .toList()
             );
-            nbtCompound.set("Lore", loreNBT);
+            if (loreNBT.isEmpty()) {
+                nbtCompound.remove("Lore");
+            } else {
+                nbtCompound.set("Lore", loreNBT);
+            }
         });
         return this;
     }

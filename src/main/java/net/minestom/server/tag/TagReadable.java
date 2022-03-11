@@ -1,7 +1,7 @@
 package net.minestom.server.tag;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 
 /**
@@ -16,7 +16,7 @@ public interface TagReadable {
      * @param <T> the tag type
      * @return the read tag, null if not present
      */
-    <T> @Nullable T getTag(@NotNull Tag<T> tag);
+    <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
     /**
      * Returns if a tag is present.
@@ -39,7 +39,7 @@ public interface TagReadable {
     static @NotNull TagReadable fromCompound(@NotNull NBTCompoundLike compound) {
         return new TagReadable() {
             @Override
-            public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+            public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
                 return tag.read(compound);
             }
         };

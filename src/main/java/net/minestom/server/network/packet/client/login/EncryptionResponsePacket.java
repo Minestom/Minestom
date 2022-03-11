@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.client.login;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -26,11 +25,10 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) implements ClientPreplayPacket {
-    private static final String MOJANG_AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined").concat("?username=%s&serverId=%s");
     private static final Gson GSON = new Gson();
 
     public EncryptionResponsePacket(BinaryReader reader) {
-        this(reader.readBytes(reader.readVarInt()), reader.readBytes(reader.readVarInt()));
+        this(reader.readByteArray(), reader.readByteArray());
     }
 
     @Override
@@ -59,7 +57,7 @@ public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) 
             final String serverId = new BigInteger(digestedData).toString(16);
             final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
 
-            final String url = String.format(MOJANG_AUTH_URL, username, serverId);
+            final String url = String.format(MojangAuth.AUTH_URL, username, serverId);
             // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
 
             final HttpClient client = HttpClient.newHttpClient();
@@ -91,8 +89,8 @@ public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) 
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        ByteArrayData.encodeByteArray(writer, sharedSecret);
-        ByteArrayData.encodeByteArray(writer, verifyToken);
+        writer.writeByteArray(sharedSecret);
+        writer.writeByteArray(verifyToken);
     }
 
     private SecretKey getSecretKey() {

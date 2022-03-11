@@ -4,6 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.ref.WeakReference;
+import java.util.function.Consumer;
 
 public class EntityMeta {
     public static final byte OFFSET = 0;
@@ -17,11 +21,11 @@ public class EntityMeta {
     private final static byte HAS_GLOWING_EFFECT_BIT = 0x40;
     private final static byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
 
-    protected final Entity entity;
+    private final WeakReference<Entity> entityRef;
     protected final Metadata metadata;
 
-    public EntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
-        this.entity = entity;
+    public EntityMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
+        this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
     }
 
@@ -180,12 +184,11 @@ public class EntityMeta {
         setMask(index, mask);
     }
 
-    protected void setBoundingBox(double x, double y, double z) {
-        this.entity.setBoundingBox(x, y, z);
-    }
-
-    protected void setBoundingBox(double width, double height) {
-        setBoundingBox(width, height, width);
+    protected void consumeEntity(Consumer<Entity> consumer) {
+        Entity entity = this.entityRef.get();
+        if (entity != null) {
+            consumer.accept(entity);
+        }
     }
 
 }

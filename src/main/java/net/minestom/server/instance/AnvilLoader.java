@@ -1,15 +1,12 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;
@@ -30,9 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
-    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
-    private static final ExceptionManager EXCEPTION_MANAGER = MinecraftServer.getExceptionManager();
     private static final Biome BIOME = Biome.PLAINS;
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
@@ -74,7 +68,7 @@ public class AnvilLoader implements IChunkLoader {
         try {
             return loadMCA(instance, chunkX, chunkZ);
         } catch (Exception e) {
-            EXCEPTION_MANAGER.handleException(e);
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         return CompletableFuture.completedFuture(null);
     }
@@ -119,7 +113,8 @@ public class AnvilLoader implements IChunkLoader {
                             int finalZ = fileChunk.getZ() * Chunk.CHUNK_SIZE_Z + z;
                             int finalY = section.getY() * Chunk.CHUNK_SECTION_SIZE + y;
                             String biomeName = section.getBiome(x, y, z);
-                            Biome biome = biomeCache.computeIfAbsent(biomeName, n -> Objects.requireNonNullElse(BIOME_MANAGER.getByName(NamespaceID.from(n)), BIOME));
+                            Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
+                                    Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
                             chunk.setBiome(finalX, finalY, finalZ, biome);
                         }
                     }
@@ -151,7 +146,7 @@ public class AnvilLoader implements IChunkLoader {
                 }
                 return new RegionFile(new RandomAccessFile(regionPath.toFile(), "rw"), regionX, regionZ, instance.getDimensionType().getMinY(), instance.getDimensionType().getMaxY()-1);
             } catch (IOException | AnvilException e) {
-                EXCEPTION_MANAGER.handleException(e);
+                MinecraftServer.getExceptionManager().handleException(e);
                 return null;
             }
         });
@@ -178,7 +173,7 @@ public class AnvilLoader implements IChunkLoader {
 
                             chunk.setBlock(x, y + yOffset, z, block);
                         } catch (Exception e) {
-                            EXCEPTION_MANAGER.handleException(e);
+                            MinecraftServer.getExceptionManager().handleException(e);
                         }
                     }
                 }
@@ -199,7 +194,7 @@ public class AnvilLoader implements IChunkLoader {
 
             final String tileEntityID = te.getString("id");
             if (tileEntityID != null) {
-                final BlockHandler handler = BLOCK_MANAGER.getHandlerOrDummy(tileEntityID);
+                final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(tileEntityID);
                 block = block.withHandler(handler);
             }
             // Remove anvil tags
@@ -254,7 +249,7 @@ public class AnvilLoader implements IChunkLoader {
                     alreadyLoaded.put(n, mcaFile);
                 } catch (AnvilException | IOException e) {
                     LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
-                    EXCEPTION_MANAGER.handleException(e);
+                    MinecraftServer.getExceptionManager().handleException(e);
                     return AsyncUtils.VOID_FUTURE;
                 }
             }
@@ -264,7 +259,7 @@ public class AnvilLoader implements IChunkLoader {
             column = mcaFile.getOrCreateChunk(chunkX, chunkZ);
         } catch (AnvilException | IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
-            EXCEPTION_MANAGER.handleException(e);
+            MinecraftServer.getExceptionManager().handleException(e);
             return AsyncUtils.VOID_FUTURE;
         }
         save(chunk, column);
@@ -274,7 +269,7 @@ public class AnvilLoader implements IChunkLoader {
             mcaFile.forget(column);
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
-            EXCEPTION_MANAGER.handleException(e);
+            MinecraftServer.getExceptionManager().handleException(e);
             return AsyncUtils.VOID_FUTURE;
         }
         return AsyncUtils.VOID_FUTURE;

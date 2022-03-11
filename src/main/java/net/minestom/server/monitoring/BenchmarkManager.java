@@ -9,6 +9,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -20,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.minestom.server.MinecraftServer.*;
+import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK;
+import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK_SCHEDULER;
 
 /**
  * Small monitoring tools that can be used to check the current memory usage and Minestom threads CPU usage.
@@ -31,11 +34,11 @@ import static net.minestom.server.MinecraftServer.*;
  * Be aware that this is not the most accurate method, you should use a proper java profiler depending on your needs.
  */
 public final class BenchmarkManager {
+    private final static Logger LOGGER = LoggerFactory.getLogger(BenchmarkManager.class);
     private static final ThreadMXBean THREAD_MX_BEAN = ManagementFactory.getThreadMXBean();
     private static final List<String> THREADS = new ArrayList<>();
 
     static {
-        THREADS.add(THREAD_NAME_BLOCK_BATCH);
         THREADS.add(THREAD_NAME_TICK_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK);
     }
@@ -52,8 +55,14 @@ public final class BenchmarkManager {
 
     public void enable(@NotNull Duration duration) {
         Check.stateCondition(enabled, "A benchmark is already running, please disable it first.");
-        THREAD_MX_BEAN.setThreadContentionMonitoringEnabled(true);
-        THREAD_MX_BEAN.setThreadCpuTimeEnabled(true);
+        try {
+            THREAD_MX_BEAN.setThreadContentionMonitoringEnabled(true);
+            THREAD_MX_BEAN.setThreadCpuTimeEnabled(true);
+        } catch (Throwable e) {
+            // Likely unsupported by the JVM (e.g. Substrate VM)
+            LOGGER.warn("Could not enable thread monitoring", e);
+            return;
+        }
 
         this.time = duration.toMillis();
 
@@ -97,7 +106,7 @@ public final class BenchmarkManager {
     }
 
     public @NotNull Component getCpuMonitoringMessage() {
-        Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
+        if (!enabled) return Component.text("CPU monitoring is disabled");
         TextComponent.Builder benchmarkMessage = Component.text();
         for (var resultEntry : resultMap.entrySet()) {
             final String name = resultEntry.getKey();

@@ -7,7 +7,6 @@ import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +55,7 @@ public class ExtensionManager {
      * <p>
      * Default value is 'true'.
      *
-     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
+     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(java.net.SocketAddress)}
      */
     public boolean shouldLoadOnStartup() {
         return state != State.DO_NOT_START;
@@ -716,8 +715,10 @@ public class ExtensionManager {
 
         for (String dependentID : dependents) {
             Extension dependentExt = extensions.get(dependentID.toLowerCase());
-            LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
-            unload(dependentExt);
+            if ( dependentExt != null ) { // check if extension isn't already unloaded.
+                LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
+                unload(dependentExt);
+            }
         }
 
         LOGGER.info("Unloading extension {}", extensionName);

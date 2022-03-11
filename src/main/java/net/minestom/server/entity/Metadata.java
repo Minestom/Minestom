@@ -6,7 +6,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.ObjectArray;
+import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;

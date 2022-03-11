@@ -1,10 +1,8 @@
 package net.minestom.server.map;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.thread.MinestomThreadPool;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public enum MapColors {
@@ -187,16 +185,8 @@ public enum MapColors {
 
     private static void fillRGBArray() {
         rgbArray = new PreciseMapColor[0xFFFFFF + 1];
-        MinestomThreadPool threads = new MinestomThreadPool(Runtime.getRuntime().availableProcessors(), "RGBMapping", true);
         for (int rgb = 0; rgb <= 0xFFFFFF; rgb++) {
-            int finalRgb = rgb;
-            threads.execute(() -> rgbArray[finalRgb] = mapColor(finalRgb));
-        }
-        try {
-            threads.shutdown();
-            threads.awaitTermination(100, TimeUnit.MINUTES);
-        } catch (Throwable t) {
-            MinecraftServer.getExceptionManager().handleException(t);
+            rgbArray[rgb] = mapColor(rgb);
         }
     }
 

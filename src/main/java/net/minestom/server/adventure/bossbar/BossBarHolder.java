@@ -18,10 +18,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * use {@link BossBarManager} to manage boss bars for players.
  */
 final class BossBarHolder implements Viewable {
-
-    protected final UUID uuid = UUID.randomUUID();
-    protected final Set<Player> players = new CopyOnWriteArraySet<>();
-    protected final BossBar bar;
+    final UUID uuid = UUID.randomUUID();
+    final Set<Player> players = new CopyOnWriteArraySet<>();
+    final BossBar bar;
 
     BossBarHolder(@NotNull BossBar bar) {
         this.bar = bar;

@@ -1,7 +1,8 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.*;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.item.ItemStack;
@@ -39,6 +40,20 @@ public class EventNodeTest {
     static class Recursive2 extends Recursive1 {
     }
 
+    record ItemTestEvent(ItemStack item) implements ItemEvent {
+        @Override
+        public @NotNull ItemStack getItemStack() {
+            return item;
+        }
+    }
+
+    record EntityTestEvent(Entity entity) implements EntityEvent {
+        @Override
+        public @NotNull Entity getEntity() {
+            return entity;
+        }
+    }
+
     @Test
     public void testCall() {
         var node = EventNode.all("main");
@@ -54,6 +69,16 @@ public class EventNodeTest {
         node.removeListener(listener);
         node.call(new EventTest());
         assertFalse(result.get(), "The event should not be called after the removal");
+    }
+
+    @Test
+    public void testHandle() {
+        var node = EventNode.all("main");
+        var handle = node.getHandle(EventTest.class);
+        assertSame(handle, node.getHandle(EventTest.class));
+
+        var handle1 = node.getHandle(CancellableTest.class);
+        assertSame(handle1, node.getHandle(CancellableTest.class));
     }
 
     @Test
@@ -76,7 +101,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testRecursive() {
+    public void recursiveSub() {
         var node = EventNode.all("main");
         AtomicBoolean result1 = new AtomicBoolean(false);
         AtomicBoolean result2 = new AtomicBoolean(false);
@@ -96,6 +121,25 @@ public class EventNodeTest {
         assertFalse(result2.get(), "There is no listener for Recursive2");
         assertTrue(result1.get(), "Recursive1 should be called due to the RecursiveEvent interface");
     }
+
+    // FIXME: nodes are currently unable to retrieve sub handles
+    //@Test
+    //public void recursiveSuper() {
+    //    var node = EventNode.all("main");
+    //    AtomicBoolean result2 = new AtomicBoolean(false);
+    //    var listener2 = EventListener.of(Recursive2.class, event -> result2.set(true));
+    //    node.addListener(listener2);
+    //    node.call(new Recursive2());
+    //    assertTrue(result2.get(), "The event should be called after the call");
+    //
+    //    AtomicBoolean result1 = new AtomicBoolean(false);
+    //    var listener1 = EventListener.of(Recursive1.class, event -> result1.set(true));
+    //    node.addListener(listener1);
+    //    result2.set(false);
+    //    node.call(new Recursive2());
+    //    assertTrue(result2.get(), "Recursive2 should have been called directly");
+    //    assertTrue(result1.get(), "Recursive1 should be called due to the RecursiveEvent interface");
+    //}
 
     @Test
     public void testChildren() {
@@ -133,12 +177,6 @@ public class EventNodeTest {
 
     @Test
     public void testFiltering() {
-        record ItemTestEvent(ItemStack item) implements ItemEvent {
-            @Override
-            public @NotNull ItemStack getItemStack() {
-                return item;
-            }
-        }
         AtomicBoolean result = new AtomicBoolean(false);
         AtomicBoolean childResult = new AtomicBoolean(false);
 
@@ -163,14 +201,6 @@ public class EventNodeTest {
 
     @Test
     public void testBinding() {
-
-        record ItemTestEvent(ItemStack item) implements ItemEvent {
-            @Override
-            public @NotNull ItemStack getItemStack() {
-                return item;
-            }
-        }
-
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
@@ -188,36 +218,6 @@ public class EventNodeTest {
         result.set(false);
         node.unregister(binding);
         node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
-        assertFalse(result.get());
-    }
-
-    @Test
-    public void testMap() {
-        record ItemTestEvent(ItemStack item) implements ItemEvent {
-            @Override
-            public @NotNull ItemStack getItemStack() {
-                return item;
-            }
-        }
-
-        var item = ItemStack.of(Material.DIAMOND);
-        var node = EventNode.all("main");
-
-        AtomicBoolean result = new AtomicBoolean(false);
-        var itemNode = EventNode.type("item_node", EventFilter.ITEM);
-        itemNode.addListener(ItemTestEvent.class, event -> result.set(true));
-        assertDoesNotThrow(() -> node.map(itemNode, item));
-
-        node.call(new ItemTestEvent(item));
-        assertTrue(result.get());
-
-        result.set(false);
-        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_INGOT)));
-        assertFalse(result.get());
-
-        result.set(false);
-        assertTrue(node.unmap(item));
-        node.call(new ItemTestEvent(item));
         assertFalse(result.get());
     }
 }

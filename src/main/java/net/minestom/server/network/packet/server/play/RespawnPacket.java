@@ -23,8 +23,8 @@ public record RespawnPacket(DimensionType dimensionType, String worldName,
         writer.writeNBT("", dimensionType.toNBT());
         writer.writeSizedString(worldName);
         writer.writeLong(hashedSeed);
-        writer.writeByte(gameMode.getId());
-        writer.writeByte(previousGameMode.getId()); // Hardcore flag not included
+        writer.writeByte(gameMode.id());
+        writer.writeByte(previousGameMode.id());
         writer.writeBoolean(isDebug);
         writer.writeBoolean(isFlat);
         writer.writeBoolean(copyMeta);

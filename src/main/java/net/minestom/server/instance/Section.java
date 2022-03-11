@@ -63,7 +63,7 @@ public final class Section implements Writeable {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeShort((short) blockPalette.size());
+        writer.writeShort((short) blockPalette.count());
         writer.write(blockPalette);
         writer.write(biomePalette);
     }

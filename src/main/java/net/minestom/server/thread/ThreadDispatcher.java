@@ -1,7 +1,7 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.entity.Entity;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
-import java.util.concurrent.Phaser;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Used to link chunks into multiple groups.
@@ -29,12 +29,11 @@ public final class ThreadDispatcher<P> {
 
     // Requests consumed at the end of each tick
     private final MessagePassingQueue<DispatchUpdate<P>> updates = new MpscUnboundedArrayQueue<>(1024);
-    private final Phaser phaser = new Phaser(1);
 
     private ThreadDispatcher(ThreadProvider<P> provider, int threadCount) {
         this.provider = provider;
         TickThread[] threads = new TickThread[threadCount];
-        Arrays.setAll(threads, i -> new TickThread(phaser, i));
+        Arrays.setAll(threads, TickThread::new);
         this.threads = List.of(threads);
         this.threads.forEach(Thread::start);
     }
@@ -57,7 +56,7 @@ public final class ThreadDispatcher<P> {
      *
      * @param time the tick time in milliseconds
      */
-    public void updateAndAwait(long time) {
+    public synchronized void updateAndAwait(long time) {
         // Update dispatcher
         this.updates.drain(update -> {
             if (update instanceof DispatchUpdate.PartitionLoad<P> chunkUpdate) {
@@ -73,8 +72,13 @@ public final class ThreadDispatcher<P> {
             }
         });
         // Tick all partitions
-        for (TickThread thread : threads) thread.startTick(time);
-        this.phaser.arriveAndAwaitAdvance();
+        CountDownLatch latch = new CountDownLatch(threads.size());
+        for (TickThread thread : threads) thread.startTick(latch, time);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -196,8 +200,8 @@ public final class ThreadDispatcher<P> {
         if (partitionEntry != null) {
             this.elements.put(tickable, partitionEntry);
             partitionEntry.elements.add(tickable);
-            if (tickable instanceof Acquirable<?> acquirable) {
-                acquirable.getHandler().refreshChunkEntry(partitionEntry);
+            if (tickable instanceof Entity entity) { // TODO support other types
+                ((AcquirableImpl<?>) entity.getAcquirable()).updateThread(partitionEntry.thread());
             }
         }
     }

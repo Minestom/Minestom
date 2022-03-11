@@ -116,17 +116,15 @@ public class CommandDispatcher {
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(this, commandString);
         // Check if the command exists
         if (commandQueryResult == null) {
             return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
         }
-        final Command command = commandQueryResult.command;
-
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand(command, commandName, commandQueryResult.args, commandString, result);
+        findParsedCommand( commandQueryResult, commandName, commandString, result);
 
         // Cache result
         this.cache.put(commandString, result);
@@ -134,27 +132,18 @@ public class CommandDispatcher {
         return result;
     }
 
-    private @Nullable ParsedCommand findParsedCommand(@NotNull Command command,
-                                                      @NotNull String commandName, @NotNull String[] args,
+    private @NotNull ParsedCommand findParsedCommand(@NotNull CommandQueryResult commandQueryResult,
+                                                      @NotNull String commandName,
                                                       @NotNull String commandString,
                                                       @NotNull CommandResult result) {
+        final Command command = commandQueryResult.command();
+        String[] args = commandQueryResult.args();
         final boolean hasArgument = args.length > 0;
-
-        // Search for subcommand
-        if (hasArgument) {
-            final String firstArgument = args[0];
-            for (Command subcommand : command.getSubcommands()) {
-                if (Command.isValidName(subcommand, firstArgument)) {
-                    return findParsedCommand(subcommand,
-                            firstArgument, Arrays.copyOfRange(args, 1, args.length),
-                            commandString, result);
-                }
-            }
-        }
 
         final String input = commandName + StringUtils.SPACE + String.join(StringUtils.SPACE, args);
 
         ParsedCommand parsedCommand = new ParsedCommand();
+        parsedCommand.parents = commandQueryResult.parents();
         parsedCommand.command = command;
         parsedCommand.commandString = commandString;
 
@@ -210,7 +199,7 @@ public class CommandDispatcher {
             final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, context);
             if (finalValidSyntax != null) {
                 // A fully correct syntax has been found, use it
-                final CommandSyntax syntax = finalValidSyntax.syntax;
+                final CommandSyntax syntax = finalValidSyntax.syntax();
 
                 parsedCommand.syntax = syntax;
                 parsedCommand.executor = syntax.getExecutor();
@@ -226,9 +215,9 @@ public class CommandDispatcher {
         if (!syntaxesSuggestions.isEmpty()) {
             final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
             final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-            final CommandSyntax syntax = suggestionHolder.syntax;
-            final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
-            final int argIndex = suggestionHolder.argIndex;
+            final CommandSyntax syntax = suggestionHolder.syntax();
+            final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException();
+            final int argIndex = suggestionHolder.argIndex();
 
             // Found the closest syntax with at least 1 correct argument
             final Argument<?> argument = syntax.getArguments()[argIndex];

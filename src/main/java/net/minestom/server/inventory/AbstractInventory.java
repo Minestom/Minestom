@@ -1,6 +1,6 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
@@ -12,6 +12,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.MethodHandles;
@@ -81,9 +82,9 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             UNSAFE_itemInsert(slot, itemStack);
         }
         if (this instanceof PlayerInventory inv) {
-            GlobalHandles.PLAYER_INVENTORY_ITEM_CHANGE_EVENT.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
+            EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
         } else if (this instanceof Inventory inv) {
-            GlobalHandles.INVENTORY_ITEM_CHANGE_EVENT.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
+            EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
         }
     }
 
@@ -250,7 +251,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         synchronized (nbtLock) {
             return tag.read(nbt);
         }

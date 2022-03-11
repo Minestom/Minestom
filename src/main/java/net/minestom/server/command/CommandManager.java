@@ -202,29 +202,28 @@ public final class CommandManager {
             String input = pair.left();
             NodeMaker.Request request = pair.right();
 
-            final CommandQueryResult commandQueryResult = CommandParser.findCommand(input);
+            final CommandQueryResult commandQueryResult = CommandParser.findCommand(dispatcher, input);
             if (commandQueryResult == null) {
                 // Invalid command, return root node
                 request.retrieve(0);
                 continue;
             }
 
-            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, input, false, true, syntax -> true, argument -> true);
+            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
+                    commandQueryResult.args(), input, false, true, syntax -> true, argument -> true);
             if (queryResult == null) {
                 // Invalid argument, return command node (default to root)
-                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
+                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command(), 0);
                 request.retrieve(commandNode);
                 continue;
             }
 
             // Retrieve argument node
-            final Argument<?> argument = queryResult.argument;
-            final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
+            final int argumentNode = argumentIdentityMap.getOrDefault(queryResult.argument(), 0);
             request.retrieve(argumentNode);
         }
         // Add root node children
-        rootNode.children = ArrayUtils.toArray(rootChildren);
+        rootNode.children = rootChildren.toIntArray();
         return new DeclareCommandsPacket(nodes, 0);
     }
 
@@ -382,7 +381,7 @@ public final class CommandManager {
 
                             // Append to the last node
                             {
-                                final int[] children = ArrayUtils.toArray(argChildren);
+                                final int[] children = argChildren.toIntArray();
                                 for (DeclareCommandsPacket.Node lastNode : lastNodes) {
                                     lastNode.children = lastNode.children == null ?
                                             children :
@@ -423,7 +422,7 @@ public final class CommandManager {
             argumentIdentityMap.put(indexedArgument.argument, value);
         });
 
-        literalNode.children = ArrayUtils.toArray(cmdChildren);
+        literalNode.children = cmdChildren.toIntArray();
         return literalNode;
     }
 

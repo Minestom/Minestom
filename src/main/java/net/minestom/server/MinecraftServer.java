@@ -3,7 +3,6 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.data.DataManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -17,10 +16,8 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.storage.StorageManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
@@ -31,13 +28,13 @@ import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -49,18 +46,14 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.18.1";
-    public static final int PROTOCOL_VERSION = 757;
+    public static final String VERSION_NAME = "1.18.2";
+    public static final int PROTOCOL_VERSION = 758;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
     public static final String THREAD_NAME_TICK_SCHEDULER = "Ms-TickScheduler";
     public static final String THREAD_NAME_TICK = "Ms-Tick";
-
-    public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
-    public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
-            Runtime.getRuntime().availableProcessors() / 2);
 
     // Config
     // Can be modified at performance cost when increased
@@ -78,7 +71,6 @@ public final class MinecraftServer {
     private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
     private static int compressionThreshold = 256;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
-    private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
@@ -205,16 +197,6 @@ public final class MinecraftServer {
         return serverProcess.recipe();
     }
 
-    @Deprecated
-    public static StorageManager getStorageManager() {
-        return serverProcess.storage();
-    }
-
-    @Deprecated
-    public static DataManager getDataManager() {
-        return serverProcess.data();
-    }
-
     public static TeamManager getTeamManager() {
         return serverProcess.team();
     }
@@ -316,7 +298,7 @@ public final class MinecraftServer {
     /**
      * Changes the compression threshold of the server.
      * <p>
-     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
+     * WARNING: this need to be called before {@link #start(SocketAddress)}.
      *
      * @param compressionThreshold the new compression threshold, 0 to disable compression
      * @throws IllegalStateException if this is called after the server started
@@ -343,17 +325,6 @@ public final class MinecraftServer {
     public static void setTerminalEnabled(boolean enabled) {
         Check.stateCondition(serverProcess.isAlive(), "Terminal settings may not be changed after starting the server.");
         MinecraftServer.terminalEnabled = enabled;
-    }
-
-    /**
-     * Gets the consumer executed to show server-list data.
-     *
-     * @return the response data consumer
-     * @deprecated listen to the {@link net.minestom.server.event.server.ServerListPingEvent} instead
-     */
-    @Deprecated
-    public static ResponseDataConsumer getResponseDataConsumer() {
-        return responseDataConsumer;
     }
 
     public static DimensionTypeManager getDimensionTypeManager() {
@@ -385,30 +356,16 @@ public final class MinecraftServer {
      * <p>
      * It should be called after {@link #init()} and probably your own initialization code.
      *
-     * @param address              the server address
-     * @param port                 the server port
-     * @param responseDataConsumer the response data consumer, can be null
+     * @param address the server address
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
-     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.ServerListPingEvent} event instead of ResponseDataConsumer
      */
-    @Deprecated
-    public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
-        MinecraftServer.responseDataConsumer = responseDataConsumer;
-        start(address, port);
+    public void start(@NotNull SocketAddress address) {
+        serverProcess.start(address);
+        new TickSchedulerThread(serverProcess).start();
     }
 
-    /**
-     * Starts the server.
-     * <p>
-     * It should be called after {@link #init()} and probably your own initialization code.
-     *
-     * @param address the server address
-     * @param port    the server port
-     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
-     */
     public void start(@NotNull String address, int port) {
-        serverProcess.start(new InetSocketAddress(address, port));
-        new TickSchedulerThread(serverProcess).start();
+        start(new InetSocketAddress(address, port));
     }
 
     /**
@@ -416,9 +373,5 @@ public final class MinecraftServer {
      */
     public static void stopCleanly() {
         serverProcess.stop();
-    }
-
-    private static int getThreadCount(@NotNull String property, int count) {
-        return Integer.getInteger(property, Math.max(1, count));
     }
 }

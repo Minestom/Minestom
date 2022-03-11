@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,29 +14,31 @@ import java.util.Objects;
 public final class NamespaceID implements CharSequence, Key {
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
     private static final String legalPathLetters = "[0123456789abcdefghijklmnopqrstuvwxyz./_-]+";
+    private static final Cache<String, NamespaceID> CACHE = Caffeine.newBuilder().weakKeys().weakValues().build();
 
     private final String domain;
     private final String path;
     private final String full;
 
-    public static @NotNull NamespaceID from(@NotNull String domain, @NotNull String path) {
-        final String full = domain + ":" + path;
-        return new NamespaceID(full, domain, path);
+    public static @NotNull NamespaceID from(@NotNull String namespace) {
+        return CACHE.get(namespace, id -> {
+            final int index = id.indexOf(':');
+            final String domain;
+            final String path;
+            if (index < 0) {
+                domain = "minecraft";
+                path = id;
+                id = "minecraft:" + id;
+            } else {
+                domain = id.substring(0, index);
+                path = id.substring(index + 1);
+            }
+            return new NamespaceID(id, domain, path);
+        });
     }
 
-    public static @NotNull NamespaceID from(@NotNull String id) {
-        final int index = id.indexOf(':');
-        final String domain;
-        final String path;
-        if (index < 0) {
-            domain = "minecraft";
-            path = id;
-            id = "minecraft:" + id;
-        } else {
-            domain = id.substring(0, index);
-            path = id.substring(index + 1);
-        }
-        return new NamespaceID(id, domain, path);
+    public static @NotNull NamespaceID from(@NotNull String domain, @NotNull String path) {
+        return from(domain + ":" + path);
     }
 
     public static @NotNull NamespaceID from(@NotNull Key key) {

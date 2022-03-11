@@ -7,8 +7,8 @@ adventure = "4.9.3"
 kotlin = "1.6.10"
 hydrazine = "1.7.2"
 dependencyGetter = "v1.0.1"
-minestomData = "801b8007cf"
-hephaistos = "2.4.1"
+minestomData = "895581d464"
+hephaistos = "2.4.2"
 jetbrainsAnnotations = "23.0.0"
 
 # Terminal / Logging
@@ -17,10 +17,9 @@ jline = "3.21.0"
 
 # Performance / Data Structures
 caffeine = "3.0.5"
-fastutil = "8.5.6"
-flare = "2.0.0"
-gson = "2.8.9"
-guava = "31.0.1-jre"
+fastutil = "8.5.8"
+flare = "2.0.1"
+gson = "2.9.0"
 jcTools = "3.3.0"
 
 # Test
@@ -63,21 +62,21 @@ tinylog-impl = { group = "org.tinylog", name = "tinylog-impl", version.ref = "ti
 tinylog-slf4j = { group = "org.tinylog", name = "slf4j-tinylog", version.ref = "tinylog" }
 
 # Terminal
-jline = { group = "org.jline", name = "jline", version.ref = "jline"}
+jline = { group = "org.jline", name = "jline", version.ref = "jline" }
 jline-jansi = { group = "org.jline", name = "jline-terminal-jansi", version.ref = "jline" }
 
 # Performance / Data Structures
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
-flare = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = "flare"}
-flare-fastutil = { group = "space.vectrix.flare", name = "flare", version.ref = "flare"}
-guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+flare = { group = "space.vectrix.flare", name = "flare", version.ref = "flare" }
+flare-fastutil = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = "flare" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools"}
+jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools" }
 
 # Test
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
+junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit-jupiter" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 
 # Code Generation
@@ -87,8 +86,8 @@ javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet"
 jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNoise" }
 
 # JMH
-jmh-core = { group = "org.openjdk.jmh", name= "jmh-core", version.ref = "jmh" }
-jmh-annotationprocessor = { group = "org.openjdk.jmh", name= "jmh-generator-annprocess", version.ref = "jmh" }
+jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
+jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
 
 [bundles]
 

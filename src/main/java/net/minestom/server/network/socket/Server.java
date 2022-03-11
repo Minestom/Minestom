@@ -6,12 +6,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
+import java.net.*;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +31,7 @@ public final class Server {
     private int index;
 
     private ServerSocketChannel serverSocket;
+    private SocketAddress socketAddress;
     private String address;
     private int port;
 
@@ -43,16 +44,25 @@ public final class Server {
 
     @ApiStatus.Internal
     public void init(SocketAddress address) throws IOException {
+        ProtocolFamily family;
         if (address instanceof InetSocketAddress inetSocketAddress) {
             this.address = inetSocketAddress.getHostString();
             this.port = inetSocketAddress.getPort();
-        } // TODO unix domain support
+            family = inetSocketAddress.getAddress().getAddress().length == 4 ? StandardProtocolFamily.INET : StandardProtocolFamily.INET6;
+        } else if (address instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
+            this.address = "unix://" + unixDomainSocketAddress.getPath();
+            this.port = 0;
+            family = StandardProtocolFamily.UNIX;
+        } else {
+            throw new IllegalArgumentException("Address must be an InetSocketAddress or a UnixDomainSocketAddress");
+        }
 
-        ServerSocketChannel server = ServerSocketChannel.open();
+        ServerSocketChannel server = ServerSocketChannel.open(family);
         server.bind(address);
         server.configureBlocking(false);
         server.register(selector, SelectionKey.OP_ACCEPT);
         this.serverSocket = server;
+        this.socketAddress = address;
     }
 
     @ApiStatus.Internal
@@ -86,6 +96,14 @@ public final class Server {
 
     public void stop() {
         this.stop = true;
+        try {
+            this.serverSocket.close();
+            if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
+                Files.deleteIfExists(unixDomainSocketAddress.getPath());
+            }
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
         this.selector.wakeup();
         this.workers.forEach(worker -> worker.selector.wakeup());
     }
@@ -95,9 +113,8 @@ public final class Server {
         return packetProcessor;
     }
 
-    @ApiStatus.Internal
-    public List<Worker> workers() {
-        return workers;
+    public SocketAddress socketAddress() {
+        return socketAddress;
     }
 
     public String getAddress() {

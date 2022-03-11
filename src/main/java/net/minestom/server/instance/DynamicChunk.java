@@ -1,10 +1,10 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
@@ -14,10 +14,15 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -159,7 +164,6 @@ public class DynamicChunk extends Chunk {
     @Override
     public void sendChunk() {
         if (!isLoaded()) return;
-        if (getViewers().isEmpty()) return;
         sendPacketToViewers(chunkCache);
     }
 
@@ -197,7 +201,7 @@ public class DynamicChunk extends Chunk {
                     "WORLD_SURFACE", NBT.LongArray(Utils.encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
-        final BinaryWriter writer = new BinaryWriter(PacketUtils.localBuffer());
+        final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
         for (Section section : sections) writer.write(section);
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
@@ -240,4 +244,15 @@ public class DynamicChunk extends Chunk {
                 skyLights, blockLights);
     }
 
+    @Override
+    public @NotNull ChunkSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        Section[] clonedSections = new Section[sections.size()];
+        for (int i = 0; i < clonedSections.length; i++)
+            clonedSections[i] = sections.get(i).clone();
+        var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
+        final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
+        return new InstanceSnapshotImpl.Chunk(minSection, chunkX, chunkZ,
+                clonedSections, entries.clone(), entityIds, updater.reference(instance),
+                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
+    }
 }

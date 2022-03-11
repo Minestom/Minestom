@@ -7,11 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record ParticleImpl(NamespaceID namespace, int id) implements Particle {
-    private static final Registry.Container<Particle> CONTAINER = new Registry.Container<>(Registry.Resource.PARTICLES,
-            (loader, namespace, object) -> {
-                final int id = ((Number) object.get("id")).intValue();
-                loader.register(new ParticleImpl(NamespaceID.from(namespace), id));
-            });
+    private static final Registry.Container<Particle> CONTAINER = Registry.createContainer(Registry.Resource.PARTICLES,
+            (namespace, properties) -> new ParticleImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static Particle get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

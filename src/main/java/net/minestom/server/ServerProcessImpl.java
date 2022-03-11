@@ -1,12 +1,12 @@
 package net.minestom.server;
 
-import net.minestom.server.acquirable.Acquirable;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.data.DataManager;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -21,25 +21,32 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
-import net.minestom.server.network.socket.Worker;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.storage.StorageManager;
+import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
+import net.minestom.server.snapshot.ServerSnapshot;
+import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.terminal.MinestomTerminal;
-import net.minestom.server.thread.MinestomThreadPool;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
     private final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
@@ -53,8 +60,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final BlockManager block;
     private final CommandManager command;
     private final RecipeManager recipe;
-    private final StorageManager storage;
-    private final DataManager data;
     private final TeamManager team;
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
@@ -69,7 +74,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
 
-    private boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
@@ -83,8 +87,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.block = new BlockManager();
         this.command = new CommandManager();
         this.recipe = new RecipeManager();
-        this.storage = new StorageManager();
-        this.data = new DataManager();
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
@@ -123,16 +125,6 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull RecipeManager recipe() {
         return recipe;
-    }
-
-    @Override
-    public @NotNull StorageManager storage() {
-        return storage;
-    }
-
-    @Override
-    public @NotNull DataManager data() {
-        return data;
     }
 
     @Override
@@ -243,7 +235,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         LOGGER.info("Minestom server started successfully.");
 
-        if (terminalEnabled) {
+        if (MinecraftServer.isTerminalEnabled()) {
             MinestomTerminal.start();
         }
         // Stop the server on SIGINT
@@ -260,11 +252,9 @@ final class ServerProcessImpl implements ServerProcess {
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
-        storage.getLoadedLocations().forEach(StorageLocation::close);
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         MinestomTerminal.stop();
-        MinestomThreadPool.shutdownAll();
         dispatcher.shutdown();
         LOGGER.info("Minestom server stopped successfully.");
     }
@@ -272,6 +262,33 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public boolean isAlive() {
         return started.get() && !stopped.get();
+    }
+
+    @Override
+    public @NotNull ServerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        List<AtomicReference<InstanceSnapshot>> instanceRefs = new ArrayList<>();
+        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs = new Int2ObjectOpenHashMap<>();
+        for (Instance instance : instance.getInstances()) {
+            instanceRefs.add(updater.reference(instance));
+            for (Entity entity : instance.getEntities()) {
+                entityRefs.put(entity.getEntityId(), updater.reference(entity));
+            }
+        }
+        return new SnapshotImpl(MappedCollection.plainReferences(instanceRefs), entityRefs);
+    }
+
+    record SnapshotImpl(Collection<InstanceSnapshot> instances,
+                        Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs) implements ServerSnapshot {
+        @Override
+        public @NotNull Collection<EntitySnapshot> entities() {
+            return MappedCollection.plainReferences(entityRefs.values());
+        }
+
+        @Override
+        public @UnknownNullability EntitySnapshot entity(int id) {
+            var ref = entityRefs.get(id);
+            return ref != null ? ref.getPlain() : null;
+        }
     }
 
     private final class TickerImpl implements Ticker {
@@ -292,15 +309,13 @@ final class ServerProcessImpl implements ServerProcess {
 
             // Flush all waiting packets
             PacketUtils.flush();
-            server().workers().forEach(Worker::flush);
 
             // Monitoring
             {
-                final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
+                final double acquisitionTimeMs = Acquirable.resetAcquiringTime() / 1e6D;
                 final double tickTimeMs = (System.nanoTime() - nanoTime) / 1e6D;
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
-                GlobalHandles.SERVER_TICK_MONITOR_HANDLE.call(new ServerTickMonitorEvent(tickMonitor));
-                Acquirable.resetAcquiringTime();
+                EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
             }
         }
 

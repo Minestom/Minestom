@@ -1,7 +1,5 @@
 package net.minestom.server.thread;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,12 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public interface ThreadProvider<T> {
     static <T> @NotNull ThreadProvider<T> counter() {
         return new ThreadProvider<>() {
-            private final Cache<T, Integer> cache = Caffeine.newBuilder().weakKeys().build();
             private final AtomicInteger counter = new AtomicInteger();
 
             @Override
             public int findThread(@NotNull T partition) {
-                return cache.get(partition, i -> counter.getAndIncrement());
+                return counter.getAndIncrement();
             }
         };
     }

@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
@@ -27,16 +26,14 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(entityId);
         writer.writeBoolean(isHardcore);
-        writer.writeByte(gameMode.getId());
+        writer.writeByte(gameMode.id());
         if (previousGameMode != null) {
-            writer.writeByte(previousGameMode.getId());
+            writer.writeByte(previousGameMode.id());
         } else {
             writer.writeByte((byte) -1);
         }
 
-        //array of worlds
-        writer.writeVarInt(1);
-        writer.writeSizedString("minestom:world");
+        writer.writeVarIntList(worlds, BinaryWriter::writeSizedString);
 
         writer.writeNBT("", dimensionCodec);
         writer.writeNBT("", dimension);

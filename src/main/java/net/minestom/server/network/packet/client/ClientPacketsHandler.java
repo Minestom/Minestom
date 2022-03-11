@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.PingPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
-import net.minestom.server.utils.ObjectArray;
+import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;

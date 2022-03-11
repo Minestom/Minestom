@@ -109,7 +109,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte((byte) effect.id());
+        writer.writeVarInt(effect.id());
         writer.writeByte(amplifier);
         writer.writeVarInt(duration);
         writer.writeByte(flags);

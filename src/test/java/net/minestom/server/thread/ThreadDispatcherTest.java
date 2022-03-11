@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Phaser;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -22,7 +21,7 @@ public class ThreadDispatcherTest {
         final AtomicInteger counter = new AtomicInteger();
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
         assertEquals(1, dispatcher.threads().size());
-        assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(new Phaser(), 1)));
+        assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(1)));
 
         var partition = new Object();
         Tickable element = (time) -> counter.incrementAndGet();
@@ -60,18 +59,16 @@ public class ThreadDispatcherTest {
         assertEquals(0, counter1.get());
         assertEquals(0, counter2.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(1, counter1.get());
-        assertEquals(1, counter2.get());
-
-        dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(2, counter1.get());
-        assertEquals(2, counter2.get());
+        for (int i = 0; i < 100; i++) {
+            dispatcher.updateAndAwait(System.currentTimeMillis());
+            assertEquals(i + 1, counter1.get());
+            assertEquals(i + 1, counter2.get());
+        }
 
         dispatcher.deletePartition(partition);
         dispatcher.updateAndAwait(System.currentTimeMillis());
-        assertEquals(2, counter1.get());
-        assertEquals(2, counter2.get());
+        assertEquals(100, counter1.get());
+        assertEquals(100, counter2.get());
 
         dispatcher.shutdown();
     }

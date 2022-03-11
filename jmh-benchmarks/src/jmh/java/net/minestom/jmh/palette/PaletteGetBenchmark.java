@@ -22,7 +22,7 @@ public class PaletteGetBenchmark {
 
     @Setup
     public void setup() {
-        palette = Palette.newPalette(dimension, 15, 4, 1);
+        palette = Palette.newPalette(dimension, 15, 4);
         AtomicInteger value = new AtomicInteger();
         palette.setAll((x, y, z) -> value.getAndIncrement());
     }

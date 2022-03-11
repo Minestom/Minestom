@@ -1,8 +1,6 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +24,6 @@ final class SchedulerImpl implements Scheduler {
     private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
     private final MpscUnboundedArrayQueue<TaskImpl> taskQueue = new MpscUnboundedArrayQueue<>(64);
-    private final IntSet registeredTasks = new IntOpenHashSet();
-    private final IntSet parkedTasks = new IntOpenHashSet();
-
     // Tasks scheduled on a certain tick
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickTaskQueue = new Int2ObjectAVLTreeMap<>();
 
@@ -68,34 +63,15 @@ final class SchedulerImpl implements Scheduler {
     @Override
     public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
                                     @NotNull ExecutionType executionType) {
-        final TaskImpl taskRef = register(task, executionType);
+        final TaskImpl taskRef = new TaskImpl(TASK_COUNTER.getAndIncrement(), task,
+                executionType, this);
         handleTask(taskRef);
         return taskRef;
     }
 
-    synchronized void unparkTask(TaskImpl task) {
-        if (parkedTasks.remove(task.id()))
+    void unparkTask(TaskImpl task) {
+        if (task.tryUnpark())
             this.taskQueue.relaxedOffer(task);
-    }
-
-    synchronized boolean isTaskParked(TaskImpl task) {
-        return parkedTasks.contains(task.id());
-    }
-
-    synchronized void cancelTask(TaskImpl task) {
-        this.registeredTasks.remove(task.id());
-    }
-
-    synchronized boolean isTaskAlive(TaskImpl task) {
-        return registeredTasks.contains(task.id());
-    }
-
-    private synchronized TaskImpl register(@NotNull Supplier<TaskSchedule> task,
-                                           @NotNull ExecutionType executionType) {
-        TaskImpl taskRef = new TaskImpl(TASK_COUNTER.getAndIncrement(), task,
-                executionType, this);
-        this.registeredTasks.add(taskRef.id());
-        return taskRef;
     }
 
     private void safeExecute(TaskImpl task) {
@@ -120,11 +96,9 @@ final class SchedulerImpl implements Scheduler {
         } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {
             futureSchedule.future().thenRun(() -> safeExecute(task));
         } else if (schedule instanceof TaskScheduleImpl.Park) {
-            synchronized (this) {
-                this.parkedTasks.add(task.id());
-            }
+            task.parked = true;
         } else if (schedule instanceof TaskScheduleImpl.Stop) {
-            cancelTask(task);
+            task.cancel();
         } else if (schedule instanceof TaskScheduleImpl.Immediate) {
             this.taskQueue.relaxedOffer(task);
         }

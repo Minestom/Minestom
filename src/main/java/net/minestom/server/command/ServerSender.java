@@ -1,12 +1,12 @@
 package net.minestom.server.command;
 
-import net.minestom.server.command.builder.CommandContext;
 import net.kyori.adventure.audience.Audience;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class ServerSender implements CommandSender {
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return tag.read(nbtCompound);
     }
 
