@@ -253,10 +253,6 @@ public final class ChunkUtils {
      * @return section coordinate
      */
     public static int toSectionRelativeCoordinate(int xyz) {
-        xyz %= 16;
-        if (xyz < 0) {
-            xyz += Chunk.CHUNK_SECTION_SIZE;
-        }
-        return xyz;
+        return xyz & 0xF;
     }
 }
