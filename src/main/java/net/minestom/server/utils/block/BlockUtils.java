@@ -2,6 +2,7 @@ package net.minestom.server.utils.block;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -53,12 +54,23 @@ public class BlockUtils {
         return getRelativeTo(-1, 0, 0);
     }
 
-    public Block getBlock() {
-        return instance.getBlock(position);
+    public @Nullable Block getBlock() {
+        Chunk chunk = instance.getChunkAt(position);
+        if (chunk == null) {
+            return null;
+        }
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (chunk) {
+            return chunk.getBlock(position);
+        }
     }
 
-    public boolean equals(Block block) {
-        return getBlock().compare(block);
+    public boolean equals(@NotNull Block block) {
+        Block myBlock = getBlock();
+        if (myBlock == null) {
+            return false;
+        }
+        return myBlock.compare(block);
     }
 
     public static Map<String, String> parseProperties(String query) {
