@@ -305,8 +305,10 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     @ApiStatus.Internal
     void postLoad() {
-        applyPlacementRulesToOwnBlocks();
-        applyPlacementRulesToCornerBlocksOfNeighbourChunks();
+        if (MinecraftServer.getBlockManager().areAnyBlockPlacementRulesRegistered()) {
+            applyPlacementRulesToOwnBlocks();
+            applyPlacementRulesToCornerBlocksOfNeighbourChunks();
+        }
     }
 
     private void applyPlacementRulesToOwnBlocks() {

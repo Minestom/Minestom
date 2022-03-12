@@ -73,4 +73,12 @@ public final class BlockManager {
     public synchronized @Nullable BlockPlacementRule getBlockPlacementRule(@NotNull Block block) {
         return placementRuleMap.get(block.id());
     }
+
+    /**
+     * Gets whether any {@link BlockPlacementRule} had been registered within manager.
+     * @return true if any placement rule had been registered, false otherwise.
+     */
+    public synchronized boolean areAnyBlockPlacementRulesRegistered() {
+        return !placementRuleMap.isEmpty();
+    }
 }
