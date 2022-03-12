@@ -336,7 +336,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
             }
             final int minY = Math.max(myMinY, nei.getMinSection() * Chunk.CHUNK_SECTION_SIZE);
             final int maxY = Math.min(myMaxY, nei.getMaxSection() * Chunk.CHUNK_SECTION_SIZE);
-            final int x = Chunk.CHUNK_SIZE_X - 1;
+            final int x = delta == -1 ? Chunk.CHUNK_SIZE_X - 1 : 0;
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; ++z) {
                 for (int y = minY; y < maxY; ++y) {
                     nei.applyPlacementRule(x, y, z);
@@ -353,7 +353,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
             }
             final int minY = Math.max(myMinY, nei.getMinSection() * Chunk.CHUNK_SECTION_SIZE);
             final int maxY = Math.min(myMaxY, nei.getMaxSection() * Chunk.CHUNK_SECTION_SIZE);
-            final int z = Chunk.CHUNK_SIZE_Z - 1;
+            final int z = delta == -1 ? Chunk.CHUNK_SIZE_Z - 1 : 0;
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; ++x) {
                 for (int y = minY; y < maxY; ++y) {
                     nei.applyPlacementRule(x, y, z);
