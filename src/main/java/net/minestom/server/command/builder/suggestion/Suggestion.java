@@ -48,4 +48,11 @@ public class Suggestion {
         this.suggestionEntries.add(entry);
     }
 
+    /**
+     * @return true if this suggestion's input, after the start, has characters that are equal to the provided input
+     */
+    public boolean check(@NotNull String input, boolean ignoreCase) {
+        return this.input.regionMatches(start, input, 0, Math.min(length - start, input.length()));
+    }
+
 }

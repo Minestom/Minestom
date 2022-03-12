@@ -39,7 +39,7 @@ public class NodeMaker {
         return nodes.size();
     }
 
-    public void addNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
+    public void addNodes(@NotNull DeclareCommandsPacket.Node @NotNull ... nodes) {
         Options options = new Options();
         this.configuredNodes.add(ConfiguredNodes.of(nodes, options));
         this.nodes.add(nodes);
@@ -57,14 +57,6 @@ public class NodeMaker {
     @NotNull
     public Object2IntMap<DeclareCommandsPacket.Node> getNodeIdsMap() {
         return nodeIdsMap;
-    }
-
-    public void request(String input, Request request) {
-        this.nodeRequests.add(Pair.of(input, request));
-    }
-
-    public List<Pair<String, Request>> getNodeRequests() {
-        return nodeRequests;
     }
 
     public static class ConfiguredNodes {

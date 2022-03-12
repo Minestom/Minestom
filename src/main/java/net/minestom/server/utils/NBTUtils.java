@@ -3,6 +3,7 @@ package net.minestom.server.utils;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.command.StringReader;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
@@ -129,6 +130,44 @@ public final class NBTUtils {
                 LOGGER.warn("Unknown enchantment type: {}", id);
             }
         }
+    }
+
+    /**
+     * Reads NBT from the provided reader. This is done by reading all possible portions of text from the reader. For
+     * example, if there is the text '{"name": "2"}' it will try parsing '{', then '{"', then '{"n', and so on until the
+     * parsing succeeds. This is extremely inefficient because it might create dozens of objects, but Hephaistos does
+     * not currently support seeing how much of the reader was read, so this is what must be done.<br>
+     * Note: This method allocates two objects per character that was read.
+     */
+    // TODO: Remove when/if https://github.com/jglrxavpok/Hephaistos/issues/13 is completed
+    @Deprecated
+    public static @Nullable NBT readSNBT(@NotNull StringReader reader) {
+        if (!reader.canRead()) {
+            return null;
+        }
+
+        int start = reader.position();
+        while (reader.canRead() && StringReader.isValidUnquotedCharacter(reader.peek())) {
+            reader.skip();
+        }
+
+        while (true) {
+            SNBTParser parser = new SNBTParser(new java.io.StringReader(reader.all().substring(start, reader.position())));
+
+            try {
+                return parser.parse();
+            } catch (NBTException ignored) {}
+
+            if (!reader.canRead()) {
+                // Reset position before returning
+                reader.position(start);
+                return null;
+            }
+
+            reader.skip();
+
+        }
+
     }
 
     @FunctionalInterface

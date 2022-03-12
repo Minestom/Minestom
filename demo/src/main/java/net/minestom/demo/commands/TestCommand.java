@@ -1,10 +1,11 @@
 package net.minestom.demo.commands;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import org.jetbrains.annotations.NotNull;
 
 public class TestCommand extends Command {
 
@@ -13,13 +14,13 @@ public class TestCommand extends Command {
         setDefaultExecutor(this::usage);
 
         var block = ArgumentType.BlockState("block");
-        block.setCallback((sender, exception) -> exception.printStackTrace());
+        block.setCallback((origin, exception) -> exception.printStackTrace());
 
-        addSyntax((sender, context) -> System.out.println("executed"), block);
+        addSyntax((origin, context) -> System.out.println("executed"), block);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Incorrect usage"));
+    private void usage(@NotNull CommandOrigin origin, @NotNull CommandContext context) {
+        origin.sender().sendMessage(Component.text("Incorrect usage"));
     }
 
 }

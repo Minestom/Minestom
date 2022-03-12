@@ -1,13 +1,15 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,19 +18,15 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * An argument is meant to be parsed when added into a {@link Command}'s syntax with {@link Command#addSyntax(CommandExecutor, Argument[])}.
- * <p>
- * You can create your own with your own special conditions.
- * <p>
- * Arguments are parsed using {@link #parse(String)}.
- *
+ * An argument is meant to be parsed when added into a {@link Command}'s syntax with
+ * {@link Command#addSyntax(CommandExecutor, Argument[])}.<br>
+ * You can create your own with your own special conditions.<br>
+ * Arguments are parsed using {@link #parse(StringReader)}.
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
 
     private final String id;
-    protected final boolean allowSpace;
-    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
@@ -36,36 +34,26 @@ public abstract class Argument<T> {
 
     private SuggestionCallback suggestionCallback;
 
+    private final boolean shouldCache;
+
+    /**
+     * Creates a new argument
+     * @param id the id of the argument to use
+     * @param shouldCache true if results containing this argument should be cached. This should be used, for example,
+     *                    when arguments change how much they read based on outside factors
+     */
+    public Argument(@NotNull String id, boolean shouldCache) {
+        this.id = id;
+        this.shouldCache = shouldCache;
+    }
+
     /**
      * Creates a new argument.
-     *
-     * @param id           the id of the argument, used to retrieve the parsed value
-     * @param allowSpace   true if the argument can/should have spaces in it
-     * @param useRemaining true if the argument will always take the rest of the command arguments
-     */
-    public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
-        this.id = id;
-        this.allowSpace = allowSpace;
-        this.useRemaining = useRemaining;
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} sets to false.
-     *
-     * @param id         the id of the argument, used to retrieve the parsed value
-     * @param allowSpace true if the argument can/should have spaces in it
-     */
-    public Argument(@NotNull String id, boolean allowSpace) {
-        this(id, allowSpace, false);
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} and {@code allowSpace} sets to false.
      *
      * @param id the id of the argument, used to retrieve the parsed value
      */
     public Argument(@NotNull String id) {
-        this(id, false, false);
+        this(id, true);
     }
 
     /**
@@ -74,22 +62,19 @@ public abstract class Argument<T> {
      * @param argument the argument, with the input as id
      * @param <T>      the result type
      * @return the parsed result
-     * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
+     * @throws CommandException if the argument cannot be parsed due to a fault input (argument id)
      */
     @ApiStatus.Experimental
-    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
-        return argument.parse(argument.getId());
+    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws CommandException {
+        return argument.parse(new StringReader(argument.getId()));
     }
 
     /**
-     * Parses the given input, and throw an {@link ArgumentSyntaxException}
-     * if the input cannot be converted to {@code T}
-     *
-     * @param input the argument to parse
-     * @return the parsed argument
-     * @throws ArgumentSyntaxException if {@code value} is not valid
+     * Reads from and parses the provided input, and throws a {@link CommandException} if there is an error
+     * while reading the input into a {@code T}.<br>
+     * <b>Note that this method is not abstract because the conversion to {@code StringReader}s is not complete.</b>
      */
-    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public abstract @NotNull T parse(@NotNull StringReader input) throws CommandException;
 
     /**
      * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
@@ -129,27 +114,6 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Gets if the argument can contain space.
-     *
-     * @return true if the argument allows space, false otherwise
-     */
-    public boolean allowSpace() {
-        return allowSpace;
-    }
-
-    /**
-     * Gets if the argument always use all the remaining characters.
-     * <p>
-     * ex: /help I am a test - will always give you "I am a test"
-     * if the first and single argument does use the remaining.
-     *
-     * @return true if the argument use all the remaining characters, false otherwise
-     */
-    public boolean useRemaining() {
-        return useRemaining;
-    }
-
-    /**
      * Gets the {@link ArgumentCallback} to check if the argument-specific conditions are validated or not.
      *
      * @return the argument callback, null if not any
@@ -160,12 +124,14 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Sets the {@link ArgumentCallback}.
-     *
-     * @param callback the argument callback, null to do not have one
+     * Sets the {@link ArgumentCallback}.<br>
+     * Returns itself for chaining.
+     * @param callback the argument callback, null to not have one
      */
-    public void setCallback(@Nullable ArgumentCallback callback) {
+    @Contract("_ -> this")
+    public @NotNull Argument<T> setCallback(@Nullable ArgumentCallback callback) {
         this.callback = callback;
+        return this;
     }
 
     /**
@@ -255,6 +221,16 @@ public abstract class Argument<T> {
     }
 
     /**
+     * This boolean determines if commands that are executed that contain this should be cached. For example, if an
+     * argument reads different amounts of text based on values that may change, it is a good idea to initialize it with
+     * {@code shouldCache} as false. However, it's a bad idea to have arguments that behave like this.
+     * @return true if results should be cached.
+     */
+    public boolean shouldCache() {
+        return shouldCache;
+    }
+
+    /**
      * Maps this argument's output to another result.
      *
      * @param mapper The mapper to use (this argument's input = desired output)
@@ -293,12 +269,11 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentMap<I, O> extends Argument<O> {
-        public static final int INVALID_MAP = 555;
         final Argument<I> argument;
         final Function<I, O> mapper;
 
         private ArgumentMap(@NotNull Argument<I> argument, @NotNull Function<I, O> mapper) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -308,11 +283,14 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
+        public @NotNull O parse(@NotNull StringReader input) throws CommandException {
+            int pos = input.position();
             final I value = argument.parse(input);
             final O mappedValue = mapper.apply(value);
-            if (mappedValue == null)
-                throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
+            if (mappedValue == null) {
+                // TODO: Consider throwing a more accurate exception
+                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
+            }
             return mappedValue;
         }
 
@@ -323,12 +301,11 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentFilter<T> extends Argument<T> {
-        public static final int INVALID_FILTER = 556;
         final Argument<T> argument;
         final Predicate<T> predicate;
 
         private ArgumentFilter(@NotNull Argument<T> argument, @NotNull Predicate<T> predicate) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -338,10 +315,13 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-            final T result = argument.parse(input);
-            if (!predicate.test(result))
-                throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
+        public @NotNull T parse(@NotNull StringReader input) throws CommandException {
+            int pos = input.position();
+            T result = argument.parse(input);
+            if (!predicate.test(result)) {
+                // TODO: Consider throwing a more accurate exception
+                throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
+            }
             return result;
         }
 

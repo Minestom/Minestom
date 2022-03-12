@@ -1,8 +1,6 @@
 package net.minestom.demo.commands;
 
-import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Entity;
@@ -21,13 +19,11 @@ public class EntitySelectorCommand extends Command {
 
         setArgumentCallback((sender, exception) -> exception.printStackTrace(), argumentEntity);
 
-        addSyntax(this::executor, argumentEntity);
+        addSyntax((origin, context) -> {
+            EntityFinder entityFinder = context.get("entities");
+            List<Entity> entities = entityFinder.find(origin.sender());
+            System.out.println("found " + entities.size() + " entities");
+        });
 
-    }
-
-    private void executor(CommandSender commandSender, CommandContext context) {
-        EntityFinder entityFinder = context.get("entities");
-        List<Entity> entities = entityFinder.find(commandSender);
-        System.out.println("found " + entities.size() + " entities");
     }
 }

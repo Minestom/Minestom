@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
@@ -47,14 +48,18 @@ public class Command {
     public final static Logger LOGGER = LoggerFactory.getLogger(Command.class);
 
     private final String name;
-    private final String[] aliases;
-    private final String[] names;
+    private final List<String> aliases;
+    private final List<String> names;
+    private final List<String> formattedNames;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
 
     private final List<Command> subcommands;
+    private final List<Command> subcommandsView;
+
     private final List<CommandSyntax> syntaxes;
+    private final List<CommandSyntax> syntaxesView;
 
     /**
      * Creates a {@link Command} with a name and one or multiple aliases.
@@ -65,11 +70,15 @@ public class Command {
      */
     public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
-        this.aliases = aliases;
-        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
+        this.aliases = aliases == null ? List.of() : List.of(aliases);
+        this.names = Stream.concat(Stream.of(name), this.aliases.stream()).toList();
+        this.formattedNames = names.stream().map(s -> s.toLowerCase(Locale.ROOT)).toList();
 
         this.subcommands = new ArrayList<>();
+        this.subcommandsView = Collections.unmodifiableList(subcommands);
+
         this.syntaxes = new ArrayList<>();
+        this.syntaxesView = Collections.unmodifiableList(syntaxes);
     }
 
     /**
@@ -125,7 +134,7 @@ public class Command {
 
     @NotNull
     public List<Command> getSubcommands() {
-        return Collections.unmodifiableList(subcommands);
+        return subcommandsView;
     }
 
     /**
@@ -133,74 +142,79 @@ public class Command {
      * <p>
      * A syntax is simply a list of arguments and an executor called when successfully parsed.
      *
-     * @param commandCondition the condition to use the syntax
+     * @param condition the condition to use the syntax
      * @param executor         the executor to call when the syntax is successfully received
      * @param args             all the arguments of the syntax, the length needs to be higher than 0
-     * @return the created {@link CommandSyntax syntaxes},
-     * there can be multiple of them when optional arguments are used
+     * @return the created {@link CommandSyntax syntaxes}. There can be multiple of them when optional arguments are
+     *         used, and it may be immutable based on the syntaxes that were added
      */
-    @NotNull
-    public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
+    public @NotNull Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition condition,
                                                           @NotNull CommandExecutor executor,
-                                                          @NotNull Argument<?>... args) {
-        // Check optional argument(s)
-        boolean hasOptional = false;
-        {
-            for (Argument<?> argument : args) {
-                if (argument.isOptional()) {
-                    hasOptional = true;
-                }
-                if (hasOptional && !argument.isOptional()) {
-                    LOGGER.warn("Optional arguments are followed by a non-optional one, the default values will be ignored.");
-                    hasOptional = false;
-                    break;
-                }
-            }
-        }
-
-        if (!hasOptional) {
-            final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
+                                                          @NotNull Argument<?> @NotNull ... args) {
+        // Quickly escape if there are no arguments
+        if (args.length == 0) {
+            final CommandSyntax syntax = new CommandSyntax(List.of(), executor, condition);
             this.syntaxes.add(syntax);
             return Collections.singleton(syntax);
-        } else {
-            List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
+        }
+        // If the last argument is not optional, we know there is only one valid syntax.
+        if (!args[args.length - 1].isOptional()) {
+            final CommandSyntax syntax = new CommandSyntax(List.of(args), executor, condition);
+            this.syntaxes.add(syntax);
 
-            // the 'args' array starts by all the required arguments, followed by the optional ones
-            List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
-            boolean optionalBranch = false;
-            int i = 0;
+            // Print warnings for arguments that are optional, since we know that the last one is not
             for (Argument<?> argument : args) {
-                final boolean isLast = ++i == args.length;
                 if (argument.isOptional()) {
-                    // Set default value
-                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
-
-                    if (!optionalBranch && !requiredArguments.isEmpty()) {
-                        // First optional argument, create a syntax with current cached arguments
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
-                        optionalSyntaxes.add(syntax);
-                        optionalBranch = true;
-                    } else {
-                        // New optional argument, save syntax with current cached arguments and save default value
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
-                        optionalSyntaxes.add(syntax);
-                    }
-                }
-                requiredArguments.add(argument);
-                if (isLast) {
-                    // Create the last syntax
-                    final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                            requiredArguments.toArray(new Argument[0]));
-                    optionalSyntaxes.add(syntax);
+                    LOGGER.warn("There is an optional argument (with id \"" + argument.getId() + "\") followed by a " +
+                            "non-optional one. The optional argument will be treated as non-optional.");
                 }
             }
-
-            this.syntaxes.addAll(optionalSyntaxes);
-            return optionalSyntaxes;
+            return Collections.singleton(syntax);
         }
+
+        int firstOptional = 0;
+        boolean shouldWarn = false;
+
+        for (int i = args.length - 1; i >= 0; i--) {
+            Argument<?> arg = args[i];
+
+            if (!arg.isOptional() && !shouldWarn) {
+                shouldWarn = true;
+                // We know that the argument after the current one is the last optional, since this is the first
+                // non-optional one from the right.
+                firstOptional = i + 1;
+            }
+            if (arg.isOptional() && shouldWarn) {
+                LOGGER.warn("There is an optional argument (with id \"" + arg.getId() + "\") followed by a " +
+                        "non-optional one. It will be treated as non-optional.");
+            }
+        }
+
+        List<Argument<?>> currentArguments = new ArrayList<>();
+        List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
+        Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
+
+        for (int i = firstOptional; i < args.length; i++) {
+            //noinspection unchecked
+            defaultValuesMap.put(args[i].getId(), (Supplier<Object>) args[i].getDefaultValue());
+        }
+
+        // Turn defaultValuesMap into an immutable copy so that the optional syntaxes instantiated later in this code
+        // don't need to create their own copy of the map. This could theoretically be improved by making
+        // defaultValuesMap an array of entries and then directly creating a copy of it
+        defaultValuesMap = Map.copyOf(defaultValuesMap);
+
+        for (int i = 0; i < args.length; i++) {
+            currentArguments.add(args[i]);
+            // Subtract one to include the syntax with none of the optional arguments
+            if (i >= firstOptional - 1) {
+                // It's safe to put them directly into this constructor because CommandSyntax copies them before saving
+                optionalSyntaxes.add(new CommandSyntax(currentArguments, executor, condition, defaultValuesMap));
+            }
+        }
+
+        this.syntaxes.addAll(optionalSyntaxes);
+        return optionalSyntaxes;
     }
 
     /**
@@ -240,7 +254,7 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    public @Nullable String[] getAliases() {
+    public @NotNull List<String> getAliases() {
         return aliases;
     }
 
@@ -251,8 +265,17 @@ public class Command {
      *
      * @return this command names
      */
-    public @NotNull String[] getNames() {
+    public @NotNull List<String> getNames() {
         return names;
+    }
+
+    /**
+     * Gets all the possible names for this command, formatted for parsing. Currently, the names are just converted to
+     * lowercase.<br>
+     * This includes {@link #getName()} and {@link #getAliases()}.
+     */
+    public @NotNull List<String> getFormattedNames() {
+        return formattedNames;
     }
 
     /**
@@ -280,27 +303,25 @@ public class Command {
     /**
      * Gets all the syntaxes of this command.
      *
-     * @return a collection containing all this command syntaxes
+     * @return a list containing all this command syntaxes
      * @see #addSyntax(CommandExecutor, Argument[])
      */
-    public @NotNull Collection<CommandSyntax> getSyntaxes() {
-        return syntaxes;
+    public @NotNull List<CommandSyntax> getSyntaxes() {
+        return syntaxesView;
     }
 
     /**
-     * Called when a {@link CommandSender} executes this command before any syntax callback.
+     * Called when something executes this command before any syntax callback.
      * <p>
      * WARNING: the {@link CommandCondition} is not executed, and all the {@link CommandSyntax} are not checked,
      * this is called every time a {@link CommandSender} send a command which start by {@link #getName()} or {@link #getAliases()}.
      * <p>
      * Can be used if you wish to still suggest the player syntaxes but want to parse things mostly by yourself.
      *
-     * @param sender  the {@link CommandSender}
-     * @param context the UNCHECKED context of the command, some can be null even when unexpected
-     * @param command the raw UNCHECKED received command
+     * @param origin  the origin of the command
+     * @param context the UNCHECKED context of the command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
-    }
+    public void globalListener(@NotNull CommandOrigin origin, @NotNull CommandContext context) {}
 
     @ApiStatus.Experimental
     public @NotNull Set<String> getSyntaxesStrings() {
@@ -323,7 +344,7 @@ public class Command {
     @ApiStatus.Experimental
     public @NotNull String getSyntaxesTree() {
         Node commandNode = new Node();
-        commandNode.names.addAll(Arrays.asList(getNames()));
+        commandNode.names.addAll(names);
 
         // current node, literal = returned node
         BiFunction<Node, Set<String>, Node> findNode = (currentNode, literals) -> {
@@ -385,7 +406,7 @@ public class Command {
 
         // Subcommands
         this.subcommands.forEach(command -> {
-            final Node node = findNode.apply(commandNode, Set.of(command.getNames()));
+            final Node node = findNode.apply(commandNode, Set.copyOf(command.getNames()));
             command.getSyntaxes().forEach(syntax -> syntaxProcessor.accept(syntax, node));
         });
 
@@ -395,15 +416,6 @@ public class Command {
         JsonObject jsonObject = new JsonObject();
         processNode(commandNode, jsonObject);
         return jsonObject.toString();
-    }
-
-    public static boolean isValidName(@NotNull Command command, @NotNull String name) {
-        for (String commandName : command.getNames()) {
-            if (commandName.equals(name)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void processNode(@NotNull Node node, @NotNull JsonObject jsonObject) {

@@ -7,29 +7,39 @@ import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.parser.ArgumentQueryResult;
-import net.minestom.server.command.builder.parser.CommandParser;
-import net.minestom.server.command.builder.parser.CommandQueryResult;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.callback.CommandCallback;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 /**
- * Manager used to register {@link Command commands}.
- * <p>
- * It is also possible to simulate a command using {@link #execute(CommandSender, String)}.
+ * Manager used to register and execute {@link Command Command}s.<br>
+ * It is also possible to simulate a sender executing a command using {@link #execute(CommandOrigin, StringReader)}.
  */
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
+
+    public static final @NotNull CommandCallback STANDARD_UNKNOWN_COMMAND_CALLBACK = (origin, command) -> {
+        origin.sender().sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
+        origin.sender().sendMessage(command.generateContextMessage());
+    };
+
+    public static final @NotNull CommandExecutor STANDARD_DEFAULT_EXECUTOR = (origin, context) -> {
+        origin.sender().sendMessage(CommandException.COMMAND_UNKNOWN_COMMAND.generateComponent());
+        if (context.getException() != null) {
+            origin.sender().sendMessage(context.getException().generateContextMessage());
+        } else {
+            origin.sender().sendMessage(FixedStringReader.generateContextMessage(context.getMessage(), context.getStartingPosition()));
+        }
+    };
 
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
@@ -42,26 +52,16 @@ public final class CommandManager {
     }
 
     /**
-     * Registers a {@link Command}.
+     * Registers a {@link Command}. This method does nothing if the command was already registered.
      *
      * @param command the command to register
-     * @throws IllegalStateException if a command with the same name already exists
      */
     public synchronized void register(@NotNull Command command) {
-        Check.stateCondition(commandExists(command.getName()),
-                "A command with the name " + command.getName() + " is already registered!");
-        if (command.getAliases() != null) {
-            for (String alias : command.getAliases()) {
-                Check.stateCondition(commandExists(alias),
-                        "A command with the name " + alias + " is already registered!");
-            }
-        }
         this.dispatcher.register(command);
     }
 
     /**
-     * Removes a command from the currently registered commands.
-     * Does nothing if the command was not registered before
+     * Unregisters a {@link Command}. This method does nothing if the command was not already registered.
      *
      * @param command the command to remove
      */
@@ -70,48 +70,43 @@ public final class CommandManager {
     }
 
     /**
-     * Gets the {@link Command} registered by {@link #register(Command)}.
+     * Gets a {@link Command} that has an alias that the provided reader starts with. This method reads from the
+     * provided reader if a command was found because it is possible that the client may not know which alias was found.
      *
-     * @param commandName the command name
-     * @return the command associated with the name, null if not any
+     * @param reader the reader to read from
+     * @return the command that was found, or null if there was not a command found
      */
-    public @Nullable Command getCommand(@NotNull String commandName) {
-        return dispatcher.findCommand(commandName);
+    public @Nullable Command findCommand(@NotNull StringReader reader) {
+        return dispatcher.findCommand(reader);
     }
 
     /**
-     * Gets if a command with the name {@code commandName} already exists or not.
-     *
-     * @param commandName the command name to check
-     * @return true if the command does exist
+     * Find any command that has been registered to this manager's dispatcher and has the provided input as one of its
+     * aliases.
      */
-    public boolean commandExists(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
-        return dispatcher.findCommand(commandName) != null;
+    public @Nullable Command findCommand(@NotNull String input) {
+        return dispatcher.findCommand(input);
     }
 
     /**
-     * Executes a command for a {@link CommandSender}.
+     * Executes a command for a {@link CommandOrigin}.
      *
-     * @param sender  the sender of the command
-     * @param command the raw command string (without the command prefix)
+     * @param origin the origin of the command
+     * @param command the reader that should be read from (without the prefix)
      * @return the execution result
      */
-    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
-        // Command event
-        if (sender instanceof Player player) {
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
-            EventDispatcher.call(playerCommandEvent);
-            if (playerCommandEvent.isCancelled())
-                return CommandResult.of(CommandResult.Type.CANCELLED, command);
-            command = playerCommandEvent.getCommand();
-        }
-        // Process the command
-        final CommandResult result = dispatcher.execute(sender, command);
-        if (result.getType() == CommandResult.Type.UNKNOWN) {
-            if (unknownCommandCallback != null) {
-                this.unknownCommandCallback.apply(sender, command);
+    public @NotNull CommandResult execute(@NotNull CommandOrigin origin, @NotNull StringReader command) {
+        if (origin.entity() instanceof Player player) {
+            PlayerCommandEvent event = new PlayerCommandEvent(player, command);
+            EventDispatcher.call(event);
+            if (event.isCancelled()) {
+                return new CommandResult(CommandResult.Type.CANCELLED, event.getCommand().all(), event.getCommand().position(), null);
             }
+            command = event.getCommand();
+        }
+        final CommandResult result = dispatcher.execute(origin, command);
+        if (result.type() == CommandResult.Type.UNKNOWN_COMMAND && this.unknownCommandCallback != null) {
+            this.unknownCommandCallback.apply(origin, command);
         }
         return result;
     }
@@ -120,10 +115,10 @@ public final class CommandManager {
      * Executes the command using a {@link ServerSender}. This can be used
      * to run a silent command (nothing is printed to console).
      *
-     * @see #execute(CommandSender, String)
+     * @see #execute(CommandOrigin, StringReader)
      */
-    public @NotNull CommandResult executeServerCommand(@NotNull String command) {
-        return execute(serverSender, command);
+    public @NotNull CommandResult executeServerCommand(@NotNull StringReader command) {
+        return execute(new CommandOrigin(serverSender, null, null, null), command);
     }
 
     public @NotNull CommandDispatcher getDispatcher() {
@@ -193,41 +188,16 @@ public final class CommandManager {
 
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
-            final int commandNodeIndex = serializeCommand(player, command, nodes, rootChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
+            final int commandNodeIndex = serializeCommand(CommandOrigin.ofPlayer(player), command, nodes, rootChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
             commandIdentityMap.put(command, commandNodeIndex);
         }
 
-        // Answer to all node requests
-        for (Pair<String, NodeMaker.Request> pair : nodeRequests) {
-            String input = pair.left();
-            NodeMaker.Request request = pair.right();
-
-            final CommandQueryResult commandQueryResult = CommandParser.findCommand(dispatcher, input);
-            if (commandQueryResult == null) {
-                // Invalid command, return root node
-                request.retrieve(0);
-                continue;
-            }
-
-            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
-                    commandQueryResult.args(), input, false, true, syntax -> true, argument -> true);
-            if (queryResult == null) {
-                // Invalid argument, return command node (default to root)
-                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command(), 0);
-                request.retrieve(commandNode);
-                continue;
-            }
-
-            // Retrieve argument node
-            final int argumentNode = argumentIdentityMap.getOrDefault(queryResult.argument(), 0);
-            request.retrieve(argumentNode);
-        }
         // Add root node children
         rootNode.children = rootChildren.toIntArray();
         return new DeclareCommandsPacket(nodes, 0);
     }
 
-    private int serializeCommand(CommandSender sender, Command command,
+    private int serializeCommand(CommandOrigin origin, Command command,
                                  List<DeclareCommandsPacket.Node> nodes,
                                  IntList rootChildren,
                                  Map<Command, Integer> commandIdentityMap,
@@ -237,7 +207,7 @@ public final class CommandManager {
         final CommandCondition commandCondition = command.getCondition();
         if (commandCondition != null) {
             // Do not show command if return false
-            if (!commandCondition.canUse(sender, null)) {
+            if (!commandCondition.canUse(origin, null, -1)) {
                 return -1;
             }
         }
@@ -247,13 +217,13 @@ public final class CommandManager {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         // Create command for main name
-        final DeclareCommandsPacket.Node mainNode = createCommandNodes(sender, nodes, cmdChildren,
+        final DeclareCommandsPacket.Node mainNode = createCommandNodes(origin, nodes, cmdChildren,
                 command.getName(), syntaxes, rootChildren, argumentIdentityMap, nodeRequests);
         final int mainNodeIndex = nodes.indexOf(mainNode);
 
         // Serialize all the subcommands
         for (Command subcommand : command.getSubcommands()) {
-            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
+            final int subNodeIndex = serializeCommand(origin, subcommand, nodes, cmdChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
             if (subNodeIndex != -1) {
                 mainNode.children = ArrayUtils.concatenateIntArrays(mainNode.children, new int[]{subNodeIndex});
                 commandIdentityMap.put(subcommand, subNodeIndex);
@@ -261,17 +231,14 @@ public final class CommandManager {
         }
 
         // Use redirection to hook aliases with the command
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
-                aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
-                        false, true, false);
-                aliasNode.name = alias;
-                aliasNode.redirectedNode = mainNodeIndex;
+        for (String alias : command.getAliases()) {
+            DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
+            aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                    false, true, false);
+            aliasNode.name = alias;
+            aliasNode.redirectedNode = mainNodeIndex;
 
-                addCommandNameNode(aliasNode, rootChildren, nodes);
-            }
+            addCommandNameNode(aliasNode, rootChildren, nodes);
         }
 
         return mainNodeIndex;
@@ -280,7 +247,7 @@ public final class CommandManager {
     /**
      * Adds the command's syntaxes to the nodes list.
      *
-     * @param sender       the potential sender of the command
+     * @param origin       the origin of this
      * @param nodes        the nodes of the packet
      * @param cmdChildren  the main root of this command
      * @param name         the name of the command (or the alias)
@@ -288,7 +255,7 @@ public final class CommandManager {
      * @param rootChildren the children of the main node (all commands name)
      * @return The index of the main node for alias redirection
      */
-    private DeclareCommandsPacket.Node createCommandNodes(@NotNull CommandSender sender,
+    private DeclareCommandsPacket.Node createCommandNodes(@NotNull CommandOrigin origin,
                                                           @NotNull List<DeclareCommandsPacket.Node> nodes,
                                                           @NotNull IntList cmdChildren,
                                                           @NotNull String name,
@@ -302,15 +269,15 @@ public final class CommandManager {
         final int literalNodeId = addCommandNameNode(literalNode, rootChildren, nodes);
 
         // Contains the arguments of the already-parsed syntaxes
-        Map<CommandSyntax, Argument<?>[]> syntaxesArguments = new HashMap<>();
+        Map<CommandSyntax, List<Argument<?>>> syntaxesArguments = new HashMap<>();
         // Contains the nodes of an argument
         Map<IndexedArgument, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         // Sort syntaxes by argument count. Brigadier requires it.
-        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).toList();
+        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().size())).toList();
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
-            if (commandCondition != null && !commandCondition.canUse(sender, null)) {
+            if (commandCondition != null && !commandCondition.canUse(origin, null, -1)) {
                 // Sender does not have the right to use this syntax, ignore it
                 continue;
             }
@@ -324,10 +291,10 @@ public final class CommandManager {
             NodeMaker nodeMaker = new NodeMaker(lastNodes, literalNodeId);
             int lastArgumentNodeIndex = nodeMaker.getNodesCount();
 
-            final Argument<?>[] arguments = syntax.getArguments();
-            for (int i = 0; i < arguments.length; i++) {
-                final Argument<?> argument = arguments[i];
-                final boolean isLast = i == arguments.length - 1;
+            final List<Argument<?>> arguments = syntax.getArguments();
+            for (int i = 0; i < arguments.size(); i++) {
+                final Argument<?> argument = arguments.get(i);
+                final boolean isLast = i == arguments.size() - 1;
 
                 // Search previously parsed syntaxes to find identical part in order to create a link between those
                 {
@@ -336,8 +303,15 @@ public final class CommandManager {
                     for (var entry : syntaxesArguments.entrySet()) {
                         final var parsedArguments = entry.getValue();
                         final int index = i + 1;
-                        if (Arrays.mismatch(arguments, 0, index, parsedArguments, 0, index) == -1) {
-                            final Argument<?> sharedArgument = parsedArguments[i];
+
+                        SharedPart:
+                        {
+                            for (int j = 0; j < index; j++) {
+                                if (!Objects.equals(arguments.get(j), parsedArguments.get(j))) {
+                                    break SharedPart;
+                                }
+                            }
+                            final Argument<?> sharedArgument = parsedArguments.get(i);
                             final var sharedSyntax = entry.getKey();
                             final var indexed = new IndexedArgument(sharedSyntax, sharedArgument, i);
                             final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(indexed);
@@ -406,8 +380,6 @@ public final class CommandManager {
                 }
             }
 
-            nodeRequests.addAll(nodeMaker.getNodeRequests());
-
             syntaxesArguments.put(syntax, arguments);
         }
 
@@ -443,37 +415,5 @@ public final class CommandManager {
         return node;
     }
 
-    private static class IndexedArgument {
-        private final CommandSyntax syntax;
-        private final Argument<?> argument;
-        private final int index;
-
-        public IndexedArgument(CommandSyntax syntax, Argument<?> argument, int index) {
-            this.syntax = syntax;
-            this.argument = argument;
-            this.index = index;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            IndexedArgument that = (IndexedArgument) o;
-            return index == that.index && Objects.equals(syntax, that.syntax) && Objects.equals(argument, that.argument);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(syntax, argument, index);
-        }
-
-        @Override
-        public String toString() {
-            return "IndexedArgument{" +
-                    "syntax=" + syntax +
-                    ", argument=" + argument +
-                    ", index=" + index +
-                    '}';
-        }
-    }
+    private record IndexedArgument(CommandSyntax syntax, Argument<?> argument, int index) { }
 }

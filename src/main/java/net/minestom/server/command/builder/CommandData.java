@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,13 +11,14 @@ public class CommandData {
 
     private final Map<String, Object> dataMap = new ConcurrentHashMap<>();
 
-    public CommandData set(@NotNull String key, Object value) {
+    @Contract("_, _ -> this")
+    public @NotNull CommandData set(@NotNull String key, @Nullable Object value) {
         this.dataMap.put(key, value);
         return this;
     }
 
-    @Nullable
-    public <T> T get(@NotNull String key) {
+    public @Nullable <T> T get(@NotNull String key) {
+        //noinspection unchecked
         return (T) dataMap.get(key);
     }
 
@@ -24,8 +26,11 @@ public class CommandData {
         return dataMap.containsKey(key);
     }
 
-    @NotNull
-    public Map<String, Object> getDataMap() {
+    public void clear() {
+        this.dataMap.clear();
+    }
+
+    public @NotNull Map<String, Object> getDataMap() {
         return dataMap;
     }
 }

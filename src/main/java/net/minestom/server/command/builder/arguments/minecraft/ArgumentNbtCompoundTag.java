@@ -1,16 +1,14 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
-
-import java.io.StringReader;
 
 /**
  * Argument used to retrieve a {@link NBTCompound} if you need key-value data.
@@ -19,25 +17,21 @@ import java.io.StringReader;
  */
 public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
-    public static final int INVALID_NBT = 1;
-
-    public ArgumentNbtCompoundTag(String id) {
-        super(id, true);
+    public ArgumentNbtCompoundTag(@NotNull String id) {
+        super(id);
     }
 
-    @NotNull
     @Override
-    public NBTCompound parse(@NotNull String input) throws ArgumentSyntaxException {
-        try {
-            NBT nbt = new SNBTParser(new StringReader(input)).parse();
+    public @NotNull NBTCompound parse(@NotNull StringReader input) throws CommandException {
+        @SuppressWarnings("deprecation")
+        NBT nbt = NBTUtils.readSNBT(input);
 
-            if (!(nbt instanceof NBTCompound))
-                throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
-
-            return (NBTCompound) nbt;
-        } catch (NBTException e) {
-            throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
+        // FIXME: Throw an exception that's more accurate (ideally once Hephaistos adds partial reading)
+        if (!(nbt instanceof NBTCompound compound)) {
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
         }
+
+        return compound;
     }
 
     @Override
@@ -45,7 +39,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:nbt_compound_tag";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

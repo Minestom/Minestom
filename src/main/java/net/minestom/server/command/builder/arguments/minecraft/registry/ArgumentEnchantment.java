@@ -1,22 +1,29 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an argument giving an {@link Enchantment}.
  */
 public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
 
-    public ArgumentEnchantment(String id) {
+    public ArgumentEnchantment(@NotNull String id) {
         super(id);
     }
 
     @Override
-    public Enchantment getRegistry(@NotNull String value) {
-        return Enchantment.fromNamespaceId(value);
+    public @Nullable Enchantment getRegistry(@NotNull String key) {
+        return Enchantment.fromNamespaceId(key);
+    }
+
+    @Override
+    public @NotNull CommandException createException(@NotNull String input, int position, @NotNull String id) {
+        return CommandException.ENCHANTMENT_UNKNOWN.generateException(input, position, id);
     }
 
     @Override
@@ -24,7 +31,7 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:item_enchantment";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

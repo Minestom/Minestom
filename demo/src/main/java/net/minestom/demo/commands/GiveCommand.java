@@ -20,10 +20,9 @@ public class GiveCommand extends Command {
     public GiveCommand() {
         super("give");
 
-        setDefaultExecutor((sender, context) ->
-                sender.sendMessage(Component.text("Usage: /give <target> <item> [<count>]")));
+        setDefaultExecutor((origin, context) -> origin.sender().sendMessage(Component.text("Usage: /give <target> <item> [<count>]")));
 
-        addSyntax((sender, context) -> {
+        addSyntax((origin, context) -> {
             final EntityFinder entityFinder = context.get("target");
             int count = context.get("count");
             count = Math.min(count, PlayerInventory.INVENTORY_SIZE * 64);
@@ -42,15 +41,14 @@ public class GiveCommand extends Command {
                 itemStacks.add(itemStack.withAmount(count));
             }
 
-            final List<Entity> targets = entityFinder.find(sender);
+            final List<Entity> targets = entityFinder.find(origin.sender());
             for (Entity target : targets) {
-                if (target instanceof Player) {
-                    Player player = (Player) target;
+                if (target instanceof Player player) {
                     player.getInventory().addItemStacks(itemStacks, TransactionOption.ALL);
                 }
             }
 
-            sender.sendMessage(Component.text("Items have been given successfully!"));
+            origin.sender().sendMessage(Component.text("Items have been given successfully!"));
 
         }, Entity("target").onlyPlayers(true), ItemStack("item"), Integer("count").setDefaultValue(() -> 1));
 

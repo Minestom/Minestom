@@ -1,6 +1,7 @@
 package net.minestom.server.utils.callback;
 
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
+import net.minestom.server.command.StringReader;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,9 +15,10 @@ public interface CommandCallback {
     /**
      * Executed if an unknown command is run.
      *
-     * @param sender  the command sender
-     * @param command the complete command string
+     * @param origin the origin of the command
+     * @param command the StringReader containing the command, where the unread portion of the reader should be treated
+     *                as the command
      */
-    void apply(@NotNull CommandSender sender, @NotNull String command);
+    void apply(@NotNull CommandOrigin origin, @NotNull StringReader command);
 
 }

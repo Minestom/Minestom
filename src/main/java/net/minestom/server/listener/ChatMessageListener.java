@@ -4,6 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.CommandOrigin;
+import net.minestom.server.command.StringReader;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -24,14 +26,13 @@ public class ChatMessageListener {
     public static void listener(ClientChatMessagePacket packet, Player player) {
         String message = packet.message();
 
-        final String cmdPrefix = CommandManager.COMMAND_PREFIX;
-        if (message.startsWith(cmdPrefix)) {
-            // The message is a command
-            final String command = message.replaceFirst(cmdPrefix, "");
+        if (message.startsWith(CommandManager.COMMAND_PREFIX)) {
+            // Create a new reader with the message and skip the prefix because it's not part of the command
+            StringReader reader = new StringReader(message, CommandManager.COMMAND_PREFIX.length());
 
             // check if we can receive commands
             if (Messenger.canReceiveCommand(player)) {
-                COMMAND_MANAGER.execute(player, command);
+                COMMAND_MANAGER.execute(CommandOrigin.ofPlayer(player), reader);
             } else {
                 Messenger.sendRejectionMessage(player);
             }

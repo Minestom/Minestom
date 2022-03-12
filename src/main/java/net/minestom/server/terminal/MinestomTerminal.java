@@ -1,6 +1,7 @@
 package net.minestom.server.terminal;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.StringReader;
 import org.jetbrains.annotations.ApiStatus;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
@@ -12,6 +13,7 @@ import org.jline.terminal.TerminalBuilder;
 import java.io.IOException;
 
 public class MinestomTerminal {
+
     private static final String PROMPT = "> ";
 
     private static volatile Terminal terminal;
@@ -34,8 +36,7 @@ public class MinestomTerminal {
                 String command;
                 try {
                     command = reader.readLine(PROMPT);
-                    var commandManager = MinecraftServer.getCommandManager();
-                    commandManager.execute(commandManager.getConsoleSender(), command);
+                    MinecraftServer.getCommandManager().execute(MinecraftServer.getCommandManager().getConsoleSender().getOrigin(), new StringReader(command));
                 } catch (UserInterruptException e) {
                     // Handle Ctrl + C
                     System.exit(0);

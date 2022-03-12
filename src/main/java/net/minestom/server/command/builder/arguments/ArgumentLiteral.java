@@ -1,25 +1,25 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentLiteral extends Argument<String> {
 
-    public static final int INVALID_VALUE_ERROR = 1;
-
     public ArgumentLiteral(@NotNull String id) {
         super(id);
     }
 
-    @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (!input.equals(getId()))
-            throw new ArgumentSyntaxException("Invalid literal value", input, INVALID_VALUE_ERROR);
-
-        return input;
+    public @NotNull String parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
+        String value = input.readUnquotedString();
+        if (!value.equals(getId())) {
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
+        }
+        return value;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ArgumentLiteral extends Argument<String> {
                 executable, false, false);
         literalNode.name = getId();
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{literalNode});
+        nodeMaker.addNodes(literalNode);
     }
 
     @Override

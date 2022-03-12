@@ -1,10 +1,9 @@
 package net.minestom.server.utils.location;
 
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,9 +66,8 @@ public final class RelativeVec {
         }
     }
 
-    public @NotNull Vec fromSender(@Nullable CommandSender sender) {
-        final var entityPosition = sender instanceof Player ? ((Player) sender).getPosition() : Pos.ZERO;
-        return from(entityPosition);
+    public @NotNull Vec fromSender(@NotNull CommandOrigin sender) {
+        return from(sender.entity() == null ? Pos.ZERO : sender.entity().getPosition());
     }
 
     @ApiStatus.Experimental

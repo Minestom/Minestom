@@ -2,22 +2,29 @@ package net.minestom.server.command.builder.arguments.minecraft.registry;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an argument giving an {@link EntityType}.
  */
 public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 
-    public ArgumentEntityType(String id) {
+    public ArgumentEntityType(@NotNull String id) {
         super(id);
     }
 
     @Override
-    public EntityType getRegistry(@NotNull String value) {
-        return EntityType.fromNamespaceId(value);
+    public @Nullable EntityType getRegistry(@NotNull String key) {
+        return EntityType.fromNamespaceId(key);
+    }
+
+    @Override
+    public @NotNull CommandException createException(@NotNull String input, int position, @NotNull String id) {
+        return CommandException.ENTITY_NOTFOUND.generateException(input, position, id);
     }
 
     @Override
@@ -26,7 +33,7 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
         argumentNode.parser = "minecraft:resource_location";
         argumentNode.suggestionsType = SuggestionType.SUMMONABLE_ENTITIES.getIdentifier();
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

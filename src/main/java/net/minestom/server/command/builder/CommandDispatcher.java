@@ -2,238 +2,425 @@ package net.minestom.server.command.builder;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
-import net.minestom.server.command.CommandSender;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minestom.server.command.CommandOrigin;
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.command.builder.parser.CommandParser;
-import net.minestom.server.command.builder.parser.CommandQueryResult;
-import net.minestom.server.command.builder.parser.CommandSuggestionHolder;
-import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
-import net.minestom.server.utils.StringUtils;
+import net.minestom.server.command.builder.exception.CommandException;
+import net.minestom.server.command.builder.suggestion.Suggestion;
+import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+
 /**
- * Class responsible for parsing {@link Command}.
+ * The class responsible for executing commands. This should generally be wrapped by a CommandManager to manage things
+ * like synchronization, extra parsing, more features, etc.
  */
 public class CommandDispatcher {
 
-    private final Map<String, Command> commandMap = new HashMap<>();
+    public final static Logger LOGGER = LoggerFactory.getLogger(CommandDispatcher.class);
+
+    private final Object2ObjectOpenHashMap<String, Command> commandNamesMap = new Object2ObjectOpenHashMap<>();
     private final Set<Command> commands = new HashSet<>();
+
+    private final Set<Command> commandsView = Collections.unmodifiableSet(commands);
 
     private final Cache<String, CommandResult> cache = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .build();
 
     /**
-     * Registers a command,
-     * be aware that registering a command name or alias will override the previous entry.
-     *
-     * @param command the command to register
+     * Registers the provided command in this dispatcher. Any names will overwrite the names of other commands.
      */
     public void register(@NotNull Command command) {
-        this.commandMap.put(command.getName().toLowerCase(), command);
-
-        // Register aliases
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                this.commandMap.put(alias.toLowerCase(), command);
+        if (!commands.add(command)) {
+            LOGGER.warn("The command \"" + command.getName() + "\" is already registered in this dispatcher!");
+            return;
+        }
+        for (String name : command.getFormattedNames()) {
+            Command previousValue = commandNamesMap.put(name, command);
+            if (previousValue != null) {
+                cache.invalidateAll();
+                LOGGER.warn("The command \"" + command.getName() + "\" overwrites the name \"" + name + "\" which was" +
+                        " registered by another command \"" + previousValue.getName() + "\".");
             }
         }
-
-        this.commands.add(command);
     }
 
+    /**
+     * Unregisters the provided command from this dispatcher.
+     */
     public void unregister(@NotNull Command command) {
-        this.commandMap.remove(command.getName().toLowerCase());
-
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                this.commandMap.remove(alias.toLowerCase());
-            }
+        if (!commands.remove(command)) {
+            LOGGER.warn("The command \"" + command.getName() + "\" is not registered in this dispatcher!");
+            return;
         }
-
-        this.commands.remove(command);
-
-        // Clear cache
-        this.cache.invalidateAll();
+        for (String name : command.getFormattedNames()) {
+            commandNamesMap.remove(name, command);
+        }
+        cache.invalidateAll();
     }
 
+    /**
+     * @return the set of commands that are registered in this dispatcher
+     */
     public @NotNull Set<Command> getCommands() {
-        return Collections.unmodifiableSet(commands);
+        return commandsView;
     }
 
     /**
-     * Gets the command class associated with the name.
-     *
-     * @param commandName the command name
-     * @return the {@link Command} associated with the name, null if not any
+     * Finds the command that has a name contained within the start of this reader that is the longest out of all
+     * registered names. For example, this method would choose the alias "test command" instead of "test" in all cases.
+     * This method reads the name from the reader, and it requires that there is either no text after the name or there
+     * is a valid whitespace character after it. However, if there is whitespace, this method does not read it.
      */
-    public @Nullable Command findCommand(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
-        return commandMap.getOrDefault(commandName, null);
-    }
-
-    /**
-     * Checks if the command exists, and execute it.
-     *
-     * @param source        the command source
-     * @param commandString the command with the argument(s)
-     * @return the command result
-     */
-    public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
-        CommandResult commandResult = parse(commandString);
-        ParsedCommand parsedCommand = commandResult.parsedCommand;
-        if (parsedCommand != null) {
-            commandResult.commandData = parsedCommand.execute(source);
-        }
-        return commandResult;
-    }
-
-    /**
-     * Parses the given command.
-     *
-     * @param commandString the command (containing the command name and the args if any)
-     * @return the parsing result
-     */
-    public @NotNull CommandResult parse(@NotNull String commandString) {
-        commandString = commandString.trim();
-        // Verify if the result is cached
-        {
-            final CommandResult cachedResult = cache.getIfPresent(commandString);
-            if (cachedResult != null) {
-                return cachedResult;
+    public @Nullable Command findCommand(@NotNull StringReader reader) {
+        int longestLength = -1;
+        Command currentLongest = null;
+        // Directly iterate instead of using an enhanced for loop so we can use the fastIterator method to avoid
+        // creating excessive objects
+        var iterator = commandNamesMap.object2ObjectEntrySet().fastIterator();
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            if (entry.getKey().length() > longestLength &&
+                    reader.canRead(entry.getKey(), true) &&
+                    (!reader.canRead(entry.getKey().length() + 1) ||
+                            StringReader.isValidWhitespace(reader.peek(entry.getKey().length())))
+            ) {
+                longestLength = entry.getKey().length();
+                currentLongest = entry.getValue();
             }
         }
 
-        // Split space
-        final String[] parts = commandString.split(StringUtils.SPACE);
-        final String commandName = parts[0];
-
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(this, commandString);
-        // Check if the command exists
-        if (commandQueryResult == null) {
-            return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
+        if (longestLength >= 0) {
+            reader.skip(longestLength);
         }
-        CommandResult result = new CommandResult();
-        result.input = commandString;
-        // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand( commandQueryResult, commandName, commandString, result);
 
-        // Cache result
-        this.cache.put(commandString, result);
+        return currentLongest;
+    }
 
+    /**
+     * Find any command that has been registered to this dispatcher and has the provided input as one of its aliases.
+     */
+    public @Nullable Command findCommand(@NotNull String input) {
+        return commandNamesMap.get(input);
+    }
+
+    public @NotNull CommandResult execute(@NotNull CommandOrigin origin, @NotNull StringReader reader) {
+        CommandResult result = parse(reader);
+        if (result.parsedCommand() != null) {
+            result.parsedCommand().execute(origin);
+        }
         return result;
     }
 
-    private @NotNull ParsedCommand findParsedCommand(@NotNull CommandQueryResult commandQueryResult,
-                                                      @NotNull String commandName,
-                                                      @NotNull String commandString,
-                                                      @NotNull CommandResult result) {
-        final Command command = commandQueryResult.command();
-        String[] args = commandQueryResult.args();
-        final boolean hasArgument = args.length > 0;
+    public @Nullable Suggestion tabComplete(@NotNull CommandOrigin origin, @NotNull StringReader reader) {
+        Command command = findCommand(reader);
+        if (command == null) {
+            return null;
+        }
 
-        final String input = commandName + StringUtils.SPACE + String.join(StringUtils.SPACE, args);
+        command = roamSubcommands(command, reader);
+        if (!reader.canRead()) {
+            return null;
+        }
 
-        ParsedCommand parsedCommand = new ParsedCommand();
-        parsedCommand.parents = commandQueryResult.parents();
-        parsedCommand.command = command;
-        parsedCommand.commandString = commandString;
+        List<CommandSyntax> syntaxes = command.getSyntaxes();
+        if (syntaxes.isEmpty()) {
+            return null;
+        }
 
-        // The default executor should be used if no argument is provided
-        if (!hasArgument) {
-            Optional<CommandSyntax> optionalSyntax = command.getSyntaxes()
-                    .stream()
-                    .filter(syntax -> syntax.getArguments().length == 0)
-                    .findFirst();
+        int start = reader.position();
+        ParsedCommand primaryContext = new ParsedCommand();
+        primaryContext.setCommand(command).setMessage(reader.all()).setReaderPosition(-1).setArgumentNumber(-1).setStartingPosition(start);
+        final Map<String, Object> temporaryArgumentMap = new HashMap<>();
 
-            if (optionalSyntax.isPresent()) {
-                // Empty syntax found
-                final CommandSyntax syntax = optionalSyntax.get();
-                parsedCommand.syntax = syntax;
-                parsedCommand.executor = syntax.getExecutor();
-                parsedCommand.context = new CommandContext(input);
+        SyntaxLoop:
+        for (CommandSyntax syntax : syntaxes) {
+            reader.position(start);
+            temporaryArgumentMap.clear();
+            int tempPos;
+            int lastStart = -1;
+            for (int i = 0; i < syntax.getArguments().size(); i++) {
+                Argument<?> argument = syntax.getArguments().get(i);
+                tempPos = reader.position();
+                reader.skipWhitespace();
+                int tempStart = reader.position();
+                if (tempPos == reader.position()) {
+                    if (i > 0) {
+                        // switch to previous
+                        boolean shouldOverride = tempPos > primaryContext.getReaderPosition();
+                        if (!shouldOverride && tempPos == primaryContext.getReaderPosition() && primaryContext.getSyntax() != null) {
+                            CommandSyntax commandSyntax = primaryContext.getSyntax();
+                            if (primaryContext.getArgumentNumber() >= 0 && primaryContext.getArgumentNumber() < commandSyntax.getArguments().size()) {
+                                Argument<?> arg = commandSyntax.getArguments().get(primaryContext.getArgumentNumber());
+                                if (!arg.hasSuggestion()) {
+                                    shouldOverride = true;
+                                }
+                            }
+                        }
 
-                result.type = CommandResult.Type.SUCCESS;
-                result.parsedCommand = parsedCommand;
-                return parsedCommand;
-            } else {
-                // No empty syntax, use default executor if any
-                final CommandExecutor defaultExecutor = command.getDefaultExecutor();
-                if (defaultExecutor != null) {
-                    parsedCommand.executor = defaultExecutor;
-                    parsedCommand.context = new CommandContext(input);
+                        // Set to start of last argument
+                        if (shouldOverride) {
+                            primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>(temporaryArgumentMap))
+                                    .setReaderPosition(lastStart).setArgumentNumber(i - 1).setException(null).setSuccess(false);
+                        }
+                    }
+                    continue SyntaxLoop;
+                }
+                tempPos = reader.position();
+                if (!reader.canRead()) {
+                    boolean shouldOverride = tempPos > primaryContext.getReaderPosition();
+                    if (!shouldOverride && tempPos == primaryContext.getReaderPosition() && primaryContext.getSyntax() != null) {
+                        CommandSyntax commandSyntax = primaryContext.getSyntax();
+                        if (primaryContext.getArgumentNumber() >= 0 && primaryContext.getArgumentNumber() < commandSyntax.getArguments().size()) {
+                            Argument<?> arg = commandSyntax.getArguments().get(primaryContext.getArgumentNumber());
+                            if (!arg.hasSuggestion()) {
+                                shouldOverride = true;
+                            }
+                        }
+                    }
 
-                    result.type = CommandResult.Type.SUCCESS;
-                    result.parsedCommand = parsedCommand;
-                    return parsedCommand;
+                    if (shouldOverride) {
+                        primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>(temporaryArgumentMap))
+                                .setReaderPosition(tempPos).setArgumentNumber(i).setException(null).setSuccess(false);
+                    }
+                    continue SyntaxLoop;
+                }
+                try {
+                    temporaryArgumentMap.put(argument.getId(), argument.parse(reader));
+                } catch (CommandException exception) {
+                    boolean shouldOverride = tempPos > primaryContext.getReaderPosition();
+                    if (!shouldOverride && tempPos == primaryContext.getReaderPosition() && primaryContext.getSyntax() != null) {
+                        CommandSyntax commandSyntax = primaryContext.getSyntax();
+                        if (primaryContext.getArgumentNumber() >= 0 && primaryContext.getArgumentNumber() < commandSyntax.getArguments().size()) {
+                            Argument<?> arg = commandSyntax.getArguments().get(primaryContext.getArgumentNumber());
+                            if (!arg.hasSuggestion()) {
+                                shouldOverride = true;
+                            }
+                        }
+                    }
+
+                    if (shouldOverride) {
+                        primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>(temporaryArgumentMap))
+                                .setReaderPosition(tempPos).setArgumentNumber(i).setException(exception).setSuccess(false);
+                    }
+                    continue SyntaxLoop;
+                }
+
+                lastStart = tempStart;
+            }
+        }
+
+        if (primaryContext.getSyntax() != null) {
+            CommandSyntax syntax = primaryContext.getSyntax();
+            List<Argument<?>> arguments = syntax.getArguments();
+            if (primaryContext.getArgumentNumber() >= 0 && primaryContext.getArgumentNumber() < arguments.size()) {
+                Argument<?> argument = arguments.get(primaryContext.getArgumentNumber());
+
+                if (argument.getSuggestionCallback() != null) {
+                    SuggestionCallback callback = argument.getSuggestionCallback();
+
+                    Suggestion suggestion = new Suggestion(reader.all(), primaryContext.getReaderPosition(), reader.length());
+                    CommandContext context = primaryContext.toContext();
+
+                    callback.apply(origin, context, suggestion);
+
+                    return suggestion;
+                }
+            }
+        }
+        return null;
+    }
+
+    public @NotNull CommandResult parse(@NotNull StringReader reader) {
+        final CommandResult result = cache.getIfPresent(reader.unread());
+        if (result != null) {
+            return result;
+        }
+
+        int position = reader.position();
+        Command command = findCommand(reader);
+
+        if (command == null) {
+            return new CommandResult(CommandResult.Type.UNKNOWN_COMMAND, reader.all(), position);
+        }
+
+        command = roamSubcommands(command, reader);
+
+        ParsedCommand parsedCommand = parseSyntaxes(command.getSyntaxes(), reader).setCommand(command);
+
+        if (parsedCommand.getSyntax() != null && parsedCommand.getSyntax().getDefaultValuesMap() != null) {
+            if (parsedCommand.getArgumentMap() == null) {
+                parsedCommand.setArgumentMap(new HashMap<>());
+            }
+            for (var entry : parsedCommand.getSyntax().getDefaultValuesMap().entrySet()) {
+                parsedCommand.getArgumentMap().computeIfAbsent(entry.getKey(), t -> entry.getValue().get());
+            }
+        }
+
+        CommandResult commandResult = new CommandResult(parsedCommand.isSuccess() ? CommandResult.Type.SUCCESS : CommandResult.Type.FAILURE, reader.all(), position, parsedCommand);
+
+        for (CommandSyntax syntax : command.getSyntaxes()) {
+            for (Argument<?> argument : syntax.getArguments()) {
+                if (!argument.shouldCache()) {
+                    return commandResult;
+                }
+            }
+        }
+        cache.put(reader.all().substring(position), commandResult);
+        return commandResult;
+    }
+
+    private @NotNull ParsedCommand parseSyntaxes(@NotNull List<CommandSyntax> syntaxes, @NotNull StringReader reader) {
+
+        int start = reader.position();
+        ParsedCommand primaryContext = new ParsedCommand();
+        primaryContext.setMessage(reader.all()).setReaderPosition(-1).setArgumentNumber(-1).setStartingPosition(start);
+
+        final Map<String, Object> temporaryArgumentMap = new HashMap<>();
+
+        // Unexpected behavior will occur if the following loop runs when there are no syntaxes.
+        if (syntaxes.isEmpty()) {
+            return primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1)
+                    .setException(CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(reader.all(), start))
+                    .setSuccess(false);
+        }
+
+        if (!reader.canRead()) {
+            for (CommandSyntax syntax : syntaxes) {
+                if (syntax.getArguments().isEmpty()) {
+                    return primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>()).setArgumentNumber(-1).setSuccess(true);
+                }
+            }
+            return primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1)
+                    .setException(CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(reader.all(), start))
+                    .setSuccess(false);
+        }
+
+        SyntaxLoop:
+        for (CommandSyntax syntax : syntaxes) {
+            // Reset the reader and temporary argument map so we don't have to create a new one for each syntax
+            reader.position(start);
+            temporaryArgumentMap.clear();
+
+            for (int i = 0; i < syntax.getArguments().size(); i++) {
+                Argument<?> argument = syntax.getArguments().get(i);
+                try {
+                    reader.assureWhitespace();
+                    temporaryArgumentMap.put(argument.getId(), argument.parse(reader));
+                } catch (CommandException exception) {
+                    if (exception.getPosition() > primaryContext.getReaderPosition()) {
+                        primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>(temporaryArgumentMap))
+                                .setReaderPosition(exception.getPosition()).setArgumentNumber(i).setException(exception)
+                                .setSuccess(false);
+                    } else if (exception.getPosition() == primaryContext.getReaderPosition()) {
+                        primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1)
+                                .setException(CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(primaryContext.getMessage(), primaryContext.getReaderPosition()))
+                                .setSuccess(false);
+                    }
+                    continue SyntaxLoop;
+                }
+            }
+
+            if (reader.canRead()) {
+                int store = reader.position();
+                reader.skipWhitespace();
+                if (reader.position() > primaryContext.getReaderPosition()) {
+                    // Use "Incorrect argument for command" if there isn't any whitespace, otherwise complain about there not being whitespace
+                    CommandException exception = (store == reader.position()) ?
+                            CommandException.COMMAND_EXPECTED_SEPARATOR.generateException(reader.all(), store) :
+                            CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(primaryContext.getMessage(), reader.position());
+                    primaryContext.setSyntax(syntax).setArgumentMap(new HashMap<>(temporaryArgumentMap))
+                            .setReaderPosition(reader.position()).setArgumentNumber(syntax.getArguments().size() - 1)
+                            .setException(exception)
+                            .setSuccess(false);
+                } else if (reader.position() == primaryContext.getReaderPosition()) {
+                    primaryContext.setSyntax(null).setArgumentMap(null).setArgumentNumber(-1).setException(null)
+                            .setSuccess(false);
+                }
+                continue;
+            }
+            primaryContext.setSyntax(syntax).setArgumentMap(temporaryArgumentMap).setReaderPosition(reader.position())
+                    .setArgumentNumber(syntax.getArguments().size() - 1).setException(null).setSuccess(true);
+
+            return primaryContext;
+
+        }
+
+        return primaryContext;
+    }
+
+    public @NotNull Command traverseSubcommands(@NotNull StringReader reader, @NotNull Command startingCommand) {
+        Command newCommand = findValidSubcommand(reader, startingCommand);
+
+        if (newCommand == null ||
+                startingCommand.getSubcommands().isEmpty() ||
+                !reader.canRead() ||
+                !StringReader.isValidWhitespace(reader.peek())) {
+            return startingCommand;
+        }
+
+        return roamSubcommands(startingCommand, reader);
+    }
+
+    // Requires at least one whitespace character that occurs at the start of the reader
+    public @NotNull Command roamSubcommands(@NotNull Command startingCommand, @NotNull StringReader reader) {
+        if (startingCommand.getSubcommands().isEmpty() ||
+                !reader.canRead() ||
+                !StringReader.isValidWhitespace(reader.peek())) {
+            return startingCommand;
+        }
+        int start = reader.position();
+
+        reader.skipWhitespace();
+
+        Command newCommand = findValidSubcommand(reader, startingCommand);
+
+        if (newCommand == null) {
+            reader.position(start);
+            return startingCommand;
+        }
+
+        return roamSubcommands(newCommand, reader);
+    }
+
+    private @Nullable Command findValidSubcommand(@NotNull StringReader reader, @NotNull Command currentCommand) {
+        List<Command> sub = currentCommand.getSubcommands();
+
+        // Find the longest command
+        int longestLength = -1;
+        Command longestCommand = null;
+        for (int i = sub.size() - 1; i >= 0; i--) {
+            Command current = sub.get(i);
+
+            List<String> names = current.getFormattedNames();
+            for (int j = names.size() - 1; j >= 0; j--) {
+                String name = names.get(i);
+
+                if (name.length() > longestLength &&
+                        reader.canRead(name, true) &&
+                        (!reader.canRead(name.length() + 1) ||
+                                StringReader.isValidWhitespace(reader.peek(name.length()))
+                        )) {
+                    longestLength = name.length();
+                    longestCommand = current;
                 }
             }
         }
 
-        // SYNTAXES PARSING
-
-        // All the registered syntaxes of the command
-        final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
-        // Contains all the fully validated syntaxes (we later find the one with the most amount of arguments)
-        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>(syntaxes.size());
-        // Contains all the syntaxes that are not fully correct, used to later, retrieve the "most correct syntax"
-        // Number of correct argument - The data about the failing argument
-        Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
-
-        for (CommandSyntax syntax : syntaxes) {
-            CommandParser.parse(syntax, syntax.getArguments(), args, commandString, validSyntaxes, syntaxesSuggestions);
+        if (longestLength == -1) {
+            return null;
         }
 
-        // Check if there is at least one correct syntax
-        if (!validSyntaxes.isEmpty()) {
-            CommandContext context = new CommandContext(input);
-            // Search the syntax with all perfect args
-            final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, context);
-            if (finalValidSyntax != null) {
-                // A fully correct syntax has been found, use it
-                final CommandSyntax syntax = finalValidSyntax.syntax();
+        reader.skip(longestLength);
 
-                parsedCommand.syntax = syntax;
-                parsedCommand.executor = syntax.getExecutor();
-                parsedCommand.context = context;
-
-                result.type = CommandResult.Type.SUCCESS;
-                result.parsedCommand = parsedCommand;
-                return parsedCommand;
-            }
-        }
-
-        // No all-correct syntax, find the closest one to use the argument callback
-        if (!syntaxesSuggestions.isEmpty()) {
-            final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
-            final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-            final CommandSyntax syntax = suggestionHolder.syntax();
-            final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException();
-            final int argIndex = suggestionHolder.argIndex();
-
-            // Found the closest syntax with at least 1 correct argument
-            final Argument<?> argument = syntax.getArguments()[argIndex];
-            if (argument.hasErrorCallback() && argumentSyntaxException != null) {
-                parsedCommand.callback = argument.getCallback();
-                parsedCommand.argumentSyntaxException = argumentSyntaxException;
-
-                result.type = CommandResult.Type.INVALID_SYNTAX;
-                result.parsedCommand = parsedCommand;
-                return parsedCommand;
-            }
-        }
-
-        // No syntax found
-        result.type = CommandResult.Type.INVALID_SYNTAX;
-        result.parsedCommand = ParsedCommand.withDefaultExecutor(command, input);
-        return result.parsedCommand;
+        return longestCommand;
     }
 }

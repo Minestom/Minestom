@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -15,14 +17,13 @@ import java.util.regex.Pattern;
  */
 public class ArgumentStringArray extends Argument<String[]> {
 
-    public ArgumentStringArray(String id) {
-        super(id, true, true);
+    public ArgumentStringArray(@NotNull String id) {
+        super(id);
     }
 
-    @NotNull
     @Override
-    public String[] parse(@NotNull String input) {
-        return input.split(Pattern.quote(StringUtils.SPACE));
+    public @NotNull String @NotNull [] parse(@NotNull StringReader input) throws CommandException {
+        return input.readAll().split(Pattern.quote(StringUtils.SPACE));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ArgumentStringArray extends Argument<String[]> {
             packetWriter.writeVarInt(2); // Greedy phrase
         });
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

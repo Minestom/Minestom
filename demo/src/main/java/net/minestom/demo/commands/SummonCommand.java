@@ -1,6 +1,6 @@
 package net.minestom.demo.commands;
 
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -9,7 +9,10 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,13 +36,13 @@ public class SummonCommand extends Command {
                 .setFormat(ArgumentEnum.Format.LOWER_CASED)
                 .setDefaultValue(EntityClass.CREATURE);
         addSyntax(this::execute, entity, pos, entityClass);
-        setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
+        setDefaultExecutor((origin, context) -> origin.sender().sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
     }
 
-    private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
+    private void execute(@NotNull CommandOrigin origin, @NotNull CommandContext commandContext) {
         final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
         //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
-        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
+        entity.setInstance(origin.entity().getInstance(), commandContext.get(pos).fromSender(origin));
     }
 
     @SuppressWarnings("unused")

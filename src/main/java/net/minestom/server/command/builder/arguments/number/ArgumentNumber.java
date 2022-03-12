@@ -2,20 +2,13 @@ package net.minestom.server.command.builder.arguments.number;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.regex.Pattern;
 
-public class ArgumentNumber<T extends Number> extends Argument<T> {
+public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
 
     public static final int NOT_NUMBER_ERROR = 1;
     public static final int TOO_LOW_ERROR = 2;
@@ -25,45 +18,12 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected T min, max;
 
     protected final String parserName;
-    protected final BiFunction<String, Integer, T> radixParser;
-    protected final Function<String, T> parser;
-    protected final BiConsumer<BinaryWriter, T> propertiesWriter;
-    protected final Comparator<T> comparator;
+    protected final BiConsumer<BinaryWriter, T> valueWriter;
 
-    ArgumentNumber(@NotNull String id, String parserName, Function<String, T> parser,
-                   BiFunction<String, Integer, T> radixParser, BiConsumer<BinaryWriter, T> propertiesWriter,
-                   Comparator<T> comparator) {
+    ArgumentNumber(@NotNull String id, @NotNull String parserName, @NotNull BiConsumer<BinaryWriter, T> valueWriter) {
         super(id);
         this.parserName = parserName;
-        this.radixParser = radixParser;
-        this.parser = parser;
-        this.propertiesWriter = propertiesWriter;
-        this.comparator = comparator;
-    }
-
-    @Override
-    public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-        try {
-            final T value;
-            final int radix = getRadix(input);
-            if (radix == 10) {
-                value = parser.apply(parseValue(input));
-            } else {
-                value = radixParser.apply(parseValue(input), radix);
-            }
-
-            // Check range
-            if (hasMin && comparator.compare(value, min) < 0) {
-                throw new ArgumentSyntaxException("Input is lower than the minimum allowed value", input, TOO_LOW_ERROR);
-            }
-            if (hasMax && comparator.compare(value, max) > 0) {
-                throw new ArgumentSyntaxException("Input is higher than the maximum allowed value", input, TOO_HIGH_ERROR);
-            }
-
-            return value;
-        } catch (NumberFormatException | NullPointerException e) {
-            throw new ArgumentSyntaxException("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
-        }
+        this.valueWriter = valueWriter;
     }
 
     @Override
@@ -74,12 +34,12 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
         argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
-                propertiesWriter.accept(packetWriter, getMin());
+                valueWriter.accept(packetWriter, getMin());
             if (this.hasMax())
-                propertiesWriter.accept(packetWriter, getMax());
+                valueWriter.accept(packetWriter, getMax());
         });
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @NotNull
@@ -158,34 +118,4 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
         return max;
     }
 
-    @NotNull
-    protected String parseValue(@NotNull String value) {
-        if (value.startsWith("0b")) {
-            value = value.replaceFirst(Pattern.quote("0b"), "");
-        } else if (value.startsWith("0x")) {
-            value = value.replaceFirst(Pattern.quote("0x"), "");
-        } else if (value.toLowerCase().contains("e")) {
-            value = removeScientificNotation(value);
-        }
-        // TODO number suffix support (k,m,b,t)
-        return value;
-    }
-
-    protected int getRadix(@NotNull String value) {
-        if (value.startsWith("0b")) {
-            return 2;
-        } else if (value.startsWith("0x")) {
-            return 16;
-        }
-        return 10;
-    }
-
-    @Nullable
-    protected String removeScientificNotation(@NotNull String value) {
-        try {
-            return new BigDecimal(value).toPlainString();
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
 }

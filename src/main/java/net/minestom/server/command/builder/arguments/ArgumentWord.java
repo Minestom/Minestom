@@ -1,11 +1,11 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,12 +18,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ArgumentWord extends Argument<String> {
 
-    public static final int SPACE_ERROR = 1;
-    public static final int RESTRICTION_ERROR = 2;
-
     protected String[] restrictions;
 
-    public ArgumentWord(String id) {
+    public ArgumentWord(@NotNull String id) {
         super(id);
     }
 
@@ -51,22 +48,21 @@ public class ArgumentWord extends Argument<String> {
         return this;
     }
 
-    @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (input.contains(StringUtils.SPACE))
-            throw new ArgumentSyntaxException("Word cannot contain space character", input, SPACE_ERROR);
+    public @NotNull String parse(@NotNull StringReader input) throws CommandException {
+        int pos = input.position();
+        String result = input.readUnquotedString();
 
-        // Check restrictions (acting as literal)
-        if (hasRestrictions()) {
-            for (String r : restrictions) {
-                if (input.equals(r))
-                    return input;
+        if (hasRestrictions()){
+            for (String restriction : restrictions){
+                if (result.equals(restriction)){
+                    return result;
+                }
             }
-            throw new ArgumentSyntaxException("Word needs to be in the restriction list", input, RESTRICTION_ERROR);
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), pos);
         }
 
-        return input;
+        return result;
     }
 
     @Override
@@ -76,7 +72,7 @@ public class ArgumentWord extends Argument<String> {
             // Create a primitive array for mapping
             DeclareCommandsPacket.Node[] nodes = new DeclareCommandsPacket.Node[this.restrictions.length];
 
-            // Create a node for each restrictions as literal
+            // Create a node for each restriction as a literal
             for (int i = 0; i < nodes.length; i++) {
                 DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
 
@@ -94,7 +90,7 @@ public class ArgumentWord extends Argument<String> {
             argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
                 packetWriter.writeVarInt(0); // Single word
             });
-            nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+            nodeMaker.addNodes(argumentNode);
         }
     }
 

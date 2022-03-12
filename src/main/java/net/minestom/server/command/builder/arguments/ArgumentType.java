@@ -1,7 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -11,7 +14,10 @@ import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVe
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.parser.ArgumentParser;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Convenient class listing all the basics {@link Argument}.
@@ -23,86 +29,98 @@ public class ArgumentType {
     /**
      * @see ArgumentLiteral
      */
-    public static ArgumentLiteral Literal(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentLiteral Literal(@NotNull String id) {
         return new ArgumentLiteral(id);
     }
 
     /**
      * @see ArgumentGroup
      */
-    public static ArgumentGroup Group(@NotNull String id, @NotNull Argument<?>... arguments) {
+    @Contract("_, _ -> new")
+    public static @NotNull ArgumentGroup Group(@NotNull String id, @NotNull List<Argument<?>> arguments) {
         return new ArgumentGroup(id, arguments);
     }
 
     /**
      * @see ArgumentLoop
      */
+    @Contract("_, _ -> new")
     @SafeVarargs
-    public static <T> ArgumentLoop<T> Loop(@NotNull String id, @NotNull Argument<T>... arguments) {
+    public static <T> @NotNull ArgumentLoop<T> Loop(@NotNull String id, @NotNull Argument<T>... arguments) {
         return new ArgumentLoop<>(id, arguments);
     }
 
     /**
      * @see ArgumentBoolean
      */
-    public static ArgumentBoolean Boolean(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentBoolean Boolean(@NotNull String id) {
         return new ArgumentBoolean(id);
     }
 
     /**
      * @see ArgumentInteger
      */
-    public static ArgumentInteger Integer(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentInteger Integer(@NotNull String id) {
         return new ArgumentInteger(id);
     }
 
     /**
      * @see ArgumentDouble
      */
-    public static ArgumentDouble Double(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentDouble Double(@NotNull String id) {
         return new ArgumentDouble(id);
     }
 
     /**
      * @see ArgumentFloat
      */
-    public static ArgumentFloat Float(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentFloat Float(@NotNull String id) {
         return new ArgumentFloat(id);
     }
 
     /**
      * @see ArgumentString
      */
-    public static ArgumentString String(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentString String(@NotNull String id) {
         return new ArgumentString(id);
     }
 
     /**
      * @see ArgumentWord
      */
-    public static ArgumentWord Word(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentWord Word(@NotNull String id) {
         return new ArgumentWord(id);
     }
 
     /**
      * @see ArgumentStringArray
      */
-    public static ArgumentStringArray StringArray(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentStringArray StringArray(@NotNull String id) {
         return new ArgumentStringArray(id);
     }
 
     /**
      * @see ArgumentCommand
      */
-    public static ArgumentCommand Command(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentCommand Command(@NotNull String id) {
         return new ArgumentCommand(id);
     }
 
     /**
      * @see ArgumentEnum
      */
+    @Contract("_, _ -> new")
     @SuppressWarnings("rawtypes")
-    public static <E extends Enum> ArgumentEnum<E> Enum(@NotNull String id, @NotNull Class<E> enumClass) {
+    public static <E extends Enum> @NotNull ArgumentEnum<E> Enum(@NotNull String id, @NotNull Class<E> enumClass) {
         return new ArgumentEnum<>(id, enumClass);
     }
 
@@ -111,133 +129,152 @@ public class ArgumentType {
     /**
      * @see ArgumentColor
      */
-    public static ArgumentColor Color(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentColor Color(@NotNull String id) {
         return new ArgumentColor(id);
     }
 
     /**
      * @see ArgumentTime
      */
-    public static ArgumentTime Time(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentTime Time(@NotNull String id) {
         return new ArgumentTime(id);
     }
 
     /**
      * @see ArgumentEnchantment
      */
-    public static ArgumentEnchantment Enchantment(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentEnchantment Enchantment(@NotNull String id) {
         return new ArgumentEnchantment(id);
     }
 
     /**
      * @see ArgumentParticle
      */
-    public static ArgumentParticle Particle(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentParticle Particle(@NotNull String id) {
         return new ArgumentParticle(id);
     }
 
     /**
      * @see ArgumentResourceLocation
      */
-    public static ArgumentResourceLocation ResourceLocation(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentResourceLocation ResourceLocation(@NotNull String id) {
         return new ArgumentResourceLocation(id);
     }
 
     /**
      * @see ArgumentPotionEffect
      */
-    public static ArgumentPotionEffect Potion(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentPotionEffect Potion(@NotNull String id) {
         return new ArgumentPotionEffect(id);
     }
 
     /**
      * @see ArgumentEntityType
      */
-    public static ArgumentEntityType EntityType(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentEntityType EntityType(@NotNull String id) {
         return new ArgumentEntityType(id);
     }
 
     /**
      * @see ArgumentBlockState
      */
-    public static ArgumentBlockState BlockState(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentBlockState BlockState(@NotNull String id) {
         return new ArgumentBlockState(id);
     }
 
     /**
      * @see ArgumentIntRange
      */
-    public static ArgumentIntRange IntRange(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentIntRange IntRange(@NotNull String id) {
         return new ArgumentIntRange(id);
     }
 
     /**
      * @see ArgumentFloatRange
      */
-    public static ArgumentFloatRange FloatRange(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentFloatRange FloatRange(@NotNull String id) {
         return new ArgumentFloatRange(id);
     }
 
     /**
      * @see ArgumentEntity
      */
-    public static ArgumentEntity Entity(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentEntity Entity(@NotNull String id) {
         return new ArgumentEntity(id);
     }
 
     /**
      * @see ArgumentItemStack
      */
-    public static ArgumentItemStack ItemStack(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentItemStack ItemStack(@NotNull String id) {
         return new ArgumentItemStack(id);
     }
 
     /**
      * @see ArgumentComponent
      */
-    public static ArgumentComponent Component(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentComponent Component(@NotNull String id) {
         return new ArgumentComponent(id);
     }
 
     /**
      * @see ArgumentUUID
      */
-    public static ArgumentUUID UUID(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentUUID UUID(@NotNull String id) {
         return new ArgumentUUID(id);
     }
 
     /**
      * @see ArgumentNbtTag
      */
-    public static ArgumentNbtTag NBT(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentNbtTag NBT(@NotNull String id) {
         return new ArgumentNbtTag(id);
     }
 
     /**
      * @see ArgumentNbtCompoundTag
      */
-    public static ArgumentNbtCompoundTag NbtCompound(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentNbtCompoundTag NbtCompound(@NotNull String id) {
         return new ArgumentNbtCompoundTag(id);
     }
 
     /**
      * @see ArgumentRelativeBlockPosition
      */
-    public static ArgumentRelativeBlockPosition RelativeBlockPosition(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentRelativeBlockPosition RelativeBlockPosition(@NotNull String id) {
         return new ArgumentRelativeBlockPosition(id);
     }
 
     /**
      * @see ArgumentRelativeVec3
      */
-    public static ArgumentRelativeVec3 RelativeVec3(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentRelativeVec3 RelativeVec3(@NotNull String id) {
         return new ArgumentRelativeVec3(id);
     }
 
     /**
      * @see ArgumentRelativeVec2
      */
-    public static ArgumentRelativeVec2 RelativeVec2(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentRelativeVec2 RelativeVec2(@NotNull String id) {
         return new ArgumentRelativeVec2(id);
     }
 
@@ -256,7 +293,8 @@ public class ArgumentType {
     /**
      * @see ArgumentLong
      */
-    public static ArgumentLong Long(@NotNull String id) {
+    @Contract("_ -> new")
+    public static @NotNull ArgumentLong Long(@NotNull String id) {
         return new ArgumentLong(id);
     }
 
@@ -264,8 +302,9 @@ public class ArgumentType {
      * @see ArgumentEntity
      * @deprecated use {@link #Entity(String)}
      */
+    @Contract("_ -> new")
     @Deprecated
-    public static ArgumentEntity Entities(@NotNull String id) {
+    public static @NotNull ArgumentEntity Entities(@NotNull String id) {
         return new ArgumentEntity(id);
     }
 }

@@ -1,15 +1,13 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
-
-import java.io.StringReader;
 
 /**
  * Argument used to retrieve a {@link NBT} based object, can be any kind of tag like
@@ -20,20 +18,21 @@ import java.io.StringReader;
  */
 public class ArgumentNbtTag extends Argument<NBT> {
 
-    public static final int INVALID_NBT = 1;
-
-    public ArgumentNbtTag(String id) {
-        super(id, true);
+    public ArgumentNbtTag(@NotNull String id) {
+        super(id);
     }
 
-    @NotNull
     @Override
-    public NBT parse(@NotNull String input) throws ArgumentSyntaxException {
-        try {
-            return new SNBTParser(new StringReader(input)).parse();
-        } catch (NBTException e) {
-            throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
+    public @NotNull NBT parse(@NotNull StringReader input) throws CommandException {
+        @SuppressWarnings("deprecation")
+        NBT nbt = NBTUtils.readSNBT(input);
+
+        // FIXME: Throw an exception that's more accurate (ideally once Hephaistos adds partial reading)
+        if (nbt == null) {
+            throw CommandException.COMMAND_UNKNOWN_ARGUMENT.generateException(input.all(), input.position());
         }
+
+        return nbt;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:nbt_tag";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

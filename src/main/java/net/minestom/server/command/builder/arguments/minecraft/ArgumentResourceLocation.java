@@ -1,27 +1,22 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.StringReader;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.exception.CommandException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-public class ArgumentResourceLocation extends Argument<String> {
-
-    public static final int SPACE_ERROR = 1;
+public class ArgumentResourceLocation extends Argument<NamespaceID> {
 
     public ArgumentResourceLocation(@NotNull String id) {
         super(id);
     }
 
-    @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (input.contains(StringUtils.SPACE))
-            throw new ArgumentSyntaxException("Resource location cannot contain space character", input, SPACE_ERROR);
-
-        return input;
+    public @NotNull NamespaceID parse(@NotNull StringReader input) throws CommandException {
+        return input.readNamespaceID();
     }
 
     @Override
@@ -29,7 +24,7 @@ public class ArgumentResourceLocation extends Argument<String> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:resource_location";
 
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(argumentNode);
     }
 
     @Override

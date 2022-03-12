@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
+import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,32 +12,30 @@ public abstract class SimpleCommand extends Command {
 
         setCondition(this::hasAccess);
 
-        setDefaultExecutor((sender, context) ->
-                process(sender, context.getCommandName(), new String[0]));
+        setDefaultExecutor((origin, context) -> process(origin, context.getMessage(), context.getStartingPosition()));
 
-        final var params = ArgumentType.StringArray("params");
-        addSyntax((sender, context) ->
-                process(sender, context.getCommandName(), context.get(params)), params);
+        final var params = ArgumentType.String("params").setReadType(ArgumentString.ReadType.GREEDY);
+        addSyntax((origin, context) -> process(origin, context.getMessage(), context.getStartingPosition()), params);
     }
 
     /**
-     * Called when the command is executed by a {@link CommandSender}.
+     * Called when the command is executed.
      *
-     * @param sender  the sender which executed the command
-     * @param command the command name used
-     * @param args    an array containing all the args (split by space char)
-     * @return true when the command is successful, false otherwise
+     * @param origin the origin of the command
+     * @param command the entire string that is the command
+     * @param startingPosition the position in the {@code command} argument where the parsing started
+     * @return true if the command was successfully executed, otherwise false
      */
-    public abstract boolean process(@NotNull CommandSender sender, @NotNull String command, @NotNull String[] args);
+    public abstract boolean process(@NotNull CommandOrigin origin, @NotNull String command, int startingPosition);
 
     /**
-     * Called to know if a player has access to the command.
+     * Used to know if the sender has access to the command.
      *
-     * @param sender        the command sender to check the access
-     * @param commandString the raw command string,
-     *                      null if this is an access request
-     * @return true if the player has access to the command, false otherwise
+     * @param origin the origin of the command
+     * @param command the entire string that is the command
+     * @param startingPosition the position in the {@code command} argument where the parsing started
+     * @return true if the sender can run the command, otherwise false
      */
-    public abstract boolean hasAccess(@NotNull CommandSender sender, @Nullable String commandString);
+    public abstract boolean hasAccess(@NotNull CommandOrigin origin, @Nullable String command, int startingPosition);
 
 }

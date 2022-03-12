@@ -1,109 +1,215 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.CommandOrigin;
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.CommandException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a {@link Command} ready to be executed (already parsed).
- */
 public class ParsedCommand {
 
-    // Command
-    protected List<Command> parents;
-    protected Command command;
-    protected String commandString;
+    private Command command;
+    private List<Command> parents;
+    private CommandSyntax syntax;
+    private String message;
+    private Map<String, Object> argumentMap;
+    private int readerPosition;
+    private int argumentNumber;
+    private CommandException exception;
+    private boolean success;
+    private int startingPosition;
 
-    // Command Executor
-    protected CommandSyntax syntax;
+    public @NotNull Command getCommand() {
+        return command;
+    }
 
-    protected CommandExecutor executor;
-    protected CommandContext context;
+    public @UnknownNullability List<Command> getParents() {
+        return parents;
+    }
 
-    // Argument Callback
-    protected ArgumentCallback callback;
-    protected ArgumentSyntaxException argumentSyntaxException;
+    public @Nullable CommandSyntax getSyntax() {
+        return syntax;
+    }
 
-    /**
-     * Executes the command for the given source.
-     * <p>
-     * The command will not be executed if {@link Command#getCondition()}
-     * is not validated.
-     *
-     * @param source the command source
-     * @return the command data, null if none
-     */
-    public @Nullable CommandData execute(@NotNull CommandSender source) {
-        // Global listener
-        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString)), commandString);
-        // Command condition check
-        {
-            // Parents
-            if (parents != null) {
-                for (Command parent : parents) {
-                    final CommandCondition condition = parent.getCondition();
-                    if (condition != null) {
-                        final boolean result = condition.canUse(source, commandString);
-                        if (!result) return null;
-                    }
-                }
-            }
-            // Self
-            final CommandCondition condition = command.getCondition();
-            if (condition != null) {
-                final boolean result = condition.canUse(source, commandString);
-                if (!result) return null;
-            }
+    public @NotNull String getMessage() {
+        return message;
+    }
+
+    public @Nullable Map<String, Object> getArgumentMap() {
+        return argumentMap;
+    }
+
+    public int getReaderPosition() {
+        return readerPosition;
+    }
+
+    public int getArgumentNumber() {
+        return argumentNumber;
+    }
+
+    public @UnknownNullability CommandException getException() {
+        return exception;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public int getStartingPosition() {
+        return startingPosition;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setCommand(@NotNull Command command) {
+        this.command = command;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setParents(@NotNull List<Command> parents) {
+        this.parents = parents;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setSyntax(@Nullable CommandSyntax syntax) {
+        this.syntax = syntax;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setMessage(@NotNull String message) {
+        this.message = message;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setArgumentMap(@Nullable Map<String, Object> argumentMap) {
+        this.argumentMap = argumentMap;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setReaderPosition(int readerPosition) {
+        this.readerPosition = readerPosition;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setArgumentNumber(int argumentNumber) {
+        this.argumentNumber = argumentNumber;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setException(@Nullable CommandException exception) {
+        this.exception = exception;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setSuccess(boolean success) {
+        this.success = success;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ParsedCommand setStartingPosition(int startingPosition) {
+        this.startingPosition = startingPosition;
+        return this;
+    }
+
+    @Contract(" -> new")
+    public @NotNull CommandContext toContext() {
+        return new CommandContext(this.message, this.command, this.syntax, this.argumentMap, new CommandData(), this.exception, this.startingPosition);
+    }
+
+    public @Nullable CommandData execute(@NotNull CommandOrigin origin) {
+        CommandContext context = toContext();
+
+        command.globalListener(origin, context);
+
+        if (command.getCondition() != null && !command.getCondition().canUse(origin, message, startingPosition)) {
+            return null;
         }
-        // Condition is respected
-        if (executor != null) {
-            // An executor has been found
 
-            if (syntax != null) {
-                // The executor is from a syntax
-                final CommandCondition commandCondition = syntax.getCommandCondition();
-                if (commandCondition == null || commandCondition.canUse(source, commandString)) {
-                    context.retrieveDefaultValues(syntax.getDefaultValuesMap());
+        // If it's a failure, look for the correct argument. If there is none, just use the default executor. If there
+        // is no default executor at this point, there is no other way to notify the command of this failed execution.
+        if (!isSuccess()) {
+            if (exception != null && syntax != null && argumentNumber >= 0 && argumentNumber < syntax.getArguments().size()) {
+                Argument<?> exactArgument = syntax.getArguments().get(argumentNumber);
+                if (exactArgument.getCallback() != null) {
                     try {
-                        executor.apply(source, context);
+                        exactArgument.getCallback().apply(origin, exception);
                     } catch (Throwable throwable) {
                         MinecraftServer.getExceptionManager().handleException(throwable);
                     }
+                    return context.getData();
                 }
-            } else {
-                // The executor is probably the default one
+            }
+            if (command.getDefaultExecutor() != null) {
                 try {
-                    executor.apply(source, context);
+                    command.getDefaultExecutor().apply(origin, context);
                 } catch (Throwable throwable) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
                 }
             }
-        } else if (callback != null && argumentSyntaxException != null) {
-            // No syntax has been validated but the faulty argument with a callback has been found
-            // Execute the faulty argument callback
-            callback.apply(source, argumentSyntaxException);
+            return context.getData();
         }
 
-        if (context == null) {
-            // Argument callbacks cannot return data
-            return null;
+        if (syntax == null) {
+            if (command.getDefaultExecutor() != null) {
+                try {
+                    command.getDefaultExecutor().apply(origin, context);
+                } catch (Throwable throwable) {
+                    MinecraftServer.getExceptionManager().handleException(throwable);
+                }
+            }
+        } else {
+            try {
+                syntax.getExecutor().apply(origin, context);
+            } catch (Throwable throwable) {
+                MinecraftServer.getExceptionManager().handleException(throwable);
+            }
         }
 
-        return context.getReturnData();
+        return context.getData();
     }
 
-    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
-        ParsedCommand parsedCommand = new ParsedCommand();
-        parsedCommand.command = command;
-        parsedCommand.commandString = input;
-        parsedCommand.executor = command.getDefaultExecutor();
-        parsedCommand.context = new CommandContext(input);
-        return parsedCommand;
+    @Override
+    public String toString() {
+        return "ParsedCommand[" +
+                "command=" + command +
+                ", syntax=" + syntax +
+                ", message='" + message + '\'' +
+                ", argumentMap=" + argumentMap +
+                ", readerPosition=" + readerPosition +
+                ", argumentNumber=" + argumentNumber +
+                ", exception=" + exception +
+                ", success=" + success +
+                "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParsedCommand that = (ParsedCommand) o;
+        return readerPosition == that.readerPosition && argumentNumber == that.argumentNumber &&
+                success == that.success && Objects.equals(command, that.command) &&
+                Objects.equals(syntax, that.syntax) && Objects.equals(message, that.message) &&
+                Objects.equals(argumentMap, that.argumentMap) && Objects.equals(exception, that.exception);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(command, syntax, message, argumentMap, readerPosition, argumentNumber, exception, success);
     }
 }
