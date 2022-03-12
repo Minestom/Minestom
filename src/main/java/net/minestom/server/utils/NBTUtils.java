@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

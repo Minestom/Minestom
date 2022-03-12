@@ -25,7 +25,7 @@ public class CommandException extends RuntimeException {
 
     /**
      * A static translatable component that represents the message that appears after incorrect command syntax, e.g.
-     * "/gamemode test<--[HERE]". It's automatically styled to be red and italicised.
+     * "/gamemode test&lt;--[HERE]". It's automatically styled to be red and italicised.
      */
     public static final @NotNull Component CONTEXT_HERE = Component.translatable("command.context.here", NamedTextColor.RED, TextDecoration.ITALIC);
 

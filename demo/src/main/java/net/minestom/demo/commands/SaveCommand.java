@@ -1,7 +1,7 @@
 package net.minestom.demo.commands;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.CommandOrigin;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class SaveCommand extends Command {
         addSyntax(this::execute);
     }
 
-    private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
+    private void execute(@NotNull CommandOrigin commandOrigin, @NotNull CommandContext commandContext) {
         for(var instance : MinecraftServer.getInstanceManager().getInstances()) {
             CompletableFuture<Void> instanceSave = instance.saveInstance().thenCompose(v -> instance.saveChunksToStorage());
             try {
@@ -28,6 +28,6 @@ public class SaveCommand extends Command {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }
-        commandSender.sendMessage("Saving done!");
+        commandOrigin.sender().sendMessage("Saving done!");
     }
 }

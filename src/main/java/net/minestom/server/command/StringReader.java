@@ -38,7 +38,7 @@ public final class StringReader implements FixedStringReader {
 
     /**
      * @return true if the character is an underscore ('_'), a plus ('+'), a valid number according to {@link
-     * #isValidNumber(int)}, or a valid letter according to {@link #isValidLetter(int)
+     * #isValidNumber(int)}, or a valid letter according to {@link #isValidLetter(int)}
      */
     public static boolean isValidUnquotedCharacter(int c) {
         return c == '_' || c == '+' || isValidNumber(c) || isValidLetter(c);

@@ -22,20 +22,11 @@ public class TabCompleteListener {
 
         Suggestion suggestion = MinecraftServer.getCommandManager().getDispatcher().tabComplete(CommandOrigin.ofPlayer(player), reader);
         if (suggestion != null) {
-            TabCompletePacket tabCompletePacket = new TabCompletePacket();
-            tabCompletePacket.transactionId = packet.transactionId();
-            tabCompletePacket.start = suggestion.getStart();
-            tabCompletePacket.length = suggestion.getLength();
-            tabCompletePacket.matches = suggestion.getEntries()
-                    .stream()
-                    .map(suggestionEntry -> {
-                        TabCompletePacket.Match match = new TabCompletePacket.Match();
-                        match.match = suggestionEntry.entry();
-                        match.hasTooltip = suggestionEntry.tooltip() != null;
-                        match.tooltip = suggestionEntry.tooltip();
-                        return match;
-                    }).toArray(TabCompletePacket.Match[]::new);
-            player.getPlayerConnection().sendPacket(tabCompletePacket);
+            player.getPlayerConnection().sendPacket(
+                    new TabCompletePacket(packet.transactionId(), suggestion.getStart(), suggestion.getLength(),
+                            suggestion.getEntries().stream().map(entry -> new TabCompletePacket.Match(entry.entry(), entry.tooltip())).toList()
+                    )
+            );
         }
     }
 
