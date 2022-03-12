@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
@@ -7,6 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
@@ -14,6 +16,7 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -298,5 +301,73 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     protected void unload() {
         this.loaded = false;
+    }
+
+    @ApiStatus.Internal
+    void postLoad() {
+        applyPlacementRulesToOwnBlocks();
+        applyPlacementRulesToCornerBlocksOfNeighbourChunks();
+    }
+
+    private void applyPlacementRulesToOwnBlocks() {
+        final int minY = getMinSection() * Chunk.CHUNK_SECTION_SIZE;
+        final int maxY = getMaxSection() * Chunk.CHUNK_SECTION_SIZE;
+        for (int x = 0; x < Chunk.CHUNK_SIZE_X; ++x) {
+            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; ++z) {
+                for (int y = minY; y < maxY; ++y) {
+                    applyPlacementRule(x, y, z);
+                }
+            }
+        }
+    }
+
+    private void applyPlacementRulesToCornerBlocksOfNeighbourChunks() {
+        final int myMinY = getMinSection() * Chunk.CHUNK_SECTION_SIZE;
+        final int myMaxY = getMaxSection() * Chunk.CHUNK_SECTION_SIZE;
+        for (int delta = -1; delta <= 1; ++delta) {
+            if (delta == 0) {
+                continue;
+            }
+            final Chunk nei = instance.getChunk(chunkX + delta, chunkZ);
+            if (nei == null) {
+                continue;
+            }
+            final int minY = Math.max(myMinY, nei.getMinSection() * Chunk.CHUNK_SECTION_SIZE);
+            final int maxY = Math.min(myMaxY, nei.getMaxSection() * Chunk.CHUNK_SECTION_SIZE);
+            final int x = Chunk.CHUNK_SIZE_X - 1;
+            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; ++z) {
+                for (int y = minY; y < maxY; ++y) {
+                    nei.applyPlacementRule(x, y, z);
+                }
+            }
+        }
+        for (int delta = -1; delta <= 1; ++delta) {
+            if (delta == 0) {
+                continue;
+            }
+            final Chunk nei = instance.getChunk(chunkX, chunkZ + delta);
+            if (nei == null) {
+                continue;
+            }
+            final int minY = Math.max(myMinY, nei.getMinSection() * Chunk.CHUNK_SECTION_SIZE);
+            final int maxY = Math.min(myMaxY, nei.getMaxSection() * Chunk.CHUNK_SECTION_SIZE);
+            final int z = Chunk.CHUNK_SIZE_Z - 1;
+            for (int x = 0; x < Chunk.CHUNK_SIZE_X; ++x) {
+                for (int y = minY; y < maxY; ++y) {
+                    nei.applyPlacementRule(x, y, z);
+                }
+            }
+        }
+    }
+
+    private void applyPlacementRule(int relX, int relY, int relZ) {
+        final Block block = getBlock(relX, relY, relZ);
+        final BlockPlacementRule placementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
+        if (placementRule != null) {
+            setBlock(
+                    relX, relY, relZ,
+                    placementRule.blockUpdate(instance, new Vec((chunkX << 4) | relX, relY, (chunkZ << 4) | relZ), block)
+            );
+        }
     }
 }
