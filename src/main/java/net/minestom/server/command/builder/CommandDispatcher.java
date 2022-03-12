@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * The class responsible for executing commands. This should generally be wrapped by a CommandManager to manage things
  * like synchronization, extra parsing, more features, etc.
@@ -125,8 +124,8 @@ public class CommandDispatcher {
         if (command == null) {
             return null;
         }
-
-        command = roamSubcommands(command, reader);
+        List<Command> parents = new ArrayList<>();
+        command = roamSubcommands(command, reader, parents);
         if (!reader.canRead()) {
             return null;
         }
@@ -138,7 +137,8 @@ public class CommandDispatcher {
 
         int start = reader.position();
         ParsedCommand primaryContext = new ParsedCommand();
-        primaryContext.setCommand(command).setMessage(reader.all()).setReaderPosition(-1).setArgumentNumber(-1).setStartingPosition(start);
+        primaryContext.setCommand(command).setMessage(reader.all()).setReaderPosition(-1).setArgumentNumber(-1)
+                .setStartingPosition(start).setParents(parents);
         final Map<String, Object> temporaryArgumentMap = new HashMap<>();
 
         SyntaxLoop:
@@ -252,9 +252,10 @@ public class CommandDispatcher {
             return new CommandResult(CommandResult.Type.UNKNOWN_COMMAND, reader.all(), position);
         }
 
-        command = roamSubcommands(command, reader);
+        List<Command> parents = new ArrayList<>();
+        command = roamSubcommands(command, reader, parents);
 
-        ParsedCommand parsedCommand = parseSyntaxes(command.getSyntaxes(), reader).setCommand(command);
+        ParsedCommand parsedCommand = parseSyntaxes(command.getSyntaxes(), reader).setCommand(command).setParents(parents);
 
         if (parsedCommand.getSyntax() != null && parsedCommand.getSyntax().getDefaultValuesMap() != null) {
             if (parsedCommand.getArgumentMap() == null) {
@@ -357,38 +358,23 @@ public class CommandDispatcher {
         return primaryContext;
     }
 
-    public @NotNull Command traverseSubcommands(@NotNull StringReader reader, @NotNull Command startingCommand) {
-        Command newCommand = findValidSubcommand(reader, startingCommand);
-
-        if (newCommand == null ||
-                startingCommand.getSubcommands().isEmpty() ||
-                !reader.canRead() ||
-                !StringReader.isValidWhitespace(reader.peek())) {
-            return startingCommand;
-        }
-
-        return roamSubcommands(startingCommand, reader);
-    }
-
     // Requires at least one whitespace character that occurs at the start of the reader
-    public @NotNull Command roamSubcommands(@NotNull Command startingCommand, @NotNull StringReader reader) {
-        if (startingCommand.getSubcommands().isEmpty() ||
-                !reader.canRead() ||
-                !StringReader.isValidWhitespace(reader.peek())) {
-            return startingCommand;
+    private @NotNull Command roamSubcommands(@NotNull Command command, @NotNull StringReader reader, @NotNull List<Command> currentParents) {
+        if (command.getSubcommands().isEmpty() || !reader.canRead() || !StringReader.isValidWhitespace(reader.peek())) {
+            return command;
         }
         int start = reader.position();
-
         reader.skipWhitespace();
 
-        Command newCommand = findValidSubcommand(reader, startingCommand);
+        Command newCommand = findValidSubcommand(reader, command);
 
         if (newCommand == null) {
             reader.position(start);
-            return startingCommand;
+            return command;
         }
 
-        return roamSubcommands(newCommand, reader);
+        currentParents.add(newCommand);
+        return roamSubcommands(command, reader, currentParents);
     }
 
     private @Nullable Command findValidSubcommand(@NotNull StringReader reader, @NotNull Command currentCommand) {
