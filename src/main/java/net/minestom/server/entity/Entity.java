@@ -629,6 +629,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private void touchTick() {
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
+        final BoundingBox boundingBox = this.boundingBox;
+        final Instance instance = this.instance;
+        Chunk chunk = currentChunk;
+
         final int minX = (int) Math.floor(boundingBox.minX() + position.x());
         final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
         final int minY = (int) Math.floor(boundingBox.minY() + position.y());
@@ -639,19 +643,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
-                    if (!ChunkUtils.isLoaded(chunk))
-                        continue;
+                    chunk = ChunkUtils.retrieve(instance, chunk, x, z);
+                    if (!ChunkUtils.isLoaded(chunk)) continue;
                     final Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.CACHED);
-                    if (block == null)
-                        continue;
+                    if (block == null) continue;
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
                         final double triggerDelta = 0.01;
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Point blockPos = new Pos(x * (1 - triggerDelta), y * (1 - triggerDelta), z * (1 - triggerDelta));
                         if (block.registry().collisionShape().intersectBox(position.sub(blockPos), boundingBox)) {
-                            // TODO: replace with check with custom block bounding box
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
                     }

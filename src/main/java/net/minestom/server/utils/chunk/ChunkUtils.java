@@ -79,8 +79,8 @@ public final class ChunkUtils {
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);
-        final boolean sameChunk = originChunk.getChunkX() == chunkX &&
-                originChunk.getChunkZ() == chunkZ;
+        final boolean sameChunk = originChunk != null &&
+                originChunk.getChunkX() == chunkX && originChunk.getChunkZ() == chunkZ;
         return sameChunk ? originChunk : instance.getChunk(chunkX, chunkZ);
     }
 
