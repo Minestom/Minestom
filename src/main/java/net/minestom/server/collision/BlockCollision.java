@@ -265,7 +265,6 @@ final class BlockCollision {
             checkBlock = Block.STONE; // Generic full block
         }
         boolean hitBlock = false;
-
         if (checkBlock.isSolid()) {
             final Vec blockPos = new Vec(blockX, blockY, blockZ);
             hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
