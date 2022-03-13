@@ -622,6 +622,23 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsSmallMoveC2E(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 43, 1, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.51, 42.50, 0.51)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
+        assertEqualsPoint(new Pos(1.08, 43, 1.08), res.newPosition());
+    }
+
+    @Test
     public void entityPhysicsCheckNoCollision(Env env) {
         var instance = env.createFlatInstance();
 
