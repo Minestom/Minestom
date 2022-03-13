@@ -7,9 +7,6 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 final class BlockCollision {
     // Minimum move amount, minimum final velocity
     private static final double MIN_DELTA = 0.001;
@@ -131,7 +128,6 @@ final class BlockCollision {
                                        @NotNull Vec entityVelocity, @NotNull Pos entityPosition,
                                        @NotNull Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult) {
-        final var faces = boundingBox.faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
@@ -176,7 +172,7 @@ final class BlockCollision {
                 return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, entityVelocity, null, Block.AIR);
 
         // Query faces to get the points needed for collision
-        Vec[] allFaces = calculateFaces(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())), entity.getBoundingBox());
+        Vec[] allFaces = calculateFaces(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())), boundingBox);
 
         PhysicsResult res = handlePhysics(boundingBox, remainingMove, entityPosition, getter, allFaces, finalResult);
 
@@ -209,7 +205,7 @@ final class BlockCollision {
             // If the entity isn't moving, break
             if (res.newVelocity().isZero()) break;
 
-            allFaces = calculateFaces(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())), entity.getBoundingBox());
+            allFaces = calculateFaces(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())), boundingBox);
 
             res = handlePhysics(boundingBox, res.newVelocity(), res.newPosition(), getter, allFaces, finalResult);
         }
