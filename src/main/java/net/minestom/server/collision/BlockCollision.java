@@ -7,7 +7,7 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 final class BlockCollision {
@@ -15,12 +15,47 @@ final class BlockCollision {
     private static final double MIN_DELTA = 0.001;
 
     private static Vec[] calculateFaces(Vec queryVec, BoundingBox boundingBox) {
-        HashSet<Vec> facePoints = new HashSet<>();
+        // Add 1 because we start at point 0
+        int ceilX = (int) Math.ceil(boundingBox.width()) + 1;
+        int ceilY = (int) Math.ceil(boundingBox.height()) + 1;
+        int ceilZ = (int) Math.ceil(boundingBox.depth()) + 1;
+
+        int pointCount = 0;
+        if (queryVec.x() != 0) pointCount += ceilY * ceilZ;
+        if (queryVec.y() != 0) pointCount += ceilX * ceilZ;
+        if (queryVec.z() != 0) pointCount += ceilX * ceilY;
+
+        // Three edge reduction
+        if (queryVec.x() != 0 && queryVec.y() != 0 && queryVec.z() != 0) {
+            pointCount -= ceilX + ceilY + ceilZ;
+
+            // inclusion exclusion principle
+            pointCount++;
+        } else if (queryVec.x() != 0 && queryVec.y() != 0) { // Two edge reduction
+            pointCount -= ceilZ;
+        } else if (queryVec.y() != 0 && queryVec.z() != 0) { // Two edge reduction
+            pointCount -= ceilX;
+        } else if (queryVec.x() != 0 && queryVec.z() != 0) { // Two edge reduction
+            pointCount -= ceilY;
+        }
+
+        Vec[] facePoints = new Vec[pointCount];
+        int insertIndex = 0;
 
         // X -> Y x Z
         if (queryVec.x() != 0) {
-            for (int i = 0; i <= Math.ceil(boundingBox.depth()); ++i)
-                for (int j = 0; j <= Math.ceil(boundingBox.height()); ++j) {
+            int startIOffset = 0, endIOffset = 0, startJOffset = 0, endJOffset = 0;
+
+            // Y handles XY edge
+            if (queryVec.y() < 0) startJOffset = 1;
+            if (queryVec.y() > 0) endJOffset = 1;
+
+            // Z handles XZ edge
+            if (queryVec.z() < 0) startIOffset = 1;
+            if (queryVec.z() > 0) endIOffset = 1;
+
+            for (int i = startIOffset; i <= Math.ceil(boundingBox.depth()) - endIOffset; ++i)
+                for (int j = startJOffset; j <= Math.ceil(boundingBox.height()) - endJOffset; ++j) {
                     double cellI = i;
                     double cellJ = j;
                     double cellK = queryVec.x() < 0 ? 0 : boundingBox.width();
@@ -33,13 +68,19 @@ final class BlockCollision {
                     cellK += boundingBox.minX();
 
                     Vec p = new Vec(cellK, cellJ, cellI);
-                    facePoints.add(p);
+                    facePoints[insertIndex++] = p;
                 }
         }
 
         // Y -> X x Z
         if (queryVec.y() != 0) {
-            for (int i = 0; i <= Math.ceil(boundingBox.depth()); ++i)
+            int startJOffset = 0, endJOffset = 0;
+
+            // Z handles YZ edge
+            if (queryVec.z() < 0) startJOffset = 1;
+            if (queryVec.z() > 0) endJOffset = 1;
+
+            for (int i = startJOffset; i <= Math.ceil(boundingBox.depth()) - endJOffset; ++i)
                 for (int j = 0; j <= Math.ceil(boundingBox.width()); ++j) {
                     double cellI = i;
                     double cellJ = j;
@@ -53,7 +94,7 @@ final class BlockCollision {
                     cellK += boundingBox.minY();
 
                     Vec p = new Vec(cellJ, cellK, cellI);
-                    facePoints.add(p);
+                    facePoints[insertIndex++] = p;
                 }
         }
 
@@ -73,11 +114,11 @@ final class BlockCollision {
                     cellK += boundingBox.minZ();
 
                     Vec p = new Vec(cellJ, cellI, cellK);
-                    facePoints.add(p);
+                    facePoints[insertIndex++] = p;
                 }
         }
 
-        return facePoints.toArray(Vec[]::new);
+        return facePoints;
     }
 
     /**
