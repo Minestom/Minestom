@@ -144,42 +144,55 @@ final class BlockCollision {
         double remainingZ = deltaPosition.z();
 
         // If the movement is small we don't need to run the expensive ray casting.
+        // Positions of move less than one can have hardcoded blocks to check for every direction
         if (deltaPosition.length() < 1) {
-            // Go through all points to check. See if the point after the move will be in a new block
-            // If the point after is in a new block that new block needs to be checked, otherwise only check the current block
             for (Vec point : allFaces) {
                 Vec pointBefore = point.add(entityPosition);
                 Vec pointAfter = point.add(entityPosition).add(deltaPosition);
 
+                // Entity can pass through up to 4 blocks. Starting block, Two intermediate blocks, and a final block.
+                // This means we must check every combination of block movements when an entity moves over an axis.
+                // 000, 001, 010, 011, etc.
+                // There are 8 of these combinations
+                // Checks can be limited by checking if we moved across an axis line
+
+                // Pass through (0, 0, 0)
+                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+
                 if (pointBefore.blockX() != pointAfter.blockX()) {
+                    // Pass through (+1, 0, 0)
                     checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
 
-                    if (pointBefore.blockY() != pointAfter.blockY()) {
+                    // Checks for moving through 4 blocks
+                    if (pointBefore.blockY() != pointAfter.blockY())
+                        // Pass through (+1, +1, 0)
                         checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-                    }
-                    if (pointBefore.blockZ() != pointAfter.blockZ()) {
+
+                    if (pointBefore.blockZ() != pointAfter.blockZ())
+                        // Pass through (+1, 0, +1)
                         checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-                    }
                 }
 
                 if (pointBefore.blockY() != pointAfter.blockY()) {
+                    // Pass through (0, +1, 0)
                     checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
 
-                    if (pointBefore.blockZ() != pointAfter.blockZ()) {
+                    // Checks for moving through 4 blocks
+                    if (pointBefore.blockZ() != pointAfter.blockZ())
+                        // Pass through (0, +1, +1)
                         checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-                    }
                 }
 
                 if (pointBefore.blockZ() != pointAfter.blockZ()) {
+                    // Pass through (0, 0, +1)
                     checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
                 }
 
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
-
+                // Pass through (+1, +1, +1)
                 if (pointBefore.blockX() != pointAfter.blockX()
-                        && pointBefore.blockY() != pointAfter.blockY()
-                        && pointBefore.blockZ() != pointAfter.blockZ())
-                    checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                    && pointBefore.blockY() != pointAfter.blockY()
+                    && pointBefore.blockZ() != pointAfter.blockZ())
+                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
             }
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
@@ -253,8 +266,13 @@ final class BlockCollision {
         }
         boolean hitBlock = false;
         final Pos blockPos = new Pos(blockX, blockY, blockZ);
+        System.out.println("Checking " + blockPos);
+
         if (checkBlock.isSolid()) {
             hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
+
+            if (hitBlock)
+                System.out.println("Hit " + blockPos);
         }
         return hitBlock;
     }
