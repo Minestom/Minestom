@@ -211,6 +211,25 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckEdgeClipSmall(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.6999, 42, 0.6999)).join();
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.702, 0, 0.702));
+
+        boolean isFirst = checkPoints(new Pos(1.402, 42, 0.7), res.newPosition());
+        boolean isSecond = checkPoints(new Pos(0.7, 42, 1.402), res.newPosition());
+
+        // First and second are both valid, it depends on the implementation
+        // If x collision is checked first then isFirst will be true
+        // If z collision is checked first then isSecond will be true
+        assertTrue(isFirst || isSecond);
+    }
+
+    @Test
     public void entityPhysicsCheckDoorSubBlockNorth(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "north", "open", "true"));
@@ -428,6 +447,178 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.3, 0, 0));
         assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition());
+    }
+
+    // Checks C include all checks for crossing one intermediate block (3 block checks)
+    @Test
+    public void entityPhysicsSmallMoveC0(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 0, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.7, 42, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, 0.6));
+        assertEqualsPoint(new Pos(1, 42, 1.1), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC1(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 1, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.5, 42, 0.7)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, 0.6));
+        assertEqualsPoint(new Pos(1.1, 42, 1), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC2(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.8, 42, 1.3)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, -0.6));
+        assertEqualsPoint(new Pos(1, 42, 0.7), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC3(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.7, 42, 1.1)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, -0.6));
+        assertEqualsPoint(new Pos(1.3, 42, 1), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC4(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 1, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(1.1, 42, 1.3)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(-0.6, 0, -0.6));
+        assertEqualsPoint(new Pos(1, 42, 0.7), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC5(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 0, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(1.3, 42, 1.1)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(-0.6, 0, -0.6));
+        assertEqualsPoint(new Pos(0.7, 42, 1), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC6(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(1.1, 42, 0.7)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(-0.6, 0, 0.6));
+        assertEqualsPoint(new Pos(1, 42, 1.3), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC7(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 1, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(1.3, 42, 0.8)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(-0.6, 0, 0.6));
+        assertEqualsPoint(new Pos(0.7, 42, 1), res.newPosition());
+    }
+
+    // Checks CE include checks for crossing two intermediate block (4 block checks)
+    @Test
+    public void entityPhysicsSmallMoveC0E(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 43, 0, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.51, 42.51, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
+        assertEqualsPoint(new Pos(1.08, 43, 1.07), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsSmallMoveC1E(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 43, 1, Block.STONE);
+
+        BoundingBox bb = new BoundingBox(0, 0, 0);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(bb);
+
+        entity.setInstance(instance, new Pos(0.50, 42.51, 0.51)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
+        assertEqualsPoint(new Pos(1.07, 43, 1.08), res.newPosition());
     }
 
     @Test
