@@ -7,18 +7,12 @@ import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public final class BoundingBox implements Shape {
     private final double width, height, depth;
     private final Point offset;
-    private Map<Vec, Vec[]> faces;
 
     BoundingBox(double width, double height, double depth, Point offset) {
         this.width = width;
@@ -140,14 +134,6 @@ public final class BoundingBox implements Shape {
         return depth;
     }
 
-    @NotNull Map<Vec, Vec[]> faces() {
-        Map<Vec, Vec[]> faces = this.faces;
-        if (faces == null) {
-            this.faces = faces = retrieveFaces();
-        }
-        return faces;
-    }
-
     public double minX() {
         return relativeStart().x();
     }
@@ -170,109 +156,5 @@ public final class BoundingBox implements Shape {
 
     public double maxZ() {
         return relativeEnd().z();
-    }
-
-    private Vec[] buildSet(Collection<Vec> a) {
-        return a.toArray(Vec[]::new);
-    }
-
-    private Vec[] buildSet(Collection<Vec> a, Collection<Vec> b) {
-        Set<Vec> allFaces = new HashSet<>();
-        Stream.of(a, b).forEach(allFaces::addAll);
-        return allFaces.toArray(Vec[]::new);
-    }
-
-    private Vec[] buildSet(Collection<Vec> a, Collection<Vec> b, Collection<Vec> c) {
-        Set<Vec> allFaces = new HashSet<>();
-        Stream.of(a, b, c).forEach(allFaces::addAll);
-        return allFaces.toArray(Vec[]::new);
-    }
-
-    private Map<Vec, Vec[]> retrieveFaces() {
-        double minX = minX();
-        double maxX = maxX();
-        double minY = minY();
-        double maxY = maxY();
-        double minZ = minZ();
-        double maxZ = maxZ();
-
-        // Calculate steppings for each axis
-        // Start at minimum, increase by step size until we reach maximum
-        // This is done to catch all blocks that are part of that axis
-        // Since this stops before max point is reached, we add the max point after
-        final List<Double> stepsX = IntStream.rangeClosed(0, (int) ((maxX - minX))).mapToDouble(x -> x + minX).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-        final List<Double> stepsY = IntStream.rangeClosed(0, (int) ((maxY - minY))).mapToDouble(x -> x + minY).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-        final List<Double> stepsZ = IntStream.rangeClosed(0, (int) ((maxZ - minZ))).mapToDouble(x -> x + minZ).boxed().collect(Collectors.toCollection(ArrayList<Double>::new));
-
-        stepsX.add(maxX);
-        stepsY.add(maxY);
-        stepsZ.add(maxZ);
-
-        final Set<Vec> bottom = new HashSet<>();
-        final Set<Vec> top = new HashSet<>();
-        final Set<Vec> left = new HashSet<>();
-        final Set<Vec> right = new HashSet<>();
-        final Set<Vec> front = new HashSet<>();
-        final Set<Vec> back = new HashSet<>();
-
-        CartesianProduct.product(stepsX, stepsY).forEach(cross -> {
-            double i = (double) ((List<?>) cross).get(0);
-            double j = (double) ((List<?>) cross).get(1);
-            front.add(new Vec(i, j, minZ));
-            back.add(new Vec(i, j, maxZ));
-        });
-
-        CartesianProduct.product(stepsY, stepsZ).forEach(cross -> {
-            double j = (double) ((List<?>) cross).get(0);
-            double k = (double) ((List<?>) cross).get(1);
-            left.add(new Vec(minX, j, k));
-            right.add(new Vec(maxX, j, k));
-        });
-
-        CartesianProduct.product(stepsX, stepsZ).forEach(cross -> {
-            double i = (double) ((List<?>) cross).get(0);
-            double k = (double) ((List<?>) cross).get(1);
-            bottom.add(new Vec(i, minY, k));
-            top.add(new Vec(i, maxY, k));
-        });
-
-        // X   -1 left    |  1 right
-        // Y   -1 bottom  |  1 top
-        // Z   -1 front   |  1 back
-        var query = new HashMap<Vec, Vec[]>();
-        query.put(new Vec(0, 0, 0), new Vec[0]);
-
-        query.put(new Vec(-1, 0, 0), buildSet(left));
-        query.put(new Vec(1, 0, 0), buildSet(right));
-        query.put(new Vec(0, -1, 0), buildSet(bottom));
-        query.put(new Vec(0, 1, 0), buildSet(top));
-        query.put(new Vec(0, 0, -1), buildSet(front));
-        query.put(new Vec(0, 0, 1), buildSet(back));
-
-        query.put(new Vec(0, -1, -1), buildSet(bottom, front));
-        query.put(new Vec(0, -1, 1), buildSet(bottom, back));
-        query.put(new Vec(0, 1, -1), buildSet(top, front));
-        query.put(new Vec(0, 1, 1), buildSet(top, back));
-
-        query.put(new Vec(-1, -1, 0), buildSet(left, bottom));
-        query.put(new Vec(-1, 1, 0), buildSet(left, top));
-        query.put(new Vec(1, -1, 0), buildSet(right, bottom));
-        query.put(new Vec(1, 1, 0), buildSet(right, top));
-
-        query.put(new Vec(-1, 0, -1), buildSet(left, front));
-        query.put(new Vec(-1, 0, 1), buildSet(left, back));
-        query.put(new Vec(1, 0, -1), buildSet(right, front));
-        query.put(new Vec(1, 0, 1), buildSet(right, back));
-
-        query.put(new Vec(1, 1, 1), buildSet(right, top, back));
-        query.put(new Vec(1, 1, -1), buildSet(right, top, front));
-        query.put(new Vec(1, -1, 1), buildSet(right, bottom, back));
-        query.put(new Vec(1, -1, -1), buildSet(right, bottom, front));
-        query.put(new Vec(-1, 1, 1), buildSet(left, top, back));
-        query.put(new Vec(-1, 1, -1), buildSet(left, top, front));
-        query.put(new Vec(-1, -1, 1), buildSet(left, bottom, back));
-        query.put(new Vec(-1, -1, -1), buildSet(left, bottom, front));
-
-        return query;
     }
 }

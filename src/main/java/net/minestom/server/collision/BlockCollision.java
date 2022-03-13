@@ -7,9 +7,80 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 final class BlockCollision {
     // Minimum move amount, minimum final velocity
     private static final double MIN_DELTA = 0.001;
+
+    private static Vec[] calculateFaces(Vec queryVec, BoundingBox boundingBox) {
+        HashSet<Vec> facePoints = new HashSet<>();
+
+        // X -> Y x Z
+        if (queryVec.x() != 0) {
+            for (int i = 0; i <= Math.ceil(boundingBox.depth()); ++i)
+                for (int j = 0; j <= Math.ceil(boundingBox.height()); ++j) {
+                    double cellI = i;
+                    double cellJ = j;
+                    double cellK = queryVec.x() < 0 ? 0 : boundingBox.width();
+
+                    if (i >= boundingBox.depth()) cellI = boundingBox.depth();
+                    if (j >= boundingBox.height()) cellJ = boundingBox.height();
+
+                    cellI += boundingBox.minZ();
+                    cellJ += boundingBox.minY();
+                    cellK += boundingBox.minX();
+
+                    Vec p = new Vec(cellK, cellJ, cellI);
+                    facePoints.add(p);
+                }
+        }
+
+        // Y -> X x Z
+        if (queryVec.y() != 0) {
+            for (int i = 0; i <= Math.ceil(boundingBox.depth()); ++i)
+                for (int j = 0; j <= Math.ceil(boundingBox.width()); ++j) {
+                    double cellI = i;
+                    double cellJ = j;
+                    double cellK = queryVec.y() < 0 ? 0 : boundingBox.height();
+
+                    if (i >= boundingBox.depth()) cellI = boundingBox.depth();
+                    if (j >= boundingBox.width()) cellJ = boundingBox.width();
+
+                    cellI += boundingBox.minZ();
+                    cellJ += boundingBox.minX();
+                    cellK += boundingBox.minY();
+
+                    Vec p = new Vec(cellJ, cellK, cellI);
+                    facePoints.add(p);
+                }
+        }
+
+        // Z -> X x Y
+        if (queryVec.z() != 0) {
+            for (int i = 0; i <= Math.ceil(boundingBox.height()); ++i)
+                for (int j = 0; j <= Math.ceil(boundingBox.width()); ++j) {
+                    double cellI = i;
+                    double cellJ = j;
+                    double cellK = queryVec.z() < 0 ? 0 : boundingBox.depth();
+
+                    if (i >= boundingBox.height()) cellI = boundingBox.height();
+                    if (j >= boundingBox.width()) cellJ = boundingBox.width();
+
+                    cellI += boundingBox.minY();
+                    cellJ += boundingBox.minX();
+                    cellK += boundingBox.minZ();
+
+                    Vec p = new Vec(cellJ, cellI, cellK);
+                    facePoints.add(p);
+                }
+        }
+
+        System.out.println(facePoints);
+
+        return facePoints.toArray(Vec[]::new);
+    }
 
     /**
      * Moves an entity with physics applied (ie checking against blocks)
@@ -66,7 +137,7 @@ final class BlockCollision {
                 return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, entityVelocity, null, Block.AIR);
 
         // Query faces to get the points needed for collision
-        Vec[] allFaces = faces.get(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())));
+        Vec[] allFaces = calculateFaces(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())), entity.getBoundingBox());
 
         PhysicsResult res = handlePhysics(boundingBox, remainingMove, entityPosition, getter, allFaces, finalResult);
 
@@ -99,7 +170,7 @@ final class BlockCollision {
             // If the entity isn't moving, break
             if (res.newVelocity().isZero()) break;
 
-            allFaces = faces.get(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())));
+            allFaces = calculateFaces(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())), entity.getBoundingBox());
 
             res = handlePhysics(boundingBox, res.newVelocity(), res.newPosition(), getter, allFaces, finalResult);
         }
