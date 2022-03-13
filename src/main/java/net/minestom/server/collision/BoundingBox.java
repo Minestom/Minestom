@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public final class BoundingBox implements Shape {
     private final double width, height, depth;
     private final Point offset;
-    private Faces faces;
+    private Map<Vec, Vec[]> faces;
 
     BoundingBox(double width, double height, double depth, Point offset) {
         this.width = width;
@@ -140,8 +140,8 @@ public final class BoundingBox implements Shape {
         return depth;
     }
 
-    @NotNull Faces faces() {
-        Faces faces = this.faces;
+    @NotNull Map<Vec, Vec[]> faces() {
+        Map<Vec, Vec[]> faces = this.faces;
         if (faces == null) {
             this.faces = faces = retrieveFaces();
         }
@@ -172,29 +172,23 @@ public final class BoundingBox implements Shape {
         return relativeEnd().z();
     }
 
-    record Faces(Map<Vec, List<Vec>> query) {
-        public Faces {
-            query = Map.copyOf(query);
-        }
+    private Vec[] buildSet(Collection<Vec> a) {
+        return a.toArray(Vec[]::new);
     }
 
-    private List<Vec> buildSet(Set<Vec> a) {
-        return a.stream().toList();
-    }
-
-    private List<Vec> buildSet(Set<Vec> a, Set<Vec> b) {
+    private Vec[] buildSet(Collection<Vec> a, Collection<Vec> b) {
         Set<Vec> allFaces = new HashSet<>();
         Stream.of(a, b).forEach(allFaces::addAll);
-        return allFaces.stream().toList();
+        return allFaces.toArray(Vec[]::new);
     }
 
-    private List<Vec> buildSet(Set<Vec> a, Set<Vec> b, Set<Vec> c) {
+    private Vec[] buildSet(Collection<Vec> a, Collection<Vec> b, Collection<Vec> c) {
         Set<Vec> allFaces = new HashSet<>();
         Stream.of(a, b, c).forEach(allFaces::addAll);
-        return allFaces.stream().toList();
+        return allFaces.toArray(Vec[]::new);
     }
 
-    private Faces retrieveFaces() {
+    private Map<Vec, Vec[]> retrieveFaces() {
         double minX = minX();
         double maxX = maxX();
         double minY = minY();
@@ -245,8 +239,8 @@ public final class BoundingBox implements Shape {
         // X   -1 left    |  1 right
         // Y   -1 bottom  |  1 top
         // Z   -1 front   |  1 back
-        var query = new HashMap<Vec, List<Vec>>();
-        query.put(new Vec(0, 0, 0), List.of());
+        var query = new HashMap<Vec, Vec[]>();
+        query.put(new Vec(0, 0, 0), new Vec[0]);
 
         query.put(new Vec(-1, 0, 0), buildSet(left));
         query.put(new Vec(1, 0, 0), buildSet(right));
@@ -279,6 +273,6 @@ public final class BoundingBox implements Shape {
         query.put(new Vec(-1, -1, 1), buildSet(left, bottom, back));
         query.put(new Vec(-1, -1, -1), buildSet(left, bottom, front));
 
-        return new Faces(query);
+        return query;
     }
 }

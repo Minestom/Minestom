@@ -11,8 +11,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 final class BlockCollision {
     // Minimum move amount, minimum final velocity
     private static final double MIN_DELTA = 0.001;
@@ -28,7 +26,7 @@ final class BlockCollision {
      */
     static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
                                        @Nullable PhysicsResult lastPhysicsResult) {
-        final BoundingBox.Faces faces = entity.getBoundingBox().faces();
+        final var faces = entity.getBoundingBox().faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
@@ -74,8 +72,7 @@ final class BlockCollision {
                 return new PhysicsResult(entity.getPosition(), Vec.ZERO, false, false, false, false, entityVelocity, null, Block.AIR);
 
         // Query faces to get the points needed for collision
-        Vec queryVec = new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z()));
-        List<Vec> allFaces = faces.query().get(queryVec);
+        Vec[] allFaces = faces.get(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())));
 
         PhysicsResult res = handlePhysics(entity, remainingMove, entity.getPosition(), allFaces, finalResult);
 
@@ -108,8 +105,7 @@ final class BlockCollision {
             // If the entity isn't moving, break
             if (res.newVelocity().isZero()) break;
 
-            queryVec = new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z()));
-            allFaces = faces.query().get(queryVec);
+            allFaces = faces.get(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())));
 
             res = handlePhysics(entity, res.newVelocity(), res.newPosition(), allFaces, finalResult);
         }
@@ -134,7 +130,7 @@ final class BlockCollision {
      * @return result of physics calculation
      */
     private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition,
-                                               @NotNull List<Vec> allFaces, @NotNull SweepResult finalResult) {
+                                               @NotNull Vec[] allFaces, @NotNull SweepResult finalResult) {
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
         final BoundingBox boundingBox = entity.getBoundingBox();
@@ -190,9 +186,9 @@ final class BlockCollision {
 
                 // Pass through (+1, +1, +1)
                 if (pointBefore.blockX() != pointAfter.blockX()
-                    && pointBefore.blockY() != pointAfter.blockY()
-                    && pointBefore.blockZ() != pointAfter.blockZ())
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                        && pointBefore.blockY() != pointAfter.blockY()
+                        && pointBefore.blockZ() != pointAfter.blockZ())
+                    checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
             }
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
