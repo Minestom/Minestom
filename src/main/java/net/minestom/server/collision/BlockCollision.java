@@ -3,11 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,13 +16,12 @@ final class BlockCollision {
      * <p>
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
-     *
-     * @param entity the entity to move
-     * @return the result of physics simulation
      */
-    static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
+    static PhysicsResult handlePhysics(@NotNull BoundingBox boundingBox,
+                                       @NotNull Vec entityVelocity, @NotNull Pos entityPosition,
+                                       @NotNull Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult) {
-        final var faces = entity.getBoundingBox().faces();
+        final var faces = boundingBox.faces();
         Vec remainingMove = entityVelocity;
 
         // Allocate once and update values
@@ -39,14 +34,13 @@ final class BlockCollision {
 
         // Check cache to see if the entity is standing on a block without moving.
         // If the entity isn't moving and the block below hasn't changed, return
-        if (lastPhysicsResult != null && entity.getInstance() != null) {
+        if (lastPhysicsResult != null) {
             if (lastPhysicsResult.collisionY()
                     && Math.signum(remainingMove.y()) == Math.signum(lastPhysicsResult.originalDelta().y())
                     && lastPhysicsResult.collidedBlockY() != null
-                    && entity.getInstance().getChunk(lastPhysicsResult.collidedBlockY().chunkX(), lastPhysicsResult.collidedBlockY().chunkZ()) != null
-                    && entity.getInstance().getBlock(lastPhysicsResult.collidedBlockY(), Block.Getter.Condition.TYPE) == lastPhysicsResult.blockTypeY()
+                    && getter.getBlock(lastPhysicsResult.collidedBlockY(), Block.Getter.Condition.TYPE) == lastPhysicsResult.blockTypeY()
                     && remainingMove.x() == 0 && remainingMove.z() == 0
-                    && entity.getPosition().samePoint(lastPhysicsResult.newPosition())
+                    && entityPosition.samePoint(lastPhysicsResult.newPosition())
                     && lastPhysicsResult.blockTypeY() != Block.AIR) {
                 remainingMove = remainingMove.withY(0);
                 foundCollisionY = true;
@@ -65,16 +59,16 @@ final class BlockCollision {
 
         if (remainingMove.isZero())
             if (lastPhysicsResult != null)
-                return new PhysicsResult(entity.getPosition(), Vec.ZERO, lastPhysicsResult.isOnGround(),
+                return new PhysicsResult(entityPosition, Vec.ZERO, lastPhysicsResult.isOnGround(),
                         lastPhysicsResult.collisionX(), lastPhysicsResult.collisionY(), lastPhysicsResult.collisionZ(),
                         entityVelocity, lastPhysicsResult.collidedBlockY(), lastPhysicsResult.blockTypeY());
             else
-                return new PhysicsResult(entity.getPosition(), Vec.ZERO, false, false, false, false, entityVelocity, null, Block.AIR);
+                return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, entityVelocity, null, Block.AIR);
 
         // Query faces to get the points needed for collision
         Vec[] allFaces = faces.get(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())));
 
-        PhysicsResult res = handlePhysics(entity, remainingMove, entity.getPosition(), allFaces, finalResult);
+        PhysicsResult res = handlePhysics(boundingBox, remainingMove, entityPosition, getter, allFaces, finalResult);
 
         // Loop until no collisions are found.
         // When collisions are found, the collision axis is set to 0
@@ -107,7 +101,7 @@ final class BlockCollision {
 
             allFaces = faces.get(new Vec(Math.signum(remainingMove.x()), Math.signum(remainingMove.y()), Math.signum(remainingMove.z())));
 
-            res = handlePhysics(entity, res.newVelocity(), res.newPosition(), allFaces, finalResult);
+            res = handlePhysics(boundingBox, res.newVelocity(), res.newPosition(), getter, allFaces, finalResult);
         }
 
         final double newDeltaX = foundCollisionX ? 0 : entityVelocity.x();
@@ -119,21 +113,11 @@ final class BlockCollision {
                 foundCollisionX, foundCollisionY, foundCollisionZ, entityVelocity, collisionYBlock, blockYType);
     }
 
-    /**
-     * Does a physics step until a boundary is found
-     *
-     * @param entity         the entity to move
-     * @param deltaPosition  the movement vector
-     * @param entityPosition the position of the entity
-     * @param allFaces       point list to use for collision checking
-     * @param finalResult    place to store final result of collision
-     * @return result of physics calculation
-     */
-    private static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition, Pos entityPosition,
-                                               @NotNull Vec[] allFaces, @NotNull SweepResult finalResult) {
-        final Instance instance = entity.getInstance();
-        final Chunk originChunk = entity.getChunk();
-        final BoundingBox boundingBox = entity.getBoundingBox();
+    private static PhysicsResult handlePhysics(@NotNull BoundingBox boundingBox,
+                                               @NotNull Vec deltaPosition, Pos entityPosition,
+                                               @NotNull Block.Getter getter,
+                                               @NotNull Vec[] allFaces,
+                                               @NotNull SweepResult finalResult) {
 
         double remainingX = deltaPosition.x();
         double remainingY = deltaPosition.y();
@@ -153,47 +137,47 @@ final class BlockCollision {
                 // Checks can be limited by checking if we moved across an axis line
 
                 // Pass through (0, 0, 0)
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
 
                 if (pointBefore.blockX() != pointAfter.blockX()) {
                     // Pass through (+1, 0, 0)
-                    checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                    checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
 
                     // Checks for moving through 4 blocks
                     if (pointBefore.blockY() != pointAfter.blockY())
                         // Pass through (+1, +1, 0)
-                        checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                        checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
 
                     if (pointBefore.blockZ() != pointAfter.blockZ())
                         // Pass through (+1, 0, +1)
-                        checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                        checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
                 }
 
                 if (pointBefore.blockY() != pointAfter.blockY()) {
                     // Pass through (0, +1, 0)
-                    checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                    checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
 
                     // Checks for moving through 4 blocks
                     if (pointBefore.blockZ() != pointAfter.blockZ())
                         // Pass through (0, +1, +1)
-                        checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                        checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
                 }
 
                 if (pointBefore.blockZ() != pointAfter.blockZ()) {
                     // Pass through (0, 0, +1)
-                    checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                    checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
                 }
 
                 // Pass through (+1, +1, +1)
                 if (pointBefore.blockX() != pointAfter.blockX()
                         && pointBefore.blockY() != pointAfter.blockY()
                         && pointBefore.blockZ() != pointAfter.blockZ())
-                    checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, instance, originChunk, finalResult);
+                    checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), deltaPosition, entityPosition, boundingBox, getter, finalResult);
             }
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
-                RayUtils.RaycastCollision(deltaPosition, point.add(entityPosition), instance, originChunk, boundingBox, entityPosition, finalResult);
+                RayUtils.RaycastCollision(deltaPosition, point.add(entityPosition), getter, boundingBox, entityPosition, finalResult);
             }
         }
 
@@ -244,22 +228,15 @@ final class BlockCollision {
      * @param entityVelocity entity movement vector
      * @param entityPosition entity position
      * @param boundingBox    entity bounding box
-     * @param instance       entity instance
-     * @param originChunk    entity chunk
+     * @param getter         block getter
      * @param finalResult    place to store final result of collision
      * @return true if entity finds collision, other false
      */
     static boolean checkBoundingBox(int blockX, int blockY, int blockZ,
                                     Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox,
-                                    Instance instance, Chunk originChunk, SweepResult finalResult) {
-        final Chunk c = ChunkUtils.retrieve(instance, originChunk, blockX, blockZ);
+                                    Block.Getter getter, SweepResult finalResult) {
         // Don't step if chunk isn't loaded yet
-        final Block checkBlock;
-        if (ChunkUtils.isLoaded(c)) {
-            checkBlock = c.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
-        } else {
-            checkBlock = Block.STONE; // Generic full block
-        }
+        final Block checkBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
         boolean hitBlock = false;
         if (checkBlock.isSolid()) {
             final Vec blockPos = new Vec(blockX, blockY, blockZ);

@@ -53,6 +53,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
+import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -630,8 +631,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
         final BoundingBox boundingBox = this.boundingBox;
-        final Instance instance = this.instance;
-        Chunk chunk = currentChunk;
+        ChunkCache cache = new ChunkCache(instance, currentChunk);
 
         final int minX = (int) Math.floor(boundingBox.minX() + position.x());
         final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
@@ -643,9 +643,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    chunk = ChunkUtils.retrieve(instance, chunk, x, z);
-                    if (!ChunkUtils.isLoaded(chunk)) continue;
-                    final Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.CACHED);
+                    final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
                     if (block == null) continue;
                     final BlockHandler handler = block.handler();
                     if (handler != null) {

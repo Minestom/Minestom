@@ -3,20 +3,10 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 
-class RayUtils {
-    /**
-     * @param rayDirection Ray vector
-     * @param rayStart     Ray start point
-     * @param instance     entity instance
-     * @param originChunk  entity chunk
-     * @param boundingBox  entity bounding box
-     * @param entityCentre position of entity
-     * @param finalResult  place to store final result of collision
-     */
-    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult finalResult) {
+final class RayUtils {
+    public static void RaycastCollision(Vec rayDirection, Point rayStart, Block.Getter getter, BoundingBox boundingBox, Pos entityCentre, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
@@ -53,7 +43,7 @@ class RayUtils {
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, getter, finalResult))
                     break;
             }
         }
@@ -79,7 +69,7 @@ class RayUtils {
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, getter, finalResult))
                     break;
             }
         }
@@ -105,7 +95,7 @@ class RayUtils {
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, getter, finalResult))
                     break;
             }
         }
