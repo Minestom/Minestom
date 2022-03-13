@@ -77,8 +77,6 @@ final class BlockCollision {
                 }
         }
 
-        System.out.println(facePoints);
-
         return facePoints.toArray(Vec[]::new);
     }
 
