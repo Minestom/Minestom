@@ -105,9 +105,7 @@ public class BlockPlacementListener {
         }
 
         final Block placedBlock = useMaterial.block();
-        boolean hasIntersect = !CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock);
-
-        if (hasIntersect) {
+        if (!CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock)) {
             refresh(player, chunk);
             return;
         }
