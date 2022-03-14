@@ -1,12 +1,10 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
@@ -25,8 +23,6 @@ import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacement
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
-
-import java.util.Collection;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -109,24 +105,7 @@ public class BlockPlacementListener {
         }
 
         final Block placedBlock = useMaterial.block();
-        final Collection<Entity> entities = instance.getNearbyEntities(placementPosition, 5);
-
-        // Check if the player is trying to place a block in an entity
-        boolean intersectPlayer = placedBlock.registry().collisionShape().intersectBox(player.getPosition().sub(placementPosition), player.getBoundingBox());
-
-        boolean hasIntersect = intersectPlayer || entities
-                .stream()
-                .filter(entity -> entity.getEntityType() != EntityType.ITEM)
-                .filter(entity -> {
-                    // Marker Armor Stands should not prevent block placement
-                    if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
-                        return !armorStandMeta.isMarker();
-                    }
-                    return true;
-                })
-                .anyMatch(entity -> placedBlock.registry().collisionShape().intersectBox(entity.getPosition().sub(placementPosition), entity.getBoundingBox()));
-
-        if (hasIntersect) {
+        if (!CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock)) {
             refresh(player, chunk);
             return;
         }

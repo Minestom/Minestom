@@ -3,11 +3,17 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.metadata.other.ArmorStandMeta;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-final class BlockCollision {
+import java.util.Collection;
+
+public final class BlockCollision {
     // Minimum move amount, minimum final velocity
     private static final double MIN_DELTA = 0.001;
 
@@ -323,6 +329,36 @@ final class BlockCollision {
                 new Vec(remainingX, remainingY, remainingZ), collisionY,
                 collisionX, collisionY, collisionZ,
                 Vec.ZERO, finalResult.collidedShapePosition, finalResult.blockType);
+    }
+
+    static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+        final Collection<Entity> entities = instance.getNearbyEntities(blockPos, 3);
+
+        return entities
+                .stream()
+                .filter(entity -> entity.getEntityType() != EntityType.ITEM)
+                .filter(entity -> {
+                    // Marker Armor Stands should not prevent block placement
+                    if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
+                        return !armorStandMeta.isMarker();
+                    }
+                    return true;
+                })
+                .noneMatch(entity -> {
+                    boolean intersects;
+
+                    if (entity.getEntityType() == EntityType.PLAYER) {
+                        // Need to move player slightly away from block we're placing.
+                        // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
+                        // For this reason we subtract a small amount from the player position
+                        Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.01));
+                        intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
+                    } else {
+                        intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
+                    }
+
+                    return intersects;
+                });
     }
 
     /**

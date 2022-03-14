@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -39,6 +40,10 @@ public final class CollisionUtils {
 
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
         return handlePhysics(entity, entityVelocity, null);
+    }
+
+    public static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+        return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
     }
 
     /**
