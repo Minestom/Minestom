@@ -111,10 +111,7 @@ public class BlockPlacementListener {
         final Block placedBlock = useMaterial.block();
         final Collection<Entity> entities = instance.getNearbyEntities(placementPosition, 5);
 
-        // Check if the player is trying to place a block in an entity
-        boolean intersectPlayer = placedBlock.registry().collisionShape().intersectBox(player.getPosition().sub(placementPosition), player.getBoundingBox());
-
-        boolean hasIntersect = intersectPlayer || entities
+        boolean hasIntersect = entities
                 .stream()
                 .filter(entity -> entity.getEntityType() != EntityType.ITEM)
                 .filter(entity -> {
@@ -124,7 +121,21 @@ public class BlockPlacementListener {
                     }
                     return true;
                 })
-                .anyMatch(entity -> placedBlock.registry().collisionShape().intersectBox(entity.getPosition().sub(placementPosition), entity.getBoundingBox()));
+                .anyMatch(entity -> {
+                    boolean intersects;
+
+                    if (entity.getEntityType() == EntityType.PLAYER) {
+                        // Need to move player slightly away from block we're placing.
+                        // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
+                        // For this reason we subtract a small amount from the player position
+                        Point playerPos = entity.getPosition().add(entity.getPosition().sub(placementPosition).mul(0.01));
+                        intersects = placedBlock.registry().collisionShape().intersectBox(playerPos.sub(placementPosition), entity.getBoundingBox());
+                    } else {
+                        intersects = placedBlock.registry().collisionShape().intersectBox(entity.getPosition().sub(placementPosition), entity.getBoundingBox());
+                    }
+
+                    return intersects;
+                });
 
         if (hasIntersect) {
             refresh(player, chunk);
