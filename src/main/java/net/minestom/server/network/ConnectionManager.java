@@ -15,6 +15,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
@@ -213,8 +215,8 @@ public final class ConnectionManager {
      * @param player   the player
      * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
-    public void startPlayState(@NotNull Player player, boolean register) {
-        AsyncUtils.runAsync(() -> {
+    public CompletableFuture<Void> startPlayState(@NotNull Player player, boolean register) {
+        return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
@@ -290,7 +292,12 @@ public final class ConnectionManager {
             final Instance spawningInstance = loginEvent.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
             // Spawn the player at Player#getRespawnPoint
-            waitingPlayer.UNSAFE_init(spawningInstance);
+            if (DebugUtils.INSIDE_TEST) {
+                // Required to get the exact moment the player spawns
+                waitingPlayer.UNSAFE_init(spawningInstance).join();
+            } else {
+                waitingPlayer.UNSAFE_init(spawningInstance);
+            }
         });
     }
 

@@ -49,9 +49,9 @@ import java.util.zip.Inflater;
 public final class PacketUtils {
     private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
 
-    public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
-    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
+    public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);
+    public static final boolean CACHED_PACKET = PropertyUtils.getBoolean("minestom.cached-packet", true);
+    public static final boolean VIEWABLE_PACKET = PropertyUtils.getBoolean("minestom.viewable-packet", true);
 
     // Viewable packets
     private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
@@ -338,15 +338,5 @@ public final class PacketUtils {
             }
             // TODO for non-socket connection
         }
-    }
-
-    private static boolean getBoolean(String name, boolean defaultValue) {
-        boolean result = defaultValue;
-        try {
-            final String value = System.getProperty(name);
-            if (value != null) result = Boolean.parseBoolean(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
-        }
-        return result;
     }
 }

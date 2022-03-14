@@ -236,7 +236,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
      */
-    public void UNSAFE_init(@NotNull Instance spawnInstance) {
+    public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
         NBTCompound nbt = NBT.Compound(Map.of(
@@ -301,7 +301,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
-        setInstance(spawnInstance);
+        return setInstance(spawnInstance);
     }
 
     /**
