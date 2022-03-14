@@ -30,28 +30,28 @@ public class Main {
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
-        commandManager.register(new TestCommand());
-        commandManager.register(new EntitySelectorCommand());
-        commandManager.register(new HealthCommand());
-        commandManager.register(new LegacyCommand());
-        commandManager.register(new DimensionCommand());
-        commandManager.register(new ShutdownCommand());
-        commandManager.register(new TeleportCommand());
-        commandManager.register(new PlayersCommand());
-        commandManager.register(new FindCommand());
-        commandManager.register(new PotionCommand());
-        commandManager.register(new TitleCommand());
-        commandManager.register(new BookCommand());
-        commandManager.register(new ShootCommand());
-        commandManager.register(new HorseCommand());
-        commandManager.register(new EchoCommand());
-        commandManager.register(new SummonCommand());
-        commandManager.register(new RemoveCommand());
-        commandManager.register(new GiveCommand());
-        commandManager.register(new SetBlockCommand());
         commandManager.register(new AutoViewCommand());
-        commandManager.register(new SaveCommand());
+        commandManager.register(new BookCommand());
+        commandManager.register(new DimensionCommand());
+        commandManager.register(new EchoCommand());
+        commandManager.register(new EntitySelectorCommand());
+        commandManager.register(new FindCommand());
         commandManager.register(new GamemodeCommand());
+        commandManager.register(new GiveCommand());
+        commandManager.register(new HealthCommand());
+        commandManager.register(new HorseCommand());
+        commandManager.register(new LegacyCommand());
+        commandManager.register(new PlayersCommand());
+        commandManager.register(new PotionCommand());
+        commandManager.register(new RemoveCommand());
+        commandManager.register(new SaveCommand());
+        commandManager.register(new SetBlockCommand());
+        commandManager.register(new ShootCommand());
+        commandManager.register(new ShutdownCommand());
+        commandManager.register(new SummonCommand());
+        commandManager.register(new TeleportCommand());
+        commandManager.register(new TestCommand());
+        commandManager.register(new TitleCommand());
 
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
