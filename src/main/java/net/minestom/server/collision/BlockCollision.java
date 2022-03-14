@@ -11,8 +11,6 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 final class BlockCollision {
     // Minimum move amount, minimum final velocity
     private static final double MIN_DELTA = 0.001;
@@ -332,33 +330,27 @@ final class BlockCollision {
     }
 
     static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
-        final Collection<Entity> entities = instance.getNearbyEntities(blockPos, 3);
+        for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
+            final EntityType type = entity.getEntityType();
+            if (type == EntityType.ITEM)
+                continue;
+            // Marker Armor Stands should not prevent block placement
+            if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker())
+                continue;
 
-        return entities
-                .stream()
-                .filter(entity -> entity.getEntityType() != EntityType.ITEM)
-                .filter(entity -> {
-                    // Marker Armor Stands should not prevent block placement
-                    if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
-                        return !armorStandMeta.isMarker();
-                    }
-                    return true;
-                })
-                .noneMatch(entity -> {
-                    boolean intersects;
-
-                    if (entity.getEntityType() == EntityType.PLAYER) {
-                        // Need to move player slightly away from block we're placing.
-                        // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
-                        // For this reason we subtract a small amount from the player position
-                        Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.01));
-                        intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
-                    } else {
-                        intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
-                    }
-
-                    return intersects;
-                });
+            final boolean intersects;
+            if (type == EntityType.PLAYER) {
+                // Need to move player slightly away from block we're placing.
+                // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
+                // For this reason we subtract a small amount from the player position
+                Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.01));
+                intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
+            } else {
+                intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
+            }
+            if (intersects) return false;
+        }
+        return true;
     }
 
     /**
