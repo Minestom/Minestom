@@ -1,5 +1,6 @@
 package net.minestom.server.instance.batch;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -31,18 +32,23 @@ public class ChunkGenerationBatch extends ChunkBatch {
                 final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
                 final boolean hasPopulator = populators != null && !populators.isEmpty();
 
+                chunk.setStatus(ChunkStatus.GENERATION);
                 chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
 
                 if (hasPopulator) {
+                    chunk.setStatus(ChunkStatus.POPULATION);
                     for (ChunkPopulator chunkPopulator : populators) {
                         chunkPopulator.populateChunk(this, chunk);
                     }
                 }
 
-                // Update the chunk.
-                this.chunk.sendChunk();
-                this.instance.refreshLastBlockChangeTime();
-                completableFuture.complete(chunk);
+                chunk.setStatus(ChunkStatus.LIGHTING);
+                chunk.getLightData().lightChunk(false).thenRun(() -> {
+                    // Update the chunk.
+                    this.chunk.sendChunk();
+                    this.instance.refreshLastBlockChangeTime();
+                    completableFuture.complete(chunk);
+                });
             }
         });
         return completableFuture;

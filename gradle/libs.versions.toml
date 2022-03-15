@@ -7,7 +7,7 @@ adventure = "4.9.3"
 kotlin = "1.6.10"
 hydrazine = "1.7.2"
 dependencyGetter = "v1.0.1"
-minestomData = "895581d464"
+minestomData = "cc58d6848671e8d48d240db7323a1d7ef8aefc4d"
 hephaistos = "2.4.2"
 jetbrainsAnnotations = "23.0.0"
 
@@ -53,7 +53,7 @@ kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk
 # Miscellaneous
 hydrazine = { group = "com.github.MadMartian", name = "hydrazine-path-finding", version.ref = "hydrazine" }
 dependencyGetter = { group = "com.github.Minestom", name = "DependencyGetter", version.ref = "dependencyGetter" }
-minestomData = { group = "com.github.Minestom", name = "MinestomDataGenerator", version.ref = "minestomData" }
+minestomData = { group = "com.github.RinesThaix", name = "MinestomDataGenerator", version.ref = "minestomData" }
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
 
 # Logging

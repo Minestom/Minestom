@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.light.ChunkLightData;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -82,6 +83,7 @@ public class AnvilLoader implements IChunkLoader {
             return CompletableFuture.completedFuture(null);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
+        chunk.setStatus(ChunkStatus.READING);
         if(fileChunk.getMinY() < instance.getDimensionType().getMinY()) {
             throw new AnvilException(
                     String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
@@ -125,14 +127,15 @@ public class AnvilLoader implements IChunkLoader {
         loadBlocks(chunk, fileChunk);
         loadTileEntities(chunk, fileChunk);
         // Lights
-        for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
-            var section = chunk.getSection(sectionY);
-            var chunkSection = fileChunk.getSection((byte) sectionY);
-            section.setSkyLight(chunkSection.getSkyLights());
-            section.setBlockLight(chunkSection.getBlockLights());
+        final ChunkLightData lightData = chunk.getLightData();
+        for (int sectionY = chunk.getMinSection(); sectionY <= chunk.getMaxSection(); sectionY++) {
+            final ChunkSection chunkSection = fileChunk.getSection((byte) sectionY);
+            lightData.setSkyLight(sectionY, chunkSection.getSkyLights());
+            lightData.setBlockLight(sectionY, chunkSection.getBlockLights());
         }
         mcaFile.forget(fileChunk);
-        return CompletableFuture.completedFuture(chunk);
+        chunk.setStatus(ChunkStatus.LIGHTING);
+        return lightData.lightChunk(true);
     }
 
     private @Nullable RegionFile getMCAFile(Instance instance, int chunkX, int chunkZ) {
@@ -277,7 +280,7 @@ public class AnvilLoader implements IChunkLoader {
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
         chunkColumn.changeVersion(SupportedVersion.Companion.getLatest());
-        chunkColumn.setYRange(chunk.getMinSection()*16, chunk.getMaxSection()*16-1);
+        chunkColumn.setYRange(chunk.getMinSection() << 4, chunk.getMaxSection() << 4);
         List<NBTCompound> tileEntities = new ArrayList<>();
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {

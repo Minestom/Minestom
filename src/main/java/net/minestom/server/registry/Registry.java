@@ -161,6 +161,9 @@ public final class Registry {
         private final double friction;
         private final double speedFactor;
         private final double jumpFactor;
+        private final boolean conditionallyFullOpaque;
+        private final int lightBlock;
+        private final int lightEmission;
         private final boolean air;
         private final boolean solid;
         private final boolean liquid;
@@ -181,6 +184,9 @@ public final class Registry {
             this.friction = main.getDouble("friction");
             this.speedFactor = main.getDouble("speedFactor", 1);
             this.jumpFactor = main.getDouble("jumpFactor", 1);
+            this.conditionallyFullOpaque = main.getBoolean("conditionallyFullOpaque", false);
+            this.lightBlock = main.getInt("lightBlock", 15);
+            this.lightEmission = main.getInt("lightEmission", 0);
             this.air = main.getBoolean("air", false);
             this.solid = main.getBoolean("solid");
             this.liquid = main.getBoolean("liquid", false);
@@ -238,6 +244,25 @@ public final class Registry {
 
         public double jumpFactor() {
             return jumpFactor;
+        }
+
+        public boolean isConditionallyFullOpaque() {
+            return conditionallyFullOpaque;
+        }
+
+        public int lightBlock() {
+            return lightBlock;
+        }
+
+        public int lightEmission() {
+            return lightEmission;
+        }
+
+        public int opacity() {
+            if (conditionallyFullOpaque) {
+                return -1;
+            }
+            return lightBlock;
         }
 
         public boolean isAir() {

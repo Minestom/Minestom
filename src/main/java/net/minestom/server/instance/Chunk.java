@@ -7,13 +7,18 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.light.ChunkLightData;
+import net.minestom.server.instance.light.InstanceLightManager;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.time.Cooldown;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -47,6 +52,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     protected final int chunkX, chunkZ;
     protected final int minSection, maxSection;
 
+    private volatile ChunkStatus status = ChunkStatus.INITIALIZATION;
+
     // Options
     private final boolean shouldGenerate;
     private boolean readOnly;
@@ -60,6 +67,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     // Data
     private final MutableNBTCompound nbt = new MutableNBTCompound();
 
+    private volatile ChunkLightData lightData;
+    private long lastLightUpdate;
+
     public Chunk(@NotNull Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.instance = instance;
@@ -69,6 +79,17 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
         this.viewers = new ChunkView(instance, toPosition());
+
+        instance.registerChunk(this);
+    }
+
+    public @NotNull ChunkStatus getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(@NotNull ChunkStatus status) {
+        Check.argCondition(this.status.isOrAfter(status), "Can't switch chunk status from " + this.status + " to " + status);
+        this.status = status;
     }
 
     /**
@@ -106,7 +127,16 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param time the time of the update in milliseconds
      */
     @Override
-    public abstract void tick(long time);
+    public void tick(long time) {
+        if (status.isOrAfter(ChunkStatus.LIGHTING)) {
+            final Instance instance = getInstance();
+            final InstanceLightManager lightManager = instance.getLightManager();
+            if (lightManager != null && !Cooldown.hasCooldown(time, lastLightUpdate, instance.getLightUpdate())) {
+                lastLightUpdate = time;
+                lightManager.runPendingTasks(this);
+            }
+        }
+    }
 
     /**
      * Gets the last time that this chunk changed.
@@ -298,5 +328,17 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     protected void unload() {
         this.loaded = false;
+    }
+
+    @ApiStatus.Internal
+    public void setLightData(@NotNull ChunkLightData lightData) {
+        this.lightData = lightData;
+    }
+
+    public final @NotNull ChunkLightData getLightData() {
+        if (this.lightData == null) {
+            this.lightData = new ChunkLightData(this);
+        }
+        return this.lightData;
     }
 }

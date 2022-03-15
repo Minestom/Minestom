@@ -126,6 +126,7 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.setupLightManager(true, true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         if (false) {
