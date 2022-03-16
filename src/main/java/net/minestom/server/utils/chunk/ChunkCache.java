@@ -35,6 +35,10 @@ public final class ChunkCache implements Block.Getter {
         if (chunk == null || chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ) {
             this.chunk = chunk = this.instance.getChunk(chunkX, chunkZ);
         }
-        return chunk != null ? chunk.getBlock(x, y, z, condition) : defaultBlock;
+        if (chunk != null) {
+            synchronized (chunk) {
+                return chunk.getBlock(x, y, z, condition);
+            }
+        } else return defaultBlock;
     }
 }

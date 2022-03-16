@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
+import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -492,6 +493,7 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the position of the modified block
      */
     private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition) {
+        ChunkCache cache = new ChunkCache(this, null, null);
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
@@ -502,10 +504,9 @@ public class InstanceContainer extends Instance {
                     final int neighborZ = blockPosition.blockZ() + offsetZ;
                     if (neighborY < getDimensionType().getMinY() || neighborY > getDimensionType().getTotalHeight())
                         continue;
-                    final Chunk chunk = getChunkAt(neighborX, neighborZ);
-                    if (chunk == null) continue;
-
-                    final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
+                    final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.TYPE);
+                    if (neighborBlock == null)
+                        continue;
                     final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
                     if (neighborBlockPlacementRule == null) continue;
 
