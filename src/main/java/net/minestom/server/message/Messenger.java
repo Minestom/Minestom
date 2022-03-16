@@ -3,7 +3,7 @@ package net.minestom.server.message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
+import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +21,7 @@ public final class Messenger {
      */
     public static final Component CANNOT_SEND_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
     private static final UUID NO_SENDER = new UUID(0, 0);
-    private static final ChatMessagePacket CANNOT_SEND_PACKET = new ChatMessagePacket(CANNOT_SEND_MESSAGE, ChatPosition.SYSTEM_MESSAGE, NO_SENDER);
+    private static final SystemChatPacket CANNOT_SEND_PACKET = new SystemChatPacket(CANNOT_SEND_MESSAGE, ChatPosition.SYSTEM_MESSAGE.getID());
 
     /**
      * Sends a message to a player, respecting their chat settings.
@@ -34,7 +34,7 @@ public final class Messenger {
      */
     public static boolean sendMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
         if (getChatMessageType(player).accepts(position)) {
-            player.sendPacket(new ChatMessagePacket(message, position, Objects.requireNonNullElse(uuid, NO_SENDER)));
+            player.sendPacket(new SystemChatPacket(message, 1));
             return true;
         }
         return false;
@@ -50,7 +50,7 @@ public final class Messenger {
      */
     public static void sendMessage(@NotNull Collection<Player> players, @NotNull Component message,
                                    @NotNull ChatPosition position, @Nullable UUID uuid) {
-        PacketUtils.sendGroupedPacket(players, new ChatMessagePacket(message, position, Objects.requireNonNullElse(uuid, NO_SENDER)),
+        PacketUtils.sendGroupedPacket(players, new SystemChatPacket(message, 1),
                 player -> getChatMessageType(player).accepts(position));
     }
 

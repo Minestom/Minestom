@@ -10,13 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
-                                @NotNull Pos position, int data,
+                                @NotNull Pos position, float headRot, int data,
                                 short velocityX, short velocityY, short velocityZ) implements ServerPacket {
     public SpawnEntityPacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readUuid(), reader.readVarInt(),
                 new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
-                        reader.readByte() * 360f / 256f, reader.readByte() * 360f / 256f),
-                reader.readInt(), reader.readShort(), reader.readShort(), reader.readShort());
+                        reader.readByte() * 360f / 256f, reader.readByte() * 360f / 256f), reader.readByte() * 360f / 256f,
+                reader.readVarInt(), reader.readShort(), reader.readShort(), reader.readShort());
     }
 
     @Override
@@ -31,8 +31,9 @@ public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
 
         writer.writeByte((byte) (position.yaw() * 256 / 360));
         writer.writeByte((byte) (position.pitch() * 256 / 360));
+        writer.writeByte((byte) (headRot * 256 / 360));
 
-        writer.writeInt(data);
+        writer.writeVarInt(data);
 
         writer.writeShort(velocityX);
         writer.writeShort(velocityY);

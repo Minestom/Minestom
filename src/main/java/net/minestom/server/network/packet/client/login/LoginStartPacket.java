@@ -20,11 +20,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public record LoginStartPacket(@NotNull String username) implements ClientPreplayPacket {
+public record LoginStartPacket(@NotNull String username, Test test) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
     public LoginStartPacket(BinaryReader reader) {
-        this(reader.readSizedString(16));
+        this(reader.readSizedString(16), reader.readBoolean() ?
+                new Test(reader.readLong(), reader.readByteArray(), reader.readByteArray()) : null);
+    }
+
+    record Test(long timestamp, byte[] key, byte[] signature) {
     }
 
     @Override

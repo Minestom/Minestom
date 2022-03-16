@@ -148,6 +148,7 @@ public record PlayerInfoPacket(@NotNull Action action,
             writer.writeVarInt(ping);
             writer.writeBoolean(displayName != null);
             if (displayName != null) writer.writeComponent(displayName);
+            writer.writeBoolean(false);
         }
 
         @Override

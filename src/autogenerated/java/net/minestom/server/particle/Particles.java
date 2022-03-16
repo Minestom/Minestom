@@ -53,6 +53,8 @@ interface Particles {
 
     Particle EXPLOSION = ParticleImpl.get("minecraft:explosion");
 
+    Particle SONIC_BOOM = ParticleImpl.get("minecraft:sonic_boom");
+
     Particle FALLING_DUST = ParticleImpl.get("minecraft:falling_dust");
 
     Particle FIREWORK = ParticleImpl.get("minecraft:firework");
@@ -60,6 +62,12 @@ interface Particles {
     Particle FISHING = ParticleImpl.get("minecraft:fishing");
 
     Particle FLAME = ParticleImpl.get("minecraft:flame");
+
+    Particle SCULK_SOUL = ParticleImpl.get("minecraft:sculk_soul");
+
+    Particle SCULK_CHARGE = ParticleImpl.get("minecraft:sculk_charge");
+
+    Particle SCULK_CHARGE_POP = ParticleImpl.get("minecraft:sculk_charge_pop");
 
     Particle SOUL_FIRE_FLAME = ParticleImpl.get("minecraft:soul_fire_flame");
 
@@ -180,4 +188,6 @@ interface Particles {
     Particle ELECTRIC_SPARK = ParticleImpl.get("minecraft:electric_spark");
 
     Particle SCRAPE = ParticleImpl.get("minecraft:scrape");
+
+    Particle SHRIEK = ParticleImpl.get("minecraft:shriek");
 }

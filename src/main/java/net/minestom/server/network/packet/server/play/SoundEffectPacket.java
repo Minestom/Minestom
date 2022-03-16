@@ -12,17 +12,17 @@ import org.jetbrains.annotations.NotNull;
 
 public record SoundEffectPacket(int soundId, @NotNull Source source,
                                 int x, int y, int z,
-                                float volume, float pitch) implements ServerPacket {
+                                float volume, float pitch, long seed) implements ServerPacket {
     public SoundEffectPacket(BinaryReader reader) {
         this(reader.readVarInt(), Source.values()[reader.readVarInt()],
                 reader.readInt() * 8, reader.readInt() * 8, reader.readInt() * 8,
-                reader.readFloat(), reader.readFloat());
+                reader.readFloat(), reader.readFloat(), reader.readLong());
     }
 
     public SoundEffectPacket(@NotNull SoundEvent sound, @NotNull Source source,
                              @NotNull Point position, float volume, float pitch) {
-        this(sound.id(), source,
-                (int) position.x(), (int) position.y(), (int) position.z(), volume, pitch);
+        this(sound.id(), source, (int) position.x(), (int) position.y(), (int) position.z(),
+                volume, pitch, 0);
     }
 
     @Override
@@ -34,6 +34,7 @@ public record SoundEffectPacket(int soundId, @NotNull Source source,
         writer.writeInt(z * 8);
         writer.writeFloat(volume);
         writer.writeFloat(pitch);
+        writer.writeLong(seed);
     }
 
     @Override

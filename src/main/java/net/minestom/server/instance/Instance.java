@@ -548,7 +548,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         final Block block = getBlock(blockPosition);
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "The chunk at {0} is not loaded!", blockPosition);
-        chunk.sendPacketToViewers(new BlockActionPacket(blockPosition, actionId, actionParam, block));
+        chunk.sendPacketToViewers(new BlockActionPacket(blockPosition, actionId, actionParam, block, 0));
     }
 
     /**

@@ -9,10 +9,8 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
@@ -61,10 +59,10 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911"));
         SERVER_PACKETS.add(new SetCompressionPacket(256));
         // Play
-        SERVER_PACKETS.add(new AcknowledgePlayerDiggingPacket(VEC, 5, ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true));
+        SERVER_PACKETS.add(new AcknowledgeBlockChangePacket(0));
         SERVER_PACKETS.add(new ActionBarPacket(COMPONENT));
         SERVER_PACKETS.add(new AttachEntityPacket(5, 10));
-        SERVER_PACKETS.add(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5));
+        SERVER_PACKETS.add(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5, 0));
         SERVER_PACKETS.add(new BlockBreakAnimationPacket(5, VEC, (byte) 5));
         SERVER_PACKETS.add(new BlockChangePacket(VEC, 0));
         SERVER_PACKETS.add(new BlockEntityDataPacket(VEC, 5, NBT.Compound(Map.of("key", NBT.String("value")))));
@@ -76,7 +74,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.UpdateFlagsAction((byte) 5)));
         SERVER_PACKETS.add(new CameraPacket(5));
         SERVER_PACKETS.add(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.RAIN_LEVEL_CHANGE, 2));
-        SERVER_PACKETS.add(new ChatMessagePacket(COMPONENT, ChatPosition.CHAT, UUID.randomUUID()));
+        SERVER_PACKETS.add(new SystemChatPacket(COMPONENT, 1));
         SERVER_PACKETS.add(new ClearTitlesPacket(false));
         SERVER_PACKETS.add(new CloseWindowPacket((byte) 2));
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
