@@ -67,7 +67,7 @@ import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.PlayerSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
-import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -92,7 +92,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -529,41 +529,49 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         // Must update the player chunks
         final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
-        final Thread runThread = Thread.currentThread();
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
-        // Wait for all surrounding chunks to load
-        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(),
-                (chunkX, chunkZ) -> futures.add(instance.loadOptionalChunk(chunkX, chunkZ)));
 
-        SchedulerManager scheduler = MinecraftServer.getSchedulerManager();
-        AtomicBoolean join = new AtomicBoolean();
+        // Ensure that surrounding chunks are loaded
+        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
+        ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) -> {
+            final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
+            if (!future.isDone()) futures.add(future);
+        });
+        if (futures.isEmpty()) {
+            // All chunks are already loaded
+            runnable.accept(instance);
+            return AsyncUtils.VOID_FUTURE;
+        }
+
+        // One or more chunks need to be loaded
+        final Thread runThread = Thread.currentThread();
+        CountDownLatch latch = new CountDownLatch(1);
+        Scheduler scheduler = scheduler();
         CompletableFuture<Void> future = new CompletableFuture<>() {
             @Override
             public Void join() {
                 // Prevent deadlock
-                scheduler.process();
-                join.set(true);
-                final Void result = super.join();
-                join.set(false);
-                return result;
+                if (runThread == Thread.currentThread()) {
+                    try {
+                        latch.await();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    scheduler.process();
+                    assert isDone();
+                }
+                return super.join();
             }
         };
 
         CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
                 .thenRun(() -> {
-                    if (runThread == Thread.currentThread()) {
+                    scheduler.scheduleNextProcess(() -> {
                         runnable.accept(instance);
                         future.complete(null);
-                    } else {
-                        scheduler.scheduleNextProcess(() -> {
-                            runnable.accept(instance);
-                            future.complete(null);
-                        });
-                        if (join.compareAndSet(true, false))
-                            scheduler.process();
-                    }
+                    });
+                    latch.countDown();
                 });
         return future;
     }
