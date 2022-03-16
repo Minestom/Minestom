@@ -547,7 +547,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // One or more chunks need to be loaded
         final Thread runThread = Thread.currentThread();
         CountDownLatch latch = new CountDownLatch(1);
-        Scheduler scheduler = scheduler();
+        Scheduler scheduler = MinecraftServer.getSchedulerManager();
         CompletableFuture<Void> future = new CompletableFuture<>() {
             @Override
             public Void join() {
