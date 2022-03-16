@@ -112,10 +112,10 @@ public class AdventurePacketConvertor {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         if (minestomSound == null) {
             return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
-                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch());
+                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), 0);
         } else {
             return new SoundEffectPacket(minestomSound.id(), sound.source(),
-                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch());
+                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), 0);
         }
     }
 
@@ -135,11 +135,11 @@ public class AdventurePacketConvertor {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
 
         if (minestomSound != null) {
-            return new EntitySoundEffectPacket(minestomSound.id(), sound.source(), entity.getEntityId(), sound.volume(), sound.pitch());
+            return new EntitySoundEffectPacket(minestomSound.id(), sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), 0);
         } else {
             final Pos pos = entity.getPosition();
             return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
-                    (int) pos.x(), (int) pos.y(), (int) pos.z(), sound.volume(), sound.pitch());
+                    (int) pos.x(), (int) pos.y(), (int) pos.z(), sound.volume(), sound.pitch(), 0);
         }
     }
 

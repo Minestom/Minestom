@@ -93,7 +93,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      * @param entity the entity to add the effect to
      */
     public void sendAddPacket(@NotNull Entity entity) {
-        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
+        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this, null));
     }
 
     /**

@@ -8,10 +8,10 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point blockPosition,
-                                        @NotNull BlockFace blockFace) implements ClientPacket {
+                                        @NotNull BlockFace blockFace, int sequence) implements ClientPacket {
     public ClientPlayerDiggingPacket(BinaryReader reader) {
         this(Status.values()[reader.readVarInt()], reader.readBlockPosition(),
-                BlockFace.values()[reader.readByte()]);
+                BlockFace.values()[reader.readByte()], reader.readVarInt());
     }
 
     @Override
@@ -19,6 +19,7 @@ public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point b
         writer.writeVarInt(status.ordinal());
         writer.writeBlockPosition(blockPosition);
         writer.writeByte((byte) blockFace.ordinal());
+        writer.writeVarInt(sequence);
     }
 
     public enum Status {

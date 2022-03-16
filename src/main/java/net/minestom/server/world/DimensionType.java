@@ -136,6 +136,8 @@ public class DimensionType {
             nbt.setInt("logical_height", logicalHeight);
             nbt.setInt("coordinate_scale", coordinateScale);
             nbt.setString("name", name.toString());
+            nbt.setInt("monster_spawn_block_light_limit", 0);
+            nbt.setInt("monster_spawn_light_level", 11);
             if (fixedTime != null) nbt.setLong("fixed_time", fixedTime);
         });
     }

@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
@@ -20,6 +21,7 @@ import java.util.List;
 public abstract class PlayerConnection {
     private Player player;
     private volatile ConnectionState connectionState;
+    private PlayerPublicKey playerPublicKey;
     volatile boolean online;
 
     public PlayerConnection() {
@@ -148,6 +150,14 @@ public abstract class PlayerConnection {
      */
     public @NotNull ConnectionState getConnectionState() {
         return connectionState;
+    }
+
+    public PlayerPublicKey playerPublicKey() {
+        return playerPublicKey;
+    }
+
+    public void setPlayerPublicKey(PlayerPublicKey playerPublicKey) {
+        this.playerPublicKey = playerPublicKey;
     }
 
     @Override

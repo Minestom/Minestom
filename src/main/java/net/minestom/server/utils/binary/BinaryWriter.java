@@ -5,6 +5,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.ApiStatus;
@@ -322,6 +323,16 @@ public class BinaryWriter extends OutputStream {
         } catch (IOException e) {
             // should not throw, as nbtWriter points to this PacketWriter
             MinecraftServer.getExceptionManager().handleException(e);
+        }
+    }
+
+    public <L, R> void writeEither(Either<L, R> either, BiConsumer<BinaryWriter, L> leftWriter, BiConsumer<BinaryWriter, R> rightWriter) {
+        if (either.isLeft()) {
+            writeBoolean(true);
+            leftWriter.accept(this, either.left());
+        } else {
+            writeBoolean(false);
+            rightWriter.accept(this, either.right());
         }
     }
 

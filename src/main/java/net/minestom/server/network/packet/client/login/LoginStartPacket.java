@@ -2,6 +2,9 @@ package net.minestom.server.network.packet.client.login;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.crypto.PlayerPublicKey;
+import net.minestom.server.crypto.SignatureValidator;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -16,19 +19,47 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public record LoginStartPacket(@NotNull String username) implements ClientPreplayPacket {
+public record LoginStartPacket(@NotNull String username,
+                               @Nullable PlayerPublicKey publicKey,
+                               @Nullable UUID profileId) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
     public LoginStartPacket(BinaryReader reader) {
-        this(reader.readSizedString(16));
+        this(reader.readSizedString(16),
+                reader.readBoolean() ? new PlayerPublicKey(reader) : null,
+                reader.readBoolean() ? reader.readUuid() : null);
     }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
+        // TODO use uuid
+        // TODO configurable check & messages
+        if (publicKey != null) {
+            if (!SignatureValidator.YGGDRASIL.validate(binaryWriter -> {
+                if (profileId != null) {
+                    binaryWriter.writeLong(profileId.getMostSignificantBits());
+                    binaryWriter.writeLong(profileId.getLeastSignificantBits());
+                } else {
+                    MinecraftServer.LOGGER.warn("Profile ID was null for player {}, signature will not match!", username);
+                }
+                binaryWriter.writeLong(publicKey.expiresAt().toEpochMilli());
+                binaryWriter.writeBytes(publicKey.publicKey().getEncoded());
+            }, publicKey.signature())) {
+                connection.sendPacket(new LoginDisconnectPacket(Component.text("Invalid Profile Public Key!")));
+                connection.disconnect();
+            }
+            if (publicKey.expiresAt().isBefore(Instant.now())) {
+                connection.sendPacket(new LoginDisconnectPacket(Component.text("Expired Profile Public Key!")));
+                connection.disconnect();
+            }
+            connection.setPlayerPublicKey(publicKey);
+        }
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
         // Proxy support (only for socket clients) and cache the login username
         if (isSocketConnection) {
