@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block.rule.vanilla;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -99,7 +100,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                            @NotNull Player pl) {
+                            @NotNull Player pl, @NotNull Vec cursorPosition) {
         final Block belowBlock = instance.getBlock(blockPosition.sub(0, 1, 0));
         return belowBlock.isSolid() ? block : null;
     }

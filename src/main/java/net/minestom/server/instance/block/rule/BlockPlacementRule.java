@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block.rule;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -28,16 +29,17 @@ public abstract class BlockPlacementRule {
     /**
      * Called when the block is placed.
      *
-     * @param instance      the instance of the block
-     * @param block         the block placed
-     * @param blockFace     the block face
-     * @param blockPosition the block position
-     * @param pl            the player who placed the block
+     * @param instance       the instance of the block
+     * @param block          the block placed
+     * @param blockFace      the block face
+     * @param blockPosition  the block position
+     * @param pl             the player who placed the block
+     * @param cursorPosition the player's cursor positions
      * @return the block to place, {@code null} to cancel
      */
     public abstract @Nullable Block blockPlace(@NotNull Instance instance,
                                                @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                                               @NotNull Player pl);
+                                               @NotNull Player pl, @NotNull Vec cursorPosition);
 
     public @NotNull Block getBlock() {
         return block;

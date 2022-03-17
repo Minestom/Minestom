@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block.rule.vanilla;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityFacing;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
@@ -40,9 +41,15 @@ public class StairsPlacementRule extends BlockPlacementRule {
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace,
-                            @NotNull Point blockPosition, @NotNull Player player) {
+                            @NotNull Point blockPosition, @NotNull Player player,
+                            @NotNull Vec cursorPosition) {
         EntityFacing facing = player.getEntityFacing();
-        BlockFace half = blockFace == BlockFace.BOTTOM ? BlockFace.TOP : BlockFace.BOTTOM;
+        BlockFace half = blockFace == BlockFace.TOP ?
+                BlockFace.BOTTOM :
+                (blockFace == BlockFace.BOTTOM ?
+                        BlockFace.TOP :
+                        (cursorPosition.y() > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM)
+                );
         Shape shape = getShape(facing, instance, blockPosition);
         return block.withProperties(Map.of(
                 "facing", facing.toString().toLowerCase(Locale.ROOT),

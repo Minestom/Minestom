@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -123,7 +124,10 @@ public class BlockPlacementListener {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
         if (blockPlacementRule != null) {
             // Get id from block placement rule instead of the event
-            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+            resultBlock = blockPlacementRule.blockPlace(
+                    instance, resultBlock, blockFace, blockPosition, player,
+                    new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ())
+            );
         }
         if (resultBlock == null) {
             refresh(player, chunk);
