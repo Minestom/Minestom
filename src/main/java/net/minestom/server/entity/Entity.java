@@ -1653,6 +1653,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return nearby.orElse(null);
     }
 
+    public EntityFacing getEntityFacing() {
+        return EntityFacing.fromYaw(position.yaw());
+    }
+
     public enum Pose {
         STANDING,
         FALL_FLYING,

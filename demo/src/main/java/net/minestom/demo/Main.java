@@ -9,6 +9,7 @@ import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.extras.PlacementRules;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -25,9 +26,7 @@ public class Main {
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        BlockManager blockManager = MinecraftServer.getBlockManager();
-
-        blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
+        PlacementRules.init();
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());

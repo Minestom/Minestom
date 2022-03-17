@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.AxisPlacementRule;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.instance.block.rule.vanilla.StairsPlacementRule;
 import net.minestom.server.instance.block.rule.vanilla.WallPlacementRule;
 
 public final class PlacementRules {
@@ -40,15 +41,20 @@ public final class PlacementRules {
 		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.DARK_OAK_WOOD));
 		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.CRIMSON_STEM));
 		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.WARPED_STEM));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_OAK_WOOD));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_SPRUCE_WOOD));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_BIRCH_WOOD));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_JUNGLE_WOOD));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_ACACIA_WOOD));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_DARK_OAK_WOOD));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_CRIMSON_STEM));
-		blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_WARPED_STEM));
-		blockManager.registerBlockPlacementRule(new WallPlacementRule(Block.COBBLESTONE_WALL));
-		blockManager.registerBlockPlacementRule(new WallPlacementRule(Block.MOSSY_COBBLESTONE_WALL));
-	}
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_OAK_WOOD));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_SPRUCE_WOOD));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_BIRCH_WOOD));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_JUNGLE_WOOD));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_ACACIA_WOOD));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_DARK_OAK_WOOD));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_CRIMSON_STEM));
+        blockManager.registerBlockPlacementRule(new AxisPlacementRule(Block.STRIPPED_WARPED_STEM));
+        blockManager.registerBlockPlacementRule(new WallPlacementRule(Block.COBBLESTONE_WALL));
+        blockManager.registerBlockPlacementRule(new WallPlacementRule(Block.MOSSY_COBBLESTONE_WALL));
+        for (Block block : Block.values()) {
+            if (StairsPlacementRule.isStairs(block)) {
+                blockManager.registerBlockPlacementRule(new StairsPlacementRule(block));
+            }
+        }
+    }
 }
