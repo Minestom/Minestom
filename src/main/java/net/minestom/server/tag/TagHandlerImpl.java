@@ -15,7 +15,7 @@ import java.util.Arrays;
 final class TagHandlerImpl implements TagHandler {
     private static final VarHandle ENTRY_UPDATER = MethodHandles.arrayElementVarHandle(Entry[].class);
 
-    private volatile Entry<?>[] entries;
+    private volatile Entry<?>[] entries = new Entry<>[0];
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
@@ -26,9 +26,7 @@ final class TagHandlerImpl implements TagHandler {
     public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         final int index = tag.index;
         Entry<?>[] entries = this.entries;
-        if (entries == null) {
-            this.entries = entries = new Entry[index + 1];
-        } else if (index >= entries.length) {
+        if (index >= entries.length) {
             this.entries = entries = Arrays.copyOf(entries, index * 2 + 1);
         }
         ENTRY_UPDATER.setVolatile(entries, index, new Entry<>(tag, value));
@@ -36,24 +34,19 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public @NotNull TagReadable readableCopy() {
-        var entries = this.entries;
-        if (entries == null) {
-            return new Reader(null);
-        }
-        return new Reader(entries.clone());
+        final Entry<?>[] entries = this.entries;
+        return new Reader(entries != null ? entries.clone() : null);
     }
 
     @Override
     public void updateContent(@NotNull NBTCompoundLike compound) {
-        Entry<?>[] entries = null;
-        for (var entry : compound.asMapView().entrySet()) {
+        Entry<?>[] entries = new Entry<>[0];
+        for (var entry : compound) {
             final String key = entry.getKey();
             final NBT nbt = entry.getValue();
             final Tag<NBT> tag = Tag.NBT(key);
             final int index = tag.index;
-            if (entries == null) {
-                entries = new Entry[index + 1];
-            } else if (index >= entries.length) {
+            if (index >= entries.length) {
                 entries = Arrays.copyOf(entries, index * 2 + 1);
             }
             entries[index] = new Entry<>(tag, nbt);
@@ -100,30 +93,26 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private static <T> T read(Entry<?>[] entries, Tag<T> tag, boolean volatileRead) {
-        final int index;
-        if (entries == null || (index = tag.index) >= entries.length) {
+        final int index = tag.index;
+        if (index >= entries.length) {
             return tag.createDefault();
         }
         Entry<?> entry = volatileRead ? (Entry<?>) ENTRY_UPDATER.getVolatile(entries, index) : entries[index];
         if (entry == null) return tag.createDefault();
-
-        // Value must be parsed from nbt if the tag is different
-        {
-            final Tag<?> entryTag = entry.tag;
-            if (entryTag != tag) {
-                // Try to convert nbt
-                NBTCompound nbt = entry.nbt;
-                if (nbt == null) {
-                    var compound = new MutableNBTCompound();
-                    entryTag.writeUnsafe(compound, entry.value);
-                    entry.nbt = nbt = compound.toCompound();
-                }
-                return tag.read(nbt);
-            }
+        if (entry.tag == tag) {
+            // Tag is the same, return the value
+            //noinspection unchecked
+            return (T) entry.value;
         }
-
-        // Tag is the same, return the value
-        //noinspection unchecked
-        return (T) entry.value;
+        // Value must be parsed from nbt if the tag is different
+        final Tag<?> entryTag = entry.tag;
+        // Try to convert nbt
+        NBTCompound nbt = entry.nbt;
+        if (nbt == null) {
+            var compound = new MutableNBTCompound();
+            entryTag.writeUnsafe(compound, entry.value);
+            entry.nbt = nbt = compound.toCompound();
+        }
+        return tag.read(nbt);
     }
 }
