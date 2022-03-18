@@ -10,6 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.util.Arrays;
 
 final class TagHandlerImpl implements TagHandler {
     private static final VarHandle ENTRY_UPDATER = MethodHandles.arrayElementVarHandle(Entry[].class);
@@ -22,11 +23,13 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+    public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         final int index = tag.index;
         Entry<?>[] entries = this.entries;
-        if (entries == null || index >= entries.length) {
+        if (entries == null) {
             this.entries = entries = new Entry[index + 1];
+        } else if (index >= entries.length) {
+            this.entries = entries = Arrays.copyOf(entries, index * 2 + 1);
         }
         ENTRY_UPDATER.setVolatile(entries, index, new Entry<>(tag, value));
     }
@@ -48,8 +51,10 @@ final class TagHandlerImpl implements TagHandler {
             final NBT nbt = entry.getValue();
             final Tag<NBT> tag = Tag.NBT(key);
             final int index = tag.index;
-            if (entries == null || index >= entries.length) {
+            if (entries == null) {
                 entries = new Entry[index + 1];
+            } else if (index >= entries.length) {
+                entries = Arrays.copyOf(entries, index * 2 + 1);
             }
             entries[index] = new Entry<>(tag, nbt);
         }

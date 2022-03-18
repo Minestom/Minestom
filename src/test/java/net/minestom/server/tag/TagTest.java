@@ -7,6 +7,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagTest {
@@ -70,5 +72,28 @@ public class TagTest {
         var handler = TagHandler.newHandler();
         handler.setTag(tag, item);
         assertEquals(item, handler.getTag(tag));
+    }
+
+    @Test
+    public void tagResizing() {
+        var tag1 = Tag.Integer("tag1");
+        var tag2 = Tag.Integer("tag2");
+        var handler = TagHandler.newHandler();
+
+        handler.setTag(tag1, 5);
+        handler.setTag(tag2, 1);
+
+        assertEquals(5, handler.getTag(tag1));
+        assertEquals(1, handler.getTag(tag2));
+    }
+
+    @Test
+    public void nbtResizing() {
+        var handler = TagHandler.fromCompound(NBT.Compound(Map.of(
+                "tag1", NBT.Int(5),
+                "tag2", NBT.Int(1))));
+
+        assertEquals(5, handler.getTag(Tag.Integer("tag1")));
+        assertEquals(1, handler.getTag(Tag.Integer("tag2")));
     }
 }
