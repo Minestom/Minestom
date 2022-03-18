@@ -6,14 +6,11 @@ import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -26,7 +23,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, TagHandler
+public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable
         permits Inventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
@@ -39,8 +36,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     // the click processor which process all the clicks in the inventory
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
-    private final Object nbtLock = new Object();
-    private final MutableNBTCompound nbt = new MutableNBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
     protected AbstractInventory(int size) {
         this.size = size;
@@ -251,16 +247,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        synchronized (nbtLock) {
-            return tag.read(nbt);
-        }
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        synchronized (nbtLock) {
-            tag.write(nbt, value);
-        }
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 }

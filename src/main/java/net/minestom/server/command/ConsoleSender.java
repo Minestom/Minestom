@@ -5,11 +5,8 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.permission.Permission;
-import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +21,7 @@ public class ConsoleSender implements CommandSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleSender.class);
 
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
-    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
     @Override
     public void sendMessage(@NotNull String message) {
@@ -54,12 +51,7 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbtCompound);
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        tag.write(nbtCompound, value);
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 }

@@ -3,11 +3,8 @@ package net.minestom.server.command;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.permission.Permission;
-import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,7 +20,7 @@ import java.util.Set;
 public class ServerSender implements CommandSender {
 
     private final Set<Permission> permissions = Collections.unmodifiableSet(new HashSet<>());
-    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
     @NotNull
     @Override
@@ -32,12 +29,7 @@ public class ServerSender implements CommandSender {
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbtCompound);
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        tag.write(nbtCompound, value);
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 }

@@ -1,6 +1,6 @@
 package net.minestom.server.tag;
 
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.StringReader;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -26,43 +26,15 @@ import java.util.function.Supplier;
  */
 @ApiStatus.NonExtendable
 public class Tag<T> {
-
-    /**
-     * Handles the snbt of the tag holder.
-     * <p>
-     * Writing will override all tags. Proceed with caution.
-     */
-    @ApiStatus.Experimental
-    public static final Tag<String> SNBT = new Tag<>(null, NBTCompoundLike::toSNBT, (original, snbt) -> {
-        try {
-            final var updated = new SNBTParser(new StringReader(snbt)).parse();
-            if (!(updated instanceof NBTCompound updatedCompound))
-                throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
-            original.copyFrom(updatedCompound);
-        } catch (NBTException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
-    });
-
-    /**
-     * Handles the complete tag holder compound.
-     * <p>
-     * Writing will override all tags. Proceed with caution.
-     */
-    @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompoundLike::toCompound,
-            (original, updated) -> {
-                if (updated == null) {
-                    original.clear();
-                    return;
-                }
-                original.copyFrom(updated);
-            });
+    private static final Map<String, Integer> INDEX_MAP = new ConcurrentHashMap<>();
+    private static final AtomicInteger INDEX = new AtomicInteger();
 
     private final String key;
     private final Function<NBTCompoundLike, T> readFunction;
     private final BiConsumer<MutableNBTCompound, T> writeConsumer;
     private final Supplier<T> defaultValue;
+
+    final int index;
 
     protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompoundLike, T> readFunction,
@@ -72,6 +44,8 @@ public class Tag<T> {
         this.readFunction = readFunction;
         this.writeConsumer = writeConsumer;
         this.defaultValue = defaultValue;
+
+        this.index = INDEX_MAP.computeIfAbsent(key, k -> INDEX.getAndIncrement());
     }
 
     protected Tag(@Nullable String key,
@@ -82,8 +56,6 @@ public class Tag<T> {
 
     /**
      * Returns the key used to navigate inside the holder nbt.
-     * <p>
-     * Can be null if unused (e.g. {@link #View(TagSerializer)}, {@link #SNBT} and {@link #NBT}).
      *
      * @return the tag key
      */
@@ -130,11 +102,13 @@ public class Tag<T> {
 
     public @Nullable T read(@NotNull NBTCompoundLike nbtCompound) {
         T result = readFunction.apply(nbtCompound);
-        if (result == null) {
-            final var supplier = defaultValue;
-            result = supplier != null ? supplier.get() : null;
-        }
+        if (result == null) result = createDefault();
         return result;
+    }
+
+    T createDefault() {
+        final var supplier = defaultValue;
+        return supplier != null ? supplier.get() : null;
     }
 
     public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
@@ -212,20 +186,26 @@ public class Tag<T> {
                 nbtCompound -> {
                     final NBTCompound compound = nbtCompound.getCompound(key);
                     if (compound == null) return null;
-                    return serializer.read(TagReadable.fromCompound(compound));
+                    return serializer.read(TagHandler.fromCompound(compound));
                 },
                 (nbtCompound, value) -> {
                     MutableNBTCompound mutableCopy = nbtCompound.get(key) instanceof NBTCompound c ?
                             c.toMutableCompound() : new MutableNBTCompound();
-                    serializer.write(TagWritable.fromCompound(mutableCopy), value);
+                    serializer.write(TagHandler.fromCompound(mutableCopy), value);
                     nbtCompound.set(key, mutableCopy.toCompound());
                 });
     }
 
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
         return new Tag<>(null,
-                nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
-                (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
+                nbtCompound -> serializer.read(TagHandler.fromCompound(nbtCompound)),
+                (nbtCompound, value) -> serializer.write(TagHandler.fromCompound(nbtCompound), value));
+    }
+
+    public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
+        return new Tag<>(key,
+                nbtCompound -> ItemStack.fromItemNBT(nbtCompound.getCompound(key)),
+                (nbtCompound, value) -> nbtCompound.set(key, value.toItemNBT()));
     }
 
     /**
