@@ -191,8 +191,9 @@ public class Tag<T> {
                 (nbtCompound, value) -> {
                     MutableNBTCompound mutableCopy = nbtCompound.get(key) instanceof NBTCompound c ?
                             c.toMutableCompound() : new MutableNBTCompound();
-                    serializer.write(TagHandler.fromCompound(mutableCopy), value);
-                    nbtCompound.set(key, mutableCopy.toCompound());
+                    var handler = TagHandler.fromCompound(mutableCopy);
+                    serializer.write(handler, value);
+                    nbtCompound.set(key, handler.asCompound());
                 });
     }
 
