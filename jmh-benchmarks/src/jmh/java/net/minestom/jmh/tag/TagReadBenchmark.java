@@ -16,11 +16,17 @@ import java.util.concurrent.TimeUnit;
 public class TagReadBenchmark {
     static final Tag<String> TAG = Tag.String("key");
 
+    @Param({"false", "true"})
+    public boolean present;
+
     TagHandler tagHandler;
 
     @Setup
     public void setup() {
         this.tagHandler = TagHandler.newHandler();
+        if (present) {
+            tagHandler.setTag(TAG, "value");
+        }
     }
 
     @Benchmark
