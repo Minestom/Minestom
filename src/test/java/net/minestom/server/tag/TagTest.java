@@ -28,10 +28,22 @@ public class TagTest {
     }
 
     @Test
+    public void intNull() {
+        var handler = TagHandler.fromCompound(new MutableNBTCompound().set("key", NBT.Int(5)));
+        // Removal
+        var tag = Tag.Integer("key");
+        handler.setTag(tag, null);
+        assertFalse(handler.hasTag(tag));
+        assertEquals(NBTCompound.EMPTY, handler.asCompound(), "Tag must be removed when set to null");
+    }
+
+    @Test
     public void intRemove() {
         var handler = TagHandler.fromCompound(new MutableNBTCompound().set("key", NBT.Int(5)));
         // Removal
-        handler.setTag(Tag.Integer("key"), null);
+        var tag = Tag.Integer("key");
+        handler.removeTag(tag);
+        assertFalse(handler.hasTag(tag));
         assertEquals(NBTCompound.EMPTY, handler.asCompound(), "Tag must be removed when set to null");
     }
 

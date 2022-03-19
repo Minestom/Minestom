@@ -15,7 +15,7 @@ import java.util.Arrays;
 final class TagHandlerImpl implements TagHandler {
     private static final VarHandle ENTRY_UPDATER = MethodHandles.arrayElementVarHandle(Entry[].class);
 
-    private volatile Entry<?>[] entries = new Entry<>[0];
+    private volatile Entry<?>[] entries = new Entry[0];
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
@@ -27,9 +27,12 @@ final class TagHandlerImpl implements TagHandler {
         final int index = tag.index;
         Entry<?>[] entries = this.entries;
         if (index >= entries.length) {
+            if (value == null)
+                return; // no need to create/remove an entry
             this.entries = entries = Arrays.copyOf(entries, index * 2 + 1);
         }
-        ENTRY_UPDATER.setVolatile(entries, index, new Entry<>(tag, value));
+        final Entry<T> entry = value != null ? new Entry<>(tag, value) : null;
+        ENTRY_UPDATER.setVolatile(entries, index, entry);
     }
 
     @Override
@@ -40,7 +43,7 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public void updateContent(@NotNull NBTCompoundLike compound) {
-        Entry<?>[] entries = new Entry<>[0];
+        Entry<?>[] entries = new Entry[0];
         for (var entry : compound) {
             final String key = entry.getKey();
             final NBT nbt = entry.getValue();
