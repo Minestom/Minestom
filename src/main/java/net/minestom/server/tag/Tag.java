@@ -75,26 +75,14 @@ public class Tag<T> {
                           @NotNull Function<R, T> writeMap) {
         return new Tag<>(key,
                 // Read
-                nbt -> {
-                    final T old = readFunction.apply(nbt);
-                    if (old == null) {
-                        return null;
-                    }
-                    return readMap.apply(old);
-                },
+                readFunction.andThen(t -> {
+                    if (t == null) return null;
+                    return readMap.apply(t);
+                }),
                 // Write
-                (value) -> {
-                    final T n = writeMap.apply(value);
-                    return writeFunction.apply(n);
-                },
+                writeMap.andThen(writeFunction),
                 // Default value
-                () -> {
-                    if (defaultValue == null) {
-                        return null;
-                    }
-                    final T old = defaultValue.get();
-                    return readMap.apply(old);
-                });
+                () -> readMap.apply(createDefault()));
     }
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
