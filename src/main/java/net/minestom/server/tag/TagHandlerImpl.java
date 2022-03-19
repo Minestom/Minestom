@@ -26,13 +26,16 @@ final class TagHandlerImpl implements TagHandler {
     public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         final int index = tag.index;
         Entry<?>[] entries = this.entries;
+        final Entry<T> entry = value != null ? new Entry<>(tag, value) : null;
         if (index >= entries.length) {
             if (value == null)
                 return; // no need to create/remove an entry
-            this.entries = entries = Arrays.copyOf(entries, index * 2 + 1);
+            entries = Arrays.copyOf(entries, index * 2 + 1);
+            entries[index] = entry;
+            this.entries = entries; // Volatile write
+        } else {
+            ENTRY_UPDATER.setVolatile(entries, index, entry);
         }
-        final Entry<T> entry = value != null ? new Entry<>(tag, value) : null;
-        ENTRY_UPDATER.setVolatile(entries, index, entry);
     }
 
     @Override

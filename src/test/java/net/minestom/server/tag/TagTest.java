@@ -78,6 +78,19 @@ public class TagTest {
     }
 
     @Test
+    public void invalidType() {
+        var tag1 = Tag.Integer("key");
+        var tag2 = Tag.String("key");
+
+        var handler = TagHandler.newHandler();
+        handler.setTag(tag1, 5);
+        assertEquals(5, handler.getTag(tag1));
+
+        assertNull(handler.getTag(tag2));
+        assertEquals("hey", handler.getTag(tag2.defaultValue("hey")));
+    }
+
+    @Test
     public void item() {
         var item = ItemStack.of(Material.DIAMOND);
         var tag = Tag.ItemStack("item");
