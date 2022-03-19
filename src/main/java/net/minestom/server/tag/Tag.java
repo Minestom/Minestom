@@ -5,15 +5,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
+import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,28 +27,28 @@ public class Tag<T> {
     private static final AtomicInteger INDEX = new AtomicInteger();
 
     private final String key;
-    private final Function<NBTCompoundLike, T> readFunction;
-    private final BiConsumer<MutableNBTCompound, T> writeConsumer;
+    private final Function<NBT, T> readFunction;
+    private final Function<T, NBT> writeFunction;
     private final Supplier<T> defaultValue;
 
     final int index;
 
-    protected Tag(@Nullable String key,
-                  @NotNull Function<NBTCompoundLike, T> readFunction,
-                  @NotNull BiConsumer<MutableNBTCompound, T> writeConsumer,
+    protected Tag(@NotNull String key,
+                  @NotNull Function<NBT, T> readFunction,
+                  @NotNull Function<T, NBT> writeFunction,
                   @Nullable Supplier<T> defaultValue) {
         this.key = key;
         this.readFunction = readFunction;
-        this.writeConsumer = writeConsumer;
+        this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
 
         this.index = INDEX_MAP.computeIfAbsent(key, k -> INDEX.getAndIncrement());
     }
 
-    protected Tag(@Nullable String key,
-                  @NotNull Function<NBTCompoundLike, T> readFunction,
-                  @NotNull BiConsumer<MutableNBTCompound, T> writeConsumer) {
-        this(key, readFunction, writeConsumer, null);
+    protected Tag(@NotNull String key,
+                  @NotNull Function<NBT, T> readFunction,
+                  @NotNull Function<T, NBT> writeFunction) {
+        this(key, readFunction, writeFunction, null);
     }
 
     /**
@@ -59,13 +56,13 @@ public class Tag<T> {
      *
      * @return the tag key
      */
-    public @Nullable String getKey() {
+    public @NotNull String getKey() {
         return key;
     }
 
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
-        return new Tag<>(key, readFunction, writeConsumer, defaultValue);
+        return new Tag<>(key, readFunction, writeFunction, defaultValue);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -78,32 +75,36 @@ public class Tag<T> {
                           @NotNull Function<R, T> writeMap) {
         return new Tag<>(key,
                 // Read
-                nbtCompound -> {
-                    final var old = readFunction.apply(nbtCompound);
+                nbt -> {
+                    final T old = readFunction.apply(nbt);
                     if (old == null) {
                         return null;
                     }
                     return readMap.apply(old);
                 },
                 // Write
-                (nbtCompound, r) -> {
-                    var n = writeMap.apply(r);
-                    writeConsumer.accept(nbtCompound, n);
+                (value) -> {
+                    final T n = writeMap.apply(value);
+                    return writeFunction.apply(n);
                 },
                 // Default value
                 () -> {
                     if (defaultValue == null) {
                         return null;
                     }
-                    var old = defaultValue.get();
+                    final T old = defaultValue.get();
                     return readMap.apply(old);
                 });
     }
 
-    public @Nullable T read(@NotNull NBTCompoundLike nbtCompound) {
-        T result = readFunction.apply(nbtCompound);
-        if (result == null) result = createDefault();
-        return result;
+    public @Nullable T read(@NotNull NBTCompoundLike nbt) {
+        final String key = this.key;
+        if (key.isBlank()) {
+            // Special handling for view tag
+            return convertToValue((NBT) nbt);
+        }
+        final NBT subTag = nbt.get(key);
+        return convertToValue(subTag);
     }
 
     T createDefault() {
@@ -112,10 +113,14 @@ public class Tag<T> {
     }
 
     public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
-        if (key == null || value != null) {
-            this.writeConsumer.accept(nbtCompound, value);
+        final String key = this.key;
+        if (value != null) {
+            final NBT nbt = writeFunction.apply(value);
+            if (key.isBlank()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
+            else nbtCompound.set(key, nbt);
         } else {
-            nbtCompound.remove(key);
+            if (key.isBlank()) nbtCompound.clear();
+            else nbtCompound.remove(key);
         }
     }
 
@@ -124,53 +129,48 @@ public class Tag<T> {
         write(nbtCompound, (T) value);
     }
 
+    T convertToValue(NBT nbt) {
+        if (nbt == null) return createDefault();
+        T result = readFunction.apply(nbt);
+        if (result == null) result = createDefault();
+        return result;
+    }
+
+    NBT convertToNbt(T value) {
+        return writeFunction.apply(value);
+    }
+
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getByte(key),
-                (nbtCompound, value) -> nbtCompound.setByte(key, value));
+        return new Tag<>(key, nbt -> ((NBTByte) nbt).getValue(), NBT::Byte);
     }
 
     public static @NotNull Tag<Short> Short(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getShort(key),
-                (nbtCompound, value) -> nbtCompound.setShort(key, value));
+        return new Tag<>(key, nbt -> ((NBTShort) nbt).getValue(), NBT::Short);
     }
 
     public static @NotNull Tag<Integer> Integer(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getInt(key),
-                (nbtCompound, integer) -> nbtCompound.setInt(key, integer));
+        return new Tag<>(key, nbt -> ((NBTInt) nbt).getValue(), NBT::Int);
     }
 
     public static @NotNull Tag<Long> Long(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getLong(key),
-                (nbtCompound, value) -> nbtCompound.setLong(key, value));
+        return new Tag<>(key, nbt -> ((NBTLong) nbt).getValue(), NBT::Long);
     }
 
     public static @NotNull Tag<Float> Float(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getFloat(key),
-                (nbtCompound, value) -> nbtCompound.setFloat(key, value));
+        return new Tag<>(key, nbt -> ((NBTFloat) nbt).getValue(), NBT::Float);
     }
 
     public static @NotNull Tag<Double> Double(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getDouble(key),
-                (nbtCompound, value) -> nbtCompound.setDouble(key, value));
+        return new Tag<>(key, nbt -> ((NBTDouble) nbt).getValue(), NBT::Double);
     }
 
     public static @NotNull Tag<String> String(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getString(key),
-                (nbtCompound, value) -> nbtCompound.setString(key, value));
+        return new Tag<>(key, nbt -> ((NBTString) nbt).getValue(), NBT::String);
     }
 
     public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
         //noinspection unchecked
-        return new Tag<>(key,
-                nbt -> (T) nbt.get(key),
-                ((nbt, value) -> nbt.set(key, value)));
+        return new Tag<>(key, nbt -> (T) nbt, t -> t);
     }
 
     /**
@@ -183,30 +183,27 @@ public class Tag<T> {
      */
     public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
-                nbtCompound -> {
-                    final NBTCompound compound = nbtCompound.getCompound(key);
-                    if (compound == null) return null;
-                    return serializer.read(TagHandler.fromCompound(compound));
-                },
-                (nbtCompound, value) -> {
-                    MutableNBTCompound mutableCopy = nbtCompound.get(key) instanceof NBTCompound c ?
-                            c.toMutableCompound() : new MutableNBTCompound();
-                    var handler = TagHandler.fromCompound(mutableCopy);
+                nbt -> serializer.read(TagHandler.fromCompound((NBTCompoundLike) nbt)),
+                (value) -> {
+                    TagHandler handler = TagHandler.newHandler();
                     serializer.write(handler, value);
-                    nbtCompound.set(key, handler.asCompound());
+                    return handler.asCompound();
                 });
     }
 
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
-        return new Tag<>(null,
-                nbtCompound -> serializer.read(TagHandler.fromCompound(nbtCompound)),
-                (nbtCompound, value) -> serializer.write(TagHandler.fromCompound(nbtCompound), value));
+        // TODO special id
+        return new Tag<>("",
+                nbt -> serializer.read(TagHandler.fromCompound((NBTCompoundLike) nbt)),
+                (value) -> {
+                    TagHandler handler = TagHandler.newHandler();
+                    serializer.write(handler, value);
+                    return handler.asCompound();
+                });
     }
 
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> ItemStack.fromItemNBT(nbtCompound.getCompound(key)),
-                (nbtCompound, value) -> nbtCompound.set(key, value.toItemNBT()));
+        return new Tag<>(key, nbt -> ItemStack.fromItemNBT((NBTCompound) nbt), ItemStack::toItemNBT);
     }
 
     /**
@@ -214,9 +211,7 @@ public class Tag<T> {
      */
     @Deprecated
     public static @NotNull Tag<byte[]> ByteArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getByteArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setByteArray(key, value));
+        return new Tag<>(key, nbt -> ((NBTByteArray) nbt).getValue().copyArray(), NBT::ByteArray);
     }
 
     /**
@@ -224,9 +219,7 @@ public class Tag<T> {
      */
     @Deprecated
     public static @NotNull Tag<int[]> IntArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getIntArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setIntArray(key, value));
+        return new Tag<>(key, nbt -> ((NBTIntArray) nbt).getValue().copyArray(), NBT::IntArray);
     }
 
     /**
@@ -234,9 +227,7 @@ public class Tag<T> {
      */
     @Deprecated
     public static @NotNull Tag<long[]> LongArray(@NotNull String key) {
-        return new Tag<>(key,
-                nbtCompound -> nbtCompound.getLongArray(key).copyArray(),
-                (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
+        return new Tag<>(key, nbt -> ((NBTLongArray) nbt).getValue().copyArray(), NBT::LongArray);
     }
 
     /**

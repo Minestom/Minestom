@@ -67,11 +67,17 @@ final class TagHandlerImpl implements TagHandler {
         MutableNBTCompound compound = new MutableNBTCompound();
         for (var entry : entries) {
             if (entry == null) continue;
-            final NBTCompound nbt = entry.nbt;
-            if (nbt != null) {
-                compound.putAll(nbt);
+            final Tag tag = entry.tag;
+            NBT nbt = entry.nbt;
+            if (nbt == null) {
+                entry.nbt = nbt = tag.convertToNbt(entry.value);
+            }
+            final String key = tag.getKey();
+            if (key.isBlank() && nbt instanceof NBTCompound c) {
+                // Special handling for view tag
+                compound.copyFrom(c);
             } else {
-                entry.tag.writeUnsafe(compound, entry.value);
+                compound.set(key, nbt);
             }
         }
         return compound.toCompound();
@@ -80,7 +86,7 @@ final class TagHandlerImpl implements TagHandler {
     private static final class Entry<T> {
         final Tag<T> tag;
         final T value;
-        volatile NBTCompound nbt;
+        volatile NBT nbt;
 
         Entry(Tag<T> tag, T value) {
             this.tag = tag;
@@ -108,14 +114,14 @@ final class TagHandlerImpl implements TagHandler {
             return (T) entry.value;
         }
         // Value must be parsed from nbt if the tag is different
-        final Tag<?> entryTag = entry.tag;
+        final Tag entryTag = entry.tag;
         // Try to convert nbt
-        NBTCompound nbt = entry.nbt;
+        NBT nbt = entry.nbt;
         if (nbt == null) {
             var compound = new MutableNBTCompound();
             entryTag.writeUnsafe(compound, entry.value);
-            entry.nbt = nbt = compound.toCompound();
+            entry.nbt = nbt = entryTag.convertToNbt(entry.value);
         }
-        return tag.read(nbt);
+        return tag.convertToValue(nbt);
     }
 }

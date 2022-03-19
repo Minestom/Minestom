@@ -47,7 +47,7 @@ public class TagStructureTest {
         }
     });
 
-    record Entry(String value) {
+    private record Entry(String value) {
     }
 
     @Test
