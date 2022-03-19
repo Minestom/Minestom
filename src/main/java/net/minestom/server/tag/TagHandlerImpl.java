@@ -8,19 +8,22 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.lang.invoke.VarHandle;
 import java.util.Arrays;
 
 final class TagHandlerImpl implements TagHandler {
-    private volatile Entry<?>[] entries = new Entry[0];
-    private volatile Cache cache;
+    private Entry<?>[] entries = new Entry[0];
+    private Cache cache;
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        VarHandle.acquireFence();
         return read(entries, tag);
     }
 
     @Override
     public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        VarHandle.acquireFence();
         final int index = tag.index;
         Entry<?>[] entries = this.entries;
         final Entry<T> entry = value != null ? new Entry<>(tag, value) : null;
@@ -30,12 +33,13 @@ final class TagHandlerImpl implements TagHandler {
             this.entries = entries = Arrays.copyOf(entries, index + 1);
         }
         entries[index] = entry;
-        this.cache = null; // Volatile write
+        this.cache = null;
+        VarHandle.releaseFence();
     }
 
     @Override
     public @NotNull TagReadable readableCopy() {
-        return updatedCache().readableCopy;
+        return updatedCache();
     }
 
     @Override
@@ -53,6 +57,7 @@ final class TagHandlerImpl implements TagHandler {
         }
         this.entries = entries;
         this.cache = null;
+        VarHandle.releaseFence();
     }
 
     @Override
@@ -61,28 +66,32 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private Cache updatedCache() {
+        VarHandle.acquireFence();
         Cache cache = this.cache;
         if (cache == null) {
             Entry<?>[] entries = this.entries;
-            if (entries == null) {
-                return (this.cache = Cache.EMPTY);
-            }
-            entries = entries.clone();
-            MutableNBTCompound tmp = new MutableNBTCompound();
-            for (Entry<?> entry : entries) {
-                if (entry == null) continue;
-                final Tag tag = entry.tag;
-                NBT nbt = entry.nbt;
-                if (nbt == null) entry.nbt = nbt = tag.convertToNbt(entry.value);
-                final String key = tag.getKey();
-                if (key.isEmpty() && nbt instanceof NBTCompound c) {
-                    // Special handling for view tag
-                    tmp.copyFrom(c);
-                } else {
-                    tmp.set(key, nbt);
+            if (entries != null) {
+                entries = entries.clone();
+                MutableNBTCompound tmp = new MutableNBTCompound();
+                for (Entry<?> entry : entries) {
+                    if (entry == null) continue;
+                    final Tag tag = entry.tag;
+                    NBT nbt = entry.nbt;
+                    if (nbt == null) entry.nbt = nbt = tag.convertToNbt(entry.value);
+                    final String key = tag.getKey();
+                    if (key.isEmpty() && nbt instanceof NBTCompound c) {
+                        // Special handling for view tag
+                        tmp.copyFrom(c);
+                    } else {
+                        tmp.set(key, nbt);
+                    }
                 }
+                cache = new Cache(entries, tmp.toCompound());
+            } else {
+                cache = Cache.EMPTY;
             }
-            cache = new Cache(new Reader(entries), tmp.toCompound());
+            this.cache = cache;
+            VarHandle.releaseFence();
         }
         return cache;
     }
@@ -98,11 +107,9 @@ final class TagHandlerImpl implements TagHandler {
         }
     }
 
-    private record Cache(TagReadable readableCopy, NBTCompound compound) {
-        static final Cache EMPTY = new Cache(new Reader(new Entry[0]), NBTCompound.EMPTY);
-    }
+    private record Cache(Entry<?>[] entries, NBTCompound compound) implements TagReadable {
+        static final Cache EMPTY = new Cache(new Entry[0], NBTCompound.EMPTY);
 
-    private record Reader(Entry<?>[] entries) implements TagReadable {
         @Override
         public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
             return read(entries, tag);
