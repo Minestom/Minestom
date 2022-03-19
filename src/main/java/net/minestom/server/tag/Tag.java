@@ -124,7 +124,7 @@ public class Tag<T> {
             if (nbt == null || (result = readFunction.apply(nbt)) == null)
                 return createDefault();
             return result;
-        } catch (Exception e) {
+        } catch (ClassCastException e) {
             return createDefault();
         }
     }
