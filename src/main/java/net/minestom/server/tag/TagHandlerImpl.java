@@ -19,7 +19,7 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return read(entries, tag, true);
+        return read(entries, tag);
     }
 
     @Override
@@ -97,17 +97,16 @@ final class TagHandlerImpl implements TagHandler {
     private record Reader(Entry<?>[] entries) implements TagReadable {
         @Override
         public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-            return read(entries, tag, false);
+            return read(entries, tag);
         }
     }
 
-    private static <T> T read(Entry<?>[] entries, Tag<T> tag, boolean volatileRead) {
+    private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
         final int index = tag.index;
-        if (index >= entries.length) {
+        final Entry<?> entry;
+        if (index >= entries.length || (entry = entries[index]) == null) {
             return tag.createDefault();
         }
-        Entry<?> entry = volatileRead ? (Entry<?>) ENTRY_UPDATER.getVolatile(entries, index) : entries[index];
-        if (entry == null) return tag.createDefault();
         if (entry.tag == tag) {
             // Tag is the same, return the value
             //noinspection unchecked
@@ -115,13 +114,8 @@ final class TagHandlerImpl implements TagHandler {
         }
         // Value must be parsed from nbt if the tag is different
         final Tag entryTag = entry.tag;
-        // Try to convert nbt
         NBT nbt = entry.nbt;
-        if (nbt == null) {
-            var compound = new MutableNBTCompound();
-            entryTag.writeUnsafe(compound, entry.value);
-            entry.nbt = nbt = entryTag.convertToNbt(entry.value);
-        }
+        if (nbt == null) entry.nbt = nbt = entryTag.convertToNbt(entry.value);
         return tag.convertToValue(nbt);
     }
 }
