@@ -73,7 +73,7 @@ final class TagHandlerImpl implements TagHandler {
                 entry.nbt = nbt = tag.convertToNbt(entry.value);
             }
             final String key = tag.getKey();
-            if (key.isBlank() && nbt instanceof NBTCompound c) {
+            if (key.isEmpty() && nbt instanceof NBTCompound c) {
                 // Special handling for view tag
                 compound.copyFrom(c);
             } else {
@@ -107,13 +107,13 @@ final class TagHandlerImpl implements TagHandler {
         if (index >= entries.length || (entry = entries[index]) == null) {
             return tag.createDefault();
         }
-        if (entry.tag == tag) {
+        final Tag entryTag = entry.tag;
+        if (entryTag == tag) {
             // Tag is the same, return the value
             //noinspection unchecked
             return (T) entry.value;
         }
         // Value must be parsed from nbt if the tag is different
-        final Tag entryTag = entry.tag;
         NBT nbt = entry.nbt;
         if (nbt == null) entry.nbt = nbt = entryTag.convertToNbt(entry.value);
         return tag.convertToValue(nbt);

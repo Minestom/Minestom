@@ -20,6 +20,7 @@ public class TagReadBenchmark {
     public boolean present;
 
     TagHandler tagHandler;
+    Tag<String> secondTag;
 
     @Setup
     public void setup() {
@@ -27,11 +28,17 @@ public class TagReadBenchmark {
         if (present) {
             tagHandler.setTag(TAG, "value");
         }
+        secondTag = Tag.String("key");
     }
 
     @Benchmark
     public void readConstantTag(Blackhole blackhole) {
         blackhole.consume(tagHandler.getTag(TAG));
+    }
+
+    @Benchmark
+    public void readDifferentTag(Blackhole blackhole) {
+        blackhole.consume(tagHandler.getTag(secondTag));
     }
 
     @Benchmark

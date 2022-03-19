@@ -87,7 +87,7 @@ public class Tag<T> {
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
         final String key = this.key;
-        if (key.isBlank()) {
+        if (key.isEmpty()) {
             // Special handling for view tag
             return convertToValue((NBT) nbt);
         }
@@ -104,10 +104,10 @@ public class Tag<T> {
         final String key = this.key;
         if (value != null) {
             final NBT nbt = writeFunction.apply(value);
-            if (key.isBlank()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
+            if (key.isEmpty()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
             else nbtCompound.set(key, nbt);
         } else {
-            if (key.isBlank()) nbtCompound.clear();
+            if (key.isEmpty()) nbtCompound.clear();
             else nbtCompound.remove(key);
         }
     }
@@ -119,9 +119,8 @@ public class Tag<T> {
 
     T convertToValue(NBT nbt) {
         if (nbt == null) return createDefault();
-        T result = readFunction.apply(nbt);
-        if (result == null) result = createDefault();
-        return result;
+        final T result = readFunction.apply(nbt);
+        return result != null ? result : createDefault();
     }
 
     NBT convertToNbt(T value) {
