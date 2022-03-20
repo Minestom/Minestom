@@ -2,7 +2,7 @@ package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GuardianMeta extends MonsterMeta {
     public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
@@ -26,9 +26,9 @@ public class GuardianMeta extends MonsterMeta {
         return this.target;
     }
 
-    public void setTarget(@NotNull Entity target) {
+    public void setTarget(@Nullable Entity target) {
         this.target = target;
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(target.getEntityId()));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(target == null ? 0 : target.getEntityId()));
     }
 
 }
