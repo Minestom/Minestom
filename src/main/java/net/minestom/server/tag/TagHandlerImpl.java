@@ -70,23 +70,15 @@ final class TagHandlerImpl implements TagHandler {
         Cache cache = this.cache;
         if (cache == null) {
             Entry<?>[] entries = this.entries;
-            if (entries != null) {
+            if (entries.length > 0) {
                 entries = entries.clone();
                 MutableNBTCompound tmp = new MutableNBTCompound();
                 for (Entry<?> entry : entries) {
                     if (entry == null) continue;
-                    final Tag tag = entry.tag;
-                    NBT nbt = entry.nbt;
-                    if (nbt == null) entry.nbt = nbt = tag.convertToNbt(entry.value);
-                    final String key = tag.getKey();
-                    if (key.isEmpty() && nbt instanceof NBTCompound c) {
-                        // Special handling for view tag
-                        tmp.copyFrom(c);
-                    } else {
-                        tmp.set(key, nbt);
-                    }
+                    final Tag<?> tag = entry.tag;
+                    tag.writeUnsafe(tmp, entry.value);
                 }
-                cache = new Cache(entries, tmp.toCompound());
+                cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
             } else {
                 cache = Cache.EMPTY;
             }
