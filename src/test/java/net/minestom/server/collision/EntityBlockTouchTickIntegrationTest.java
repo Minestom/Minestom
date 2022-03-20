@@ -60,7 +60,7 @@ public class EntityBlockTouchTickIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFar(Env env) {
+    public void entityPhysicsCheckTouchTickFarZ(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(1000, 1000, 1000));
 
@@ -90,10 +90,59 @@ public class EntityBlockTouchTickIntegrationTest {
 
         entity.tick(0);
 
-        assertEquals(Set.of(new Vec(1000, 42, 1000),
+        assertEquals(Set.of(
+                new Vec(1000, 42, 1000),
                 new Vec(1000, 42, 1001),
-                new Vec(1000, 43, 1001)),
-                positions);
+                new Vec(1000, 43, 1001)
+            ), positions);
+
+        assertEquals(instance, entity.getInstance());
+    }
+
+    @Test
+    public void entityPhysicsCheckTouchTickFarX(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(new Pos(1000, 1000, 1000));
+
+        Set<Point> positions = new HashSet<>();
+        var handler = new BlockHandler() {
+            @Override
+            public void onTouch(@NotNull Touch touch) {
+                assertTrue(positions.add(touch.getBlockPosition()));
+            }
+
+            @Override
+            public @NotNull NamespaceID getNamespaceId() {
+                return NamespaceID.from("minestom:test");
+            }
+        };
+
+        instance.setBlock(1000, 42, 1000, Block.STONE.withHandler(handler));
+        instance.setBlock(1000, 42, 1001, Block.STONE.withHandler(handler));
+        instance.setBlock(1000, 43, 1001, Block.STONE.withHandler(handler));
+        instance.setBlock(1000, 43, 999, Block.STONE.withHandler(handler));
+        instance.setBlock(1001, 43, 999, Block.STONE.withHandler(handler));
+        instance.setBlock(1001, 42, 999, Block.STONE.withHandler(handler));
+        instance.setBlock(1001, 42, 1001, Block.STONE.withHandler(handler));
+        instance.setBlock(1001, 43, 1000, Block.STONE.withHandler(handler));
+        instance.setBlock(999, 42, 1001, Block.STONE.withHandler(handler));
+        instance.setBlock(1001, 43, 1001, Block.STONE.withHandler(handler));
+        instance.setBlock(1001, 42, 1000, Block.STONE.withHandler(handler));
+        instance.setBlock(1000, 42, 1010, Block.STONE.withHandler(handler));
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(1000.699, 42, 1000)).join();
+
+        entity.tick(0);
+
+        assertEquals(Set.of(
+                new Vec(1000, 43, 999),
+                new Vec(1000, 42, 1000),
+                new Vec(1001, 43, 1000),
+                new Vec(1001, 42, 1000),
+                new Vec(1001, 42, 999),
+                new Vec(1001, 43, 999)
+            ), positions);
 
         assertEquals(instance, entity.getInstance());
     }
