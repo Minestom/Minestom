@@ -1,6 +1,5 @@
 package net.minestom.server.network.player;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerController;
@@ -25,13 +24,6 @@ public class FakePlayerConnection extends PlayerConnection {
     @Override
     public SocketAddress getRemoteAddress() {
         return new InetSocketAddress(0);
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-        if (getFakePlayer().getOption().isRegistered())
-            MinecraftServer.getConnectionManager().removePlayer(this);
     }
 
     public FakePlayer getFakePlayer() {

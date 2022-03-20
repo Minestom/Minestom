@@ -183,11 +183,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void flush() {
-        this.workerQueue.relaxedOffer(this::flushSync);
-    }
-
-    @Override
     public @NotNull SocketAddress getRemoteAddress() {
         return remoteAddress;
     }
@@ -377,7 +372,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         var buffer = PacketUtils.createFramedPacket(serverPacket, compressed);
         writeBufferSync0(buffer, 0, buffer.limit());
-        if (player == null) flushSync(); // Player is probably not logged yet
     }
 
     private void writeBufferSync(@NotNull ByteBuffer buffer, int index, int length) {
@@ -418,35 +412,26 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    public void flushSync() {
+    public void flushSync() throws IOException {
+        if (!channel.isConnected()) throw new ClosedChannelException();
+        if (waitingBuffers.isEmpty() && tickBuffer.getPlain().writeChannel(channel))
+            return; // Fast exit if the tick buffer can be reused
+
         try {
-            if (!channel.isConnected()) throw new ClosedChannelException();
-            try {
-                if (waitingBuffers.isEmpty() && tickBuffer.getPlain().writeChannel(channel))
-                    return; // Fast exit if the tick buffer can be reused
+            updateLocalBuffer();
+        } catch (OutOfMemoryError e) {
+            this.waitingBuffers.clear();
+            System.gc(); // Explicit gc forcing buffers to be collected
+            throw new ClosedChannelException();
+        }
 
-                try {
-                    updateLocalBuffer();
-                } catch (OutOfMemoryError e) {
-                    this.waitingBuffers.clear();
-                    System.gc(); // Explicit gc forcing buffers to be collected
-                    throw new ClosedChannelException();
-                }
-
-                // Write as much as possible from the waiting list
-                Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
-                while (iterator.hasNext()) {
-                    BinaryBuffer waitingBuffer = iterator.next();
-                    if (!waitingBuffer.writeChannel(channel)) break;
-                    iterator.remove();
-                    PooledBuffers.add(waitingBuffer);
-                }
-            } catch (IOException e) { // Couldn't write to the socket
-                MinecraftServer.getExceptionManager().handleException(e);
-                throw new ClosedChannelException();
-            }
-        } catch (ClosedChannelException e) {
-            disconnect();
+        // Write as much as possible from the waiting list
+        Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
+        while (iterator.hasNext()) {
+            BinaryBuffer waitingBuffer = iterator.next();
+            if (!waitingBuffer.writeChannel(channel)) break;
+            iterator.remove();
+            PooledBuffers.add(waitingBuffer);
         }
     }
 

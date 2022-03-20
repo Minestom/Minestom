@@ -3,6 +3,7 @@ package net.minestom.server.network.player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.ConnectionState;
@@ -96,15 +97,6 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Flush waiting data to the connection.
-     * <p>
-     * Might not do anything depending on the implementation.
-     */
-    public void flush() {
-        // Empty
-    }
-
-    /**
      * Gets the remote address of the client.
      *
      * @return the remote address
@@ -148,6 +140,11 @@ public abstract class PlayerConnection {
      */
     public void disconnect() {
         this.online = false;
+        MinecraftServer.getConnectionManager().removePlayer(this);
+        final Player player = getPlayer();
+        if (player != null && !player.isRemoved()) {
+            player.scheduleNextTick(Entity::remove);
+        }
     }
 
     /**
