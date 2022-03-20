@@ -8,7 +8,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 /**
  * Represents an element which can read and write {@link Tag tags}.
  */
-@ApiStatus.Experimental
 public interface TagHandler extends TagReadable, TagWritable {
 
     @NotNull TagReadable readableCopy();
@@ -23,12 +22,10 @@ public interface TagHandler extends TagReadable, TagWritable {
     }
 
     /**
-     * Converts a nbt compound to a tag handler.
-     * <p>
-     * The returned tag handler is not thread-safe.
+     * Copy the content of the given {@link NBTCompoundLike} into a new {@link TagHandler}.
      *
-     * @param compound the compound to convert
-     * @return a {@link TagHandler} capable of writing and reading {@code compound}
+     * @param compound the compound to read tags from
+     * @return a new tag handler with the content of the given compound
      */
     static @NotNull TagHandler fromCompound(@NotNull NBTCompoundLike compound) {
         TagHandler handler = newHandler();
