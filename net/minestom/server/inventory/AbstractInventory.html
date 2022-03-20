@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dd><code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract sealed class </span><span class="element-name type-name-label">AbstractInventory</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a>, <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>
+implements <a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a>, <a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></span>
 <span class="permits">permits <a href="Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>, <a href="PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></span></div>
 <div class="block">Represents an inventory where items can be modified/retrieved.</div>
 </section>
@@ -194,62 +194,54 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the size of the inventory.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTag(net.minestom.server.tag.Tag)" class="member-name-link">getTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Reads the specified tag.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)" class="member-name-link">processItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
- @NotNull <a href="TransactionType.html" title="interface in net.minestom.server.inventory">TransactionType</a>&nbsp;type,
- @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)" class="member-name-link">processItemStacks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)" class="member-name-link">processItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
  @NotNull <a href="TransactionType.html" title="interface in net.minestom.server.inventory">TransactionType</a>&nbsp;type,
  @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceItemStack(int,java.util.function.UnaryOperator)" class="member-name-link">replaceItemStack</a><wbr>(int&nbsp;slot,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;operator)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)" class="member-name-link">processItemStacks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
+ @NotNull <a href="TransactionType.html" title="interface in net.minestom.server.inventory">TransactionType</a>&nbsp;type,
+ @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#safeItemInsert(int,net.minestom.server.item.ItemStack)" class="member-name-link">safeItemInsert</a><wbr>(int&nbsp;slot,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceItemStack(int,java.util.function.UnaryOperator)" class="member-name-link">replaceItemStack</a><wbr>(int&nbsp;slot,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;operator)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#safeItemInsert(int,net.minestom.server.item.ItemStack)" class="member-name-link">safeItemInsert</a><wbr>(int&nbsp;slot,
  @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Inserts safely an item into the inventory.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemStack(int,net.minestom.server.item.ItemStack)" class="member-name-link">setItemStack</a><wbr>(int&nbsp;slot,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemStack(int,net.minestom.server.item.ItemStack)" class="member-name-link">setItemStack</a><wbr>(int&nbsp;slot,
  @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot and send relevant update to the viewer(s).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTag(net.minestom.server.tag.Tag,T)" class="member-name-link">setTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
- T&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes the specified type.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
  @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Takes an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> from the inventory and sends relevant update to the viewer(s).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStacks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStacks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
  @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Takes <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>s from the inventory and sends relevant updates to the viewer(s).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)" class="member-name-link">UNSAFE_itemInsert</a><wbr>(int&nbsp;slot,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)" class="member-name-link">UNSAFE_itemInsert</a><wbr>(int&nbsp;slot,
  @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -260,11 +252,8 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <h3 id="methods-inherited-from-class-net.minestom.server.inventory.InventoryClickHandler">Methods inherited from interface&nbsp;net.minestom.server.inventory.<a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></h3>
 <code><a href="InventoryClickHandler.html#callClickEvent(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callClickEvent</a>, <a href="InventoryClickHandler.html#changeHeld(net.minestom.server.entity.Player,int,int)">changeHeld</a>, <a href="InventoryClickHandler.html#doubleClick(net.minestom.server.entity.Player,int)">doubleClick</a>, <a href="InventoryClickHandler.html#dragging(net.minestom.server.entity.Player,int,int)">dragging</a>, <a href="InventoryClickHandler.html#drop(net.minestom.server.entity.Player,boolean,int,int)">drop</a>, <a href="InventoryClickHandler.html#leftClick(net.minestom.server.entity.Player,int)">leftClick</a>, <a href="InventoryClickHandler.html#middleClick(net.minestom.server.entity.Player,int)">middleClick</a>, <a href="InventoryClickHandler.html#rightClick(net.minestom.server.entity.Player,int)">rightClick</a>, <a href="InventoryClickHandler.html#shiftClick(net.minestom.server.entity.Player,int)">shiftClick</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagReadable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
-<code><a href="../tag/TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagWritable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
-<code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.tag.Taggable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></h3>
+<code><a href="../tag/Taggable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../tag/Taggable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a>, <a href="../tag/Taggable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/Taggable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code></div>
 </section>
 </li>
 </ul>
@@ -570,41 +559,13 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 </section>
 </li>
 <li>
-<section class="detail" id="getTag(net.minestom.server.tag.Tag)">
-<h3>getTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getTag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">TagReadable</a></code></span></div>
-<div class="block">Reads the specified tag.</div>
+<section class="detail" id="tagHandler()">
+<h3>tagHandler</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">tagHandler</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">getTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></dd>
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - the tag type</dd>
-<dt>Parameters:</dt>
-<dd><code>tag</code> - the tag to read</dd>
-<dt>Returns:</dt>
-<dd>the read tag, null if not present</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setTag(net.minestom.server.tag.Tag,T)">
-<h3 id="setTag(net.minestom.server.tag.Tag,java.lang.Object)">setTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
- @Nullable
- T&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">TagWritable</a></code></span></div>
-<div class="block">Writes the specified type.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - the tag type</dd>
-<dt>Parameters:</dt>
-<dd><code>tag</code> - the tag to write</dd>
-<dd><code>value</code> - the tag value, null to remove</dd>
+<dd><code><a href="../tag/Taggable.html#tagHandler()">tagHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code></dd>
 </dl>
 </section>
 </li>

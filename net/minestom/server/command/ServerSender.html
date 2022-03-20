@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ServerSender</span>
@@ -120,17 +120,9 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns all permissions associated to this handler.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTag(net.minestom.server.tag.Tag)" class="member-name-link">getTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Reads the specified tag.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTag(net.minestom.server.tag.Tag,T)" class="member-name-link">setTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
- T&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes the specified type.</div>
-</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -150,11 +142,8 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <h3 id="methods-inherited-from-class-net.kyori.adventure.pointer.Pointered">Methods inherited from interface&nbsp;net.kyori.adventure.pointer.<a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></h3>
 <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#get(net.kyori.adventure.pointer.Pointer)" title="class or interface in net.kyori.adventure.pointer" class="external-link">get</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#getOrDefault(net.kyori.adventure.pointer.Pointer,T)" title="class or interface in net.kyori.adventure.pointer" class="external-link">getOrDefault</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#getOrDefaultFrom(net.kyori.adventure.pointer.Pointer,java.util.function.Supplier)" title="class or interface in net.kyori.adventure.pointer" class="external-link">getOrDefaultFrom</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#pointers()" title="class or interface in net.kyori.adventure.pointer" class="external-link">pointers</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagReadable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
-<code><a href="../tag/TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagWritable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
-<code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.tag.Taggable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></h3>
+<code><a href="../tag/Taggable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../tag/Taggable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a>, <a href="../tag/Taggable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/Taggable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code></div>
 </section>
 </li>
 </ul>
@@ -197,41 +186,13 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 </section>
 </li>
 <li>
-<section class="detail" id="getTag(net.minestom.server.tag.Tag)">
-<h3>getTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getTag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">TagReadable</a></code></span></div>
-<div class="block">Reads the specified tag.</div>
+<section class="detail" id="tagHandler()">
+<h3>tagHandler</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">tagHandler</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">getTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></dd>
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - the tag type</dd>
-<dt>Parameters:</dt>
-<dd><code>tag</code> - the tag to read</dd>
-<dt>Returns:</dt>
-<dd>the read tag, null if not present</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setTag(net.minestom.server.tag.Tag,T)">
-<h3 id="setTag(net.minestom.server.tag.Tag,java.lang.Object)">setTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
- @Nullable
- T&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">TagWritable</a></code></span></div>
-<div class="block">Writes the specified type.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - the tag type</dd>
-<dt>Parameters:</dt>
-<dd><code>tag</code> - the tag to write</dd>
-<dd><code>value</code> - the tag value, null to remove</dd>
+<dd><code><a href="../tag/Taggable.html#tagHandler()">tagHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code></dd>
 </dl>
 </section>
 </li>

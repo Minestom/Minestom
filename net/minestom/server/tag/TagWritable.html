@@ -74,7 +74,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></dd>
+<dd><code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -91,24 +91,19 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound)" class="member-name-link">fromCompound</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;compound)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
-<div class="block">Converts a nbt compound to a tag writer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeTag(net.minestom.server.tag.Tag)" class="member-name-link">removeTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setTag(net.minestom.server.tag.Tag,T)" class="member-name-link">setTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeTag(net.minestom.server.tag.Tag)" class="member-name-link">removeTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setTag(net.minestom.server.tag.Tag,T)" class="member-name-link">setTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
  T&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Writes the specified type.</div>
 </div>
 </div>
@@ -147,23 +142,6 @@ loadScripts(document, 'script');</script>
 <h3>removeTag</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeTag</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="fromCompound(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound)">
-<h3>fromCompound</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></span>&nbsp;<span class="element-name">fromCompound</span><wbr><span class="parameters">(@NotNull
- @NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;compound)</span></div>
-<div class="block">Converts a nbt compound to a tag writer.
- <p>
- The returned tag writer is not thread-safe.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>compound</code> - the compound to convert</dd>
-<dt>Returns:</dt>
-<dd>a <a href="TagWritable.html" title="interface in net.minestom.server.tag"><code>TagWritable</code></a> capable of writing <code>compound</code></dd>
-</dl>
 </section>
 </li>
 </ul>

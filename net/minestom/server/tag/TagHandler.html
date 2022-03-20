@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -72,17 +76,8 @@ loadScripts(document, 'script');</script>
 <dt>All Superinterfaces:</dt>
 <dd><code><a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
-<dl class="notes">
-<dt>All Known Subinterfaces:</dt>
-<dd><code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code></dd>
-</dl>
-<dl class="notes">
-<dt>All Known Implementing Classes:</dt>
-<dd><code><a href="../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code>, <code><a href="../inventory/type/AnvilInventory.html" title="class in net.minestom.server.inventory.type">AnvilInventory</a></code>, <code><a href="../inventory/type/BeaconInventory.html" title="class in net.minestom.server.inventory.type">BeaconInventory</a></code>, <code><a href="../inventory/type/BrewingStandInventory.html" title="class in net.minestom.server.inventory.type">BrewingStandInventory</a></code>, <code><a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code>, <code><a href="../command/ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code>, <code><a href="../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code>, <code><a href="../instance/DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></code>, <code><a href="../inventory/type/EnchantmentTableInventory.html" title="class in net.minestom.server.inventory.type">EnchantmentTableInventory</a></code>, <code><a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code>, <code><a href="../entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code>, <code><a href="../entity/damage/EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code>, <code><a href="../entity/EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a></code>, <code><a href="../entity/damage/EntityProjectileDamage.html" title="class in net.minestom.server.entity.damage">EntityProjectileDamage</a></code>, <code><a href="../entity/ExperienceOrb.html" title="class in net.minestom.server.entity">ExperienceOrb</a></code>, <code><a href="../entity/fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a></code>, <code><a href="../inventory/type/FurnaceInventory.html" title="class in net.minestom.server.inventory.type">FurnaceInventory</a></code>, <code><a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code>, <code><a href="../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code>, <code><a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code>, <code><a href="../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code>, <code><a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code>, <code><a href="../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></code>, <code><a href="../command/ServerSender.html" title="class in net.minestom.server.command">ServerSender</a></code>, <code><a href="../instance/SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code>, <code><a href="../inventory/type/VillagerInventory.html" title="class in net.minestom.server.inventory.type">VillagerInventory</a></code></dd>
-</dl>
 <hr>
-<div class="type-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">public interface </span><span class="element-name type-name-label">TagHandler</span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">TagHandler</span><span class="extends-implements">
 extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>, <a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></span></div>
 <div class="block">Represents an element which can read and write <a href="Tag.html" title="class in net.minestom.server.tag"><code>tags</code></a>.</div>
 </section>
@@ -93,15 +88,29 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="caption"><span>Static Methods</span></div>
-<div class="summary-table three-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel">
+<div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#asCompound()" class="member-name-link">asCompound</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">fromCompound</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Copy the content of the given <code>NBTCompoundLike</code> into a new <a href="TagHandler.html" title="interface in net.minestom.server.tag"><code>TagHandler</code></a>.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound)" class="member-name-link">fromCompound</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;compound)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
-<div class="block">Converts a nbt compound to a tag handler.</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#newHandler()" class="member-name-link">newHandler</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableCopy()" class="member-name-link">readableCopy</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateContent(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">updateContent</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -123,19 +132,46 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="fromCompound(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound)">
+<section class="detail" id="readableCopy()">
+<h3>readableCopy</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></span>&nbsp;<span class="element-name">readableCopy</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateContent(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)">
+<h3>updateContent</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">updateContent</span><wbr><span class="parameters">(@NotNull
+ @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="asCompound()">
+<h3>asCompound</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">asCompound</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="newHandler()">
+<h3>newHandler</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">newHandler</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)">
 <h3>fromCompound</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">fromCompound</span><wbr><span class="parameters">(@NotNull
- @NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;compound)</span></div>
-<div class="block">Converts a nbt compound to a tag handler.
- <p>
- The returned tag handler is not thread-safe.</div>
+ @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</span></div>
+<div class="block">Copy the content of the given <code>NBTCompoundLike</code> into a new <a href="TagHandler.html" title="interface in net.minestom.server.tag"><code>TagHandler</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>compound</code> - the compound to convert</dd>
+<dd><code>compound</code> - the compound to read tags from</dd>
 <dt>Returns:</dt>
-<dd>a <a href="TagHandler.html" title="interface in net.minestom.server.tag"><code>TagHandler</code></a> capable of writing and reading <code>compound</code></dd>
+<dd>a new tag handler with the content of the given compound</dd>
 </dl>
 </section>
 </li>

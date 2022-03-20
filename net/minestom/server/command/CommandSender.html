@@ -74,7 +74,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">CommandSender</span><span class="extends-implements">
-extends <a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a>, <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span></div>
+extends <a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a>, <a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></span></div>
 <div class="block">Represents something which can send commands to the server.
  <p>
  Main implementations are <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> and <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
@@ -143,11 +143,8 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <h3 id="methods-inherited-from-class-net.kyori.adventure.pointer.Pointered">Methods inherited from interface&nbsp;net.kyori.adventure.pointer.<a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></h3>
 <code><a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#get(net.kyori.adventure.pointer.Pointer)" title="class or interface in net.kyori.adventure.pointer" class="external-link">get</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#getOrDefault(net.kyori.adventure.pointer.Pointer,T)" title="class or interface in net.kyori.adventure.pointer" class="external-link">getOrDefault</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#getOrDefaultFrom(net.kyori.adventure.pointer.Pointer,java.util.function.Supplier)" title="class or interface in net.kyori.adventure.pointer" class="external-link">getOrDefaultFrom</a>, <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/pointer/Pointered.html#pointers()" title="class or interface in net.kyori.adventure.pointer" class="external-link">pointers</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagReadable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
-<code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../tag/TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagWritable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
-<code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.tag.Taggable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></h3>
+<code><a href="../tag/Taggable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../tag/Taggable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a>, <a href="../tag/Taggable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/Taggable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="../tag/Taggable.html#tagHandler()">tagHandler</a></code></div>
 </section>
 </li>
 </ul>
