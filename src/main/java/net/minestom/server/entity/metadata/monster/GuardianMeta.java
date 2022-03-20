@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GuardianMeta extends MonsterMeta {
