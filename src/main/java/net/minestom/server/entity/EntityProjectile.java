@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class that allows to instantiate entities with projectile-like physics handling.
@@ -133,7 +134,7 @@ public class EntityProjectile extends Entity {
             return true;
         }
 
-        Instance instance = getInstance();
+        final Instance instance = getInstance();
         Chunk chunk = null;
         Collection<Entity> entities = null;
 
@@ -142,8 +143,8 @@ public class EntityProjectile extends Entity {
           For each point we will be checking blocks and entities we're in.
          */
         double part = .25D; // half of the bounding box
-        final var dir = posNow.sub(pos).asVec();
-        int parts = (int) Math.ceil(dir.length() / part);
+        final Vec dir = posNow.sub(pos).asVec();
+        final int parts = (int) Math.ceil(dir.length() / part);
         final var direction = dir.normalize().mul(part).asPosition();
         for (int i = 0; i < parts; ++i) {
             // If we're at last part, we can't just add another direction-vector, because we can exceed end point.
@@ -165,18 +166,18 @@ public class EntityProjectile extends Entity {
                         .filter(entity -> entity instanceof LivingEntity)
                         .collect(Collectors.toSet());
             }
+            Stream<Entity> victimsStream = entities.stream()
+                    .filter(entity -> getBoundingBox().intersectEntity(getPosition(), entity));
             /*
               We won't check collisions with entities for first ticks of arrow's life, because it spawns in the
               shooter and will immediately damage him.
              */
-            if (getAliveTicks() < 3) {
-                continue;
+            if (getAliveTicks() < 3 && shooter != null) {
+                victimsStream = victimsStream.filter(entity -> entity != shooter);
             }
-            Optional<Entity> victimOptional = entities.stream()
-                    .filter(entity -> getBoundingBox().intersectEntity(getPosition(), entity))
-                    .findAny();
+            final Optional<Entity> victimOptional = victimsStream.findAny();
             if (victimOptional.isPresent()) {
-                LivingEntity victim = (LivingEntity) victimOptional.get();
+                final LivingEntity victim = (LivingEntity) victimOptional.get();
                 if(entityType == EntityTypes.ARROW || entityType == EntityTypes.SPECTRAL_ARROW) {
                     victim.setArrowCount(victim.getArrowCount() + 1);
                 }
