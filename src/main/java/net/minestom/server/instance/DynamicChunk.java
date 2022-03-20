@@ -16,8 +16,6 @@ import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
-import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -257,7 +255,7 @@ public class DynamicChunk extends Chunk {
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new InstanceSnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
+                tagHandler().readableCopy());
     }
 
     private void assertLock() {

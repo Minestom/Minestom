@@ -22,9 +22,8 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.InstanceSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.snapshot.Snapshotable;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
@@ -38,9 +37,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
@@ -59,7 +56,7 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, Snapshotable, TagHandler, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, Snapshotable, Taggable, PacketGroupingAudience {
 
     private boolean registered;
 
@@ -85,8 +82,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     protected UUID uniqueId;
 
     // instance custom data
-    private final Object nbtLock = new Object();
-    private final MutableNBTCompound nbt = new MutableNBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
     private final Scheduler scheduler = Scheduler.newScheduler();
 
@@ -599,17 +595,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        synchronized (nbtLock) {
-            return tag.read(nbt);
-        }
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        synchronized (nbtLock) {
-            tag.write(nbt, value);
-        }
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 
     @Override
@@ -623,7 +610,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
         return new InstanceSnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
-                TagReadable.fromCompound(Objects.requireNonNull(getTag(Tag.NBT))));
+                tagHandler.readableCopy());
     }
 
     /**

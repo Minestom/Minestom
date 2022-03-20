@@ -151,6 +151,11 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     }
 
     @Override
+    public @NotNull Block withNbt(@Nullable NBTCompound compound) {
+        return new BlockImpl(registry, propertiesArray, compound, handler);
+    }
+
+    @Override
     public @NotNull Block withHandler(@Nullable BlockHandler handler) {
         return new BlockImpl(registry, propertiesArray, nbt, handler);
     }

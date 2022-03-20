@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -52,7 +51,7 @@ public class AnvilLoader implements IChunkLoader {
         try (var reader = new NBTReader(Files.newInputStream(levelPath))) {
             final NBTCompound tag = (NBTCompound) reader.read();
             Files.copy(levelPath, path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
-            instance.setTag(Tag.NBT, tag);
+            instance.tagHandler().updateContent(tag);
         } catch (IOException | NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
@@ -213,8 +212,8 @@ public class AnvilLoader implements IChunkLoader {
 
     @Override
     public @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
-        final var nbt = instance.getTag(Tag.NBT);
-        if (nbt == null) {
+        final var nbt = instance.tagHandler().asCompound();
+        if (nbt.isEmpty()) {
             // Instance has no data
             return AsyncUtils.VOID_FUTURE;
         }
