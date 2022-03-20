@@ -142,33 +142,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves the current <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>, can be the default one if none is defined.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getShutdownText()" class="member-name-link">getShutdownText</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleKeepAlive(long)" class="member-name-link">handleKeepAlive</a><wbr>(long&nbsp;tickStart)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleKeepAlive(long)" class="member-name-link">handleKeepAlive</a><wbr>(long&nbsp;tickStart)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates keep alive by checking the last keep alive packet and send a new one if needed.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerPlayer(net.minestom.server.entity.Player)" class="member-name-link">registerPlayer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">removePlayer</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerPlayer(net.minestom.server.entity.Player)" class="member-name-link">registerPlayer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">removePlayer</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from the players list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)" class="member-name-link">setPlayerProvider</a><wbr>(@Nullable <a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setShutdownText(net.kyori.adventure.text.Component)" class="member-name-link">setShutdownText</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;shutdownText)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)" class="member-name-link">setPlayerProvider</a><wbr>(@Nullable <a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the kick reason in case of a shutdown.</div>
+<div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUuidProvider(net.minestom.server.network.UuidProvider)" class="member-name-link">setUuidProvider</a><wbr>(@Nullable <a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a>&nbsp;uuidProvider)</code></div>
@@ -371,36 +361,6 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the current <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getShutdownText()">
-<h3>getShutdownText</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">getShutdownText</span>()</div>
-<div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the kick reason in case on a shutdown</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setShutdownText(net.kyori.adventure.text.Component)">
-<h3>setShutdownText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setShutdownText</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;shutdownText)</span></div>
-<div class="block">Changes the kick reason in case of a shutdown.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>shutdownText</code> - the new shutdown kick reason</dd>
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="#getShutdownText()"><code>getShutdownText()</code></a></li>
-</ul>
-</dd>
 </dl>
 </section>
 </li>
