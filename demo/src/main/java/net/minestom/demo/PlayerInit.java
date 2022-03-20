@@ -7,7 +7,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.ItemEntity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -78,26 +81,6 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
-
-                Instance instance = player.getInstance();
-
-                instance.setBlock(1000, 42, 1000, Block.STONE);
-                instance.setBlock(1000, 42, 1001, Block.STONE);
-                instance.setBlock(1000, 43, 1001, Block.STONE);
-                instance.setBlock(1000, 43, 999, Block.STONE);
-                instance.setBlock(1001, 43, 999, Block.STONE);
-                instance.setBlock(1001, 42, 999, Block.STONE);
-                instance.setBlock(1001, 42, 1001, Block.STONE);
-                instance.setBlock(1001, 43, 1000, Block.STONE);
-                instance.setBlock(999, 42, 1001, Block.STONE);
-                instance.setBlock(1001, 43, 1001, Block.STONE);
-                instance.setBlock(1001, 42, 1000, Block.STONE);
-                instance.setBlock(1000, 42, 1010, Block.STONE);
-
-                var entity = new Entity(EntityType.ZOMBIE);
-                entity.setNoGravity(true);
-                entity.setInstance(instance, new Pos(1000.699, 42, 1000)).join();
-                entity.setInstance(instance, new Pos(1000.7, 42, 1000)).join();
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(PlayerLoginEvent.class, event -> {
