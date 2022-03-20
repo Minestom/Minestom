@@ -185,7 +185,6 @@ public class Tag<T> {
     }
 
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
-        // TODO special id
         return tag("", NBTCompound.class,
                 nbt -> serializer.read(TagHandler.fromCompound(nbt)),
                 (value) -> {
