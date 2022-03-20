@@ -1307,11 +1307,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         if (playerConnection instanceof PlayerSocketConnection) {
             ((PlayerSocketConnection) playerConnection).writeAndFlush(disconnectPacket);
-            playerConnection.disconnect();
         } else {
             playerConnection.sendPacket(disconnectPacket);
-            playerConnection.refreshOnline(false);
         }
+        playerConnection.disconnect();
     }
 
     /**

@@ -82,11 +82,11 @@ public final class Worker extends MinestomThread {
     }
 
     public void disconnect(PlayerSocketConnection connection, SocketChannel channel) {
+        assert !connection.isOnline();
         try {
             channel.close();
             this.connectionMap.remove(channel);
             MinecraftServer.getConnectionManager().removePlayer(connection);
-            connection.refreshOnline(false);
             Player player = connection.getPlayer();
             if (player != null && !player.isRemoved()) {
                 player.scheduleNextTick(Entity::remove);

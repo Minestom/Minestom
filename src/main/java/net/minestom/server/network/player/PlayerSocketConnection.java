@@ -106,6 +106,8 @@ public class PlayerSocketConnection extends PlayerConnection {
         try {
             this.cacheBuffer = PacketUtils.readPackets(readBuffer, compressed,
                     (id, payload) -> {
+                        if (!isOnline())
+                            return; // Prevent packet corruption
                         try {
                             packetProcessor.process(this, id, payload);
                         } catch (Exception e) {
@@ -212,6 +214,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
+        super.disconnect();
         this.workerQueue.relaxedOffer(() -> this.worker.disconnect(this, channel));
     }
 

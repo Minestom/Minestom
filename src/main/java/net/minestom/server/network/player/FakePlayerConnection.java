@@ -29,6 +29,7 @@ public class FakePlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
+        super.disconnect();
         if (getFakePlayer().getOption().isRegistered())
             MinecraftServer.getConnectionManager().removePlayer(this);
     }

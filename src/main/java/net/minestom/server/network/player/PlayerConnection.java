@@ -25,7 +25,7 @@ public abstract class PlayerConnection {
 
     private Player player;
     private volatile ConnectionState connectionState;
-    private boolean online;
+    volatile boolean online;
 
     // Text used to kick client sending too many packets
     private static final Component rateLimitKickMessage = Component.text("Too Many Packets", NamedTextColor.RED);
@@ -146,7 +146,9 @@ public abstract class PlayerConnection {
     /**
      * Forcing the player to disconnect.
      */
-    public abstract void disconnect();
+    public void disconnect() {
+        this.online = false;
+    }
 
     /**
      * Gets the player linked to this connection.
@@ -175,10 +177,6 @@ public abstract class PlayerConnection {
      */
     public boolean isOnline() {
         return online;
-    }
-
-    public void refreshOnline(boolean online) {
-        this.online = online;
     }
 
     public void setConnectionState(@NotNull ConnectionState connectionState) {
