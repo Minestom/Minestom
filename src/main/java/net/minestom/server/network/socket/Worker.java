@@ -83,6 +83,8 @@ public final class Worker extends MinestomThread {
 
     public void disconnect(PlayerSocketConnection connection, SocketChannel channel) {
         assert !connection.isOnline();
+        assert Thread.currentThread() == this;
+        connection.flushSync();
         try {
             channel.close();
             this.connectionMap.remove(channel);

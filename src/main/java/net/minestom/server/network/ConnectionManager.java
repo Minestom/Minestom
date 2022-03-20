@@ -12,7 +12,6 @@ import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.debug.DebugUtils;
@@ -240,11 +239,7 @@ public final class ConnectionManager {
             }
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
-            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-                socketConnection.writeAndFlush(loginSuccessPacket);
-            } else {
-                playerConnection.sendPacket(loginSuccessPacket);
-            }
+            playerConnection.sendPacket(loginSuccessPacket);
             playerConnection.setConnectionState(ConnectionState.PLAY);
             if (register) registerPlayer(player);
             this.waitingPlayers.relaxedOffer(player);

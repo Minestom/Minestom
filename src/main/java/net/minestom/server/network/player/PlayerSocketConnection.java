@@ -153,7 +153,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         Check.stateCondition(compressed, "Compression is already enabled!");
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
-        writeAndFlush(new SetCompressionPacket(threshold));
+        sendPacket(new SetCompressionPacket(threshold));
         this.compressed = true;
     }
 
@@ -180,14 +180,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     @ApiStatus.Internal
     public void write(@NotNull ByteBuffer buffer) {
         write(buffer, buffer.position(), buffer.remaining());
-    }
-
-    public void writeAndFlush(@NotNull ServerPacket packet) {
-        final boolean compressed = this.compressed;
-        this.workerQueue.relaxedOffer(() -> {
-            writeServerPacketSync(packet, compressed);
-            flushSync();
-        });
     }
 
     @Override
