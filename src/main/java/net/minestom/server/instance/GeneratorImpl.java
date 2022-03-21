@@ -18,12 +18,6 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
 final class GeneratorImpl {
     private static final Vec SECTION_SIZE = new Vec(16);
 
-    record ChunkEntry(List<Section> sections, int x, int z) {
-        public ChunkEntry(Chunk chunk) {
-            this(chunk.getSections(), chunk.getChunkX(), chunk.getChunkZ());
-        }
-    }
-
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
         final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
         final Vec end = start.add(SECTION_SIZE);
@@ -31,20 +25,23 @@ final class GeneratorImpl {
         return unit(modifier, start, end, null);
     }
 
-    static GenerationUnit chunk(int minSection, int maxSection, ChunkEntry chunk) {
+    static GenerationUnit chunk(int minSection, int maxSection,
+                                List<Section> chunkSections, int chunkX, int chunkZ) {
         final int minY = minSection * 16;
         AtomicInteger sectionCounterY = new AtomicInteger(minSection);
-        List<GenerationUnit> sections = chunk.sections().stream()
-                .map(section -> section(section, chunk.x(), sectionCounterY.getAndIncrement(), chunk.z()))
+        List<GenerationUnit> sections = chunkSections.stream()
+                .map(section -> section(section, chunkX, sectionCounterY.getAndIncrement(), chunkZ))
                 .toList();
 
-        final int chunkX = chunk.x();
-        final int chunkZ = chunk.z();
         final Vec size = new Vec(16, (maxSection - minSection) * 16, 16);
         final Vec start = new Vec(chunkX * 16, minY, chunkZ * 16);
         final Vec end = new Vec(chunkX * 16 + 16, size.y() + minY, chunkZ * 16 + 16);
         final UnitModifier modifier = new ChunkModifierImpl(size, start, end, chunkX, chunkZ, minY, sections);
         return unit(modifier, start, end, sections);
+    }
+
+    static GenerationUnit chunk(Chunk chunk) {
+        return chunk(chunk.minSection, chunk.maxSection, chunk.getSections(), chunk.getChunkX(), chunk.getChunkZ());
     }
 
     private static void checkChunk(int x, int chunkX,

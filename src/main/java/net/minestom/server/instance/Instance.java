@@ -16,7 +16,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
@@ -47,8 +46,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -700,23 +697,5 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
-    }
-
-    /**
-     * Gets the lowest section y coordinate
-     *
-     * @return lowest y section coordinate
-     */
-    public int getSectionMinY() {
-        return getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
-    }
-
-    /**
-     * Gets the highest section y coordinate
-     *
-     * @return highest y section coordinate
-     */
-    public int getSectionMaxY() {
-        return (getDimensionType().getMinY() + getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
     }
 }

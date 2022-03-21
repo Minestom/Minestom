@@ -12,6 +12,7 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -289,8 +290,7 @@ public class InstanceContainer extends Instance {
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = getGenerator();
         if (generator != null && chunk.shouldGenerate()) {
-            var chunkUnit = GeneratorImpl.chunk(getSectionMinY(), getSectionMaxY(),
-                    new GeneratorImpl.ChunkEntry(chunk));
+            GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
 
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
             // TODO: virtual thread once Loom is available
