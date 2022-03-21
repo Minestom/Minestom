@@ -9,8 +9,8 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
 import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
@@ -44,7 +44,7 @@ final class GeneratorImpl {
         final Vec start = new Vec(chunkX * 16, minY, chunkZ * 16);
         final Vec end = new Vec(chunkX * 16 + 16, size.y() + minY, chunkZ * 16 + 16);
         final UnitModifier modifier = new ChunkModifierImpl(size, start, end, chunkX, chunkZ, minY, sections);
-        return unit(modifier, start, end, generationUnit -> sections);
+        return unit(modifier, start, end, sections);
     }
 
     private static void checkChunk(int x, int chunkX,
@@ -58,7 +58,7 @@ final class GeneratorImpl {
     }
 
     static GenerationUnit unit(UnitModifier modifier, Point start, Point end,
-                               Function<GenerationUnit, List<GenerationUnit>> divider) {
+                               List<GenerationUnit> divider) {
         if (start.x() > end.x() || start.y() > end.y() || start.z() > end.z()) {
             throw new IllegalArgumentException("absoluteStart must be before absoluteEnd");
         }
@@ -69,32 +69,16 @@ final class GeneratorImpl {
             throw new IllegalArgumentException("absoluteEnd must be a multiple of 16");
         }
         final Point size = end.sub(start);
-        return new GenerationUnit() {
-            @Override
-            public @NotNull UnitModifier modifier() {
-                return modifier;
-            }
+        return new UnitImpl(modifier, size, start, end, divider);
+    }
 
-            @Override
-            public @NotNull Point size() {
-                return size;
-            }
-
-            @Override
-            public @NotNull Point absoluteStart() {
-                return start;
-            }
-
-            @Override
-            public @NotNull Point absoluteEnd() {
-                return end;
-            }
-
-            @Override
-            public @NotNull List<GenerationUnit> subdivide() {
-                return divider != null ? divider.apply(this) : GenerationUnit.super.subdivide();
-            }
-        };
+    record UnitImpl(UnitModifier modifier, Point size,
+                    Point absoluteStart, Point absoluteEnd,
+                    List<GenerationUnit> divider) implements GenerationUnit {
+        @Override
+        public @NotNull List<GenerationUnit> subdivide() {
+            return Objects.requireNonNullElseGet(divider, GenerationUnit.super::subdivide);
+        }
     }
 
     record SectionModifierImpl(Point size, Point start, Point end,
@@ -199,6 +183,33 @@ final class GeneratorImpl {
         public void fillBiome(@NotNull Biome biome) {
             for (GenerationUnit section : sections) {
                 section.modifier().fillBiome(biome);
+            }
+        }
+
+        @Override
+        public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
+            final int minMultiple = ((minHeight - 1) | 15) + 1;
+            final int maxMultiple = maxHeight - (maxHeight % 16);
+            // First section
+            if (minMultiple != minHeight) {
+                assert minHeight % 16 != 0;
+                final int sectionY = getChunkCoordinate(minHeight - minY);
+                final GenerationUnit section = sections.get(sectionY);
+                section.modifier().fillHeight(minHeight, Math.min(minMultiple, maxHeight), block);
+            }
+            // Last section
+            if (maxMultiple != maxHeight) {
+                assert maxHeight % 16 != 0;
+                final int sectionY = getChunkCoordinate(maxMultiple - minY);
+                final GenerationUnit section = sections.get(sectionY);
+                section.modifier().fillHeight(maxMultiple, maxHeight, block);
+            }
+            // Middle sections (to fill)
+            final int startSection = (minMultiple - minY) / 16;
+            final int endSection = (maxMultiple - 1 - minY) / 16;
+            for (int i = startSection; i <= endSection; i++) {
+                final GenerationUnit section = sections.get(i);
+                section.modifier().fill(block);
             }
         }
     }

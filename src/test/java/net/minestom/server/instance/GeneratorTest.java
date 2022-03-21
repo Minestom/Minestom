@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.minestom.server.instance.GeneratorImpl.unit;
 import static org.junit.jupiter.api.Assertions.*;
@@ -244,6 +245,68 @@ public class GeneratorTest {
         for (var section : sections) {
             section.biomePalette().getAll((x, y, z, value) ->
                     assertEquals(Biome.PLAINS.id(), value));
+        }
+    }
+
+    @Test
+    public void chunkFillHeightExact() {
+        final int minSection = -1;
+        final int maxSection = 5;
+        final int sectionCount = maxSection - minSection;
+        Section[] sections = new Section[sectionCount];
+        Arrays.setAll(sections, i -> new Section());
+        var chunkUnits = GeneratorImpl.chunk(minSection, maxSection,
+                new GeneratorImpl.ChunkEntry(List.of(sections), 3, -2));
+        Generator generator = chunk -> chunk.modifier().fillHeight(0, 32, Block.STONE);
+        generator.generate(chunkUnits);
+
+        AtomicInteger index = new AtomicInteger(minSection);
+        for (var section : sections) {
+            section.blockPalette().getAll((x, y, z, value) -> {
+                if (index.get() == 0 || index.get() == 1) {
+                    assertEquals(Block.STONE.stateId(), value, "filling failed for section " + index.get());
+                } else {
+                    assertEquals(0, value);
+                }
+            });
+            index.incrementAndGet();
+        }
+    }
+
+    @Test
+    public void chunkFillHeightOneOff() {
+        final int minSection = -1;
+        final int maxSection = 5;
+        final int sectionCount = maxSection - minSection;
+        Section[] sections = new Section[sectionCount];
+        Arrays.setAll(sections, i -> new Section());
+        var chunkUnits = GeneratorImpl.chunk(minSection, maxSection,
+                new GeneratorImpl.ChunkEntry(List.of(sections), 3, -2));
+        Generator generator = chunk -> chunk.modifier().fillHeight(1, 33, Block.STONE);
+        generator.generate(chunkUnits);
+
+        AtomicInteger index = new AtomicInteger(minSection);
+        for (var section : sections) {
+            section.blockPalette().getAll((x, y, z, value) -> {
+                if (index.get() == 0) {
+                    if (y > 0) {
+                        assertEquals(Block.STONE.stateId(), value);
+                    } else {
+                        assertEquals(0, value);
+                    }
+                } else if (index.get() == 1) {
+                    assertEquals(Block.STONE.stateId(), value);
+                } else if (index.get() == 2) {
+                    if (y == 0) {
+                        assertEquals(Block.STONE.stateId(), value);
+                    } else {
+                        assertEquals(0, value);
+                    }
+                } else {
+                    assertEquals(0, value);
+                }
+            });
+            index.incrementAndGet();
         }
     }
 
