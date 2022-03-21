@@ -295,39 +295,35 @@ public class InstanceContainer extends Instance {
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
             // TODO: virtual thread once Loom is available
             ForkJoinPool.commonPool().submit(() -> {
-                try {
-                    GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
-                    // Generate block/biome palette
-                    generator.generate(chunkUnit);
-                    // Apply nbt/handler
-                    if (chunkUnit.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier) {
-                        var sections = chunkModifier.sections();
-                        for (var section : sections) {
-                            if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                                var cache = sectionModifier.cache();
-                                if (!cache.isEmpty()) {
-                                    final int height = section.absoluteStart().blockY();
-                                    synchronized (chunk) {
-                                        Int2ObjectMaps.fastForEach(cache, blockEntry -> {
-                                            final int index = blockEntry.getIntKey();
-                                            final Block block = blockEntry.getValue();
-                                            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-                                            final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
-                                            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-                                            chunk.setBlock(x, y, z, block);
-                                        });
-                                    }
+                GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
+                // Generate block/biome palette
+                generator.generate(chunkUnit);
+                // Apply nbt/handler
+                if (chunkUnit.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier) {
+                    var sections = chunkModifier.sections();
+                    for (var section : sections) {
+                        if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
+                            var cache = sectionModifier.cache();
+                            if (!cache.isEmpty()) {
+                                final int height = section.absoluteStart().blockY();
+                                synchronized (chunk) {
+                                    Int2ObjectMaps.fastForEach(cache, blockEntry -> {
+                                        final int index = blockEntry.getIntKey();
+                                        final Block block = blockEntry.getValue();
+                                        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+                                        final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
+                                        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                                        chunk.setBlock(x, y, z, block);
+                                    });
                                 }
                             }
                         }
                     }
-                    // End generation
-                    chunk.sendChunk();
-                    refreshLastBlockChangeTime();
-                    resultFuture.complete(chunk);
-                } catch (Throwable e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
                 }
+                // End generation
+                chunk.sendChunk();
+                refreshLastBlockChangeTime();
+                resultFuture.complete(chunk);
             });
             return resultFuture;
         } else {
