@@ -75,8 +75,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @Nullable Generator getGenerator() {
-        return instanceContainer.getGenerator();
+    public @Nullable Generator generator() {
+        return instanceContainer.generator();
     }
 
     @Override

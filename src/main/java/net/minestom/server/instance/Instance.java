@@ -268,7 +268,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
      *
      * @return the generator if any
      */
-    public abstract @Nullable Generator getGenerator();
+    public abstract @Nullable Generator generator();
 
     /**
      * Changes the generator of the instance

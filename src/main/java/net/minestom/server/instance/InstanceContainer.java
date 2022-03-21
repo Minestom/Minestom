@@ -51,7 +51,8 @@ public class InstanceContainer extends Instance {
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
-    private Generator generator;
+    // the chunk generator used, can be null
+    private volatile Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -290,7 +291,7 @@ public class InstanceContainer extends Instance {
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
-        Generator generator = getGenerator();
+        Generator generator = generator();
         if (generator != null && chunk.shouldGenerate()) {
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
             // TODO: virtual thread once Loom is available
@@ -457,7 +458,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @Nullable Generator getGenerator() {
+    public @Nullable Generator generator() {
         return generator;
     }
 
