@@ -122,9 +122,17 @@ public final class ExtensionManager {
         }
 
         // Discover all extensions
-        Map<String, ExtensionDescriptor> extensionByName = discoverers.stream()
-                .flatMap(discoverer -> discoverer.discover(extensionDataRoot))
-                .collect(Collectors.toMap(ext -> ext.name().toLowerCase(), Function.identity()));
+        Map<String, ExtensionDescriptor> extensionByName = new HashMap<>();
+        for (ExtensionDiscoverer discoverer : discoverers) {
+            try {
+                Collection<ExtensionDescriptor> descriptors = discoverer.discover(extensionDataRoot);
+                for (ExtensionDescriptor descriptor : descriptors) {
+                    extensionByName.put(descriptor.name().toUpperCase(Locale.ROOT), descriptor);
+                }
+            } catch (Throwable e) {
+                LOGGER.error("Failed to process extension discoverer {}", discoverer.getClass().getName(), e);
+            }
+        }
         if (extensionByName.isEmpty()) return;
 
         // Compute the load order depending on dependencies
