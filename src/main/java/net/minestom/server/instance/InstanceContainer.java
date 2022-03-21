@@ -12,8 +12,6 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.instance.generator.GenerationRequest;
-import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -35,7 +33,7 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -291,38 +289,18 @@ public class InstanceContainer extends Instance {
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = getGenerator();
         if (generator != null && chunk.shouldGenerate()) {
-            AtomicReference<CompletableFuture<?>> stage = new AtomicReference<>(null);
             var chunkUnit = GeneratorImpl.chunk(getSectionMinY(), getSectionMaxY(),
                     new GeneratorImpl.ChunkEntry(chunk));
-            generator.generate(new GenerationRequest() {
-                @Override
-                public void returnAsync(@NotNull CompletableFuture<?> future) {
-                    stage.set(future);
-                }
-
-                @Override
-                public @NotNull GenerationUnit unit() {
-                    return chunkUnit;
-                }
-            });
 
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
-            final CompletableFuture<?> future = stage.get();
-            if (future != null) {
-                future.whenComplete((o, throwable) -> {
-                    if (throwable != null) {
-                        resultFuture.completeExceptionally(throwable);
-                    }
-                    resultFuture.complete(chunk);
-                });
-            } else {
-                resultFuture.complete(chunk);
-            }
-            return resultFuture.whenComplete((c, throwable) -> {
-                c.sendChunk();
+            // TODO: virtual thread once Loom is available
+            ForkJoinPool.commonPool().submit(() -> {
+                generator.generate(chunkUnit);
+                chunk.sendChunk();
                 refreshLastBlockChangeTime();
-                resultFuture.complete(c);
+                resultFuture.complete(chunk);
             });
+            return resultFuture;
         } else {
             // No chunk generator, execute the callback with the empty chunk
             return CompletableFuture.completedFuture(chunk);

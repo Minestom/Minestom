@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.generator.GenerationRequest;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import org.jetbrains.annotations.NotNull;
@@ -12,13 +11,12 @@ import org.jetbrains.annotations.NotNull;
  */
 record ChunkGeneratorCompatibilityLayer(@NotNull ChunkGenerator chunkGenerator) implements Generator {
     @Override
-    public void generate(@NotNull GenerationRequest request) {
-        GenerationUnit chunk = request.unit();
-        final int startY = chunk.absoluteStart().blockY();
+    public void generate(@NotNull GenerationUnit unit) {
+        final int startY = unit.absoluteStart().blockY();
         ChunkBatch batch = new ChunkBatch() {
             @Override
             public void setBlock(int x, int y, int z, @NotNull Block block) {
-                chunk.modifier().setRelative(x, y - startY, z, block);
+                unit.modifier().setRelative(x, y - startY, z, block);
             }
         };
         chunkGenerator.generateChunkData(batch, -999, -999);

@@ -6,9 +6,9 @@ import java.util.List;
 
 @FunctionalInterface
 public interface Generator {
-    void generate(@NotNull GenerationRequest request);
+    void generate(@NotNull GenerationUnit unit);
 
-    default void generateAll(@NotNull List<GenerationRequest> requests) {
-        requests.forEach(this::generate);
+    default void generateAll(@NotNull List<GenerationUnit> units) {
+        units.forEach(this::generate);
     }
 }
