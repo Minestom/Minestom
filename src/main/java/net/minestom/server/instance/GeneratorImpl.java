@@ -226,9 +226,12 @@ final class GeneratorImpl {
         default void setAll(@NotNull Supplier supplier) {
             final Point start = start();
             final Point end = end();
-            for (int x = start.blockX(); x < end.blockX(); x++) {
-                for (int y = start.blockY(); y < end.blockY(); y++) {
-                    for (int z = start.blockZ(); z < end.blockZ(); z++) {
+            final int endX = end.blockX();
+            final int endY = end.blockY();
+            final int endZ = end.blockZ();
+            for (int x = start.blockX(); x < endX; x++) {
+                for (int y = start.blockY(); y < endY; y++) {
+                    for (int z = start.blockZ(); z < endZ; z++) {
                         setBlock(x, y, z, supplier.get(x, y, z));
                     }
                 }
@@ -238,9 +241,12 @@ final class GeneratorImpl {
         @Override
         default void setAllRelative(@NotNull Supplier supplier) {
             final Point size = size();
-            for (int x = 0; x < size.blockX(); x++) {
-                for (int y = 0; y < size.blockY(); y++) {
-                    for (int z = 0; z < size.blockZ(); z++) {
+            final int endX = size.blockX();
+            final int endY = size.blockY();
+            final int endZ = size.blockZ();
+            for (int x = 0; x < endX; x++) {
+                for (int y = 0; y < endY; y++) {
+                    for (int z = 0; z < endZ; z++) {
                         setRelative(x, y, z, supplier.get(x, y, z));
                     }
                 }
@@ -280,12 +286,12 @@ final class GeneratorImpl {
                 // Slow path if the unit is not fully contained in the height range
                 final int startLoopY = Math.max(minHeight, startY);
                 final int endLoopY = Math.min(maxHeight, endY);
-                for (int x = start.blockX(); x < end.blockX(); x++) {
-                    for (int z = start.blockZ(); z < end.blockZ(); z++) {
-                        for (int y = startLoopY; y < endLoopY; y++) {
-                            if (y >= minHeight && y <= maxHeight) {
-                                setBlock(x, y, z, block);
-                            }
+                final int endX = end.blockX();
+                final int endZ = end.blockZ();
+                for (int x = start.blockX(); x < endX; x++) {
+                    for (int y = startLoopY; y < endLoopY; y++) {
+                        for (int z = start.blockZ(); z < endZ; z++) {
+                            setBlock(x, y, z, block);
                         }
                     }
                 }
