@@ -249,5 +249,28 @@ final class GeneratorImpl {
                 }
             }
         }
+
+        @Override
+        public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
+            final int startY = start.blockY();
+            final int endY = end.blockY();
+            if (startY >= minHeight && endY <= maxHeight) {
+                // Fast path if the unit is fully contained in the height range
+                fill(start, end, block);
+            } else {
+                // Slow path if the unit is not fully contained in the height range
+                final int startLoopY = Math.max(minHeight, startY);
+                final int endLoopY = Math.min(maxHeight, endY);
+                for (int x = start.blockX(); x < end.blockX(); x++) {
+                    for (int z = start.blockZ(); z < end.blockZ(); z++) {
+                        for (int y = startLoopY; y < endLoopY; y++) {
+                            if (y >= minHeight && y <= maxHeight) {
+                                setBlock(x, y, z, block);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

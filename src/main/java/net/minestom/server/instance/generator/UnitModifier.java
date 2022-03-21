@@ -16,6 +16,8 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
 
     void fill(@NotNull Point start, @NotNull Point end, @NotNull Block block);
 
+    void fillHeight(int minHeight, int maxHeight, @NotNull Block block);
+
     void fillBiome(@NotNull Biome biome);
 
     interface Supplier {

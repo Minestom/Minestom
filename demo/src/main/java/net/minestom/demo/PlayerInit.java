@@ -18,13 +18,11 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -128,11 +126,7 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-
-        instanceContainer.setGenerator(request -> {
-            GenerationUnit unit = request.unit();
-            unit.modifier().setAll((x, y, z) -> y > 40 ? Block.AIR : Block.STONE);
-        });
+        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
 
         if (false) {
             System.out.println("start");
