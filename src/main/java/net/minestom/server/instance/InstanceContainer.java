@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -23,6 +24,7 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -290,15 +292,42 @@ public class InstanceContainer extends Instance {
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = getGenerator();
         if (generator != null && chunk.shouldGenerate()) {
-            GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
-
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
             // TODO: virtual thread once Loom is available
             ForkJoinPool.commonPool().submit(() -> {
-                generator.generate(chunkUnit);
-                chunk.sendChunk();
-                refreshLastBlockChangeTime();
-                resultFuture.complete(chunk);
+                try {
+                    GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
+                    // Generate block/biome palette
+                    generator.generate(chunkUnit);
+                    // Apply nbt/handler
+                    if (chunkUnit.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier) {
+                        var sections = chunkModifier.sections();
+                        for (var section : sections) {
+                            if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
+                                var cache = sectionModifier.cache();
+                                if (!cache.isEmpty()) {
+                                    final int height = section.absoluteStart().blockY();
+                                    synchronized (chunk) {
+                                        Int2ObjectMaps.fastForEach(cache, blockEntry -> {
+                                            final int index = blockEntry.getIntKey();
+                                            final Block block = blockEntry.getValue();
+                                            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+                                            final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
+                                            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                                            chunk.setBlock(x, y, z, block);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // End generation
+                    chunk.sendChunk();
+                    refreshLastBlockChangeTime();
+                    resultFuture.complete(chunk);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             });
             return resultFuture;
         } else {

@@ -1,10 +1,13 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.UnitModifier;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +24,7 @@ final class GeneratorImpl {
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
         final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
         final Vec end = start.add(SECTION_SIZE);
-        final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end, section);
+        final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end, section, new Int2ObjectOpenHashMap<>(0));
         return unit(modifier, start, end, null);
     }
 
@@ -79,7 +82,7 @@ final class GeneratorImpl {
     }
 
     record SectionModifierImpl(Point size, Point start, Point end,
-                               Section section) implements GenericModifier {
+                               Section section, Int2ObjectMap<Block> cache) implements GenericModifier {
         @Override
         public void setBiome(int x, int y, int z, @NotNull Biome biome) {
             section.biomePalette().set(
@@ -93,27 +96,54 @@ final class GeneratorImpl {
             final int localX = toSectionRelativeCoordinate(x);
             final int localY = toSectionRelativeCoordinate(y);
             final int localZ = toSectionRelativeCoordinate(z);
+            handleCache(localX, localY, localZ, block);
             section.blockPalette().set(localX, localY, localZ, block.stateId());
         }
 
         @Override
         public void setRelative(int x, int y, int z, @NotNull Block block) {
+            handleCache(x, y, z, block);
             section.blockPalette().set(x, y, z, block.stateId());
         }
 
         @Override
         public void setAllRelative(@NotNull Supplier supplier) {
-            section.blockPalette().setAll((x, y, z) -> supplier.get(x, y, z).stateId());
+            section.blockPalette().setAll((x, y, z) -> {
+                final Block block = supplier.get(x, y, z);
+                handleCache(x, y, z, block);
+                return block.stateId();
+            });
         }
 
         @Override
         public void fill(@NotNull Block block) {
+            if (requireCache(block)) {
+                for (int x = 0; x < 16; x++) {
+                    for (int y = 0; y < 16; y++) {
+                        for (int z = 0; z < 16; z++) {
+                            this.cache.put(ChunkUtils.getBlockIndex(x, y, z), block);
+                        }
+                    }
+                }
+            }
             section.blockPalette().fill(block.stateId());
         }
 
         @Override
         public void fillBiome(@NotNull Biome biome) {
             section.biomePalette().fill(biome.id());
+        }
+
+        private void handleCache(int x, int y, int z, Block block) {
+            if (requireCache(block)) {
+                this.cache.put(ChunkUtils.getBlockIndex(x, y, z), block);
+            } else if (!cache.isEmpty()) {
+                this.cache.remove(ChunkUtils.getBlockIndex(x, y, z));
+            }
+        }
+
+        private boolean requireCache(Block block) {
+            return block.hasNbt() || block.handler() != null || block.registry().isBlockEntity();
         }
     }
 
