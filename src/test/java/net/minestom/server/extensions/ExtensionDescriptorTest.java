@@ -135,7 +135,7 @@ public class ExtensionDescriptorTest {
                             "repositories": {}
                         }
                         """),
-                of("repository as non-object", "Repository definitions must be objects, not: []", """
+                of("repository as non-object", "Repository definitions must be strings or objects, not: []", """
                         {
                             "name": "Test",
                             "version": "1.0.0",
