@@ -15,18 +15,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static net.minestom.server.instance.GeneratorImpl.unit;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GeneratorTest {
 
     @Test
     public void unitSize() {
-        assertDoesNotThrow(() -> GeneratorImpl.dummyUnit(Vec.ZERO, new Vec(16)));
-        assertDoesNotThrow(() -> GeneratorImpl.dummyUnit(new Vec(16), new Vec(32)));
-        assertThrows(IllegalArgumentException.class, () -> GeneratorImpl.dummyUnit(new Vec(15), Vec.ZERO));
-        assertThrows(IllegalArgumentException.class, () -> GeneratorImpl.dummyUnit(new Vec(15), new Vec(32)));
-        assertThrows(IllegalArgumentException.class, () -> GeneratorImpl.dummyUnit(new Vec(15), new Vec(31)));
-        assertThrows(IllegalArgumentException.class, () -> GeneratorImpl.dummyUnit(Vec.ZERO, new Vec(15)));
+        assertDoesNotThrow(() -> dummyUnit(Vec.ZERO, new Vec(16)));
+        assertDoesNotThrow(() -> dummyUnit(new Vec(16), new Vec(32)));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), Vec.ZERO));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(32)));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(31)));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(Vec.ZERO, new Vec(15)));
     }
 
     @Test
@@ -254,5 +255,9 @@ public class GeneratorTest {
         generator.generate(chunkUnit);
         section.blockPalette().getAll((x, y, z, value) ->
                 assertEquals(Block.STONE.stateId(), value));
+    }
+
+    static GenerationUnit dummyUnit(Point start, Point end) {
+        return unit(null, start, end, null);
     }
 }

@@ -25,45 +25,9 @@ final class GeneratorImpl {
     }
 
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
-        final var start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
-        final var end = start.add(SECTION_SIZE);
-        final UnitModifier modifier = new ModifierImpl(SECTION_SIZE, start, end) {
-            @Override
-            public void setBiome(int x, int y, int z, @NotNull Biome biome) {
-                section.biomePalette().set(
-                        toSectionRelativeCoordinate(x) / 4,
-                        toSectionRelativeCoordinate(y) / 4,
-                        toSectionRelativeCoordinate(z) / 4, biome.id());
-            }
-
-            @Override
-            public void setBlock(int x, int y, int z, @NotNull Block block) {
-                final int localX = toSectionRelativeCoordinate(x);
-                final int localY = toSectionRelativeCoordinate(y);
-                final int localZ = toSectionRelativeCoordinate(z);
-                section.blockPalette().set(localX, localY, localZ, block.stateId());
-            }
-
-            @Override
-            public void setRelative(int x, int y, int z, @NotNull Block block) {
-                section.blockPalette().set(x, y, z, block.stateId());
-            }
-
-            @Override
-            public void setAllRelative(@NotNull Supplier supplier) {
-                section.blockPalette().setAll((x, y, z) -> supplier.get(x, y, z).stateId());
-            }
-
-            @Override
-            public void fill(@NotNull Block block) {
-                section.blockPalette().fill(block.stateId());
-            }
-
-            @Override
-            public void fillBiome(@NotNull Biome biome) {
-                section.biomePalette().fill(biome.id());
-            }
-        };
+        final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
+        final Vec end = start.add(SECTION_SIZE);
+        final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end, section);
         return unit(modifier, start, end, null);
     }
 
@@ -76,73 +40,10 @@ final class GeneratorImpl {
 
         final int chunkX = chunk.x();
         final int chunkZ = chunk.z();
-        final var size = new Vec(16, (maxSection - minSection) * 16, 16);
-        final var start = new Vec(chunkX * 16, minY, chunkZ * 16);
-        final var end = new Vec(chunkX * 16 + 16, size.y() + minY, chunkZ * 16 + 16);
-        final UnitModifier modifier = new ModifierImpl(size, start, end) {
-            @Override
-            public void setBlock(int x, int y, int z, @NotNull Block block) {
-                checkChunk(x, chunkX, z, chunkZ);
-                y -= minY;
-                final int sectionY = getChunkCoordinate(y);
-                final GenerationUnit section = sections.get(sectionY);
-                section.modifier().setBlock(x, y, z, block);
-            }
-
-            @Override
-            public void setBiome(int x, int y, int z, @NotNull Biome biome) {
-                checkChunk(x, chunkX, z, chunkZ);
-                y -= minY;
-                final int sectionY = getChunkCoordinate(y);
-                final GenerationUnit section = sections.get(sectionY);
-                section.modifier().setBiome(x, y, z, biome);
-            }
-
-            @Override
-            public void setRelative(int x, int y, int z, @NotNull Block block) {
-                if (x < 0 || x >= size.x() || y < 0 || y >= size.y() || z < 0 || z >= size.z()) {
-                    throw new IllegalArgumentException("x, y and z must be in the chunk: " + x + ", " + y + ", " + z);
-                }
-                final GenerationUnit section = sections.get(y / 16);
-                section.modifier().setBlock(x, y % 16, z, block);
-            }
-
-            @Override
-            public void setAll(@NotNull Supplier supplier) {
-                for (GenerationUnit section : sections) {
-                    final var start = section.absoluteStart();
-                    final int startX = start.blockX();
-                    final int startY = start.blockY();
-                    final int startZ = start.blockZ();
-                    section.modifier().setAllRelative((x, y, z) ->
-                            supplier.get(x + startX, y + startY, z + startZ));
-                }
-            }
-
-            @Override
-            public void setAllRelative(@NotNull Supplier supplier) {
-                for (int i = 0; i < sections.size(); i++) {
-                    final GenerationUnit section = sections.get(i);
-                    final int offset = i * 16;
-                    section.modifier().setAllRelative((x, y, z) ->
-                            supplier.get(x, y + offset, z));
-                }
-            }
-
-            @Override
-            public void fill(@NotNull Block block) {
-                for (GenerationUnit section : sections) {
-                    section.modifier().fill(block);
-                }
-            }
-
-            @Override
-            public void fillBiome(@NotNull Biome biome) {
-                for (GenerationUnit section : sections) {
-                    section.modifier().fillBiome(biome);
-                }
-            }
-        };
+        final Vec size = new Vec(16, (maxSection - minSection) * 16, 16);
+        final Vec start = new Vec(chunkX * 16, minY, chunkZ * 16);
+        final Vec end = new Vec(chunkX * 16 + 16, size.y() + minY, chunkZ * 16 + 16);
+        final UnitModifier modifier = new ChunkModifierImpl(size, start, end, chunkX, chunkZ, minY, sections);
         return unit(modifier, start, end, generationUnit -> sections);
     }
 
@@ -196,21 +97,124 @@ final class GeneratorImpl {
         };
     }
 
-    static GenerationUnit dummyUnit(Point start, Point end) {
-        return unit(null, start, end, null);
+    record SectionModifierImpl(Point size, Point start, Point end,
+                               Section section) implements GenericModifier {
+        @Override
+        public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+            section.biomePalette().set(
+                    toSectionRelativeCoordinate(x) / 4,
+                    toSectionRelativeCoordinate(y) / 4,
+                    toSectionRelativeCoordinate(z) / 4, biome.id());
+        }
+
+        @Override
+        public void setBlock(int x, int y, int z, @NotNull Block block) {
+            final int localX = toSectionRelativeCoordinate(x);
+            final int localY = toSectionRelativeCoordinate(y);
+            final int localZ = toSectionRelativeCoordinate(z);
+            section.blockPalette().set(localX, localY, localZ, block.stateId());
+        }
+
+        @Override
+        public void setRelative(int x, int y, int z, @NotNull Block block) {
+            section.blockPalette().set(x, y, z, block.stateId());
+        }
+
+        @Override
+        public void setAllRelative(@NotNull Supplier supplier) {
+            section.blockPalette().setAll((x, y, z) -> supplier.get(x, y, z).stateId());
+        }
+
+        @Override
+        public void fill(@NotNull Block block) {
+            section.blockPalette().fill(block.stateId());
+        }
+
+        @Override
+        public void fillBiome(@NotNull Biome biome) {
+            section.biomePalette().fill(biome.id());
+        }
     }
 
-    static abstract class ModifierImpl implements UnitModifier {
-        private final Point size, start, end;
+    record ChunkModifierImpl(Point size, Point start, Point end,
+                             int chunkX, int chunkZ, int minY,
+                             List<GenerationUnit> sections) implements GenericModifier {
+        @Override
+        public void setBlock(int x, int y, int z, @NotNull Block block) {
+            checkChunk(x, chunkX, z, chunkZ);
+            y -= minY;
+            final int sectionY = getChunkCoordinate(y);
+            final GenerationUnit section = sections.get(sectionY);
+            section.modifier().setBlock(x, y, z, block);
+        }
 
-        public ModifierImpl(Point size, Point start, Point end) {
-            this.size = size;
-            this.start = start;
-            this.end = end;
+        @Override
+        public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+            checkChunk(x, chunkX, z, chunkZ);
+            y -= minY;
+            final int sectionY = getChunkCoordinate(y);
+            final GenerationUnit section = sections.get(sectionY);
+            section.modifier().setBiome(x, y, z, biome);
+        }
+
+        @Override
+        public void setRelative(int x, int y, int z, @NotNull Block block) {
+            if (x < 0 || x >= size.x() || y < 0 || y >= size.y() || z < 0 || z >= size.z()) {
+                throw new IllegalArgumentException("x, y and z must be in the chunk: " + x + ", " + y + ", " + z);
+            }
+            final GenerationUnit section = sections.get(y / 16);
+            section.modifier().setBlock(x, y % 16, z, block);
         }
 
         @Override
         public void setAll(@NotNull Supplier supplier) {
+            for (GenerationUnit section : sections) {
+                final var start = section.absoluteStart();
+                final int startX = start.blockX();
+                final int startY = start.blockY();
+                final int startZ = start.blockZ();
+                section.modifier().setAllRelative((x, y, z) ->
+                        supplier.get(x + startX, y + startY, z + startZ));
+            }
+        }
+
+        @Override
+        public void setAllRelative(@NotNull Supplier supplier) {
+            for (int i = 0; i < sections.size(); i++) {
+                final GenerationUnit section = sections.get(i);
+                final int offset = i * 16;
+                section.modifier().setAllRelative((x, y, z) ->
+                        supplier.get(x, y + offset, z));
+            }
+        }
+
+        @Override
+        public void fill(@NotNull Block block) {
+            for (GenerationUnit section : sections) {
+                section.modifier().fill(block);
+            }
+        }
+
+        @Override
+        public void fillBiome(@NotNull Biome biome) {
+            for (GenerationUnit section : sections) {
+                section.modifier().fillBiome(biome);
+            }
+        }
+    }
+
+    sealed interface GenericModifier extends UnitModifier
+            permits ChunkModifierImpl, SectionModifierImpl {
+        Point size();
+
+        Point start();
+
+        Point end();
+
+        @Override
+        default void setAll(@NotNull Supplier supplier) {
+            final Point start = start();
+            final Point end = end();
             for (int x = start.blockX(); x < end.blockX(); x++) {
                 for (int y = start.blockY(); y < end.blockY(); y++) {
                     for (int z = start.blockZ(); z < end.blockZ(); z++) {
@@ -221,7 +225,8 @@ final class GeneratorImpl {
         }
 
         @Override
-        public void setAllRelative(@NotNull Supplier supplier) {
+        default void setAllRelative(@NotNull Supplier supplier) {
+            final Point size = size();
             for (int x = 0; x < size.blockX(); x++) {
                 for (int y = 0; y < size.blockY(); y++) {
                     for (int z = 0; z < size.blockZ(); z++) {
@@ -232,12 +237,12 @@ final class GeneratorImpl {
         }
 
         @Override
-        public void fill(@NotNull Block block) {
-            fill(start, end, block);
+        default void fill(@NotNull Block block) {
+            fill(start(), end(), block);
         }
 
         @Override
-        public void fill(@NotNull Point start, @NotNull Point end, @NotNull Block block) {
+        default void fill(@NotNull Point start, @NotNull Point end, @NotNull Block block) {
             final int endX = end.blockX();
             final int endY = end.blockY();
             final int endZ = end.blockZ();
@@ -251,7 +256,10 @@ final class GeneratorImpl {
         }
 
         @Override
-        public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
+        default void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
+            final Point start = start();
+            final Point end = end();
+
             final int startY = start.blockY();
             final int endY = end.blockY();
             if (startY >= minHeight && endY <= maxHeight) {
