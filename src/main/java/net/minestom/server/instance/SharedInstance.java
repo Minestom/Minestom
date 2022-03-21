@@ -75,12 +75,6 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    @Deprecated
-    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        this.instanceContainer.setChunkGenerator(chunkGenerator);
-    }
-
-    @Override
     public @Nullable Generator getGenerator() {
         return instanceContainer.getGenerator();
     }
@@ -88,12 +82,6 @@ public class SharedInstance extends Instance {
     @Override
     public void setGenerator(@Nullable Generator generator) {
         instanceContainer.setGenerator(generator);
-    }
-
-    @Override
-    @Deprecated
-    public ChunkGenerator getChunkGenerator() {
-        return instanceContainer.getChunkGenerator();
     }
 
     @NotNull

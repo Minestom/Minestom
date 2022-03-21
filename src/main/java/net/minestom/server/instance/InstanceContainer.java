@@ -460,24 +460,6 @@ public class InstanceContainer extends Instance {
         this.lastBlockChangeTime = System.currentTimeMillis();
     }
 
-    /**
-     * @deprecated Use {@link #getGenerator()}
-     */
-    @Override
-    @Deprecated
-    public ChunkGenerator getChunkGenerator() {
-        return null;
-    }
-
-    /**
-     * @deprecated Use {@link #setGenerator(Generator)}
-     */
-    @Override
-    @Deprecated
-    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        setGenerator(new ChunkGeneratorCompatibilityLayer(chunkGenerator));
-    }
-
     @Override
     public @Nullable Generator getGenerator() {
         return generator;

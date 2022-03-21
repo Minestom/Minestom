@@ -253,22 +253,15 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Gets the instance {@link ChunkGenerator}.
-     *
-     * @return the {@link ChunkGenerator} of the instance
-     * @deprecated Use {@link #getGenerator()}
-     */
-    @Deprecated
-    public abstract @Nullable ChunkGenerator getChunkGenerator();
-
-    /**
      * Changes the instance {@link ChunkGenerator}.
      *
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
      * @deprecated Use {@link #setGenerator(Generator)}
      */
     @Deprecated
-    public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
+    public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
+        setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
+    }
 
     /**
      * Gets the generator associated with the instance
