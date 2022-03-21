@@ -1,6 +1,6 @@
 package net.minestom.server.extensions;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +10,7 @@ public sealed interface Repository permits RepositoryImpl {
         return new RepositoryImpl(id, url);
     }
 
-    static @Nullable Repository fromJson(@NotNull JsonObject json) {
+    static @Nullable Repository fromJson(@NotNull JsonElement json) {
         return RepositoryImpl.fromJson(json);
     }
 

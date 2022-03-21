@@ -57,8 +57,7 @@ record ExtensionDescriptorImpl(
             JsonElement repositoriesElement = json.get("repositories");
             Check.argCondition(!repositoriesElement.isJsonArray(), "Repositories must be an array, not: " + repositoriesElement);
             for (JsonElement repositoryElement : repositoriesElement.getAsJsonArray()) {
-                Check.argCondition(!repositoryElement.isJsonObject(), "Repository definitions must be objects, not: " + repositoryElement);
-                Repository repository = Repository.fromJson(repositoryElement.getAsJsonObject());
+                Repository repository = Repository.fromJson(repositoryElement);
                 if (repository != null) repositories.add(repository);
             }
         }
