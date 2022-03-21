@@ -145,7 +145,7 @@ public class ExtensionDescriptorTest {
                             ]
                         }
                         """),
-                of("repository missing name", "Repository must have a name", """
+                of("repository missing name", "Repository must have an id", """
                         {
                             "name": "Test",
                             "version": "1.0.0",
@@ -162,7 +162,7 @@ public class ExtensionDescriptorTest {
                             "entrypoint": "abc",
                             "repositories": [
                                 {
-                                    "name": "Maven Central"
+                                    "id": "Maven Central"
                                 }
                             ]
                         }
