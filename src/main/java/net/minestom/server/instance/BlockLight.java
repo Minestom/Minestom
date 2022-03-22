@@ -15,6 +15,7 @@ final class BlockLight {
     static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
 
     static @NotNull Result compute(Palette blockPalette) {
+        float[] factor = new float[4096];
 
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[DIRECTIONS.length][];
@@ -24,7 +25,8 @@ final class BlockLight {
             final Block block = Block.fromStateId((short) stateId);
             assert block != null;
             final byte lightEmission = (byte) block.registry().lightEmission();
-            placeLight(lightArray, x, y, z, lightEmission);
+            if (lightEmission > 0) placeLight(lightArray, x, y, z, lightEmission);
+            factor[(x & 15) | ((z & 15) << 4) | ((y & 15) << 8)] = getBlockFactor(block);
         });
 
         while (true) {
@@ -50,8 +52,8 @@ final class BlockLight {
                                 continue;
                             }
 
-                            byte neighborLight = (byte) (getLight(lightArray, xO, yO, zO) - 1);
-                            neighborLight = (byte) ((float) neighborLight * (1 - getBlockFactor(blockPalette, x, y, z)));
+                            final float blockFactor = factor[(x & 15) | ((z & 15) << 4) | ((y & 15) << 8)];
+                            final byte neighborLight = (byte) (((float) getLight(lightArray, xO, yO, zO) - 1) * (1 - blockFactor));
                             newLight = (byte) Math.max(newLight, neighborLight);
                         }
                         if (newLight != light) {
@@ -121,11 +123,8 @@ final class BlockLight {
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }
 
-    private static float getBlockFactor(Palette palette, int x, int y, int z) {
-        var block = Block.fromStateId((short) palette.get(x, y, z));
-        assert block != null : "Block not found: " + x + ", " + y + ", " + z;
+    private static float getBlockFactor(Block block) {
         var shape = block.registry().collisionShape();
-        float factor = shape.relativeStart().isZero() && shape.relativeEnd().samePoint(Vec.ONE) ? 1 : 0;
-        return factor;
+        return (float) (shape.relativeStart().isZero() && shape.relativeEnd().samePoint(Vec.ONE) ? 1 : 0);
     }
 }
