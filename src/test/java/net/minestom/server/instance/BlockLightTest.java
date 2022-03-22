@@ -106,6 +106,84 @@ public class BlockLightTest {
                 entry(new Vec(2, 2, 3), 0)));
     }
 
+    @Test
+    public void isolatedStair() {
+        var palette = Palette.blocks();
+        palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
+        palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(
+                "facing", "east",
+                "half", "bottom",
+                "shape", "straight")).stateId());
+
+        palette.set(3, 1, 4, Block.STONE.stateId());
+        palette.set(4, 1, 5, Block.STONE.stateId());
+        palette.set(4, 1, 3, Block.STONE.stateId());
+        palette.set(5, 1, 4, Block.STONE.stateId());
+        palette.set(4, 2, 4, Block.STONE.stateId());
+        palette.set(4, 0, 4, Block.STONE.stateId());
+
+        var result = BlockLight.compute(palette);
+        assertLight(result, Map.ofEntries(
+                // Glowstone
+                entry(new Vec(4, 1, 4), 15),
+                // Front of stair
+                entry(new Vec(2, 1, 4), 0)));
+    }
+
+    @Test
+    public void isolatedStairOpposite() {
+        var palette = Palette.blocks();
+        palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
+        palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(
+                "facing", "west",
+                "half", "bottom",
+                "shape", "straight")).stateId());
+
+        palette.set(3, 1, 4, Block.STONE.stateId());
+        palette.set(4, 1, 5, Block.STONE.stateId());
+        palette.set(4, 1, 3, Block.STONE.stateId());
+        palette.set(5, 1, 4, Block.STONE.stateId());
+        palette.set(4, 2, 4, Block.STONE.stateId());
+        palette.set(4, 0, 4, Block.STONE.stateId());
+
+        var result = BlockLight.compute(palette);
+        assertLight(result, Map.ofEntries(
+                // Glowstone
+                entry(new Vec(4, 1, 4), 15),
+                // Front of stair
+                entry(new Vec(2, 1, 4), 11),
+                // Others
+                entry(new Vec(3, 0, 5), 12),
+                entry(new Vec(3, 0, 3), 12)));
+    }
+
+    @Test
+    public void isolatedStairSouth() {
+        var palette = Palette.blocks();
+        palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
+        palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(
+                "facing", "south",
+                "half", "bottom",
+                "shape", "straight")).stateId());
+
+        palette.set(3, 1, 4, Block.STONE.stateId());
+        palette.set(4, 1, 5, Block.STONE.stateId());
+        palette.set(4, 1, 3, Block.STONE.stateId());
+        palette.set(5, 1, 4, Block.STONE.stateId());
+        palette.set(4, 2, 4, Block.STONE.stateId());
+        palette.set(4, 0, 4, Block.STONE.stateId());
+
+        var result = BlockLight.compute(palette);
+        assertLight(result, Map.ofEntries(
+                // Glowstone
+                entry(new Vec(4, 1, 4), 15),
+                // Front of stair
+                entry(new Vec(2, 1, 4), 13),
+                // Others
+                entry(new Vec(3, 0, 5), 10),
+                entry(new Vec(3, 0, 3), 12)));
+    }
+
     void assertLight(BlockLight.Result result, Map<Vec, Integer> expectedLights) {
         List<String> errors = new ArrayList<>();
         for (int x = -1; x < 17; x++) {
