@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
@@ -21,52 +22,55 @@ final class BlockLight {
         byte[][] borders = new byte[DIRECTIONS.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
 
+        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+
         blockPalette.getAllPresent((x, y, z, stateId) -> {
             final Block block = Block.fromStateId((short) stateId);
             assert block != null;
             final byte lightEmission = (byte) block.registry().lightEmission();
-            if (lightEmission > 0) placeLight(lightArray, x, y, z, lightEmission);
-            factor[(x & 15) | ((z & 15) << 4) | ((y & 15) << 8)] = getBlockFactor(block);
+
+            final int index = (x & 15) | ((z & 15) << 4) | ((y & 15) << 8);
+            if (lightEmission > 0) {
+                lightSources.enqueue(index);
+                placeLight(lightArray, x, y, z, lightEmission);
+            }
+            factor[index] = getBlockFactor(block);
         });
 
-        while (true) {
-            boolean updated = false;
-            for (int x = 0; x < SECTION_SIZE; x++) {
-                for (int z = 0; z < SECTION_SIZE; z++) {
-                    for (int y = 0; y < SECTION_SIZE; y++) {
-                        final byte light = (byte) getLight(lightArray, x, y, z);
-                        byte newLight = light;
-                        for (Direction dir : DIRECTIONS) {
-                            int xO = x + dir.normalX();
-                            int yO = y + dir.normalY();
-                            int zO = z + dir.normalZ();
+        while (!lightSources.isEmpty()) {
+            final int index = lightSources.dequeueInt();
+            final int x = index & 15;
+            final int z = (index >> 4) & 15;
+            final int y = (index >> 8) & 15;
+            final int lightLevel = getLight(lightArray, x, y, z);
 
-                            if (xO < 0 || xO >= SECTION_SIZE || yO < 0 || yO >= SECTION_SIZE || zO < 0 || zO >= SECTION_SIZE) {
-                                final byte[] border = borders[dir.ordinal()];
-                                final int index = switch (dir) {
-                                    case WEST, EAST -> y * SECTION_SIZE + z;
-                                    case DOWN, UP -> x * SECTION_SIZE + z;
-                                    case NORTH, SOUTH -> x * SECTION_SIZE + y;
-                                };
-                                border[index] = (byte) Math.max(border[index], light - 1);
-                                continue;
-                            }
-
-                            final float blockFactor = factor[(x & 15) | ((z & 15) << 4) | ((y & 15) << 8)];
-                            final byte neighborLight = (byte) (((float) getLight(lightArray, xO, yO, zO) - 1) * (1 - blockFactor));
-                            newLight = (byte) Math.max(newLight, neighborLight);
-                        }
-                        if (newLight != light) {
-                            updated = true;
-                            placeLight(lightArray, x, y, z, newLight);
-                        }
-                    }
+            for (Direction dir : DIRECTIONS) {
+                final int xO = x + dir.normalX();
+                final int yO = y + dir.normalY();
+                final int zO = z + dir.normalZ();
+                // Handler border
+                if (xO < 0 || xO >= SECTION_SIZE || yO < 0 || yO >= SECTION_SIZE || zO < 0 || zO >= SECTION_SIZE) {
+                    final byte[] border = borders[dir.ordinal()];
+                    final int borderIndex = switch (dir) {
+                        case WEST, EAST -> y * SECTION_SIZE + z;
+                        case DOWN, UP -> x * SECTION_SIZE + z;
+                        case NORTH, SOUTH -> x * SECTION_SIZE + y;
+                    };
+                    border[borderIndex] = (byte) Math.max(border[borderIndex], lightLevel - 1);
+                    continue;
+                }
+                // Section
+                final int newIndex = (xO & 15) | ((zO & 15) << 4) | ((yO & 15) << 8);
+                final float targetFactor = factor[newIndex];
+                if (targetFactor != 0)
+                    continue; // TODO float factor
+                if (getLight(lightArray, xO, yO, zO) + 2 <= lightLevel) {
+                    final byte newLightLevel = (byte) (lightLevel - 1);
+                    placeLight(lightArray, xO, yO, zO, newLightLevel);
+                    lightSources.enqueue(newIndex);
                 }
             }
-            if (!updated) break;
         }
-
-
         return new Result(lightArray, borders);
     }
 

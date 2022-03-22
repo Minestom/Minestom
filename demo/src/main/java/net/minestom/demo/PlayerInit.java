@@ -88,7 +88,7 @@ public class PlayerInit {
                 {
                     var instance = player.getInstance();
                     MinecraftServer.getSchedulerManager().scheduleTask(() -> {
-                        IntStream.range(0, 1).forEach(value -> {
+                        IntStream.range(0, 15).forEach(value -> {
                             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 250;
                             int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 250;
                             var pos = new Vec(x, 40, z);
@@ -138,6 +138,9 @@ public class PlayerInit {
             })
             .addListener(PlayerPacketEvent.class, event -> {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(ServerTickMonitorEvent.class, event -> {
+                System.out.println("tick " + event.getTickMonitor().getTickTime());
             });
 
     static {
