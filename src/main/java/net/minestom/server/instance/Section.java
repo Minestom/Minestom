@@ -11,6 +11,8 @@ public final class Section implements Writeable {
     private byte[] skyLight;
     private byte[] blockLight;
 
+    volatile boolean updatedLight = false;
+
     private Section(Palette blockPalette, Palette biomePalette,
                     byte[] skyLight, byte[] blockLight) {
         this.blockPalette = blockPalette;
@@ -41,6 +43,11 @@ public final class Section implements Writeable {
     }
 
     public byte[] getBlockLight() {
+        if (!updatedLight) {
+            updatedLight = true;
+            var result = BlockLight.compute(blockPalette);
+            return (this.blockLight = result.light());
+        }
         return blockLight;
     }
 

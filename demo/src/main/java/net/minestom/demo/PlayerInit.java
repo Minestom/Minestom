@@ -126,6 +126,8 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.setTime(18000);
+        instanceContainer.setTimeRate(0);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         if (false) {
