@@ -48,6 +48,7 @@ final class BlockLight {
                 final int xO = x + dir.normalX();
                 final int yO = y + dir.normalY();
                 final int zO = z + dir.normalZ();
+                final byte newLightLevel = (byte) (lightLevel - 1);
                 // Handler border
                 if (xO < 0 || xO >= SECTION_SIZE || yO < 0 || yO >= SECTION_SIZE || zO < 0 || zO >= SECTION_SIZE) {
                     final byte[] border = borders[dir.ordinal()];
@@ -56,7 +57,7 @@ final class BlockLight {
                         case DOWN, UP -> x * SECTION_SIZE + z;
                         case NORTH, SOUTH -> x * SECTION_SIZE + y;
                     };
-                    border[borderIndex] = (byte) Math.max(border[borderIndex], lightLevel - 1);
+                    border[borderIndex] = newLightLevel;
                     continue;
                 }
                 // Section
@@ -65,7 +66,6 @@ final class BlockLight {
                 if (targetFactor != 0)
                     continue; // TODO float factor
                 if (getLight(lightArray, xO, yO, zO) + 2 <= lightLevel) {
-                    final byte newLightLevel = (byte) (lightLevel - 1);
                     placeLight(lightArray, xO, yO, zO, newLightLevel);
                     lightSources.enqueue(newIndex);
                 }
