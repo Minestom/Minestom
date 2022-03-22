@@ -36,6 +36,20 @@ public class BlockLightTest {
     }
 
     @Test
+    public void doubleGlowstone() {
+        var palette = Palette.blocks();
+        palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
+        palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
+
+        var result = BlockLight.compute(palette);
+        assertLight(result, Map.of(
+                new Vec(1, 1, 3), 11,
+                new Vec(3, 3, 7), 9,
+                new Vec(1, 1, 1), 13,
+                new Vec(3, 1, 4), 14));
+    }
+
+    @Test
     public void glowstoneBorder() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
