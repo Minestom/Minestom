@@ -9,13 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 final class BlockLight {
+    static final int SECTION_SIZE = 16;
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SIDE_LENGTH = 16 * 16 * Direction.values().length / 2;
 
     static @NotNull Result compute(Palette blockPalette) {
-        int sizeX = 16;
-        int sizeY = 16;
-        int sizeZ = 16;
 
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[Direction.values().length][];
@@ -30,9 +28,9 @@ final class BlockLight {
 
         while (true) {
             boolean updated = false;
-            for (int x = 0; x < sizeX; x++) {
-                for (int z = 0; z < sizeZ; z++) {
-                    for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < SECTION_SIZE; x++) {
+                for (int z = 0; z < SECTION_SIZE; z++) {
+                    for (int y = 0; y < SECTION_SIZE; y++) {
                         final byte light = (byte) getLight(lightArray, x, y, z);
                         byte newLight = light;
                         for (Direction dir : Direction.values()) {
@@ -40,15 +38,19 @@ final class BlockLight {
                             int yO = y + dir.normalY();
                             int zO = z + dir.normalZ();
 
-                            if (xO < 0 || xO >= sizeX || yO < 0 || yO >= sizeY || zO < 0 || zO >= sizeZ) {
-                                // TODO: Place border block
-                                var border = borders[dir.ordinal()];
+                            if (xO < 0 || xO >= SECTION_SIZE || yO < 0 || yO >= SECTION_SIZE || zO < 0 || zO >= SECTION_SIZE) {
+                                final byte[] border = borders[dir.ordinal()];
+                                final int index = switch (dir) {
+                                    case WEST, EAST -> y * SECTION_SIZE + z;
+                                    case DOWN, UP -> x * SECTION_SIZE + z;
+                                    case NORTH, SOUTH -> x * SECTION_SIZE + y;
+                                };
+                                border[index] = (byte) Math.max(border[index], light - 1);
                                 continue;
                             }
 
                             byte neighborLight = (byte) (getLight(lightArray, xO, yO, zO) - 1);
                             neighborLight = (byte) ((float) neighborLight * (1 - getBlockFactor(blockPalette, x, y, z)));
-
                             newLight = (byte) Math.max(newLight, neighborLight);
                         }
                         if (newLight != light) {
@@ -62,45 +64,57 @@ final class BlockLight {
         }
 
 
-        return new Result(lightArray, null);
+        return new Result(lightArray, borders);
     }
 
     static final class Result {
         final byte[] light;
-        final byte[] border;
+        final byte[][] borders;
 
-        Result(byte[] light, byte[] border) {
+        Result(byte[] light, byte[][] borders) {
             assert light.length == LIGHT_LENGTH : "Only 16x16x16 sections are supported: " + light.length;
             //assert border.length == SIDE_LENGTH : "There should be 16x16 entries per side: " + border.length;
             this.light = light;
-            this.border = border;
+            this.borders = borders;
+        }
+
+        public byte getLight(int x, int y, int z) {
+            final boolean outX = x < 0 || x >= SECTION_SIZE;
+            final boolean outY = y < 0 || y >= SECTION_SIZE;
+            final boolean outZ = z < 0 || z >= SECTION_SIZE;
+            if (outX || outY || outZ) {
+                final boolean multipleOut = outX ? (outY || outZ) : (outY && outZ);
+                if (multipleOut)
+                    throw new IllegalArgumentException("Coordinates are out of bounds: " + x + ", " + y + ", " + z);
+                if (outX) {
+                    // WEST or EAST
+                    if (x < 0) return borders[Direction.WEST.ordinal()][y * SECTION_SIZE + z];
+                    else return borders[Direction.EAST.ordinal()][y * SECTION_SIZE + z];
+                } else if (outY) {
+                    // BOTTOM or TOP
+                    if (y < 0) return borders[Direction.DOWN.ordinal()][x * SECTION_SIZE + z];
+                    else return borders[Direction.UP.ordinal()][x * SECTION_SIZE + z];
+                } else {
+                    // NORTH or SOUTH
+                    if (z < 0) return borders[Direction.NORTH.ordinal()][x * SECTION_SIZE + y];
+                    else return borders[Direction.SOUTH.ordinal()][x * SECTION_SIZE + y];
+                }
+            } else return (byte) BlockLight.getLight(light, x, y, z);
         }
 
         public byte[] light() {
             return light;
         }
-
-        public Border border(Direction direction) {
-            final int length = border.length / Direction.values().length;
-            final int index = direction.ordinal() * length;
-            return new Border(Arrays.copyOfRange(border, index, index + length));
-        }
     }
 
-    record Border(byte[] light) {
-        byte get(int x, int z) {
-            return light[x + z * 16];
-        }
-    }
-
-    static void placeLight(byte[] light, int x, int y, int z, int value) {
+    private static void placeLight(byte[] light, int x, int y, int z, int value) {
         int index = (x & 15) | ((z & 15) << 4) | ((y & 15) << 8);
         int shift = (index & 1) << 2;
         int i = index >>> 1;
         light[i] = (byte) ((light[i] & (0xF0 >>> shift)) | (value << shift));
     }
 
-    static int getLight(byte[] light, int x, int y, int z) {
+    private static int getLight(byte[] light, int x, int y, int z) {
         int index = (x & 15) | ((z & 15) << 4) | ((y & 15) << 8);
         int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);

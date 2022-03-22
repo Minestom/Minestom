@@ -92,6 +92,7 @@ public class CoordinateTest {
     public void toSectionRelativeCoordinate() {
         assertEquals(8, ChunkUtils.toSectionRelativeCoordinate(-40));
         assertEquals(12, ChunkUtils.toSectionRelativeCoordinate(-20));
+        assertEquals(15, ChunkUtils.toSectionRelativeCoordinate(-1));
         assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(0));
         assertEquals(5, ChunkUtils.toSectionRelativeCoordinate(5));
         assertEquals(15, ChunkUtils.toSectionRelativeCoordinate(15));

@@ -36,6 +36,24 @@ public class BlockLightTest {
     }
 
     @Test
+    public void glowstoneBorder() {
+        var palette = Palette.blocks();
+        palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
+        var result = BlockLight.compute(palette);
+        assertLight(result, Map.of(
+                // X axis
+                new Vec(-1, 0, 0), 13,
+                new Vec(-1, 1, 0), 14,
+                new Vec(-1, 2, 0), 13,
+                new Vec(-1, 3, 0), 12,
+                // Z axis
+                new Vec(0, 0, -1), 13,
+                new Vec(0, 1, -1), 14,
+                new Vec(0, 2, -1), 13,
+                new Vec(0, 3, -1), 12));
+    }
+
+    @Test
     public void glowstoneBlock() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
@@ -76,14 +94,15 @@ public class BlockLightTest {
 
     void assertLight(BlockLight.Result result, Map<Vec, Integer> expectedLights) {
         List<String> errors = new ArrayList<>();
-        final byte[] lights = result.light();
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; y++) {
-                for (int z = 0; z < 16; z++) {
-                    var light = BlockLight.getLight(lights, x, y, z);
+        for (int x = -1; x < 17; x++) {
+            for (int y = -1; y < 17; y++) {
+                for (int z = -1; z < 17; z++) {
                     var expected = expectedLights.get(new Vec(x, y, z));
-                    if (expected != null && light != expected) {
-                        errors.add(String.format("Expected %d at [%d,%d,%d] but got %d", expected, x, y, z, light));
+                    if (expected != null) {
+                        final byte light = result.getLight(x, y, z);
+                        if (light != expected) {
+                            errors.add(String.format("Expected %d at [%d,%d,%d] but got %d", expected, x, y, z, light));
+                        }
                     }
                 }
             }
