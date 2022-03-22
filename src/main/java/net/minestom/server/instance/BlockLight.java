@@ -16,6 +16,8 @@ final class BlockLight {
         final byte[] border;
 
         Result(byte[] light, byte[] border) {
+            assert light.length == 16 * 16 * 16 : "Only 16x16x16 sections are supported";
+            assert border.length == 16 * 16 * Side.values().length : "There should be 16x16 entries per side";
             this.light = light;
             this.border = border;
         }
