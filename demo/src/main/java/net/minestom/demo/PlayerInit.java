@@ -17,6 +17,7 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
+import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -28,6 +29,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -39,6 +41,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 public class PlayerInit {
 
@@ -79,6 +82,24 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
+
+                // Stress test light engine
+                {
+                    var instance = player.getInstance();
+                    MinecraftServer.getSchedulerManager().scheduleTask(() -> {
+                        IntStream.range(0, 15).forEach(value -> {
+                            int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 250;
+                            int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 250;
+                            var pos = new Vec(x, 40, z);
+                            instance.setBlock(pos, Block.GLOWSTONE);
+
+                            // Force update
+                            var chunk = (DynamicChunk) instance.getChunkAt(pos);
+                            chunk.createLightPacket();
+                        });
+
+                    }, TaskSchedule.nextTick(), TaskSchedule.nextTick());
+                }
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(PlayerLoginEvent.class, event -> {
@@ -116,12 +137,17 @@ public class PlayerInit {
             })
             .addListener(PlayerPacketEvent.class, event -> {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(ServerTickMonitorEvent.class, event -> {
+                System.out.println("tick " + event.getTickMonitor().getTickTime());
             });
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.setTime(18000);
+        instanceContainer.setTimeRate(0);
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
 
         if (false) {

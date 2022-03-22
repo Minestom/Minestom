@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,4 +42,13 @@ public interface Shape {
      * @return End of shape
      */
     @NotNull Point relativeEnd();
+
+    /**
+     * Check if addition of two shape faces is full
+     *
+     * @param shape shape to add
+     * @param face  face to add
+     * @return true if combined face is full
+     */
+    boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face);
 }

@@ -100,7 +100,7 @@ final class GeneratorImpl {
                 this.width = 1;
                 this.height = 1;
                 this.depth = 1;
-                this.sections = List.of(section(new Section(), sectionX, sectionY, sectionZ, true));
+                this.sections = List.of(section(Section.create(), sectionX, sectionY, sectionZ, true));
             } else if (x < minSection.x() || y < minSection.y() || z < minSection.z() ||
                     x >= minSection.x() + width * 16 || y >= minSection.y() + height * 16 || z >= minSection.z() + depth * 16) {
                 // Resize necessary
@@ -134,7 +134,7 @@ final class GeneratorImpl {
                         final int newX = coordinates.blockX() + startX;
                         final int newY = coordinates.blockY() + startY;
                         final int newZ = coordinates.blockZ() + startZ;
-                        final GenerationUnit unit = section(new Section(), newX, newY, newZ, true);
+                        final GenerationUnit unit = section(Section.create(), newX, newY, newZ, true);
                         newSections[i] = unit;
                     }
                 }
@@ -170,7 +170,7 @@ final class GeneratorImpl {
             for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
                 for (int sectionY = minSectionY; sectionY < maxSectionY; sectionY++) {
                     for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
-                        final GenerationUnit unit = section(new Section(), sectionX, sectionY, sectionZ, true);
+                        final GenerationUnit unit = section(Section.create(), sectionX, sectionY, sectionZ, true);
                         units[index++] = unit;
                     }
                 }
