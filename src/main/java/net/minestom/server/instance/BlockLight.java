@@ -10,18 +10,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 final class BlockLight {
-    static final Direction[] DIRECTIONS = Direction.values();
+    private static final Direction[] DIRECTIONS = Direction.values();
     static final int SECTION_SIZE = 16;
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
 
     static @NotNull Result compute(Palette blockPalette) {
         float[] factor = new float[4096];
-
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[DIRECTIONS.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
-
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
 
         blockPalette.getAllPresent((x, y, z, stateId) -> {
@@ -29,10 +27,10 @@ final class BlockLight {
             assert block != null;
             final byte lightEmission = (byte) block.registry().lightEmission();
 
-            final int index = (x & 15) | ((z & 15) << 4) | ((y & 15) << 8);
+            final int index = x | (z << 4) | (y << 8);
             if (lightEmission > 0) {
-                lightSources.enqueue(index);
-                placeLight(lightArray, x, y, z, lightEmission);
+                lightSources.enqueue(index | (lightEmission << 12));
+                placeLight(lightArray, index, lightEmission);
             }
             factor[index] = getBlockFactor(block);
         });
@@ -42,7 +40,7 @@ final class BlockLight {
             final int x = index & 15;
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
-            final int lightLevel = getLight(lightArray, x, y, z);
+            final int lightLevel = (index >> 12) & 15;
 
             for (Direction dir : DIRECTIONS) {
                 final int xO = x + dir.normalX();
@@ -61,13 +59,13 @@ final class BlockLight {
                     continue;
                 }
                 // Section
-                final int newIndex = (xO & 15) | ((zO & 15) << 4) | ((yO & 15) << 8);
+                final int newIndex = xO | (zO << 4) | (yO << 8);
                 final float targetFactor = factor[newIndex];
                 if (targetFactor != 0)
                     continue; // TODO float factor
-                if (getLight(lightArray, xO, yO, zO) + 2 <= lightLevel) {
-                    placeLight(lightArray, xO, yO, zO, newLightLevel);
-                    lightSources.enqueue(newIndex);
+                if (getLight(lightArray, newIndex) + 2 <= lightLevel) {
+                    placeLight(lightArray, newIndex, newLightLevel);
+                    lightSources.enqueue(newIndex | (newLightLevel << 12));
                 }
             }
         }
@@ -106,7 +104,7 @@ final class BlockLight {
                     if (z < 0) return borders[Direction.NORTH.ordinal()][x * SECTION_SIZE + y];
                     else return borders[Direction.SOUTH.ordinal()][x * SECTION_SIZE + y];
                 }
-            } else return (byte) BlockLight.getLight(light, x, y, z);
+            } else return (byte) BlockLight.getLight(light, x | (z << 4) | (y << 8));
         }
 
         public byte[] light() {
@@ -114,16 +112,14 @@ final class BlockLight {
         }
     }
 
-    private static void placeLight(byte[] light, int x, int y, int z, int value) {
-        int index = (x & 15) | ((z & 15) << 4) | ((y & 15) << 8);
-        int shift = (index & 1) << 2;
-        int i = index >>> 1;
+    private static void placeLight(byte[] light, int index, int value) {
+        final int shift = (index & 1) << 2;
+        final int i = index >>> 1;
         light[i] = (byte) ((light[i] & (0xF0 >>> shift)) | (value << shift));
     }
 
-    private static int getLight(byte[] light, int x, int y, int z) {
-        int index = (x & 15) | ((z & 15) << 4) | ((y & 15) << 8);
-        int value = light[index >>> 1];
+    private static int getLight(byte[] light, int index) {
+        final int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }
 
