@@ -9,14 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 final class BlockLight {
+    static final Direction[] DIRECTIONS = Direction.values();
     static final int SECTION_SIZE = 16;
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
-    static final int SIDE_LENGTH = 16 * 16 * Direction.values().length / 2;
+    static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
 
     static @NotNull Result compute(Palette blockPalette) {
 
         byte[] lightArray = new byte[LIGHT_LENGTH];
-        byte[][] borders = new byte[Direction.values().length][];
+        byte[][] borders = new byte[DIRECTIONS.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
 
         blockPalette.getAllPresent((x, y, z, stateId) -> {
@@ -33,7 +34,7 @@ final class BlockLight {
                     for (int y = 0; y < SECTION_SIZE; y++) {
                         final byte light = (byte) getLight(lightArray, x, y, z);
                         byte newLight = light;
-                        for (Direction dir : Direction.values()) {
+                        for (Direction dir : DIRECTIONS) {
                             int xO = x + dir.normalX();
                             int yO = y + dir.normalY();
                             int zO = z + dir.normalZ();
