@@ -24,16 +24,90 @@ final class TagHandlerImpl implements TagHandler {
     @Override
     public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         VarHandle.acquireFence();
-        final int index = tag.index;
+        int tagIndex = tag.index;
+        TagHandlerImpl local = this;
         Entry<?>[] entries = this.entries;
-        final Entry<T> entry = value != null ? new Entry<>(tag, value) : null;
-        if (index >= entries.length) {
+
+        var paths = tag.path;
+        TagHandlerImpl[] pathHandlers = null;
+        if (paths != null) {
+            pathHandlers = new TagHandlerImpl[paths.size()];
+            // Path-able tag
+            int in = 0;
+            for (var path : paths) {
+                final int index = path.index();
+                if (index >= entries.length) {
+                    local.entries = entries = Arrays.copyOf(entries, index + 1);
+                }
+                Entry<?> entry = entries[index];
+                if (entry == null) {
+                    var updated = new TagHandlerImpl();
+                    entries[index] = new Entry<>(Tag.tag(path.name(), null, null), updated);
+                    local = updated;
+                } else if (entry.value instanceof TagHandlerImpl handler) {
+                    local = handler;
+                } else {
+                    throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry");
+                }
+                entries = local.entries;
+                pathHandlers[in++] = local;
+            }
+
+            // Handle removal
+            if (value == null) {
+                int removalIndex = -1;
+                for (int i = pathHandlers.length - 1; i >= 0; i--) {
+                    final boolean last = i == pathHandlers.length - 1;
+                    var handler = pathHandlers[i];
+                    var entr = handler.entries;
+
+                    // Clear the entry
+                    if (last && entr.length > tagIndex) entr[tagIndex] = null;
+
+                    // Verify if the handler is empty
+                    boolean empty = tagIndex >= entr.length;
+                    if (!empty) {
+                        empty = true;
+                        for (var entry : entr) {
+                            if (entry != null) {
+                                empty = false;
+                                break;
+                            }
+                        }
+                    }
+                    // Remove last looped entry if empty
+                    if (!empty && !last) {
+                        var child = pathHandlers[i + 1];
+
+                        for (int j = 0; j < entr.length; j++) {
+                            var e = entr[j];
+                            if (e != null && e.value == child) {
+                                entr[j] = null;
+                                break;
+                            }
+                        }
+                    }
+                    if (empty || !last) removalIndex = i;
+                }
+                if (removalIndex == 0) {
+                    local = this;
+                    entries = this.entries;
+                    tagIndex = paths.get(0).index();
+                }
+            }
+        }
+        // Normal tag
+        if (tagIndex >= entries.length) {
             if (value == null)
                 return; // no need to create/remove an entry
-            this.entries = entries = Arrays.copyOf(entries, index + 1);
+            local.entries = entries = Arrays.copyOf(entries, tagIndex + 1);
         }
-        entries[index] = entry;
+        entries[tagIndex] = value != null ? new Entry<>(tag, value) : null;
+
         this.cache = null;
+        if (pathHandlers != null) {
+            for (var handler : pathHandlers) handler.cache = null;
+        }
         VarHandle.releaseFence();
     }
 
@@ -76,7 +150,13 @@ final class TagHandlerImpl implements TagHandler {
                 for (Entry<?> entry : entries) {
                     if (entry == null) continue;
                     final Tag<?> tag = entry.tag;
-                    tag.writeUnsafe(tmp, entry.value);
+                    final Object value = entry.value;
+                    if (value instanceof TagHandler handler) {
+                        // Path-able entry
+                        tmp.put(tag.getKey(), handler.asCompound());
+                    } else {
+                        tag.writeUnsafe(tmp, value);
+                    }
                 }
                 cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
             } else {
@@ -90,7 +170,7 @@ final class TagHandlerImpl implements TagHandler {
 
     private static final class Entry<T> {
         final Tag<T> tag;
-        final T value;
+        final T value; // TagHandler type for path-able tags
         volatile NBT nbt;
 
         Entry(Tag<T> tag, T value) {
@@ -110,7 +190,20 @@ final class TagHandlerImpl implements TagHandler {
 
     private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
         final int index = tag.index;
-        final Entry<?> entry;
+        Entry<?> entry;
+        if (tag.path != null) {
+            // Must be a path-able entry
+            var paths = tag.path;
+            for (var path : paths) {
+                final int pathIndex = path.index();
+                if (pathIndex >= entries.length || (entry = entries[pathIndex]) == null) {
+                    return tag.createDefault();
+                }
+                if (entry.value instanceof TagHandlerImpl handler) {
+                    entries = handler.entries;
+                }
+            }
+        }
         if (index >= entries.length || (entry = entries[index]) == null) {
             return tag.createDefault();
         }
