@@ -61,10 +61,9 @@ public class Tag<T> {
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
-                                         @NotNull Class<N> nbtClass,
                                          @NotNull Function<N, T> readFunction,
                                          @NotNull Function<T, N> writeFunction) {
-        return new Tag<T>(key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction, null);
+        return new Tag<>(key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction, null);
     }
 
     /**
@@ -137,36 +136,35 @@ public class Tag<T> {
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
-        return tag(key, NBTByte.class, NBTByte::getValue, NBT::Byte);
+        return tag(key, NBTByte::getValue, NBT::Byte);
     }
 
     public static @NotNull Tag<Short> Short(@NotNull String key) {
-        return tag(key, NBTShort.class, NBTShort::getValue, NBT::Short);
+        return tag(key, NBTShort::getValue, NBT::Short);
     }
 
     public static @NotNull Tag<Integer> Integer(@NotNull String key) {
-        return tag(key, NBTInt.class, NBTInt::getValue, NBT::Int);
+        return tag(key, NBTInt::getValue, NBT::Int);
     }
 
     public static @NotNull Tag<Long> Long(@NotNull String key) {
-        return tag(key, NBTLong.class, NBTLong::getValue, NBT::Long);
+        return tag(key, NBTLong::getValue, NBT::Long);
     }
 
     public static @NotNull Tag<Float> Float(@NotNull String key) {
-        return tag(key, NBTFloat.class, NBTFloat::getValue, NBT::Float);
+        return tag(key, NBTFloat::getValue, NBT::Float);
     }
 
     public static @NotNull Tag<Double> Double(@NotNull String key) {
-        return tag(key, NBTDouble.class, NBTDouble::getValue, NBT::Double);
+        return tag(key, NBTDouble::getValue, NBT::Double);
     }
 
     public static @NotNull Tag<String> String(@NotNull String key) {
-        return tag(key, NBTString.class, NBTString::getValue, NBT::String);
+        return tag(key, NBTString::getValue, NBT::String);
     }
 
     public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
-        //noinspection unchecked
-        return tag(key, NBT.class, nbt -> (T) nbt, t -> t);
+        return Tag.<T, T>tag(key, nbt -> nbt, t -> t);
     }
 
     /**
@@ -178,8 +176,8 @@ public class Tag<T> {
      * @return the created tag
      */
     public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
-        return tag(key, NBTCompound.class,
-                nbt -> serializer.read(TagHandler.fromCompound(nbt)),
+        return tag(key,
+                (NBTCompound compound) -> serializer.read(TagHandler.fromCompound(compound)),
                 (value) -> {
                     TagHandler handler = TagHandler.newHandler();
                     serializer.write(handler, value);
@@ -188,8 +186,8 @@ public class Tag<T> {
     }
 
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
-        return tag("", NBTCompound.class,
-                nbt -> serializer.read(TagHandler.fromCompound(nbt)),
+        return tag("",
+                (NBTCompound compound) -> serializer.read(TagHandler.fromCompound(compound)),
                 (value) -> {
                     TagHandler handler = TagHandler.newHandler();
                     serializer.write(handler, value);
@@ -198,6 +196,6 @@ public class Tag<T> {
     }
 
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
-        return tag(key, NBTCompound.class, ItemStack::fromItemNBT, ItemStack::toItemNBT);
+        return tag(key, ItemStack::fromItemNBT, ItemStack::toItemNBT);
     }
 }
