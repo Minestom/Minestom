@@ -43,6 +43,8 @@ final class TagHandlerImpl implements TagHandler {
                 }
                 Entry<?> entry = entries[pathIndex];
                 if (entry == null) {
+                    if (value == null)
+                        return;
                     var updated = new TagHandlerImpl();
                     entries[pathIndex] = new Entry<>(Tag.tag(path.name(), null, null), updated);
                     local = updated;
