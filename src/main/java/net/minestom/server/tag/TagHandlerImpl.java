@@ -58,41 +58,36 @@ final class TagHandlerImpl implements TagHandler {
             }
             // Handle removal if the tag was present (recursively)
             if (value == null) {
-                int removalIndex = -1;
+                pathHandlers[pathHandlers.length - 1].entries[tagIndex] = null;
+                boolean empty = false;
+                removalLoop:
                 for (int i = pathHandlers.length - 1; i >= 0; i--) {
-                    final boolean last = i == pathHandlers.length - 1;
                     TagHandlerImpl handler = pathHandlers[i];
                     Entry<?>[] entr = handler.entries;
-                    // Clear the entry
-                    if (last) {
-                        assert entr.length > tagIndex;
-                        entr[tagIndex] = null;
-                    }
                     // Verify if the handler is empty
-                    boolean empty = tagIndex >= entr.length;
+                    empty = tagIndex >= entr.length;
                     if (!empty) {
                         empty = true;
                         for (var entry : entr) {
                             if (entry != null) {
                                 empty = false;
+                                continue removalLoop;
+                            }
+                        }
+                    }
+                    if (i > 0) {
+                        TagHandlerImpl parent = pathHandlers[i - 1];
+                        var e = parent.entries;
+                        for (int j = 0; j < e.length; j++) {
+                            final Entry<?> entry = e[j];
+                            if (entry != null && entry.value == handler) {
+                                e[j] = null;
                                 break;
                             }
                         }
                     }
-                    // Remove last looped entry if empty
-                    if (!empty && !last) {
-                        final TagHandlerImpl child = pathHandlers[i + 1];
-                        for (int j = 0; j < entr.length; j++) {
-                            final Entry<?> entry = entr[j];
-                            if (entry != null && entry.value == child) {
-                                entr[j] = null;
-                                break;
-                            }
-                        }
-                    }
-                    if (empty || !last) removalIndex = i;
                 }
-                if (removalIndex == 0) {
+                if (empty) {
                     // Remove the root handler
                     local = this;
                     entries = this.entries;

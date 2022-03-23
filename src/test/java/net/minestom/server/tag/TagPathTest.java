@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static net.minestom.server.api.TestUtils.assertEqualsIgnoreSpace;
+import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagPathTest {
@@ -36,7 +36,7 @@ public class TagPathTest {
         var tag = Tag.Integer("number").path("display");
         handler.removeTag(tag);
         assertNull(handler.getTag(tag));
-        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test
@@ -44,16 +44,16 @@ public class TagPathTest {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
         handler.setTag(tag, 5);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
                   "display": {
-                    "number": 5
+                    "number":5
                   }
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         handler.removeTag(tag);
-        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test
@@ -64,20 +64,26 @@ public class TagPathTest {
         handler.setTag(tag, 5);
         handler.setTag(tag1, "test");
 
-        assertEquals(NBT.Compound(Map.of("display", NBT.Compound(Map.of("string", NBT.String("test"),
-                "number", NBT.Int(5))))), handler.asCompound());
-
-        handler.removeTag(tag);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
                   "display": {
-                    "string": "test"
+                    "string":"test",
+                    "number":5
                   }
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
+
+        handler.removeTag(tag);
+        assertEqualsSNBT("""
+                {
+                  "display": {
+                    "string":"test"
+                  }
+                }
+                """, handler.asCompound());
 
         handler.removeTag(tag1);
-        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test
@@ -86,11 +92,11 @@ public class TagPathTest {
         var tag = Tag.Integer("number");
         var path = tag.path("display");
         handler.setTag(tag, 5);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
-                  "number": 5
+                  "number":5
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         handler.setTag(path, 5);
         assertEquals(NBT.Compound(Map.of("display", NBT.Compound(Map.of("number", NBT.Int(5))),
@@ -98,13 +104,13 @@ public class TagPathTest {
 
 
         handler.removeTag(tag);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
                   "display": {
-                    "number": 5
+                    "number":5
                   }
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
     }
 
     @Test
@@ -113,11 +119,11 @@ public class TagPathTest {
         var tag = Tag.Integer("key");
         var tag1 = Tag.Integer("value").path("key");
         handler.setTag(tag, 5);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
-                  "key": 5
+                  "key":5
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         assertThrows(IllegalStateException.class, () -> handler.setTag(tag1, 5));
     }
@@ -137,21 +143,65 @@ public class TagPathTest {
         var tag = Tag.Integer("key");
         var path = Tag.Integer("key").path("first", "second");
         handler.setTag(path, 5);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
                   "first": {
                     "second": {
-                      "key": 5
+                      "key":5
                     }
                   }
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         assertEquals(5, handler.getTag(path));
         assertNull(handler.getTag(tag));
 
         handler.removeTag(path);
-        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+        assertEqualsSNBT("{}", handler.asCompound());
+    }
+
+    @Test
+    public void chainingDouble() {
+        var handler = TagHandler.newHandler();
+        var path = Tag.Integer("key").path("first", "second");
+        var path1 = Tag.Integer("key").path("first");
+        handler.setTag(path, 5);
+        assertEqualsSNBT("""
+                {
+                  "first": {
+                    "second": {
+                      "key":5
+                    }
+                  }
+                }
+                """, handler.asCompound());
+        assertEquals(5, handler.getTag(path));
+
+        handler.setTag(path1, 5);
+        assertEqualsSNBT("""
+                {
+                  "first": {
+                    "key":5,
+                    "second": {
+                      "key":5
+                    }
+                  }
+                }
+                """, handler.asCompound());
+        assertEquals(5, handler.getTag(path));
+        assertEquals(5, handler.getTag(path1));
+
+        handler.removeTag(path);
+        assertEqualsSNBT("""
+                {
+                  "first": {
+                    "key":5
+                  }
+                }
+                """, handler.asCompound());
+
+        handler.removeTag(path1);
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test
@@ -177,13 +227,13 @@ public class TagPathTest {
         });
 
         handler.setTag(struct, new Entry(5));
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
                   "struct": {
-                    "value": 5
+                    "value":5
                   }
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         handler.setTag(tag, 5);
         assertEquals(NBT.Compound(Map.of("value", NBT.Int(5),
