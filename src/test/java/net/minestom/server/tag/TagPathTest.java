@@ -2,10 +2,7 @@ package net.minestom.server.tag;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,9 +96,14 @@ public class TagPathTest {
                 """, handler.asCompound());
 
         handler.setTag(path, 5);
-        assertEquals(NBT.Compound(Map.of("display", NBT.Compound(Map.of("number", NBT.Int(5))),
-                "number", NBT.Int(5))), handler.asCompound());
-
+        assertEqualsSNBT("""
+                {
+                  "number":5,
+                  "display": {
+                    "number":5
+                  }
+                }
+                """, handler.asCompound());
 
         handler.removeTag(tag);
         assertEqualsSNBT("""
@@ -236,9 +238,14 @@ public class TagPathTest {
                 """, handler.asCompound());
 
         handler.setTag(tag, 5);
-        assertEquals(NBT.Compound(Map.of("value", NBT.Int(5),
-                        "struct", NBT.Compound(Map.of("value", NBT.Int(5))))),
-                handler.asCompound());
+        assertEqualsSNBT("""
+                {
+                  value:5,
+                  "struct": {
+                    "value":5
+                  }
+                }
+                """, handler.asCompound());
 
         // Cannot enter a structure from a path tag
         assertThrows(IllegalStateException.class, () -> handler.setTag(tag.path("struct"), 5));
