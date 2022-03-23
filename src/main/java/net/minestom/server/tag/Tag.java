@@ -1,7 +1,7 @@
 package net.minestom.server.tag;
 
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.collection.IndexMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,12 +21,7 @@ import java.util.function.Supplier;
  */
 @ApiStatus.NonExtendable
 public class Tag<T> {
-    private static final Object2IntOpenHashMap<String> INDEX_MAP = new Object2IntOpenHashMap<>();
-    private static int lastIndex = 0; // Synchronized on INDEX_MAP
-
-    static {
-        INDEX_MAP.defaultReturnValue(-1);
-    }
+    private static final IndexMap<String> INDEX_MAP = new IndexMap<>();
 
     private final String key;
     final Function<NBT, T> readFunction;
@@ -43,21 +38,7 @@ public class Tag<T> {
         this.readFunction = readFunction;
         this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
-
-        // Potentially very hot code!
-        // First try to get the index from the cpu cache
-        // If it's not there, synchronization is required
-        int index = INDEX_MAP.getInt(key);
-        if (index == -1) {
-            synchronized (INDEX_MAP) {
-                index = INDEX_MAP.getInt(key);
-                if (index == -1) {
-                    index = lastIndex++;
-                    INDEX_MAP.put(key, index);
-                }
-            }
-        }
-        this.index = index;
+        this.index = INDEX_MAP.get(key);
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
