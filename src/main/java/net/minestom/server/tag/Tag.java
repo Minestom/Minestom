@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -8,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -23,8 +21,12 @@ import java.util.function.Supplier;
  */
 @ApiStatus.NonExtendable
 public class Tag<T> {
-    private static final Map<String, Integer> INDEX_MAP = new ConcurrentHashMap<>();
-    private static final AtomicInteger INDEX = new AtomicInteger();
+    private static final Object2IntOpenHashMap<String> INDEX_MAP = new Object2IntOpenHashMap<>();
+    private static int lastIndex = 0; // Synchronized on INDEX_MAP
+
+    static {
+        INDEX_MAP.defaultReturnValue(-1);
+    }
 
     private final String key;
     private final Function<NBT, T> readFunction;
@@ -42,7 +44,20 @@ public class Tag<T> {
         this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
 
-        this.index = INDEX_MAP.computeIfAbsent(key, k -> INDEX.getAndIncrement());
+        // Potentially very hot code!
+        // First try to get the index from the cpu cache
+        // If it's not there, synchronization is required
+        int index = INDEX_MAP.getInt(key);
+        if (index == -1) {
+            synchronized (INDEX_MAP) {
+                index = INDEX_MAP.getInt(key);
+                if (index == -1) {
+                    index = lastIndex++;
+                    INDEX_MAP.put(key, index);
+                }
+            }
+        }
+        this.index = index;
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
