@@ -35,14 +35,16 @@ final class TagHandlerImpl implements TagHandler {
             // Path-able tag
             int in = 0;
             for (var path : paths) {
-                final int index = path.index();
-                if (index >= entries.length) {
-                    local.entries = entries = Arrays.copyOf(entries, index + 1);
+                final int pathIndex = path.index();
+                if (pathIndex >= entries.length) {
+                    if (value == null)
+                        return;
+                    local.entries = entries = Arrays.copyOf(entries, pathIndex + 1);
                 }
-                Entry<?> entry = entries[index];
+                Entry<?> entry = entries[pathIndex];
                 if (entry == null) {
                     var updated = new TagHandlerImpl();
-                    entries[index] = new Entry<>(Tag.tag(path.name(), null, null), updated);
+                    entries[pathIndex] = new Entry<>(Tag.tag(path.name(), null, null), updated);
                     local = updated;
                 } else if (entry.value instanceof TagHandlerImpl handler) {
                     local = handler;
@@ -52,18 +54,18 @@ final class TagHandlerImpl implements TagHandler {
                 entries = local.entries;
                 pathHandlers[in++] = local;
             }
-
-            // Handle removal
+            // Handle removal if the tag was present (recursively)
             if (value == null) {
                 int removalIndex = -1;
                 for (int i = pathHandlers.length - 1; i >= 0; i--) {
                     final boolean last = i == pathHandlers.length - 1;
-                    var handler = pathHandlers[i];
-                    var entr = handler.entries;
-
+                    TagHandlerImpl handler = pathHandlers[i];
+                    Entry<?>[] entr = handler.entries;
                     // Clear the entry
-                    if (last && entr.length > tagIndex) entr[tagIndex] = null;
-
+                    if (last) {
+                        assert entr.length > tagIndex;
+                        entr[tagIndex] = null;
+                    }
                     // Verify if the handler is empty
                     boolean empty = tagIndex >= entr.length;
                     if (!empty) {
@@ -77,11 +79,10 @@ final class TagHandlerImpl implements TagHandler {
                     }
                     // Remove last looped entry if empty
                     if (!empty && !last) {
-                        var child = pathHandlers[i + 1];
-
+                        final TagHandlerImpl child = pathHandlers[i + 1];
                         for (int j = 0; j < entr.length; j++) {
-                            var e = entr[j];
-                            if (e != null && e.value == child) {
+                            final Entry<?> entry = entr[j];
+                            if (entry != null && entry.value == child) {
                                 entr[j] = null;
                                 break;
                             }
@@ -90,6 +91,7 @@ final class TagHandlerImpl implements TagHandler {
                     if (empty || !last) removalIndex = i;
                 }
                 if (removalIndex == 0) {
+                    // Remove the root handler
                     local = this;
                     entries = this.entries;
                     tagIndex = paths.get(0).index();
@@ -207,15 +209,18 @@ final class TagHandlerImpl implements TagHandler {
         if (index >= entries.length || (entry = entries[index]) == null) {
             return tag.createDefault();
         }
+        final Object value = entry.value;
+        if (value instanceof TagHandlerImpl)
+            throw new IllegalStateException("Cannot read path-able tag " + tag.getKey());
         final Tag entryTag = entry.tag;
         if (entryTag == tag) {
             // Tag is the same, return the value
             //noinspection unchecked
-            return (T) entry.value;
+            return (T) value;
         }
         // Value must be parsed from nbt if the tag is different
         NBT nbt = entry.nbt;
-        if (nbt == null) entry.nbt = nbt = (NBT) entryTag.writeFunction.apply(entry.value);
+        if (nbt == null) entry.nbt = nbt = (NBT) entryTag.writeFunction.apply(value);
         try {
             return tag.readFunction.apply(nbt);
         } catch (ClassCastException e) {

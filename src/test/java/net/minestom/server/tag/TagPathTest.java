@@ -31,6 +31,15 @@ public class TagPathTest {
     }
 
     @Test
+    public void emptyRemoval() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("number").path("display");
+        handler.removeTag(tag);
+        assertNull(handler.getTag(tag));
+        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+    }
+
+    @Test
     public void snbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
@@ -111,6 +120,15 @@ public class TagPathTest {
                 """, handler.asCompound().toSNBT());
 
         assertThrows(IllegalStateException.class, () -> handler.setTag(tag1, 5));
+    }
+
+    @Test
+    public void forgetPath() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("key");
+        var path = Tag.Integer("value").path("key");
+        handler.setTag(path, 5);
+        assertThrows(IllegalStateException.class, () -> handler.getTag(tag));
     }
 
     @Test
