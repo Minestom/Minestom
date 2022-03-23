@@ -122,7 +122,11 @@ final class TagHandlerImpl implements TagHandler {
         }
         // Value must be parsed from nbt if the tag is different
         NBT nbt = entry.nbt;
-        if (nbt == null) entry.nbt = nbt = entryTag.convertToNbt(entry.value);
-        return tag.convertToValue(nbt);
+        if (nbt == null) entry.nbt = nbt = (NBT) entryTag.writeFunction.apply(entry.value);
+        try {
+            return tag.readFunction.apply(nbt);
+        } catch (ClassCastException e) {
+            return tag.createDefault();
+        }
     }
 }

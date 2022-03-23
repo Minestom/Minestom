@@ -29,8 +29,8 @@ public class Tag<T> {
     }
 
     private final String key;
-    private final Function<NBT, T> readFunction;
-    private final Function<T, NBT> writeFunction;
+    final Function<NBT, T> readFunction;
+    final Function<T, NBT> writeFunction;
     private final Supplier<T> defaultValue;
 
     final int index;
@@ -103,12 +103,15 @@ public class Tag<T> {
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
         final String key = this.key;
-        if (key.isEmpty()) {
-            // Special handling for view tag
-            return convertToValue(nbt.toCompound());
+        final NBT readable = key.isEmpty() ? nbt.toCompound() : nbt.get(key);
+        final T result;
+        try {
+            if (readable == null || (result = readFunction.apply(readable)) == null)
+                return createDefault();
+            return result;
+        } catch (ClassCastException e) {
+            return createDefault();
         }
-        final NBT subTag = nbt.get(key);
-        return convertToValue(subTag);
     }
 
     T createDefault() {
@@ -131,21 +134,6 @@ public class Tag<T> {
     public void writeUnsafe(@NotNull MutableNBTCompound nbtCompound, @Nullable Object value) {
         //noinspection unchecked
         write(nbtCompound, (T) value);
-    }
-
-    T convertToValue(NBT nbt) {
-        final T result;
-        try {
-            if (nbt == null || (result = readFunction.apply(nbt)) == null)
-                return createDefault();
-            return result;
-        } catch (ClassCastException e) {
-            return createDefault();
-        }
-    }
-
-    NBT convertToNbt(T value) {
-        return writeFunction.apply(value);
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
