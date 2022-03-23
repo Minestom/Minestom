@@ -250,4 +250,18 @@ public class TagPathTest {
         // Cannot enter a structure from a path tag
         assertThrows(IllegalStateException.class, () -> handler.setTag(tag.path("struct"), 5));
     }
+
+    @Test
+    public void tagObstruction() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("key");
+        var path = Tag.Integer("value").path("key", "second");
+        handler.setTag(tag, 5);
+        assertEqualsSNBT("""
+                {
+                  "key":5
+                }
+                """, handler.asCompound());
+        assertThrows(IllegalStateException.class, () -> handler.setTag(path, 5));
+    }
 }
