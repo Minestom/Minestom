@@ -37,14 +37,12 @@ final class TagHandlerImpl implements TagHandler {
             for (var path : paths) {
                 final int pathIndex = path.index();
                 if (pathIndex >= entries.length) {
-                    if (value == null)
-                        return;
+                    if (value == null) return;
                     local.entries = entries = Arrays.copyOf(entries, pathIndex + 1);
                 }
                 Entry<?> entry = entries[pathIndex];
                 if (entry == null) {
-                    if (value == null)
-                        return;
+                    if (value == null) return;
                     var updated = new TagHandlerImpl();
                     entries[pathIndex] = new Entry<>(Tag.tag(path.name(), null, null), updated);
                     local = updated;
@@ -77,14 +75,7 @@ final class TagHandlerImpl implements TagHandler {
                     }
                     if (i > 0) {
                         TagHandlerImpl parent = pathHandlers[i - 1];
-                        var e = parent.entries;
-                        for (int j = 0; j < e.length; j++) {
-                            final Entry<?> entry = e[j];
-                            if (entry != null && entry.value == handler) {
-                                e[j] = null;
-                                break;
-                            }
-                        }
+                        parent.entries[paths.get(i).index()] = null;
                     }
                 }
                 if (empty) {
@@ -97,12 +88,10 @@ final class TagHandlerImpl implements TagHandler {
         }
         // Normal tag
         if (tagIndex >= entries.length) {
-            if (value == null)
-                return; // no need to create/remove an entry
+            if (value == null) return;
             local.entries = entries = Arrays.copyOf(entries, tagIndex + 1);
         }
         entries[tagIndex] = value != null ? new Entry<>(tag, value) : null;
-
         this.cache = null;
         if (pathHandlers != null) {
             for (var handler : pathHandlers) handler.cache = null;

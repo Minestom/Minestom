@@ -91,6 +91,7 @@ public class Tag<T> {
                 path);
     }
 
+    @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> path(@NotNull String @Nullable ... path) {
         final List<PathEntry> entries = path != null ? Arrays.stream(path).map(s -> new PathEntry(s, INDEX_MAP.get(s))).toList() : null;
