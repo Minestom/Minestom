@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TagListTest {
 
@@ -138,10 +137,32 @@ public class TagListTest {
         val.add(1);
 
         handler.setTag(tag, val);
+        assertNotSame(val, handler.getTag(tag));
         assertEquals(List.of(1), handler.getTag(tag));
 
         val.add(2); // Must not modify the nbt
+        assertNotSame(val, handler.getTag(tag));
         assertEquals(List.of(1), handler.getTag(tag));
+    }
+
+    @Test
+    public void chainingImmutability() {
+        var handler = TagHandler.newHandler();
+        Tag<List<List<Integer>>> tag = Tag.Integer("numbers").list().list();
+        List<List<Integer>> val = new ArrayList<>();
+        val.add(new ArrayList<>(Arrays.asList(1, 2, 3)));
+        val.add(new ArrayList<>(Arrays.asList(4, 5, 6)));
+
+        handler.setTag(tag, val);
+        assertNotSame(val, handler.getTag(tag));
+        assertEquals(List.of(List.of(1, 2, 3), List.of(4, 5, 6)), handler.getTag(tag));
+
+        // Must not modify the nbt
+        val.get(0).add(7);
+        val.get(1).add(8);
+        val.add(new ArrayList<>(Arrays.asList(9, 10, 11)));
+        assertNotSame(val, handler.getTag(tag));
+        assertEquals(List.of(List.of(1, 2, 3), List.of(4, 5, 6)), handler.getTag(tag));
     }
 
     @Test

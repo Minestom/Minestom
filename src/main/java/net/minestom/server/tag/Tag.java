@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -117,18 +116,25 @@ public class Tag<T> {
                     if (size == 0)
                         return new NBTList<>(NBTType.TAG_String); // String is the default type for lists
                     NBTType<NBT> type = null;
-                    List<NBT> nbtList = new ArrayList<>(size);
-                    for (T t : write) {
-                        final NBT nbt = writeFunction.apply(t);
+                    NBT[] array = new NBT[size];
+                    for (int i = 0; i < size; i++) {
+                        final NBT nbt = writeFunction.apply(write.get(i));
                         if (type == null) {
                             type = (NBTType<NBT>) nbt.getID();
                         } else if (type != nbt.getID()) {
                             throw new IllegalArgumentException("All elements of the list must have the same type");
                         }
-                        nbtList.add(nbt);
+                        array[i] = nbt;
                     }
-                    return NBT.List(type, nbtList);
-                }, null, path, List::copyOf);
+                    return NBT.List(type, List.of(array));
+                }, null, path,
+                copy != null ? ts -> {
+                    T[] array = (T[]) new Object[ts.size()];
+                    for (int i = 0; i < ts.size(); i++) {
+                        array[i] = copy.apply(ts.get(i));
+                    }
+                    return List.of(array);
+                } : List::copyOf);
     }
 
     @ApiStatus.Experimental
