@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -89,6 +90,40 @@ public class Tag<T> {
                 // Default value
                 () -> readMap.apply(createDefault()),
                 path);
+    }
+
+    @ApiStatus.Experimental
+    @Contract(value = "-> new", pure = true)
+    public Tag<List<T>> list() {
+        return new Tag<>(key,
+                read -> {
+                    var list = (NBTList<?>) read;
+                    final int size = list.getSize();
+                    if (size == 0)
+                        return List.of();
+                    T[] array = (T[]) new Object[size];
+                    for (int i = 0; i < size; i++) {
+                        array[i] = readFunction.apply(list.get(i));
+                    }
+                    return List.of(array);
+                },
+                write -> {
+                    final int size = write.size();
+                    if (size == 0)
+                        return new NBTList<>(NBTType.TAG_String); // String is the default type for lists
+                    NBTType<NBT> type = null;
+                    List<NBT> nbtList = new ArrayList<>(size);
+                    for (T t : write) {
+                        final NBT nbt = writeFunction.apply(t);
+                        if (type == null) {
+                            type = (NBTType<NBT>) nbt.getID();
+                        } else if (type != nbt.getID()) {
+                            throw new IllegalArgumentException("All elements of the list must have the same type");
+                        }
+                        nbtList.add(nbt);
+                    }
+                    return NBT.List(type, nbtList);
+                }, null, path);
     }
 
     @ApiStatus.Experimental
