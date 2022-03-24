@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.api.TestUtils.assertEqualsIgnoreSpace;
+import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TagViewTest {
 
@@ -53,14 +52,14 @@ public class TagViewTest {
         var handler = TagHandler.newHandler();
         var entry = new Entry("hello");
         handler.setTag(VIEW_TAG, entry);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
-                  "value": "hello"
+                  "value":"hello"
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         handler.removeTag(VIEW_TAG);
-        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
 }

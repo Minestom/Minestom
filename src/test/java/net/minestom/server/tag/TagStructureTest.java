@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.api.TestUtils.assertEqualsIgnoreSpace;
+import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagStructureTest {
@@ -71,16 +71,16 @@ public class TagStructureTest {
         var handler = TagHandler.newHandler();
         var entry = new Entry("hello");
         handler.setTag(STRUCTURE_TAG, entry);
-        assertEqualsIgnoreSpace("""
+        assertEqualsSNBT("""
                 {
                   "entry": {
-                    "value": "hello"
+                    "value":"hello"
                   }
                 }
-                """, handler.asCompound().toSNBT());
+                """, handler.asCompound());
 
         handler.removeTag(STRUCTURE_TAG);
-        assertEqualsIgnoreSpace("{}", handler.asCompound().toSNBT());
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test
@@ -117,24 +117,24 @@ public class TagStructureTest {
         // Add first entry
         {
             handler.setTag(STRUCTURE_TAG, entry1);
-            assertEqualsIgnoreSpace("""
+            assertEqualsSNBT("""
                     {
                       "entry": {
-                        "value": "hello"
+                        "value":"hello"
                       }
                     }
-                    """, handler.asCompound().toSNBT());
+                    """, handler.asCompound());
         }
         // Add second entry
         {
             handler.setTag(STRUCTURE_TAG2, entry2);
-            assertEqualsIgnoreSpace("""
+            assertEqualsSNBT("""
                     {
                       "entry": {
                         "value2": "hello2"
                       }
                     }
-                    """, handler.asCompound().toSNBT());
+                    """, handler.asCompound());
         }
     }
 }
