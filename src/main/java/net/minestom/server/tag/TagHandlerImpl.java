@@ -172,6 +172,12 @@ final class TagHandlerImpl implements TagHandler {
             this.tag = tag;
             this.value = value;
         }
+
+        NBT updatedNbt() {
+            NBT nbt = this.nbt;
+            if (nbt == null) this.nbt = nbt = tag.writeFunction.apply(value);
+            return nbt;
+        }
     }
 
     private record Cache(Entry<?>[] entries, NBTCompound compound) implements TagReadable {
@@ -196,6 +202,10 @@ final class TagHandlerImpl implements TagHandler {
                 }
                 if (entry.value instanceof TagHandlerImpl handler) {
                     entries = handler.entries;
+                } else if (entry.updatedNbt() instanceof NBTCompound compound) {
+                    var tmp = new TagHandlerImpl();
+                    tmp.updateContent(compound);
+                    entries = tmp.entries;
                 }
             }
         }
@@ -206,14 +216,13 @@ final class TagHandlerImpl implements TagHandler {
         if (value instanceof TagHandlerImpl)
             throw new IllegalStateException("Cannot read path-able tag " + tag.getKey());
         final Tag entryTag = entry.tag;
-        if (entryTag == tag) {
+        if (entryTag.shareValue(tag)) {
             // Tag is the same, return the value
             //noinspection unchecked
             return (T) value;
         }
         // Value must be parsed from nbt if the tag is different
-        NBT nbt = entry.nbt;
-        if (nbt == null) entry.nbt = nbt = (NBT) entryTag.writeFunction.apply(value);
+        final NBT nbt = entry.updatedNbt();
         try {
             return tag.readFunction.apply(nbt);
         } catch (ClassCastException e) {

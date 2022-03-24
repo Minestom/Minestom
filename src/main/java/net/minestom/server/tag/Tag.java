@@ -178,6 +178,12 @@ public class Tag<T> {
         write(nbtCompound, (T) value);
     }
 
+    final boolean shareValue(@NotNull Tag<?> other) {
+        // Verify if these 2 tags can share the same cached value
+        // Key/Default value/Path are ignored
+        return this == other || this.readFunction == other.readFunction;
+    }
+
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
         return tag(key, NBTByte::getValue, NBT::Byte);
     }

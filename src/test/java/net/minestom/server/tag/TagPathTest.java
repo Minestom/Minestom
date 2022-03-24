@@ -236,6 +236,7 @@ public class TagPathTest {
                   }
                 }
                 """, handler.asCompound());
+        assertEquals(5, handler.getTag(tag.path("struct")));
 
         handler.setTag(tag, 5);
         assertEqualsSNBT("""
