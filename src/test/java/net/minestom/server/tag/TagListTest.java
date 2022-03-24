@@ -110,4 +110,21 @@ public class TagListTest {
         handler.removeTag(tag);
         assertEqualsSNBT("{}", handler.asCompound());
     }
+
+    @Test
+    public void defaultValue() {
+        var handler = TagHandler.newHandler();
+        var val = List.of(1, 2, 3);
+        var tag = Tag.Integer("number").list().defaultValue(val);
+        assertEquals(List.of(1, 2, 3), handler.getTag(tag));
+    }
+
+    @Test
+    public void defaultValueReset() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("number").defaultValue(5);
+        var list = tag.list();
+        assertNull(handler.getTag(list));
+        assertEquals(List.of(1, 2, 3), handler.getTag(list.defaultValue(List.of(1, 2, 3))));
+    }
 }
