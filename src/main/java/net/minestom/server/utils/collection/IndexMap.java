@@ -2,6 +2,7 @@ package net.minestom.server.utils.collection;
 
 import it.unimi.dsi.fastutil.HashCommon;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import static it.unimi.dsi.fastutil.HashCommon.arraySize;
@@ -24,6 +25,7 @@ public final class IndexMap<K> {
         value = new int[n + 1];
     }
 
+    @Contract(pure = true)
     public int get(@NotNull K key) {
         final int hash = HashCommon.mix(key.hashCode());
         int index = getInt(key, hash);

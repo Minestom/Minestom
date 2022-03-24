@@ -43,7 +43,6 @@ public class Tag<T> {
         Function<T, NBT> writeFunction,
         @Nullable Supplier<T> defaultValue, @Nullable List<PathEntry> path,
         @Nullable UnaryOperator<T> copy) {
-        //noinspection AssertWithSideEffects
         assert index == INDEX_MAP.get(key);
         this.index = index;
         this.key = key;
