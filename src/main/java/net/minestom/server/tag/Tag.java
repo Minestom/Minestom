@@ -46,27 +46,20 @@ public class Tag<T> {
         @Nullable UnaryOperator<T> copy) {
         //noinspection AssertWithSideEffects
         assert index == INDEX_MAP.get(key);
+        this.index = index;
         this.key = key;
         this.readFunction = readFunction;
         this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
-        this.index = index;
         this.path = path;
         this.copy = copy;
-    }
-
-    protected Tag(String key,
-                  Function<NBT, T> readFunction,
-                  Function<T, NBT> writeFunction,
-                  @Nullable Supplier<T> defaultValue,
-                  @Nullable List<PathEntry> path) {
-        this(INDEX_MAP.get(key), key, readFunction, writeFunction, defaultValue, path, null);
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
                                          @NotNull Function<N, T> readFunction,
                                          @NotNull Function<T, N> writeFunction) {
-        return new Tag<>(key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction, null, null);
+        return new Tag<>(INDEX_MAP.get(key), key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction,
+                null, null, null);
     }
 
     /**
