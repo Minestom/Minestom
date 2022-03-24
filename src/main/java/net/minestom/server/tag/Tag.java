@@ -39,11 +39,11 @@ public class Tag<T> {
     final List<PathEntry> path;
     final UnaryOperator<T> copy;
 
-    public Tag(int index, String key,
-               Function<NBT, T> readFunction,
-               Function<T, NBT> writeFunction,
-               @Nullable Supplier<T> defaultValue, @Nullable List<PathEntry> path,
-               @Nullable UnaryOperator<T> copy) {
+    Tag(int index, String key,
+        Function<NBT, T> readFunction,
+        Function<T, NBT> writeFunction,
+        @Nullable Supplier<T> defaultValue, @Nullable List<PathEntry> path,
+        @Nullable UnaryOperator<T> copy) {
         //noinspection AssertWithSideEffects
         assert index == INDEX_MAP.get(key);
         this.key = key;
