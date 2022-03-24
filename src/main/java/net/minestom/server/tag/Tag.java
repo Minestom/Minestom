@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -23,6 +25,9 @@ import java.util.function.Supplier;
 public class Tag<T> {
     private static final IndexMap<String> INDEX_MAP = new IndexMap<>();
 
+    record PathEntry(String name, int index) {
+    }
+
     private final String key;
     final Function<NBT, T> readFunction;
     final Function<T, NBT> writeFunction;
@@ -30,21 +35,25 @@ public class Tag<T> {
 
     final int index;
 
+    final List<PathEntry> path;
+
     protected Tag(@NotNull String key,
                   @NotNull Function<NBT, T> readFunction,
                   @NotNull Function<T, NBT> writeFunction,
-                  @Nullable Supplier<T> defaultValue) {
+                  @Nullable Supplier<T> defaultValue,
+                  @Nullable List<PathEntry> path) {
+        this.index = INDEX_MAP.get(key);
         this.key = key;
         this.readFunction = readFunction;
         this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
-        this.index = INDEX_MAP.get(key);
+        this.path = path;
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
                                          @NotNull Function<N, T> readFunction,
                                          @NotNull Function<T, N> writeFunction) {
-        return new Tag<>(key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction, null);
+        return new Tag<>(key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction, null, null);
     }
 
     /**
@@ -58,7 +67,7 @@ public class Tag<T> {
 
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
-        return new Tag<>(key, readFunction, writeFunction, defaultValue);
+        return new Tag<>(key, readFunction, writeFunction, defaultValue, path);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -78,7 +87,15 @@ public class Tag<T> {
                 // Write
                 writeMap.andThen(writeFunction),
                 // Default value
-                () -> readMap.apply(createDefault()));
+                () -> readMap.apply(createDefault()),
+                path);
+    }
+
+    @ApiStatus.Experimental
+    @Contract(value = "_ -> new", pure = true)
+    public Tag<T> path(@NotNull String @Nullable ... path) {
+        final List<PathEntry> entries = path != null ? Arrays.stream(path).map(s -> new PathEntry(s, INDEX_MAP.get(s))).toList() : null;
+        return new Tag<>(key, readFunction, writeFunction, defaultValue, entries);
     }
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
