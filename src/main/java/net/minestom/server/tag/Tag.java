@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a key to retrieve or change a value.
@@ -29,26 +30,37 @@ public class Tag<T> {
     record PathEntry(String name, int index) {
     }
 
+    final int index;
     private final String key;
     final Function<NBT, T> readFunction;
     final Function<T, NBT> writeFunction;
     private final Supplier<T> defaultValue;
 
-    final int index;
-
     final List<PathEntry> path;
+    final UnaryOperator<T> copy;
 
-    protected Tag(@NotNull String key,
-                  @NotNull Function<NBT, T> readFunction,
-                  @NotNull Function<T, NBT> writeFunction,
-                  @Nullable Supplier<T> defaultValue,
-                  @Nullable List<PathEntry> path) {
-        this.index = INDEX_MAP.get(key);
+    public Tag(int index, String key,
+               Function<NBT, T> readFunction,
+               Function<T, NBT> writeFunction,
+               @Nullable Supplier<T> defaultValue, @Nullable List<PathEntry> path,
+               @Nullable UnaryOperator<T> copy) {
+        //noinspection AssertWithSideEffects
+        assert index == INDEX_MAP.get(key);
         this.key = key;
         this.readFunction = readFunction;
         this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
+        this.index = index;
         this.path = path;
+        this.copy = copy;
+    }
+
+    protected Tag(String key,
+                  Function<NBT, T> readFunction,
+                  Function<T, NBT> writeFunction,
+                  @Nullable Supplier<T> defaultValue,
+                  @Nullable List<PathEntry> path) {
+        this(INDEX_MAP.get(key), key, readFunction, writeFunction, defaultValue, path, null);
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
@@ -68,7 +80,7 @@ public class Tag<T> {
 
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
-        return new Tag<>(key, readFunction, writeFunction, defaultValue, path);
+        return new Tag<>(index, key, readFunction, writeFunction, defaultValue, path, copy);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -79,7 +91,7 @@ public class Tag<T> {
     @Contract(value = "_, _ -> new", pure = true)
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
-        return new Tag<>(key,
+        return new Tag<>(index, key,
                 // Read
                 readFunction.andThen(t -> {
                     if (t == null) return null;
@@ -89,13 +101,13 @@ public class Tag<T> {
                 writeMap.andThen(writeFunction),
                 // Default value
                 () -> readMap.apply(createDefault()),
-                path);
+                path, null);
     }
 
     @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
-        return new Tag<>(key,
+        return new Tag<>(index, key,
                 read -> {
                     var list = (NBTList<?>) read;
                     final int size = list.getSize();
@@ -123,14 +135,14 @@ public class Tag<T> {
                         nbtList.add(nbt);
                     }
                     return NBT.List(type, nbtList);
-                }, null, path);
+                }, null, path, List::copyOf);
     }
 
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> path(@NotNull String @Nullable ... path) {
         final List<PathEntry> entries = path != null ? Arrays.stream(path).map(s -> new PathEntry(s, INDEX_MAP.get(s))).toList() : null;
-        return new Tag<>(key, readFunction, writeFunction, defaultValue, entries);
+        return new Tag<>(index, key, readFunction, writeFunction, defaultValue, entries, copy);
     }
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {

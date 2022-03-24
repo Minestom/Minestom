@@ -2,6 +2,8 @@ package net.minestom.server.tag;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
@@ -126,5 +128,74 @@ public class TagListTest {
         var list = tag.list();
         assertNull(handler.getTag(list));
         assertEquals(List.of(1, 2, 3), handler.getTag(list.defaultValue(List.of(1, 2, 3))));
+    }
+
+    @Test
+    public void immutability() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("number").list();
+        List<Integer> val = new ArrayList<>();
+        val.add(1);
+
+        handler.setTag(tag, val);
+        assertEquals(List.of(1), handler.getTag(tag));
+
+        val.add(2); // Must not modify the nbt
+        assertEquals(List.of(1), handler.getTag(tag));
+    }
+
+    @Test
+    public void immutabilitySnbt() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("numbers").list();
+        List<Integer> val = new ArrayList<>();
+        val.add(1);
+
+        handler.setTag(tag, val);
+        assertEqualsSNBT("""
+                {
+                  "numbers": [1]
+                }
+                """, handler.asCompound());
+
+        val.add(2); // Must not modify the nbt
+        assertEqualsSNBT("""
+                {
+                  "numbers": [1]
+                }
+                """, handler.asCompound());
+    }
+
+    @Test
+    public void chainingImmutabilitySnbt() {
+        var handler = TagHandler.newHandler();
+        Tag<List<List<Integer>>> tag = Tag.Integer("numbers").list().list();
+        List<List<Integer>> val = new ArrayList<>();
+        val.add(new ArrayList<>(Arrays.asList(1, 2, 3)));
+        val.add(new ArrayList<>(Arrays.asList(4, 5, 6)));
+
+        handler.setTag(tag, val);
+        assertEqualsSNBT("""
+                {
+                  "numbers":[
+                    [1,2,3],
+                    [4,5,6]
+                  ]
+                }
+                """, handler.asCompound());
+
+
+        // Must not modify the nbt
+        val.get(0).add(7);
+        val.get(1).add(8);
+        val.add(new ArrayList<>(Arrays.asList(9, 10, 11)));
+        assertEqualsSNBT("""
+                {
+                  "numbers":[
+                    [1,2,3],
+                    [4,5,6]
+                  ]
+                }
+                """, handler.asCompound());
     }
 }

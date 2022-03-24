@@ -10,6 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.VarHandle;
 import java.util.Arrays;
+import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
     private Entry<?>[] entries = new Entry[0];
@@ -23,6 +24,12 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        // Convert value to fit the tag (e.g. list copies)
+        if (value != null) {
+            final UnaryOperator<T> copy = tag.copy;
+            if (copy != null) value = copy.apply(value);
+        }
+
         VarHandle.acquireFence();
         int tagIndex = tag.index;
         TagHandlerImpl local = this;
