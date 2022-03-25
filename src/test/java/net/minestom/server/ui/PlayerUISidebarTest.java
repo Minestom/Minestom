@@ -81,7 +81,7 @@ public class PlayerUISidebarTest {
 
         // Identical sidebar shouldn't send any packets
         assertFalse(ui.sidebar(sidebar().build()));
-        ui.drain(packet -> { throw new IllegalStateException(); });
+        ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
@@ -130,7 +130,7 @@ public class PlayerUISidebarTest {
         assertFalse(ui.sidebar(sidebar()
                 .add(COMPONENT_DIFF)
                 .build()));
-        ui.drain(packet -> { throw new IllegalStateException(); });
+        ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
@@ -155,7 +155,7 @@ public class PlayerUISidebarTest {
         assertFalse(ui.sidebar(sidebar()
                 .title(COMPONENT_DIFF)
                 .build()));
-        ui.drain(packet -> { throw new IllegalStateException(); });
+        ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class PlayerUISidebarTest {
 
         // Ensure state is actually changed
         assertFalse(ui.sidebar(SidebarUI.builder(COMPONENT_TITLE).build()));
-        ui.drain(packet -> { throw new IllegalStateException(); });
+        ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
@@ -233,7 +233,7 @@ public class PlayerUISidebarTest {
         assertFalse(ui.sidebar(SidebarUI.builder(COMPONENT_TITLE)
                 .set(1, COMPONENT_LINE1) // Must also set line 0 to Component.empty()
                 .build()));
-        ui.drain(packet -> { throw new IllegalStateException(); });
+        ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @SuppressWarnings("unchecked")
@@ -242,7 +242,7 @@ public class PlayerUISidebarTest {
             if (packet.getClass() == clazz) {
                 consumer.accept((T) packet);
             } else {
-                throw new RuntimeException("Expected " + clazz.getClass().getName() + ", got " + packet.getClass().getName() + " instead");
+                fail("Expected " + clazz.getClass().getName() + ", got " + packet.getClass().getName() + " instead");
             }
         };
     }
@@ -259,13 +259,13 @@ public class PlayerUISidebarTest {
         ui.drain(packet -> {
             int i = index.getAndIncrement();
             if (i >= consumers.length) {
-                throw new RuntimeException("Expected no more packets, but got " + packet.getClass().getName());
+                fail("Expected no more packets, but got " + packet.getClass().getName());
             } else {
                 ((Consumer<ServerPacket>)consumers[i]).accept(packet);
             }
         });
         if (consumers.length > index.get()) {
-            throw new RuntimeException("Expected packet, but no more packets were sent");
+            fail("Expected packet, but no more packets were sent");
         }
     }
 
