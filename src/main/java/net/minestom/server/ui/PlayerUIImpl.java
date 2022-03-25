@@ -1,22 +1,33 @@
 package net.minestom.server.ui;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
-public class PlayerUIImpl extends PlayerUI implements Serializable {
+public final class PlayerUIImpl implements PlayerUI {
+
+    // region [Constants]
+    /**
+     * Limited by the notchian client, do not change
+     */
+    private static final int MAX_LINES_COUNT = 15;
 
     private static final String MAGIC = "58D0F79F"; // https://xkcd.com/221/
-
-    // region [Scoreboard Constants]
     private static final String OBJECTIVE_NAME = MAGIC+"_objective";
     private static final byte OBJECTIVE_POSITION = (byte) 1; // Sidebar
     private static final String TEAM_NAME = MAGIC+"_team";
@@ -33,88 +44,231 @@ public class PlayerUIImpl extends PlayerUI implements Serializable {
         }
         ENTITY_NAMES = List.of(names);
     }
+
+    private static final char TAB_LIST_BEFORE = '!';
+    private static final char TAB_LIST_AFTER = '~';
+    private static final String TAB_LIST_AFTER_TEAM_PREFIX = "\u9999"+MAGIC;
     // endregion
 
-    private final Player player;
+    private final MessagePassingQueue<ServerPacket> queue = new MpscUnboundedArrayQueue<>(32);
 
-    public PlayerUIImpl(Player player) {
-        this.player = player;
+    private final int[] scoreboardHashCodes = new int[MAX_LINES_COUNT + 1];
+
+    private boolean tabListAfterTeamCreated = false;
+
+    private Component header = Component.empty();
+    private Component footer = Component.empty();
+
+    private final IntList textHashCodesBefore = new IntArrayList();
+    private final IntList skinHashCodesBefore = new IntArrayList();
+    private final IntList textHashCodesAfter = new IntArrayList();
+    private final IntList skinHashCodesAfter = new IntArrayList();
+
+    public PlayerUIImpl() {
+        Arrays.fill(scoreboardHashCodes, -1);
     }
 
-    protected void createScoreboardObjective(Component title) {
+    @Override
+    public boolean sidebar(@Nullable SidebarUI sidebar) {
+        if (sidebar == null) {
+            if (scoreboardHashCodes[0] == -1) return false;
+            Arrays.fill(scoreboardHashCodes, -1);
+            destroySidebarObjective();
+            return true;
+        } else if (sidebar instanceof SidebarUIImpl impl) {
+            // Set title
+            boolean changed = setScoreboardLine(0, impl.title());
+
+            int index = 1;
+
+            // Set specified sidebar lines
+            for (; index-1 < impl.lines().size() && index < scoreboardHashCodes.length; index++) {
+                Component line = impl.lines().get(index-1);
+                changed |= setScoreboardLine(index, line);
+            }
+
+            // Clear remaining lines
+            for (; index < scoreboardHashCodes.length; index++) {
+                changed |= setScoreboardLine(index, null);
+            }
+
+            return changed;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean tabList(TabList tabList) {
+        if (tabList == null) {
+            updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesBefore, skinHashCodesBefore, -1);
+            updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesAfter, skinHashCodesAfter, 1);
+
+            header = Component.empty();
+            footer = Component.empty();
+            setHeaderAndFooter(header, footer);
+        } else if (tabList instanceof TabListImpl impl) {
+            boolean modified = false;
+
+            if (impl.hasPlayerList()) {
+                modified |= updatePlayerList(impl.beforeText(), impl.beforeSkin(), textHashCodesBefore, skinHashCodesBefore, -1);
+                modified |= updatePlayerList(impl.afterText(), impl.afterSkin(), textHashCodesAfter, skinHashCodesAfter, 1);
+            }
+
+            boolean headerFooterChanged = false;
+
+            if (impl.header() != null) {
+                if (!header.equals(impl.header())) {
+                    headerFooterChanged = true;
+                    header = impl.header();
+                }
+            }
+            if (impl.footer() != null) {
+                if (!footer.equals(impl.footer())) {
+                    headerFooterChanged = true;
+                    footer = impl.footer();
+                }
+            }
+            if (headerFooterChanged) {
+                setHeaderAndFooter(header, footer);
+                modified = true;
+            }
+
+            return modified;
+        }
+        return false;
+    }
+
+    @Override
+    public void drain(@NotNull Consumer<ServerPacket> consumer) {
+        this.queue.drain(consumer::accept);
+    }
+
+    private boolean setScoreboardLine(int index, @Nullable Component line) {
+        int oldLine = scoreboardHashCodes[index];
+
+        if (line == null) {
+            if (index <= 0) return false;
+            if (oldLine == -1) return false;
+            scoreboardHashCodes[index] = -1;
+            removeSidebarLine(index-1);
+            return true;
+        } else {
+            int lineHashCode = line.hashCode();
+            if (oldLine == -1) {
+                scoreboardHashCodes[index] = lineHashCode;
+
+                if (index <= 0) {
+                    createSidebarObjective(line);
+                } else {
+                    createSidebarLine(index-1, line);
+                }
+                return true;
+            } else if (oldLine != lineHashCode) {
+                scoreboardHashCodes[index] = lineHashCode;
+
+                if (index <= 0) {
+                    updateSidebarTitle(line);
+                } else {
+                    updateSidebarLine(index-1, line);
+                }
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private boolean updatePlayerList(List<Component> lines, List<PlayerSkin> skins,
+                                     IntList textHashCodeList, IntList skinHashCodeList, int indexMultiplier) {
+        boolean modified = false;
+
+        assert lines.size() == skins.size();
+        assert textHashCodeList.size() == skinHashCodeList.size();
+
+        int index = 0;
+        for (; index < lines.size(); index++) {
+            Component line = lines.get(index);
+            PlayerSkin skin = skins.get(index);
+
+            int lineHashCode = line.hashCode();
+            int skinHashCode = skin.hashCode();
+
+            if (index >= textHashCodeList.size()) {
+                modified = true;
+                addTabListEntry((index+1)*indexMultiplier, line, skin);
+                textHashCodeList.add(lineHashCode);
+                skinHashCodeList.add(skinHashCode);
+            } else {
+                if (skinHashCodeList.getInt(index) != skinHashCode) {
+                    modified = true;
+                    addTabListEntry((index+1)*indexMultiplier, line, skin);
+                    textHashCodeList.set(index, lineHashCode);
+                    skinHashCodeList.set(index, skinHashCode);
+                } else if (textHashCodeList.getInt(index) != lineHashCode) {
+                    modified = true;
+                    updateTabListEntry((index+1)*indexMultiplier, line);
+                    textHashCodeList.set(index, lineHashCode);
+                }
+            }
+        }
+
+        int beforeSize = textHashCodeList.size();
+        for (; index < beforeSize; index++) {
+            modified = true;
+            removeTabListEntry((index+1)*indexMultiplier);
+            textHashCodeList.removeInt(textHashCodeList.size()-1);
+            skinHashCodeList.removeInt(skinHashCodeList.size()-1);
+        }
+
+        return modified;
+    }
+
+    private void createSidebarObjective(Component title) {
         var scoreboardObjectivePacket = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 0,
                 title, ScoreboardObjectivePacket.Type.INTEGER);
 
         var displayScoreboardPacket = new DisplayScoreboardPacket(OBJECTIVE_POSITION, OBJECTIVE_NAME);
 
-        player.sendPacket(scoreboardObjectivePacket); // Create objective
-        player.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard
+        queue.offer(scoreboardObjectivePacket); // Create objective
+        queue.offer(displayScoreboardPacket); // Show sidebar scoreboard
     }
 
-    protected void destroyScoreboardObjective() {
+    private void destroySidebarObjective() {
         var scoreboardObjectivePacket = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 1, null, null);
         var displayScoreboardPacket = new DisplayScoreboardPacket(OBJECTIVE_POSITION, OBJECTIVE_NAME);
 
-        player.sendPacket(scoreboardObjectivePacket); // Creative objective
-        player.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
+        queue.offer(scoreboardObjectivePacket); // Creative objective
+        queue.offer(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
     }
 
-    @Override
-    protected void updateScoreboardLine(int index, Component line) {
-        if (index <= 0) {
-            var packet = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 2,
-                    line, ScoreboardObjectivePacket.Type.INTEGER);
-            player.sendPacket(packet);
-        } else {
-            index--;
-
-            final var action = new TeamsPacket.UpdateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
-                    NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty());
-            sendTeamPacket(index, action);
-        }
-
+    private void updateSidebarTitle(Component title) {
+        var packet = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 2,
+                title, ScoreboardObjectivePacket.Type.INTEGER);
+        queue.offer(packet);
     }
 
-    @Override
-    protected void createScoreboardLine(int index, Component line) {
-        if (index <= 0) {
-            // Don't need to create title
-        } else {
-            index--;
-
-            String entityName = ENTITY_NAMES.get(index);
-
-            final var action = new TeamsPacket.CreateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
-                    NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty(),
-                    List.of(entityName));
-            sendTeamPacket(index, action);
-            player.sendPacket(new UpdateScorePacket(entityName, (byte) 0, OBJECTIVE_NAME, 0));
-        }
+    private void updateSidebarLine(int index, Component line) {
+        final var action = new TeamsPacket.UpdateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
+                NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty());
+        queue.offer(new TeamsPacket(TEAM_NAME+"_"+index, action));
     }
 
-    @Override
-    protected void removeScoreboardLine(int index) {
-        if (index <= 0) {
-            // Don't need to remove title
-        } else {
-            index--;
+    private void createSidebarLine(int index, Component line) {
+        String entityName = ENTITY_NAMES.get(index);
 
-            player.sendPacket(new UpdateScorePacket(ENTITY_NAMES.get(index), (byte) 1, OBJECTIVE_NAME, 0));
-        }
+        final var action = new TeamsPacket.CreateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
+                NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty(),
+                List.of(entityName));
+        queue.offer(new TeamsPacket(TEAM_NAME+"_"+index, action));
+        queue.offer(new UpdateScorePacket(entityName, (byte) 0, OBJECTIVE_NAME, 0));
     }
 
-    private void sendTeamPacket(int index, TeamsPacket.Action action) {
-        player.sendPacket(new TeamsPacket(TEAM_NAME+"_"+index, action));
+    private void removeSidebarLine(int index) {
+        queue.offer(new UpdateScorePacket(ENTITY_NAMES.get(index), (byte) 1, OBJECTIVE_NAME, 0));
     }
 
-    private boolean createdTeam = false;
-    private static char BEFORE = '!';
-    private static char AFTER = '~';
-    private static final String TAB_LIST_AFTER_TEAM = "\u9999"+MAGIC;
-
-    @Override
-    protected void addTabListEntry(int index, Component text, PlayerSkin skin) {
-        String name = (index < 0 ? BEFORE : AFTER) + Integer.toHexString(Math.abs(index)+0x10000000).substring(1);
+    private void addTabListEntry(int index, Component text, PlayerSkin skin) {
+        String name = (index < 0 ? TAB_LIST_BEFORE : TAB_LIST_AFTER) + Integer.toHexString(Math.abs(index)+0x10000000).substring(1);
 
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
@@ -122,39 +276,37 @@ public class PlayerUIImpl extends PlayerUI implements Serializable {
         var packet = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
                 new PlayerInfoPacket.AddPlayer(new UUID(index, 0), name, prop,
                         GameMode.CREATIVE, 0, text));
-        player.sendPacket(packet);
+        queue.offer(packet);
 
         if (index >= 0) {
-            if (!createdTeam) {
+            if (!tabListAfterTeamCreated) {
                 final var action = new TeamsPacket.CreateTeamAction(Component.empty(), FRIENDLY_FLAGS,
                         NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, Component.empty(), Component.empty(),
                         List.of(name));
-                player.sendPacket(new TeamsPacket(TAB_LIST_AFTER_TEAM, action));
-                createdTeam = true;
+                queue.offer(new TeamsPacket(TAB_LIST_AFTER_TEAM_PREFIX, action));
+                tabListAfterTeamCreated = true;
             } else {
                 final var action = new TeamsPacket.AddEntitiesToTeamAction(List.of(name));
-                player.sendPacket(new TeamsPacket(TAB_LIST_AFTER_TEAM, action));
+                queue.offer(new TeamsPacket(TAB_LIST_AFTER_TEAM_PREFIX, action));
             }
         }
     }
 
-    @Override
-    protected void updateTabListEntry(int index, Component text) {
+    private void updateTabListEntry(int index, Component text) {
         var packet = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
                 new PlayerInfoPacket.UpdateDisplayName(new UUID(index, 0), text));
-        player.sendPacket(packet);
+        queue.offer(packet);
     }
 
-    @Override
-    protected void removeTabListEntry(int index) {
+    private void removeTabListEntry(int index) {
         var packet = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER,
                 new PlayerInfoPacket.RemovePlayer(new UUID(index, 0)));
-        player.sendPacket(packet);
+        queue.offer(packet);
     }
 
-    @Override
-    protected void setHeaderAndFooter(Component header, Component footer) {
-        player.sendPlayerListHeaderAndFooter(header, footer);
+    private void setHeaderAndFooter(Component header, Component footer) {
+        var packet = new PlayerListHeaderAndFooterPacket(header, footer);
+        queue.offer(packet);
     }
 
 }

@@ -68,6 +68,7 @@ import net.minestom.server.snapshot.PlayerSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.timer.Scheduler;
+import net.minestom.server.ui.PlayerUI;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -141,6 +142,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
+
+    private final PlayerUI playerUI = PlayerUI.newPlayerUI();
 
     private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
@@ -360,6 +363,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshEating(null);
             }
         }
+
+        // Player UI
+        playerUI.drain(playerConnection::sendPacket);
 
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
@@ -626,6 +632,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
+    }
+
+    public PlayerUI getPlayerUI() {
+        return playerUI;
     }
 
     /**

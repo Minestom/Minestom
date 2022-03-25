@@ -3,6 +3,10 @@ package net.minestom.server.ui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,38 +27,6 @@ public class TabListBuilder {
 
     /*package-private*/ TabListBuilder() {}
 
-    public TabListBuilder addBefore(Component text, PlayerSkin skin) {
-        hasPlayerList = true;
-        beforeText.add(text);
-        beforeSkin.add(skin);
-        return this;
-    }
-
-    public TabListBuilder addBefore(Component text, NamedTextColor color) {
-        return this.addBefore(text, getColouredPlayerSkin(color));
-    }
-
-    public TabListBuilder addAfter(Component text, PlayerSkin skin) {
-        hasPlayerList = true;
-        afterText.add(text);
-        afterSkin.add(skin);
-        return this;
-    }
-
-    public TabListBuilder addAfter(Component text, NamedTextColor color) {
-        return this.addAfter(text, getColouredPlayerSkin(color));
-    }
-
-    public TabListBuilder header(Component header) {
-        this.header = header;
-        return this;
-    }
-
-    public TabListBuilder footer(Component footer) {
-        this.footer = footer;
-        return this;
-    }
-
     public TabList build() {
         return new TabListImpl(
                 header, footer,
@@ -64,108 +36,54 @@ public class TabListBuilder {
         );
     }
 
-    private static PlayerSkin getColouredPlayerSkin(NamedTextColor color) {
-        return NAMED_PLAYER_SKIN_MAP.get(color);
+    public TabListBuilder header(@NotNull Component header) {
+        this.header = header;
+        return this;
     }
 
-    private static final PlayerSkin DEFAULT_SKIN_AQUA = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYxMTQyNjc0OTk1NiwKICAicHJvZmlsZUlkIiA6ICIzZmM3ZmRmOTM5NjM0YzQxOTExOTliYTNmN2NjM2ZlZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJZZWxlaGEiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWE1Njk5ZDJmMmEwOTgyMWIwMGM0Mzc5MTIxNWJhNGZjMGQxNTEzYTgxNTRkNTcwNjllZmRjNjRlMWRkNjJmIgogICAgfQogIH0KfQ==",
-            "wzECNGF+15FK5ZtJo5USp9xIbUIUD5VXxh8QEupGiH5AzTxFl2gwZHrDIuahwUrQPd8FdMKl69PkoqtzX6OlFsx8qP8Xn27dAKURFrhKEiNQJDQAXtlW4Ce9umu8/uDLFhDBw5cqGe2kPdeWaBHoYUOXWRwN2DMaZ/e7JNs3thQUqauLCr8qzKVMYgz23+ezPuc1ZEUS9qWf2NN4ERj5Nw7h5kzVa66eNZywbPXTA2YLYp98Wps0DodijDxNEHLwbKi7RljJWlMJsldX27XeZ67pWhEr/GNE3IpyZ4pTMg3UgOQUzicQedCX705O3+njDn/aoR4Sbv4/fhjnAxkCVPHSY2L/asuoZ04eGrUDmxnBj/Uuk24KZzDGiLVfLkOAgGRO56IdI/bTu4GGM41zlvXSN2XyhJW+4R3VwdgfGaM9au3PL6VgCwmZzQTRAjNxaPZWdkPEgNt6GKteyugHsV88RUrnX3XFC3yFkpB1WqOgjV4JSQLz9/tQtiakF3s5z8AIUX4AFFTPJSbtCFEXkzDY9Vjl9/cSGnkb4sajHL/JsrPaC31w58mnqzf6z4jMpyM67+0nGAzk9GlMV+U2fsiawVwxc4kC0RdhsyD9ZLYGG1J3Sto2PNKuqQ6Akx/9OFqS2eTLrrMguRxab7l0llols6bPusSGloDjQxSse+E="
-    );
+    public TabListBuilder footer(@NotNull Component footer) {
+        this.footer = footer;
+        return this;
+    }
 
-    private static final PlayerSkin DEFAULT_SKIN_BLACK = new PlayerSkin(
-            "eyJ0aW1lc3RhbXAiOjE1ODU5MDYzODk1MDUsInByb2ZpbGVJZCI6ImJlY2RkYjI4YTJjODQ5YjRhOWIwOTIyYTU4MDUxNDIwIiwicHJvZmlsZU5hbWUiOiJTdFR2Iiwic2lnbmF0dXJlUmVxdWlyZWQiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9lYWNjYjA3ZjA1MzZkZDgxN2MxNTI1YTNhM2Y5N2U0MjgwOTVjOWIyOTg0NjBiYzdhM2EzZTFiOGI5ZmM3MWZhIn19fQ==",
-            "XoobQpuhUKxou21LsxxLA+08ICIiTbFUvVuuqT0cTB7ZCAhD05Xvfd8Ov7PYWgXYV0oCCKayZLKAfebYfKsvI51K7ukVVCujGa13syPTctO+j30+8gbacf+4Z+kyaJx5xo15nT9qadyoDI+6PUbhgMFCMvP1Q+/I6vJL2mgH8Zud1c/dc4+3VfCE3vh2LdkSMZ5oUfFSHD+dfCQth+38nde/29MW2yTr0hbVnPqmyueraxn7gme1Bra9kts32ZC5VfqJ3yZgvVsEEy+lzIkJdELyna4HmRyE70xoJ6MJVoa+IOSxqQjrMT/sA5GBwn53/m2Bl+VZvAUn+XsKh/kzwV6vTIzLzJfburHV+7p3kTIjIT17I0uy0SjbhO0Fe//Dy3luRTe++K1Uzi9oC74ixz4dvTnPOQVwPHMqFF+NVE43JJtmB+jaXwOFNYpGZtlrqsq751QS6/MYbW9kkaOTk3d5cF4J1QHze+NgR5dqL/8jeqIkezIxNSyAUdms+mqRendHzXCHqmblwoi/ZHpVCh32gKgPpV9rOLCGzT9BhR935rOWVpriptp1m/XaR7TaT4Scu2Nnbk3ZkolZVGDPhGpgTr+oHBX0ZjVaWeoy+E6xO3k11WTZI3cn8CETk8vkzaPen9iJEIjnsOdd9wrqWzBmOq1R2GpBQaABjYDVsu0="
-    );
+    public TabListBuilder addBefore(@NotNull Component text, @Nullable PlayerSkin skin) {
+        hasPlayerList = true;
+        beforeText.add(text);
+        beforeSkin.add(skin == null ? DEFAULT_SKIN_GRAY : skin);
+        return this;
+    }
 
-    private static final PlayerSkin DEFAULT_SKIN_BLUE = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNjA5NDU1OSwKICAicHJvZmlsZUlkIiA6ICJlZDUzZGQ4MTRmOWQ0YTNjYjRlYjY1MWRjYmE3N2U2NiIsCiAgInByb2ZpbGVOYW1lIiA6ICI0MTQxNDE0MWgiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTczNmVmZDMzMWEwZjNlYTJlZTFmZGI1ZDcxYWZlMmZmZTU0N2NkZDAwOTljZGM3NjQyNTUzNTUxYWFiNGRhZSIKICAgIH0KICB9Cn0=",
-            "VnxKas/4T5J0qnmGs/mQNME081vliBbZ7oACpr5fPuXUXK0A/ecBFR/VqTLNBfIiCPbOx4/aUTLV4QtGByFFRRo+iBtXHm0uviBaDuUxYwtDlYua5BJXNrnXR9leNC0ZzAoEw0anzFcSQhP6GseE/4bzCrc5ghepLUNyGRB2aWs5VGr4qhOv4r+TFywyjSRy2dzhhzHGb3TjIZl8L2IZfUQMFdTGu6XkvTrirGr1VoF8Ft1Fbe6K4muhLtL32h7Z2tUGeMffZkSbGw03z8ojJTNowc62s8jg910/ghiVXktjnLHz6bYh6d3ciUDWaIX0GBtNKvllDBkMQalzzUvIZ1lKi0Xxgm4IMcQt0iRM+XTeSVVAu2WtwbDSyGQLKfOU+cICuRqxNcPjIS2HGn4/hQwsYCmFgu1Cz/uZaip0y85znciL5C08HDtr4KSmsdxlFwiqY6BUrYlwZh4Dof4miBDbM+IgKr8zg/4wsV5T4WHscNHGnHxBMkn8dbBuGosZQtfZKTMMNNuyFkGgHc8XOM7uBXze5BDsO/qPDr16MWxSDNfH1oHbliy0jT3P+7FlOwwfI3mbvqjyZIh2abVW9IzFJXPgfPz/LFuLard6bZhPxt8kQ+HUeSer7/ZRRdDuZR6ydDo8YTdb7ZpegGDHj3drY8/x6D6i0UNH6fxlBpg="
-    );
+    public TabListBuilder addAfter(@NotNull Component text, @Nullable PlayerSkin skin) {
+        hasPlayerList = true;
+        afterText.add(text);
+        afterSkin.add(skin == null ? DEFAULT_SKIN_GRAY : skin);
+        return this;
+    }
 
-    private static final PlayerSkin DEFAULT_SKIN_DARK_AQUA = new PlayerSkin(
-            "eyJ0aW1lc3RhbXAiOjE1MzY0MzE1NTEwMTksInByb2ZpbGVJZCI6IjVjN2ZiNzhhMmQxMzQ5NTZhNWE1M2EyNGQ5NWY1YjRmIiwicHJvZmlsZU5hbWUiOiJQZWFyc29uSW5tYW4iLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2FiN2QwNDUzYzc3ODMxYWIyZTk1ZjM0NjQ2NTk5MGM5YjkyOWRkMzhjODRjMTA2ZTJhMWFhMmY4ZDExYTM1ZSJ9fX0=",
-            "pJoWD6S8w9yBuKYguFwhY2XqZQ+dsc71IgKjtU6EN2VnEKvHr0T3O4zbi8yavdT/6W1zZGPGpN86eJjgrgtQIPPV0ytwGGWOFfZnlnvR39qeaNrW4WQ6WbTha9MvhoQkPEoi+WTmx4aHh0fA5eKIuJZR2m0FOphpuH9TOUXynb9k9dj9KReFfkodN7YsSxjWEfAqJbAeXzSgAA1TqWoqBSC9q8vH4iv45VrlXVXexNxoqJNinSO9cHtrqXPTyEN1XhFyv0PyMt/lx55C3Y7kucAlOmqYjlvzpHqUhHxodpn/Fqi/AoCOCoetDm5OAaktthKdyrVmIAe/iA1VqFFnN/HnQkc2NskIRi0aOddOKAWC6Nt3Hq+2rKtrJYin8Rkdxq/XAK3gu/+VBigdKLyGUy0gnBOR7OHfjTbYGEI1feOKDasm9nNoI3aiZ1HK7QnEBv0pVaEugCWUVUwnzxz0v+o5boECPysc5nw3cq3Xn9jtQAOKaaFLRVO7+grxw1JW7gLsWyR/lsm7ARM39tkqovHs7zOnsNYbJMLW/IqQYSxF0+6VAFolAN+MY3erhBXTVx/k9UBK3GwUnRZCIpd4ee2mKkNwn7gJTgUV/zbnHSipfNmvUG4fb/As5ppA/j3ZhSt0QFN+tjY1k3W6xJ0egxdIPnNYTbwQE61f3IIU06g="
-    );
+    public TabListBuilder setBefore(@Range(from = 0, to = 80) int index, @NotNull Component text, @Nullable PlayerSkin skin) {
+        return set(beforeText, beforeSkin, index, text, skin);
+    }
 
-    private static final PlayerSkin DEFAULT_SKIN_DARK_BLUE = new PlayerSkin(
-            "eyJ0aW1lc3RhbXAiOjE1MzY0MzE1NzE0NzgsInByb2ZpbGVJZCI6ImIwZDRiMjhiYzFkNzQ4ODlhZjBlODY2MWNlZTk2YWFiIiwicHJvZmlsZU5hbWUiOiJ4RmFpaUxlUiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjhmMWUyMTY0OGQwODg0MjJiMGMzNDYyNzZkYjA3OTE5M2MzMzhjYjM0NzY5YjZjMzgyNzIxNWRmZWNkMzQyNiJ9fX0=",
-            "VZ/tP4CrUElwGw7p5CCgdIpjr0P3rrqiU9u65Ht8ajIoR1btN4+vL6S38es8OkRtibf07SLTQZYOo/IC0Rwwu4EW+Pql1jcQPqDUj1LxhOmRRjrlNUqhzF9tiTSUKKT/H6BZirCQapr4H4lTVORUtbxlggRKStyrn42JvtewGN2LdySPkn2VBVtLQUBa/4Mr10rXxYRM1YUw9vMLO5WTB3JQzDTPkrWmgpE8rWFVQyuN5KRMK8EzZH1Yb8Bmp+yuAeqPJrbnYUNbjjdmM6Hpt0nF12/FODH5mj5C7d39biszEG190u6oXSAmwARI71FpETy0Wtd0McUdo7E0EVMa+CVvehK2CmwsQCvBCwvrX51DKWlSz4PLGdAkQILmVl8W+R7dZvl84VRyAgCziNoRV4+ZqkIBbQeC/G9ECTMoCLZVHrpYPqPGLut8Q/aL3E1+MDAgK/kBs9jmBMiL0r/KcY9acIol6goq+O5w0dA5zRhpXtZwiW3MH24S+cyPy3mWGz1WvgHogROWVuznv1Aauu3SouOkiXpGR6wPrzT95QdDQKbrX4E3PKd8c/Lkp2jMkSRK0MJazik0BzODBqL+qILyfFa8J1UixomgWMfLu16LuSTFxBe3W+JaNbRmlWch9oY9gR5S8hEbNIzhWM8D4KHs8g3wMVJMMaRcw9B3QgE="
-    );
+    public TabListBuilder setAfter(@Range(from = 0, to = 80) int index, @NotNull Component text, @Nullable PlayerSkin skin) {
+        return set(afterText, afterSkin, index, text, skin);
+    }
 
-    private static final PlayerSkin DEFAULT_SKIN_DARK_GRAY = new PlayerSkin(
-            "eyJ0aW1lc3RhbXAiOjE1NjgxMjY5MzEyNTYsInByb2ZpbGVJZCI6Ijc1MTQ0NDgxOTFlNjQ1NDY4Yzk3MzlhNmUzOTU3YmViIiwicHJvZmlsZU5hbWUiOiJUaGFua3NNb2phbmciLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzRkOTk0OGQ4NTI1ZDI3NThhZjVjMWI2YmEzMjJmZmIzODMzZDk3OTc0NTAwZDRhNmFhOWJmOTE4NTgyM2U4ZWMifX19",
-            "jX1TJSpQHX4h+EutdyFvS/mm8xEQFwyoK21s5a8rup7CLdPJNcDdcr4JDByvfVG2Q/MtFguPjI+z8ms9yRD6Ssy8veuMd75ogn3nWdx03QgZCbccgJelOi1OHCw1V2on1xaLEE151DsZItNn0eHfIn9/VsIeyhCSrNnuC7lcQ3KJgdHWuCtFbY06JWohkzYl0Zbb0KyEjyai1zUFAzJDWmz801ZDf2lMjoqitlS5dbxHOmM2V0Jd7RPOJNgIcW4ZA/JmAC8g/x/ZdhfsdzmG2kJp5SMwepSbKc5Irus5fq1VSiD8NL3o585Hg8RqBmtryXxr+4+MdMuKg/4FW1dii3a0adwoNt/8DktBGlmrVbzWV1Mve23wTE32eRglLL1JEW9nG9Xm37AY7Zzw4Oz7vwU+R4sMN0+Vk4e45tpf/kYvogvXnwxtwBjuWX/d27potNcu9tToxujM1YYlz7Lv0AfQW3Pd3P1tJ7QZxWOvhiqY3j4iWwbYk/zKpVqvO4ZtOo+M63G6Ii8HA1S+XrHyyxukc5M8f/LRP99HY/CpQ2zlFxaBxeoUwklHYm5Eo+fMpDeKsxhNvWPWf1+ImxAS7gjmZlgg3mv+DGJxTMKd1BwsMSyrXxmxzucbvw/GAwwnqxrdb9PzuBw87AgrApEKUxTZrx6mp4Pt4Ym/b8Yjez4="
-    );
+    private TabListBuilder set(List<Component> textList, List<PlayerSkin> skinList, int index,
+                               Component text, PlayerSkin skin) {
+        while (textList.size() <= index) {
+            textList.add(Component.empty());
+            skinList.add(DEFAULT_SKIN_GRAY);
+        }
 
-    private static final PlayerSkin DEFAULT_SKIN_DARK_GREEN = new PlayerSkin(
-            "eyJ0aW1lc3RhbXAiOjE1MzY0MzE2MDIxMzEsInByb2ZpbGVJZCI6ImIwZDczMmZlMDBmNzQwN2U5ZTdmNzQ2MzAxY2Q5OGNhIiwicHJvZmlsZU5hbWUiOiJPUHBscyIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzA2ODhhMzMzZTRlZTBjZmIxMjRhYjRmNjE4YWIyZTE5YWJmYTUxMDRhZjA2YThiYWE3MzMzZjc2ZDMxNjc4YyJ9fX0=",
-            "rbVlxGW/DuZloKIu/cigjVH9rlIjkzVn4pWbaazCwvzhuPrsszuzwTG2+e8r2fGoxk9wksZDP4F95yEqCLMjq9rTVOSKWezkKaUMP+ByD0zw+gmd47fxRMLOXdlES7HCPm0QGwb/id8ZTgX/XXRDO8resIFuM35L4Ewj+Wt13wgJp25E/7wBTKRFgvrx5ybY4ft9iXQUhUFsOPLWDD6IA9hFcQ2uc6z7pFHQtDTMqmW9ZNF6D9y5Oeiwr0wmTjmkeBIrBpaIyG7NQiSdkHwfFSBr+ZuvSOqDQJEilIe1ArklAQzxa8ZmW+MMh94DOb5O9yef4YCDzV7iKODX1WDzD2cBWn3ks5wl9OBoGQk9gBv+mzISxdhckRhDQeyWHZdzqAI/kzwUo4FtHbXfi1O1e3ReNzs7o6VcG9sn2hyoeo9jAf7DSYk+tkvlL750De9M4X7o1c6XgyjUtlpC9Y8CTmX81g7wnbJKZZ14QgR+7/artn9/PXGBgfCVCDsZGuESAz6vxgGnGsWnyau37Qrvgx/MgitsjIO1hkvDWo6pVze/QI06fRoI05jPuTQp7Hk+TQurVZVcSuom65A6ImPEY52DhZzN4ekrqEsr5lDjYlNc6PwZNyYNXA6tdomuDo4k7CrkKRGZlQeo6s8Pzq2k2BwHN5vow6zMPS2pPozPY70="
-    );
+        textList.set(index, text);
+        skinList.set(index, skin == null ? DEFAULT_SKIN_GRAY : skin);
 
-    private static final PlayerSkin DEFAULT_SKIN_DARK_PURPLE = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNzk5ODg3OSwKICAicHJvZmlsZUlkIiA6ICI5ZDEzZjcyMTcxM2E0N2U0OTAwZTMyZGVkNjBjNDY3MyIsCiAgInByb2ZpbGVOYW1lIiA6ICJUYWxvZGFvIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2MzZDBhYmUzMTQxZDM4MjI0NzA0NzczNGFhMzEwOTZiYWE5ZTg4OTA4NGY5ZjFiNTljOTFhYzM5ZGU1ZWY3NTciCiAgICB9CiAgfQp9",
-            "acvRwlxCqgS005YPZGrCs39UwRxJ37/Mkb0TSiQE44C8ktZjBbtjbAonjR6Mv1wDuJWot9xx4TLuEwKBZUxvgFJkdi2Utu9FhuG3a48uWVEVpT/mCRrX4TDv3nClMfRi2tz9bbwIfOs2NirQuQ2GI5i5G+EGZ41JC0ih4sEEoBovqrp+MdOfZwH1FtYBEDiqKYP3luwNhwoLjKBT2dXt4E4Q/hvqAv3adOCHtlQCIkseYnsOUu+CLsXy1HnX1JZqQIrpIzkEQ+1NjrwcAdpaC8Y9QkxH2adb8SzqokM5edybuiuuOQQ8Vvd54qzzukDleX9/E6pTqyBHl3tpInfH2O1GfTAxmZMuVfEdaisQ73GUqxF9OhfwWP4j9MrTOvOpAs+JhjIYk//KZWymA5qhMdUXNjZsa4/HujczP1UR6oiPESnzus3Wx85CfKojIKKuGum688JpMt/R1r9acM2DUtkIgE5uI8NlWHYRQYt4fmQMhhWlhREnsJT8vOPyJ1y4PSgWs5419rapmbkYG8F+CmbYAOeZiA8NKV2J/GvTsk7AiNDxbSwn8wdDqSD0p9iiYmF5P9upW++Dpf2ZFYQsdYnfRhdRtbcPiEwBU2B8GeG/tH0+OuuJaMA/MYFz5B1ZaDdHzuB7a3SSNDMYugrxqU1/tDnfRRZsBnL+Ix864LU="
-    );
+        return this;
+    }
 
-    private static final PlayerSkin DEFAULT_SKIN_DARK_RED = new PlayerSkin(
-            "eyJ0aW1lc3RhbXAiOjE1MzY0MzE2NjczNzYsInByb2ZpbGVJZCI6IjU2Njc1YjIyMzJmMDRlZTA4OTE3OWU5YzkyMDZjZmU4IiwicHJvZmlsZU5hbWUiOiJUaGVJbmRyYSIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWQzOWVhYTQ1NmE0ODMwNjg3MzhjODQ3NGRkOGFiN2ExN2RjOThjNjUwMzg3M2VlMGY4M2QyMGUxNGUyZTM0MyJ9fX0=",
-            "TuUTI7vIMOFl8fO6O9d/L7TGlFrwmYhQg1lVQuIwpPK3Vp5j4hC/BSDVdlqhBzEN6Sg+dpRI0bdf3zSweqTGrHmukiVhEkejKgC4YpIFGiXVeb+ISdXr8bDtZsJdDhUE9sck8PAs96LGYZQ3+R4p48MCRBHoBU35W1C0zVZVipq9qvAZARlADQpfuRWWNbiJHarenJEDRUG913zuDLtmS0h7iSVMc9lPrbPhuSxAgsNArWzvunXMkchWjjo8V/C6E55s0ngxQmF3370JwvUtoqNNCPMeHdvvIzAFZ8od2RVGAh1xb0CbWaIbigqRRkNiJg1wNJ02xj0R5nkVjft5SnFGMluNie2Bb4SOzWxDUtlznATbuggce93E/q7gkjfuKd5cz8DTDIvRDbVhkrEavzm7PLOpwKk0VVOsFyQJQqmG5jMv+Rr5uDWCPBhUaz92VAY9jy/BywcQFOHIysp7i3FuRdRraEhHnKIiYIhsSpYL+cGCwX/0Fb+dRCtGMuf5IbIr/LGiZUZXZKmM8d/vjUlLymTqOPg+uR/VIuItu+8WXA7s6pYxtZ3q0Gw3lUdvxqHeXTNG/wh2Osvdg6CGTKzQnYlEMGnDozaFhUHWNuiGrDCemHVP4oJa8fIqXOSWsoBoEaw1YQexMpD7QgIhn+c/nzd99Ehw74jebnj+c5o="
-    );
-
-    private static final PlayerSkin DEFAULT_SKIN_GOLD = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNTM1MzI0MiwKICAicHJvZmlsZUlkIiA6ICIxOTI1MjFiNGVmZGI0MjVjODkzMWYwMmE4NDk2ZTExYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJTZXJpYWxpemFibGUiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjg5ODVhMjQ4ZTQwNjczYWFjMDI1MzY5NGU0ZWY3N2MxMmQ2NmIyMjFmMDkwYmI3ZGM2ZWZhMThlYmVjZTUyOCIKICAgIH0KICB9Cn0=",
-            "IaeDdI4iQ1LzTz1eKWYhIK4syFPgsU6R1ykKN9qEUX99iih0/praUuAii4L/X/LHtocPQwO0gZ7qLqgr+6Kzh6Numg5jMmdv1Uhdos7VGWDIotwWgPpGT+FsIfLFVyAqK1pqgd1//zeuQBeIwQxbrnc/zkgQbSa67nYMROBTOQWKKf/xDiJastVlGuvsqWV0r6SN9i7BfpAy/mVgNDpr+OV+A5CQeqV+ePtRva2fXt8yAXLUntVJSmuX8HkophJ5M+HFa3bahpLu1VPucnt99EmkhhIMyxVvMRSAIfOKGRcJ81QmzZ13wK06nt+6cfLbW7puq33Qzz/ENepml+tqsOdEghtn9k/TBNcYdVZ8VYfNx3yow5jn4hd+mCQODENPDdRTtURa/Xx8JR39S9bIObPqGlMBcd29HA9Qbor+8qKvA9QEB+7yC21EzZo4sfEeBx0zdmERl83X7ZoGxWeYKjgHEB4FbVCr4Y8OHyffFw605gBQGJjHAiVRSf3U4I+zz6Qo8Z6HTXgqWn94hiQc0Ak72r7ZBrA1AgcWvtFah9HQOdRlTeDic3g7WjoRwmbCVDe2FBlam4UZrZgg1/aLp/8VvX5J8+YLKoDzk90nZ6Ojh6DgpMQH/Hk30t9t1u5N6bFrbwzsX0w4xQInPxzMvg44aLTdhkDFqz+i3wp7VZw="
-    );
-
-    private static final PlayerSkin DEFAULT_SKIN_GRAY = new PlayerSkin(
+    public static final PlayerSkin DEFAULT_SKIN_GRAY = new PlayerSkin(
             "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNTc0MzIzMSwKICAicHJvZmlsZUlkIiA6ICI3NTE0NDQ4MTkxZTY0NTQ2OGM5NzM5YTZlMzk1N2JlYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJUaGFua3NNb2phbmciLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjQ2YTNkZmYyNTk4ZjBlZWQ3MGYwODI2YmQ1MWY0NGYzZTI1YmI5MmUxYTU5ODMxNWE2ZGEwMmViZGViMDcwNSIKICAgIH0KICB9Cn0=",
             "NsGdhmj7Hag3+1O64vCcMn/F91J9uIqL6vnbeGHA3nN8aeOGufxyHt7YqWh8wX2DrsfyuEE/9y03QmmmKQSjOs80eAjKmMNP6CKP85S0IUc236JqoVIQcERD/KymWswK3G0slSEuYr4lxSqbr7v06zM4H03V8HlkMAUEJB3OD14tSYiVqaA564c+Scq9+g3J+Hu20PP1YA0Ai5Iendo63O60regmRUS2QGMIJKvQH712HIUurmyPTb5zKCojjP3dCmNzoQW7tuBegTmoUcn9FQW/sjskyPKN+NhqYfPQHqzSVENHKGX5657LWYQdSnk3tnXnd6RhPlQ65zJKLfQptOofTT2F99Y50isbsIEgVYwKGfut+RvJH/m1+Z6nbbxnPBawDQDcRq00V2LNfR0y4UDRs8WgmSh1q56IQApeiMLn9KGNrJY/m5pwGuIQGUYUAxg7pJ5cTpcaCAHJQ5qkpzplVizWW9g6iKrn80Ozp9W6yqWK+7QKp88E1Mmtge3aOZ32RYxNVim/mDIrHRJPlRe+lvZsilzs62OIoQi1Gc3GFwggkLUJ4VOB6dcgarZ+DxhHSYR7sEcAcK3935LjOtyQf9WZ565R3CinYv2SP775ptIQMSLRBymkMgCiVcWk/Hd7gQYz2ucKhgzCe6ALhpNUpO7Sz816kccu6G6Q5PY="
     );
-
-    private static final PlayerSkin DEFAULT_SKIN_GREEN = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNzkwODIzNSwKICAicHJvZmlsZUlkIiA6ICI0ZDcwNDg2ZjUwOTI0ZDMzODZiYmZjOWMxMmJhYjRhZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJzaXJGYWJpb3pzY2hlIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzk0NGMzMTg1YTQxMGIyZjEyYWNmMzY1NGRlYTE3Mzg4M2FlOGJlOWFlYzg4MjQyYTM4YTdjZjcwMzBmMjQxNjIiCiAgICB9CiAgfQp9",
-            "GuDBXidjnIKXu1reW2wL1FxqfaALqVbHDeXWmTHUY8tLwjJfRWinDX40Cd81njRlTBZ3d2mM7YIYOF25S8T3jLGySy9jZ/xyBtPgFDJY6V18koWcNTbklVoW/UuiZxya7SYVa5iNnXBIL/bkILjhoTSIyxg99H21YS6cVaM/Fqy3jPt4wtErRNoszklmo9kdw68UVXIWuL2VSht3sJeU/En+SwpwAOuZ4WLvHHwn9WL1YNHC5kY66mdQBoYzKn3yFeEmwsT2OBGwyAvyOCK3lyMJO8aggG8vyY9eofZiVAC2rYEqa7BEngq9jeWtVaxCVxHemd8DaxuY0437GDBkMwqrGUJJnWKU8eNp+BJs9/EKnlU2dD6SFrCTHm1uy8gRAyNIKhL9N1LJMHsqF8SObhCxIZdT9kKSEyyJFKiOv1xsfMv0gcl+28v6WLVnQLqvUFxlTHDkGqLdOtF6oUPM68QefI4N6gLsXO2nvjwF7iuTafzlRVHIeYzyRN3NIlAVpJOkYJIbikkpxRxRbPRWOqoLUnm45jr7Dl7/MBDjYbK7QYjbAHSO7ZHlv5U6RJwQd2uF1gNetaIOvAfonUNxkCw6Ldey0x3xG2IB1W4P0GpeZMMZg1YnRgngY2In0pxYd6q+15YkCi6KjY3Qs5tY2RSpcvIj84/1G1uUfZWsf3w="
-    );
-
-    private static final PlayerSkin DEFAULT_SKIN_LIGHT_PURPLE = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNTE1NTcxNCwKICAicHJvZmlsZUlkIiA6ICJmNjE1NzFmMjY1NzY0YWI5YmUxODcyMjZjMTEyYWEwYSIsCiAgInByb2ZpbGVOYW1lIiA6ICJGZWxpeF9NYW5nZW5zZW4iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWRiMGYwMzdiMjAwZjc2NDY0M2QwOTc5OTk3N2RlNTI2YTBmYThhNTI5YzhkYzhkNDNjYzI3NWU3OWFmYzlmMyIKICAgIH0KICB9Cn0=",
-            "MbWr5H8wzbxnRiMkHaabq+IZOee2vGIOGrmS4boHz+pgkZ4pCYMDTIe9WUw0pZ4ZpRaAqRfmHmplXF2gZ6WirbwmdGrB8nBpKaLSy6+mpxUmaUU7vxl0JWGFDMhboZppa4V0rU27nCHXEQ+uJtMAipscqOCtjx0d517P+oIN2Z+gPjDVIt5OnKVBi6jWY9BUMrQI1TGxd4c8GyIUptr1e2KJjIQOttIi+rr8KHQ4cZo1rgNUXLwwbNE//W6R/Hv2MDUd38DOedUmK0PB7g11MrCm+x3c1gbnuHS5f/66QZnmeUowizNIpHGRq0auB1im4ixVZTHe8mkoEO9Y4gFCbJE5aTqn1kg0IHmVmi8zRWwGc3GP5e4H+fy8ZiXxZlKyYTTtYfO0UId/pmSGyJrYtrd9mZ7Wk6FRa5dlGA4echqUnm3xvWLXsyJXwnVyZ9V6aUJvIIYgYVshWs6zgd132rGI4oDsJu7PzJlzQNEWBTn3ieIo8HlC7h4Mfqsoee2nt9ifGddaH6zgQ3nywywTOTrJIyjnjNXNCf2mpLuq2G+qwluyZdHKw8O5c6eyRneaC1rf6Tyg4DyrwtsEUq5DkylwrDJxlHyW+W8Ll3vzMucLpE60OV9Rqfvyc9Bacm+91cyb7Gy1Tari8fKedwlTvpCz84wXEXG1tb1qZa4wucE="
-    );
-
-    private static final PlayerSkin DEFAULT_SKIN_RED = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxNjUwMzI2OCwKICAicHJvZmlsZUlkIiA6ICJlYjIwYWVkYTRiYTM0NzVmOTczZGNmZjkzNTE2OGZhYSIsCiAgInByb2ZpbGVOYW1lIiA6ICJTa3lGYWxsZWVlIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2IxYmI1NzdkZjg3OGU4NzY1YzhjMDZmZWVlY2Y5ODA3OTRlZWE5ODI4MDFjMjc5NWI4MjY4ZjA5MzI2MGEwZTAiCiAgICB9CiAgfQp9",
-            "s/TIW86bb1jKqnGqgaGMakBqVCQRgpsqM8MKcfULp4BRcXrMNkax1jKA121cEG1SjoPWGjH1cqMdH9KKqnHFbhE1yFDhMFKuBKRRJyGyV+DRdtbz0fDV5mGABoDHcY2u4PcQJh6pova/+IaaDn66F8xKduMET6BHuvhjrGFbX9r+ZFVUQS1EuF51EWblKvOUkDCMH6pBzbdqeXRhQfbbm6KpRttVxnNKbsxiRdDEvJ8j67JrAy6p2BTXr/gFW/BF6ktvFqLL9OQzH/cW/TScZYglvTUb1GnztxPn/PbYJlCMKL4QTEAJs1Ti7l4Uj5do4/cK/AXxsuvEqTMArvdBrwv6+AgCvFnh7PPTIRHMzTHyLmSHr1ikKtjloQgnkQVLO5gFEPnuExzAbvTZYL+F2NJN3OTQZ0KBWriIgS2futweFehKuhMoksLo056yb7coJpeaX/BAAcloRiC3IilozepdIYVnCxAw4MgW5Uy7gSoE7xBDIg2e0+24kdjA0yEpfrm9SBa9xhcpzVtH+g7zlKil4gEQhptNL7kz9iSMEMuNNFI8dLZs1jnTiscti5D/gp3BqscCX8wv4Nx2uRaQgrclxbZ4A/s81jAlbPhw5TdTZwFojFLCDDoBtpNA9zj4/YjcfXnN/3vBKmzL/2k8JPs+GAUG/5tFARpZ0yhWDgk="
-    );
-
-    private static final PlayerSkin DEFAULT_SKIN_WHITE = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTU4ODg1MDIwNjg0MiwKICAicHJvZmlsZUlkIiA6ICJmMjc0YzRkNjI1MDQ0ZTQxOGVmYmYwNmM3NWIyMDIxMyIsCiAgInByb2ZpbGVOYW1lIiA6ICJIeXBpZ3NlbCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9jNmFlOTI3OWQzZDhkZDRjZDljM2ViMDE4NGI4MDBlYTY0NDE3NjcwYWYxZDA4NzdkMjc1MDFhZjk0NjNiMGMiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==",
-            "R+4GryMi5/gxzV0vBbheGOfZVnJUqKNslJYfh5nR+qj3Bowiyu3l4+f9+8vVZlRjLCiwqB6XNhLV2OieYfUfaG9GUADF5Z5DH3SGz2e125UM21z/B9mh/Ysl8LlHnBECX3fRonhRuGFwBjiLhN0qcsF0jMrrad/ywf1LXaP9n+6nPTItNIgO6TGyn7GyvSV9vo2NIBl6y+nmroIjI46j5givCodIcSPZZQTGzaADMNRenclr7Tn9DNLJp5/kbLTQajmVjIoQ5tqJ5xC/bBAU/d3Rb+gdcP14y+R7/RPpSKKUljyJFF1OwCtOnmWynfaw+tMr6SETtMU1Nk3th1mJE/HXLkE2XFRn7XvLypkwI6x038E43BzKsY1KiWFIFWS8rhENn6XoxMfP/dApITikhbhAs1gFfpSkLoie1L42WzVvMIQVTU4O0aiuR2v9Vg/tCTIXRH0sdv32XlX1lbQGP868sxynfh1xKFwfXpM7B6Ugn/Fg9BhJi1Rl2g1KcIC/Zv/voR/79Re7E3+5m4LkqX8OCVj/zBN7EITkOCobMyIqjLVlWJpkyeN2MA9DW27XbXblYhWpvgnktYGWnvpIyhiCyUewCBGjEinJt8A3f+8YwXevi+lfLE+qQkWAHG8LAhO9yac91YW5IV5DJPabynwM49cYmstrjAbyBm4XZWQ="
-    );
-
-    private static final PlayerSkin DEFAULT_SKIN_YELLOW = new PlayerSkin(
-            "ewogICJ0aW1lc3RhbXAiIDogMTYwNzcxODE5ODY3MywKICAicHJvZmlsZUlkIiA6ICJkODAwZDI4MDlmNTE0ZjkxODk4YTU4MWYzODE0Yzc5OSIsCiAgInByb2ZpbGVOYW1lIiA6ICJ0aGVCTFJ4eCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS85MTMwZjJjYjcwYTk1YTA5YzdmOWIwOGNmYjdmNzI1MWQxMzAxNzVkNWNkYWZmOGU0ZWQ1YzlmNzlmZmQxNmEyIgogICAgfQogIH0KfQ==",
-            "h4+kTtRmdCIQueRKuhykif7YF+7X/wfhBrYgx0vQu4yFM9zIyYWnLxx6XUZMvkhEBigialeWJOKLDUIvQBkZ0a9COv3ZvGoF5PlcMvePusV+T93sbyD/sZ12CAMrX9XkvAxSGjELuTAVu40aGncFGpPoYx0Vv/MX4xAy+xvb51HlVy/oXDuRKwuQGEHFUlq2Xt+6qAwzD3EiU9U0yMeCjNavZHPXP3JFopWsHwS/p7Tgngyb+MxyMZjKUAGK7hInvrDF4xcidhvjPUpeYswTOyYmyw6QJ5Vbmcn4r+zeYchUp2P7e0T+zk1PRHOVrZJ3zCgeQuRZJLl4esjaPgFqOmI4tgTYC3OYEm28+n098eBx6lnYgLF9EWyK0keUPSkrYCYpbCRwxv9fr0bFG8jjyMY5ulLmsQh5a3iIpgk0rgOcWSsC+Mll5M8SxPSLKQRSoWgTUV8l7AEd/XNpSNJkeotA/4gPSU8juk/UO8xo9HOetLwuSUk8GH7Fotz2HmhtuJEmsIW0DWlMOhW8fb1n0e4WJMd3vUB2rghNMyUZfg3fDhsmEz12eZzyXcOD14dawqSmoYA5CvWjLXjDFi2Bl1oNv9SIa0cAtiWmFPOgf5Y7wvKTSK6WCzsLz8P5lkC+U1ifFvTw30GJhA6KLBydn2+wM4IxWamIc0XKgv+e1B4="
-    );
-
-    private static final Map<NamedTextColor, PlayerSkin> NAMED_PLAYER_SKIN_MAP = new HashMap<>();
-    static {
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.AQUA, DEFAULT_SKIN_AQUA);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.BLACK, DEFAULT_SKIN_BLACK);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.BLUE, DEFAULT_SKIN_BLUE);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.DARK_AQUA, DEFAULT_SKIN_DARK_AQUA);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.DARK_BLUE, DEFAULT_SKIN_DARK_BLUE);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.DARK_GRAY, DEFAULT_SKIN_DARK_GRAY);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.DARK_GREEN, DEFAULT_SKIN_DARK_GREEN);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.DARK_PURPLE, DEFAULT_SKIN_DARK_PURPLE);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.DARK_RED, DEFAULT_SKIN_DARK_RED);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.GOLD, DEFAULT_SKIN_GOLD);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.GRAY, DEFAULT_SKIN_GRAY);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.GREEN, DEFAULT_SKIN_GREEN);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.LIGHT_PURPLE, DEFAULT_SKIN_LIGHT_PURPLE);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.RED, DEFAULT_SKIN_RED);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.WHITE, DEFAULT_SKIN_WHITE);
-        NAMED_PLAYER_SKIN_MAP.put(NamedTextColor.YELLOW, DEFAULT_SKIN_YELLOW);
-    }
 
 }
