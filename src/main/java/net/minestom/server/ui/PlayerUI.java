@@ -12,9 +12,9 @@ public sealed interface PlayerUI permits PlayerUIImpl {
         return new PlayerUIImpl();
     }
 
-    boolean sidebar(@Nullable SidebarUI sidebar);
+    void sidebar(@Nullable SidebarUI sidebar);
 
-    boolean tabList(@Nullable TabList tabList);
+    void tabList(@Nullable TabList tabList);
 
     void drain(@NotNull Consumer<ServerPacket> consumer);
 

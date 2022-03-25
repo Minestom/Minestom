@@ -70,36 +70,32 @@ final class PlayerUIImpl implements PlayerUI {
     }
 
     @Override
-    public boolean sidebar(@Nullable SidebarUI sidebar) {
+    public void sidebar(@Nullable SidebarUI sidebar) {
         if (sidebar == null) {
-            if (scoreboardHashCodes[0] == -1) return false;
+            if (scoreboardHashCodes[0] == -1) return;
             Arrays.fill(scoreboardHashCodes, -1);
             destroySidebarObjective();
-            return true;
         } else if (sidebar instanceof SidebarUIImpl impl) {
             // Set title
-            boolean changed = setScoreboardLine(0, impl.title());
+            setScoreboardLine(0, impl.title());
 
             int index = 1;
 
             // Set specified sidebar lines
             for (; index - 1 < impl.lines().size() && index < scoreboardHashCodes.length; index++) {
                 Component line = impl.lines().get(index - 1);
-                changed |= setScoreboardLine(index, line);
+                setScoreboardLine(index, line);
             }
 
             // Clear remaining lines
             for (; index < scoreboardHashCodes.length; index++) {
-                changed |= setScoreboardLine(index, null);
+                setScoreboardLine(index, null);
             }
-
-            return changed;
         }
-        return false;
     }
 
     @Override
-    public boolean tabList(TabList tabList) {
+    public void tabList(TabList tabList) {
         if (tabList == null) {
             updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesBefore, skinHashCodesBefore, -1);
             updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesAfter, skinHashCodesAfter, 1);
@@ -108,11 +104,9 @@ final class PlayerUIImpl implements PlayerUI {
             footer = Component.empty();
             setHeaderAndFooter(header, footer);
         } else if (tabList instanceof TabListImpl impl) {
-            boolean modified = false;
-
             if (impl.hasPlayerList()) {
-                modified |= updatePlayerList(impl.beforeText(), impl.beforeSkin(), textHashCodesBefore, skinHashCodesBefore, -1);
-                modified |= updatePlayerList(impl.afterText(), impl.afterSkin(), textHashCodesAfter, skinHashCodesAfter, 1);
+                updatePlayerList(impl.beforeText(), impl.beforeSkin(), textHashCodesBefore, skinHashCodesBefore, -1);
+                updatePlayerList(impl.afterText(), impl.afterSkin(), textHashCodesAfter, skinHashCodesAfter, 1);
             }
 
             boolean headerFooterChanged = false;
@@ -123,20 +117,18 @@ final class PlayerUIImpl implements PlayerUI {
                     header = impl.header();
                 }
             }
+
             if (impl.footer() != null) {
                 if (!footer.equals(impl.footer())) {
                     headerFooterChanged = true;
                     footer = impl.footer();
                 }
             }
+
             if (headerFooterChanged) {
                 setHeaderAndFooter(header, footer);
-                modified = true;
             }
-
-            return modified;
         }
-        return false;
     }
 
     @Override
@@ -144,15 +136,13 @@ final class PlayerUIImpl implements PlayerUI {
         this.queue.drain(consumer::accept);
     }
 
-    private boolean setScoreboardLine(int index, @Nullable Component line) {
+    private void setScoreboardLine(int index, @Nullable Component line) {
         int oldLine = scoreboardHashCodes[index];
 
         if (line == null) {
-            if (index <= 0) return false;
-            if (oldLine == -1) return false;
+            if (index <= 0 || oldLine == -1) return;
             scoreboardHashCodes[index] = -1;
             removeSidebarLine(index - 1);
-            return true;
         } else {
             int lineHashCode = line.hashCode();
             if (oldLine == -1) {
@@ -163,7 +153,6 @@ final class PlayerUIImpl implements PlayerUI {
                 } else {
                     createSidebarLine(index - 1, line);
                 }
-                return true;
             } else if (oldLine != lineHashCode) {
                 scoreboardHashCodes[index] = lineHashCode;
 
@@ -172,17 +161,12 @@ final class PlayerUIImpl implements PlayerUI {
                 } else {
                     updateSidebarLine(index - 1, line);
                 }
-                return true;
             }
-
-            return false;
         }
     }
 
-    private boolean updatePlayerList(List<Component> lines, List<PlayerSkin> skins,
+    private void updatePlayerList(List<Component> lines, List<PlayerSkin> skins,
                                      IntList textHashCodeList, IntList skinHashCodeList, int indexMultiplier) {
-        boolean modified = false;
-
         assert lines.size() == skins.size();
         assert textHashCodeList.size() == skinHashCodeList.size();
 
@@ -195,18 +179,15 @@ final class PlayerUIImpl implements PlayerUI {
             int skinHashCode = skin.hashCode();
 
             if (index >= textHashCodeList.size()) {
-                modified = true;
                 addTabListEntry((index + 1) * indexMultiplier, line, skin);
                 textHashCodeList.add(lineHashCode);
                 skinHashCodeList.add(skinHashCode);
             } else {
                 if (skinHashCodeList.getInt(index) != skinHashCode) {
-                    modified = true;
                     addTabListEntry((index + 1) * indexMultiplier, line, skin);
                     textHashCodeList.set(index, lineHashCode);
                     skinHashCodeList.set(index, skinHashCode);
                 } else if (textHashCodeList.getInt(index) != lineHashCode) {
-                    modified = true;
                     updateTabListEntry((index + 1) * indexMultiplier, line);
                     textHashCodeList.set(index, lineHashCode);
                 }
@@ -215,13 +196,10 @@ final class PlayerUIImpl implements PlayerUI {
 
         int beforeSize = textHashCodeList.size();
         for (; index < beforeSize; index++) {
-            modified = true;
             removeTabListEntry((index + 1) * indexMultiplier);
             textHashCodeList.removeInt(textHashCodeList.size() - 1);
             skinHashCodeList.removeInt(skinHashCodeList.size() - 1);
         }
-
-        return modified;
     }
 
     private void createSidebarObjective(Component title) {
