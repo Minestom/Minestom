@@ -129,10 +129,15 @@ public class Tag<T> {
                 }, null, path,
                 copy != null ? ts -> {
                     T[] array = (T[]) new Object[ts.size()];
+                    boolean shallowCopy = true;
                     for (int i = 0; i < ts.size(); i++) {
-                        array[i] = copy.apply(ts.get(i));
+                        T t = ts.get(i);
+                        array[i] = copy.apply(t);
+                        if (shallowCopy && array[i] != t) {
+                            shallowCopy = false;
+                        }
                     }
-                    return List.of(array);
+                    return shallowCopy ? List.copyOf(ts) : List.of(array);
                 } : List::copyOf);
     }
 

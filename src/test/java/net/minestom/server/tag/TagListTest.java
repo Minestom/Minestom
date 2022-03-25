@@ -27,6 +27,41 @@ public class TagListTest {
     }
 
     @Test
+    public void cache() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("number").list();
+        var val = List.of(1, 2, 3);
+
+        handler.setTag(tag, val);
+        assertSame(val, handler.getTag(tag));
+    }
+
+    @Test
+    public void recursiveCache() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("number").list().list();
+        var val = List.of(List.of(1, 2, 3), List.of(4, 5, 6));
+
+        handler.setTag(tag, val);
+        assertSame(val.get(0), handler.getTag(tag).get(0));
+        assertSame(val.get(1), handler.getTag(tag).get(1));
+        assertSame(val, handler.getTag(tag));
+    }
+
+    @Test
+    public void recursiveCacheIncorrect() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("number").list().list();
+        var val = List.of(List.of(1, 2, 3), new ArrayList<>(Arrays.asList(4, 5, 6)));
+
+        handler.setTag(tag, val);
+        assertSame(val.get(0), handler.getTag(tag).get(0));
+        assertNotSame(val.get(1), handler.getTag(tag).get(1));
+        assertNotSame(val, handler.getTag(tag));
+        assertEquals(val, handler.getTag(tag));
+    }
+
+    @Test
     public void snbt() {
         var handler = TagHandler.newHandler();
         Tag<List<Integer>> tag = Tag.Integer("numbers").list();
