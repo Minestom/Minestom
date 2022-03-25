@@ -18,25 +18,32 @@ public class SideBarUIBenchmark {
 
     PlayerUI ui;
     int count;
+    SidebarUI sideBar;
 
     @Setup
     public void setup() {
         this.ui = PlayerUI.newPlayerUI();
+        this.sideBar = SidebarUI.of(Component.text("test"), List.of());
     }
 
     @Benchmark
     public void constant() {
-        ui.sidebar(SidebarUI.of(Component.text("test"), List.of()));
+        ui.sidebar(sideBar);
         ui.drain(serverPacket -> {
-            // Empty
         });
     }
 
     @Benchmark
-    public void random() {
+    public void constantNew() {
+        ui.sidebar(SidebarUI.of(Component.text("test"), List.of()));
+        ui.drain(serverPacket -> {
+        });
+    }
+
+    @Benchmark
+    public void randomNew() {
         ui.sidebar(SidebarUI.of(Component.text("test"), List.of(Component.text("count: " + (++count)))));
         ui.drain(serverPacket -> {
-            // Empty
         });
     }
 }

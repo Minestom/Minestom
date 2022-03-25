@@ -37,12 +37,16 @@ final class SidebarHandler {
     private final MessagePassingQueue<ServerPacket> queue;
     private final int[] scoreboardHashCodes = new int[MAX_LINES_COUNT];
 
+    private SidebarUI lastSideBar;
+
     SidebarHandler(MessagePassingQueue<ServerPacket> queue) {
         this.queue = queue;
         Arrays.fill(scoreboardHashCodes, -1);
     }
 
     public void handle(@Nullable SidebarUI sidebar) {
+        if(sidebar == this.lastSideBar) return;
+        this.lastSideBar = sidebar;
         if (sidebar == null) {
             if (scoreboardHashCodes[0] == -1) return;
             Arrays.fill(scoreboardHashCodes, -1);
