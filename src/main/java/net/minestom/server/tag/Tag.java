@@ -128,14 +128,14 @@ public class Tag<T> {
                     return NBT.List(type, List.of(array));
                 }, null, path,
                 copy != null ? ts -> {
-                    T[] array = (T[]) new Object[ts.size()];
+                    final int size = ts.size();
+                    T[] array = (T[]) new Object[size];
                     boolean shallowCopy = true;
-                    for (int i = 0; i < ts.size(); i++) {
-                        T t = ts.get(i);
-                        array[i] = copy.apply(t);
-                        if (shallowCopy && array[i] != t) {
-                            shallowCopy = false;
-                        }
+                    for (int i = 0; i < size; i++) {
+                        final T t = ts.get(i);
+                        final T copy = this.copy.apply(t);
+                        if (shallowCopy && copy != t) shallowCopy = false;
+                        array[i] = copy;
                     }
                     return shallowCopy ? List.copyOf(ts) : List.of(array);
                 } : List::copyOf);
