@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public final class PlayerUIImpl implements PlayerUI {
+final class PlayerUIImpl implements PlayerUI {
 
     // region [Constants]
     /**
@@ -28,26 +28,27 @@ public final class PlayerUIImpl implements PlayerUI {
     private static final int MAX_LINES_COUNT = 15;
 
     private static final String MAGIC = "58D0F79F"; // https://xkcd.com/221/
-    private static final String OBJECTIVE_NAME = MAGIC+"_objective";
+    private static final String OBJECTIVE_NAME = MAGIC + "_objective";
     private static final byte OBJECTIVE_POSITION = (byte) 1; // Sidebar
-    private static final String TEAM_NAME = MAGIC+"_team";
-    private static final Component TEAM_DISPLAY_NAME = Component.text(MAGIC+"_name");
+    private static final String TEAM_NAME = MAGIC + "_team";
+    private static final Component TEAM_DISPLAY_NAME = Component.text(MAGIC + "_name");
     private static final byte FRIENDLY_FLAGS = 0x00;
     private static final TeamsPacket.NameTagVisibility NAME_TAG_VISIBILITY = TeamsPacket.NameTagVisibility.NEVER;
     private static final TeamsPacket.CollisionRule COLLISION_RULE = TeamsPacket.CollisionRule.NEVER;
     private static final NamedTextColor TEAM_COLOR = NamedTextColor.WHITE;
     private static final List<String> ENTITY_NAMES;
+
     static {
         String[] names = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
-        for (int i=0; i<names.length; i++) {
-            names[i] = "\u00A7"+names[i]+"\u00A7r";
+        for (int i = 0; i < names.length; i++) {
+            names[i] = "\u00A7" + names[i] + "\u00A7r";
         }
         ENTITY_NAMES = List.of(names);
     }
 
     private static final char TAB_LIST_BEFORE = '!';
     private static final char TAB_LIST_AFTER = '~';
-    private static final String TAB_LIST_AFTER_TEAM_PREFIX = "\u9999"+MAGIC;
+    private static final String TAB_LIST_AFTER_TEAM_PREFIX = "\u9999" + MAGIC;
     // endregion
 
     private final MessagePassingQueue<ServerPacket> queue = new MpscUnboundedArrayQueue<>(32);
@@ -82,8 +83,8 @@ public final class PlayerUIImpl implements PlayerUI {
             int index = 1;
 
             // Set specified sidebar lines
-            for (; index-1 < impl.lines().size() && index < scoreboardHashCodes.length; index++) {
-                Component line = impl.lines().get(index-1);
+            for (; index - 1 < impl.lines().size() && index < scoreboardHashCodes.length; index++) {
+                Component line = impl.lines().get(index - 1);
                 changed |= setScoreboardLine(index, line);
             }
 
@@ -150,7 +151,7 @@ public final class PlayerUIImpl implements PlayerUI {
             if (index <= 0) return false;
             if (oldLine == -1) return false;
             scoreboardHashCodes[index] = -1;
-            removeSidebarLine(index-1);
+            removeSidebarLine(index - 1);
             return true;
         } else {
             int lineHashCode = line.hashCode();
@@ -160,7 +161,7 @@ public final class PlayerUIImpl implements PlayerUI {
                 if (index <= 0) {
                     createSidebarObjective(line);
                 } else {
-                    createSidebarLine(index-1, line);
+                    createSidebarLine(index - 1, line);
                 }
                 return true;
             } else if (oldLine != lineHashCode) {
@@ -169,7 +170,7 @@ public final class PlayerUIImpl implements PlayerUI {
                 if (index <= 0) {
                     updateSidebarTitle(line);
                 } else {
-                    updateSidebarLine(index-1, line);
+                    updateSidebarLine(index - 1, line);
                 }
                 return true;
             }
@@ -195,18 +196,18 @@ public final class PlayerUIImpl implements PlayerUI {
 
             if (index >= textHashCodeList.size()) {
                 modified = true;
-                addTabListEntry((index+1)*indexMultiplier, line, skin);
+                addTabListEntry((index + 1) * indexMultiplier, line, skin);
                 textHashCodeList.add(lineHashCode);
                 skinHashCodeList.add(skinHashCode);
             } else {
                 if (skinHashCodeList.getInt(index) != skinHashCode) {
                     modified = true;
-                    addTabListEntry((index+1)*indexMultiplier, line, skin);
+                    addTabListEntry((index + 1) * indexMultiplier, line, skin);
                     textHashCodeList.set(index, lineHashCode);
                     skinHashCodeList.set(index, skinHashCode);
                 } else if (textHashCodeList.getInt(index) != lineHashCode) {
                     modified = true;
-                    updateTabListEntry((index+1)*indexMultiplier, line);
+                    updateTabListEntry((index + 1) * indexMultiplier, line);
                     textHashCodeList.set(index, lineHashCode);
                 }
             }
@@ -215,9 +216,9 @@ public final class PlayerUIImpl implements PlayerUI {
         int beforeSize = textHashCodeList.size();
         for (; index < beforeSize; index++) {
             modified = true;
-            removeTabListEntry((index+1)*indexMultiplier);
-            textHashCodeList.removeInt(textHashCodeList.size()-1);
-            skinHashCodeList.removeInt(skinHashCodeList.size()-1);
+            removeTabListEntry((index + 1) * indexMultiplier);
+            textHashCodeList.removeInt(textHashCodeList.size() - 1);
+            skinHashCodeList.removeInt(skinHashCodeList.size() - 1);
         }
 
         return modified;
@@ -250,7 +251,7 @@ public final class PlayerUIImpl implements PlayerUI {
     private void updateSidebarLine(int index, Component line) {
         final var action = new TeamsPacket.UpdateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
                 NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty());
-        queue.offer(new TeamsPacket(TEAM_NAME+"_"+index, action));
+        queue.offer(new TeamsPacket(TEAM_NAME + "_" + index, action));
     }
 
     private void createSidebarLine(int index, Component line) {
@@ -259,7 +260,7 @@ public final class PlayerUIImpl implements PlayerUI {
         final var action = new TeamsPacket.CreateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
                 NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty(),
                 List.of(entityName));
-        queue.offer(new TeamsPacket(TEAM_NAME+"_"+index, action));
+        queue.offer(new TeamsPacket(TEAM_NAME + "_" + index, action));
         queue.offer(new UpdateScorePacket(entityName, (byte) 0, OBJECTIVE_NAME, 0));
     }
 
@@ -268,7 +269,7 @@ public final class PlayerUIImpl implements PlayerUI {
     }
 
     private void addTabListEntry(int index, Component text, PlayerSkin skin) {
-        String name = (index < 0 ? TAB_LIST_BEFORE : TAB_LIST_AFTER) + Integer.toHexString(Math.abs(index)+0x10000000).substring(1);
+        String name = (index < 0 ? TAB_LIST_BEFORE : TAB_LIST_AFTER) + Integer.toHexString(Math.abs(index) + 0x10000000).substring(1);
 
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :

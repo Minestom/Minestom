@@ -143,7 +143,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final PlayerUI playerUI = PlayerUI.newPlayerUI();
+    private final PlayerUI ui = PlayerUI.newPlayerUI();
 
     private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
@@ -365,7 +365,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Player UI
-        playerUI.drain(playerConnection::sendPacket);
+        this.ui.drain(playerConnection::sendPacket);
 
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
@@ -634,8 +634,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
     }
 
-    public PlayerUI getPlayerUI() {
-        return playerUI;
+    public PlayerUI ui() {
+        return ui;
     }
 
     /**
@@ -2103,9 +2103,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return mainHand;
         }
 
-        public boolean enableTextFiltering() { return enableTextFiltering; }
+        public boolean enableTextFiltering() {
+            return enableTextFiltering;
+        }
 
-        public boolean allowServerListings() { return allowServerListings; }
+        public boolean allowServerListings() {
+            return allowServerListings;
+        }
 
         /**
          * Changes the player settings internally.

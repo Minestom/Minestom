@@ -1,9 +1,29 @@
 package net.minestom.server.ui;
 
-public sealed interface TabList permits TabListImpl {
+import net.kyori.adventure.text.Component;
+import net.minestom.server.entity.PlayerSkin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
-    static TabListBuilder builder() {
-        return new TabListBuilder();
+public sealed interface TabList permits TabListImpl {
+    static Builder builder() {
+        return new TabListImpl.Builder();
     }
 
+    interface Builder {
+        @NotNull Builder header(@NotNull Component header);
+
+        @NotNull Builder footer(@NotNull Component footer);
+
+        @NotNull Builder addBefore(@NotNull Component text, @Nullable PlayerSkin skin);
+
+        @NotNull Builder addAfter(@NotNull Component text, @Nullable PlayerSkin skin);
+
+        @NotNull Builder setBefore(@Range(from = 0, to = 80) int index, @NotNull Component text, @Nullable PlayerSkin skin);
+
+        @NotNull Builder setAfter(@Range(from = 0, to = 80) int index, @NotNull Component text, @Nullable PlayerSkin skin);
+
+        @NotNull TabList build();
+    }
 }
