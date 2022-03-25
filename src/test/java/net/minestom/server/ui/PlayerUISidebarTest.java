@@ -29,7 +29,7 @@ public class PlayerUISidebarTest {
     @Test
     public void sidebarInitial() {
         var ui = PlayerUI.newPlayerUI();
-        assertTrue(ui.sidebar(sidebar().build()));
+        ui.sidebar(sidebar().build());
 
         AtomicReference<String> objectiveName = new AtomicReference<>();
         AtomicReference<String> entityName = new AtomicReference<>();
@@ -76,24 +76,24 @@ public class PlayerUISidebarTest {
     @Test
     public void sidebarIdenticalNoPackets() {
         var ui = PlayerUI.newPlayerUI();
-        assertTrue(ui.sidebar(sidebar().build()));
+        ui.sidebar(sidebar().build());
         ui.drain(packet -> {});
 
         // Identical sidebar shouldn't send any packets
-        assertFalse(ui.sidebar(sidebar().build()));
+        ui.sidebar(sidebar().build());
         ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
     public void sidebarUpdateLine() {
         var ui = PlayerUI.newPlayerUI();
-        assertTrue(ui.sidebar(sidebar().build()));
+        ui.sidebar(sidebar().build());
         ui.drain(packet -> {});
 
         // Sending a new line
-        assertTrue(ui.sidebar(sidebar()
+        ui.sidebar(sidebar()
                 .add(COMPONENT_LINE2)
-                .build()));
+                .build());
 
         AtomicReference<String> entityName = new AtomicReference<>();
 
@@ -113,9 +113,9 @@ public class PlayerUISidebarTest {
         );
 
         // Updating an existing line
-        assertTrue(ui.sidebar(sidebar()
+        ui.sidebar(sidebar()
                 .add(COMPONENT_DIFF)
-                .build()));
+                .build());
 
         assertPackets(ui,
                 packetCond(TeamsPacket.class, p -> {
@@ -127,22 +127,22 @@ public class PlayerUISidebarTest {
         );
 
         // Ensure state is actually changed
-        assertFalse(ui.sidebar(sidebar()
+        ui.sidebar(sidebar()
                 .add(COMPONENT_DIFF)
-                .build()));
+                .build());
         ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
     public void sidebarUpdateTitle() {
         var ui = PlayerUI.newPlayerUI();
-        assertTrue(ui.sidebar(sidebar().build()));
+        ui.sidebar(sidebar().build());
         ui.drain(packet -> {});
 
         // Updating the title
-        assertTrue(ui.sidebar(sidebar()
+        ui.sidebar(sidebar()
                 .title(COMPONENT_DIFF)
-                .build()));
+                .build());
 
         assertPackets(ui,
                 packetCond(ScoreboardObjectivePacket.class, p -> {
@@ -152,9 +152,9 @@ public class PlayerUISidebarTest {
         );
 
         // Ensure state is actually changed
-        assertFalse(ui.sidebar(sidebar()
+        ui.sidebar(sidebar()
                 .title(COMPONENT_DIFF)
-                .build()));
+                .build());
         ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
@@ -165,7 +165,7 @@ public class PlayerUISidebarTest {
         ui.drain(packet -> {});
 
         // Remove lines 0 and 1
-        assertTrue(ui.sidebar(SidebarUI.builder(COMPONENT_TITLE).build()));
+        ui.sidebar(SidebarUI.builder(COMPONENT_TITLE).build());
 
         assertPackets(ui,
                 packetCond(UpdateScorePacket.class, p -> {
@@ -177,16 +177,16 @@ public class PlayerUISidebarTest {
         );
 
         // Ensure state is actually changed
-        assertFalse(ui.sidebar(SidebarUI.builder(COMPONENT_TITLE).build()));
+        ui.sidebar(SidebarUI.builder(COMPONENT_TITLE).build());
         ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
     @Test
     public void sidebarBuilderSet() {
         var ui = PlayerUI.newPlayerUI();
-        assertTrue(ui.sidebar(SidebarUI.builder(COMPONENT_TITLE)
+        ui.sidebar(SidebarUI.builder(COMPONENT_TITLE)
                 .set(1, COMPONENT_LINE1) // Must also set line 0 to Component.empty()
-                .build()));
+                .build());
 
         AtomicReference<String> objectiveName = new AtomicReference<>();
         AtomicReference<String> entityName = new AtomicReference<>();
@@ -230,9 +230,9 @@ public class PlayerUISidebarTest {
         );
 
         // Ensure state is actually changed
-        assertFalse(ui.sidebar(SidebarUI.builder(COMPONENT_TITLE)
+        ui.sidebar(SidebarUI.builder(COMPONENT_TITLE)
                 .set(1, COMPONENT_LINE1) // Must also set line 0 to Component.empty()
-                .build()));
+                .build());
         ui.drain(packet -> fail("Expected no more packets, but got " + packet.getClass().getName()));
     }
 
