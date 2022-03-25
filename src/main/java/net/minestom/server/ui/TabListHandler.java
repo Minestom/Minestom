@@ -38,15 +38,15 @@ final class TabListHandler {
         this.queue = queue;
     }
 
-    public void handle(TabListUI tabListUI) {
-        if (tabListUI == null) {
+    public void handle(TabListUI tabList) {
+        if (tabList == null) {
             updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesBefore, skinHashCodesBefore, -1);
             updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesAfter, skinHashCodesAfter, 1);
 
             header = Component.empty();
             footer = Component.empty();
             setHeaderAndFooter(header, footer);
-        } else if (tabListUI instanceof TabListUIImpl impl) {
+        } else if (tabList instanceof TabListUIImpl impl) {
             if (impl.hasPlayerList()) {
                 updatePlayerList(impl.beforeText(), impl.beforeSkin(), textHashCodesBefore, skinHashCodesBefore, -1);
                 updatePlayerList(impl.afterText(), impl.afterSkin(), textHashCodesAfter, skinHashCodesAfter, 1);

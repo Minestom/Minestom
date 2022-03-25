@@ -34,8 +34,8 @@ final class PlayerUIImpl implements PlayerUI {
     }
 
     @Override
-    public void tabList(TabListUI tabListUI) {
-        this.tabListHandler.handle(tabListUI);
+    public void tabList(TabListUI tabList) {
+        this.tabListHandler.handle(tabList);
     }
 
     @Override
