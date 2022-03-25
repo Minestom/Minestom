@@ -18,7 +18,7 @@ final class SidebarHandler {
     /**
      * Limited by the notchian client, do not change
      */
-    private static final int MAX_LINES_COUNT = 15;
+    private static final int MAX_LINES_COUNT = 16;
 
     private static final String OBJECTIVE_NAME = MAGIC + "_objective";
     private static final byte OBJECTIVE_POSITION = (byte) 1; // Sidebar
@@ -35,8 +35,7 @@ final class SidebarHandler {
     }
 
     private final MessagePassingQueue<ServerPacket> queue;
-
-    private final int[] scoreboardHashCodes = new int[MAX_LINES_COUNT + 1];
+    private final int[] scoreboardHashCodes = new int[MAX_LINES_COUNT];
 
     SidebarHandler(MessagePassingQueue<ServerPacket> queue) {
         this.queue = queue;
@@ -51,73 +50,57 @@ final class SidebarHandler {
         } else if (sidebar instanceof SidebarUIImpl impl) {
             // Set title
             setScoreboardLine(0, impl.title());
-
-            int index = 1;
-
-            // Set specified sidebar lines
-            for (; index - 1 < impl.lines().size() && index < scoreboardHashCodes.length; index++) {
-                Component line = impl.lines().get(index - 1);
-                setScoreboardLine(index, line);
+            // Update lines
+            final List<Component> lines = impl.lines();
+            final int newSize = lines.size();
+            for (int i = 1; i < MAX_LINES_COUNT; ++i) {
+                final int index = i - 1;
+                setScoreboardLine(i, index < newSize ? lines.get(index) : null);
             }
-
-            // Clear remaining lines
-            for (; index < scoreboardHashCodes.length; index++) {
-                setScoreboardLine(index, null);
-            }
+        } else {
+            throw new IllegalArgumentException("Unsupported sidebar type: " + sidebar.getClass().getName());
         }
     }
 
     private void setScoreboardLine(int index, @Nullable Component line) {
-        int oldLine = scoreboardHashCodes[index];
-
+        final int oldLine = scoreboardHashCodes[index];
         if (line == null) {
             if (index <= 0 || oldLine == -1) return;
             scoreboardHashCodes[index] = -1;
             removeSidebarLine(index - 1);
         } else {
-            int lineHashCode = line.hashCode();
+            final int lineHashCode = line.hashCode();
+            scoreboardHashCodes[index] = lineHashCode;
             if (oldLine == -1) {
-                scoreboardHashCodes[index] = lineHashCode;
-
-                if (index <= 0) {
-                    createSidebarObjective(line);
-                } else {
-                    createSidebarLine(index - 1, line);
-                }
+                // Creation
+                if (index <= 0) createSidebarObjective(line);
+                else createSidebarLine(index - 1, line);
             } else if (oldLine != lineHashCode) {
-                scoreboardHashCodes[index] = lineHashCode;
-
-                if (index <= 0) {
-                    updateSidebarTitle(line);
-                } else {
-                    updateSidebarLine(index - 1, line);
-                }
+                // Update
+                if (index <= 0) updateSidebarTitle(line);
+                else updateSidebarLine(index - 1, line);
             }
         }
     }
 
     private void createSidebarObjective(Component title) {
-        var scoreboardObjectivePacket = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 0,
-                title, ScoreboardObjectivePacket.Type.INTEGER);
-
-        var displayScoreboardPacket = new DisplayScoreboardPacket(OBJECTIVE_POSITION, OBJECTIVE_NAME);
-
-        queue.offer(scoreboardObjectivePacket); // Create objective
-        queue.offer(displayScoreboardPacket); // Show sidebar scoreboard
+        // Create objective
+        queue.offer(new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 0,
+                title, ScoreboardObjectivePacket.Type.INTEGER));
+        // Show sidebar scoreboard
+        queue.offer(new DisplayScoreboardPacket(OBJECTIVE_POSITION, OBJECTIVE_NAME));
     }
 
     private void destroySidebarObjective() {
-        var scoreboardObjectivePacket = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 1, null, null);
-        var displayScoreboardPacket = new DisplayScoreboardPacket(OBJECTIVE_POSITION, OBJECTIVE_NAME);
-
-        queue.offer(scoreboardObjectivePacket); // Creative objective
-        queue.offer(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
+        // Creative objective
+        queue.offer(new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 1, null, null));
+        // Show sidebar scoreboard (wait for scores packet)
+        queue.offer(new DisplayScoreboardPacket(OBJECTIVE_POSITION, OBJECTIVE_NAME));
     }
 
     private void updateSidebarTitle(Component title) {
-        var packet = new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 2,
-                title, ScoreboardObjectivePacket.Type.INTEGER);
-        queue.offer(packet);
+        queue.offer(new ScoreboardObjectivePacket(OBJECTIVE_NAME, (byte) 2,
+                title, ScoreboardObjectivePacket.Type.INTEGER));
     }
 
     private void updateSidebarLine(int index, Component line) {
@@ -127,7 +110,7 @@ final class SidebarHandler {
     }
 
     private void createSidebarLine(int index, Component line) {
-        String entityName = ENTITY_NAMES.get(index);
+        final String entityName = ENTITY_NAMES.get(index);
 
         final var action = new TeamsPacket.CreateTeamAction(TEAM_DISPLAY_NAME, FRIENDLY_FLAGS,
                 NAME_TAG_VISIBILITY, COLLISION_RULE, TEAM_COLOR, line, Component.empty(),

@@ -242,7 +242,7 @@ public class PlayerUISidebarTest {
             if (packet.getClass() == clazz) {
                 consumer.accept((T) packet);
             } else {
-                fail("Expected " + clazz.getClass().getName() + ", got " + packet.getClass().getName() + " instead");
+                fail("Expected " + clazz.getName() + ", got " + packet.getClass().getName() + " instead");
             }
         };
     }
