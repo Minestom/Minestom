@@ -35,29 +35,34 @@ public class Tag<T> {
     final Function<T, NBT> writeFunction;
     private final Supplier<T> defaultValue;
 
+    final Function<?, ?> originalRead;
+    // Optional properties
     final List<PathEntry> path;
     final UnaryOperator<T> copy;
+    final int listScope;
 
     Tag(int index, String key,
-        Function<NBT, T> readFunction,
-        Function<T, NBT> writeFunction,
-        @Nullable Supplier<T> defaultValue, @Nullable List<PathEntry> path,
-        @Nullable UnaryOperator<T> copy) {
+        Function<?, ?> originalRead,
+        Function<NBT, T> readFunction, Function<T, NBT> writeFunction,
+        Supplier<T> defaultValue, List<PathEntry> path, UnaryOperator<T> copy, int listScope) {
         assert index == INDEX_MAP.get(key);
         this.index = index;
         this.key = key;
+        this.originalRead = originalRead;
         this.readFunction = readFunction;
         this.writeFunction = writeFunction;
         this.defaultValue = defaultValue;
         this.path = path;
         this.copy = copy;
+        this.listScope = listScope;
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key,
                                          @NotNull Function<N, T> readFunction,
                                          @NotNull Function<T, N> writeFunction) {
-        return new Tag<>(INDEX_MAP.get(key), key, (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction,
-                null, null, null);
+        return new Tag<>(INDEX_MAP.get(key), key, readFunction,
+                (Function<NBT, T>) readFunction, (Function<T, NBT>) writeFunction,
+                null, null, null, 0);
     }
 
     /**
@@ -71,7 +76,7 @@ public class Tag<T> {
 
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
-        return new Tag<>(index, key, readFunction, writeFunction, defaultValue, path, copy);
+        return new Tag<>(index, key, originalRead, readFunction, writeFunction, defaultValue, path, copy, listScope);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -83,6 +88,7 @@ public class Tag<T> {
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
         return new Tag<>(index, key,
+                readMap,
                 // Read
                 readFunction.andThen(t -> {
                     if (t == null) return null;
@@ -92,13 +98,13 @@ public class Tag<T> {
                 writeMap.andThen(writeFunction),
                 // Default value
                 () -> readMap.apply(createDefault()),
-                path, null);
+                path, null, listScope);
     }
 
     @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
-        return new Tag<>(index, key,
+        return new Tag<>(index, key, originalRead,
                 read -> {
                     var list = (NBTList<?>) read;
                     final int size = list.getSize();
@@ -138,14 +144,15 @@ public class Tag<T> {
                         array[i] = copy;
                     }
                     return shallowCopy ? List.copyOf(ts) : List.of(array);
-                } : List::copyOf);
+                } : List::copyOf, listScope + 1);
     }
 
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> path(@NotNull String @Nullable ... path) {
         final List<PathEntry> entries = path != null ? Arrays.stream(path).map(s -> new PathEntry(s, INDEX_MAP.get(s))).toList() : null;
-        return new Tag<>(index, key, readFunction, writeFunction, defaultValue, entries, copy);
+        return new Tag<>(index, key, originalRead,
+                readFunction, writeFunction, defaultValue, entries, copy, listScope);
     }
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
@@ -186,7 +193,7 @@ public class Tag<T> {
     final boolean shareValue(@NotNull Tag<?> other) {
         // Verify if these 2 tags can share the same cached value
         // Key/Default value/Path are ignored
-        return this == other || this.readFunction == other.readFunction;
+        return this == other || (this.originalRead == other.originalRead && this.listScope == other.listScope);
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
