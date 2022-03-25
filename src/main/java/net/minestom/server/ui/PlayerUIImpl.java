@@ -95,15 +95,15 @@ final class PlayerUIImpl implements PlayerUI {
     }
 
     @Override
-    public void tabList(TabList tabList) {
-        if (tabList == null) {
+    public void tabList(TabListUI tabListUI) {
+        if (tabListUI == null) {
             updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesBefore, skinHashCodesBefore, -1);
             updatePlayerList(Collections.emptyList(), Collections.emptyList(), textHashCodesAfter, skinHashCodesAfter, 1);
 
             header = Component.empty();
             footer = Component.empty();
             setHeaderAndFooter(header, footer);
-        } else if (tabList instanceof TabListImpl impl) {
+        } else if (tabListUI instanceof TabListUIImpl impl) {
             if (impl.hasPlayerList()) {
                 updatePlayerList(impl.beforeText(), impl.beforeSkin(), textHashCodesBefore, skinHashCodesBefore, -1);
                 updatePlayerList(impl.afterText(), impl.afterSkin(), textHashCodesAfter, skinHashCodesAfter, 1);

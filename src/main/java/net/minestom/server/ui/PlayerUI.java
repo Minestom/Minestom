@@ -14,7 +14,7 @@ public sealed interface PlayerUI permits PlayerUIImpl {
 
     void sidebar(@Nullable SidebarUI sidebar);
 
-    void tabList(@Nullable TabList tabList);
+    void tabList(@Nullable TabListUI tabListUI);
 
     void drain(@NotNull Consumer<ServerPacket> consumer);
 

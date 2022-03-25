@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-public sealed interface TabList permits TabListImpl {
+public sealed interface TabListUI permits TabListUIImpl {
     static Builder builder() {
-        return new TabListImpl.Builder();
+        return new TabListUIImpl.Builder();
     }
 
     interface Builder {
@@ -24,6 +24,6 @@ public sealed interface TabList permits TabListImpl {
 
         @NotNull Builder setAfter(@Range(from = 0, to = 80) int index, @NotNull Component text, @Nullable PlayerSkin skin);
 
-        @NotNull TabList build();
+        @NotNull TabListUI build();
     }
 }
