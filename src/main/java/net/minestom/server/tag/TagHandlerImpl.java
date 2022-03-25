@@ -166,7 +166,7 @@ final class TagHandlerImpl implements TagHandler {
     private static final class Entry<T> {
         final Tag<T> tag;
         final T value; // TagHandler type for path-able tags
-        volatile NBT nbt;
+        private NBT nbt;
 
         Entry(Tag<T> tag, T value) {
             this.tag = tag;
@@ -174,8 +174,12 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         NBT updatedNbt() {
+            VarHandle.acquireFence();
             NBT nbt = this.nbt;
-            if (nbt == null) this.nbt = nbt = tag.writeFunction.apply(value);
+            if (nbt == null) {
+                this.nbt = nbt = tag.writeFunction.apply(value);
+                VarHandle.releaseFence();
+            }
             return nbt;
         }
     }
