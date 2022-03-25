@@ -4,8 +4,14 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.util.List;
+
 public sealed interface SidebarUI permits SidebarUIImpl {
-    static Builder builder(@NotNull Component title) {
+    static @NotNull SidebarUI of(@NotNull Component title, @NotNull List<@NotNull Component> lines) {
+        return new SidebarUIImpl(title, lines);
+    }
+
+    static @NotNull Builder builder(@NotNull Component title) {
         return new SidebarUIImpl.Builder(title);
     }
 

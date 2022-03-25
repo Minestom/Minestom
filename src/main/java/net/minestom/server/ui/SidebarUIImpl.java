@@ -9,6 +9,9 @@ import java.util.List;
 
 record SidebarUIImpl(Component title,
                      List<Component> lines) implements SidebarUI {
+    SidebarUIImpl {
+        lines = List.copyOf(lines);
+    }
 
     static final class Builder implements SidebarUI.Builder {
         Component title;
@@ -16,10 +19,6 @@ record SidebarUIImpl(Component title,
 
         Builder(@NotNull Component title) {
             this.title = title;
-        }
-
-        public @NotNull SidebarUI build() {
-            return new SidebarUIImpl(title, lines);
         }
 
         public @NotNull Builder title(@NotNull Component title) {
@@ -38,6 +37,10 @@ record SidebarUIImpl(Component title,
             }
             lines.set(index, line);
             return this;
+        }
+
+        public @NotNull SidebarUI build() {
+            return new SidebarUIImpl(title, lines);
         }
     }
 }
