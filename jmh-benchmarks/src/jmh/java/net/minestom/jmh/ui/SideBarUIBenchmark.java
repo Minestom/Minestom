@@ -5,6 +5,7 @@ import net.minestom.server.ui.PlayerUI;
 import net.minestom.server.ui.SidebarUI;
 import org.openjdk.jmh.annotations.*;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
@@ -25,7 +26,7 @@ public class SideBarUIBenchmark {
 
     @Benchmark
     public void constant() {
-        ui.sidebar(SidebarUI.builder(Component.text("test")).build());
+        ui.sidebar(SidebarUI.of(Component.text("test"), List.of()));
         ui.drain(serverPacket -> {
             // Empty
         });
@@ -33,10 +34,7 @@ public class SideBarUIBenchmark {
 
     @Benchmark
     public void random() {
-        SidebarUI sidebar = SidebarUI.builder(Component.text("test"))
-                .add(Component.text("count: " + (++count)))
-                .build();
-        ui.sidebar(sidebar);
+        ui.sidebar(SidebarUI.of(Component.text("test"), List.of(Component.text("count: " + (++count)))));
         ui.drain(serverPacket -> {
             // Empty
         });
