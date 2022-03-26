@@ -264,6 +264,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             if (player != this) sendPacket(player.getAddPlayerToList());
         }
+        
+        //Teams
+        for (Team team : MinecraftServer.getTeamManager().getTeams()) {
+            sendPacket(team.createTeamsCreationPacket());
+        }
 
         // Commands
         refreshCommands();
