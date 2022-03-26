@@ -81,7 +81,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                 if (equals(child, name, eventType)) {
                     removeChild(child);
                     addChild(eventNode);
-                    continue;
+                    break;
                 }
                 child.replaceChildren(name, eventType, eventNode);
             }
