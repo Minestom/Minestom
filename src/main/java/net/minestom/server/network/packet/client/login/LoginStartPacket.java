@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.client.login;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -33,9 +32,8 @@ public record LoginStartPacket(@NotNull String username) implements ClientPrepla
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
         // Proxy support (only for socket clients) and cache the login username
         if (isSocketConnection) {
-            final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.UNSAFE_setLoginUsername(username);
-
             // Velocity support
             if (VelocityProxy.isEnabled()) {
                 final int messageId = ThreadLocalRandom.current().nextInt();

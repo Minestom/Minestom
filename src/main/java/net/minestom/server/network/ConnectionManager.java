@@ -196,15 +196,11 @@ public final class ConnectionManager {
     public CompletableFuture<Void> startPlayState(@NotNull Player player, boolean register) {
         return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
-
+            // Compression
             if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-                // Compression
                 final int threshold = MinecraftServer.getCompressionThreshold();
-                if (threshold > 0) {
-                    socketConnection.startCompression();
-                }
+                if (threshold > 0) socketConnection.startCompression();
             }
-
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
