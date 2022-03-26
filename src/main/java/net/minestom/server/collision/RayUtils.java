@@ -298,9 +298,7 @@ final class RayUtils {
         double moveAmount = entryTime * 0.99999;
 
         if (entryTime > exitTime
-                || xEntry > 1.0f
-                || yEntry > 1.0f
-                || zEntry > 1.0f
+                || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f
                 || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f)
                 || moveAmount > finalResult.res) {
             return false;
@@ -343,7 +341,6 @@ final class RayUtils {
         finalResult.normalX = normalx;
         finalResult.normalY = normaly;
         finalResult.normalZ = normalz;
-
         return true;
     }
 
