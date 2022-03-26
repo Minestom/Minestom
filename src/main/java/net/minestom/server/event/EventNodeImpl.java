@@ -343,7 +343,6 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                 final Consumer<E> listener = createConsumer();
                 this.listener = listener;
                 this.updated = true;
-                VarHandle.releaseFence();
                 return listener;
             }
         }

@@ -28,7 +28,6 @@ public final class LazyPacket implements SendablePacket {
                 packet = this.packet;
                 if (packet == null) {
                     this.packet = packet = packetSupplier.get();
-                    VarHandle.releaseFence();
                 }
             }
         }
