@@ -134,10 +134,15 @@ public class EntityProjectile extends Entity {
         final int parts = (int) Math.ceil(dir.length() / part);
         final Pos direction = dir.normalize().mul(part).asPosition();
         final long aliveTicks = getAliveTicks();
+        Block block = null;
+        Point blockPos = null;
         for (int i = 0; i < parts; ++i) {
             // If we're at last part, we can't just add another direction-vector, because we can exceed the end point.
             pos = (i == parts - 1) ? posNow : pos.add(direction);
-            final Block block = instance.getBlock(pos);
+            if (block == null || !pos.sameBlock(blockPos)) {
+                block = instance.getBlock(pos);
+                blockPos = pos;
+            }
             if (block.isSolid()) {
                 final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
                 EventDispatcher.call(event);
