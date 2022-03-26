@@ -579,7 +579,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // World border collision
         final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-        if (finalVelocityPosition.samePoint(position)) {
+        if (finalVelocityPosition.samePoint(position) && newVelocity.isZero()) {
             this.velocity = Vec.ZERO;
             if (hasVelocity) {
                 sendPacketToViewers(getVelocityPacket());

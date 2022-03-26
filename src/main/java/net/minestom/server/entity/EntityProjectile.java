@@ -116,11 +116,11 @@ public class EntityProjectile extends Entity {
      */
     @SuppressWarnings("ConstantConditions")
     private boolean isStuck(Pos pos, Pos posNow) {
+        final Instance instance = getInstance();
         if (pos.samePoint(posNow)) {
-            return true;
+            return instance.getBlock(pos).isSolid();
         }
 
-        final Instance instance = getInstance();
         Chunk chunk = null;
         Collection<LivingEntity> entities = null;
         final BoundingBox bb = getBoundingBox();
@@ -133,11 +133,12 @@ public class EntityProjectile extends Entity {
         final Vec dir = posNow.sub(pos).asVec();
         final int parts = (int) Math.ceil(dir.length() / part);
         final Pos direction = dir.normalize().mul(part).asPosition();
+        final long aliveTicks = getAliveTicks();
         for (int i = 0; i < parts; ++i) {
             // If we're at last part, we can't just add another direction-vector, because we can exceed the end point.
             pos = (i == parts - 1) ? posNow : pos.add(direction);
             final Block block = instance.getBlock(pos);
-            if (!block.isSolid()) {
+            if (block.isSolid()) {
                 final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
                 EventDispatcher.call(event);
                 if (!event.isCancelled()) {
@@ -159,7 +160,7 @@ public class EntityProjectile extends Entity {
               We won't check collisions with a shooter for first ticks of arrow's life, because it spawns in him
               and will immediately deal damage.
              */
-            if (getAliveTicks() < 3 && shooter != null) {
+            if (aliveTicks < 3 && shooter != null) {
                 victimsStream = victimsStream.filter(entity -> entity != shooter);
             }
             final Optional<LivingEntity> victimOptional = victimsStream.findAny();
