@@ -3,6 +3,7 @@ package net.minestom.server.utils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,6 +13,13 @@ import java.util.function.ToIntFunction;
 public final class ArrayUtils {
 
     private ArrayUtils() {
+    }
+
+    public static boolean isEmpty(@Nullable Object @NotNull [] array) {
+        for (Object object : array) {
+            if (object != null) return false;
+        }
+        return true;
     }
 
     public static int[] concatenateIntArrays(int @NotNull []... arrays) {

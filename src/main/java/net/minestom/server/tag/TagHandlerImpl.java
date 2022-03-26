@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import net.minestom.server.utils.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -13,12 +14,11 @@ import java.util.Arrays;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
-    private Entry<?>[] entries = new Entry[0];
+    private volatile Entry<?>[] entries = new Entry[0];
     private Cache cache;
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        VarHandle.acquireFence();
         return read(entries, tag);
     }
 
@@ -30,16 +30,15 @@ final class TagHandlerImpl implements TagHandler {
             if (copy != null) value = copy.apply(value);
         }
 
-        VarHandle.acquireFence();
         int tagIndex = tag.index;
         TagHandlerImpl local = this;
         Entry<?>[] entries = this.entries;
+        final Entry<?>[] localEntries = entries;
 
-        var paths = tag.path;
+        final var paths = tag.path;
         TagHandlerImpl[] pathHandlers = null;
         if (paths != null) {
             pathHandlers = new TagHandlerImpl[paths.size()];
-            // Path-able tag
             int in = 0;
             for (var path : paths) {
                 final int pathIndex = path.index();
@@ -47,40 +46,29 @@ final class TagHandlerImpl implements TagHandler {
                     if (value == null) return;
                     local.entries = entries = Arrays.copyOf(entries, pathIndex + 1);
                 }
-                Entry<?> entry = entries[pathIndex];
+                final Entry<?> entry = entries[pathIndex];
                 if (entry == null) {
                     if (value == null) return;
-                    var updated = new TagHandlerImpl();
-                    entries[pathIndex] = new Entry<>(Tag.tag(path.name(), null, null), updated);
-                    local = updated;
+                    // Empty path, create a new handler
+                    local = new TagHandlerImpl();
+                    entries[pathIndex] = new Entry<>(Tag.tag(path.name(), null, null), local);
                 } else if (entry.value instanceof TagHandlerImpl handler) {
+                    // Existing path, continue navigating
                     local = handler;
-                } else {
-                    throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry");
-                }
+                } else throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry");
                 entries = local.entries;
                 pathHandlers[in++] = local;
             }
             // Handle removal if the tag was present (recursively)
             if (value == null) {
-                pathHandlers[pathHandlers.length - 1].entries[tagIndex] = null;
+                pathHandlers[in - 1].entries[tagIndex] = null;
                 boolean empty = false;
-                removalLoop:
-                for (int i = pathHandlers.length - 1; i >= 0; i--) {
+                for (int i = in - 1; i >= 0; i--) {
                     TagHandlerImpl handler = pathHandlers[i];
                     Entry<?>[] entr = handler.entries;
                     // Verify if the handler is empty
-                    empty = tagIndex >= entr.length;
-                    if (!empty) {
-                        empty = true;
-                        for (var entry : entr) {
-                            if (entry != null) {
-                                empty = false;
-                                continue removalLoop;
-                            }
-                        }
-                    }
-                    if (i > 0) {
+                    empty = tagIndex >= entr.length || ArrayUtils.isEmpty(entr);
+                    if (empty && i > 0) {
                         TagHandlerImpl parent = pathHandlers[i - 1];
                         parent.entries[paths.get(i).index()] = null;
                     }
@@ -88,7 +76,7 @@ final class TagHandlerImpl implements TagHandler {
                 if (empty) {
                     // Remove the root handler
                     local = this;
-                    entries = this.entries;
+                    entries = localEntries;
                     tagIndex = paths.get(0).index();
                 }
             }
@@ -103,7 +91,6 @@ final class TagHandlerImpl implements TagHandler {
         if (pathHandlers != null) {
             for (var handler : pathHandlers) handler.cache = null;
         }
-        VarHandle.releaseFence();
     }
 
     @Override
@@ -124,9 +111,8 @@ final class TagHandlerImpl implements TagHandler {
             }
             entries[index] = new Entry<>(tag, nbt);
         }
-        this.entries = entries;
         this.cache = null;
-        VarHandle.releaseFence();
+        this.entries = entries;
     }
 
     @Override
@@ -135,30 +121,31 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private Cache updatedCache() {
-        VarHandle.acquireFence();
         Cache cache = this.cache;
         if (cache == null) {
-            Entry<?>[] entries = this.entries;
-            if (entries.length > 0) {
-                entries = entries.clone();
-                MutableNBTCompound tmp = new MutableNBTCompound();
-                for (Entry<?> entry : entries) {
-                    if (entry == null) continue;
-                    final Tag<?> tag = entry.tag;
-                    final Object value = entry.value;
-                    if (value instanceof TagHandler handler) {
-                        // Path-able entry
-                        tmp.put(tag.getKey(), handler.asCompound());
-                    } else {
-                        tag.writeUnsafe(tmp, value);
+            synchronized (this) {
+                if ((cache = this.cache) != null) return cache;
+                Entry<?>[] entries = this.entries;
+                if (entries.length > 0) {
+                    entries = entries.clone();
+                    MutableNBTCompound tmp = new MutableNBTCompound();
+                    for (Entry<?> entry : entries) {
+                        if (entry == null) continue;
+                        final Tag<?> tag = entry.tag;
+                        final Object value = entry.value;
+                        if (value instanceof TagHandler handler) {
+                            // Path-able entry
+                            tmp.put(tag.getKey(), handler.asCompound());
+                        } else {
+                            tag.writeUnsafe(tmp, value);
+                        }
                     }
+                    cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
+                } else {
+                    cache = Cache.EMPTY;
                 }
-                cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
-            } else {
-                cache = Cache.EMPTY;
+                this.cache = cache;
             }
-            this.cache = cache;
-            VarHandle.releaseFence();
         }
         return cache;
     }
