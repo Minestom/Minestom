@@ -88,20 +88,18 @@ final class ShapeImpl implements Shape {
     @Override
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         boolean hitBlock = false;
-        SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
+
         for (BoundingBox blockSection : blockSections) {
             // Fast check to see if a collision happens
             // Uses minkowski sum
             if (!RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos))
                 continue;
+
             // Longer check to get result of collision
-            RayUtils.SweptAABB(moving, rayStart, rayDirection, blockSection, shapePos, tempResult);
+            boolean foundCollision = RayUtils.SweptAABB(moving, rayStart, rayDirection, blockSection, shapePos, finalResult);
+
             // Update final result if the temp result collision is sooner than the current final result
-            if (tempResult.res < finalResult.res) {
-                finalResult.res = tempResult.res;
-                finalResult.normalX = tempResult.normalX;
-                finalResult.normalY = tempResult.normalY;
-                finalResult.normalZ = tempResult.normalZ;
+            if (foundCollision) {
                 finalResult.collidedShapePosition = shapePos;
                 finalResult.collidedShape = this;
                 finalResult.blockType = block.get().block();
