@@ -111,8 +111,10 @@ final class TagHandlerImpl implements TagHandler {
             }
             entries[index] = new Entry<>(tag, nbt);
         }
-        this.cache = null;
-        this.entries = entries;
+        synchronized (this) {
+            this.cache = null;
+            this.entries = entries;
+        }
     }
 
     @Override
@@ -120,32 +122,29 @@ final class TagHandlerImpl implements TagHandler {
         return updatedCache().compound;
     }
 
-    private Cache updatedCache() {
+    private synchronized Cache updatedCache() {
         Cache cache = this.cache;
         if (cache == null) {
-            synchronized (this) {
-                if ((cache = this.cache) != null) return cache;
-                Entry<?>[] entries = this.entries;
-                if (entries.length > 0) {
-                    entries = entries.clone();
-                    MutableNBTCompound tmp = new MutableNBTCompound();
-                    for (Entry<?> entry : entries) {
-                        if (entry == null) continue;
-                        final Tag<?> tag = entry.tag;
-                        final Object value = entry.value;
-                        if (value instanceof TagHandler handler) {
-                            // Path-able entry
-                            tmp.put(tag.getKey(), handler.asCompound());
-                        } else {
-                            tag.writeUnsafe(tmp, value);
-                        }
+            Entry<?>[] entries = this.entries;
+            if (entries.length > 0) {
+                entries = entries.clone();
+                MutableNBTCompound tmp = new MutableNBTCompound();
+                for (Entry<?> entry : entries) {
+                    if (entry == null) continue;
+                    final Tag<?> tag = entry.tag;
+                    final Object value = entry.value;
+                    if (value instanceof TagHandler handler) {
+                        // Path-able entry
+                        tmp.put(tag.getKey(), handler.asCompound());
+                    } else {
+                        tag.writeUnsafe(tmp, value);
                     }
-                    cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
-                } else {
-                    cache = Cache.EMPTY;
                 }
-                this.cache = cache;
+                cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
+            } else {
+                cache = Cache.EMPTY;
             }
+            this.cache = cache;
         }
         return cache;
     }
