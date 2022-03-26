@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -308,7 +307,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     final class Handle<E extends Event> implements ListenerHandle<E> {
         private final Class<E> eventType;
         private Consumer<E> listener = null;
-        private boolean updated;
+        private volatile boolean updated;
 
         Handle(Class<E> eventType) {
             this.eventType = eventType;
@@ -332,11 +331,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         void invalidate() {
             this.updated = false;
-            VarHandle.releaseFence();
         }
 
         @Nullable Consumer<E> updatedListener() {
-            VarHandle.acquireFence();
             if (updated) return listener;
             synchronized (GLOBAL_CHILD_LOCK) {
                 if (updated) return listener;
