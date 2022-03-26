@@ -41,12 +41,8 @@ public final class BoundingBox implements Shape {
                 this,
                 shapePos
         );
-
         if (!isHit) return false;
-
-        // Longer check to get result of collision
-        boolean foundCollision = RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, finalResult);
-        if (foundCollision) {
+        if (RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
             finalResult.collidedShapePosition = shapePos;
             finalResult.collidedShape = this;
             finalResult.blockType = null;
