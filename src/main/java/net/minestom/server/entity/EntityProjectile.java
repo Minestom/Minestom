@@ -1,15 +1,18 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.entity.metadata.ProjectileMeta;
-import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.entity.EntityShootEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.metadata.ProjectileMeta;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.entity.EntityShootEvent;
+import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEvent;
+import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
+import net.minestom.server.event.entity.projectile.ProjectileUncollideEvent;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,30 +48,14 @@ public class EntityProjectile extends Entity {
         return this.shooter;
     }
 
-    /**
-     * Called when this projectile is stuck in blocks.
-     * Probably you want to do nothing with arrows in such case and to remove other types of projectiles.
-     */
-    public void onStuck() {
-
-    }
-
-    /**
-     * Called when this projectile unstucks.
-     * Probably you want to add some random velocity to arrows in such case.
-     */
-    public void onUnstuck() {
-
-    }
-
     public void shoot(Point to, double power, double spread) {
-        EntityShootEvent shootEvent = new EntityShootEvent(this.shooter, this, to, power, spread);
+        final EntityShootEvent shootEvent = new EntityShootEvent(this.shooter, this, to, power, spread);
         EventDispatcher.call(shootEvent);
         if (shootEvent.isCancelled()) {
             remove();
             return;
         }
-        final var from = this.shooter.getPosition().add(0D, this.shooter.getEyeHeight(), 0D);
+        final Pos from = this.shooter.getPosition().add(0D, this.shooter.getEyeHeight(), 0D);
         shoot(from, to, shootEvent.getPower(), shootEvent.getSpread());
     }
 
@@ -76,10 +63,10 @@ public class EntityProjectile extends Entity {
         double dx = to.x() - from.x();
         double dy = to.y() - from.y();
         double dz = to.z() - from.z();
-        double xzLength = Math.sqrt(dx * dx + dz * dz);
+        final double xzLength = Math.sqrt(dx * dx + dz * dz);
         dy += xzLength * 0.20000000298023224D;
 
-        double length = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        final double length = Math.sqrt(dx * dx + dy * dy + dz * dz);
         dx /= length;
         dy /= length;
         dz /= length;
@@ -99,9 +86,9 @@ public class EntityProjectile extends Entity {
 
     @Override
     public void tick(long time) {
-        final var posBefore = getPosition();
+        final Pos posBefore = getPosition();
         super.tick(time);
-        final var posNow = getPosition();
+        final Pos posNow = getPosition();
         if (isStuck(posBefore, posNow)) {
             if (super.onGround) {
                 return;
@@ -110,14 +97,13 @@ public class EntityProjectile extends Entity {
             this.velocity = Vec.ZERO;
             sendPacketToViewersAndSelf(getVelocityPacket());
             setNoGravity(true);
-            onStuck();
         } else {
             if (!super.onGround) {
                 return;
             }
             super.onGround = false;
             setNoGravity(false);
-            onUnstuck();
+            EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
     }
 
@@ -136,54 +122,54 @@ public class EntityProjectile extends Entity {
 
         final Instance instance = getInstance();
         Chunk chunk = null;
-        Collection<Entity> entities = null;
+        Collection<LivingEntity> entities = null;
+        final BoundingBox bb = getBoundingBox();
 
         /*
-          What we're about to do is to discretely jump from the previous position to the new one.
+          What we're about to do is to discretely jump from a previous position to the new one.
           For each point we will be checking blocks and entities we're in.
          */
-        double part = .25D; // half of the bounding box
+        final double part = bb.width() / 2;
         final Vec dir = posNow.sub(pos).asVec();
         final int parts = (int) Math.ceil(dir.length() / part);
-        final var direction = dir.normalize().mul(part).asPosition();
+        final Pos direction = dir.normalize().mul(part).asPosition();
         for (int i = 0; i < parts; ++i) {
-            // If we're at last part, we can't just add another direction-vector, because we can exceed end point.
-            if (i == parts - 1) {
-                pos = posNow;
-            } else {
-                pos = pos.add(direction);
+            // If we're at last part, we can't just add another direction-vector, because we can exceed the end point.
+            pos = (i == parts - 1) ? posNow : pos.add(direction);
+            final Block block = instance.getBlock(pos);
+            if (!block.isSolid()) {
+                final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
+                EventDispatcher.call(event);
+                if (!event.isCancelled()) {
+                    teleport(pos);
+                    return true;
+                }
             }
-            Block block = instance.getBlock(pos);
-            if (!block.isAir() && !block.isLiquid()) {
-                teleport(pos);
-                return true;
-            }
-            Chunk currentChunk = instance.getChunkAt(pos);
             if (currentChunk != chunk) {
                 chunk = currentChunk;
                 entities = instance.getChunkEntities(chunk)
                         .stream()
                         .filter(entity -> entity instanceof LivingEntity)
+                        .map(entity -> (LivingEntity) entity)
                         .collect(Collectors.toSet());
             }
-            Stream<Entity> victimsStream = entities.stream()
-                    .filter(entity -> getBoundingBox().intersectEntity(getPosition(), entity));
+            Stream<LivingEntity> victimsStream = entities.stream()
+                    .filter(entity -> bb.intersectEntity(getPosition(), entity));
             /*
-              We won't check collisions with entities for first ticks of arrow's life, because it spawns in the
-              shooter and will immediately damage him.
+              We won't check collisions with a shooter for first ticks of arrow's life, because it spawns in him
+              and will immediately deal damage.
              */
             if (getAliveTicks() < 3 && shooter != null) {
                 victimsStream = victimsStream.filter(entity -> entity != shooter);
             }
-            final Optional<Entity> victimOptional = victimsStream.findAny();
+            final Optional<LivingEntity> victimOptional = victimsStream.findAny();
             if (victimOptional.isPresent()) {
-                final LivingEntity victim = (LivingEntity) victimOptional.get();
-                if(entityType == EntityTypes.ARROW || entityType == EntityTypes.SPECTRAL_ARROW) {
-                    victim.setArrowCount(victim.getArrowCount() + 1);
+                final LivingEntity target = victimOptional.get();
+                final ProjectileCollideWithEntityEvent event = new ProjectileCollideWithEntityEvent(this, pos, target);
+                EventDispatcher.call(event);
+                if (!event.isCancelled()) {
+                    return super.onGround;
                 }
-                EventDispatcher.call(new EntityAttackEvent(this, victim));
-                remove();
-                return super.onGround;
             }
         }
         return false;
