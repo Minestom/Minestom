@@ -38,7 +38,7 @@ final class TagHandlerImpl implements TagHandler {
         final var paths = tag.path;
         TagHandlerImpl[] pathHandlers = null;
         if (paths != null) {
-            pathHandlers = new TagHandlerImpl[paths.size()];
+            pathHandlers = new TagHandlerImpl[paths.length];
             int in = 0;
             for (var path : paths) {
                 final int pathIndex = path.index();
@@ -70,14 +70,14 @@ final class TagHandlerImpl implements TagHandler {
                     empty = tagIndex >= entr.length || ArrayUtils.isEmpty(entr);
                     if (empty && i > 0) {
                         TagHandlerImpl parent = pathHandlers[i - 1];
-                        parent.entries[paths.get(i).index()] = null;
+                        parent.entries[paths[i].index()] = null;
                     }
                 }
                 if (empty) {
                     // Remove the root handler
                     local = this;
                     entries = localEntries;
-                    tagIndex = paths.get(0).index();
+                    tagIndex = paths[0].index();
                 }
             }
         }
@@ -182,9 +182,9 @@ final class TagHandlerImpl implements TagHandler {
     private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
         final int index = tag.index;
         Entry<?> entry;
-        if (tag.path != null) {
+        final var paths = tag.path;
+        if (paths != null) {
             // Must be a path-able entry
-            var paths = tag.path;
             for (var path : paths) {
                 final int pathIndex = path.index();
                 if (pathIndex >= entries.length || (entry = entries[pathIndex]) == null) {

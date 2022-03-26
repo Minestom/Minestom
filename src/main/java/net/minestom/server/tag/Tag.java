@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -37,14 +36,14 @@ public class Tag<T> {
 
     final Function<?, ?> originalRead;
     // Optional properties
-    final List<PathEntry> path;
+    final PathEntry[] path;
     final UnaryOperator<T> copy;
     final int listScope;
 
     Tag(int index, String key,
         Function<?, ?> originalRead,
         Function<NBT, T> readFunction, Function<T, NBT> writeFunction,
-        Supplier<T> defaultValue, List<PathEntry> path, UnaryOperator<T> copy, int listScope) {
+        Supplier<T> defaultValue, PathEntry[] path, UnaryOperator<T> copy, int listScope) {
         assert index == INDEX_MAP.get(key);
         this.index = index;
         this.key = key;
@@ -150,7 +149,15 @@ public class Tag<T> {
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> path(@NotNull String @Nullable ... path) {
-        final List<PathEntry> entries = path != null ? Arrays.stream(path).map(s -> new PathEntry(s, INDEX_MAP.get(s))).toList() : null;
+        if (path == null || path.length == 0) {
+            return new Tag<>(index, key, originalRead,
+                    readFunction, writeFunction, defaultValue, null, copy, listScope);
+        }
+        PathEntry[] entries = new PathEntry[path.length];
+        for (int i = 0; i < path.length; i++) {
+            var name = path[i];
+            entries[i] = new PathEntry(name, INDEX_MAP.get(name));
+        }
         return new Tag<>(index, key, originalRead,
                 readFunction, writeFunction, defaultValue, entries, copy, listScope);
     }
