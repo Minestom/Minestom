@@ -31,20 +31,11 @@ public record LoginStartPacket(@NotNull String username) implements ClientPrepla
     @Override
     public void process(@NotNull PlayerConnection connection) {
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
-        // Cache the login username and start compression if enabled
-        if (isSocketConnection) {
-            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.UNSAFE_setLoginUsername(username);
-
-            // Compression
-            final int threshold = MinecraftServer.getCompressionThreshold();
-            if (threshold > 0) {
-                socketConnection.startCompression();
-            }
-        }
-        // Proxy support (only for socket clients)
+        // Proxy support (only for socket clients) and cache the login username
         if (isSocketConnection) {
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            socketConnection.UNSAFE_setLoginUsername(username);
+
             // Velocity support
             if (VelocityProxy.isEnabled()) {
                 final int messageId = ThreadLocalRandom.current().nextInt();
