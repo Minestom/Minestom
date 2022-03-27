@@ -355,7 +355,19 @@ public final class MinecraftServer {
      * Starts the server.
      * <p>
      * It should be called after {@link #init()} and probably your own initialization code.
-     *
+     * <br>
+     * Can be controlled/overridden via jvm properties.<br>
+     * <strong>Unix</strong><br>
+     * -Dunix=/var/run/minestom/minestom.sock
+     * <br>
+     * <strong>Host and Port</strong><br>
+     * -Dhost=127.0.0.1<br>
+     * -Dport=255565<br>
+     *<br>
+     * <strong>Full commandline example</strong><br>
+     * java -Dhost=127.0.0.1 -Dport=25565 -jar minestom.jar<br>
+     * or <br>
+     * java -Dunix=/var/run/minestom/minestom.sock -jar minestom.jar<br>
      * @param address the server address
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */

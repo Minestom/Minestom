@@ -1,6 +1,10 @@
 package net.minestom.server;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
+import java.net.InetSocketAddress;
+import java.net.UnixDomainSocketAddress;
+
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
@@ -222,7 +226,17 @@ final class ServerProcessImpl implements ServerProcess {
 
         // Init server
         try {
-            server.init(socketAddress);
+            var address = socketAddress;
+            var unixPath = System.getProperty("unix");
+            if (unixPath != null) {
+                address = UnixDomainSocketAddress.of(unixPath);
+            }
+            String host = System.getProperty("host");
+            String port = System.getProperty("port");
+            if (host != null && port != null) {
+                address = new InetSocketAddress(host, Integer.parseInt(port));
+            }
+            server.init(address);
         } catch (IOException e) {
             exception.handleException(e);
             throw new RuntimeException(e);
