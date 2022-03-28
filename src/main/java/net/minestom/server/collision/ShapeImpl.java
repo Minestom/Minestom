@@ -21,6 +21,8 @@ final class ShapeImpl implements Shape {
     private final BoundingBox[] occlusionBoundingBoxes;
     private final Point relativeOcclusionEnd, relativeOcclusionStart;
 
+    private final byte occlusion;
+
     private final Supplier<Material> block;
 
     private ShapeImpl(BoundingBox[] collisionBoundingBoxes, BoundingBox[] occlusionBoundingBoxes, Supplier<Material> block) {
@@ -63,6 +65,12 @@ final class ShapeImpl implements Shape {
             this.relativeOcclusionStart = new Vec(minX, minY, minZ);
             this.relativeOcclusionEnd = new Vec(maxX, maxY, maxZ);
         }
+
+        byte occlusion = 0;
+        for(BlockFace c : BlockFace.values())
+            occlusion |= (computeOcclusionFaceFull(c) ? 1 : 0) & (byte)c.ordinal();
+
+        this.occlusion = occlusion;
     }
 
     static private BoundingBox[] parseRegistryBoundingBoxString(String str) {
@@ -94,22 +102,7 @@ final class ShapeImpl implements Shape {
         return boundingBoxes;
     }
 
-    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, Supplier<Material> block) {
-        return new ShapeImpl(parseRegistryBoundingBoxString(collision), parseRegistryBoundingBoxString(occlusion), block);
-    }
-
-    @Override
-    public @NotNull Point relativeStart() {
-        return relativeStart;
-    }
-
-    @Override
-    public @NotNull Point relativeEnd() {
-        return relativeEnd;
-    }
-
-    @Override
-    public boolean isOcclusionFaceFull(BlockFace face) {
+    private boolean computeOcclusionFaceFull(BlockFace face) {
         return switch (face) {
             case NORTH -> // negative Z
                     relativeOcclusionStart.z() == 0
@@ -136,6 +129,25 @@ final class ShapeImpl implements Shape {
                             && relativeOcclusionStart.x() == 0 && relativeOcclusionEnd.x() == 1
                             && relativeOcclusionStart.z() == 0 && relativeOcclusionEnd.z() == 1;
         };
+    }
+
+    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, Supplier<Material> block) {
+        return new ShapeImpl(parseRegistryBoundingBoxString(collision), parseRegistryBoundingBoxString(occlusion), block);
+    }
+
+    @Override
+    public @NotNull Point relativeStart() {
+        return relativeStart;
+    }
+
+    @Override
+    public @NotNull Point relativeEnd() {
+        return relativeEnd;
+    }
+
+    @Override
+    public boolean isOcclusionFaceFull(BlockFace face) {
+        return (occlusion & face.ordinal()) == 1;
     }
 
     @Override
