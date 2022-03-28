@@ -1,4 +1,4 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.light;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -18,7 +18,7 @@ public class BlockLightTest {
     @Test
     public void empty() {
         var palette = Palette.blocks();
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         for (byte light : result.light()) {
             assertEquals(0, light);
         }
@@ -28,7 +28,7 @@ public class BlockLightTest {
     public void glowstone() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.of(
                 new Vec(0, 1, 0), 15,
                 new Vec(0, 1, 1), 14,
@@ -41,7 +41,7 @@ public class BlockLightTest {
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
 
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.of(
                 new Vec(1, 1, 3), 11,
                 new Vec(3, 3, 7), 9,
@@ -53,7 +53,7 @@ public class BlockLightTest {
     public void glowstoneBorder() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.of(
                 // X axis
                 new Vec(-1, 0, 0), 13,
@@ -72,7 +72,7 @@ public class BlockLightTest {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         palette.set(0, 1, 1, Block.STONE.stateId());
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.of(
                 new Vec(0, 1, 0), 15,
                 new Vec(0, 1, 1), 0,
@@ -91,7 +91,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
@@ -122,7 +122,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
@@ -146,7 +146,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
@@ -174,7 +174,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
@@ -204,7 +204,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = BlockLight.compute(palette);
+        var result = BlockLightCompute.compute(palette);
         assertLight(result, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
@@ -215,7 +215,7 @@ public class BlockLightTest {
                 entry(new Vec(3, 0, 3), 12)));
     }
 
-    void assertLight(BlockLight.Result result, Map<Vec, Integer> expectedLights) {
+    void assertLight(BlockLightCompute.Result result, Map<Vec, Integer> expectedLights) {
         List<String> errors = new ArrayList<>();
         for (int x = -1; x < 17; x++) {
             for (int y = -1; y < 17; y++) {

@@ -1,6 +1,7 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.light;
 
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import org.jglrxavpok.hephaistos.mca.AnvilException;
@@ -24,11 +25,11 @@ public class LightParityTest {
     public void test() throws URISyntaxException, IOException, AnvilException {
         Map<Vec, SectionEntry> sections = retrieveSections();
         // Generate our own light
-        Map<Vec, BlockLight.Result> results = new HashMap<>();
+        Map<Vec, BlockLightCompute.Result> results = new HashMap<>();
         for (var entry : sections.entrySet()) {
             var vec = entry.getKey();
             var palette = entry.getValue().blocks;
-            results.put(vec, BlockLight.compute(palette));
+            results.put(vec, BlockLightCompute.compute(palette));
         }
         // TODO merge lights and compare
     }

@@ -1,4 +1,4 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import net.minestom.server.coordinate.Vec;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-final class BlockLight {
+final class BlockLightCompute {
     private static final Direction[] DIRECTIONS = Direction.values();
     static final int SECTION_SIZE = 16;
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
@@ -104,7 +104,7 @@ final class BlockLight {
                     if (z < 0) return borders[Direction.NORTH.ordinal()][x * SECTION_SIZE + y];
                     else return borders[Direction.SOUTH.ordinal()][x * SECTION_SIZE + y];
                 }
-            } else return (byte) BlockLight.getLight(light, x | (z << 4) | (y << 8));
+            } else return (byte) BlockLightCompute.getLight(light, x | (z << 4) | (y << 8));
         }
 
         public byte[] light() {

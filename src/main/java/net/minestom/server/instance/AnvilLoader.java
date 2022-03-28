@@ -127,8 +127,8 @@ public class AnvilLoader implements IChunkLoader {
         for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
             var section = chunk.getSection(sectionY);
             var chunkSection = fileChunk.getSection((byte) sectionY);
-            section.setSkyLight(chunkSection.getSkyLights());
-            section.setBlockLight(chunkSection.getBlockLights());
+            section.skyLight().copyFrom(chunkSection.getSkyLights());
+            section.blockLight().copyFrom(chunkSection.getBlockLights());
         }
         mcaFile.forget(fileChunk);
         return CompletableFuture.completedFuture(chunk);

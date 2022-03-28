@@ -52,7 +52,7 @@ public class DynamicChunk extends Chunk {
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, value -> Section.create());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -69,9 +69,10 @@ public class DynamicChunk extends Chunk {
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = getSectionAt(y);
-        section.updatedLight = false;
         section.blockPalette()
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
+        //section.skyLight().invalidate(); TODO
+        section.blockLight().invalidate();
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -226,8 +227,8 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            final byte[] skyLight = section.getSkyLight();
-            final byte[] blockLight = section.getBlockLight();
+            final byte[] skyLight = section.skyLight().array();
+            final byte[] blockLight = section.blockLight().array();
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
