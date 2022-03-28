@@ -4,10 +4,10 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
+import net.minestom.server.event.trait.RecursiveEvent;
 import org.jetbrains.annotations.NotNull;
 
-public sealed class ProjectileCollideEvent implements EntityInstanceEvent, CancellableEvent
-        permits ProjectileCollideWithBlockEvent, ProjectileCollideWithEntityEvent {
+class ProjectileCollideEvent implements EntityInstanceEvent, CancellableEvent, RecursiveEvent {
 
     private final @NotNull Entity projectile;
     private final @NotNull Pos position;
