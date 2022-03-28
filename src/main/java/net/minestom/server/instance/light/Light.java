@@ -14,11 +14,9 @@ public interface Light {
     }
 
     @ApiStatus.Internal
-    byte[] array();
+    byte @NotNull [] array();
 
-    void copyFrom(byte[] array);
+    void copyFrom(byte @NotNull [] array);
 
     void invalidate();
-
-    @NotNull Light clone();
 }

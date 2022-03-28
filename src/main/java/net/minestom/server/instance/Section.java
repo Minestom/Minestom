@@ -25,8 +25,11 @@ public record Section(Palette blockPalette, Palette biomePalette,
 
     @Override
     public @NotNull Section clone() {
-        return new Section(blockPalette.clone(), biomePalette.clone(),
-                skyLight.clone(), blockLight.clone());
+        final Palette blockPalette = this.blockPalette.clone();
+        final Palette biomePalette = this.biomePalette.clone();
+        final Light skyLight = Light.sky(blockPalette);
+        final Light blockLight = Light.block(blockPalette);
+        return new Section(blockPalette, biomePalette, skyLight, blockLight);
     }
 
     @Override
