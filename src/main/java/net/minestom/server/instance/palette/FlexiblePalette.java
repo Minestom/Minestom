@@ -267,19 +267,19 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
                         consumer.accept(x, y, z, 0);
                     }
                 }
-                continue;
-            }
-            int bitIndex = 0;
-            for (; index < maxIndex; index++) {
-                final short paletteIndex = (short) (value >> bitIndex & magicMask);
-                if (paletteIndex != 0 || consumeEmpty) {
-                    final int result = ids != null ? ids[paletteIndex] : paletteIndex;
-                    final int y = index >> shiftedDimensionBitCount;
-                    final int z = index >> dimensionBitCount & dimensionMinus;
-                    final int x = index & dimensionMinus;
-                    consumer.accept(x, y, z, result);
+            } else {
+                int bitIndex = 0;
+                for (; index < maxIndex; index++) {
+                    final short paletteIndex = (short) (value >> bitIndex & magicMask);
+                    if (paletteIndex != 0 || consumeEmpty) {
+                        final int result = ids != null ? ids[paletteIndex] : paletteIndex;
+                        final int y = index >> shiftedDimensionBitCount;
+                        final int z = index >> dimensionBitCount & dimensionMinus;
+                        final int x = index & dimensionMinus;
+                        consumer.accept(x, y, z, result);
+                    }
+                    bitIndex += bitsPerEntry;
                 }
-                bitIndex += bitsPerEntry;
             }
         }
     }
