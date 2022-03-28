@@ -51,7 +51,7 @@ public class EntityProjectileCollisionIntegrationTest {
 
         var event = eventRef.get();
         assertNotNull(event);
-        assertEquals(blockPosition, new Vec(event.getPosition().blockX(), event.getPosition().blockY(), event.getPosition().blockZ()));
+        assertEquals(blockPosition, new Vec(event.getCollisionPosition().blockX(), event.getCollisionPosition().blockY(), event.getCollisionPosition().blockZ()));
         assertEquals(block, event.getBlock());
 
         final var eventRef2 = new AtomicReference<ProjectileUncollideEvent>();
@@ -66,7 +66,7 @@ public class EntityProjectileCollisionIntegrationTest {
         final var event2 = eventRef2.get();
         assertNotNull(event);
         assertNotNull(event2);
-        assertEquals(blockPosition.withY(y -> y - 1), new Vec(event.getPosition().blockX(), event.getPosition().blockY(), event.getPosition().blockZ()));
+        assertEquals(blockPosition.withY(y -> y - 1), new Vec(event.getCollisionPosition().blockX(), event.getCollisionPosition().blockY(), event.getCollisionPosition().blockZ()));
     }
 
     @Test

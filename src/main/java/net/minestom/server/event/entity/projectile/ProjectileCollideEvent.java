@@ -23,7 +23,7 @@ class ProjectileCollideEvent implements EntityInstanceEvent, CancellableEvent, R
         return projectile;
     }
 
-    public @NotNull Pos getPosition() {
+    public @NotNull Pos getCollisionPosition() {
         return position;
     }
 
