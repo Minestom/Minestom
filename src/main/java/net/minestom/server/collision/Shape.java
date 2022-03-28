@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,4 +42,11 @@ public interface Shape {
      * @return End of shape
      */
     @NotNull Point relativeEnd();
+
+    /**
+     * Check if occlusion block face is full
+     * @param face Face to check
+     * @return true if face is full
+     */
+    boolean isOcclusionFaceFull(BlockFace face);
 }

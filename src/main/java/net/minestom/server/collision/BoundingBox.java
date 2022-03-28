@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,6 +75,11 @@ public final class BoundingBox implements Shape {
     @Override
     public @NotNull Point relativeEnd() {
         return offset.add(width, height, depth);
+    }
+
+    @Override
+    public boolean isOcclusionFaceFull(BlockFace face) {
+        return false;
     }
 
     @Override

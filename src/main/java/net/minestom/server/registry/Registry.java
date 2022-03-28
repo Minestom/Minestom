@@ -201,8 +201,9 @@ public final class Registry {
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
             }
             {
-                final String string = main.getString("collisionShape");
-                this.shape = CollisionUtils.parseBlockShape(string, this.materialSupplier);
+                final String collision = main.getString("collisionShape");
+                final String occlusion = main.getString("occlusionShape");
+                this.shape = CollisionUtils.parseBlockShape(collision, occlusion, this.materialSupplier);
             }
         }
 
@@ -274,7 +275,7 @@ public final class Registry {
             return materialSupplier.get();
         }
 
-        public Shape collisionShape() {
+        public Shape getShape() {
             return shape;
         }
 

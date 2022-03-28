@@ -124,7 +124,7 @@ final class BlockLightCompute {
     }
 
     private static float getBlockFactor(Block block) {
-        var shape = block.registry().collisionShape();
+        var shape = block.registry().getShape();
         return (float) (shape.relativeStart().isZero() && shape.relativeEnd().samePoint(Vec.ONE) ? 1 : 0);
     }
 }
