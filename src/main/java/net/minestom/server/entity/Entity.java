@@ -578,13 +578,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // World border collision
-        final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-        if (finalVelocityPosition.samePoint(position)) {
-            this.velocity = Vec.ZERO;
-            if (hasVelocity) {
-                sendPacketToViewers(getVelocityPacket());
+        final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+        final boolean positionChanged = !finalVelocityPosition.samePoint(position);
+        if (!positionChanged) {
+            if (!hasVelocity && newVelocity.isZero()) {
+                return;
             }
-            return;
+            if (hasVelocity) {
+                this.velocity = Vec.ZERO;
+                sendPacketToViewers(getVelocityPacket());
+                return;
+            }
         }
         final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
         if (!ChunkUtils.isLoaded(finalChunk)) {
@@ -592,13 +596,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return;
         }
 
-        if (entityType == EntityTypes.ITEM || entityType == EntityType.FALLING_BLOCK) {
-            // TODO find other exceptions
-            this.previousPosition = this.position;
-            this.position = finalVelocityPosition;
-            refreshCoordinate(finalVelocityPosition);
-        } else {
-            refreshPosition(finalVelocityPosition, true);
+        if (positionChanged) {
+            if (entityType == EntityTypes.ITEM || entityType == EntityType.FALLING_BLOCK) {
+                // TODO find other exceptions
+                this.previousPosition = this.position;
+                this.position = finalVelocityPosition;
+                refreshCoordinate(finalVelocityPosition);
+            } else {
+                refreshPosition(finalVelocityPosition, true);
+            }
         }
 
         // Update velocity
