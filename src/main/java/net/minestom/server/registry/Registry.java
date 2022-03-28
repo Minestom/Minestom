@@ -275,7 +275,7 @@ public final class Registry {
             return materialSupplier.get();
         }
 
-        public Shape getShape() {
+        public Shape shape() {
             return shape;
         }
 

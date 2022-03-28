@@ -79,8 +79,8 @@ public class BlockTest {
 
     @Test
     public void testShape() {
-        Point start = Block.LANTERN.registry().getShape().relativeStart();
-        Point end = Block.LANTERN.registry().getShape().relativeEnd();
+        Point start = Block.LANTERN.registry().shape().relativeStart();
+        Point end = Block.LANTERN.registry().shape().relativeEnd();
 
         assertEquals(start, new Vec(0.312, 0, 0.312));
         assertEquals(end, new Vec(0.625, 0.437, 0.625));

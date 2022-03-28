@@ -647,7 +647,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Vec blockPos = new Vec(x, y, z);
                         Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
-                        if (block.registry().getShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
+                        if (block.registry().shape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
                     }

@@ -344,9 +344,9 @@ final class BlockCollision {
                 // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
                 // For this reason we subtract a small amount from the player position
                 Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.01));
-                intersects = b.registry().getShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
+                intersects = b.registry().shape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
             } else {
-                intersects = b.registry().getShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
+                intersects = b.registry().shape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
             }
             if (intersects) return false;
         }
@@ -374,7 +374,7 @@ final class BlockCollision {
         boolean hitBlock = false;
         if (checkBlock.isSolid()) {
             final Vec blockPos = new Vec(blockX, blockY, blockZ);
-            hitBlock = checkBlock.registry().getShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
+            hitBlock = checkBlock.registry().shape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
         }
         return hitBlock;
     }
