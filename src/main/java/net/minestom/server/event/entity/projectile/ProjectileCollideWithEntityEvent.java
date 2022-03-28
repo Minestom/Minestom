@@ -1,25 +1,23 @@
 package net.minestom.server.event.entity.projectile;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityProjectile;
-import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProjectileCollideWithEntityEvent extends ProjectileCollideEvent {
 
-    private final @NotNull LivingEntity target;
+    private final @NotNull Entity target;
 
     public ProjectileCollideWithEntityEvent(
-            @NotNull EntityProjectile projectile,
+            @NotNull Entity projectile,
             @NotNull Pos position,
-            @NotNull LivingEntity target
+            @NotNull Entity target
     ) {
         super(projectile, position);
         this.target = target;
     }
 
-    public @NotNull LivingEntity getTarget() {
+    public @NotNull Entity getTarget() {
         return target;
     }
 }

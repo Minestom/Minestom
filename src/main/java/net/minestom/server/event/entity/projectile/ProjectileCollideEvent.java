@@ -1,7 +1,7 @@
 package net.minestom.server.event.entity.projectile;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityProjectile;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import org.jetbrains.annotations.NotNull;
@@ -9,17 +9,17 @@ import org.jetbrains.annotations.NotNull;
 public sealed class ProjectileCollideEvent implements EntityInstanceEvent, CancellableEvent
         permits ProjectileCollideWithBlockEvent, ProjectileCollideWithEntityEvent {
 
-    private final @NotNull EntityProjectile projectile;
+    private final @NotNull Entity projectile;
     private final @NotNull Pos position;
     private boolean cancelled;
 
-    protected ProjectileCollideEvent(@NotNull EntityProjectile projectile, @NotNull Pos position) {
+    protected ProjectileCollideEvent(@NotNull Entity projectile, @NotNull Pos position) {
         this.projectile = projectile;
         this.position = position;
     }
 
     @Override
-    public @NotNull EntityProjectile getEntity() {
+    public @NotNull Entity getEntity() {
         return projectile;
     }
 

@@ -1,7 +1,7 @@
 package net.minestom.server.event.entity.projectile;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityProjectile;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ public final class ProjectileCollideWithBlockEvent extends ProjectileCollideEven
     private final @NotNull Block block;
 
     public ProjectileCollideWithBlockEvent(
-            @NotNull EntityProjectile projectile,
+            @NotNull Entity projectile,
             @NotNull Pos position,
             @NotNull Block block
     ) {
