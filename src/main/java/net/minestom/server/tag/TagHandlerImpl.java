@@ -38,9 +38,10 @@ final class TagHandlerImpl implements TagHandler {
         final var paths = tag.path;
         TagHandlerImpl[] pathHandlers = null;
         if (paths != null) {
-            pathHandlers = new TagHandlerImpl[paths.length];
-            int in = 0;
-            for (var path : paths) {
+            final int length = paths.length;
+            pathHandlers = new TagHandlerImpl[length];
+            for (int i = 0; i < length; i++) {
+                final Tag.PathEntry path = paths[i];
                 final int pathIndex = path.index();
                 if (pathIndex >= entries.length) {
                     if (value == null) return;
@@ -57,13 +58,13 @@ final class TagHandlerImpl implements TagHandler {
                     local = handler;
                 } else throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry");
                 entries = local.entries;
-                pathHandlers[in++] = local;
+                pathHandlers[i] = local;
             }
             // Handle removal if the tag was present (recursively)
             if (value == null) {
-                pathHandlers[in - 1].entries[tagIndex] = null;
+                pathHandlers[length - 1].entries[tagIndex] = null;
                 boolean empty = false;
-                for (int i = in - 1; i >= 0; i--) {
+                for (int i = length - 1; i >= 0; i--) {
                     TagHandlerImpl handler = pathHandlers[i];
                     Entry<?>[] entr = handler.entries;
                     // Verify if the handler is empty
