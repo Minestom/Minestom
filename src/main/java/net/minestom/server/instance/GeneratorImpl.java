@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.UnitModifier;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,8 @@ final class GeneratorImpl {
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
         final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
         final Vec end = start.add(SECTION_SIZE);
-        final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end, section, new Int2ObjectOpenHashMap<>(0));
+        final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end,
+                section.blockPalette(), section.biomePalette(), new Int2ObjectOpenHashMap<>(0));
         return unit(modifier, start, end, null);
     }
 
@@ -82,10 +84,11 @@ final class GeneratorImpl {
     }
 
     record SectionModifierImpl(Point size, Point start, Point end,
-                               Section section, Int2ObjectMap<Block> cache) implements GenericModifier {
+                               Palette blockPalette, Palette biomePalette,
+                               Int2ObjectMap<Block> cache) implements GenericModifier {
         @Override
         public void setBiome(int x, int y, int z, @NotNull Biome biome) {
-            section.biomePalette().set(
+            this.biomePalette.set(
                     toSectionRelativeCoordinate(x) / 4,
                     toSectionRelativeCoordinate(y) / 4,
                     toSectionRelativeCoordinate(z) / 4, biome.id());
@@ -97,18 +100,18 @@ final class GeneratorImpl {
             final int localY = toSectionRelativeCoordinate(y);
             final int localZ = toSectionRelativeCoordinate(z);
             handleCache(localX, localY, localZ, block);
-            section.blockPalette().set(localX, localY, localZ, block.stateId());
+            this.blockPalette.set(localX, localY, localZ, block.stateId());
         }
 
         @Override
         public void setRelative(int x, int y, int z, @NotNull Block block) {
             handleCache(x, y, z, block);
-            section.blockPalette().set(x, y, z, block.stateId());
+            this.blockPalette.set(x, y, z, block.stateId());
         }
 
         @Override
         public void setAllRelative(@NotNull Supplier supplier) {
-            section.blockPalette().setAll((x, y, z) -> {
+            this.blockPalette.setAll((x, y, z) -> {
                 final Block block = supplier.get(x, y, z);
                 handleCache(x, y, z, block);
                 return block.stateId();
@@ -126,12 +129,12 @@ final class GeneratorImpl {
                     }
                 }
             }
-            section.blockPalette().fill(block.stateId());
+            this.blockPalette.fill(block.stateId());
         }
 
         @Override
         public void fillBiome(@NotNull Biome biome) {
-            section.biomePalette().fill(biome.id());
+            this.biomePalette.fill(biome.id());
         }
 
         private void handleCache(int x, int y, int z, Block block) {
