@@ -64,9 +64,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final long[] values = this.values;
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        final int dimension = dimension();
-
-        final int sectionIdentifier = getSectionIndex(x % dimension, y % dimension, z % dimension);
+        final int sectionIdentifier = getSectionIndex(x, y, z);
         final int index = sectionIdentifier / valuesPerLong;
         final int bitIndex = sectionIdentifier % valuesPerLong * bitsPerEntry;
         final short value = (short) (values[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry]);
@@ -86,35 +84,26 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public void set(int x, int y, int z, int value) {
-        final boolean placedAir = value == 0;
-        if (!placedAir) value = getPaletteIndex(value);
+        value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        final int dimension = dimension();
         final long[] values = this.values;
         // Change to palette value
-        final int sectionIndex = getSectionIndex(x % dimension, y % dimension, z % dimension);
+        final int sectionIndex = getSectionIndex(x, y, z);
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
 
         long block = values[index];
-        {
-            final long clear = MAGIC_MASKS[bitsPerEntry];
-
-            final long oldBlock = block >> bitIndex & clear;
-            if (oldBlock == value)
-                return; // Trying to place the same block
-            final boolean currentAir = oldBlock == 0;
-
-            final long indexClear = clear << bitIndex;
-            block &= ~indexClear;
-            block |= (long) value << bitIndex;
-
-            if (currentAir != placedAir) {
-                // Block count changed
-                this.count += currentAir ? 1 : -1;
-            }
-            values[index] = block;
+        final long clear = MAGIC_MASKS[bitsPerEntry];
+        final long oldBlock = block >> bitIndex & clear;
+        if (oldBlock == value)
+            return; // Trying to place the same block
+        values[index] = block & ~(clear << bitIndex) | (value & clear) << bitIndex;
+        // Check if block count needs to be updated
+        final boolean currentAir = oldBlock == 0;
+        if (currentAir != (value == 0)) {
+            if (currentAir) count++;
+            else count--;
         }
     }
 
@@ -251,7 +240,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
         final int[] ids = hasPalette() ? paletteToValueList.elements() : null;
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
+        final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMinus);
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
@@ -336,7 +325,11 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     }
 
     int getSectionIndex(int x, int y, int z) {
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension() - 1);
+        final int dimensionMask = dimension() - 1;
+        y &= dimensionMask;
+        z &= dimensionMask;
+        x &= dimensionMask;
+        final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMask);
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
