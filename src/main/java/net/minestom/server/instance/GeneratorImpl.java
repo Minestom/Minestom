@@ -306,7 +306,6 @@ final class GeneratorImpl {
         default void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
             final Point start = start();
             final Point end = end();
-
             final int startY = start.blockY();
             final int endY = end.blockY();
             if (startY >= minHeight && endY <= maxHeight) {
@@ -314,17 +313,7 @@ final class GeneratorImpl {
                 fill(start, end, block);
             } else {
                 // Slow path if the unit is not fully contained in the height range
-                final int startLoopY = Math.max(minHeight, startY);
-                final int endLoopY = Math.min(maxHeight, endY);
-                final int endX = end.blockX();
-                final int endZ = end.blockZ();
-                for (int x = start.blockX(); x < endX; x++) {
-                    for (int y = startLoopY; y < endLoopY; y++) {
-                        for (int z = start.blockZ(); z < endZ; z++) {
-                            setBlock(x, y, z, block);
-                        }
-                    }
-                }
+                fill(start.withY(Math.max(minHeight, startY)), end.withY(Math.min(maxHeight, endY)), block);
             }
         }
     }
