@@ -78,7 +78,12 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    public boolean isOcclusionFaceFull(BlockFace face) {
+    public boolean isOccluded(BlockFace face) {
+        return false;
+    }
+
+    @Override
+    public boolean isAdditionOccluded(Shape shape, BlockFace face) {
         return false;
     }
 

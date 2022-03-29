@@ -8,19 +8,19 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class ShapeImpl implements Shape {
+    private record Rectangle(double x1, double y1, double x2, double y2) {};
+
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d{1,3}", Pattern.MULTILINE);
     private final BoundingBox[] collisionBoundingBoxes;
     private final Point relativeStart, relativeEnd;
 
     private final BoundingBox[] occlusionBoundingBoxes;
-    private final Point relativeOcclusionEnd, relativeOcclusionStart;
-
     private final byte occlusion;
 
     private final Supplier<Material> block;
@@ -33,42 +33,25 @@ final class ShapeImpl implements Shape {
         // Find bounds of collision
         {
             double minX = 1, minY = 1, minZ = 1;
-            double maxX = 1, maxY = 1, maxZ = 1;
+            double maxX = 0, maxY = 0, maxZ = 0;
             for (BoundingBox blockSection : this.collisionBoundingBoxes) {
                 // Min
                 if (blockSection.minX() < minX) minX = blockSection.minX();
                 if (blockSection.minY() < minY) minY = blockSection.minY();
                 if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
                 // Max
-                if (blockSection.maxX() < maxX) maxX = blockSection.maxX();
-                if (blockSection.maxY() < maxY) maxY = blockSection.maxY();
-                if (blockSection.maxZ() < maxZ) maxZ = blockSection.maxZ();
+                if (blockSection.maxX() > maxX) maxX = blockSection.maxX();
+                if (blockSection.maxY() > maxY) maxY = blockSection.maxY();
+                if (blockSection.maxZ() > maxZ) maxZ = blockSection.maxZ();
             }
             this.relativeStart = new Vec(minX, minY, minZ);
             this.relativeEnd = new Vec(maxX, maxY, maxZ);
         }
 
-        // Find bounds of occlusion
-        {
-            double minX = 1, minY = 1, minZ = 1;
-            double maxX = 1, maxY = 1, maxZ = 1;
-            for (BoundingBox blockSection : this.occlusionBoundingBoxes) {
-                // Min
-                if (blockSection.minX() < minX) minX = blockSection.minX();
-                if (blockSection.minY() < minY) minY = blockSection.minY();
-                if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
-                // Max
-                if (blockSection.maxX() < maxX) maxX = blockSection.maxX();
-                if (blockSection.maxY() < maxY) maxY = blockSection.maxY();
-                if (blockSection.maxZ() < maxZ) maxZ = blockSection.maxZ();
-            }
-            this.relativeOcclusionStart = new Vec(minX, minY, minZ);
-            this.relativeOcclusionEnd = new Vec(maxX, maxY, maxZ);
-        }
-
         byte occlusion = 0;
-        for(BlockFace c : BlockFace.values())
-            occlusion |= (computeOcclusionFaceFull(c) ? 1 : 0) & (byte)c.ordinal();
+        for (BlockFace f : BlockFace.values()) {
+            occlusion |= ((isFaceCovered(computeOcclusionSet(f)) ? 0b1 : 0b0) << (byte) f.ordinal());
+        }
 
         this.occlusion = occlusion;
     }
@@ -102,33 +85,108 @@ final class ShapeImpl implements Shape {
         return boundingBoxes;
     }
 
-    private boolean computeOcclusionFaceFull(BlockFace face) {
-        return switch (face) {
-            case NORTH -> // negative Z
-                    relativeOcclusionStart.z() == 0
-                            && relativeOcclusionStart.x() == 0 && relativeOcclusionEnd.x() == 1
-                            && relativeOcclusionStart.y() == 0 && relativeOcclusionEnd.y() == 1;
-            case SOUTH -> // positive Z
-                    relativeOcclusionStart.z() == 1
-                            && relativeOcclusionStart.x() == 0 && relativeOcclusionEnd.x() == 1
-                            && relativeOcclusionStart.y() == 0 && relativeOcclusionEnd.y() == 1;
-            case WEST -> // negative X
-                    relativeOcclusionStart.x() == 0
-                            && relativeOcclusionStart.z() == 0 && relativeOcclusionEnd.z() == 1
-                            && relativeOcclusionStart.y() == 0 && relativeOcclusionEnd.y() == 1;
-            case EAST -> // positive X
-                    relativeOcclusionStart.x() == 1
-                            && relativeOcclusionStart.z() == 0 && relativeOcclusionEnd.z() == 1
-                            && relativeOcclusionStart.y() == 0 && relativeOcclusionEnd.y() == 1;
-            case BOTTOM -> // negative Y
-                    relativeOcclusionStart.y() == 0
-                            && relativeOcclusionStart.x() == 0 && relativeOcclusionEnd.x() == 1
-                            && relativeOcclusionStart.z() == 0 && relativeOcclusionEnd.z() == 1;
-            case TOP -> // positive Y
-                    relativeOcclusionStart.y() == 1
-                            && relativeOcclusionStart.x() == 0 && relativeOcclusionEnd.x() == 1
-                            && relativeOcclusionStart.z() == 0 && relativeOcclusionEnd.z() == 1;
-        };
+    private static Rectangle clipRectangle(Rectangle covering, Rectangle toCover) {
+        final double x1 = Math.max(covering.x1(), toCover.x1());
+        final double y1 = Math.max(covering.y1(), toCover.y1());
+        final double x2 = Math.min(covering.x2(), toCover.x2());
+        final double y2 = Math.min(covering.y2(), toCover.y2());
+        return new Rectangle(x1, y1, x2, y2);
+    }
+
+    private static List<Rectangle> getRemaining (Rectangle covering, Rectangle toCover) {
+        List<Rectangle> remaining = new ArrayList<>();
+        covering = clipRectangle(covering, toCover);
+
+        // Up
+        if (covering.y1() > toCover.y1()) {
+            remaining.add(new Rectangle(toCover.x1(), toCover.y1(), toCover.x2(), covering.y1()));
+        }
+
+        // Down
+        if (covering.y2() < toCover.y2()) {
+            remaining.add(new Rectangle(toCover.x1(), covering.y2(), toCover.x1(), toCover.y2()));
+        }
+
+        // Left
+        if (covering.x1() > toCover.x1()) {
+            remaining.add(new Rectangle(toCover.x1(), covering.y1(), covering.x1(), covering.y2()));
+        }
+
+        //Right
+        if (covering.x2() < toCover.x2()) {
+            remaining.add(new Rectangle(covering.x2(), covering.y1(), toCover.x2(), covering.y2()));
+        }
+
+        return remaining;
+    }
+
+    // There's an n log n algorithm that involves sorting but it's not worth implementing
+    public static boolean isFaceCovered (List<Rectangle> covering) {
+        Rectangle r = new Rectangle(0, 0, 1, 1);
+
+        List<Rectangle> toCover = new ArrayList<>();
+        toCover.add(r);
+
+        for (Rectangle rect : covering) {
+            List<Rectangle> nextCovering = new ArrayList<>();
+
+            for (Rectangle toCoverRect : toCover) {
+                List<Rectangle> remaining = getRemaining(rect, toCoverRect);
+                nextCovering.addAll(remaining);
+            }
+
+            toCover = nextCovering;
+            if (toCover.isEmpty()) return true;
+        }
+
+        return false;
+    }
+
+    public boolean isAdditionOccluded(Shape shape, BlockFace face) {
+        List<Rectangle> allRectangles = ((ShapeImpl)shape).computeOcclusionSet(face.getOppositeFace());
+        allRectangles.addAll(computeOcclusionSet(face));
+        return isFaceCovered(allRectangles);
+    }
+
+    private List<Rectangle> computeOcclusionSet(BlockFace face) {
+        List<Rectangle> rSet = new ArrayList<>();
+
+        for (BoundingBox boundingBox : this.occlusionBoundingBoxes) {
+            switch (face) {
+                case NORTH -> // negative Z
+                {
+                    if (boundingBox.minZ() == 0)
+                        rSet.add(new Rectangle(boundingBox.minX(), boundingBox.minY(), boundingBox.maxX(), boundingBox.maxY()));
+                }
+                case SOUTH -> // positive Z
+                {
+                    if (boundingBox.maxZ() == 1)
+                        rSet.add(new Rectangle(boundingBox.minX(), boundingBox.minY(), boundingBox.maxX(), boundingBox.maxY()));
+                }
+                case WEST -> // negative X
+                {
+                    if (boundingBox.minX() == 0)
+                        rSet.add(new Rectangle(boundingBox.minY(), boundingBox.minZ(), boundingBox.maxY(), boundingBox.maxZ()));
+                }
+                case EAST -> // positive X
+                {
+                    if (boundingBox.maxX() == 1)
+                        rSet.add(new Rectangle(boundingBox.minY(), boundingBox.minZ(), boundingBox.maxY(), boundingBox.maxZ()));
+                }
+                case BOTTOM -> // negative Y
+                {
+                    if (boundingBox.minY() == 0)
+                        rSet.add(new Rectangle(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ()));
+                }
+                case TOP -> // positive Y
+                {
+                    if (boundingBox.maxY() == 1)
+                        rSet.add(new Rectangle(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ()));
+                }
+            }
+        }
+
+        return rSet;
     }
 
     static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, Supplier<Material> block) {
@@ -146,8 +204,8 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean isOcclusionFaceFull(BlockFace face) {
-        return (occlusion & face.ordinal()) == 1;
+    public boolean isOccluded(BlockFace face) {
+        return ((occlusion >> face.ordinal()) & 1) == 1;
     }
 
     @Override
