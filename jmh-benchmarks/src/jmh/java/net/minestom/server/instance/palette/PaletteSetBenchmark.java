@@ -1,6 +1,5 @@
-package net.minestom.jmh.palette;
+package net.minestom.server.instance.palette;
 
-import net.minestom.server.instance.palette.Palette;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

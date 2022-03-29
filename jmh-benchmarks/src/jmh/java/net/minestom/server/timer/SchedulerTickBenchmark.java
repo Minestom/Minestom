@@ -1,7 +1,5 @@
-package net.minestom.jmh.timer;
+package net.minestom.server.timer;
 
-import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.TaskSchedule;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

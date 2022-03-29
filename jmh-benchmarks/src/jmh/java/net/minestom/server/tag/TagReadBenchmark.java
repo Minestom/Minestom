@@ -1,10 +1,9 @@
-package net.minestom.jmh.tag;
+package net.minestom.server.tag;
 
-import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -15,8 +14,11 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Benchmark)
-public class TagWriteBenchmark {
+public class TagReadBenchmark {
     static final Tag<String> TAG = Tag.String("key");
+
+    @Param({"false", "true"})
+    public boolean present;
 
     TagHandler tagHandler;
     Tag<String> secondTag;
@@ -27,30 +29,30 @@ public class TagWriteBenchmark {
     public void setup() {
         // Tag benchmark
         this.tagHandler = TagHandler.newHandler();
-        tagHandler.setTag(TAG, "value");
+        if (present) tagHandler.setTag(TAG, "value");
         secondTag = Tag.String("key");
         // NBT benchmark
         this.compound = new MutableNBTCompound(new ConcurrentHashMap<>());
-        compound.set("key", NBT.String("value"));
+        if (present) compound.set("key", NBT.String("value"));
     }
 
     @Benchmark
-    public void writeConstantTag() {
-        tagHandler.setTag(TAG, "value");
+    public void readConstantTag(Blackhole blackhole) {
+        blackhole.consume(tagHandler.getTag(TAG));
     }
 
     @Benchmark
-    public void writeDifferentTag() {
-        tagHandler.setTag(secondTag, "value");
+    public void readDifferentTag(Blackhole blackhole) {
+        blackhole.consume(tagHandler.getTag(secondTag));
     }
 
     @Benchmark
-    public void writeNewTag() {
-        tagHandler.setTag(Tag.String("key"), "value");
+    public void readNewTag(Blackhole blackhole) {
+        blackhole.consume(tagHandler.getTag(Tag.String("key")));
     }
 
     @Benchmark
-    public void writeConstantTagFromCompound() {
-        compound.setString("key", "value");
+    public void readConstantTagFromCompound(Blackhole blackhole) {
+        blackhole.consume(compound.getString("key"));
     }
 }

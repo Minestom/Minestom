@@ -1,7 +1,5 @@
-package net.minestom.jmh.tag;
+package net.minestom.server.tag;
 
-import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
