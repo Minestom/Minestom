@@ -30,7 +30,7 @@ final class GeneratorImpl {
         return unit(modifier, start, end, null);
     }
 
-    static GenerationUnit chunk(int minSection, int maxSection,
+    static GenerationUnit chunk(Chunk chunk, int minSection, int maxSection,
                                 List<Section> chunkSections, int chunkX, int chunkZ) {
         final int minY = minSection * 16;
         AtomicInteger sectionCounterY = new AtomicInteger(minSection);
@@ -41,12 +41,17 @@ final class GeneratorImpl {
         final Vec size = new Vec(16, (maxSection - minSection) * 16, 16);
         final Vec start = new Vec(chunkX * 16, minY, chunkZ * 16);
         final Vec end = new Vec(chunkX * 16 + 16, size.y() + minY, chunkZ * 16 + 16);
-        final UnitModifier modifier = new ChunkModifierImpl(size, start, end, chunkX, chunkZ, minY, sections);
+        final UnitModifier modifier = new ChunkModifierImpl(chunk, size, start, end, chunkX, chunkZ, minY, sections);
         return unit(modifier, start, end, sections);
     }
 
+    static GenerationUnit chunk(int minSection, int maxSection,
+                                List<Section> chunkSections, int chunkX, int chunkZ) {
+        return chunk(null, minSection, maxSection, chunkSections, chunkX, chunkZ);
+    }
+
     static GenerationUnit chunk(Chunk chunk) {
-        return chunk(chunk.minSection, chunk.maxSection, chunk.getSections(), chunk.getChunkX(), chunk.getChunkZ());
+        return chunk(chunk, chunk.minSection, chunk.maxSection, chunk.getSections(), chunk.getChunkX(), chunk.getChunkZ());
     }
 
     private static void checkChunk(int x, int chunkX,
@@ -150,7 +155,7 @@ final class GeneratorImpl {
         }
     }
 
-    record ChunkModifierImpl(Point size, Point start, Point end,
+    record ChunkModifierImpl(Chunk chunk, Point size, Point start, Point end,
                              int chunkX, int chunkZ, int minY,
                              List<GenerationUnit> sections) implements GenericModifier {
         @Override
