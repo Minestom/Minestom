@@ -297,34 +297,39 @@ public class InstanceContainer extends Instance {
             // TODO: virtual thread once Loom is available
             ForkJoinPool.commonPool().submit(() -> {
                 GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
-                // Generate block/biome palette
-                generator.generate(chunkUnit);
-                // Apply nbt/handler
-                if (chunkUnit.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier) {
-                    var sections = chunkModifier.sections();
-                    for (var section : sections) {
-                        if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                            var cache = sectionModifier.cache();
-                            if (!cache.isEmpty()) {
-                                final int height = section.absoluteStart().blockY();
-                                synchronized (chunk) {
-                                    Int2ObjectMaps.fastForEach(cache, blockEntry -> {
-                                        final int index = blockEntry.getIntKey();
-                                        final Block block = blockEntry.getValue();
-                                        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-                                        final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
-                                        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-                                        chunk.setBlock(x, y, z, block);
-                                    });
+                try {
+                    // Generate block/biome palette
+                    generator.generate(chunkUnit);
+                    // Apply nbt/handler
+                    if (chunkUnit.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier) {
+                        var sections = chunkModifier.sections();
+                        for (var section : sections) {
+                            if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
+                                var cache = sectionModifier.cache();
+                                if (!cache.isEmpty()) {
+                                    final int height = section.absoluteStart().blockY();
+                                    synchronized (chunk) {
+                                        Int2ObjectMaps.fastForEach(cache, blockEntry -> {
+                                            final int index = blockEntry.getIntKey();
+                                            final Block block = blockEntry.getValue();
+                                            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+                                            final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
+                                            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                                            chunk.setBlock(x, y, z, block);
+                                        });
+                                    }
                                 }
                             }
                         }
                     }
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                } finally {
+                    // End generation
+                    chunk.sendChunk();
+                    refreshLastBlockChangeTime();
+                    resultFuture.complete(chunk);
                 }
-                // End generation
-                chunk.sendChunk();
-                refreshLastBlockChangeTime();
-                resultFuture.complete(chunk);
             });
             return resultFuture;
         } else {
