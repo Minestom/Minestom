@@ -60,7 +60,7 @@ final class GeneratorImpl {
     }
 
     static GenerationUnit unit(UnitModifier modifier, Point start, Point end,
-                               List<GenerationUnit> divider) {
+                               List<GenerationUnit> divided) {
         if (start.x() > end.x() || start.y() > end.y() || start.z() > end.z()) {
             throw new IllegalArgumentException("absoluteStart must be before absoluteEnd");
         }
@@ -71,15 +71,15 @@ final class GeneratorImpl {
             throw new IllegalArgumentException("absoluteEnd must be a multiple of 16");
         }
         final Point size = end.sub(start);
-        return new UnitImpl(modifier, size, start, end, divider);
+        return new UnitImpl(modifier, size, start, end, divided);
     }
 
     record UnitImpl(UnitModifier modifier, Point size,
                     Point absoluteStart, Point absoluteEnd,
-                    List<GenerationUnit> divider) implements GenerationUnit {
+                    List<GenerationUnit> divided) implements GenerationUnit {
         @Override
         public @NotNull List<GenerationUnit> subdivide() {
-            return Objects.requireNonNullElseGet(divider, GenerationUnit.super::subdivide);
+            return Objects.requireNonNullElseGet(divided, GenerationUnit.super::subdivide);
         }
     }
 

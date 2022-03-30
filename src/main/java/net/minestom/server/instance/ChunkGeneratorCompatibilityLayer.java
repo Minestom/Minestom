@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
@@ -19,6 +20,7 @@ record ChunkGeneratorCompatibilityLayer(@NotNull ChunkGenerator chunkGenerator) 
                 unit.modifier().setRelative(x, y - startY, z, block);
             }
         };
-        chunkGenerator.generateChunkData(batch, -999, -999);
+        final Point start = unit.absoluteStart();
+        chunkGenerator.generateChunkData(batch, start.chunkX(), start.chunkZ());
     }
 }
