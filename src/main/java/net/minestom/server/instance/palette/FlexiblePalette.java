@@ -16,18 +16,6 @@ import java.util.function.IntUnaryOperator;
  */
 final class FlexiblePalette implements SpecializedPalette, Cloneable {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
-    private static final int[] MAGIC_MASKS;
-    private static final int[] VALUES_PER_LONG;
-
-    static {
-        final int entries = 16;
-        MAGIC_MASKS = new int[entries];
-        VALUES_PER_LONG = new int[entries];
-        for (int i = 1; i < entries; i++) {
-            MAGIC_MASKS[i] = Integer.MAX_VALUE >> (31 - i);
-            VALUES_PER_LONG[i] = Long.SIZE / i;
-        }
-    }
 
     // Specific to this palette type
     private final AdaptivePalette adaptivePalette;
@@ -51,7 +39,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         this.valueToPaletteMap.put(0, 0);
         this.valueToPaletteMap.defaultReturnValue(-1);
 
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int valuesPerLong = 64 / bitsPerEntry;
         this.values = new long[(maxSize() + valuesPerLong - 1) / valuesPerLong];
     }
 
@@ -61,13 +49,12 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public int get(int x, int y, int z) {
-        final long[] values = this.values;
         final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
-        final int sectionIdentifier = getSectionIndex(x, y, z);
-        final int index = sectionIdentifier / valuesPerLong;
-        final int bitIndex = sectionIdentifier % valuesPerLong * bitsPerEntry;
-        final short value = (short) (values[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry]);
+        final int sectionIndex = getSectionIndex(x, y, z);
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int index = sectionIndex / valuesPerLong;
+        final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
+        final int value = (int) (values[index] >> bitIndex) & ((1 << bitsPerEntry) - 1);
         // Change to palette value and return
         return hasPalette() ? paletteToValueList.getInt(value) : value;
     }
@@ -86,15 +73,15 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     public void set(int x, int y, int z, int value) {
         value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
         final long[] values = this.values;
         // Change to palette value
+        final int valuesPerLong = 64 / bitsPerEntry;
         final int sectionIndex = getSectionIndex(x, y, z);
         final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
+        final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
 
-        long block = values[index];
-        final long clear = MAGIC_MASKS[bitsPerEntry];
+        final long block = values[index];
+        final long clear = (1L << bitsPerEntry) - 1;
         final long oldBlock = block >> bitIndex & clear;
         if (oldBlock == value)
             return; // Trying to place the same block
@@ -116,7 +103,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         }
         value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int valuesPerLong = 64 / bitsPerEntry;
         final long[] values = this.values;
         long block = 0;
         for (int i = 0; i < valuesPerLong; i++)
@@ -127,7 +114,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
-        int[] cache = sizeCache(maxSize());
+        int[] cache = WRITE_CACHE.get();
         final int dimension = dimension();
         // Fill cache with values
         int fillValue = -1;
@@ -172,7 +159,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public void replaceAll(@NotNull EntryFunction function) {
-        int[] cache = sizeCache(maxSize());
+        int[] cache = WRITE_CACHE.get();
         AtomicInteger arrayIndex = new AtomicInteger();
         AtomicInteger count = new AtomicInteger();
         getAll((x, y, z, value) -> {
@@ -235,8 +222,8 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final long[] values = this.values;
         final int dimension = this.dimension();
         final int bitsPerEntry = this.bitsPerEntry;
-        final int magicMask = MAGIC_MASKS[bitsPerEntry];
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int magicMask = (1 << bitsPerEntry) - 1;
+        final int valuesPerLong = 64 / bitsPerEntry;
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
         final int[] ids = hasPalette() ? paletteToValueList.elements() : null;
@@ -277,9 +264,9 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int size = maxSize();
         assert paletteValues.length >= size;
         final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = VALUES_PER_LONG[bitsPerEntry];
+        final int valuesPerLong = 64 / bitsPerEntry;
         final long[] values = this.values;
-        final int magicMask = MAGIC_MASKS[bitsPerEntry];
+        final int magicMask = (1 << bitsPerEntry) - 1;
         for (int i = 0; i < values.length; i++) {
             long block = values[i];
             int index = i * valuesPerLong;
@@ -331,15 +318,6 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         x &= dimensionMask;
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMask);
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
-    }
-
-    static int[] sizeCache(int size) {
-        int[] cache = WRITE_CACHE.get();
-        if (cache.length < size) {
-            cache = new int[size];
-            WRITE_CACHE.set(cache);
-        }
-        return cache;
     }
 
     static int maxPaletteSize(int bitsPerEntry) {
