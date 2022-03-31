@@ -261,9 +261,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
         PacketUtils.broadcastPacket(getAddPlayerToList());
-        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            if (player != this) sendPacket(player.getAddPlayerToList());
-        }
         
         //Teams
         for (Team team : MinecraftServer.getTeamManager().getTeams()) {
@@ -887,8 +884,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
-                new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName)));
+        PacketUtils.broadcastPacket(
+                new PlayerInfoPacket(
+                        PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
+                        new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName)
+                )
+        );
     }
 
     /**
@@ -934,6 +935,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
+            PacketUtils.broadcastPacket(getAddPlayerToList());
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1737,8 +1739,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
-                new PlayerInfoPacket.UpdateLatency(getUuid(), latency)));
+        PacketUtils.broadcastPacket(
+                new PlayerInfoPacket(
+                        PlayerInfoPacket.Action.UPDATE_LATENCY,
+                        new PlayerInfoPacket.UpdateLatency(getUuid(), latency)
+                )
+        );
     }
 
     public void refreshOnGround(boolean onGround) {
@@ -1885,7 +1891,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getAddPlayerToList());
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
