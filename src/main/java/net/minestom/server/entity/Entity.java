@@ -1611,14 +1611,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     /**
      * Checks whether the current entity has line of sight to the given one.
-     * If so, it doesn't mean that the given entity is IN line of sight of the current,
-     * but the current one can rotate so that it will be true.
      *
      * @param entity the entity to be checked.
-     * @param checkBlocks whether to check that there are no blocks on the line of sight.
+     * @param withoutRotation if set to TRUE, returns whether target is IN the line of sight of the current one;
+     *                        otherwise returns if the current entity can rotate so that target will be in its line of sight.
      * @return if the current entity has line of sight to the given one.
      */
-    public boolean hasLineOfSight(Entity entity, boolean checkBlocks) {
+    public boolean hasLineOfSight(Entity entity, boolean withoutRotation) {
         Instance instance = getInstance();
         if (instance == null) {
             return false;
@@ -1626,14 +1625,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
-        final Vec direction = end.sub(start).asVec().normalize();
+        final Vec direction = withoutRotation ? position.direction() : end.sub(start).asVec().normalize();
         if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
             return false;
         }
-        if (checkBlocks && !CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox)) {
-            return false;
-        }
-        return true;
+        return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox);
     }
 
     /**
@@ -1645,80 +1641,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return if the current entity has line of sight to the given one.
      */
     public boolean hasLineOfSight(Entity entity) {
-        return hasLineOfSight(entity, true);
-    }
-
-    /**
-     * Checks whether the given entity is on the line of sight of the current one.
-     *
-     * @param entity the entity to be checked.
-     * @param checkBlocks whether to check that there are no blocks on the line of sight.
-     * @return if the given entity is on the line of sight of the current one.
-     */
-    public boolean isOnLineOfSight(Entity entity, boolean checkBlocks) {
-        Instance instance = getInstance();
-        if (instance == null) {
-            return false;
-        }
-
-        final Pos start = position.withY(position.y() + getEyeHeight());
-        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), position.direction(), entity.getPosition())) {
-            return false;
-        }
-        final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
-        if (checkBlocks && !CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Checks whether the given entity is on the line of sight of the current one.
-     *
-     * @param entity the entity to be checked.
-     * @return if the given entity is on the line of sight of the current one.
-     */
-    public boolean isOnLineOfSight(Entity entity) {
-        return isOnLineOfSight(entity, true);
-    }
-
-    /**
-     * Gets first entity on the line of sight of the current one that matches the given predicate.
-     *
-     * @param range max length of the line of sight of the current entity to be checked.
-     * @param checkBlocks whether to check that there are no blocks on the line of sight.
-     * @param predicate optional predicate
-     * @return resulting entity whether there're any, null otherwise.
-     */
-    public @Nullable Entity getLineOfSightEntity(double range, boolean checkBlocks, Predicate<Entity> predicate) {
-        Instance instance = getInstance();
-        if (instance == null) {
-            return null;
-        }
-
-        final Pos start = position.withY(position.y() + getEyeHeight());
-        final Vec startAsVec = start.asVec();
-
-        Predicate<Entity> finalPredicate = e -> e != this
-                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
-                && predicate.test(e);
-        if (checkBlocks) {
-            final Predicate<Entity> previous = finalPredicate;
-            finalPredicate = e -> {
-                if (!previous.test(e)) {
-                    return false;
-                }
-                final Pos end = e.position.withY(e.position.y() + e.getEyeHeight());
-                return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk,
-                        start, end, e.boundingBox);
-            };
-        }
-
-        Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
-                .filter(finalPredicate)
-                .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
-
-        return nearby.orElse(null);
+        return hasLineOfSight(entity, false);
     }
 
     /**
@@ -1729,7 +1652,24 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return resulting entity whether there're any, null otherwise.
      */
     public @Nullable Entity getLineOfSightEntity(double range, Predicate<Entity> predicate) {
-        return getLineOfSightEntity(range, true, predicate);
+        Instance instance = getInstance();
+        if (instance == null) {
+            return null;
+        }
+
+        final Pos start = position.withY(position.y() + getEyeHeight());
+        final Vec startAsVec = start.asVec();
+        final Predicate<Entity> finalPredicate = e -> e != this
+                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
+                && predicate.test(e)
+                && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
+                    e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
+
+        Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
+                .filter(finalPredicate)
+                .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
+
+        return nearby.orElse(null);
     }
 
     public enum Pose {
