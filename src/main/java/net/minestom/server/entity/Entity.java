@@ -1610,7 +1610,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Raycasts eye position <-> eye position.
+     * Raycasts current entity's eye position to target eye position.
      *
      * @param entity the entity to be checked.
      * @param withoutRotation if set to TRUE, checks whether target is IN the line of sight of the current one;
