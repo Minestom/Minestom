@@ -931,7 +931,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         {
             // Remove player
             PacketUtils.broadcastPacket(removePlayerPacket);
-            sendPacketToViewersAndSelf(destroyEntitiesPacket);
+            sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
             PacketUtils.broadcastPacket(addPlayerPacket);
