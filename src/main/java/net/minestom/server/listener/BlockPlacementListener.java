@@ -19,7 +19,6 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -136,7 +135,7 @@ public class BlockPlacementListener {
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
-            final ItemStack newUsedItem = StackingRule.get().apply(usedItem, usedItem.getAmount() - 1);
+            final ItemStack newUsedItem = usedItem.consume(1);
             playerInventory.setItemInHand(hand, newUsedItem);
         }
     }
