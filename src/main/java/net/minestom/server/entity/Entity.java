@@ -1613,11 +1613,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Raycasts current entity's eye position to target eye position.
      *
      * @param entity the entity to be checked.
-     * @param withoutRotation if set to TRUE, checks whether target is IN the line of sight of the current one;
-     *                        otherwise checks if the current entity can rotate so that target will be in its line of sight.
+     * @param exactView if set to TRUE, checks whether target is IN the line of sight of the current one;
+     *                  otherwise checks if the current entity can rotate so that target will be in its line of sight.
      * @return true if the ray reaches the target bounding box before hitting a block.
      */
-    public boolean hasLineOfSight(Entity entity, boolean withoutRotation) {
+    public boolean hasLineOfSight(Entity entity, boolean exactView) {
         Instance instance = getInstance();
         if (instance == null) {
             return false;
@@ -1625,7 +1625,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
-        final Vec direction = withoutRotation ? position.direction() : end.sub(start).asVec().normalize();
+        final Vec direction = exactView ? position.direction() : end.sub(start).asVec().normalize();
         if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
             return false;
         }
