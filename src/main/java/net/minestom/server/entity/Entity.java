@@ -1610,12 +1610,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Checks whether the current entity has line of sight to the given one.
+     * Raycasts eye position <-> eye position.
      *
      * @param entity the entity to be checked.
-     * @param withoutRotation if set to TRUE, returns whether target is IN the line of sight of the current one;
-     *                        otherwise returns if the current entity can rotate so that target will be in its line of sight.
-     * @return if the current entity has line of sight to the given one.
+     * @param withoutRotation if set to TRUE, checks whether target is IN the line of sight of the current one;
+     *                        otherwise checks if the current entity can rotate so that target will be in its line of sight.
+     * @return true if the ray reaches the target bounding box before hitting a block.
      */
     public boolean hasLineOfSight(Entity entity, boolean withoutRotation) {
         Instance instance = getInstance();
@@ -1633,10 +1633,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Checks whether the current entity has line of sight to the given one.
-     * If so, it doesn't mean that the given entity is IN line of sight of the current,
-     * but the current one can rotate so that it will be true.
-     *
+     * @see Entity#hasLineOfSight(Entity, boolean)
      * @param entity the entity to be checked.
      * @return if the current entity has line of sight to the given one.
      */
