@@ -1626,18 +1626,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
-        final Vec direction = end.sub(start).asVec();
-        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction.normalize(), entity.getPosition())) {
+        final Vec direction = end.sub(start).asVec().normalize();
+        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
             return false;
         }
-        if (checkBlocks) {
-            final PhysicsResult result = CollisionUtils.handlePhysics(instance, currentChunk,
-                    BoundingBox.ZERO,
-                    start, direction,
-                    null);
-            if (!result.newPosition().samePoint(end)) {
-                return false;
-            }
+        if (checkBlocks && !CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox)) {
+            return false;
         }
         return true;
     }
@@ -1671,15 +1665,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), position.direction(), entity.getPosition())) {
             return false;
         }
-        if (checkBlocks) {
-            final Pos end = entity.position;
-            final PhysicsResult result = CollisionUtils.handlePhysics(instance, currentChunk,
-                    BoundingBox.ZERO,
-                    start, end.sub(start).asVec(),
-                    null);
-            if (!result.newPosition().samePoint(end)) {
-                return false;
-            }
+        final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
+        if (checkBlocks && !CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox)) {
+            return false;
         }
         return true;
     }
@@ -1720,12 +1708,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 if (!previous.test(e)) {
                     return false;
                 }
-                final Pos end = e.position;
-                final PhysicsResult result = CollisionUtils.handlePhysics(instance, currentChunk,
-                        BoundingBox.ZERO,
-                        start, end.sub(start).asVec(),
-                        null);
-                return result.newPosition().samePoint(end);
+                final Pos end = e.position.withY(e.position.y() + e.getEyeHeight());
+                return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk,
+                        start, end, e.boundingBox);
             };
         }
 

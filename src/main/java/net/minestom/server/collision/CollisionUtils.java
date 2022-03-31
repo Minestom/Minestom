@@ -57,6 +57,27 @@ public final class CollisionUtils {
                 getter, lastPhysicsResult);
     }
 
+    /**
+     * Checks whether shape is reachable by the given line of sight
+     * (ie there are no blocks colliding with it).
+     *
+     * @param instance the instance.
+     * @param chunk    optional chunk reference for speedup purposes.
+     * @param start    start of the line of sight.
+     * @param end      end of the line of sight.
+     * @param shape    shape to check.
+     * @return true is shape is reachable by the given line of sight; false otherwise.
+     */
+    public static boolean isLineOfSightReachingShape(@NotNull Instance instance, @Nullable Chunk chunk,
+                                             @NotNull Point start, @NotNull Point end,
+                                             @NotNull Shape shape) {
+        final PhysicsResult result = handlePhysics(instance, chunk,
+                BoundingBox.ZERO,
+                Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
+                null);
+        return shape.intersectBox(end.sub(result.newPosition()), BoundingBox.ZERO);
+    }
+
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
         return handlePhysics(entity, entityVelocity, null);
     }
