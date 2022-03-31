@@ -44,17 +44,10 @@ public interface Shape {
     @NotNull Point relativeEnd();
 
     /**
-     * Check if occlusion block face is full
-     * @param face Face to check
-     * @return true if face is full
-     */
-    boolean isOccluded(BlockFace face);
-
-    /**
      * Check if addition of two shape faces is full
      * @param shape shape to add
      * @param face face to add
      * @return true if combined face is full
      */
-    boolean isAdditionOccluded(Shape shape, BlockFace face);
+    boolean isOccluded(Shape shape, BlockFace face);
 }

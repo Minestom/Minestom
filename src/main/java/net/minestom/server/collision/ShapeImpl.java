@@ -21,7 +21,9 @@ final class ShapeImpl implements Shape {
     private final Point relativeStart, relativeEnd;
 
     private final BoundingBox[] occlusionBoundingBoxes;
-    private final byte occlusion;
+
+    private final byte blockOcclusion;
+    private final byte airOcclusion;
 
     private final Supplier<Material> block;
 
@@ -48,12 +50,17 @@ final class ShapeImpl implements Shape {
             this.relativeEnd = new Vec(maxX, maxY, maxZ);
         }
 
-        byte occlusion = 0;
+        byte airFaces = 0;
+        byte fullFaces = 0;
         for (BlockFace f : BlockFace.values()) {
-            occlusion |= ((isFaceCovered(computeOcclusionSet(f)) ? 0b1 : 0b0) << (byte) f.ordinal());
+            byte res = isFaceCovered(computeOcclusionSet(f));
+
+            airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
+            fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
         }
 
-        this.occlusion = occlusion;
+        this.airOcclusion = airFaces;
+        this.blockOcclusion = fullFaces;
     }
 
     static private BoundingBox[] parseRegistryBoundingBoxString(String str) {
@@ -120,9 +127,15 @@ final class ShapeImpl implements Shape {
         return remaining;
     }
 
-    // There's an n log n algorithm that involves sorting but it's not worth implementing
-    public static boolean isFaceCovered (List<Rectangle> covering) {
+    /**
+     * Computes the occlusion for a given face.
+     * @param covering The rectangle set to check for covering.
+     * @return 0 if face is not covered, 1 if face is covered partially, 2 if face is fully covered.
+     */
+    public static byte isFaceCovered (List<Rectangle> covering) {
         Rectangle r = new Rectangle(0, 0, 1, 1);
+
+        if (covering.isEmpty()) return 0;
 
         List<Rectangle> toCover = new ArrayList<>();
         toCover.add(r);
@@ -136,16 +149,10 @@ final class ShapeImpl implements Shape {
             }
 
             toCover = nextCovering;
-            if (toCover.isEmpty()) return true;
+            if (toCover.isEmpty()) return 2;
         }
 
-        return false;
-    }
-
-    public boolean isAdditionOccluded(Shape shape, BlockFace face) {
-        List<Rectangle> allRectangles = ((ShapeImpl)shape).computeOcclusionSet(face.getOppositeFace());
-        allRectangles.addAll(computeOcclusionSet(face));
-        return isFaceCovered(allRectangles);
+        return 1;
     }
 
     private List<Rectangle> computeOcclusionSet(BlockFace face) {
@@ -204,8 +211,28 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean isOccluded(BlockFace face) {
-        return ((occlusion >> face.ordinal()) & 1) == 1;
+    public boolean isOccluded(Shape shape, BlockFace face) {
+        ShapeImpl otherShape = ((ShapeImpl)shape);
+
+        boolean hasAirOcclusion = (((airOcclusion >> face.ordinal()) & 1) == 1);
+        boolean hasBlockOcclusion = (((blockOcclusion >> face.ordinal()) & 1) == 1);
+        boolean hasBlockOcclusionOther = ((otherShape.blockOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+        boolean hasAirOcclusionOther = ((otherShape.airOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+
+        // If either face is full, return true
+        if (hasBlockOcclusion || hasBlockOcclusionOther) return true;
+
+        // If both faces are empty, return false
+        if (hasAirOcclusion && hasAirOcclusionOther) return false;
+
+        // If a single face is air, return false
+        if (hasAirOcclusion) return false;
+        if (hasAirOcclusionOther) return false;
+
+        // Comparing two partial faces. Computation needed
+        List<Rectangle> allRectangles = ((ShapeImpl)shape).computeOcclusionSet(face.getOppositeFace());
+        allRectangles.addAll(computeOcclusionSet(face));
+        return isFaceCovered(allRectangles) == 2;
     }
 
     @Override
