@@ -887,7 +887,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
+        PacketUtils.broadcastPacket(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
                 new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName)));
     }
 
@@ -924,16 +924,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
-        playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
+        playerConnection.sendPacket(respawnPacket);
         refreshClientStateAfterRespawn();
 
         {
             // Remove player
-            sendPacketToViewers(removePlayerPacket);
+            PacketUtils.broadcastPacket(removePlayerPacket);
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
+            PacketUtils.broadcastPacket(addPlayerPacket);
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1737,7 +1738,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        sendPacketToViewersAndSelf(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
+        PacketUtils.broadcastPacket(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
                 new PlayerInfoPacket.UpdateLatency(getUuid(), latency)));
     }
 
@@ -1885,7 +1886,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getAddPlayerToList());
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
