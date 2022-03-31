@@ -130,6 +130,26 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+ @Nullable <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
+ @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Moves bounding box with physics applied (ie checking against blocks)</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isLineOfSightReachingShape(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.Shape)" class="member-name-link">isLineOfSightReachingShape</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+ @Nullable <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;start,
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;end,
+ @NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>&nbsp;shape)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Checks whether shape is reachable by the given line of sight
+ (ie there are no blocks colliding with it).</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseBlockShape(java.lang.String,java.util.function.Supplier)" class="member-name-link">parseBlockShape</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;str,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&nbsp;block)</code></div>
@@ -183,6 +203,60 @@ loadScripts(document, 'script');</script>
 <dd><code>entity</code> - the entity to move</dd>
 <dt>Returns:</dt>
 <dd>the result of physics simulation</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="handlePhysics(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult)">
+<h3>handlePhysics</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">handlePhysics</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+ @Nullable
+ @Nullable <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+ @NotNull
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
+ @NotNull
+ @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
+ @NotNull
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
+ @Nullable
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult)</span></div>
+<div class="block">Moves bounding box with physics applied (ie checking against blocks)
+ <p>
+ Works by getting all the full blocks that a bounding box could interact with.
+ All bounding boxes inside the full blocks are checked for collisions with the given bounding box.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>boundingBox</code> - the bounding box to move</dd>
+<dt>Returns:</dt>
+<dd>the result of physics simulation</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isLineOfSightReachingShape(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.Shape)">
+<h3>isLineOfSightReachingShape</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isLineOfSightReachingShape</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+ @Nullable
+ @Nullable <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+ @NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;start,
+ @NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;end,
+ @NotNull
+ @NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>&nbsp;shape)</span></div>
+<div class="block">Checks whether shape is reachable by the given line of sight
+ (ie there are no blocks colliding with it).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>instance</code> - the instance.</dd>
+<dd><code>chunk</code> - optional chunk reference for speedup purposes.</dd>
+<dd><code>start</code> - start of the line of sight.</dd>
+<dd><code>end</code> - end of the line of sight.</dd>
+<dd><code>shape</code> - shape to check.</dd>
+<dt>Returns:</dt>
+<dd>true is shape is reachable by the given line of sight; false otherwise.</dd>
 </dl>
 </section>
 </li>
