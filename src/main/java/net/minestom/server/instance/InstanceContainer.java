@@ -363,7 +363,8 @@ public class InstanceContainer extends Instance {
             var section = chunk.getSectionAt(sectionModifier.start().blockY());
             var currentBlocks = section.blockPalette();
             var blocks = sectionModifier.blockPalette();
-            blocks.getAllPresent(currentBlocks::set);
+            // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
+            blocks.getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
             applyGenerationData(chunk, sectionModifier);
         }
     }

@@ -68,6 +68,21 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
+    public void airFork(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+
+        instance.setGenerator(unit -> {
+            var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
+            u.modifier().setRelative(16, 39 + 64, 0, Block.AIR);
+        });
+        instance.loadChunk(0, 0).join();
+        instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        instance.loadChunk(1, 0).join();
+        assertEquals(Block.AIR, instance.getBlock(16, 39, 0));
+    }
+
+    @Test
     public void exceptionCatch(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();

@@ -23,12 +23,17 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
 final class GeneratorImpl {
     private static final Vec SECTION_SIZE = new Vec(16);
 
-    static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
+    static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ,
+                                  boolean explicitPlacements) {
         final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
         final Vec end = start.add(SECTION_SIZE);
         final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end,
-                section.blockPalette(), section.biomePalette(), new Int2ObjectOpenHashMap<>(0));
+                section.blockPalette(), section.biomePalette(), new Int2ObjectOpenHashMap<>(0), explicitPlacements);
         return unit(modifier, start, end, null);
+    }
+
+    static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
+        return section(section, sectionX, sectionY, sectionZ, false);
     }
 
     static UnitImpl chunk(Chunk chunk, int minSection, int maxSection,
@@ -94,7 +99,7 @@ final class GeneratorImpl {
             for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
                 for (int sectionY = minSectionY; sectionY < maxSectionY; sectionY++) {
                     for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
-                        final GenerationUnit unit = section(new Section(), sectionX, sectionY, sectionZ);
+                        final GenerationUnit unit = section(new Section(), sectionX, sectionY, sectionZ, true);
                         units[index++] = unit;
                     }
                 }
@@ -121,7 +126,7 @@ final class GeneratorImpl {
 
     record SectionModifierImpl(Point size, Point start, Point end,
                                Palette blockPalette, Palette biomePalette,
-                               Int2ObjectMap<Block> cache) implements GenericModifier {
+                               Int2ObjectMap<Block> cache, boolean explicitPlacements) implements GenericModifier {
         @Override
         public void setBiome(int x, int y, int z, @NotNull Biome biome) {
             this.biomePalette.set(
@@ -136,13 +141,13 @@ final class GeneratorImpl {
             final int localY = toSectionRelativeCoordinate(y);
             final int localZ = toSectionRelativeCoordinate(z);
             handleCache(localX, localY, localZ, block);
-            this.blockPalette.set(localX, localY, localZ, block.stateId());
+            this.blockPalette.set(localX, localY, localZ, retrieveBlockId(block));
         }
 
         @Override
         public void setRelative(int x, int y, int z, @NotNull Block block) {
             handleCache(x, y, z, block);
-            this.blockPalette.set(x, y, z, block.stateId());
+            this.blockPalette.set(x, y, z, retrieveBlockId(block));
         }
 
         @Override
@@ -150,7 +155,7 @@ final class GeneratorImpl {
             this.blockPalette.setAll((x, y, z) -> {
                 final Block block = supplier.get(x, y, z);
                 handleCache(x, y, z, block);
-                return block.stateId();
+                return retrieveBlockId(block);
             });
         }
 
@@ -165,12 +170,16 @@ final class GeneratorImpl {
                     }
                 }
             }
-            this.blockPalette.fill(block.stateId());
+            this.blockPalette.fill(retrieveBlockId(block));
         }
 
         @Override
         public void fillBiome(@NotNull Biome biome) {
             this.biomePalette.fill(biome.id());
+        }
+
+        private int retrieveBlockId(Block block) {
+            return explicitPlacements ? block.stateId() + 1 : block.stateId();
         }
 
         private void handleCache(int x, int y, int z, Block block) {
