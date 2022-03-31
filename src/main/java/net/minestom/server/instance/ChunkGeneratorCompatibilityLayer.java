@@ -16,7 +16,8 @@ import java.util.List;
 record ChunkGeneratorCompatibilityLayer(@NotNull ChunkGenerator chunkGenerator) implements Generator {
     @Override
     public void generate(@NotNull GenerationUnit unit) {
-        if (!(unit instanceof GeneratorImpl.UnitImpl impl) || !(impl.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier)) {
+        if (!(unit instanceof GeneratorImpl.UnitImpl impl) ||
+                !(impl.modifier() instanceof GeneratorImpl.AreaModifierImpl modifier && modifier.chunk() != null)) {
             throw new IllegalArgumentException("Invalid unit");
         }
 
@@ -34,7 +35,7 @@ record ChunkGeneratorCompatibilityLayer(@NotNull ChunkGenerator chunkGenerator) 
         final boolean hasPopulator = populators != null && !populators.isEmpty();
         if (hasPopulator) {
             for (ChunkPopulator chunkPopulator : populators) {
-                chunkPopulator.populateChunk(batch, chunkModifier.chunk());
+                chunkPopulator.populateChunk(batch, modifier.chunk());
             }
         }
     }

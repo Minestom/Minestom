@@ -13,7 +13,6 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -35,6 +34,7 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.locks.Lock;
@@ -288,6 +288,8 @@ public class InstanceContainer extends Instance {
         return completableFuture;
     }
 
+    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
+
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
@@ -296,32 +298,40 @@ public class InstanceContainer extends Instance {
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
             // TODO: virtual thread once Loom is available
             ForkJoinPool.commonPool().submit(() -> {
-                GenerationUnit chunkUnit = GeneratorImpl.chunk(chunk);
+                var chunkUnit = GeneratorImpl.chunk(chunk);
                 try {
                     // Generate block/biome palette
                     generator.generate(chunkUnit);
                     // Apply nbt/handler
-                    if (chunkUnit.modifier() instanceof GeneratorImpl.ChunkModifierImpl chunkModifier) {
+                    if (chunkUnit.modifier() instanceof GeneratorImpl.AreaModifierImpl chunkModifier) {
                         var sections = chunkModifier.sections();
                         for (var section : sections) {
                             if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                                var cache = sectionModifier.cache();
-                                if (!cache.isEmpty()) {
-                                    final int height = section.absoluteStart().blockY();
-                                    synchronized (chunk) {
-                                        Int2ObjectMaps.fastForEach(cache, blockEntry -> {
-                                            final int index = blockEntry.getIntKey();
-                                            final Block block = blockEntry.getValue();
-                                            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-                                            final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
-                                            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-                                            chunk.setBlock(x, y, z, block);
-                                        });
-                                    }
+                                applyGenerationData(chunk, sectionModifier);
+                            }
+                        }
+                    }
+                    // Register forks or apply locally
+                    for (var fork : chunkUnit.forks()) {
+                        var sections = ((GeneratorImpl.AreaModifierImpl) fork.modifier()).sections();
+                        for (var section : sections) {
+                            if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
+                                if (sectionModifier.blockPalette().count() == 0)
+                                    continue;
+                                final Point start = section.absoluteStart();
+                                final Chunk forkChunk = getChunkAt(start);
+                                if (forkChunk != null || forkChunk == chunk) {
+                                    applyFork(forkChunk, sectionModifier);
+                                } else {
+                                    final long index = ChunkUtils.getChunkIndex(start);
+                                    generationForks.computeIfAbsent(index, k -> new CopyOnWriteArrayList<>())
+                                            .add(sectionModifier);
                                 }
                             }
                         }
                     }
+                    // Apply awaiting forks
+                    processFork(chunk);
                 } catch (Throwable e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 } finally {
@@ -334,7 +344,43 @@ public class InstanceContainer extends Instance {
             return resultFuture;
         } else {
             // No chunk generator, execute the callback with the empty chunk
+            processFork(chunk);
             return CompletableFuture.completedFuture(chunk);
+        }
+    }
+
+    private void processFork(Chunk chunk) {
+        var current = generationForks.remove(ChunkUtils.getChunkIndex(chunk));
+        if (current != null) {
+            for (var sectionModifier : current) {
+                applyFork(chunk, sectionModifier);
+            }
+        }
+    }
+
+    private void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
+        synchronized (chunk) {
+            var section = chunk.getSectionAt(sectionModifier.start().blockY());
+            var currentBlocks = section.blockPalette();
+            var blocks = sectionModifier.blockPalette();
+            blocks.getAllPresent(currentBlocks::set);
+            applyGenerationData(chunk, sectionModifier);
+        }
+    }
+
+    private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
+        var cache = section.cache();
+        if (cache.isEmpty()) return;
+        final int height = section.start().blockY();
+        synchronized (chunk) {
+            Int2ObjectMaps.fastForEach(cache, blockEntry -> {
+                final int index = blockEntry.getIntKey();
+                final Block block = blockEntry.getValue();
+                final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+                final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
+                final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                chunk.setBlock(x, y, z, block);
+            });
         }
     }
 

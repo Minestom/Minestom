@@ -32,6 +32,40 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
+    public void localFork(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+
+        var block = Block.STONE;
+        instance.setGenerator(unit -> {
+            var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd());
+            assertEquals(unit.absoluteStart(), u.absoluteStart());
+            assertEquals(unit.absoluteEnd(), u.absoluteEnd());
+            u.modifier().setRelative(0, 0, 0, Block.STONE);
+        });
+        instance.loadChunk(0, 0).join();
+        assertEquals(block, instance.getBlock(0, -64, 0));
+    }
+
+    @Test
+    public void signalFork(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+
+        var block = Block.STONE;
+        instance.setGenerator(unit -> {
+            var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
+            assertEquals(unit.absoluteStart(), u.absoluteStart());
+            assertEquals(unit.absoluteEnd().add(16, 0, 16), u.absoluteEnd());
+            u.modifier().setRelative(16, 0, 0, Block.STONE);
+        });
+        instance.loadChunk(0, 0).join();
+        instance.setGenerator(null);
+        instance.loadChunk(1, 0).join();
+        assertEquals(block, instance.getBlock(16, -64, 0));
+    }
+
+    @Test
     public void exceptionCatch(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();

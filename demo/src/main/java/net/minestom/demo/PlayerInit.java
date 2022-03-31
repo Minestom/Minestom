@@ -23,6 +23,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -126,7 +127,17 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        instanceContainer.setGenerator(unit -> {
+            // Assume chunk unit
+            unit.modifier().fillHeight(0, 40, Block.STONE);
+            // WIP fork
+            {
+                GenerationUnit fork = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
+                fork.modifier().setRelative(15, 64 + 41, 0, Block.GRASS_BLOCK);
+                fork.modifier().setRelative(16, 64 + 41, 0, Block.GRASS_BLOCK);
+                fork.modifier().setRelative(17, 64 + 41, 0, Block.GRASS_BLOCK);
+            }
+        });
 
         if (false) {
             System.out.println("start");

@@ -14,6 +14,8 @@ public interface GenerationUnit {
 
     @NotNull Point absoluteEnd();
 
+    @NotNull GenerationUnit fork(@NotNull Point start, @NotNull Point end);
+
     /**
      * Divides this unit into the smallest independent units.
      *
