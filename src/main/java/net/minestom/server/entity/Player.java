@@ -261,6 +261,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
         PacketUtils.broadcastPacket(getAddPlayerToList());
+        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            if (player != this) sendPacket(player.getAddPlayerToList());
+        }
         
         //Teams
         for (Team team : MinecraftServer.getTeamManager().getTeams()) {
@@ -884,12 +887,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        PacketUtils.broadcastPacket(
-                new PlayerInfoPacket(
-                        PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
-                        new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName)
-                )
-        );
+        PacketUtils.broadcastPacket(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME,
+                new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName)));
     }
 
     /**
@@ -931,11 +930,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         {
             // Remove player
-            sendPacketToViewers(removePlayerPacket);
+            PacketUtils.broadcastPacket(removePlayerPacket);
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            PacketUtils.broadcastPacket(getAddPlayerToList());
+            PacketUtils.broadcastPacket(addPlayerPacket);
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1739,12 +1738,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        PacketUtils.broadcastPacket(
-                new PlayerInfoPacket(
-                        PlayerInfoPacket.Action.UPDATE_LATENCY,
-                        new PlayerInfoPacket.UpdateLatency(getUuid(), latency)
-                )
-        );
+        PacketUtils.broadcastPacket(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
+                new PlayerInfoPacket.UpdateLatency(getUuid(), latency)));
     }
 
     public void refreshOnGround(boolean onGround) {
