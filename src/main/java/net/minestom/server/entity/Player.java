@@ -924,17 +924,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
-        playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
+        playerConnection.sendPacket(respawnPacket);
         refreshClientStateAfterRespawn();
 
         {
             // Remove player
             PacketUtils.broadcastPacket(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
+            PacketUtils.broadcastPacket(destroyEntitiesPacket);
 
             // Show player again
             PacketUtils.broadcastPacket(addPlayerPacket);
+            PacketUtils.broadcastPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1886,7 +1887,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());
