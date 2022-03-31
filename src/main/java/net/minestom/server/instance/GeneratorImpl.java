@@ -24,11 +24,11 @@ final class GeneratorImpl {
     private static final Vec SECTION_SIZE = new Vec(16);
 
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ,
-                                  boolean explicitPlacements) {
+                                  boolean fork) {
         final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
         final Vec end = start.add(SECTION_SIZE);
         final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end,
-                section.blockPalette(), section.biomePalette(), new Int2ObjectOpenHashMap<>(0), explicitPlacements);
+                section.blockPalette(), section.biomePalette(), new Int2ObjectOpenHashMap<>(0), fork);
         return unit(modifier, start, end, null);
     }
 
@@ -126,9 +126,10 @@ final class GeneratorImpl {
 
     record SectionModifierImpl(Point size, Point start, Point end,
                                Palette blockPalette, Palette biomePalette,
-                               Int2ObjectMap<Block> cache, boolean explicitPlacements) implements GenericModifier {
+                               Int2ObjectMap<Block> cache, boolean fork) implements GenericModifier {
         @Override
         public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+            if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             this.biomePalette.set(
                     toSectionRelativeCoordinate(x) / 4,
                     toSectionRelativeCoordinate(y) / 4,
@@ -175,11 +176,12 @@ final class GeneratorImpl {
 
         @Override
         public void fillBiome(@NotNull Biome biome) {
+            if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             this.biomePalette.fill(biome.id());
         }
 
         private int retrieveBlockId(Block block) {
-            return explicitPlacements ? block.stateId() + 1 : block.stateId();
+            return fork ? block.stateId() + 1 : block.stateId();
         }
 
         private void handleCache(int x, int y, int z, Block block) {
@@ -241,11 +243,14 @@ final class GeneratorImpl {
 
         @Override
         public void setAllRelative(@NotNull Supplier supplier) {
-            for (int i = 0; i < sections.size(); i++) {
-                final GenerationUnit section = sections.get(i);
-                final int offset = i * 16;
+            final Point start = this.start;
+            for (GenerationUnit section : sections) {
+                final Point sectionStart = section.absoluteStart();
+                final int offsetX = sectionStart.blockX() - start.blockX();
+                final int offsetY = sectionStart.blockY() - start.blockY();
+                final int offsetZ = sectionStart.blockZ() - start.blockZ();
                 section.modifier().setAllRelative((x, y, z) ->
-                        supplier.get(x, y + offset, z));
+                        supplier.get(x + offsetX, y + offsetY, z + offsetZ));
             }
         }
 
@@ -265,29 +270,42 @@ final class GeneratorImpl {
 
         @Override
         public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
-            final int minY = (int) start.y();
+            final Point start = this.start;
+            final int startX = start.blockX();
+            final int startZ = start.blockZ();
             final int minMultiple = floorSection(minHeight);
             final int maxMultiple = ceilSection(maxHeight);
             // First section
             if (minMultiple != minHeight) {
                 assert minHeight % 16 != 0;
-                final int sectionY = getChunkCoordinate(minHeight - minY);
-                final GenerationUnit section = sections.get(sectionY);
-                section.modifier().fillHeight(minHeight, Math.min(minMultiple, maxHeight), block);
+                final int height = Math.min(minMultiple, maxHeight);
+                for (int x = 0; x < width; x++) {
+                    for (int z = 0; z < depth; z++) {
+                        final GenerationUnit section = findAbsoluteSection(startX + x * 16, minHeight, startZ + z * 16);
+                        section.modifier().fillHeight(minHeight, height, block);
+                    }
+                }
             }
             // Last section
             if (maxMultiple != maxHeight) {
                 assert maxHeight % 16 != 0;
-                final int sectionY = getChunkCoordinate(maxMultiple - minY);
-                final GenerationUnit section = sections.get(sectionY);
-                section.modifier().fillHeight(maxMultiple, maxHeight, block);
+                for (int x = 0; x < width; x++) {
+                    for (int z = 0; z < depth; z++) {
+                        final GenerationUnit section = findAbsoluteSection(startX + x * 16, maxMultiple, startZ + z * 16);
+                        section.modifier().fillHeight(maxMultiple, maxHeight, block);
+                    }
+                }
             }
             // Middle sections (to fill)
-            final int startSection = (minMultiple - minY) / 16;
-            final int endSection = (maxMultiple - 1 - minY) / 16;
+            final int startSection = (minMultiple) / 16;
+            final int endSection = (maxMultiple - 1) / 16;
             for (int i = startSection; i <= endSection; i++) {
-                final GenerationUnit section = sections.get(i);
-                section.modifier().fill(block);
+                for (int x = 0; x < width; x++) {
+                    for (int z = 0; z < depth; z++) {
+                        final GenerationUnit section = findAbsoluteSection(startX + x * 16, i * 16, startZ + z * 16);
+                        section.modifier().fill(block);
+                    }
+                }
             }
         }
 
