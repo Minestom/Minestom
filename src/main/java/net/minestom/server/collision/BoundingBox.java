@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public final class BoundingBox implements Shape {
+
+    final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
+
     private final double width, height, depth;
     private final Point offset;
     private Point relativeEnd;
