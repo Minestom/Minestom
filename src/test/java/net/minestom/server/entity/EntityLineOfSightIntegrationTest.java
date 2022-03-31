@@ -5,8 +5,7 @@ import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityLineOfSightIntegrationTest {
@@ -23,6 +22,8 @@ public class EntityLineOfSightIntegrationTest {
 
         Entity res = entity.getLineOfSightEntity(20, (e) -> true);
         assertEquals(res, entity2);
+        assertTrue(entity.isOnLineOfSight(entity2));
+        assertTrue(entity.hasLineOfSight(entity2));
     }
 
     @Test
@@ -38,6 +39,8 @@ public class EntityLineOfSightIntegrationTest {
 
         Entity res = entity.getLineOfSightEntity(20, (e) -> true);
         assertNull(res);
+        assertFalse(entity.isOnLineOfSight(entity2));
+        assertTrue(entity.hasLineOfSight(entity2));
     }
 
     @Test
@@ -53,6 +56,8 @@ public class EntityLineOfSightIntegrationTest {
 
         Entity res = entity.getLineOfSightEntity(20, (e) -> true);
         assertNull(res);
+        assertFalse(entity.isOnLineOfSight(entity2));
+        assertTrue(entity.hasLineOfSight(entity2));
     }
 
     @Test
@@ -68,6 +73,8 @@ public class EntityLineOfSightIntegrationTest {
 
         Entity res = entity.getLineOfSightEntity(20, (e) -> true);
         assertEquals(res, entity2);
+        assertTrue(entity.isOnLineOfSight(entity2));
+        assertTrue(entity.hasLineOfSight(entity2));
     }
 
     @Test
@@ -86,6 +93,10 @@ public class EntityLineOfSightIntegrationTest {
 
         Entity res = entity.getLineOfSightEntity(20, (e) -> true);
         assertEquals(res, entity3);
+        assertTrue(entity.isOnLineOfSight(entity2));
+        assertTrue(entity.hasLineOfSight(entity2));
+        assertTrue(entity.isOnLineOfSight(entity3));
+        assertTrue(entity.hasLineOfSight(entity3));
     }
 
     @Test
@@ -101,5 +112,7 @@ public class EntityLineOfSightIntegrationTest {
 
         Entity res = entity.getLineOfSightEntity(20, (e) -> true);
         assertNull(res);
+        assertFalse(entity.isOnLineOfSight(entity2));
+        assertTrue(entity.hasLineOfSight(entity2));
     }
 }

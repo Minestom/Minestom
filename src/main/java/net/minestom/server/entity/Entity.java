@@ -1624,6 +1624,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
+        final Vec direction = entity.getPosition().add(0, entity.getEyeHeight(), 0).sub(start).asVec().normalize();
+        return entity.boundingBox.boundingBoxRayIntersectionCheck(start, direction, entity.getPosition());
+    }
+
+    /**
+     * Checks whether the given entity is on line of sight of the current one.
+     *
+     * @param entity the entity to be checked.
+     * @return if the given entity is on line of sight of the current one.
+     */
+    public boolean isOnLineOfSight(Entity entity) {
+        Instance instance = getInstance();
+        if (instance == null) {
+            return false;
+        }
+
+        final Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
         return entity.boundingBox.boundingBoxRayIntersectionCheck(start, position.direction(), entity.getPosition());
     }
 
