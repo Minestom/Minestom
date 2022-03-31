@@ -27,26 +27,22 @@ import java.util.function.UnaryOperator;
  */
 public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
 
-    private static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+    static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
-    private final StackingRule stackingRule;
-
     private final Material material;
     private final int amount;
     private final ItemMeta meta;
 
     ItemStack(@NotNull Material material, int amount,
-              @NotNull ItemMeta meta,
-              @Nullable StackingRule stackingRule) {
+              @NotNull ItemMeta meta) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
-        this.stackingRule = Objects.requireNonNullElse(stackingRule, DEFAULT_STACKING_RULE);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -68,7 +64,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
         ItemMetaBuilder builder = ItemStackBuilder.getMetaBuilder(material);
         if (nbtCompound != null) ItemMetaBuilder.resetMeta(builder, nbtCompound);
-        return new ItemStack(material, amount, builder.build(), null);
+        return new ItemStack(material, amount, builder.build());
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -114,7 +110,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @Contract(value = "_, -> new", pure = true)
     public @NotNull ItemStack withAmount(int amount) {
         if (amount < 1) return AIR;
-        return new ItemStack(material, amount, meta, stackingRule);
+        return new ItemStack(material, amount, meta);
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -125,7 +121,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @ApiStatus.Experimental
     @Contract(value = "_, -> new", pure = true)
     public @NotNull ItemStack consume(int amount) {
-        return stackingRule.apply(this, currentAmount -> currentAmount - amount);
+        return DEFAULT_STACKING_RULE.apply(this, currentAmount -> currentAmount - amount);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -141,7 +137,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return new ItemStack(material, amount, meta, stackingRule);
+        return new ItemStack(material, amount, meta);
     }
 
     @Contract(pure = true)
@@ -175,11 +171,6 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     }
 
     @Contract(pure = true)
-    public @NotNull StackingRule getStackingRule() {
-        return stackingRule;
-    }
-
-    @Contract(pure = true)
     public @NotNull ItemMeta getMeta() {
         return meta;
     }
@@ -198,30 +189,19 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ItemStack itemStack = (ItemStack) o;
-
-        if (amount != itemStack.amount) return false;
-        if (!stackingRule.equals(itemStack.stackingRule)) return false;
-        if (material != itemStack.material) return false;
-        return meta.equals(itemStack.meta);
+        if (!(o instanceof ItemStack itemStack)) return false;
+        return amount == itemStack.amount && material.equals(itemStack.material) && meta.equals(itemStack.meta);
     }
 
     @Override
     public int hashCode() {
-        int result = stackingRule.hashCode();
-        result = 31 * result + material.hashCode();
-        result = 31 * result + amount;
-        result = 31 * result + meta.hashCode();
-        return result;
+        return Objects.hash(material, amount, meta);
     }
 
     @Override
     public String toString() {
         return "ItemStack{" +
-                "stackingRule=" + stackingRule +
-                ", material=" + material +
+                "material=" + material +
                 ", amount=" + amount +
                 ", meta=" + meta +
                 '}';
@@ -259,8 +239,6 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStackBuilder builder() {
-        return new ItemStackBuilder(material, meta.builder())
-                .amount(amount)
-                .stackingRule(stackingRule);
+        return new ItemStackBuilder(material, meta.builder()).amount(amount);
     }
 }

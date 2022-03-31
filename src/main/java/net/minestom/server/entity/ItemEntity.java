@@ -77,7 +77,7 @@ public class ItemEntity extends Entity {
                         if (getDistance(itemEntity) > mergeRange) return;
 
                         final ItemStack itemStackEntity = itemEntity.getItemStack();
-                        final StackingRule stackingRule = itemStack.getStackingRule();
+                        final StackingRule stackingRule = StackingRule.get();
                         final boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
 
                         if (!canStack) return;
