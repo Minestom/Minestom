@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
@@ -30,11 +31,29 @@ public final class CollisionUtils {
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
                                               @Nullable PhysicsResult lastPhysicsResult) {
-        final BoundingBox boundingBox = entity.getBoundingBox();
-        final Pos currentPosition = entity.getPosition();
-        final Block.Getter getter = new ChunkCache(entity.getInstance(), entity.getChunk(), Block.STONE);
+        assert entity.getInstance() != null;
+        return handlePhysics(entity.getInstance(), entity.getChunk(),
+                entity.getBoundingBox(),
+                entity.getPosition(), entityVelocity,
+                lastPhysicsResult);
+    }
+
+    /**
+     * Moves bounding box with physics applied (ie checking against blocks)
+     * <p>
+     * Works by getting all the full blocks that a bounding box could interact with.
+     * All bounding boxes inside the full blocks are checked for collisions with the given bounding box.
+     *
+     * @param boundingBox the bounding box to move
+     * @return the result of physics simulation
+     */
+    public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
+                                               @NotNull BoundingBox boundingBox,
+                                               @NotNull Pos position, @NotNull Vec velocity,
+                                               @Nullable PhysicsResult lastPhysicsResult) {
+        final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
         return BlockCollision.handlePhysics(boundingBox,
-                entityVelocity, currentPosition,
+                velocity, position,
                 getter, lastPhysicsResult);
     }
 

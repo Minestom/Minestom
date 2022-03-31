@@ -15,6 +15,8 @@ public final class BoundingBox implements Shape {
     private final Point offset;
     private Point relativeEnd;
 
+    public final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
+
     BoundingBox(double width, double height, double depth, Point offset) {
         this.width = width;
         this.height = height;

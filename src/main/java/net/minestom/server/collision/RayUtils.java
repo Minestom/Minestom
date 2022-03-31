@@ -345,7 +345,6 @@ final class RayUtils {
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        // TODO: BoundingBox.ZERO?
-        return BoundingBoxIntersectionCheck(new BoundingBox(0, 0, 0), start, direction, boundingBox, position);
+        return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position);
     }
 }
