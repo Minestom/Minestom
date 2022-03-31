@@ -58,11 +58,13 @@ public class GeneratorIntegrationTest {
             assertEquals(unit.absoluteStart(), u.absoluteStart());
             assertEquals(unit.absoluteEnd().add(16, 0, 16), u.absoluteEnd());
             u.modifier().setRelative(16, 0, 0, Block.STONE);
+            u.modifier().setRelative(16, 33, 0, Block.STONE);
         });
         instance.loadChunk(0, 0).join();
         instance.setGenerator(null);
         instance.loadChunk(1, 0).join();
         assertEquals(block, instance.getBlock(16, -64, 0));
+        assertEquals(block, instance.getBlock(16, -31, 0));
     }
 
     @Test

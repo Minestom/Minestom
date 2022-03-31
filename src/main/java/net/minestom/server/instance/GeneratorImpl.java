@@ -12,7 +12,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -86,15 +85,21 @@ final class GeneratorImpl {
             final int maxSectionY = end.section();
             final int maxSectionZ = end.chunkZ();
 
-            List<GenerationUnit> sections = new ArrayList<>();
+            final int width = maxSectionX - minSectionX;
+            final int height = maxSectionY - minSectionY;
+            final int depth = maxSectionZ - minSectionZ;
+
+            GenerationUnit[] units = new GenerationUnit[width * height * depth];
+            int index = 0;
             for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
                 for (int sectionY = minSectionY; sectionY < maxSectionY; sectionY++) {
                     for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
-                        sections.add(section(new Section(), sectionX, sectionY, sectionZ));
+                        final GenerationUnit unit = section(new Section(), sectionX, sectionY, sectionZ);
+                        units[index++] = unit;
                     }
                 }
             }
-            sections = List.copyOf(sections);
+            final List<GenerationUnit> sections = List.of(units);
 
             final Point startSection = new Vec(minSectionX * 16, minSectionY * 16, minSectionZ * 16);
             final Point endSection = new Vec(maxSectionX * 16, maxSectionY * 16, maxSectionZ * 16);
@@ -102,8 +107,7 @@ final class GeneratorImpl {
             final Point size = endSection.sub(startSection);
             final AreaModifierImpl modifier = new AreaModifierImpl(null,
                     size, startSection, endSection,
-                    maxSectionX - minSectionX, maxSectionY - minSectionY, maxSectionZ - minSectionZ,
-                    sections);
+                    width, height, depth, sections);
             final UnitImpl fork = new UnitImpl(modifier, size, startSection, endSection, sections, forks);
             forks.add(fork);
             return fork;
