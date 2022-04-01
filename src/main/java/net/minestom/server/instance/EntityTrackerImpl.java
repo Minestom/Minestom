@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -27,7 +28,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
-    private final TargetEntry<Entity>[] entries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
+    final TargetEntry<Entity>[] entries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
     private final Int2ObjectSyncMap<Point> entityPositions = Int2ObjectSyncMap.hashmap();
 
     @Override
@@ -112,20 +113,23 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Consumer<T> query) {
         final Long2ObjectSyncMap<List<Entity>> entities = entries[target.ordinal()].chunkEntities;
-        int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE);
-        if (point.x() % 16 != 0 || point.z() % 16 != 0) {
-            chunkRange++; // Need to loop through surrounding chunks to properly support borders
-        }
-        // Loop through range
-        if (range % 16 == 0) {
-            // Fast path for exact chunk range
-            forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
-                if (chunkEntities != null && !chunkEntities.isEmpty()) chunkEntities.forEach(query);
-            });
+        final int minChunkX = ChunkUtils.getChunkCoordinate(point.x() - range);
+        final int minChunkZ = ChunkUtils.getChunkCoordinate(point.z() - range);
+        final int maxChunkX = ChunkUtils.getChunkCoordinate(point.x() + range);
+        final int maxChunkZ = ChunkUtils.getChunkCoordinate(point.z() + range);
+        final double squaredRange = range * range;
+        if (minChunkX == maxChunkX && minChunkZ == maxChunkZ) {
+            // Single chunk
+            final var chunkEntities = (List<T>) entities.get(getChunkIndex(point));
+            if (chunkEntities != null && !chunkEntities.isEmpty()) {
+                chunkEntities.forEach(entity -> {
+                    final Point position = entityPositions.get(entity.getEntityId());
+                    if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
+                });
+            }
         } else {
-            // Slow path for non-exact chunk range
-            final double squaredRange = range * range;
+            // Multiple chunks
+            final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
             forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
                 final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
@@ -162,12 +166,12 @@ final class EntityTrackerImpl implements EntityTracker {
                 });
     }
 
-    private static final class TargetEntry<T extends Entity> {
+    static final class TargetEntry<T extends Entity> {
         private final EntityTracker.Target<T> target;
         private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
         private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
         // Chunk index -> entities inside it
-        private final Long2ObjectSyncMap<List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
+        final Long2ObjectSyncMap<List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
 
         TargetEntry(Target<T> target) {
             this.target = target;

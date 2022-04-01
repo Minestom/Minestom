@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.instance.EntityTracker;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -174,6 +173,46 @@ public class EntityTrackerTest {
         tracker.move(ent1, new Vec(16, 0, 0), EntityTracker.Target.ENTITIES, updater);
         entities.add(ent1);
         tracker.nearbyEntities(new Vec(15, 0, 0), 2, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+    }
+
+    @Test
+    public void nearbySingleChunk() {
+        var ent1 = new Entity(EntityType.ZOMBIE);
+        var ent2 = new Entity(EntityType.ZOMBIE);
+        var ent3 = new Entity(EntityType.ZOMBIE);
+        var updater = new EntityTracker.Update<>() {
+            @Override
+            public void add(@NotNull Entity entity) {
+                // Empty
+            }
+
+            @Override
+            public void remove(@NotNull Entity entity) {
+                // Empty
+            }
+        };
+
+        EntityTracker tracker = EntityTracker.newTracker();
+        tracker.register(ent1, new Vec(5, 0, 5), EntityTracker.Target.ENTITIES, updater);
+        tracker.register(ent2, new Vec(8, 0, 8), EntityTracker.Target.ENTITIES, updater);
+        tracker.register(ent3, new Vec(17, 0, 17), EntityTracker.Target.ENTITIES, updater);
+
+        Set<Entity> entities = new HashSet<>();
+
+        entities.add(ent1);
+        entities.add(ent2);
+        tracker.nearbyEntities(Vec.ZERO, 16, EntityTracker.Target.ENTITIES, entities::add);
+        assertEquals(Set.of(ent1, ent2), entities);
+        entities.clear();
+
+        entities.add(ent1);
+        entities.add(ent2);
+        tracker.nearbyEntities(new Vec(8, 0, 8), 5, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+
+        entities.add(ent2);
+        tracker.nearbyEntities(new Vec(8, 0, 8), 1, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
     }
 
