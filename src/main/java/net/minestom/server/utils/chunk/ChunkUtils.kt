@@ -31,6 +31,7 @@ object ChunkUtils {
      * @param eachCallback the optional callback when a chunk get loaded
      * @return a [CompletableFuture] completed once all chunks have been processed
      */
+    @JvmStatic
     fun optionalLoadAll(
         instance: Instance, chunks: LongArray,
         eachCallback: ChunkCallback?
@@ -72,6 +73,7 @@ object ChunkUtils {
         return isLoaded(chunk)
     }
 
+    @JvmStatic
     fun isLoaded(instance: Instance, point: Point): Boolean {
         val chunk = instance.getChunk(point.chunkX(), point.chunkZ())
         return isLoaded(chunk)
@@ -84,6 +86,7 @@ object ChunkUtils {
         return if (sameChunk) originChunk else instance.getChunk(chunkX, chunkZ)
     }
 
+    @JvmStatic
     fun retrieve(instance: Instance, originChunk: Chunk?, position: Point): Chunk? {
         return retrieve(instance, originChunk, position.x(), position.z())
     }
@@ -96,6 +99,7 @@ object ChunkUtils {
         return getChunkCoordinate(Math.floor(xz).toInt())
     }
 
+    @JvmStatic
     fun getChunkCoordinate(xz: Int): Int {
         // Assume chunk/section size being 16 (4 bits)
         return xz shr 4
@@ -120,6 +124,7 @@ object ChunkUtils {
         return getChunkIndex(chunk.chunkX, chunk.chunkZ)
     }
 
+    @JvmStatic
     fun getChunkIndex(point: Point): Long {
         return getChunkIndex(point.chunkX(), point.chunkZ())
     }
@@ -130,6 +135,7 @@ object ChunkUtils {
      * @param index the chunk index computed by [.getChunkIndex]
      * @return the chunk X based on the index
      */
+    @JvmStatic
     fun getChunkCoordX(index: Long): Int {
         return (index shr 32).toInt()
     }
@@ -140,10 +146,12 @@ object ChunkUtils {
      * @param index the chunk index computed by [.getChunkIndex]
      * @return the chunk Z based on the index
      */
+    @JvmStatic
     fun getChunkCoordZ(index: Long): Int {
         return index.toInt()
     }
 
+    @JvmStatic
     fun getChunkCount(range: Int): Int {
         require(range >= 0) { "Range cannot be negative" }
         val square = range * 2 + 1
@@ -164,6 +172,7 @@ object ChunkUtils {
         }
     }
 
+    @JvmStatic
     fun forDifferingChunksInRange(
         newChunkX: Int, newChunkZ: Int,
         oldChunkX: Int, oldChunkZ: Int,
@@ -184,6 +193,7 @@ object ChunkUtils {
         }
     }
 
+    @JvmStatic
     fun forChunksInRange(point: Point, range: Int, consumer: IntegerBiConsumer) {
         forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer)
     }
@@ -196,6 +206,7 @@ object ChunkUtils {
      * @param z the block Z
      * @return an index which can be used to store and retrieve later data linked to a block position
      */
+    @JvmStatic
     fun getBlockIndex(x: Int, y: Int, z: Int): Int {
         var x = x
         var z = z
@@ -213,6 +224,7 @@ object ChunkUtils {
      * @param chunkZ the chunk Z
      * @return the instance position of the block located in `index`
      */
+    @JvmStatic
     fun getBlockPosition(index: Int, chunkX: Int, chunkZ: Int): Point {
         val x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX
         val y = index ushr 4 and 0xFF
@@ -226,6 +238,7 @@ object ChunkUtils {
      * @param index an index computed from [.getBlockIndex]
      * @return the chunk position X (O-15) of the specified index
      */
+    @JvmStatic
     fun blockIndexToChunkPositionX(index: Int): Int {
         return index and 0xF // 0-4 bits
     }
@@ -236,6 +249,7 @@ object ChunkUtils {
      * @param index an index computed from [.getBlockIndex]
      * @return the chunk position Y of the specified index
      */
+    @JvmStatic
     fun blockIndexToChunkPositionY(index: Int): Int {
         return index shr 4 and 0x0FFFFFF // 4-28 bits
     }
@@ -246,6 +260,7 @@ object ChunkUtils {
      * @param index an index computed from [.getBlockIndex]
      * @return the chunk position Z (O-15) of the specified index
      */
+    @JvmStatic
     fun blockIndexToChunkPositionZ(index: Int): Int {
         return index shr 28 and 0xF // 28-32 bits
     }
@@ -256,6 +271,7 @@ object ChunkUtils {
      * @param xyz global coordinate
      * @return section coordinate
      */
+    @JvmStatic
     fun toSectionRelativeCoordinate(xyz: Int): Int {
         return xyz and 0xF
     }

@@ -442,6 +442,7 @@ class BinaryWriter : OutputStream {
     }
 
     companion object {
+        @JvmStatic
         @ApiStatus.Experimental
         fun view(buffer: ByteBuffer): BinaryWriter {
             return BinaryWriter(buffer, false)

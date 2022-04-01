@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
  */
 @ApiStatus.Internal
 object DebugUtils {
+    @JvmField
     var INSIDE_TEST = PropertyUtils.getBoolean("minestom.inside-test", false)
     val LOGGER = LoggerFactory.getLogger(DebugUtils::class.java)
     private val LINE_SEPARATOR = System.getProperty("line.separator")

@@ -188,12 +188,14 @@ class BinaryBuffer private constructor(  // To become a `MemorySegment` once rel
             return BinaryBuffer(ByteBuffer.allocateDirect(size))
         }
 
+        @JvmStatic
         @ApiStatus.Internal
         fun wrap(buffer: ByteBuffer): BinaryBuffer {
             assert(buffer.isDirect)
             return BinaryBuffer(buffer)
         }
 
+        @JvmStatic
         fun copy(buffer: BinaryBuffer): BinaryBuffer {
             val size = buffer.readableBytes()
             val temp = ByteBuffer.allocateDirect(size)

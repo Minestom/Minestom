@@ -51,6 +51,7 @@ object PooledBuffers {
     /**
      * Thread local buffer containing raw packet stream.
      */
+    @JvmStatic
     fun packetBuffer(): ByteBuffer {
         return PACKET_BUFFER.get().clear()
     }
@@ -58,10 +59,12 @@ object PooledBuffers {
     /**
      * Thread local buffer targeted at very small scope operations (encryption, compression, ...).
      */
+    @JvmStatic
     fun tempBuffer(): ByteBuffer {
         return LOCAL_BUFFER.get().clear()
     }
 
+    @JvmStatic
     fun get(): BinaryBuffer {
         var buffer: BinaryBuffer
         var ref: SoftReference<BinaryBuffer>
@@ -71,18 +74,22 @@ object PooledBuffers {
         return BinaryBuffer.Companion.ofSize(BUFFER_SIZE)
     }
 
+    @JvmStatic
     fun add(buffer: BinaryBuffer) {
         POOLED_BUFFERS.relaxedOffer(SoftReference(buffer.clear()))
     }
 
+    @JvmStatic
     fun clear() {
         POOLED_BUFFERS.clear()
     }
 
+    @JvmStatic
     fun count(): Int {
         return POOLED_BUFFERS.size()
     }
 
+    @JvmStatic
     fun bufferSize(): Int {
         return BUFFER_SIZE
     }
@@ -91,10 +98,12 @@ object PooledBuffers {
         CLEANER.register(ref, BufferRefCleaner(buffer))
     }
 
+    @JvmStatic
     fun registerBuffer(ref: Any?, buffer: BinaryBuffer?) {
         CLEANER.register(ref, BufferCleaner(buffer))
     }
 
+    @JvmStatic
     fun registerBuffers(ref: Any?, buffers: Collection<BinaryBuffer?>?) {
         CLEANER.register(ref, BuffersCleaner(buffers))
     }

@@ -10,11 +10,14 @@ import java.lang.Exception
 
 @ApiStatus.Internal
 object AsyncUtils {
+    @JvmField
     val VOID_FUTURE = CompletableFuture.completedFuture<Void?>(null)
+    @JvmStatic
     fun <T> empty(): CompletableFuture<T?> {
         return VOID_FUTURE as CompletableFuture<T?>
     }
 
+    @JvmStatic
     fun runAsync(runnable: Runnable): CompletableFuture<Void> {
         return CompletableFuture.runAsync {
             try {
