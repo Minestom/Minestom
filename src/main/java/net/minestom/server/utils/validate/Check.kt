@@ -18,6 +18,7 @@ object Check {
         }
     }
 
+    @JvmStatic
     @Contract("null, _, _ -> fail")
     fun notNull(`object`: Any?, reason: String, vararg arguments: Any?) {
         if (Objects.isNull(`object`)) {
@@ -30,11 +31,13 @@ object Check {
         require(!condition) { reason }
     }
 
+    @JvmStatic
     @Contract("true, _, _ -> fail")
     fun argCondition(condition: Boolean, reason: String, vararg arguments: Any?) {
         require(!condition) { MessageFormat.format(reason, *arguments) }
     }
 
+    @JvmStatic
     @Contract("_ -> fail")
     fun fail(reason: String) {
         throw IllegalArgumentException(reason)
@@ -45,6 +48,7 @@ object Check {
         check(!condition) { reason }
     }
 
+    @JvmStatic
     @Contract("true, _, _ -> fail")
     fun stateCondition(condition: Boolean, reason: String, vararg arguments: Any?) {
         check(!condition) { MessageFormat.format(reason, *arguments) }

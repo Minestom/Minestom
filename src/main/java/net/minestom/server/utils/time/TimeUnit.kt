@@ -10,9 +10,13 @@ import java.time.temporal.ChronoUnit
 object TimeUnit {
     val DAY: TemporalUnit = ChronoUnit.DAYS
     val HOUR: TemporalUnit = ChronoUnit.HOURS
+    @JvmField
     val MINUTE: TemporalUnit = ChronoUnit.MINUTES
+    @JvmField
     val SECOND: TemporalUnit = ChronoUnit.SECONDS
+    @JvmField
     val MILLISECOND: TemporalUnit = ChronoUnit.MILLIS
+    @JvmField
     val SERVER_TICK: TemporalUnit = Tick.Companion.SERVER_TICKS
     val CLIENT_TICK: TemporalUnit = Tick.Companion.CLIENT_TICKS
 

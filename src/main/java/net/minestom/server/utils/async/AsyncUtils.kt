@@ -23,7 +23,7 @@ object AsyncUtils {
             try {
                 runnable.run()
             } catch (e: Exception) {
-                MinecraftServer.getExceptionManager().handleException(e)
+                MinecraftServer.exceptionManager.handleException(e)
             }
         }
     }

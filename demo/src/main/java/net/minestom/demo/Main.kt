@@ -26,9 +26,9 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         val minecraftServer = MinecraftServer.init()
-        val blockManager = MinecraftServer.getBlockManager()
+        val blockManager = MinecraftServer.blockManager
         blockManager.registerBlockPlacementRule(RedstonePlacementRule())
-        val commandManager = MinecraftServer.getCommandManager()
+        val commandManager = MinecraftServer.commandManager
         commandManager.register(TestCommand())
         commandManager.register(EntitySelectorCommand())
         commandManager.register(HealthCommand())
@@ -56,9 +56,9 @@ object Main {
                 Component.text("Unknown command", NamedTextColor.RED)
             )
         }
-        MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND))
-        MinecraftServer.getSchedulerManager().buildShutdownTask { println("Good night") }
-        MinecraftServer.getGlobalEventHandler()
+        MinecraftServer.benchmarkManager.enable(Duration.of(10, TimeUnit.SECOND))
+        MinecraftServer.schedulerManager.buildShutdownTask { println("Good night") }
+        MinecraftServer.globalEventHandler
             .addListener(ServerListPingEvent::class.java) { event: ServerListPingEvent ->
                 val responseData = event.responseData
                 responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"))

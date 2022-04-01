@@ -23,6 +23,7 @@ object PlayerInventoryUtils {
      * the offset for the player inventory is [.OFFSET]
      * @return a packet which can be use internally with Minestom
      */
+    @JvmStatic
     fun convertPlayerInventorySlot(slot: Int, offset: Int): Int {
         return when (slot) {
             0 -> CRAFT_RESULT
@@ -38,6 +39,7 @@ object PlayerInventoryUtils {
         }
     }
 
+    @JvmStatic
     fun convertSlot(slot: Int, offset: Int): Int {
         var slot = slot
         val rowSize = 9
@@ -56,6 +58,7 @@ object PlayerInventoryUtils {
      * @param slot the internal slot
      * @return a slot id which can be used for packets
      */
+    @JvmStatic
     fun convertToPacketSlot(slot: Int): Int {
         var slot = slot
         if (slot > -1 && slot < 9) { // Held bar 0-8

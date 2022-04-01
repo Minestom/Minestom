@@ -93,7 +93,7 @@ class ArgumentCommand(id: String) : Argument<CommandResult>(id, true, true) {
     @Throws(ArgumentSyntaxException::class)
     override fun parse(input: String): CommandResult {
         val commandString = if (!shortcut.isEmpty()) shortcut + StringUtils.SPACE + input else input
-        val dispatcher = MinecraftServer.getCommandManager().dispatcher
+        val dispatcher = MinecraftServer.commandManager.dispatcher
         val result = dispatcher.parse(commandString)
         if (isOnlyCorrect && result.type != CommandResult.Type.SUCCESS) throw ArgumentSyntaxException(
             "Invalid command",

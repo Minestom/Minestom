@@ -342,7 +342,7 @@ class BinaryWriter : OutputStream {
             nbtWriter!!.writeNamed(name, tag)
         } catch (e: IOException) {
             // should not throw, as nbtWriter points to this PacketWriter
-            MinecraftServer.getExceptionManager().handleException(e)
+            MinecraftServer.exceptionManager.handleException(e)
         }
     }
 

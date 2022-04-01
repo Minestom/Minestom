@@ -276,10 +276,10 @@ class BinaryReader(val buffer: ByteBuffer) : InputStream() {
         return try {
             reader.read()
         } catch (e: IOException) {
-            MinecraftServer.getExceptionManager().handleException(e)
+            MinecraftServer.exceptionManager.handleException(e)
             throw RuntimeException()
         } catch (e: NBTException) {
-            MinecraftServer.getExceptionManager().handleException(e)
+            MinecraftServer.exceptionManager.handleException(e)
             throw RuntimeException()
         }
     }

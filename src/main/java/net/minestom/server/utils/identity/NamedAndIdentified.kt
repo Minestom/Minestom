@@ -81,6 +81,7 @@ interface NamedAndIdentified {
          * @param uuid the uuid
          * @return the named and identified instance
          */
+        @JvmStatic
         fun of(name: Component, uuid: UUID): NamedAndIdentified {
             return NamedAndIdentifiedImpl(name, uuid)
         }

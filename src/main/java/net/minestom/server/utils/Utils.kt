@@ -6,10 +6,12 @@ import java.util.*
 
 @ApiStatus.Internal
 object Utils {
+    @JvmStatic
     fun getVarIntSize(input: Int): Int {
         return if (input and -0x80 == 0) 1 else if (input and -0x4000 == 0) 2 else if (input and -0x200000 == 0) 3 else if (input and -0x10000000 == 0) 4 else 5
     }
 
+    @JvmStatic
     fun writeVarInt(buf: ByteBuffer, value: Int) {
         if (value and (-0x1 shl 7) == 0) {
             buf.put(value.toByte())
@@ -33,18 +35,21 @@ object Utils {
         }
     }
 
+    @JvmStatic
     fun writeVarIntHeader(buffer: ByteBuffer, startIndex: Int, value: Int) {
         buffer.put(startIndex, (value and 0x7F or 0x80).toByte())
         buffer.put(startIndex + 1, (value ushr 7 and 0x7F or 0x80).toByte())
         buffer.put(startIndex + 2, (value ushr 14).toByte())
     }
 
+    @JvmStatic
     fun writeEmptyVarIntHeader(buffer: ByteBuffer): Int {
         val index = buffer.position()
         buffer.position(index + 3) // Skip 3 bytes
         return index
     }
 
+    @JvmStatic
     fun readVarInt(buf: ByteBuffer): Int {
         // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
         var result = 0
@@ -86,6 +91,7 @@ object Utils {
         } while (value != 0L)
     }
 
+    @JvmStatic
     fun uuidToIntArray(uuid: UUID): IntArray {
         val array = IntArray(4)
         val uuidMost = uuid.mostSignificantBits
@@ -97,6 +103,7 @@ object Utils {
         return array
     }
 
+    @JvmStatic
     fun intArrayToUuid(array: IntArray): UUID {
         val uuidMost = array[0].toLong() shl 32 or array[1].toLong() and 0xFFFFFFFFL
         val uuidLeast = array[2].toLong() shl 32 or array[3].toLong() and 0xFFFFFFFFL
@@ -126,6 +133,7 @@ object Utils {
         0, 5
     )
 
+    @JvmStatic
     fun encodeBlocks(blocks: IntArray, bitsPerEntry: Int): LongArray {
         val maxEntryValue = (1L shl bitsPerEntry) - 1
         val valuesPerLong = (64 / bitsPerEntry).toChar()

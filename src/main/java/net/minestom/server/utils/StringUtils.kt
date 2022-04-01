@@ -8,6 +8,7 @@ import net.minestom.server.utils.UniqueIdUtils
 object StringUtils {
     const val SPACE = " "
     const val SPACE_CHAR = ' '
+    @JvmStatic
     fun countMatches(str: CharSequence, ch: Char): Int {
         if (str.length == 0) {
             return 0
@@ -31,6 +32,7 @@ object StringUtils {
      * @return The Jaro-Winkler score (between 0.0 and 1.0), with a higher value indicating larger similarity.
      * @author Thomas Trojer thomas@trojer.net
      */
+    @JvmStatic
     fun jaroWinklerScore(s1: String?, s2: String?): Double {
         // lowest score on empty strings
         if (s1 == null || s2 == null || s1.isEmpty() || s2.isEmpty()) {

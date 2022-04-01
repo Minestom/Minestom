@@ -40,6 +40,7 @@ object TickUtils {
      * @return the number of ticks
      * @throws IllegalArgumentException if duration is negative
      */
+    @JvmStatic
     fun fromDuration(duration: Duration, msPerTick: Int): Int {
         Check.argCondition(duration.isNegative, "Duration cannot be negative")
         return (duration.toMillis() / msPerTick).toInt()

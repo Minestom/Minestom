@@ -81,6 +81,7 @@ class MinecraftServer {
     }
 
     companion object {
+        @JvmField
         val LOGGER = LoggerFactory.getLogger(MinecraftServer::class.java)
         const val VERSION_NAME = "1.18.2"
         const val PROTOCOL_VERSION = 758
@@ -92,7 +93,9 @@ class MinecraftServer {
 
         // Config
         // Can be modified at performance cost when increased
+        @JvmField
         val TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20)
+        @JvmField
         val TICK_MS = 1000 / TICK_PER_SECOND
         /**
          * Gets the maximum number of packets a client can send over 1 second.
@@ -105,6 +108,7 @@ class MinecraftServer {
          * @param rateLimit the number of packet, 0 to disable
          */
         // Network monitoring
+        @JvmStatic
         var rateLimit = 300
         /**
          * Gets the maximum packet size (in bytes) that a client can send without getting disconnected.
@@ -132,6 +136,7 @@ class MinecraftServer {
          * @param chunkViewDistance the new chunk view distance
          * @throws IllegalArgumentException if `chunkViewDistance` is not between 2 and 32
          */
+        @JvmStatic
         @set:Deprecated("should instead be defined with a java property")
         var chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8)
             set(chunkViewDistance) {
@@ -156,6 +161,7 @@ class MinecraftServer {
          * @param entityViewDistance the new entity view distance
          * @throws IllegalArgumentException if `entityViewDistance` is not between 0 and 32
          */
+        @JvmStatic
         @set:Deprecated("should instead be defined with a java property")
         var entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5)
             set(entityViewDistance) {
@@ -183,6 +189,7 @@ class MinecraftServer {
          * @param compressionThreshold the new compression threshold, 0 to disable compression
          * @throws IllegalStateException if this is called after the server started
          */
+        @JvmStatic
         var compressionThreshold = 256
             set(compressionThreshold) {
                 Check.stateCondition(
@@ -220,6 +227,7 @@ class MinecraftServer {
          * @param brandName the server brand name
          * @throws NullPointerException if `brandName` is null
          */
+        @JvmStatic
         var brandName = "Minestom"
             set(brandName) {
                 field = brandName
@@ -235,17 +243,20 @@ class MinecraftServer {
          *
          * @param difficulty the new server difficulty
          */
+        @JvmStatic
         var difficulty = Difficulty.NORMAL
             set(difficulty) {
                 field = difficulty
                 PacketUtils.broadcastPacket(ServerDifficultyPacket(difficulty, true))
             }
 
+        @JvmStatic
         fun init(): MinecraftServer {
             updateProcess()
             return MinecraftServer()
         }
 
+        @JvmStatic
         @ApiStatus.Internal
         fun updateProcess(): ServerProcess {
             val process: ServerProcess
@@ -258,25 +269,34 @@ class MinecraftServer {
             return process
         }
 
+        @JvmStatic
         @ApiStatus.Experimental
         fun process(): @UnknownNullability ServerProcess? {
             return serverProcess
         }
 
+        @JvmStatic
         val globalEventHandler: GlobalEventHandler
             get() = serverProcess!!.eventHandler()
+        @JvmStatic
         val packetListenerManager: PacketListenerManager
             get() = serverProcess!!.packetListener()
+        @JvmStatic
         val instanceManager: InstanceManager
             get() = serverProcess!!.instance()
+        @JvmStatic
         val blockManager: BlockManager
             get() = serverProcess!!.block()
+        @JvmStatic
         val commandManager: CommandManager
             get() = serverProcess!!.command()
+        @JvmStatic
         val recipeManager: RecipeManager
             get() = serverProcess!!.recipe()
+        @JvmStatic
         val teamManager: TeamManager
             get() = serverProcess!!.team()
+        @JvmStatic
         val schedulerManager: SchedulerManager
             get() = serverProcess!!.scheduler()
 
@@ -285,12 +305,16 @@ class MinecraftServer {
          *
          * @return the benchmark manager
          */
+        @JvmStatic
         val benchmarkManager: BenchmarkManager
             get() = serverProcess!!.benchmark()
+        @JvmStatic
         val exceptionManager: ExceptionManager
             get() = serverProcess!!.exception()
+        @JvmStatic
         val connectionManager: ConnectionManager
             get() = serverProcess!!.connection()
+        @JvmStatic
         val bossBarManager: BossBarManager
             get() = serverProcess!!.bossBar()
         val packetProcessor: PacketProcessor
@@ -299,22 +323,28 @@ class MinecraftServer {
             get() = serverProcess!!.isAlive
         val isStopping: Boolean
             get() = !isStarted
+        @JvmStatic
         val dimensionTypeManager: DimensionTypeManager
             get() = serverProcess!!.dimension()
+        @JvmStatic
         val biomeManager: BiomeManager
             get() = serverProcess!!.biome()
         val advancementManager: AdvancementManager
             get() = serverProcess!!.advancement()
+        @JvmStatic
         val extensionManager: ExtensionManager
             get() = serverProcess!!.extension()
+        @JvmStatic
         val tagManager: TagManager
             get() = serverProcess!!.tag()
+        @JvmStatic
         val server: Server
             get() = serverProcess!!.server()
 
         /**
          * Stops this server properly (saves if needed, kicking players, etc.)
          */
+        @JvmStatic
         fun stopCleanly() {
             serverProcess!!.stop()
         }

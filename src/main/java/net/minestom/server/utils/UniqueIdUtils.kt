@@ -20,6 +20,7 @@ object UniqueIdUtils {
      * @param input The input string to be checked
      * @return `true` if the input an unique identifier, otherwise `false`
      */
+    @JvmStatic
     fun isUniqueId(input: String): Boolean {
         return input.matches(UNIQUE_ID_PATTERN.pattern())
     }
