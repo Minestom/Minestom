@@ -111,7 +111,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Consumer<T> query) {
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
+        final Long2ObjectSyncMap<List<Entity>> entities = entries[target.ordinal()].chunkEntities;
         int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE);
         if (point.x() % 16 != 0 || point.z() % 16 != 0) {
             chunkRange++; // Need to loop through surrounding chunks to properly support borders
@@ -120,15 +120,14 @@ final class EntityTrackerImpl implements EntityTracker {
         if (range % 16 == 0) {
             // Fast path for exact chunk range
             forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                var chunkEntities = (List<T>) entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
-                if (chunkEntities == null || chunkEntities.isEmpty()) return;
-                chunkEntities.forEach(query);
+                final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
+                if (chunkEntities != null && !chunkEntities.isEmpty()) chunkEntities.forEach(query);
             });
         } else {
             // Slow path for non-exact chunk range
             final double squaredRange = range * range;
             forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                var chunkEntities = (List<T>) entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
+                final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
                     final Point position = entityPositions.get(entity.getEntityId());
