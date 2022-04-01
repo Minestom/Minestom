@@ -11,6 +11,7 @@ import net.minestom.server.event.player.PlayerStopSprintingEvent
 import net.minestom.server.event.player.PlayerStartFlyingWithElytraEvent
 
 object EntityActionListener {
+    @JvmStatic
     fun listener(packet: ClientEntityActionPacket, player: Player) {
         when (packet.action()) {
             ClientEntityActionPacket.Action.START_SNEAKING -> setSneaking(player, true)

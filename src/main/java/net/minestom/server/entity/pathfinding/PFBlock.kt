@@ -173,6 +173,7 @@ class PFBlock internal constructor(private val block: Block) : IBlockDescription
          * @param block the block
          * @return the [PFBlock] linked to `blockStateId`
          */
+        @JvmStatic
         operator fun get(block: Block): PFBlock {
             return BLOCK_DESCRIPTION_MAP.computeIfAbsent(
                 block.stateId(),

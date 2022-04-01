@@ -7,6 +7,7 @@ import net.minestom.server.event.EventDispatcher
 import net.minestom.server.event.player.PlayerSettingsChangeEvent
 
 object SettingsListener {
+    @JvmStatic
     fun listener(packet: ClientSettingsPacket, player: Player) {
         val settings = player.settings
         val viewDistance = Math.abs(packet.viewDistance().toInt()).toByte()

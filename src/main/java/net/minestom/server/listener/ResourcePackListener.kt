@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.client.play.ClientResourcePackStatusPa
 import net.minestom.server.event.player.PlayerResourcePackStatusEvent
 
 object ResourcePackListener {
+    @JvmStatic
     fun listener(packet: ClientResourcePackStatusPacket, player: Player?) {
         EventDispatcher.call(PlayerResourcePackStatusEvent(player!!, packet.status()))
     }
