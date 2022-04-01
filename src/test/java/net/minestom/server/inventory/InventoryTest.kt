@@ -1,0 +1,397 @@
+package net.minestom.server.inventoryimport
+
+import net.kyori.adventure.text.Component
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+
+net.minestom.server.ServerProcess.ticker
+import net.minestom.server.ServerProcess.Ticker.tick
+import net.minestom.server.ServerProcess.instance
+import net.minestom.server.ServerProcess.eventHandler
+import org.jglrxavpok.hephaistos.parser.SNBTParser.parse
+import net.minestom.server.ServerProcess.connection
+import net.minestom.server.MinecraftServer.Companion.updateProcess
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound.setInt
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound.toCompound
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound.set
+import org.jglrxavpok.hephaistos.nbt.NBTCompound.toSNBT
+import org.jglrxavpok.hephaistos.nbt.NBTList.size
+import org.jglrxavpok.hephaistos.nbt.NBTList.asListView
+import org.jglrxavpok.hephaistos.nbt.NBTString.value
+import net.minestom.server.utils.collection.IndexMap.get
+import net.minestom.server.utils.collection.ObjectArray.set
+import net.minestom.server.utils.collection.ObjectArray.get
+import net.minestom.server.utils.collection.ObjectArray.trim
+import net.minestom.server.utils.mojang.MojangUtils.fromUsername
+import net.minestom.server.utils.position.PositionUtils.getLookYaw
+import net.minestom.server.utils.position.PositionUtils.getLookPitch
+import net.minestom.server.world.DimensionType.Companion.builder
+import net.minestom.server.world.DimensionType.DimensionTypeBuilder.build
+import net.minestom.server.ServerProcess.dimension
+import net.minestom.server.world.DimensionTypeManager.addDimension
+import net.minestom.server.command.builder.arguments.ArgumentType.Literal
+import net.minestom.server.utils.binary.PooledBuffers.packetBuffer
+import net.minestom.server.utils.binary.BinaryBuffer.Companion.wrap
+import net.minestom.server.utils.binary.BinaryBuffer.reset
+import net.minestom.server.utils.Utils.writeVarInt
+import net.minestom.server.utils.Utils.getVarIntSize
+import net.minestom.server.utils.binary.BinaryBuffer.readableBytes
+import net.minestom.server.utils.binary.PooledBuffers.clear
+import net.minestom.server.utils.binary.PooledBuffers.count
+import net.minestom.server.utils.binary.PooledBuffers.get
+import net.minestom.server.utils.binary.PooledBuffers.bufferSize
+import net.minestom.server.utils.binary.BinaryBuffer.capacity
+import net.minestom.server.utils.binary.PooledBuffers.add
+import net.minestom.server.utils.binary.Writeable.write
+import net.minestom.server.utils.binary.BinaryWriter.toByteArray
+import net.minestom.server.MinecraftServer.Companion.chunkViewDistance
+import net.minestom.server.utils.chunk.ChunkUtils.getChunkCount
+import net.minestom.server.entity.metadata.other.SlimeMeta.size
+import net.minestom.server.MinecraftServer.Companion.globalEventHandler
+import net.minestom.server.utils.inventory.PlayerInventoryUtils.convertToPacketSlot
+import net.minestom.server.MinecraftServer.Companion.init
+import net.minestom.server.utils.inventory.PlayerInventoryUtils.convertPlayerInventorySlot
+import net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex
+import net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordX
+import net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordZ
+import net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate
+import net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound.setString
+import net.minestom.server.permission.PermissionHandler.hasPermission
+import net.minestom.server.permission.PermissionHandler.addPermission
+import net.minestom.server.ServerProcess.advancement
+import net.minestom.server.advancements.AdvancementManager.createTab
+import net.minestom.server.advancements.AdvancementTab.addViewer
+import net.minestom.server.advancements.AdvancementTab.getViewers
+import net.minestom.server.advancements.AdvancementTab.Companion.getTabs
+import net.minestom.server.advancements.AdvancementTab.removeViewer
+import net.minestom.server.ServerProcess.start
+import net.minestom.server.ServerProcess.stop
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound.clear
+import net.minestom.server.ServerProcess
+import net.minestom.server.api.TestConnection
+import net.minestom.server.api.FlexibleListener
+import net.minestom.server.instance.InstanceContainer
+import net.minestom.server.instance.ChunkGenerator
+import net.minestom.server.instance.batch.ChunkBatch
+import net.minestom.server.instance.ChunkPopulator
+import net.minestom.server.api.EnvImpl.FlexibleListenerImpl
+import java.util.concurrent.CopyOnWriteArrayList
+import net.minestom.server.api.TestConnectionImpl
+import net.minestom.server.api.EnvImpl.EventCollector
+import net.minestom.server.event.GlobalEventHandler
+import net.minestom.server.api.EnvParameterResolver
+import net.minestom.server.api.EnvBefore
+import net.minestom.server.api.EnvCleaner
+import java.lang.ref.WeakReference
+import java.lang.InterruptedException
+import org.jglrxavpok.hephaistos.nbt.NBTCompound
+import org.jglrxavpok.hephaistos.nbt.NBTException
+import java.lang.StringBuilder
+import java.lang.Void
+import net.minestom.server.api.EnvImpl
+import java.util.concurrent.CompletableFuture
+import net.minestom.server.network.packet.server.ServerPacket
+import net.minestom.server.api.TestConnectionImpl.PlayerConnectionImpl
+import net.minestom.server.api.TestConnectionImpl.IncomingCollector
+import net.minestom.server.event.player.PlayerLoginEvent
+import net.minestom.server.network.player.PlayerConnection
+import net.minestom.server.network.packet.server.SendablePacket
+import java.net.InetSocketAddress
+import net.minestom.server.MinecraftServer
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound
+import net.minestom.server.tag.TagHandler
+import org.jglrxavpok.hephaistos.nbt.NBT
+import net.minestom.server.item.ItemStack
+import net.minestom.server.item.Material
+import org.jglrxavpok.hephaistos.nbt.NBTInt
+import java.lang.IllegalStateException
+import net.minestom.server.tag.TagSerializer
+import net.minestom.server.tag.TagReadable
+import net.minestom.server.tag.TagWritable
+import net.minestom.server.tag.TagViewTest
+import net.minestom.server.tag.TagStructureTest
+import net.minestom.server.item.ItemTest
+import net.minestom.server.item.Enchantment
+import net.minestom.server.item.ItemMetaBuilder
+import java.util.function.UnaryOperator
+import org.jglrxavpok.hephaistos.nbt.NBTList
+import org.jglrxavpok.hephaistos.nbt.NBTString
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
+import net.minestom.server.item.ItemStackBuilder
+import net.kyori.adventure.text.format.NamedTextColor
+import net.minestom.server.item.ItemHideFlag
+import net.minestom.server.event.trait.CancellableEvent
+import net.minestom.server.event.trait.RecursiveEvent
+import net.minestom.server.event.EventNodeTest.Recursive1
+import net.minestom.server.event.trait.EntityEvent
+import net.minestom.server.event.EventNode
+import java.util.concurrent.atomic.AtomicBoolean
+import net.minestom.server.event.EventNodeTest.EventTest
+import net.minestom.server.event.EventNodeTest.CancellableTest
+import net.minestom.server.event.EventNodeTest.Recursive2
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.function.BiPredicate
+import net.minestom.server.event.EventNodeTest.ItemTestEvent
+import net.minestom.server.event.EventBinding
+import java.util.function.BiConsumer
+import net.minestom.server.event.EventNodeImpl
+import net.minestom.server.entity.EntityType
+import net.minestom.server.event.EventNodeTest.EntityTestEvent
+import net.minestom.server.event.trait.PlayerEvent
+import java.lang.Runnable
+import net.minestom.server.timer.ExecutionType
+import net.minestom.server.timer.TaskSchedule
+import net.minestom.server.utils.collection.IndexMap
+import net.minestom.server.utils.collection.ObjectArray
+import net.minestom.server.utils.NamespaceID
+import java.lang.AssertionError
+import net.minestom.server.utils.mojang.MojangUtils
+import net.minestom.server.api.EnvTest
+import net.minestom.server.entity.GameMode
+import net.minestom.server.network.packet.server.play.JoinGamePacket
+import net.minestom.server.network.packet.server.play.ServerDifficultyPacket
+import net.minestom.server.network.packet.server.play.SpawnPositionPacket
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket
+import net.minestom.server.network.packet.server.play.EntityPropertiesPacket
+import net.minestom.server.network.packet.server.play.EntityStatusPacket
+import net.minestom.server.network.packet.server.play.UpdateHealthPacket
+import net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket
+import net.minestom.server.world.DimensionType
+import net.minestom.server.network.packet.server.play.SetExperiencePacket
+import java.lang.IllegalAccessException
+import net.minestom.server.entity.EntityTypes
+import net.minestom.server.entity.EntityTypeImpl
+import net.minestom.server.entity.PlayerSkin
+import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket
+import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket
+import net.minestom.server.event.player.PlayerChangeHeldSlotEvent
+import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket
+import net.minestom.server.entity.EntityRemovalIntegrationTest.TestEntity
+import net.minestom.server.event.entity.EntityTickEvent
+import java.time.temporal.TemporalUnit
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket
+import net.minestom.server.network.packet.server.play.EntityTeleportPacket
+import java.util.concurrent.atomic.AtomicReference
+import net.minestom.server.thread.TickThread
+import net.minestom.server.thread.ThreadDispatcher
+import net.minestom.server.thread.ThreadProvider
+import net.minestom.server.thread.MinestomThread
+import net.minestom.server.Tickable
+import java.util.concurrent.CopyOnWriteArraySet
+import java.util.function.IntFunction
+import net.minestom.server.thread.ThreadProvider.RefreshType
+import java.util.concurrent.ConcurrentHashMap
+import net.minestom.server.command.builder.CommandDispatcher
+import net.minestom.server.command.builder.CommandContext
+import net.minestom.server.command.builder.condition.CommandCondition
+import java.io.IOException
+import net.minestom.server.network.PacketProcessor
+import java.net.UnixDomainSocketAddress
+import java.util.zip.DataFormatException
+import net.minestom.server.network.packet.client.play.ClientPluginMessagePacket
+import net.minestom.server.utils.binary.PooledBuffers
+import net.minestom.server.utils.PacketUtils
+import net.minestom.server.utils.binary.BinaryBuffer
+import net.minestom.server.utils.binary.BinaryReader
+import net.minestom.server.network.packet.server.play.ChatMessagePacket
+import net.minestom.server.message.ChatPosition
+import net.minestom.server.network.packet.server.LazyPacket
+import net.minestom.server.network.packet.server.CachedPacket
+import net.minestom.server.network.packet.server.FramedPacket
+import net.minestom.server.network.PacketWriteReadTest
+import net.minestom.server.network.packet.client.ClientPacket
+import net.minestom.server.coordinate.Vec
+import net.minestom.server.network.packet.server.handshake.ResponsePacket
+import net.minestom.server.network.packet.server.status.PongPacket
+import net.minestom.server.network.packet.server.login.LoginDisconnectPacket
+import net.minestom.server.network.packet.server.login.LoginSuccessPacket
+import net.minestom.server.network.packet.server.login.SetCompressionPacket
+import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket
+import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket
+import net.minestom.server.network.packet.server.play.ActionBarPacket
+import net.minestom.server.network.packet.server.play.AttachEntityPacket
+import net.minestom.server.network.packet.server.play.BlockActionPacket
+import net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket
+import net.minestom.server.network.packet.server.play.BlockChangePacket
+import net.minestom.server.network.packet.server.play.BlockEntityDataPacket
+import net.minestom.server.network.packet.server.play.BossBarPacket
+import net.minestom.server.network.packet.server.play.BossBarPacket.AddAction
+import net.kyori.adventure.bossbar.BossBar
+import net.minestom.server.network.packet.server.play.BossBarPacket.RemoveAction
+import net.minestom.server.network.packet.server.play.BossBarPacket.UpdateHealthAction
+import net.minestom.server.network.packet.server.play.BossBarPacket.UpdateTitleAction
+import net.minestom.server.network.packet.server.play.BossBarPacket.UpdateStyleAction
+import net.minestom.server.network.packet.server.play.BossBarPacket.UpdateFlagsAction
+import net.minestom.server.network.packet.server.play.CameraPacket
+import net.minestom.server.network.packet.server.play.ChangeGameStatePacket
+import net.minestom.server.network.packet.server.play.ClearTitlesPacket
+import net.minestom.server.network.packet.server.play.CloseWindowPacket
+import net.minestom.server.network.packet.server.play.CollectItemPacket
+import net.minestom.server.network.packet.server.play.CraftRecipeResponse
+import net.minestom.server.network.packet.server.play.DeathCombatEventPacket
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.DeclaredRecipe
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.DeclaredShapelessCraftingRecipe
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.DeclaredShapedCraftingRecipe
+import net.minestom.server.network.packet.server.play.DisconnectPacket
+import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket
+import net.minestom.server.network.packet.server.play.EffectPacket
+import net.minestom.server.network.packet.server.play.EndCombatEventPacket
+import net.minestom.server.network.packet.server.play.EnterCombatEventPacket
+import net.minestom.server.network.packet.server.play.EntityAnimationPacket
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket
+import net.minestom.server.entity.EquipmentSlot
+import net.minestom.server.network.packet.server.play.EntityHeadLookPacket
+import net.minestom.server.network.packet.server.play.EntityMetaDataPacket
+import net.minestom.server.network.packet.server.play.EntityPositionAndRotationPacket
+import net.minestom.server.network.packet.server.play.EntityPositionPacket
+import net.minestom.server.attribute.AttributeInstance
+import net.minestom.server.network.packet.server.play.EntityRotationPacket
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket.UpdateDisplayName
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket.UpdateGameMode
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket.UpdateLatency
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket.AddPlayer
+import net.minestom.server.network.packet.server.play.PlayerInfoPacket.RemovePlayer
+import net.minestom.server.network.packet.client.handshake.HandshakePacket
+import net.minestom.server.utils.binary.Writeable
+import net.minestom.server.utils.binary.BinaryWriter
+import java.lang.reflect.InvocationTargetException
+import net.minestom.server.instance.palette.PaletteTest
+import java.lang.IllegalArgumentException
+import net.minestom.server.instance.palette.Palette.EntrySupplier
+import net.minestom.server.instance.palette.Palette.EntryConsumer
+import net.minestom.server.instance.palette.AdaptivePalette
+import net.minestom.server.instance.EntityTracker
+import net.minestom.server.instance.block.BlockHandler
+import net.minestom.server.instance.InstanceManager
+import net.minestom.server.utils.chunk.ChunkUtils
+import net.minestom.server.network.packet.server.play.ChunkDataPacket
+import java.lang.RuntimeException
+import net.minestom.server.instance.SharedInstance
+import net.minestom.server.event.player.PlayerTickEvent
+import net.minestom.server.snapshot.ServerSnapshot
+import net.minestom.server.snapshot.InstanceSnapshot
+import net.minestom.server.snapshot.ChunkSnapshot
+import net.minestom.server.snapshot.EntitySnapshot
+import net.minestom.server.collision.PhysicsResult
+import net.minestom.server.collision.CollisionUtils
+import net.minestom.server.collision.EntityBlockPhysicsIntegrationTest
+import net.minestom.server.entity.metadata.other.SlimeMeta
+import net.minestom.server.collision.BoundingBox
+import net.minestom.server.collision.SweepResult
+import net.minestom.server.collision.BlockCollision
+import net.minestom.server.entity.EntityProjectile
+import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEvent
+import net.minestom.server.event.entity.projectile.ProjectileUncollideEvent
+import net.minestom.server.entity.LivingEntity
+import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent
+import net.minestom.server.inventory.PlayerInventory
+import net.minestom.server.event.inventory.InventoryPreClickEvent
+import net.minestom.server.inventory.Inventory
+import net.minestom.server.inventory.InventoryType
+import net.minestom.server.utils.inventory.PlayerInventoryUtils
+import net.minestom.server.network.packet.client.play.ClientClickWindowPacket
+import net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ChangedSlot
+import net.minestom.server.inventory.TransactionOption
+import org.jglrxavpok.hephaistos.nbt.CompoundBuilder
+import net.minestom.server.permission.PermissionVerifier
+import net.minestom.server.advancements.AdvancementRoot
+import net.minestom.server.advancements.FrameType
+import net.minestom.server.advancements.AdvancementTab
+import net.minestom.server.utils.debug.DebugUtils
+import net.minestom.server.item.ItemMeta
+import regressions.ItemMetaBuilderRegressions.BasicMetaBuilder
+
+class InventoryTest {
+    @Test
+    fun testCreation() {
+        val inventory = Inventory(InventoryType.CHEST_1_ROW, "title")
+        Assertions.assertEquals(InventoryType.CHEST_1_ROW, inventory.inventoryType)
+        Assertions.assertEquals(Component.text("title"), inventory.title)
+        inventory.title = Component.text("new title")
+        Assertions.assertEquals(Component.text("new title"), inventory.title)
+    }
+
+    @Test
+    fun testEntry() {
+        val item1 = ItemStack.of(Material.DIAMOND)
+        val item2 = ItemStack.of(Material.GOLD_INGOT)
+        val inventory = Inventory(InventoryType.CHEST_1_ROW, "title")
+        Assertions.assertSame(ItemStack.AIR, inventory.getItemStack(0))
+        inventory.setItemStack(0, item1)
+        Assertions.assertSame(item1, inventory.getItemStack(0))
+        inventory.setItemStack(0, ItemStack.AIR)
+        Assertions.assertSame(ItemStack.AIR, inventory.getItemStack(0))
+
+        // Replace test
+        inventory.replaceItemStack(0) { itemStack: ItemStack? ->
+            Assertions.assertSame(ItemStack.AIR, itemStack)
+            item2
+        }
+        Assertions.assertSame(item2, inventory.getItemStack(0))
+        inventory.replaceItemStack(0) { itemStack: ItemStack? ->
+            Assertions.assertSame(item2, itemStack)
+            item1
+        }
+        Assertions.assertSame(item1, inventory.getItemStack(0))
+    }
+
+    @Test
+    fun testTake() {
+        val item = ItemStack.of(Material.DIAMOND, 32)
+        val inventory = Inventory(InventoryType.CHEST_1_ROW, "title")
+        inventory.setItemStack(0, item)
+        Assertions.assertTrue(inventory.takeItemStack(item, TransactionOption.DRY_RUN))
+        Assertions.assertTrue(inventory.takeItemStack(item.withAmount(31), TransactionOption.DRY_RUN))
+        Assertions.assertFalse(inventory.takeItemStack(item.withAmount(33), TransactionOption.DRY_RUN))
+        inventory.setItemStack(1, item.withAmount(2))
+        Assertions.assertTrue(inventory.takeItemStack(item.withAmount(33), TransactionOption.DRY_RUN))
+        Assertions.assertTrue(inventory.takeItemStack(item.withAmount(34), TransactionOption.DRY_RUN))
+    }
+
+    @Test
+    fun testAdd() {
+        val inventory = Inventory(InventoryType.HOPPER, "title")
+        Assertions.assertTrue(
+            inventory.addItemStack(
+                ItemStack.of(Material.DIAMOND, 32),
+                TransactionOption.ALL_OR_NOTHING
+            )
+        )
+        Assertions.assertTrue(
+            inventory.addItemStack(
+                ItemStack.of(Material.GOLD_BLOCK, 32),
+                TransactionOption.ALL_OR_NOTHING
+            )
+        )
+        Assertions.assertTrue(inventory.addItemStack(ItemStack.of(Material.MAP, 32), TransactionOption.ALL_OR_NOTHING))
+        Assertions.assertTrue(
+            inventory.addItemStack(
+                ItemStack.of(Material.ANDESITE_WALL, 32),
+                TransactionOption.ALL_OR_NOTHING
+            )
+        )
+        Assertions.assertTrue(
+            inventory.addItemStack(
+                ItemStack.of(Material.ANDESITE, 32),
+                TransactionOption.ALL_OR_NOTHING
+            )
+        )
+        Assertions.assertFalse(
+            inventory.addItemStack(
+                ItemStack.of(Material.BLUE_CONCRETE, 32),
+                TransactionOption.ALL_OR_NOTHING
+            )
+        )
+    }
+
+    companion object {
+        init {
+            // Required to prevent initialization error during event call
+            init()
+        }
+    }
+}
