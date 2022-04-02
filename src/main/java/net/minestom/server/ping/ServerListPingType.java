@@ -1,7 +1,6 @@
 package net.minestom.server.ping;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
@@ -140,6 +139,13 @@ public enum ServerListPingType {
             jsonObject.add("description", NAMED_RGB.serializeToTree(data.getDescription()));
         }
 
+        data.getExtraJson().forEach((key, value) -> {
+            if (value instanceof String) {
+                jsonObject.add(key, JsonParser.parseString(value.toString()));
+            } else {
+                jsonObject.addProperty(key, new Gson().toJson(value));
+            }
+        });
         return jsonObject;
     }
 
