@@ -5,7 +5,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.VarHandle;
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
@@ -20,7 +19,7 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
-    private SoftReference<FramedPacket> packet;
+    private volatile SoftReference<FramedPacket> packet;
 
     public CachedPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
@@ -32,7 +31,6 @@ public final class CachedPacket implements SendablePacket {
 
     public void invalidate() {
         this.packet = null;
-        VarHandle.releaseFence();
     }
 
     public @NotNull ServerPacket packet() {
@@ -48,13 +46,11 @@ public final class CachedPacket implements SendablePacket {
     private @Nullable FramedPacket updatedCache() {
         if (!PacketUtils.CACHED_PACKET)
             return null;
-        VarHandle.acquireFence();
         SoftReference<FramedPacket> ref = packet;
         FramedPacket cache;
         if (ref == null || (cache = ref.get()) == null) {
             cache = PacketUtils.allocateTrimmedPacket(packetSupplier.get());
             this.packet = new SoftReference<>(cache);
-            VarHandle.releaseFence();
         }
         return cache;
     }
