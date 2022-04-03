@@ -1,9 +1,13 @@
 package net.minestom.server.api;
 
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
+
+import java.io.StringReader;
 import java.lang.ref.WeakReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUtils {
     public static void waitUntilCleared(WeakReference<?> ref) {
@@ -13,6 +17,15 @@ public class TestUtils {
                 Thread.sleep(50);
             } catch (InterruptedException ignore) {
             }
+        }
+    }
+
+    public static void assertEqualsSNBT(String snbt, NBTCompound compound) {
+        try {
+            final var converted = (NBTCompound) new SNBTParser(new StringReader(snbt)).parse();
+            assertEquals(converted, compound);
+        } catch (NBTException e) {
+            fail(e);
         }
     }
 

@@ -233,7 +233,7 @@ final class RayUtils {
     }
 
     // Extended from 2d implementation found here https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/swept-aabb-collision-detection-and-response-r3084/
-    public static void SweptAABB(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult writeTo) {
+    public static boolean SweptAABB(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult finalResult) {
         double normalx, normaly, normalz;
 
         double xInvEntry, yInvEntry, zInvEntry;
@@ -295,13 +295,13 @@ final class RayUtils {
         // find the earliest/latest times of collision
         double entryTime = Math.max(Math.max(xEntry, yEntry), zEntry);
         double exitTime = Math.min(Math.max(xExit, yExit), zExit);
+        double moveAmount = entryTime * 0.99999;
 
-        if (entryTime > exitTime || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f)) {
-            writeTo.res = 1;
-            writeTo.normalX = 0;
-            writeTo.normalY = 0;
-            writeTo.normalZ = 0;
-            return;
+        if (entryTime > exitTime
+                || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f
+                || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f)
+                || moveAmount > finalResult.res) {
+            return false;
         }
 
         // calculate normal of collided surface
@@ -337,14 +337,14 @@ final class RayUtils {
             }
         }
 
-        writeTo.res = entryTime * 0.99999;
-        writeTo.normalX = normalx;
-        writeTo.normalY = normaly;
-        writeTo.normalZ = normalz;
+        finalResult.res = moveAmount;
+        finalResult.normalX = normalx;
+        finalResult.normalY = normaly;
+        finalResult.normalZ = normalz;
+        return true;
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        // TODO: BoundingBox.ZERO?
-        return BoundingBoxIntersectionCheck(new BoundingBox(0, 0, 0), start, direction, boundingBox, position);
+        return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position);
     }
 }

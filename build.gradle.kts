@@ -46,9 +46,10 @@ dependencies {
     testImplementation(libs.junit.api)
     testImplementation(libs.junit.params)
     testRuntimeOnly(libs.junit.engine)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.junit)
+    testImplementation(libs.junit.suite.api)
+    testRuntimeOnly(libs.junit.suite.engine)
+    // Only here to ensure J9 module support for extensions and our classloaders
+    testCompileOnly(libs.mockito.core)
 
 
     // Logging

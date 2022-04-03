@@ -1,10 +1,11 @@
-package net.minestom.jmh.tag;
+package net.minestom.server.tag;
 
-import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
@@ -22,13 +23,17 @@ public class TagReadBenchmark {
     TagHandler tagHandler;
     Tag<String> secondTag;
 
+    MutableNBTCompound compound;
+
     @Setup
     public void setup() {
+        // Tag benchmark
         this.tagHandler = TagHandler.newHandler();
-        if (present) {
-            tagHandler.setTag(TAG, "value");
-        }
+        if (present) tagHandler.setTag(TAG, "value");
         secondTag = Tag.String("key");
+        // NBT benchmark
+        this.compound = new MutableNBTCompound(new ConcurrentHashMap<>());
+        if (present) compound.set("key", NBT.String("value"));
     }
 
     @Benchmark
@@ -44,5 +49,10 @@ public class TagReadBenchmark {
     @Benchmark
     public void readNewTag(Blackhole blackhole) {
         blackhole.consume(tagHandler.getTag(Tag.String("key")));
+    }
+
+    @Benchmark
+    public void readConstantTagFromCompound(Blackhole blackhole) {
+        blackhole.consume(compound.getString("key"));
     }
 }

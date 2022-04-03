@@ -12,6 +12,10 @@ import java.util.function.IntUnaryOperator;
  */
 public interface StackingRule {
 
+    static @NotNull StackingRule get() {
+        return ItemStack.DEFAULT_STACKING_RULE;
+    }
+
     /**
      * Used to know if two {@link ItemStack} can be stacked together.
      *

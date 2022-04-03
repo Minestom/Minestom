@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.client.login;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -31,20 +30,10 @@ public record LoginStartPacket(@NotNull String username) implements ClientPrepla
     @Override
     public void process(@NotNull PlayerConnection connection) {
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
-        // Cache the login username and start compression if enabled
+        // Proxy support (only for socket clients) and cache the login username
         if (isSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.UNSAFE_setLoginUsername(username);
-
-            // Compression
-            final int threshold = MinecraftServer.getCompressionThreshold();
-            if (threshold > 0) {
-                socketConnection.startCompression();
-            }
-        }
-        // Proxy support (only for socket clients)
-        if (isSocketConnection) {
-            final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             // Velocity support
             if (VelocityProxy.isEnabled()) {
                 final int messageId = ThreadLocalRandom.current().nextInt();

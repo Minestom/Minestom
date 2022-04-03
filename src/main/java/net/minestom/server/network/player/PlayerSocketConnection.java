@@ -413,25 +413,20 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     public void flushSync() throws IOException {
+        final SocketChannel channel = this.channel;
+        final List<BinaryBuffer> waitingBuffers = this.waitingBuffers;
         if (!channel.isConnected()) throw new ClosedChannelException();
-        if (waitingBuffers.isEmpty() && tickBuffer.getPlain().writeChannel(channel))
-            return; // Fast exit if the tick buffer can be reused
-
-        try {
-            updateLocalBuffer();
-        } catch (OutOfMemoryError e) {
-            this.waitingBuffers.clear();
-            System.gc(); // Explicit gc forcing buffers to be collected
-            throw new ClosedChannelException();
-        }
-
-        // Write as much as possible from the waiting list
-        Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
-        while (iterator.hasNext()) {
-            BinaryBuffer waitingBuffer = iterator.next();
-            if (!waitingBuffer.writeChannel(channel)) break;
-            iterator.remove();
-            PooledBuffers.add(waitingBuffer);
+        if (waitingBuffers.isEmpty()) {
+            tickBuffer.getPlain().writeChannel(channel);
+        } else {
+            // Write as much as possible from the waiting list
+            Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
+            while (iterator.hasNext()) {
+                BinaryBuffer waitingBuffer = iterator.next();
+                if (!waitingBuffer.writeChannel(channel)) break;
+                iterator.remove();
+                PooledBuffers.add(waitingBuffer);
+            }
         }
     }
 

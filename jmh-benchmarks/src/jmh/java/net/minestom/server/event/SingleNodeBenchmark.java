@@ -1,8 +1,5 @@
-package net.minestom.jmh.event;
+package net.minestom.server.event;
 
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventNode;
-import net.minestom.server.event.ListenerHandle;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

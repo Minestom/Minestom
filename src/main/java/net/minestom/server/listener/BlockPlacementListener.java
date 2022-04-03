@@ -135,7 +135,7 @@ public class BlockPlacementListener {
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
-            final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
+            final ItemStack newUsedItem = usedItem.consume(1);
             playerInventory.setItemInHand(hand, newUsedItem);
         }
     }
