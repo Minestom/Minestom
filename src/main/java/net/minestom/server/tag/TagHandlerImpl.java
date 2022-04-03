@@ -9,7 +9,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
-import java.lang.invoke.VarHandle;
 import java.util.Arrays;
 import java.util.function.UnaryOperator;
 
@@ -153,7 +152,7 @@ final class TagHandlerImpl implements TagHandler {
     private static final class Entry<T> {
         final Tag<T> tag;
         final T value; // TagHandler type for path-able tags
-        private NBT nbt;
+        volatile NBT nbt;
 
         Entry(Tag<T> tag, T value) {
             this.tag = tag;
@@ -161,12 +160,8 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         NBT updatedNbt() {
-            VarHandle.acquireFence();
             NBT nbt = this.nbt;
-            if (nbt == null) {
-                this.nbt = nbt = tag.writeFunction.apply(value);
-                VarHandle.releaseFence();
-            }
+            if (nbt == null) this.nbt = nbt = tag.writeFunction.apply(value);
             return nbt;
         }
     }

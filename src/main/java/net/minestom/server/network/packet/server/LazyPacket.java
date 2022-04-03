@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.invoke.VarHandle;
 import java.util.function.Supplier;
 
 /**
@@ -14,21 +13,18 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public final class LazyPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
-    private ServerPacket packet;
+    private volatile ServerPacket packet;
 
     public LazyPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
     }
 
     public @NotNull ServerPacket packet() {
-        VarHandle.acquireFence();
         ServerPacket packet = this.packet;
         if (packet == null) {
             synchronized (this) {
                 packet = this.packet;
-                if (packet == null) {
-                    this.packet = packet = packetSupplier.get();
-                }
+                if (packet == null) this.packet = packet = packetSupplier.get();
             }
         }
         return packet;
