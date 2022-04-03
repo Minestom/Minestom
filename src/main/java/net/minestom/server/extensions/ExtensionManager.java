@@ -329,7 +329,7 @@ public final class ExtensionManager {
         // Load child and get classloader
         HierarchyClassLoader dependencyClassLoader = null;
         if (dep instanceof Dependency.Extension dependency) {
-            ExtensionDescriptor descriptor = extensionsById.get(dependency.id().toLowerCase());
+            ExtensionDescriptor descriptor = extensionsById.get(dependency.id().toUpperCase(Locale.ROOT));
             //todo what happens if extension does not exist?
             boolean loaded = loadExtension(descriptor, extensionsById);
             if (!loaded) return false;
