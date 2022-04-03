@@ -167,7 +167,7 @@ public final class ExtensionManager {
         for (ExtensionDescriptor extension : extensionsByName.values()) {
             for (Dependency dependency : extension.dependencies()) {
                 if (dependency instanceof Dependency.Extension extensionDependency) {
-                    ExtensionDescriptor dependencyExtension = extensionsByName.get(extensionDependency.id().toLowerCase());
+                    ExtensionDescriptor dependencyExtension = extensionsByName.get(extensionDependency.id().toUpperCase(Locale.ROOT));
                     if (dependencyExtension == null) {
                         if (extensionDependency.isOptional()) {
                             LOGGER.debug("Optional extension {} (for {}) was not found.", extensionDependency.id(), extension.name());
