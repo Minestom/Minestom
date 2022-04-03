@@ -11,8 +11,12 @@ import org.jetbrains.annotations.NotNull;
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public final class BoundingBox implements Shape {
+
+    final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
+
     private final double width, height, depth;
     private final Point offset;
+    private Point relativeEnd;
 
     BoundingBox(double width, double height, double depth, Point offset) {
         this.width = width;
@@ -41,18 +45,8 @@ public final class BoundingBox implements Shape {
                 this,
                 shapePos
         );
-
         if (!isHit) return false;
-
-        SweepResult tempResult = new SweepResult(1, 0, 0, 0, null);
-        // Longer check to get result of collision
-        RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, tempResult);
-        // Update final result if the temp result collision is sooner than the current final result
-        if (tempResult.res < finalResult.res) {
-            finalResult.res = tempResult.res;
-            finalResult.normalX = tempResult.normalX;
-            finalResult.normalY = tempResult.normalY;
-            finalResult.normalZ = tempResult.normalZ;
+        if (RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
             finalResult.collidedShapePosition = shapePos;
             finalResult.collidedShape = this;
             finalResult.blockType = null;
@@ -83,7 +77,9 @@ public final class BoundingBox implements Shape {
 
     @Override
     public @NotNull Point relativeEnd() {
-        return offset.add(width, height, depth);
+        Point relativeEnd = this.relativeEnd;
+        if (relativeEnd == null) this.relativeEnd = relativeEnd = offset.add(width, height, depth);
+        return relativeEnd;
     }
 
     @Override

@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
@@ -10,6 +11,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.debug.DebugUtils;
@@ -194,6 +196,11 @@ public final class ConnectionManager {
     public CompletableFuture<Void> startPlayState(@NotNull Player player, boolean register) {
         return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
+            // Compression
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                final int threshold = MinecraftServer.getCompressionThreshold();
+                if (threshold > 0) socketConnection.startCompression();
+            }
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);

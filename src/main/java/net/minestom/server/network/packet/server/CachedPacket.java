@@ -5,7 +5,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
@@ -20,18 +19,7 @@ import java.util.function.Supplier;
  */
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
-    private static final VarHandle PACKET;
-
-    static {
-        try {
-            PACKET = MethodHandles.lookup().findVarHandle(CachedPacket.class, "packet", SoftReference.class);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
     private final Supplier<ServerPacket> packetSupplier;
-    @SuppressWarnings("unused")
     private SoftReference<FramedPacket> packet;
 
     public CachedPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
@@ -43,7 +31,8 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public void invalidate() {
-        PACKET.setRelease(this, null);
+        this.packet = null;
+        VarHandle.releaseFence();
     }
 
     public @NotNull ServerPacket packet() {
@@ -59,12 +48,13 @@ public final class CachedPacket implements SendablePacket {
     private @Nullable FramedPacket updatedCache() {
         if (!PacketUtils.CACHED_PACKET)
             return null;
-        @SuppressWarnings("unchecked")
-        SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getAcquire(this);
+        VarHandle.acquireFence();
+        SoftReference<FramedPacket> ref = packet;
         FramedPacket cache;
         if (ref == null || (cache = ref.get()) == null) {
             cache = PacketUtils.allocateTrimmedPacket(packetSupplier.get());
-            PACKET.setRelease(this, new SoftReference<>(cache));
+            this.packet = new SoftReference<>(cache);
+            VarHandle.releaseFence();
         }
         return cache;
     }

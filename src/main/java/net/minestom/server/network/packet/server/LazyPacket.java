@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.function.Supplier;
 
@@ -14,18 +13,7 @@ import java.util.function.Supplier;
  */
 @ApiStatus.Internal
 public final class LazyPacket implements SendablePacket {
-    private static final VarHandle PACKET;
-
-    static {
-        try {
-            PACKET = MethodHandles.lookup().findVarHandle(LazyPacket.class, "packet", ServerPacket.class);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
     private final Supplier<ServerPacket> packetSupplier;
-    @SuppressWarnings("unused")
     private ServerPacket packet;
 
     public LazyPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
@@ -33,13 +21,13 @@ public final class LazyPacket implements SendablePacket {
     }
 
     public @NotNull ServerPacket packet() {
-        ServerPacket packet = (ServerPacket) PACKET.getAcquire(this);
+        VarHandle.acquireFence();
+        ServerPacket packet = this.packet;
         if (packet == null) {
             synchronized (this) {
-                packet = (ServerPacket) PACKET.getAcquire(this);
+                packet = this.packet;
                 if (packet == null) {
-                    packet = packetSupplier.get();
-                    PACKET.setRelease(this, packet);
+                    this.packet = packet = packetSupplier.get();
                 }
             }
         }
