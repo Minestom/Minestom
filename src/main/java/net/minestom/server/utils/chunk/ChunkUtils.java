@@ -198,7 +198,12 @@ public final class ChunkUtils {
         z = z % Chunk.CHUNK_SIZE_Z;
 
         int index = x & 0xF; // 4 bits
-        index |= (y << 4) & 0x0FFFFFF0; // 24 bits
+        if(y > 0) {
+            index |= (y << 4) & 0x07FFFFF0; // 23 bits (24th bit is always 0 because y is positive)
+        } else {
+            index |= ((-y) << 4) & 0x7FFFFF0; // Make positive and use 23 bits
+            index |= 1 << 27; // Set negative sign at 24th bit
+        }
         index |= (z << 28) & 0xF0000000; // 4 bits
         return index;
     }
@@ -211,7 +216,9 @@ public final class ChunkUtils {
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
         final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
-        final int y = index >>> 4 & 0xFF;
+        int y = index >>> 4 & 0xFF;
+        if(((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
+
         final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
         return new Vec(x, y, z);
     }
