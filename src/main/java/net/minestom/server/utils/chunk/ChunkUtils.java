@@ -216,9 +216,7 @@ public final class ChunkUtils {
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
         final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
-        int y = index >>> 4 & 0xFF;
-        if(((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
-
+        final int y = blockIndexToChunkPositionY(index);
         final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
         return new Vec(x, y, z);
     }
@@ -240,7 +238,9 @@ public final class ChunkUtils {
      * @return the chunk position Y of the specified index
      */
     public static int blockIndexToChunkPositionY(int index) {
-        return (index >> 4) & 0x0FFFFFF; // 4-28 bits
+        int y = index >>> 4 & 0xFF;
+        if(((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
+        return y; // 4-28 bits
     }
 
     /**
