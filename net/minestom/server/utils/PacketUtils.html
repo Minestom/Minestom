@@ -164,7 +164,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a>&nbsp;audience,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a>&nbsp;audience,
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sends a packet to an audience.</div>
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)">
 <h3>sendPacket</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a>&nbsp;audience,
+ @NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a>&nbsp;audience,
  @NotNull
  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</span></div>
 <div class="block">Sends a packet to an audience. This method performs the following steps in the
@@ -237,9 +237,9 @@ loadScripts(document, 'script');</script>
      <li>Otherwise, if <code>audience</code> is a <a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience"><code>PacketGroupingAudience</code></a>, call
      <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)"><code>sendGroupedPacket(Collection, ServerPacket)</code></a> on the players that the
      grouping audience contains.</li>
-     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/ForwardingAudience.Single.html" title="class or interface in net.kyori.adventure.audience" class="external-link"><code>ForwardingAudience.Single</code></a>,
+     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/audience/ForwardingAudience.Single.html" title="class or interface in net.kyori.adventure.audience" class="external-link"><code>ForwardingAudience.Single</code></a>,
      call this method on the single audience inside the forwarding audience.</li>
-     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.9.3/net/kyori/adventure/audience/ForwardingAudience.html" title="class or interface in net.kyori.adventure.audience" class="external-link"><code>ForwardingAudience</code></a>, call this
+     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/audience/ForwardingAudience.html" title="class or interface in net.kyori.adventure.audience" class="external-link"><code>ForwardingAudience</code></a>, call this
      method for each audience member of the forwarding audience.</li>
      <li>Otherwise, do nothing.</li>
  </ol></div>
