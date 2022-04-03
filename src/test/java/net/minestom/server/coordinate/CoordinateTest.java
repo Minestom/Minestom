@@ -100,4 +100,18 @@ public class CoordinateTest {
         assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(32));
         assertEquals(1, ChunkUtils.toSectionRelativeCoordinate(33));
     }
+
+    @Test
+    public void testBlockIndex() {
+        // Positive Y coordinate
+        Pos posPositive = new Pos(124, 16, 116);
+        assertEquals(getBlockPosition(getBlockIndex(posPositive.blockX(), posPositive.blockY(), posPositive.blockZ()),
+                        posPositive.chunkX(), posPositive.chunkZ()), posPositive.asVec());
+
+        // Negative Y coordinate
+        Pos posNegative = new Pos(124, -16, 116);
+        assertEquals(getBlockPosition(getBlockIndex(posNegative.blockX(), posNegative.blockY(), posNegative.blockZ()),
+                posNegative.chunkX(), posNegative.chunkZ()), posNegative.asVec());
+    }
+
 }
