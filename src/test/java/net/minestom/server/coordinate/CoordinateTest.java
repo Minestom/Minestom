@@ -1,5 +1,7 @@
 package net.minestom.server.coordinate;
 
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
@@ -126,7 +128,7 @@ public class CoordinateTest {
                 new Vec(0, -8_388_607, 0)
         );
 
-        for(Vec vec : tempEquals) {
+        for (Vec vec : tempEquals) {
             assertEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
                     vec.chunkX(), vec.chunkZ()), vec);
         }
@@ -141,10 +143,29 @@ public class CoordinateTest {
                 new Vec(0, -8_388_608, 0)
         );
 
-        for(Vec vec : tempNotEquals) {
+        for (Vec vec : tempNotEquals) {
             assertNotEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
                     vec.chunkX(), vec.chunkZ()), vec);
         }
     }
 
+    @Test
+    public void blockIndexDuplicate() {
+        LongSet temp = new LongOpenHashSet();
+
+        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                for (int y = -64; y < 364; y++) {
+                    var vec = new Vec(x, y, z);
+                    var index = getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
+                    assertTrue(temp.add(index), "Duplicate block index found: " + index + " " + vec);
+                    assertEquals(getBlockPosition(index, vec.chunkX(), vec.chunkZ()), vec);
+
+                    assertEquals(blockIndexToChunkPositionX(index), x);
+                    assertEquals(blockIndexToChunkPositionY(index), y);
+                    assertEquals(blockIndexToChunkPositionZ(index), z);
+                }
+            }
+        }
+    }
 }
