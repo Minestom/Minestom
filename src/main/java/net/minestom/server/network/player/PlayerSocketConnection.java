@@ -344,7 +344,10 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
             final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
-            outgoing.call(new PlayerPacketOutEvent(player, serverPacket));
+            PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+            outgoing.call(event);
+            if (event.isCancelled()) return;
+            if (event.isUpdated()) packet = event.getPacket();
         }
         // Write packet
         if (packet instanceof ServerPacket serverPacket) {
