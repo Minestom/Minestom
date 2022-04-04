@@ -222,12 +222,8 @@ final class ShapeImpl implements Shape {
         // If either face is full, return true
         if (hasBlockOcclusion || hasBlockOcclusionOther) return true;
 
-        // If both faces are empty, return false
-        if (hasAirOcclusion && hasAirOcclusionOther) return false;
-
         // If a single face is air, return false
-        if (hasAirOcclusion) return false;
-        if (hasAirOcclusionOther) return false;
+        if (hasAirOcclusion || hasAirOcclusionOther) return false;
 
         // Comparing two partial faces. Computation needed
         List<Rectangle> allRectangles = ((ShapeImpl)shape).computeOcclusionSet(face.getOppositeFace());
