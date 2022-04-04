@@ -238,7 +238,7 @@ public final class ChunkUtils {
      * @return the chunk position Y of the specified index
      */
     public static int blockIndexToChunkPositionY(int index) {
-        int y = index >>> 4 & 0xFF;
+        int y = (index & 0x07FFFFF0) >>> 4;
         if(((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
         return y; // 4-28 bits
     }
