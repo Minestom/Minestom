@@ -1,11 +1,15 @@
 package net.minestom.server.coordinate;
 
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CoordinateTest {
 
@@ -99,5 +103,69 @@ public class CoordinateTest {
         assertEquals(4, ChunkUtils.toSectionRelativeCoordinate(20));
         assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(32));
         assertEquals(1, ChunkUtils.toSectionRelativeCoordinate(33));
+    }
+
+    @Test
+    public void blockIndex() {
+        // Test if the block index is correctly converted back and forth
+
+        List<Vec> tempEquals = List.of(
+                // Zero vector with zero, positive and negative Y value
+                Vec.ZERO,
+                Vec.ZERO.withY(1),
+                Vec.ZERO.withY(-1),
+                // One vector with positive and negative Y value
+                Vec.ONE,
+                Vec.ONE.withY(-1),
+                // Vector with X/Z outside of chunk size
+                new Vec(Chunk.CHUNK_SIZE_X + 1, 20, Chunk.CHUNK_SIZE_Z + 1),
+                new Vec(Chunk.CHUNK_SIZE_X + 1, -20, Chunk.CHUNK_SIZE_Z + 1),
+                // Vector with negative X/Z block pos
+                new Vec(-1, 20, -1),
+                new Vec(-1, -20, -1),
+                // Check Y min and max value (23 bits, 2^23-1, -2^23+1)
+                new Vec(0, 8_388_607, 0),
+                new Vec(0, -8_388_607, 0)
+        );
+
+        for (Vec vec : tempEquals) {
+            assertEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
+                    vec.chunkX(), vec.chunkZ()), vec);
+        }
+
+        // Test if the block index does convert to wrong values due to overflow
+
+        List<Vec> tempNotEquals = List.of(
+                // Above and below Y min and max value (> 2^23-1, < -2^23+1)
+                // Integer overflows into the 24th bit which is not copied into block index,
+                // so an error is expected here.
+                new Vec(0, 8_388_608, 0),
+                new Vec(0, -8_388_608, 0)
+        );
+
+        for (Vec vec : tempNotEquals) {
+            assertNotEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
+                    vec.chunkX(), vec.chunkZ()), vec);
+        }
+    }
+
+    @Test
+    public void blockIndexDuplicate() {
+        LongSet temp = new LongOpenHashSet();
+
+        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                for (int y = -64; y < 364; y++) {
+                    var vec = new Vec(x, y, z);
+                    var index = getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
+                    assertTrue(temp.add(index), "Duplicate block index found: " + index + " " + vec);
+                    assertEquals(getBlockPosition(index, vec.chunkX(), vec.chunkZ()), vec);
+
+                    assertEquals(blockIndexToChunkPositionX(index), x);
+                    assertEquals(blockIndexToChunkPositionY(index), y);
+                    assertEquals(blockIndexToChunkPositionZ(index), z);
+                }
+            }
+        }
     }
 }
