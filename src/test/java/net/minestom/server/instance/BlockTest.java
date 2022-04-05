@@ -83,6 +83,6 @@ public class BlockTest {
         Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
 
         assertEquals(start, new Vec(0.312, 0, 0.312));
-        assertEquals(end, new Vec(0.625, 0.437, 0.625));
+        assertEquals(end, new Vec(0.687, 0.562, 0.687));
     }
 }

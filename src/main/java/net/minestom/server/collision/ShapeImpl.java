@@ -23,16 +23,16 @@ final class ShapeImpl implements Shape {
         // Find bounds
         {
             double minX = 1, minY = 1, minZ = 1;
-            double maxX = 1, maxY = 1, maxZ = 1;
+            double maxX = 0, maxY = 0, maxZ = 0;
             for (BoundingBox blockSection : blockSections) {
                 // Min
                 if (blockSection.minX() < minX) minX = blockSection.minX();
                 if (blockSection.minY() < minY) minY = blockSection.minY();
                 if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
                 // Max
-                if (blockSection.maxX() < maxX) maxX = blockSection.maxX();
-                if (blockSection.maxY() < maxY) maxY = blockSection.maxY();
-                if (blockSection.maxZ() < maxZ) maxZ = blockSection.maxZ();
+                if (blockSection.maxX() > maxX) maxX = blockSection.maxX();
+                if (blockSection.maxY() > maxY) maxY = blockSection.maxY();
+                if (blockSection.maxZ() > maxZ) maxZ = blockSection.maxZ();
             }
             this.relativeStart = new Vec(minX, minY, minZ);
             this.relativeEnd = new Vec(maxX, maxY, maxZ);
