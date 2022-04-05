@@ -55,6 +55,20 @@ public class BlockIsOccludedTest {
     }
 
     @Test
+    public void blockSlabTopEnchantingTable() {
+        Shape shape1 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().shape();
+        Shape shape2 = Block.ENCHANTING_TABLE.registry().shape();
+
+        assertFalse(shape1.isOccluded(shape2, BlockFace.BOTTOM));
+
+        assertTrue(shape1.isOccluded(shape2, BlockFace.NORTH));
+        assertTrue(shape1.isOccluded(shape2, BlockFace.SOUTH));
+        assertTrue(shape1.isOccluded(shape2, BlockFace.EAST));
+        assertTrue(shape1.isOccluded(shape2, BlockFace.WEST));
+        assertTrue(shape1.isOccluded(shape2, BlockFace.TOP));
+    }
+
+    @Test
     public void blockStairWest() {
         Shape shape = Block.SANDSTONE_STAIRS.withProperties(Map.of(
                 "facing", "west",
