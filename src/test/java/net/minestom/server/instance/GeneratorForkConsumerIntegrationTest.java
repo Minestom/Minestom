@@ -12,10 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class GeneratorForkConsumerIntegrationTest {
 
     @Test
-    public void consumerLocal(Env env) {
+    public void local(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
@@ -35,10 +34,24 @@ public class GeneratorForkConsumerIntegrationTest {
     }
 
     @Test
-    public void consumerNeighborZ(Env env) {
+    public void doubleLocal(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
+        instance.setGenerator(unit -> {
+            unit.fork(setter -> {
+                setter.setBlock(unit.absoluteStart(), Block.STONE);
+                setter.setBlock(unit.absoluteStart().add(1, 0, 0), Block.STONE);
+            });
+        });
+        instance.loadChunk(0, 0).join();
+        assertEquals(Block.STONE, instance.getBlock(0, -64, 0));
+        assertEquals(Block.STONE, instance.getBlock(1, -64, 0));
+    }
 
+    @Test
+    public void neighborZ(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
@@ -62,10 +75,9 @@ public class GeneratorForkConsumerIntegrationTest {
     }
 
     @Test
-    public void consumerNeighborX(Env env) {
+    public void neighborX(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
@@ -89,10 +101,9 @@ public class GeneratorForkConsumerIntegrationTest {
     }
 
     @Test
-    public void consumerNeighborY(Env env) {
+    public void neighborY(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;

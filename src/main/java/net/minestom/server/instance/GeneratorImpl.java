@@ -88,59 +88,52 @@ final class GeneratorImpl {
         }
 
         private void resize(int x, int y, int z) {
-            if (sections == null ||
-                    x < minSection.x() || y < minSection.y() || z < minSection.z() ||
+            final int sectionX = getChunkCoordinate(x);
+            final int sectionY = getChunkCoordinate(y);
+            final int sectionZ = getChunkCoordinate(z);
+            if (sections == null) {
+                this.minSection = new Vec(sectionX * 16, sectionY * 16, sectionZ * 16);
+                this.width = 1;
+                this.height = 1;
+                this.depth = 1;
+                this.sections = List.of(section(new Section(), sectionX, sectionY, sectionZ, true));
+            } else if (x < minSection.x() || y < minSection.y() || z < minSection.z() ||
                     x >= minSection.x() + width * 16 || y >= minSection.y() + height * 16 || z >= minSection.z() + depth * 16) {
                 // Resize necessary
-                final Vec newMin;
-                final int newWidth;
-                final int newHeight;
-                final int newDepth;
-                if (sections == null) {
-                    newMin = new Vec(getChunkCoordinate(x) * 16, getChunkCoordinate(y) * 16, getChunkCoordinate(z) * 16);
-                    newWidth = 1;
-                    newHeight = 1;
-                    newDepth = 1;
-                } else {
-                    newMin = new Vec(Math.min(minSection.x(), getChunkCoordinate(x) * 16),
-                            Math.min(minSection.y(), getChunkCoordinate(y) * 16),
-                            Math.min(minSection.z(), getChunkCoordinate(z) * 16));
-                    final Vec newMax = new Vec(Math.max(minSection.x() + width * 16, getChunkCoordinate(x) * 16 + 16),
-                            Math.max(minSection.y() + height * 16, getChunkCoordinate(y) * 16 + 16),
-                            Math.max(minSection.z() + depth * 16, getChunkCoordinate(z) * 16 + 16));
-                    newWidth = getChunkCoordinate(newMax.x() - newMin.x());
-                    newHeight = getChunkCoordinate(newMax.y() - newMin.y());
-                    newDepth = getChunkCoordinate(newMax.z() - newMin.z());
-                }
+                final Vec newMin = new Vec(Math.min(minSection.x(), sectionX * 16),
+                        Math.min(minSection.y(), sectionY * 16),
+                        Math.min(minSection.z(), sectionZ * 16));
+                final Vec newMax = new Vec(Math.max(minSection.x() + width * 16, sectionX * 16 + 16),
+                        Math.max(minSection.y() + height * 16, sectionY * 16 + 16),
+                        Math.max(minSection.z() + depth * 16, sectionZ * 16 + 16));
+                final int newWidth = getChunkCoordinate(newMax.x() - newMin.x());
+                final int newHeight = getChunkCoordinate(newMax.y() - newMin.y());
+                final int newDepth = getChunkCoordinate(newMax.z() - newMin.z());
                 // Resize
-                {
-                    GenerationUnit[] newSections = new GenerationUnit[newWidth * newHeight * newDepth];
-                    // Copy old sections
-                    if (sections != null) {
-                        for (GenerationUnit s : sections) {
-                            var start = s.absoluteStart();
-                            final int sectionX = getChunkCoordinate(start.x() - newMin.x());
-                            final int sectionY = getChunkCoordinate(start.y() - newMin.y());
-                            final int sectionZ = getChunkCoordinate(start.z() - newMin.z());
-                            final int index = sectionZ + sectionY * newDepth + sectionX * newDepth * newHeight;
-                            newSections[index] = s;
-                        }
-                    }
-                    // Fill new sections
-                    final int startX = newMin.chunkX();
-                    final int startY = newMin.section();
-                    final int startZ = newMin.chunkZ();
-                    for (int i = 0; i < newSections.length; i++) {
-                        if (newSections[i] == null) {
-                            final int newX = i % newWidth + startX;
-                            final int newY = i / newWidth % newHeight + startY;
-                            final int newZ = i / newWidth / newHeight + startZ;
-                            final GenerationUnit unit = section(new Section(), newX, newY, newZ, true);
-                            newSections[i] = unit;
-                        }
-                    }
-                    this.sections = List.of(newSections);
+                GenerationUnit[] newSections = new GenerationUnit[newWidth * newHeight * newDepth];
+                // Copy old sections
+                for (GenerationUnit s : sections) {
+                    final Point start = s.absoluteStart();
+                    final int index = findIndex(newWidth, newHeight, newDepth,
+                            getChunkCoordinate(start.x() - newMin.x()),
+                            getChunkCoordinate(start.y() - newMin.y()),
+                            getChunkCoordinate(start.z() - newMin.z()));
+                    newSections[index] = s;
                 }
+                // Fill new sections
+                final int startX = newMin.chunkX();
+                final int startY = newMin.section();
+                final int startZ = newMin.chunkZ();
+                for (int i = 0; i < newSections.length; i++) {
+                    if (newSections[i] == null) {
+                        final int newX = i % newWidth + startX;
+                        final int newY = i / newWidth % newHeight + startY;
+                        final int newZ = i / newWidth / newHeight + startZ;
+                        final GenerationUnit unit = section(new Section(), newX, newY, newZ, true);
+                        newSections[i] = unit;
+                    }
+                }
+                this.sections = List.of(newSections);
                 this.minSection = newMin;
                 this.width = newWidth;
                 this.height = newHeight;
@@ -500,6 +493,11 @@ final class GeneratorImpl {
         final int sectionZ = getChunkCoordinate(z - start.z());
         final int index = sectionZ + sectionY * depth + sectionX * depth * height;
         return units.get(index);
+    }
+
+    private static int findIndex(int width, int height, int depth,
+                                 int x, int y, int z) {
+        return z + y * depth + x * depth * height;
     }
 
     private static int floorSection(int coordinate) {
