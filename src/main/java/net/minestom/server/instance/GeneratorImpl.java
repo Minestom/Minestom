@@ -351,35 +351,38 @@ final class GeneratorImpl {
         @Override
         public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
             final Point start = this.start;
+            final int width = this.width;
+            final int depth = this.depth;
             final int startX = start.blockX();
             final int startZ = start.blockZ();
             final int minMultiple = floorSection(minHeight);
             final int maxMultiple = ceilSection(maxHeight);
-            // First section
-            if (minMultiple != minHeight) {
-                assert minHeight % 16 != 0;
-                final int height = Math.min(minMultiple, maxHeight);
+            final boolean startOffset = minMultiple != minHeight;
+            final boolean endOffset = maxMultiple != maxHeight;
+            if (startOffset || endOffset) {
+                final int firstFill = Math.min(minMultiple + 16, maxHeight);
+                final int lastFill = floorSection(maxHeight);
                 for (int x = 0; x < width; x++) {
                     for (int z = 0; z < depth; z++) {
-                        final GenerationUnit section = findAbsoluteSection(startX + x * 16, minHeight, startZ + z * 16);
-                        section.modifier().fillHeight(minHeight, height, block);
-                    }
-                }
-            }
-            // Last section
-            if (maxMultiple != maxHeight) {
-                assert maxHeight % 16 != 0;
-                for (int x = 0; x < width; x++) {
-                    for (int z = 0; z < depth; z++) {
-                        final GenerationUnit section = findAbsoluteSection(startX + x * 16, maxMultiple, startZ + z * 16);
-                        section.modifier().fillHeight(maxMultiple, maxHeight, block);
+                        final int sectionX = startX + x * 16;
+                        final int sectionZ = startZ + z * 16;
+                        // Fill start
+                        if (startOffset) {
+                            final GenerationUnit section = findAbsoluteSection(sectionX, minMultiple, sectionZ);
+                            section.modifier().fillHeight(minHeight, firstFill, block);
+                        }
+                        // Fill end
+                        if (endOffset) {
+                            final GenerationUnit section = findAbsoluteSection(sectionX, maxHeight, sectionZ);
+                            section.modifier().fillHeight(lastFill, maxHeight, block);
+                        }
                     }
                 }
             }
             // Middle sections (to fill)
-            final int startSection = (minMultiple) / 16;
-            final int endSection = (maxMultiple - 1) / 16;
-            for (int i = startSection; i <= endSection; i++) {
+            final int startSection = (minMultiple) / 16 + (startOffset ? 1 : 0);
+            final int endSection = (maxMultiple) / 16 + (endOffset ? -1 : 0);
+            for (int i = startSection; i < endSection; i++) {
                 for (int x = 0; x < width; x++) {
                     for (int z = 0; z < depth; z++) {
                         final GenerationUnit section = findAbsoluteSection(startX + x * 16, i * 16, startZ + z * 16);
@@ -500,11 +503,11 @@ final class GeneratorImpl {
         return z + y * depth + x * depth * height;
     }
 
-    private static int floorSection(int coordinate) {
-        return ((coordinate - 1) | 15) + 1;
+    static int floorSection(int coordinate) {
+        return coordinate - (coordinate & 0xF);
     }
 
-    private static int ceilSection(int coordinate) {
-        return coordinate - (coordinate & 0xF);
+    static int ceilSection(int coordinate) {
+        return ((coordinate - 1) | 15) + 1;
     }
 }

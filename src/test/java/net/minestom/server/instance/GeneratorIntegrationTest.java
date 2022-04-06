@@ -11,7 +11,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 @EnvTest
 public class GeneratorIntegrationTest {
@@ -49,7 +50,7 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
-    public void fillHeight(Env env) {
+    public void fillHeightNegative(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> {

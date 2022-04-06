@@ -75,7 +75,7 @@ public class GeneratorForkIntegrationTest {
         instance.setGenerator(null);
         instance.loadChunk(1, 0).join();
         for (int y = 0; y < 40; y++) {
-            assertEquals(Block.STONE, instance.getBlock(16, y, 0));
+            assertEquals(Block.STONE, instance.getBlock(16, y, 0), "y=" + y);
         }
     }
 

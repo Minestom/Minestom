@@ -9,14 +9,18 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
-import static net.minestom.server.instance.GeneratorImpl.unit;
+import static net.minestom.server.instance.GeneratorImpl.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GeneratorTest {
@@ -29,6 +33,44 @@ public class GeneratorTest {
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(32)));
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(31)));
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(Vec.ZERO, new Vec(15)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("sectionFloorParam")
+    public void sectionFloor(int expected, int input) {
+        assertEquals(expected, floorSection(input), "floorSection(" + input + ")");
+    }
+
+    private static Stream<Arguments> sectionFloorParam() {
+        return Stream.of(Arguments.of(-32, -32),
+                Arguments.of(-32, -31),
+                Arguments.of(-32, -17),
+                Arguments.of(-16, -16),
+                Arguments.of(-16, -15),
+                Arguments.of(0, 0),
+                Arguments.of(0, 1),
+                Arguments.of(0, 2),
+                Arguments.of(16, 16),
+                Arguments.of(16, 17));
+    }
+
+    @ParameterizedTest
+    @MethodSource("sectionCeilParam")
+    public void sectionCeil(int expected, int input) {
+        assertEquals(expected, ceilSection(input), "ceilSection(" + input + ")");
+    }
+
+    private static Stream<Arguments> sectionCeilParam() {
+        return Stream.of(Arguments.of(-32, -32),
+                Arguments.of(-16, -31),
+                Arguments.of(-16, -17),
+                Arguments.of(-16, -16),
+                Arguments.of(-0, -15),
+                Arguments.of(0, 0),
+                Arguments.of(16, 1),
+                Arguments.of(16, 2),
+                Arguments.of(16, 16),
+                Arguments.of(32, 17));
     }
 
     @Test
@@ -277,23 +319,25 @@ public class GeneratorTest {
         AtomicInteger index = new AtomicInteger(minSection);
         for (var section : sections) {
             section.blockPalette().getAll((x, y, z, value) -> {
+                Block expected;
                 if (index.get() == 0) {
                     if (y > 0) {
-                        assertEquals(Block.STONE.stateId(), value);
+                        expected = Block.STONE;
                     } else {
-                        assertEquals(0, value);
+                        expected = Block.AIR;
                     }
                 } else if (index.get() == 1) {
-                    assertEquals(Block.STONE.stateId(), value);
+                    expected = Block.STONE;
                 } else if (index.get() == 2) {
                     if (y == 0) {
-                        assertEquals(Block.STONE.stateId(), value);
+                        expected = Block.STONE;
                     } else {
-                        assertEquals(0, value);
+                        expected = Block.AIR;
                     }
                 } else {
-                    assertEquals(0, value);
+                    expected = Block.AIR;
                 }
+                assertEquals(expected.stateId(), value, "fail for coordinate: " + x + "," + y + "," + z + " for index " + index.get());
             });
             index.incrementAndGet();
         }
