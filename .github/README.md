@@ -32,7 +32,7 @@ Our own expanded version for Vanilla can be found [here](https://github.com/Mine
 This means you need to add Minestom as a dependency, add your code and compile by yourself.
 
 # Usage
-An example of how to use the Minestom library is available [here](/src/test/java/demo).
+An example of how to use the Minestom library is available [here](/demo).
 Alternatively you can check the official [wiki](https://wiki.minestom.net/) or the [javadocs](https://minestom.github.io/Minestom/).
 
 # Why Minestom?
