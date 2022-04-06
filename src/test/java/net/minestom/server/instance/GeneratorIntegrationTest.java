@@ -11,8 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class GeneratorIntegrationTest {
@@ -47,5 +46,21 @@ public class GeneratorIntegrationTest {
         instance.loadChunk(0, 0).join();
 
         assertSame(exception, ref.get());
+    }
+
+    @Test
+    public void fillHeight(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+        instance.setGenerator(unit -> {
+            unit.modifier().fillHeight(-64, -60, Block.STONE);
+        });
+        instance.loadChunk(0, 0).join();
+        for (int y = -64; y < -60; y++) {
+            assertEquals(Block.STONE, instance.getBlock(0, y, 0));
+        }
+        for (int y = -60; y < 100; y++) {
+            assertEquals(Block.AIR, instance.getBlock(0, y, 0));
+        }
     }
 }
