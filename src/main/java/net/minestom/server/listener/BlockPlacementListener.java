@@ -123,7 +123,7 @@ public class BlockPlacementListener {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
         if (blockPlacementRule != null) {
             // Get id from block placement rule instead of the event
-            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player, placementPosition);
         }
         if (resultBlock == null) {
             refresh(player, chunk);
