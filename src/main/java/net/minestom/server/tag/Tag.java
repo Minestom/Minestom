@@ -269,13 +269,11 @@ public class Tag<T> {
 
     @ApiStatus.Experimental
     public static <T extends Record> @NotNull Tag<T> Structure(@NotNull String key, @NotNull Class<T> type) {
-        assert type.isRecord();
         return Structure(key, TagRecord.serializer(type));
     }
 
     @ApiStatus.Experimental
     public static <T extends Record> @NotNull Tag<T> View(@NotNull Class<T> type) {
-        assert type.isRecord();
         return View(TagRecord.serializer(type));
     }
 }

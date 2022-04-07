@@ -59,6 +59,7 @@ final class TagRecord {
     };
 
     static <T extends Record> @NotNull Serializer<T> serializer(@NotNull Class<T> type) {
+        assert type.isRecord();
         //noinspection unchecked
         return (Serializer<T>) serializers.get(type);
     }
