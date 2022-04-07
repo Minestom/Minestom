@@ -31,6 +31,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = (cursorY > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM);
+        if(blockFace == BlockFace.BOTTOM || blockFace == BlockFace.TOP) half = blockFace.getOppositeFace();
         String waterlogged = "false";
 
         return block.withProperties(Map.of(
