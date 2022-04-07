@@ -58,4 +58,23 @@ public class TagViewTest {
         assertEqualsSNBT("{}", handler.asCompound());
     }
 
+    @Test
+    public void snbtOverride() {
+        var handler = TagHandler.newHandler();
+        var entry = new Entry("hello");
+        handler.setTag(VIEW_TAG, entry);
+        assertEqualsSNBT("""
+                {
+                  "value":"hello"
+                }
+                """, handler.asCompound());
+
+        handler.setTag(Tag.Integer("value"), 5);
+        assertEqualsSNBT("""
+                {
+                  "value":5,
+                }
+                """, handler.asCompound());
+    }
+
 }

@@ -58,7 +58,7 @@ final class TagRecord {
         }
     };
 
-    public static <T extends Record> @NotNull Serializer<T> serializer(@NotNull Class<T> type) {
+    static <T extends Record> @NotNull Serializer<T> serializer(@NotNull Class<T> type) {
         //noinspection unchecked
         return (Serializer<T>) serializers.get(type);
     }

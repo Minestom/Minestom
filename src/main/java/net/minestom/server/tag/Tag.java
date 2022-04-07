@@ -12,6 +12,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -163,7 +164,9 @@ public class Tag<T> {
         }
         PathEntry[] pathEntries = new PathEntry[path.length];
         for (int i = 0; i < path.length; i++) {
-            var name = path[i];
+            final String name = path[i];
+            if (name == null || name.isEmpty())
+                throw new IllegalArgumentException("Path must not be empty: " + Arrays.toString(path));
             pathEntries[i] = new PathEntry(name, INDEX_MAP.get(name));
         }
         return new Tag<>(index, key, readComparator, entry, defaultValue, pathEntries, copy, listScope);
@@ -244,6 +247,10 @@ public class Tag<T> {
         return tag(key, (Serializers.Entry<T, ? extends NBT>) Serializers.NBT_ENTRY);
     }
 
+    public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
+        return tag(key, Serializers.ITEM);
+    }
+
     /**
      * Create a wrapper around a compound.
      *
@@ -256,17 +263,19 @@ public class Tag<T> {
         return fromSerializer(key, serializer);
     }
 
-    @ApiStatus.Experimental
-    public static <T extends Record> @NotNull Tag<T> Structure(@NotNull String key, @NotNull Class<T> type) {
-        assert type.isRecord();
-        return fromSerializer(key, TagRecord.serializer(type));
-    }
-
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
         return Structure("", serializer);
     }
 
-    public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
-        return tag(key, Serializers.ITEM);
+    @ApiStatus.Experimental
+    public static <T extends Record> @NotNull Tag<T> Structure(@NotNull String key, @NotNull Class<T> type) {
+        assert type.isRecord();
+        return Structure(key, TagRecord.serializer(type));
+    }
+
+    @ApiStatus.Experimental
+    public static <T extends Record> @NotNull Tag<T> View(@NotNull Class<T> type) {
+        assert type.isRecord();
+        return View(TagRecord.serializer(type));
     }
 }

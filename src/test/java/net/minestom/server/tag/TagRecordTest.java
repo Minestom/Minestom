@@ -26,6 +26,27 @@ public class TagRecordTest {
     }
 
     @Test
+    public void fromNBT() {
+        var vecCompound = NBT.Compound(Map.of(
+                "x", NBT.Double(1),
+                "y", NBT.Double(2),
+                "z", NBT.Double(3)));
+        var handler = TagHandler.fromCompound(NBT.Compound(Map.of("vec", vecCompound)));
+        var tag = Tag.Structure("vec", Vec.class);
+        assertEquals(new Vec(1, 2, 3), handler.getTag(tag));
+    }
+
+    @Test
+    public void fromNBTView() {
+        var handler = TagHandler.fromCompound(NBT.Compound(Map.of(
+                "x", NBT.Double(1),
+                "y", NBT.Double(2),
+                "z", NBT.Double(3))));
+        var tag = Tag.View(Vec.class);
+        assertEquals(new Vec(1, 2, 3), handler.getTag(tag));
+    }
+
+    @Test
     public void basicSerializer() {
         var handler = TagHandler.newHandler();
         var serializer = TagRecord.serializer(Vec.class);

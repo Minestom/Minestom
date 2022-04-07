@@ -28,6 +28,12 @@ public class TagPathTest {
     }
 
     @Test
+    public void invalidPath() {
+        assertThrows(IllegalArgumentException.class, () -> Tag.Integer("number").path(""));
+        assertThrows(IllegalArgumentException.class, () -> Tag.Integer("number").path("path", null));
+    }
+
+    @Test
     public void emptyRemoval() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
