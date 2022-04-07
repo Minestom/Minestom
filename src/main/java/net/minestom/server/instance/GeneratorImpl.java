@@ -148,13 +148,13 @@ final class GeneratorImpl {
                     List<UnitImpl> forks) implements GenerationUnit {
         @Override
         public @NotNull GenerationUnit fork(@NotNull Point start, @NotNull Point end) {
-            final int minSectionX = start.chunkX();
-            final int minSectionY = start.section();
-            final int minSectionZ = start.chunkZ();
+            final int minSectionX = floorSection(start.blockX()) / 16;
+            final int minSectionY = floorSection(start.blockY()) / 16;
+            final int minSectionZ = floorSection(start.blockZ()) / 16;
 
-            final int maxSectionX = end.chunkX();
-            final int maxSectionY = end.section();
-            final int maxSectionZ = end.chunkZ();
+            final int maxSectionX = ceilSection(end.blockX()) / 16;
+            final int maxSectionY = ceilSection(end.blockY()) / 16;
+            final int maxSectionZ = ceilSection(end.blockZ()) / 16;
 
             final int width = maxSectionX - minSectionX;
             final int height = maxSectionY - minSectionY;

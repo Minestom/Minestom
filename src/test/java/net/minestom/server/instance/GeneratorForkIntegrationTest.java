@@ -2,12 +2,13 @@ package net.minestom.server.instance;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.world.biomes.Biome;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class GeneratorForkIntegrationTest {
@@ -16,7 +17,6 @@ public class GeneratorForkIntegrationTest {
     public void local(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-
         var block = Block.STONE;
         instance.setGenerator(unit -> {
             var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd());
@@ -29,10 +29,26 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
+    public void size(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+        // Set the Generator
+        instance.setGenerator(unit -> {
+            Point start = unit.absoluteStart();
+            GenerationUnit fork = unit.fork(start, start.add(18, 18, 18));
+            assertDoesNotThrow(() -> fork.modifier().setBlock(start.add(17, 17, 17), Block.STONE));
+        });
+        // Load the chunks
+        instance.loadChunk(0, 0).join();
+        instance.setGenerator(null);
+        instance.loadChunk(1, 1).join();
+        assertEquals(Block.STONE, instance.getBlock(17, -64 + 17, 17));
+    }
+
+    @Test
     public void signal(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-
         var block = Block.STONE;
         instance.setGenerator(unit -> {
             var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
@@ -52,7 +68,6 @@ public class GeneratorForkIntegrationTest {
     public void air(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-
         instance.setGenerator(unit -> {
             var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
             u.modifier().setRelative(16, 39 + 64, 0, Block.AIR);
