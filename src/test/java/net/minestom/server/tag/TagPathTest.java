@@ -223,8 +223,8 @@ public class TagPathTest {
             }
 
             @Override
-            public void write(@NotNull TagWritable writer, @Nullable Entry value) {
-                writer.setTag(VALUE_TAG, value != null ? value.value : null);
+            public void write(@NotNull TagWritable writer, @NotNull Entry value) {
+                writer.setTag(VALUE_TAG, value.value);
             }
         });
 

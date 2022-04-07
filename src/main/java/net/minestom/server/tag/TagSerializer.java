@@ -22,7 +22,7 @@ public interface TagSerializer<T> {
      * Writes the custom tag to a {@link TagWritable}.
      *
      * @param writer the writer
-     * @param value  the value to serialize, null to remove
+     * @param value  the value to serialize
      */
-    void write(@NotNull TagWritable writer, @Nullable T value);
+    void write(@NotNull TagWritable writer, @NotNull T value);
 }

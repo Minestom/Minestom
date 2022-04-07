@@ -245,22 +245,26 @@ public class Tag<T> {
      */
     public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return tag(key,
-                (NBTCompound compound) -> serializer.read(TagHandler.fromCompound(compound)),
+                (NBTCompound compound) -> {
+                    if (compound.isEmpty()) return null;
+                    return serializer.read(TagHandler.fromCompound(compound));
+                },
                 (value) -> {
+                    if (value == null) return NBTCompound.EMPTY;
                     TagHandler handler = TagHandler.newHandler();
                     serializer.write(handler, value);
                     return handler.asCompound();
                 });
     }
 
+    @ApiStatus.Experimental
+    public static <T extends Record> @NotNull Tag<T> Structure(@NotNull String key, @NotNull Class<T> type) {
+        assert type.isRecord();
+        return Structure(key, TagRecord.serializer(type));
+    }
+
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
-        return tag("",
-                (NBTCompound compound) -> serializer.read(TagHandler.fromCompound(compound)),
-                (value) -> {
-                    TagHandler handler = TagHandler.newHandler();
-                    serializer.write(handler, value);
-                    return handler.asCompound();
-                });
+        return Structure("", serializer);
     }
 
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
