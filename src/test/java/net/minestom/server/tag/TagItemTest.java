@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
 
+import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static net.minestom.server.api.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -90,5 +91,23 @@ public class TagItemTest {
             assertEquals(item2, handler.getTag(itemTag));
             assertEquals(item2.toItemNBT(), handler.getTag(nbtTag));
         }
+    }
+
+    @Test
+    public void snbt() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.ItemStack("item");
+        handler.setTag(tag, ItemStack.of(Material.DIAMOND));
+        assertEqualsSNBT("""
+                {
+                  "item": {
+                    "id":"minecraft:diamond",
+                    "Count":1B,
+                    "tag":{}
+                  }
+                }
+                """, handler.asCompound());
+        handler.removeTag(tag);
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 }

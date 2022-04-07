@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
@@ -95,5 +96,20 @@ public class TagEqualityTest {
         var tag2 = Tag.Integer("test").list();
         assertFalse(tag.shareValue(tag2));
         assertFalse(tag.list().shareValue(tag2.list()));
+    }
+
+    @Test
+    public void recordStructure() {
+        var tag = Tag.Structure("test", Vec.class);
+        var tag2 = Tag.Structure("test", Vec.class);
+        assertTrue(tag.shareValue(tag2));
+    }
+
+    @Test
+    public void recordStructureList() {
+        var tag = Tag.Structure("test", Vec.class).list();
+        var tag2 = Tag.Structure("test", Vec.class).list();
+        assertTrue(tag.shareValue(tag2));
+        assertTrue(tag.list().shareValue(tag2.list()));
     }
 }

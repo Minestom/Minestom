@@ -28,6 +28,12 @@ public class TagPathTest {
     }
 
     @Test
+    public void invalidPath() {
+        assertThrows(IllegalArgumentException.class, () -> Tag.Integer("number").path(""));
+        assertThrows(IllegalArgumentException.class, () -> Tag.Integer("number").path("path", null));
+    }
+
+    @Test
     public void emptyRemoval() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
@@ -223,8 +229,8 @@ public class TagPathTest {
             }
 
             @Override
-            public void write(@NotNull TagWritable writer, @Nullable Entry value) {
-                writer.setTag(VALUE_TAG, value != null ? value.value : null);
+            public void write(@NotNull TagWritable writer, @NotNull Entry value) {
+                writer.setTag(VALUE_TAG, value.value);
             }
         });
 

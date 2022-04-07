@@ -19,12 +19,8 @@ public class TagViewTest {
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @Nullable Entry value) {
-            if (value != null) {
-                writer.setTag(VALUE_TAG, value.value);
-            } else {
-                writer.removeTag(VALUE_TAG);
-            }
+        public void write(@NotNull TagWritable writer, @NotNull Entry value) {
+            writer.setTag(VALUE_TAG, value.value);
         }
     });
 
@@ -60,6 +56,25 @@ public class TagViewTest {
 
         handler.removeTag(VIEW_TAG);
         assertEqualsSNBT("{}", handler.asCompound());
+    }
+
+    @Test
+    public void snbtOverride() {
+        var handler = TagHandler.newHandler();
+        var entry = new Entry("hello");
+        handler.setTag(VIEW_TAG, entry);
+        assertEqualsSNBT("""
+                {
+                  "value":"hello"
+                }
+                """, handler.asCompound());
+
+        handler.setTag(Tag.Integer("value"), 5);
+        assertEqualsSNBT("""
+                {
+                  "value":5,
+                }
+                """, handler.asCompound());
     }
 
 }
