@@ -35,7 +35,7 @@ public abstract class BlockPlacementRule {
      * @param pl            the player who placed the block
      * @return the block to place, {@code null} to cancel
      * 
-     * @deprecated use {@link #blockPlace(Instance, Block, BlockFace, Point, Player, Point)} instead
+     * @deprecated use {@link #blockPlace(Instance, Block, BlockFace, Point, Player, float, float, float)} instead
      */
     @Deprecated
     public @Nullable Block blockPlace(@NotNull Instance instance,
@@ -52,12 +52,14 @@ public abstract class BlockPlacementRule {
      * @param blockFace       the block face
      * @param blockPosition   the block position
      * @param pl              the player who placed the block
-     * @param cursorPosition  the cursor position
+     * @param cursorX  the cursor X position
+     * @param cursorY  the cursor Y position
+     * @param cursorZ  the cursor Z position
      * @return the block to place, {@code null} to cancel
      */
     public @Nullable Block blockPlace(@NotNull Instance instance,
                                                @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                                               @NotNull Player pl, @Nullable Point cursorPosition) {
+                                               @NotNull Player pl, float cursorX, float cursorY, float cursorZ) {
         return blockPlace(instance, block, blockFace, blockPosition, pl);
     }
 
