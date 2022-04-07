@@ -27,11 +27,10 @@ public class StairsPlacementRule extends BlockPlacementRule {
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace,
-                            @NotNull Point blockPosition, @NotNull Player player, @Nullable Point cursorPosition) {
+                            @NotNull Point blockPosition, @NotNull Player player, float cursorX, float cursorY, float cursorZ) {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
-        // TODO: how to handle null cursorPosition?
-        BlockFace half = (cursorPosition != null && cursorPosition.blockY() > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM);
+        BlockFace half = (cursorY > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM);
         String waterlogged = "false";
 
         return block.withProperties(Map.of(
