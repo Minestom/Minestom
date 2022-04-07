@@ -19,12 +19,8 @@ public class TagViewTest {
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @Nullable Entry value) {
-            if (value != null) {
-                writer.setTag(VALUE_TAG, value.value);
-            } else {
-                writer.removeTag(VALUE_TAG);
-            }
+        public void write(@NotNull TagWritable writer, @NotNull Entry value) {
+            writer.setTag(VALUE_TAG, value.value);
         }
     });
 
