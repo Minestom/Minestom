@@ -1,7 +1,8 @@
 package net.minestom.demo.generator;
 
-import de.articdive.jnoise.JNoise;
-import de.articdive.jnoise.interpolation.InterpolationType;
+import de.articdive.jnoise.generators.noise_parameters.interpolation.Interpolation;
+import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator;
+import de.articdive.jnoise.pipeline.JNoise;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
@@ -17,12 +18,16 @@ import java.util.Random;
 public class NoiseTestGenerator implements ChunkGenerator {
 
     private Random random = new Random();
-    private JNoise jNoise = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(random.nextInt()).setFrequency(0.4).build();
-    private JNoise jNoise2 = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(random.nextInt()).setFrequency(0.6).build();
+    private JNoise jNoise = JNoise.newBuilder().perlin(
+            PerlinNoiseGenerator.newBuilder().setSeed(random.nextInt()).setInterpolation(Interpolation.LINEAR).build()
+    ).scale(0.4).build();
+    private JNoise jNoise2 = JNoise.newBuilder().perlin(
+            PerlinNoiseGenerator.newBuilder().setSeed(random.nextInt()).setInterpolation(Interpolation.LINEAR).build()
+    ).scale(0.6).build();
     private TreePopulator treeGen = new TreePopulator();
 
     public int getHeight(int x, int z) {
-        double preHeight = jNoise.getNoise(x / 16.0, z / 16.0);
+        double preHeight = jNoise.evaluateNoise(x / 16.0, z / 16.0);
         return (int) ((preHeight > 0 ? preHeight * 6 : preHeight * 4) + 64);
     }
 
@@ -155,7 +160,7 @@ public class NoiseTestGenerator implements ChunkGenerator {
         public void populateChunk(ChunkBatch batch, Chunk chunk) {
             for (int i = -2; i < 18; i++) {
                 for (int j = -2; j < 18; j++) {
-                    if (jNoise2.getNoise(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16) > 0.75) {
+                    if (jNoise2.evaluateNoise(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16) > 0.75) {
                         int y = getHeight(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16);
                         tree.build(batch, new Vec(i, y, j));
                     }

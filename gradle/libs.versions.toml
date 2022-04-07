@@ -31,7 +31,7 @@ mockito = "4.2.0"
 javaPoet = "1.13.0"
 
 # Demo
-jNoise = "3.0.1"
+jNoise = "4.0.0-SNAPSHOT"
 
 # JMH
 jmh = "1.34"
@@ -86,7 +86,7 @@ mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mo
 javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 
 # Demo
-jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNoise" }
+jNoise = { group = "de.articdive", name = "jnoise-pipeline", version.ref = "jNoise" }
 
 # JMH
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
