@@ -5,11 +5,12 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.pathfinding.task.PathfindTask;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -27,6 +28,9 @@ public class RangedAttackGoal extends GoalSelector {
     private final double spread;
 
     private Function<Entity, EntityProjectile> projectileGenerator;
+
+    // Pathfinding path
+    private @Nullable PathfindTask.Path path;
 
     private boolean stop;
     private Entity cachedTarget;
@@ -81,7 +85,7 @@ public class RangedAttackGoal extends GoalSelector {
 
     @Override
     public void start() {
-        this.entityCreature.getNavigator().setPathTo(this.cachedTarget.getPosition());
+        path = PathfindTask.moveTo(this.cachedTarget.getPosition()).start(entityCreature);
     }
 
     @Override
@@ -118,11 +122,10 @@ public class RangedAttackGoal extends GoalSelector {
                 }
             }
         }
-        Navigator navigator = this.entityCreature.getNavigator();
-        final var pathPosition = navigator.getPathPosition();
+        final var pathPosition = path.nextPoint();
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
-                navigator.setPathTo(null);
+                path.updateTarget(null);
             }
             this.entityCreature.lookAt(target);
             return;
@@ -131,7 +134,7 @@ public class RangedAttackGoal extends GoalSelector {
         if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
             if (this.cooldown.isReady(time)) {
                 this.cooldown.refreshLastUpdate(time);
-                navigator.setPathTo(targetPosition);
+                path.updateTarget(targetPosition);
             }
         }
     }
@@ -144,6 +147,8 @@ public class RangedAttackGoal extends GoalSelector {
     @Override
     public void end() {
         // Stop following the target
-        this.entityCreature.getNavigator().setPathTo(null);
+        if (path != null) {
+            path.updateTarget(null);
+        }
     }
 }

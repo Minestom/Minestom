@@ -5,7 +5,6 @@ import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
@@ -50,9 +49,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     protected volatile boolean loaded = true;
     private final ChunkView viewers;
-
-    // Path finding
-    protected PFColumnarSpace columnarSpace;
 
     // Data
     private final TagHandler tagHandler = TagHandler.newHandler();
@@ -240,15 +236,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
-    }
-
-    /**
-     * Changes this chunk columnar space.
-     *
-     * @param columnarSpace the new columnar space
-     */
-    public void setColumnarSpace(PFColumnarSpace columnarSpace) {
-        this.columnarSpace = columnarSpace;
     }
 
     /**

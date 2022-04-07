@@ -52,6 +52,7 @@ public class Main {
         commandManager.register(new AutoViewCommand());
         commandManager.register(new SaveCommand());
         commandManager.register(new GamemodeCommand());
+        commandManager.register(new PathfindCommand());
 
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));

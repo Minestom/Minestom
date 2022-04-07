@@ -18,6 +18,7 @@ public class SummonCommand extends Command {
     private final ArgumentEntityType entity;
     private final Argument<RelativeVec> pos;
     private final Argument<EntityClass> entityClass;
+    private final Argument<Integer> count;
 
     public SummonCommand() {
         super("summon");
@@ -32,14 +33,17 @@ public class SummonCommand extends Command {
         entityClass = ArgumentType.Enum("class", EntityClass.class)
                 .setFormat(ArgumentEnum.Format.LOWER_CASED)
                 .setDefaultValue(EntityClass.CREATURE);
-        addSyntax(this::execute, entity, pos, entityClass);
-        setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
+        count = ArgumentType.Integer("count").setDefaultValue(1);
+        addSyntax(this::execute, entity, pos, entityClass, count);
+        setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class> <count>"));
     }
 
     private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
-        final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
-        //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
-        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
+        for (int i = 0; i < commandContext.get(count); i++) {
+            final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
+            //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
+            entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
+        }
     }
 
     @SuppressWarnings("unused")
@@ -54,11 +58,22 @@ public class SummonCommand extends Command {
         }
 
         public Entity instantiate(EntityType type) {
+            if (type == EntityType.BEE && this == CREATURE) {
+                // Flying creature for development
+                return new FlyingEntity(type);
+            }
             return factory.newInstance(type);
         }
     }
 
     interface EntityFactory {
         Entity newInstance(EntityType type);
+    }
+
+    private static final class FlyingEntity extends EntityCreature {
+        public FlyingEntity(@NotNull EntityType entityType) {
+            super(entityType);
+            setGravity(0.0, 0.0);
+        }
     }
 }
