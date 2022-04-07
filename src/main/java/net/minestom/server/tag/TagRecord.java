@@ -63,8 +63,17 @@ final class TagRecord {
         return (Serializer<T>) serializers.get(type);
     }
 
-    record Serializer<T extends Record>(Constructor<T> constructor,
-                                        Entry[] entries) implements TagSerializer<T> {
+    static final class Serializer<T extends Record> implements TagSerializer<T> {
+        Constructor<T> constructor;
+        Entry[] entries;
+        Serializers.Entry<T, ?> serializerEntry;
+
+        Serializer(Constructor<T> constructor, Entry[] entries) {
+            this.constructor = constructor;
+            this.entries = entries;
+            this.serializerEntry = Serializers.fromTagSerializer(this);
+        }
+
         @Override
         public @Nullable T read(@NotNull TagReadable reader) {
             Object[] components = new Object[entries.length];

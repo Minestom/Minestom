@@ -51,7 +51,7 @@ final class TagHandlerImpl implements TagHandler {
                     if (value == null) return;
                     // Empty path, create a new handler
                     local = new TagHandlerImpl();
-                    entries[pathIndex] = new Entry<>(Tag.tag(path.name(), null, null), local);
+                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.VOID), local);
                 } else if (entry.value instanceof TagHandlerImpl handler) {
                     // Existing path, continue navigating
                     local = handler;
@@ -161,7 +161,7 @@ final class TagHandlerImpl implements TagHandler {
 
         NBT updatedNbt() {
             NBT nbt = this.nbt;
-            if (nbt == null) this.nbt = nbt = tag.writeFunction.apply(value);
+            if (nbt == null) this.nbt = nbt = tag.entry.write().apply(value);
             return nbt;
         }
     }
@@ -210,7 +210,7 @@ final class TagHandlerImpl implements TagHandler {
         // Value must be parsed from nbt if the tag is different
         final NBT nbt = entry.updatedNbt();
         try {
-            return tag.readFunction.apply(nbt);
+            return tag.entry.read().apply(nbt);
         } catch (ClassCastException e) {
             return tag.createDefault();
         }
