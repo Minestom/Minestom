@@ -151,12 +151,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#String(java.lang.String)" class="member-name-link">String</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Structure(java.lang.String,net.minestom.server.tag.TagSerializer)" class="member-name-link">Structure</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>&gt;<br>@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Structure(java.lang.String,java.lang.Class)" class="member-name-link">Structure</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Structure(java.lang.String,net.minestom.server.tag.TagSerializer)" class="member-name-link">Structure</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  @NotNull <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;&nbsp;serializer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Create a wrapper around a compound.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>&gt;<br>@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#View(java.lang.Class)" class="member-name-link">View</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#View(net.minestom.server.tag.TagSerializer)" class="member-name-link">View</a><wbr>(@NotNull <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;&nbsp;serializer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
@@ -337,6 +344,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="ItemStack(java.lang.String)">
+<h3>ItemStack</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</span>&nbsp;<span class="element-name">ItemStack</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="Structure(java.lang.String,net.minestom.server.tag.TagSerializer)">
 <h3>Structure</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -365,11 +380,23 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="ItemStack(java.lang.String)">
-<h3>ItemStack</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</span>&nbsp;<span class="element-name">ItemStack</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<section class="detail" id="Structure(java.lang.String,java.lang.Class)">
+<h3>Structure</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</span>&nbsp;<span class="element-name">Structure</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="View(java.lang.Class)">
+<h3>View</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</span>&nbsp;<span class="element-name">View</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 </section>
 </li>
 </ul>
