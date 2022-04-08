@@ -127,6 +127,7 @@ loadScripts(document, 'script');</script>
 <li><a href="net/minestom/server/instance/block/package-tree.html">net.minestom.server.instance.block</a>, </li>
 <li><a href="net/minestom/server/instance/block/rule/package-tree.html">net.minestom.server.instance.block.rule</a>, </li>
 <li><a href="net/minestom/server/instance/block/rule/vanilla/package-tree.html">net.minestom.server.instance.block.rule.vanilla</a>, </li>
+<li><a href="net/minestom/server/instance/generator/package-tree.html">net.minestom.server.instance.generator</a>, </li>
 <li><a href="net/minestom/server/instance/palette/package-tree.html">net.minestom.server.instance.palette</a>, </li>
 <li><a href="net/minestom/server/inventory/package-tree.html">net.minestom.server.inventory</a>, </li>
 <li><a href="net/minestom/server/inventory/click/package-tree.html">net.minestom.server.inventory.click</a>, </li>
@@ -353,11 +354,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.instance.<a href="net/minestom/server/instance/DynamicChunk.html" class="type-name-link" title="class in net.minestom.server.instance">DynamicChunk</a></li>
 </ul>
 </li>
-<li class="circle">net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/ChunkBatch.html" class="type-name-link" title="class in net.minestom.server.instance.batch">ChunkBatch</a> (implements net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;C&gt;)
-<ul>
-<li class="circle">net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/ChunkGenerationBatch.html" class="type-name-link" title="class in net.minestom.server.instance.batch">ChunkGenerationBatch</a></li>
-</ul>
-</li>
+<li class="circle">net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/ChunkBatch.html" class="type-name-link" title="class in net.minestom.server.instance.batch">ChunkBatch</a> (implements net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;C&gt;)</li>
 <li class="circle">net.minestom.server.utils.chunk.<a href="net/minestom/server/utils/chunk/ChunkCache.html" class="type-name-link" title="class in net.minestom.server.utils.chunk">ChunkCache</a> (implements net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>)</li>
 <li class="circle">net.minestom.server.utils.chunk.<a href="net/minestom/server/utils/chunk/ChunkUtils.html" class="type-name-link" title="class in net.minestom.server.utils.chunk">ChunkUtils</a></li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" class="type-name-link external-link" title="class or interface in java.lang">ClassLoader</a>
@@ -1258,7 +1255,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.snapshot.<a href="net/minestom/server/snapshot/InstanceSnapshot.html" class="type-name-link" title="interface in net.minestom.server.snapshot">InstanceSnapshot</a> (also extends net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>, net.minestom.server.snapshot.<a href="net/minestom/server/snapshot/Snapshot.html" title="interface in net.minestom.server.snapshot">Snapshot</a>, net.minestom.server.tag.<a href="net/minestom/server/tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
 </ul>
 </li>
-<li class="circle">net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.Setter.html" class="type-name-link" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></li>
+<li class="circle">net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.Setter.html" class="type-name-link" title="interface in net.minestom.server.world.biomes">Biome.Setter</a>
+<ul>
+<li class="circle">net.minestom.server.instance.generator.<a href="net/minestom/server/instance/generator/UnitModifier.html" class="type-name-link" title="interface in net.minestom.server.instance.generator">UnitModifier</a> (also extends net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a>)</li>
+</ul>
+</li>
 <li class="circle">net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/BiomeParticle.Option.html" class="type-name-link" title="interface in net.minestom.server.world.biomes">BiomeParticle.Option</a></li>
 <li class="circle">java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" class="type-name-link external-link" title="class or interface in java.util.function">BiPredicate</a>&lt;T,<wbr>U&gt;
 <ul>
@@ -1274,6 +1275,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/Block.Setter.html" class="type-name-link" title="interface in net.minestom.server.instance.block">Block.Setter</a>
 <ul>
 <li class="circle">net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/Batch.html" class="type-name-link" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;C&gt;</li>
+<li class="circle">net.minestom.server.instance.generator.<a href="net/minestom/server/instance/generator/UnitModifier.html" class="type-name-link" title="interface in net.minestom.server.instance.generator">UnitModifier</a> (also extends net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a>)</li>
 </ul>
 </li>
 <li class="circle">net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/BlockHandler.html" class="type-name-link" title="interface in net.minestom.server.instance.block">BlockHandler</a></li>
@@ -1342,6 +1344,8 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.exception.<a href="net/minestom/server/exception/ExceptionHandler.html" class="type-name-link" title="interface in net.minestom.server.exception">ExceptionHandler</a></li>
 <li class="circle">net.minestom.server.instance.<a href="net/minestom/server/instance/ExplosionSupplier.html" class="type-name-link" title="interface in net.minestom.server.instance">ExplosionSupplier</a></li>
 <li class="circle">net.minestom.server.map.<a href="net/minestom/server/map/Framebuffer.html" class="type-name-link" title="interface in net.minestom.server.map">Framebuffer</a></li>
+<li class="circle">net.minestom.server.instance.generator.<a href="net/minestom/server/instance/generator/GenerationUnit.html" class="type-name-link" title="interface in net.minestom.server.instance.generator">GenerationUnit</a></li>
+<li class="circle">net.minestom.server.instance.generator.<a href="net/minestom/server/instance/generator/Generator.html" class="type-name-link" title="interface in net.minestom.server.instance.generator">Generator</a></li>
 <li class="circle">net.minestom.server.instance.<a href="net/minestom/server/instance/IChunkLoader.html" class="type-name-link" title="interface in net.minestom.server.instance">IChunkLoader</a></li>
 <li class="circle">net.minestom.server.utils.function.<a href="net/minestom/server/utils/function/IntegerBiConsumer.html" class="type-name-link" title="interface in net.minestom.server.utils.function">IntegerBiConsumer</a></li>
 <li class="circle">net.minestom.server.inventory.<a href="net/minestom/server/inventory/InventoryClickHandler.html" class="type-name-link" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></li>
@@ -1516,6 +1520,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.inventory.<a href="net/minestom/server/inventory/TransactionOption.html" class="type-name-link" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;</li>
 <li class="circle">net.minestom.server.inventory.<a href="net/minestom/server/inventory/TransactionType.html" class="type-name-link" title="interface in net.minestom.server.inventory">TransactionType</a></li>
 <li class="circle">net.minestom.server.inventory.<a href="net/minestom/server/inventory/TransactionType.SlotPredicate.html" class="type-name-link" title="interface in net.minestom.server.inventory">TransactionType.SlotPredicate</a></li>
+<li class="circle">net.minestom.server.instance.generator.<a href="net/minestom/server/instance/generator/UnitModifier.Supplier.html" class="type-name-link" title="interface in net.minestom.server.instance.generator">UnitModifier.Supplier</a></li>
 <li class="circle">net.minestom.server.network.<a href="net/minestom/server/network/UuidProvider.html" class="type-name-link" title="interface in net.minestom.server.network">UuidProvider</a></li>
 <li class="circle">net.minestom.server.coordinate.<a href="net/minestom/server/coordinate/Vec.Interpolation.html" class="type-name-link" title="interface in net.minestom.server.coordinate">Vec.Interpolation</a></li>
 <li class="circle">net.minestom.server.coordinate.<a href="net/minestom/server/coordinate/Vec.Operator.html" class="type-name-link" title="interface in net.minestom.server.coordinate">Vec.Operator</a></li>

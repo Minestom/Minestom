@@ -74,6 +74,7 @@ net.minestom.server.instance.batch
 net.minestom.server.instance.block
 net.minestom.server.instance.block.rule
 net.minestom.server.instance.block.rule.vanilla
+net.minestom.server.instance.generator
 net.minestom.server.instance.palette
 net.minestom.server.inventory
 net.minestom.server.inventory.click

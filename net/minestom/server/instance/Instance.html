@@ -186,38 +186,38 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates an explosion at the given position with the given strength.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBlock(int,int,int,net.minestom.server.instance.block.Block.Getter.Condition)" class="member-name-link">getBlock</a><wbr>(int&nbsp;x,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @Nullable <a href="generator/Generator.html" title="interface in net.minestom.server.instance.generator">Generator</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#generator()" class="member-name-link">generator</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets the generator associated with the instance</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBlock(int,int,int,net.minestom.server.instance.block.Block.Getter.Condition)" class="member-name-link">getBlock</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  @NotNull <a href="block/Block.Getter.Condition.html" title="enum class in net.minestom.server.instance.block">Block.Getter.Condition</a>&nbsp;condition)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getChunk(int,int)" class="member-name-link">getChunk</a><wbr>(int&nbsp;chunkX,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getChunk(int,int)" class="member-name-link">getChunk</a><wbr>(int&nbsp;chunkX,
  int&nbsp;chunkZ)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Gets the loaded <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> at a position.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkAt(double,double)" class="member-name-link">getChunkAt</a><wbr>(double&nbsp;x,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkAt(double,double)" class="member-name-link">getChunkAt</a><wbr>(double&nbsp;x,
  double&nbsp;z)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> at the given block position, null if not loaded.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkAt(net.minestom.server.coordinate.Point)" class="member-name-link">getChunkAt</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkAt(net.minestom.server.coordinate.Point)" class="member-name-link">getChunkAt</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> at the given <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate"><code>Point</code></a>, null if not loaded.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkEntities(net.minestom.server.instance.Chunk)" class="member-name-link">getChunkEntities</a><wbr>(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunkEntities(net.minestom.server.instance.Chunk)" class="member-name-link">getChunkEntities</a><wbr>(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the entities located in the chunk.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @Nullable <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getChunkGenerator()" class="member-name-link">getChunkGenerator</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getChunks()" class="member-name-link">getChunks</a>()</code></div>
@@ -380,58 +380,65 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a <a href="../network/packet/server/play/BlockActionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>BlockActionPacket</code></a> for all the viewers of the specific position.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setChunkGenerator(net.minestom.server.instance.ChunkGenerator)" class="member-name-link">setChunkGenerator</a><wbr>(@Nullable <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Changes the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#setChunkGenerator(net.minestom.server.instance.ChunkGenerator)" class="member-name-link">setChunkGenerator</a><wbr>(@Nullable <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="#setGenerator(net.minestom.server.instance.generator.Generator)"><code>setGenerator(Generator)</code></a></div>
+</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setExplosionSupplier(net.minestom.server.instance.ExplosionSupplier)" class="member-name-link">setExplosionSupplier</a><wbr>(@Nullable <a href="ExplosionSupplier.html" title="interface in net.minestom.server.instance">ExplosionSupplier</a>&nbsp;supplier)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Registers the <a href="ExplosionSupplier.html" title="interface in net.minestom.server.instance"><code>ExplosionSupplier</code></a> to use in this instance.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRegistered(boolean)" class="member-name-link">setRegistered</a><wbr>(boolean&nbsp;registered)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setGenerator(net.minestom.server.instance.generator.Generator)" class="member-name-link">setGenerator</a><wbr>(@Nullable <a href="generator/Generator.html" title="interface in net.minestom.server.instance.generator">Generator</a>&nbsp;generator)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Changes the generator of the instance</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRegistered(boolean)" class="member-name-link">setRegistered</a><wbr>(boolean&nbsp;registered)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the registered field.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTime(long)" class="member-name-link">setTime</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTime(long)" class="member-name-link">setTime</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the current time in the instance, from 0 to 24000.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeRate(int)" class="member-name-link">setTimeRate</a><wbr>(int&nbsp;timeRate)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeRate(int)" class="member-name-link">setTimeRate</a><wbr>(int&nbsp;timeRate)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the time rate of the instance</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeUpdate(java.time.Duration)" class="member-name-link">setTimeUpdate</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeUpdate)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeUpdate(java.time.Duration)" class="member-name-link">setTimeUpdate</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeUpdate)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the rate at which the client is updated about the time</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Performs a single tick in the instance, including scheduled tasks from <a href="#scheduleNextTick(java.util.function.Consumer)"><code>scheduleNextTick(Consumer)</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unloadChunk(int,int)" class="member-name-link">unloadChunk</a><wbr>(int&nbsp;chunkX,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unloadChunk(int,int)" class="member-name-link">unloadChunk</a><wbr>(int&nbsp;chunkX,
  int&nbsp;chunkZ)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Unloads the chunk at the given position.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unloadChunk(net.minestom.server.instance.Chunk)" class="member-name-link">unloadChunk</a><wbr>(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unloadChunk(net.minestom.server.instance.Chunk)" class="member-name-link">unloadChunk</a><wbr>(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Schedules the removal of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, this method does not promise when it will be done.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/InstanceSnapshot.html" title="interface in net.minestom.server.snapshot">InstanceSnapshot</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/InstanceSnapshot.html" title="interface in net.minestom.server.snapshot">InstanceSnapshot</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates the currently cached snapshot if required.</div>
 </div>
 </div>
@@ -725,26 +732,42 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 </section>
 </li>
 <li>
-<section class="detail" id="getChunkGenerator()">
-<h3>getChunkGenerator</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@Nullable <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a></span>&nbsp;<span class="element-name">getChunkGenerator</span>()</div>
-<div class="block">Gets the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> of the instance</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="setChunkGenerator(net.minestom.server.instance.ChunkGenerator)">
 <h3>setChunkGenerator</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChunkGenerator</span><wbr><span class="parameters">(@Nullable
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChunkGenerator</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="#setGenerator(net.minestom.server.instance.generator.Generator)"><code>setGenerator(Generator)</code></a></div>
+</div>
 <div class="block">Changes the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>chunkGenerator</code> - the new <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> of the instance</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="generator()">
+<h3>generator</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@Nullable <a href="generator/Generator.html" title="interface in net.minestom.server.instance.generator">Generator</a></span>&nbsp;<span class="element-name">generator</span>()</div>
+<div class="block">Gets the generator associated with the instance</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the generator if any</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setGenerator(net.minestom.server.instance.generator.Generator)">
+<h3>setGenerator</h3>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setGenerator</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="generator/Generator.html" title="interface in net.minestom.server.instance.generator">Generator</a>&nbsp;generator)</span></div>
+<div class="block">Changes the generator of the instance</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>generator</code> - the new generator, or null to disable generation</dd>
 </dl>
 </section>
 </li>
