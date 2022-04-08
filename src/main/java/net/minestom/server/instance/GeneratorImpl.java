@@ -366,7 +366,7 @@ final class GeneratorImpl {
             final boolean endOffset = maxMultiple != maxHeight;
             if (startOffset || endOffset) {
                 final int firstFill = Math.min(minMultiple + 16, maxHeight);
-                final int lastFill = floorSection(maxHeight);
+                final int lastFill = startOffset ? Math.max(firstFill, floorSection(maxHeight)) : floorSection(maxHeight);
                 for (int x = 0; x < width; x++) {
                     for (int z = 0; z < depth; z++) {
                         final int sectionX = startX + x * 16;
