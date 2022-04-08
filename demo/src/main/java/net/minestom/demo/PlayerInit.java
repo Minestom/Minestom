@@ -32,6 +32,7 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -125,29 +126,11 @@ public class PlayerInit {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-//        instanceContainer.setGenerator(unit -> {
-//            // Assume chunk unit
-//            unit.modifier().fillHeight(0, 40, Block.STONE);
-//            // WIP fork
-//            {
-//                GenerationUnit fork = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
-//                fork.modifier().setRelative(15, 64 + 41, 0, Block.GRASS_BLOCK);
-//                fork.modifier().setRelative(16, 64 + 41, 0, Block.GRASS_BLOCK);
-//                fork.modifier().setRelative(17, 64 + 41, 0, Block.GRASS_BLOCK);
-//            }
-//        });
         instanceContainer.setGenerator(new NoiseTestGenerator());
 
         if (false) {
             System.out.println("start");
-            for (int x = -10; x < 10; x++) {
-                for (int z = -10; z < 10; z++) {
-                    instanceContainer.loadChunk(x, z).join();
-                }
-            }
-            if (instanceContainer.getBlock(-19, 79, 17).compare(Block.OAK_LEAVES)) {
-                System.out.println("BLOCK SHOULD NOT BE HERE");
-            }
+            ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> instanceContainer.loadChunk(x, z).join());
             System.out.println("load end");
         }
 
