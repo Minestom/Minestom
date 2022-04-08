@@ -1,10 +1,10 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.demo.generator.ChunkGeneratorDemo;
 import net.minestom.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -32,6 +32,7 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -123,27 +124,13 @@ public class PlayerInit {
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setGenerator(unit -> {
-            // Assume chunk unit
-            unit.modifier().fillHeight(0, 40, Block.STONE);
-            // WIP fork
-            {
-                GenerationUnit fork = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
-                fork.modifier().setRelative(15, 64 + 41, 0, Block.GRASS_BLOCK);
-                fork.modifier().setRelative(16, 64 + 41, 0, Block.GRASS_BLOCK);
-                fork.modifier().setRelative(17, 64 + 41, 0, Block.GRASS_BLOCK);
-            }
-        });
+        instanceContainer.setGenerator(new NoiseTestGenerator());
 
         if (false) {
             System.out.println("start");
-            IntStream.range(0, 5000).forEach(value -> {
-                instanceContainer.loadChunk(0, value).join();
-            });
+            ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> instanceContainer.loadChunk(x, z).join());
             System.out.println("load end");
         }
 
