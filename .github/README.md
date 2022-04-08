@@ -28,7 +28,12 @@ This is a developer API not meant to be used by end-users. Replacing Bukkit/Forg
 Minestom is not installed like Bukkit/Forge/Sponge.
 As Minestom is a Java library, it must be loaded the same way any other Java library may be loaded.
 This means you need to add Minestom as a dependency, add your code and compile by yourself.
-Our own WIP implementation for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
+
+For adding the required repositories and dependencies, [check this out](https://wiki.minestom.net/setup/dependencies)
+
+The newest version can be found [here: ![](https://jitpack.io/v/Minestom/Minestom.svg)](https://jitpack.io/#Minestom/Minestom)
+
+> Our own WIP implementation for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
 # Usage
 An example of how to use the Minestom library is available [here](/demo).
