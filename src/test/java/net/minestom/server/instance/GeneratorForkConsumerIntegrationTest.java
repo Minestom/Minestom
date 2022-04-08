@@ -2,8 +2,12 @@ package net.minestom.server.instance;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -122,5 +126,37 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.loadChunk(0, 0).join();
         assertEquals(Block.STONE, instance.getBlock(0, -64, 0));
         assertEquals(Block.GRASS, instance.getBlock(0, -48, 0));
+    }
+
+    @Test
+    public void verticalAndHorizontalSectionBorders(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+        Set<Point> points = ConcurrentHashMap.newKeySet();
+        instance.setGenerator(unit -> {
+            final Point start = unit.absoluteStart().withY(96);
+            unit.fork(setter -> {
+                var dynamic = (GeneratorImpl.DynamicFork) setter;
+                for (int i = 0; i < 16; i++) {
+                    setter.setBlock(start.add(i, 0, 0), Block.STONE);
+                    setter.setBlock(start.add(-i, 0, 0), Block.STONE);
+                    setter.setBlock(start.add(0, i, 0), Block.STONE);
+                    setter.setBlock(start.add(0, -i, 0), Block.STONE);
+
+                    points.add(start.add(i, 0, 0));
+                    points.add(start.add(-i, 0, 0));
+                    points.add(start.add(0, i, 0));
+                    points.add(start.add(0, -i, 0));
+                }
+                assertEquals(2, dynamic.width);
+                assertEquals(2, dynamic.height);
+                assertEquals(1, dynamic.depth);
+            });
+        });
+        instance.loadChunk(0, 0).join();
+        for (Point point : points) {
+            if (!instance.isChunkLoaded(point)) continue;
+            assertEquals(Block.STONE, instance.getBlock(point), point.toString());
+        }
     }
 }

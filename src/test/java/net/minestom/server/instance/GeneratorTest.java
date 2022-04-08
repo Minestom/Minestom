@@ -20,7 +20,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static net.minestom.server.instance.GeneratorImpl.*;
+import static net.minestom.server.instance.GeneratorImpl.unit;
+import static net.minestom.server.utils.chunk.ChunkUtils.ceilSection;
+import static net.minestom.server.utils.chunk.ChunkUtils.floorSection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GeneratorTest {

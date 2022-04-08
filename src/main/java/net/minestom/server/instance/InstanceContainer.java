@@ -14,6 +14,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
@@ -304,8 +305,7 @@ public class InstanceContainer extends Instance {
                     generator.generate(chunkUnit);
                     // Apply nbt/handler
                     if (chunkUnit.modifier() instanceof GeneratorImpl.AreaModifierImpl chunkModifier) {
-                        var sections = chunkModifier.sections();
-                        for (var section : sections) {
+                        for (var section : chunkModifier.sections()) {
                             if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
                                 applyGenerationData(chunk, sectionModifier);
                             }
@@ -319,8 +319,8 @@ public class InstanceContainer extends Instance {
                                 if (sectionModifier.blockPalette().count() == 0)
                                     continue;
                                 final Point start = section.absoluteStart();
-                                final Chunk forkChunk = getChunkAt(start);
-                                if (forkChunk != null || forkChunk == chunk) {
+                                final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
+                                if (forkChunk != null) {
                                     applyFork(forkChunk, sectionModifier);
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);
@@ -360,11 +360,10 @@ public class InstanceContainer extends Instance {
 
     private void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
         synchronized (chunk) {
-            var section = chunk.getSectionAt(sectionModifier.start().blockY());
-            var currentBlocks = section.blockPalette();
-            var blocks = sectionModifier.blockPalette();
+            Section section = chunk.getSectionAt(sectionModifier.start().blockY());
+            Palette currentBlocks = section.blockPalette();
             // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
-            blocks.getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
+            sectionModifier.blockPalette().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
             applyGenerationData(chunk, sectionModifier);
         }
     }

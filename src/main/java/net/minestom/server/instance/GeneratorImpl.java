@@ -84,6 +84,10 @@ final class GeneratorImpl {
         public void setBlock(int x, int y, int z, @NotNull Block block) {
             resize(x, y, z);
             GenerationUnit section = findAbsolute(sections, minSection, width, height, depth, x, y, z);
+            assert section.absoluteStart().chunkX() == getChunkCoordinate(x) &&
+                    section.absoluteStart().section() == getChunkCoordinate(y) &&
+                    section.absoluteStart().chunkZ() == getChunkCoordinate(z) :
+                    "Invalid section " + section.absoluteStart() + " for " + x + ", " + y + ", " + z;
             section.modifier().setBlock(x, y, z, block);
         }
 
@@ -114,10 +118,10 @@ final class GeneratorImpl {
                 // Copy old sections
                 for (GenerationUnit s : sections) {
                     final Point start = s.absoluteStart();
-                    final int index = findIndex(newWidth, newHeight, newDepth,
-                            getChunkCoordinate(start.x() - newMin.x()),
-                            getChunkCoordinate(start.y() - newMin.y()),
-                            getChunkCoordinate(start.z() - newMin.z()));
+                    final int newX = getChunkCoordinate(start.x() - newMin.x());
+                    final int newY = getChunkCoordinate(start.y() - newMin.y());
+                    final int newZ = getChunkCoordinate(start.z() - newMin.z());
+                    final int index = findIndex(newWidth, newHeight, newDepth, newX, newY, newZ);
                     newSections[index] = s;
                 }
                 // Fill new sections
@@ -126,9 +130,10 @@ final class GeneratorImpl {
                 final int startZ = newMin.chunkZ();
                 for (int i = 0; i < newSections.length; i++) {
                     if (newSections[i] == null) {
-                        final int newX = i % newWidth + startX;
-                        final int newY = i / newWidth % newHeight + startY;
-                        final int newZ = i / newWidth / newHeight + startZ;
+                        final Point coordinates = to3D(i, newWidth, newHeight, newDepth);
+                        final int newX = coordinates.blockX() + startX;
+                        final int newY = coordinates.blockY() + startY;
+                        final int newZ = coordinates.blockZ() + startZ;
                         final GenerationUnit unit = section(new Section(), newX, newY, newZ, true);
                         newSections[i] = unit;
                     }
@@ -494,20 +499,20 @@ final class GeneratorImpl {
         final int sectionX = getChunkCoordinate(x - start.x());
         final int sectionY = getChunkCoordinate(y - start.y());
         final int sectionZ = getChunkCoordinate(z - start.z());
-        final int index = sectionZ + sectionY * depth + sectionX * depth * height;
+        final int index = findIndex(width, height, depth, sectionX, sectionY, sectionZ);
         return units.get(index);
     }
 
     private static int findIndex(int width, int height, int depth,
                                  int x, int y, int z) {
-        return z + y * depth + x * depth * height;
+        return (z * width * height) + (y * width) + x;
     }
 
-    static int floorSection(int coordinate) {
-        return coordinate - (coordinate & 0xF);
-    }
-
-    static int ceilSection(int coordinate) {
-        return ((coordinate - 1) | 15) + 1;
+    private static Point to3D(int idx, int width, int height, int depth) {
+        final int z = idx / (width * height);
+        idx -= (z * width * height);
+        final int y = idx / width;
+        final int x = idx % width;
+        return new Vec(x, y, z);
     }
 }
