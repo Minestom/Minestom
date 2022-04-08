@@ -262,4 +262,12 @@ public final class ChunkUtils {
     public static int toSectionRelativeCoordinate(int xyz) {
         return xyz & 0xF;
     }
+
+    public static int floorSection(int coordinate) {
+        return coordinate - (coordinate & 0xF);
+    }
+
+    public static int ceilSection(int coordinate) {
+        return ((coordinate - 1) | 15) + 1;
+    }
 }

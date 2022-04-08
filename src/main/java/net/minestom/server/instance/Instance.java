@@ -16,6 +16,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.ChunkSnapshot;
@@ -252,18 +253,29 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Gets the instance {@link ChunkGenerator}.
-     *
-     * @return the {@link ChunkGenerator} of the instance
-     */
-    public abstract @Nullable ChunkGenerator getChunkGenerator();
-
-    /**
      * Changes the instance {@link ChunkGenerator}.
      *
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
+     * @deprecated Use {@link #setGenerator(Generator)}
      */
-    public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
+    @Deprecated
+    public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
+        setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
+    }
+
+    /**
+     * Gets the generator associated with the instance
+     *
+     * @return the generator if any
+     */
+    public abstract @Nullable Generator generator();
+
+    /**
+     * Changes the generator of the instance
+     *
+     * @param generator the new generator, or null to disable generation
+     */
+    public abstract void setGenerator(@Nullable Generator generator);
 
     /**
      * Gets all the instance's loaded chunks.
