@@ -5,8 +5,14 @@ import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.junit.jupiter.api.Test;
+
+import java.net.InetSocketAddress;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,6 +97,39 @@ public class GeneratorForkIntegrationTest {
         instance.loadChunk(1, 0).join();
         for (int y = 0; y < 40; y++) {
             assertEquals(Block.STONE, instance.getBlock(16, y, 0), "y=" + y);
+        }
+    }
+
+    @Test
+    public void verticalAndHorizontalSectionBorders(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+
+        Set<Point> points = ConcurrentHashMap.newKeySet();
+
+        instance.setGenerator(unit -> {
+            Point start = unit.absoluteStart().withY(100);
+            unit.fork(setter -> {
+                for (int i = 0; i < 32; i++) {
+                    setter.setBlock(start.add(i, 0, 0), Block.STONE);
+                    setter.setBlock(start.add(-i, 0, 0), Block.STONE);
+                    setter.setBlock(start.add(0, i, 0), Block.STONE);
+                    setter.setBlock(start.add(0, -i, 0), Block.STONE);
+
+                    points.add(start.add(i, 0, 0));
+                    points.add(start.add(-i, 0, 0));
+                    points.add(start.add(0, i, 0));
+                    points.add(start.add(0, -i, 0));
+                }
+            });
+        });
+
+        ChunkUtils.forChunksInRange(0, 0, 5, (x, z) -> instance.loadChunk(x, z).join());
+        for (Point point : points) {
+            if (!instance.isChunkLoaded(point)) {
+                continue;
+            }
+            assertEquals(instance.getBlock(point), Block.STONE, "x=" + point.x() + " z=" + point.z());
         }
     }
 

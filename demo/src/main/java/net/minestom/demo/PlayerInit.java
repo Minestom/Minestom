@@ -1,10 +1,10 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.demo.generator.ChunkGeneratorDemo;
 import net.minestom.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -123,27 +123,31 @@ public class PlayerInit {
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setGenerator(unit -> {
-            // Assume chunk unit
-            unit.modifier().fillHeight(0, 40, Block.STONE);
-            // WIP fork
-            {
-                GenerationUnit fork = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
-                fork.modifier().setRelative(15, 64 + 41, 0, Block.GRASS_BLOCK);
-                fork.modifier().setRelative(16, 64 + 41, 0, Block.GRASS_BLOCK);
-                fork.modifier().setRelative(17, 64 + 41, 0, Block.GRASS_BLOCK);
-            }
-        });
+//        instanceContainer.setGenerator(unit -> {
+//            // Assume chunk unit
+//            unit.modifier().fillHeight(0, 40, Block.STONE);
+//            // WIP fork
+//            {
+//                GenerationUnit fork = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
+//                fork.modifier().setRelative(15, 64 + 41, 0, Block.GRASS_BLOCK);
+//                fork.modifier().setRelative(16, 64 + 41, 0, Block.GRASS_BLOCK);
+//                fork.modifier().setRelative(17, 64 + 41, 0, Block.GRASS_BLOCK);
+//            }
+//        });
+        instanceContainer.setGenerator(new NoiseTestGenerator());
 
         if (false) {
             System.out.println("start");
-            IntStream.range(0, 5000).forEach(value -> {
-                instanceContainer.loadChunk(0, value).join();
-            });
+            for (int x = -10; x < 10; x++) {
+                for (int z = -10; z < 10; z++) {
+                    instanceContainer.loadChunk(x, z).join();
+                }
+            }
+            if (instanceContainer.getBlock(-19, 79, 17).compare(Block.OAK_LEAVES)) {
+                System.out.println("BLOCK SHOULD NOT BE HERE");
+            }
             System.out.println("load end");
         }
 
