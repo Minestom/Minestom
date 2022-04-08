@@ -274,7 +274,7 @@ public class InstanceContainer extends Instance {
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
-                    assert future == completableFuture;
+                    assert future == completableFuture : "Invalid future: " + future;
                     future.complete(chunk);
                 })
                 .exceptionally(throwable -> {
