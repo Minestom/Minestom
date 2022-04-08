@@ -21,7 +21,8 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @Override
     public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
-        return block;
+        Shape shape = this.getShape(instance, blockPosition, Facing.valueOf(block.getProperty("facing").toUpperCase()));
+        return block.withProperty("shape", shape.toString().toLowerCase());
     }
 
     @Override
@@ -103,19 +104,19 @@ public class StairsPlacementRule extends BlockPlacementRule {
     }
 
     @NotNull
-    private Shape getShape(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Facing facing) {
-        // TODO: check if broken (i don't think so)
-        Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
-        Pair<Shape, Facing> back = facing.getBack(instance, blockPosition);
-        Shape shape = this.getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
+    private static Shape getShape(@NotNull Instance instance, @NotNull Point point, @NotNull Facing facing) {
+        Pair<Shape, Facing> front = facing.getFront(instance, point);
+        Pair<Shape, Facing> back = facing.getBack(instance, point);
+
+        Shape shape = getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
         if (shape == null) {
-            shape = this.getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
+            shape = getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
         }
         return shape == null ? Shape.STRAIGHT : shape;
     }
 
     @Nullable
-    private Shape getShapeFromSide(@NotNull Pair<Shape, Facing> side, @NotNull Facing facing, @NotNull Shape right, @NotNull Shape left) {
+    private static Shape getShapeFromSide(@NotNull Pair<Shape, Facing> side, @NotNull Facing facing, @NotNull Shape right, @NotNull Shape left) {
         if (side.left() == null) {
             return null;
         }
@@ -148,6 +149,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
         return null;
     }
 
+    // TODO: wouldn't Player class benefit from a getFacing method globally?
     @NotNull
     private Facing getFacing(@NotNull Player player) {
         float degrees = (player.getPosition().yaw() - 90) % 360;
@@ -166,4 +168,5 @@ public class StairsPlacementRule extends BlockPlacementRule {
             return Facing.WEST;
         }
     }
+
 }
