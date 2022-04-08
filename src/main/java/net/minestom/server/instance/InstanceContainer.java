@@ -324,8 +324,11 @@ public class InstanceContainer extends Instance {
                                     applyFork(forkChunk, sectionModifier);
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);
-                                    generationForks.computeIfAbsent(index, k -> new CopyOnWriteArrayList<>())
-                                            .add(sectionModifier);
+                                    this.generationForks.compute(index, (i, sectionModifiers) -> {
+                                        if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
+                                        sectionModifiers.add(sectionModifier);
+                                        return sectionModifiers;
+                                    });
                                 }
                             }
                         }
@@ -350,12 +353,14 @@ public class InstanceContainer extends Instance {
     }
 
     private void processFork(Chunk chunk) {
-        var current = generationForks.remove(ChunkUtils.getChunkIndex(chunk));
-        if (current != null) {
-            for (var sectionModifier : current) {
-                applyFork(chunk, sectionModifier);
+        this.generationForks.compute(ChunkUtils.getChunkIndex(chunk), (aLong, sectionModifiers) -> {
+            if (sectionModifiers != null) {
+                for (var sectionModifier : sectionModifiers) {
+                    applyFork(chunk, sectionModifier);
+                }
             }
-        }
+            return null;
+        });
     }
 
     private void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
