@@ -30,6 +30,7 @@ public class CoordinateTest {
 
     @Test
     public void chunkCoordinate() {
+        assertEquals(0, getChunkCoordinate(15));
         assertEquals(1, getChunkCoordinate(16));
         assertEquals(-1, getChunkCoordinate(-16));
         assertEquals(3, getChunkCoordinate(48));
