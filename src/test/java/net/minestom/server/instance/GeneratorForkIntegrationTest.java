@@ -101,39 +101,6 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
-    public void verticalAndHorizontalSectionBorders(Env env) {
-        var manager = env.process().instance();
-        var instance = manager.createInstanceContainer();
-
-        Set<Point> points = ConcurrentHashMap.newKeySet();
-
-        instance.setGenerator(unit -> {
-            Point start = unit.absoluteStart().withY(100);
-            unit.fork(setter -> {
-                for (int i = 0; i < 32; i++) {
-                    setter.setBlock(start.add(i, 0, 0), Block.STONE);
-                    setter.setBlock(start.add(-i, 0, 0), Block.STONE);
-                    setter.setBlock(start.add(0, i, 0), Block.STONE);
-                    setter.setBlock(start.add(0, -i, 0), Block.STONE);
-
-                    points.add(start.add(i, 0, 0));
-                    points.add(start.add(-i, 0, 0));
-                    points.add(start.add(0, i, 0));
-                    points.add(start.add(0, -i, 0));
-                }
-            });
-        });
-
-        ChunkUtils.forChunksInRange(0, 0, 5, (x, z) -> instance.loadChunk(x, z).join());
-        for (Point point : points) {
-            if (!instance.isChunkLoaded(point)) {
-                continue;
-            }
-            assertEquals(instance.getBlock(point), Block.STONE, "x=" + point.x() + " z=" + point.z());
-        }
-    }
-
-    @Test
     public void biome(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
