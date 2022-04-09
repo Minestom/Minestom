@@ -29,11 +29,19 @@ final class TagHandlerImpl implements TagHandler {
             tag.writeUnsafe(viewCompound, value);
             updateContent(viewCompound);
         } else {
-            if (value != null) {
-                final UnaryOperator<T> copy = tag.copy;
-                if (copy != null) value = copy.apply(value);
+            if (value instanceof NBT nbt) {
+                synchronized (this) {
+                    write(tag, null);
+                    TagNbtSeparator.separate(tag.getKey(), nbt,
+                            entry -> write(entry.tag(), entry.value()));
+                }
+            } else {
+                if (value != null) {
+                    final UnaryOperator<T> copy = tag.copy;
+                    if (copy != null) value = copy.apply(value);
+                }
+                write(tag, value);
             }
-            write(tag, value);
         }
     }
 
@@ -57,7 +65,6 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     public synchronized <T> void write(@NotNull Tag<T> tag, @Nullable T value) {
-        // Normal write
         int tagIndex = tag.index;
         TagHandlerImpl local = this;
         Entry<?>[] entries = this.entries;
@@ -201,8 +208,6 @@ final class TagHandlerImpl implements TagHandler {
             return tag.createDefault();
         }
         final Object value = entry.value;
-        if (value instanceof TagHandlerImpl)
-            throw new IllegalStateException("Cannot read path-able tag " + tag.getKey());
         final Tag entryTag = entry.tag;
         if (entryTag.shareValue(tag)) {
             // Tag is the same, return the value
@@ -210,7 +215,7 @@ final class TagHandlerImpl implements TagHandler {
             return (T) value;
         }
         // Value must be parsed from nbt if the tag is different
-        final NBT nbt = entry.updatedNbt();
+        final NBT nbt = value instanceof TagHandlerImpl impl ? impl.asCompound() : entry.updatedNbt();
         try {
             return tag.entry.read().apply(nbt);
         } catch (ClassCastException e) {

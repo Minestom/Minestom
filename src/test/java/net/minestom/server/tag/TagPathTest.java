@@ -142,7 +142,7 @@ public class TagPathTest {
         var tag = Tag.Integer("key");
         var path = Tag.Integer("value").path("key");
         handler.setTag(path, 5);
-        assertThrows(IllegalStateException.class, () -> handler.getTag(tag));
+        assertNull(handler.getTag(tag));
     }
 
     @Test
