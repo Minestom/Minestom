@@ -185,11 +185,6 @@ public class Tag<T> {
         }
     }
 
-    T createDefault() {
-        final var supplier = defaultValue;
-        return supplier != null ? supplier.get() : null;
-    }
-
     public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
         final String key = this.key;
         if (value != null) {
@@ -207,12 +202,21 @@ public class Tag<T> {
         write(nbtCompound, (T) value);
     }
 
+    final boolean isView() {
+        return key.isEmpty();
+    }
+
     final boolean shareValue(@NotNull Tag<?> other) {
         if (this == other) return true;
         // Tags are not strictly the same, compare readers
         if (this.listScope != other.listScope)
             return false;
         return this.readComparator == other.readComparator;
+    }
+
+    final T createDefault() {
+        final var supplier = defaultValue;
+        return supplier != null ? supplier.get() : null;
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {

@@ -18,7 +18,7 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        if (tag.getKey().isEmpty()) return tag.read(asCompound());
+        if (tag.isView()) return tag.read(asCompound());
         return read(entries, tag);
     }
 
@@ -30,7 +30,7 @@ final class TagHandlerImpl implements TagHandler {
             if (copy != null) value = copy.apply(value);
         }
         // View tag access
-        if (tag.getKey().isEmpty()) {
+        if (tag.isView()) {
             MutableNBTCompound tmp = new MutableNBTCompound();
             tag.writeUnsafe(tmp, value);
             updateContent(tmp);
@@ -179,7 +179,7 @@ final class TagHandlerImpl implements TagHandler {
 
         @Override
         public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-            if (tag.getKey().isEmpty()) return tag.read(compound);
+            if (tag.isView()) return tag.read(compound);
             return read(entries, tag);
         }
     }
