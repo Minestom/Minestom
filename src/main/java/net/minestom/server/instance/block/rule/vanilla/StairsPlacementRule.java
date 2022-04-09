@@ -78,7 +78,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
         @NotNull
         public Pair<@Nullable Shape, @Nullable Facing> getFront(@NotNull Instance instance, @NotNull Point blockPosition) {
-            return this.getProperties(instance, blockPosition.add(this.front)); // TODO: is it really necessary to clone?
+            return this.getProperties(instance, blockPosition.add(this.front));
         }
 
         @NotNull
