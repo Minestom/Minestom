@@ -10,6 +10,9 @@ import java.util.function.Function;
 
 import static java.util.Map.entry;
 
+/**
+ * Handles conversion of {@link NBT} subtypes into one or multiple primitive {@link Tag tags}.
+ */
 final class TagNbtSeparator {
     static final Map<NBTType<?>, Function<String, Tag<?>>> SUPPORTED_TYPES = Map.ofEntries(
             entry(NBTType.TAG_Byte, Tag::Byte),

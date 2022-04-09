@@ -5,6 +5,9 @@ import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.function.Function;
 
+/**
+ * Basic serializers for {@link Tag tags}.
+ */
 final class Serializers {
     static final Entry<?, ?> VOID = new Entry<>(null, null);
 
@@ -19,7 +22,7 @@ final class Serializers {
 
     static final Entry<ItemStack, NBTCompound> ITEM = new Entry<>(ItemStack::fromItemNBT, ItemStack::toItemNBT);
 
-    static <T> Entry<T,?> fromTagSerializer(TagSerializer<T> serializer) {
+    static <T> Entry<T, ?> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(
                 (NBTCompound compound) -> {
                     if (compound.isEmpty()) return null;
