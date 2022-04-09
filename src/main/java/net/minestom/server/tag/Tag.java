@@ -247,16 +247,23 @@ public class Tag<T> {
         return tag(key, Serializers.STRING);
     }
 
-    public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
-        return tag(key, (Serializers.Entry<T, ? extends NBT>) Serializers.NBT_ENTRY);
-    }
-
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
         return tag(key, Serializers.ITEM);
     }
 
     /**
-     * Create a wrapper around a compound.
+     * Creates a flexible tag able to read and write any {@link NBT} objects.
+     * <p>
+     * Specialized tags are recommended if the type is known as conversion will be required both way (read and write).
+     */
+    public static @NotNull Tag<NBT> NBT(@NotNull String key) {
+        return tag(key, Serializers.NBT_ENTRY);
+    }
+
+    /**
+     * Creates a tag containing multiple fields.
+     * <p>
+     * Those fields cannot be modified from an outside tag. (This is to prevent the backed object from becoming out of sync)
      *
      * @param key        the tag key
      * @param serializer the tag serializer
@@ -267,6 +274,11 @@ public class Tag<T> {
         return fromSerializer(key, serializer);
     }
 
+    /**
+     * Specialized Structure tag affecting the src of the handler (i.e. overwrite all its data).
+     * <p>
+     * Must be used with care.
+     */
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
         return Structure("", serializer);
     }

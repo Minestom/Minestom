@@ -1,7 +1,6 @@
 package net.minestom.server.tag;
 
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -16,7 +15,7 @@ public class TagNbtTest {
     @Test
     public void compoundRead() {
         var handler = TagHandler.newHandler();
-        Tag<NBTCompound> nbtTag = Tag.NBT("path1");
+        var nbtTag = Tag.NBT("path1");
 
         var nbt = NBT.Compound(Map.of("key", NBT.Int(5)));
         handler.setTag(nbtTag, nbt);
@@ -29,7 +28,7 @@ public class TagNbtTest {
     @Test
     public void doubleCompoundRead() {
         var handler = TagHandler.newHandler();
-        Tag<NBTCompound> nbtTag = Tag.NBT("path1");
+        var nbtTag = Tag.NBT("path1");
 
         var nbt = NBT.Compound(Map.of("path2", NBT.Compound(Map.of("key", NBT.Int(5)))));
         handler.setTag(nbtTag, nbt);

@@ -23,19 +23,40 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public synchronized <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        // Convert value to fit the tag (e.g. list copies)
-        if (value != null) {
-            final UnaryOperator<T> copy = tag.copy;
-            if (copy != null) value = copy.apply(value);
-        }
-        // View tag access
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         if (tag.isView()) {
-            MutableNBTCompound tmp = new MutableNBTCompound();
-            tag.writeUnsafe(tmp, value);
-            updateContent(tmp);
-            return;
+            MutableNBTCompound viewCompound = new MutableNBTCompound();
+            tag.writeUnsafe(viewCompound, value);
+            updateContent(viewCompound);
+        } else {
+            if (value != null) {
+                final UnaryOperator<T> copy = tag.copy;
+                if (copy != null) value = copy.apply(value);
+            }
+            write(tag, value);
         }
+    }
+
+    @Override
+    public @NotNull TagReadable readableCopy() {
+        return updatedCache();
+    }
+
+    @Override
+    public void updateContent(@NotNull NBTCompoundLike compound) {
+        final TagHandlerImpl converted = fromCompound(compound);
+        synchronized (this) {
+            this.cache = converted.cache;
+            this.entries = converted.entries;
+        }
+    }
+
+    @Override
+    public @NotNull NBTCompound asCompound() {
+        return updatedCache().compound;
+    }
+
+    public synchronized <T> void write(@NotNull Tag<T> tag, @Nullable T value) {
         // Normal write
         int tagIndex = tag.index;
         TagHandlerImpl local = this;
@@ -63,7 +84,9 @@ final class TagHandlerImpl implements TagHandler {
                 } else if (entry.value instanceof TagHandlerImpl handler) {
                     // Existing path, continue navigating
                     local = handler;
-                } else throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry");
+                } else {
+                    throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry: " + entry.value.getClass());
+                }
                 entries = local.entries;
                 pathHandlers[i] = local;
             }
@@ -99,35 +122,6 @@ final class TagHandlerImpl implements TagHandler {
         if (pathHandlers != null) {
             for (var handler : pathHandlers) handler.cache = null;
         }
-    }
-
-    @Override
-    public @NotNull TagReadable readableCopy() {
-        return updatedCache();
-    }
-
-    @Override
-    public void updateContent(@NotNull NBTCompoundLike compound) {
-        Entry<?>[] entries = new Entry[0];
-        for (var entry : compound) {
-            final String key = entry.getKey();
-            final NBT nbt = entry.getValue();
-            final Tag<NBT> tag = Tag.NBT(key);
-            final int index = tag.index;
-            if (index >= entries.length) {
-                entries = Arrays.copyOf(entries, index + 1);
-            }
-            entries[index] = new Entry<>(tag, nbt);
-        }
-        synchronized (this) {
-            this.cache = null;
-            this.entries = entries;
-        }
-    }
-
-    @Override
-    public @NotNull NBTCompound asCompound() {
-        return updatedCache().compound;
     }
 
     private synchronized Cache updatedCache() {
@@ -198,8 +192,7 @@ final class TagHandlerImpl implements TagHandler {
                 if (entry.value instanceof TagHandlerImpl handler) {
                     entries = handler.entries;
                 } else if (entry.updatedNbt() instanceof NBTCompound compound) {
-                    var tmp = new TagHandlerImpl();
-                    tmp.updateContent(compound);
+                    TagHandlerImpl tmp = fromCompound(compound);
                     entries = tmp.entries;
                 }
             }
@@ -223,5 +216,15 @@ final class TagHandlerImpl implements TagHandler {
         } catch (ClassCastException e) {
             return tag.createDefault();
         }
+    }
+
+    static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
+        TagHandlerImpl handler = new TagHandlerImpl();
+        for (var entry : compound) {
+            final Tag<NBT> tag = Tag.NBT(entry.getKey());
+            final NBT nbt = entry.getValue();
+            handler.setTag(tag, nbt);
+        }
+        return handler;
     }
 }
