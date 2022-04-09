@@ -1443,6 +1443,40 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * Called to properly set the state of the server when a client sends a CloseWindowPacket
+     * Generally, you should use {@link #closeInventory()} instead of this function
+     * @param id The id of the window to close
+     */
+    public void closeInventoryFromClient(byte id) {
+        if(id == 0) {
+            // Player inventory closing
+            ItemStack cursorItem = getInventory().getCursorItem();
+            getInventory().setCursorItem(ItemStack.AIR);
+            if(!cursorItem.isAir()) {
+                boolean canAdd = getInventory().addItemStack(cursorItem);
+                if(!canAdd) {
+                    dropItem(cursorItem);
+                }
+            }
+        } else {
+            if(getOpenInventory() != null && getOpenInventory().getWindowId() == id) {
+                ItemStack cursorItem = getOpenInventory().getCursorItem(this);
+                if (!cursorItem.isAir()) {
+                    // Add item to inventory if unable to drop
+                    if (!dropItem(cursorItem)) {
+                        getInventory().addItemStack(cursorItem);
+                    }
+                }
+                openInventory.removeViewer(this);
+                this.openInventory = null;
+            }
+            // If our check failed, disregard, since we received an invalid close window request
+        }
+        inventory.update();
+        this.didCloseInventory = true;
+    }
+
+    /**
      * Used internally to prevent an inventory click to be processed
      * when the inventory listeners closed the inventory.
      * <p>
