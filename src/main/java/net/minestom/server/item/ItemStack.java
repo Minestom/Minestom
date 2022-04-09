@@ -85,9 +85,9 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         Check.notNull(material, "Unknown material: {0}", id);
 
         Byte amount = nbtCompound.getByte("Count");
-        return fromNBT(material,
-                nbtCompound.getCompound("tag"),
-                amount == null ? 1 : amount);
+        if (amount == null) amount = 1;
+        final NBTCompound tag = nbtCompound.getCompound("tag");
+        return tag != null ? fromNBT(material, tag, amount) : of(material, amount);
     }
 
     @Contract(pure = true)
@@ -231,10 +231,17 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      */
     @ApiStatus.Experimental
     public @NotNull NBTCompound toItemNBT() {
-        return NBT.Compound(Map.of(
-                "id", NBT.String(getMaterial().name()),
-                "Count", NBT.Byte(getAmount()),
-                "tag", getMeta().toNBT()));
+        final NBTCompound nbt = getMeta().toNBT();
+        if (nbt.isEmpty()) {
+            return NBT.Compound(Map.of(
+                    "id", NBT.String(getMaterial().name()),
+                    "Count", NBT.Byte(getAmount())));
+        } else {
+            return NBT.Compound(Map.of(
+                    "id", NBT.String(getMaterial().name()),
+                    "Count", NBT.Byte(getAmount()),
+                    "tag", getMeta().toNBT()));
+        }
     }
 
     @Contract(value = "-> new", pure = true)
