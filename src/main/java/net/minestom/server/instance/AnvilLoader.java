@@ -65,7 +65,7 @@ public class AnvilLoader implements IChunkLoader {
             }
             alreadyLoaded.clear();
         } catch (IOException e) {
-            EXCEPTION_MANAGER.handleException(e);
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
