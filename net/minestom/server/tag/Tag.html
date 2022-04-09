@@ -136,9 +136,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#map(java.util.function.Function,java.util.function.Function)" class="member-name-link">map</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>,<wbr>R&gt;&nbsp;readMap,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;R,<wbr><a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;writeMap)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends org.jglrxavpok.hephaistos.nbt.NBT&gt;<br>@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;org.jglrxavpok.hephaistos.nbt.NBT&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#NBT(java.lang.String)" class="member-name-link">NBT</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a flexible tag able to read and write any <code>NBT</code> objects.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#path(java.lang.String...)" class="member-name-link">path</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a> @Nullable ...&nbsp;path)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -159,14 +161,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Structure(java.lang.String,net.minestom.server.tag.TagSerializer)" class="member-name-link">Structure</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  @NotNull <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;&nbsp;serializer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Create a wrapper around a compound.</div>
+<div class="block">Creates a tag containing multiple fields.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>&gt;<br>@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#View(java.lang.Class)" class="member-name-link">View</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#View(net.minestom.server.tag.TagSerializer)" class="member-name-link">View</a><wbr>(@NotNull <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;&nbsp;serializer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Specialized Structure tag affecting the src of the handler (i.e.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound,T)" class="member-name-link">write</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;nbtCompound,
  <a href="Tag.html" title="type parameter in Tag">T</a>&nbsp;value)</code></div>
@@ -335,20 +339,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="NBT(java.lang.String)">
-<h3>NBT</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends org.jglrxavpok.hephaistos.nbt.NBT&gt;</span>
-<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</span>&nbsp;<span class="element-name">NBT</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="ItemStack(java.lang.String)">
 <h3>ItemStack</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</span>&nbsp;<span class="element-name">ItemStack</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="NBT(java.lang.String)">
+<h3>NBT</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;org.jglrxavpok.hephaistos.nbt.NBT&gt;</span>&nbsp;<span class="element-name">NBT</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="block">Creates a flexible tag able to read and write any <code>NBT</code> objects.
+ <p>
+ Specialized tags are recommended if the type is known as conversion will be required both way (read and write).</div>
 </section>
 </li>
 <li>
@@ -359,7 +365,9 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  @NotNull
  @NotNull <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;&nbsp;serializer)</span></div>
-<div class="block">Create a wrapper around a compound.</div>
+<div class="block">Creates a tag containing multiple fields.
+ <p>
+ Those fields cannot be modified from an outside tag. (This is to prevent the backed object from becoming out of sync)</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - the tag type</dd>
@@ -377,6 +385,9 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;</span>&nbsp;<span class="element-name">View</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;&nbsp;serializer)</span></div>
+<div class="block">Specialized Structure tag affecting the src of the handler (i.e. overwrite all its data).
+ <p>
+ Must be used with care.</div>
 </section>
 </li>
 <li>
