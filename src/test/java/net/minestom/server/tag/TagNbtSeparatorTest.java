@@ -1,6 +1,7 @@
 package net.minestom.server.tag;
 
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -31,6 +32,12 @@ public class TagNbtSeparatorTest {
     public void compound() {
         assertSeparation(new TagNbtSeparator.Entry<>(Tag.Byte("key").path("path"), (byte) 1),
                 "path", NBT.Compound(Map.of("key", NBT.Byte(1))));
+    }
+
+    @Test
+    public void list() {
+        assertSeparation(new TagNbtSeparator.Entry<>(Tag.Integer("key").list(), List.of(1)),
+                "key", NBT.List(NBTType.TAG_Int, NBT.Int(1)));
     }
 
     void assertSeparation(List<TagNbtSeparator.Entry<?>> expected, String key, NBT nbt) {

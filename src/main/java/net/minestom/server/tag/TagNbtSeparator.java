@@ -4,9 +4,21 @@ import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+
+import static java.util.Map.entry;
 
 final class TagNbtSeparator {
+    static final Map<NBTType<?>, Function<String, Tag<?>>> SUPPORTED_TYPES = Map.ofEntries(
+            entry(NBTType.TAG_Byte, Tag::Byte),
+            entry(NBTType.TAG_Short, Tag::Short),
+            entry(NBTType.TAG_Int, Tag::Integer),
+            entry(NBTType.TAG_Long, Tag::Long),
+            entry(NBTType.TAG_Float, Tag::Float),
+            entry(NBTType.TAG_Double, Tag::Double),
+            entry(NBTType.TAG_String, Tag::String));
 
     static void separate(String key, NBT nbt, Consumer<Entry> consumer) {
         convert(new ArrayList<>(), key, nbt, consumer);
@@ -33,8 +45,28 @@ final class TagNbtSeparator {
                 newPath.add(key);
                 convert(newPath, ent.getKey(), ent.getValue(), consumer);
             }
+        } else if (nbt instanceof NBTList<?> nbtList) {
+            var tagFunction = SUPPORTED_TYPES.get(nbtList.getSubtagType());
+            if (tagFunction == null) {
+                // Invalid list subtype, fallback to nbt
+                consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
+            } else {
+                try {
+                    var tag = tagFunction.apply(key).list();
+                    Object[] values = new Object[nbtList.getSize()];
+                    for (int i = 0; i < values.length; i++) {
+                        values[i] = nbtValue(nbtList.get(i));
+                    }
+                    consumer.accept(makeEntry(path, Tag.class.cast(tag), List.of(values)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
+                }
+            }
+        } else {
+            // TODO array support
+            consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
         }
-        // TODO list/array support
     }
 
     private static <T> Entry<?> makeEntry(List<String> path, Tag<T> tag, T value) {
@@ -42,5 +74,25 @@ final class TagNbtSeparator {
     }
 
     record Entry<T>(Tag<T> tag, T value) {
+    }
+
+    private static Object nbtValue(NBT nbt) throws IllegalArgumentException {
+        if (nbt instanceof NBTByte nbtByte) {
+            return nbtByte.getValue();
+        } else if (nbt instanceof NBTShort nbtShort) {
+            return nbtShort.getValue();
+        } else if (nbt instanceof NBTInt nbtInt) {
+            return nbtInt.getValue();
+        } else if (nbt instanceof NBTLong nbtLong) {
+            return nbtLong.getValue();
+        } else if (nbt instanceof NBTFloat nbtFloat) {
+            return nbtFloat.getValue();
+        } else if (nbt instanceof NBTDouble nbtDouble) {
+            return nbtDouble.getValue();
+        } else if (nbt instanceof NBTString nbtString) {
+            return nbtString.getValue();
+        } else {
+            throw new IllegalArgumentException("Unsupported NBT type: " + nbt.getClass().getName());
+        }
     }
 }
