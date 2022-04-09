@@ -13,6 +13,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.binary.BinaryBuffer;
@@ -344,8 +345,21 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
             final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
-            outgoing.call(new PlayerPacketOutEvent(player, serverPacket));
+            PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+            outgoing.call(event);
+
+            event.iterateAppendix(sendablePacket -> {
+                writeAbstractPacketSync(sendablePacket, compressed);
+                if (sendablePacket instanceof EntityMetaDataPacket entityMetaDataPacket) {
+                    System.out.println("sent " + entityMetaDataPacket);
+                }
+            });
+        } else {
+            writeAbstractPacketSync(packet, compressed);
         }
+    }
+
+    private void writeAbstractPacketSync(SendablePacket packet, boolean compressed) {
         // Write packet
         if (packet instanceof ServerPacket serverPacket) {
             writeServerPacketSync(serverPacket, compressed);
