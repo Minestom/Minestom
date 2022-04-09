@@ -12,51 +12,38 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
-
-import static net.minestom.server.network.packet.server.play.BossBarPacket.Action.*;
 
 /**
  * A holder of a boss bar. This class is not intended for public use, instead you should
  * use {@link BossBarManager} to manage boss bars for players.
  */
 final class BossBarHolder implements Viewable {
-
-    protected final UUID uuid = UUID.randomUUID();
-    protected final Set<Player> players = new CopyOnWriteArraySet<>();
-    protected final BossBar bar;
+    final UUID uuid = UUID.randomUUID();
+    final Set<Player> players = new CopyOnWriteArraySet<>();
+    final BossBar bar;
 
     BossBarHolder(@NotNull BossBar bar) {
         this.bar = bar;
     }
 
     @NotNull BossBarPacket createRemovePacket() {
-        return this.createGenericPacket(REMOVE, packet -> { });
+        return new BossBarPacket(uuid, new BossBarPacket.RemoveAction());
     }
 
     @NotNull BossBarPacket createAddPacket() {
-        return this.createGenericPacket(ADD, packet -> {
-            packet.title = bar.name();
-            packet.color = bar.color();
-            packet.overlay = bar.overlay();
-            packet.health = bar.progress();
-            packet.flags = AdventurePacketConvertor.getBossBarFlagValue(bar.flags());
-        });
+        return new BossBarPacket(uuid, new BossBarPacket.AddAction(bar));
     }
 
     @NotNull BossBarPacket createPercentUpdate(float newPercent) {
-        return this.createGenericPacket(UPDATE_HEALTH, packet -> packet.health = newPercent);
+        return new BossBarPacket(uuid, new BossBarPacket.UpdateHealthAction(newPercent));
     }
 
     @NotNull BossBarPacket createColorUpdate(@NotNull BossBar.Color color) {
-        return this.createGenericPacket(UPDATE_STYLE, packet -> {
-            packet.color = color;
-            packet.overlay = bar.overlay();
-        });
+        return new BossBarPacket(uuid, new BossBarPacket.UpdateStyleAction(color, bar.overlay()));
     }
 
     @NotNull BossBarPacket createTitleUpdate(@NotNull Component title) {
-        return this.createGenericPacket(UPDATE_TITLE, packet -> packet.title = title);
+        return new BossBarPacket(uuid, new BossBarPacket.UpdateTitleAction(title));
     }
 
     @NotNull BossBarPacket createFlagsUpdate() {
@@ -64,22 +51,11 @@ final class BossBarHolder implements Viewable {
     }
 
     @NotNull BossBarPacket createFlagsUpdate(@NotNull Set<BossBar.Flag> newFlags) {
-        return this.createGenericPacket(UPDATE_FLAGS, packet -> packet.flags = AdventurePacketConvertor.getBossBarFlagValue(newFlags));
+        return new BossBarPacket(uuid, new BossBarPacket.UpdateFlagsAction(AdventurePacketConvertor.getBossBarFlagValue(newFlags)));
     }
 
     @NotNull BossBarPacket createOverlayUpdate(@NotNull BossBar.Overlay overlay) {
-        return this.createGenericPacket(UPDATE_STYLE, packet -> {
-            packet.overlay = overlay;
-            packet.color = bar.color();
-        });
-    }
-
-    private @NotNull BossBarPacket createGenericPacket(@NotNull BossBarPacket.Action action, @NotNull Consumer<BossBarPacket> consumer) {
-        BossBarPacket packet = new BossBarPacket();
-        packet.uuid = this.uuid;
-        packet.action = action;
-        consumer.accept(packet);
-        return packet;
+        return new BossBarPacket(uuid, new BossBarPacket.UpdateStyleAction(bar.color(), overlay));
     }
 
     @Override

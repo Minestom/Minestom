@@ -1,10 +1,8 @@
 package net.minestom.server.event.server;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.ping.ServerListPingType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,14 +36,7 @@ public class ServerListPingEvent implements CancellableEvent {
      * @param type       the ping type to respond with
      */
     public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingType type) {
-        //noinspection deprecation we need to continue doing this until the consumer is removed - todo remove
-        ResponseDataConsumer consumer = MinecraftServer.getResponseDataConsumer();
         this.responseData = new ResponseData();
-
-        if (consumer != null) {
-            consumer.accept(connection, responseData);
-        }
-
         this.connection = connection;
         this.type = type;
     }

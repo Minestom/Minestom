@@ -1,59 +1,73 @@
 package net.minestom.server.network.socket;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
+import java.net.*;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 
 public final class Server {
-    public static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
-    public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
-            Runtime.getRuntime().availableProcessors());
-    public static final int SOCKET_BUFFER_SIZE = Integer.getInteger("minestom.buffer-size", 1_048_575);
-    public static final int MAX_PACKET_SIZE = 2_097_151; // 3 bytes var-int
+    public static final int WORKER_COUNT = Integer.getInteger("minestom.workers", Runtime.getRuntime().availableProcessors());
+    public static final int MAX_PACKET_SIZE = Integer.getInteger("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
+    public static final int SOCKET_SEND_BUFFER_SIZE = Integer.getInteger("minestom.send-buffer-size", 262_143);
+    public static final int SOCKET_RECEIVE_BUFFER_SIZE = Integer.getInteger("minestom.receive-buffer-size", 32_767);
+
     public static final boolean NO_DELAY = true;
 
     private volatile boolean stop;
 
     private final Selector selector = Selector.open();
-    private final List<Worker> workers = new ArrayList<>(WORKER_COUNT);
+    private final PacketProcessor packetProcessor;
+    private final List<Worker> workers;
     private int index;
 
     private ServerSocketChannel serverSocket;
+    private SocketAddress socketAddress;
     private String address;
     private int port;
 
     public Server(PacketProcessor packetProcessor) throws IOException {
-        // Create all workers
-        for (int i = 0; i < WORKER_COUNT; i++) {
-            Worker worker = new Worker(this, packetProcessor);
-            this.workers.add(worker);
-            worker.start();
-        }
+        this.packetProcessor = packetProcessor;
+        Worker[] workers = new Worker[WORKER_COUNT];
+        Arrays.setAll(workers, value -> new Worker(this));
+        this.workers = List.of(workers);
     }
 
-    public void start(SocketAddress address) throws IOException {
-        if (address instanceof InetSocketAddress) {
-            InetSocketAddress inetSocketAddress = (InetSocketAddress) address;
+    @ApiStatus.Internal
+    public void init(SocketAddress address) throws IOException {
+        ProtocolFamily family;
+        if (address instanceof InetSocketAddress inetSocketAddress) {
             this.address = inetSocketAddress.getHostString();
             this.port = inetSocketAddress.getPort();
-        } // TODO unix domain support
+            family = inetSocketAddress.getAddress().getAddress().length == 4 ? StandardProtocolFamily.INET : StandardProtocolFamily.INET6;
+        } else if (address instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
+            this.address = "unix://" + unixDomainSocketAddress.getPath();
+            this.port = 0;
+            family = StandardProtocolFamily.UNIX;
+        } else {
+            throw new IllegalArgumentException("Address must be an InetSocketAddress or a UnixDomainSocketAddress");
+        }
 
-        this.serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(address);
-        serverSocket.configureBlocking(false);
-        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-        serverSocket.socket().setReceiveBufferSize(SOCKET_BUFFER_SIZE);
-        LOGGER.info("Server starting, wait for connections");
+        ServerSocketChannel server = ServerSocketChannel.open(family);
+        server.bind(address);
+        server.configureBlocking(false);
+        server.register(selector, SelectionKey.OP_ACCEPT);
+        this.serverSocket = server;
+        this.socketAddress = address;
+    }
+
+    @ApiStatus.Internal
+    public void start() {
+        this.workers.forEach(Thread::start);
         new Thread(() -> {
             while (!stop) {
                 // Busy wait for connections
@@ -70,7 +84,7 @@ public final class Server {
                         }
                     });
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
         }, "Ms-entrypoint").start();
@@ -82,8 +96,25 @@ public final class Server {
 
     public void stop() {
         this.stop = true;
+        try {
+            this.serverSocket.close();
+            if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
+                Files.deleteIfExists(unixDomainSocketAddress.getPath());
+            }
+        } catch (IOException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
         this.selector.wakeup();
         this.workers.forEach(worker -> worker.selector.wakeup());
+    }
+
+    @ApiStatus.Internal
+    public @NotNull PacketProcessor packetProcessor() {
+        return packetProcessor;
+    }
+
+    public SocketAddress socketAddress() {
+        return socketAddress;
     }
 
     public String getAddress() {

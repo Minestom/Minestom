@@ -2,7 +2,6 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.metadata.*;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,15 +14,12 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-public class ItemStackBuilder {
-
+public final class ItemStackBuilder {
     private final Material material;
     private int amount;
-    protected ItemMetaBuilder metaBuilder;
+    private ItemMetaBuilder metaBuilder;
 
-    private StackingRule stackingRule;
-
-    protected ItemStackBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
+    ItemStackBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
         this.amount = 1;
         this.metaBuilder = metaBuilder;
@@ -46,6 +42,7 @@ public class ItemStackBuilder {
         MATERIAL_SUPPLIER_MAP.put(Material.FIREWORK_STAR, FireworkEffectMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.FIREWORK_ROCKET, FireworkMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.PLAYER_HEAD, PlayerHeadMeta.Builder::new);
+        MATERIAL_SUPPLIER_MAP.put(Material.BUNDLE, BundleMeta.Builder::new);
 
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_HELMET, LeatherArmorMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_CHESTPLATE, LeatherArmorMeta.Builder::new);
@@ -54,9 +51,13 @@ public class ItemStackBuilder {
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_HORSE_ARMOR, LeatherArmorMeta.Builder::new);
     }
 
-    protected ItemStackBuilder(@NotNull Material material) {
-        this(material,
-                MATERIAL_SUPPLIER_MAP.getOrDefault(material, DefaultMeta::new).get());
+    static ItemMetaBuilder getMetaBuilder(Material material) {
+        Supplier<ItemMetaBuilder> supplier = MATERIAL_SUPPLIER_MAP.get(material);
+        return supplier != null ? supplier.get() : new DefaultMeta();
+    }
+
+    ItemStackBuilder(@NotNull Material material) {
+        this(material, getMetaBuilder(material));
     }
 
     @Contract(value = "_ -> this")
@@ -72,8 +73,9 @@ public class ItemStackBuilder {
     }
 
     @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder meta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> itemMetaConsumer) {
-        this.metaBuilder = itemMetaConsumer.apply(metaBuilder);
+    public <T extends ItemMetaBuilder> @NotNull ItemStackBuilder meta(@NotNull UnaryOperator<@NotNull T> itemMetaConsumer) {
+        //noinspection unchecked
+        this.metaBuilder = itemMetaConsumer.apply((T) metaBuilder);
         return this;
     }
 
@@ -90,7 +92,7 @@ public class ItemStackBuilder {
     }
 
     @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder lore(@NotNull List<@NotNull Component> lore) {
+    public @NotNull ItemStackBuilder lore(@NotNull List<? extends Component> lore) {
         this.metaBuilder.lore(lore);
         return this;
     }
@@ -101,18 +103,10 @@ public class ItemStackBuilder {
         return this;
     }
 
-    @ApiStatus.Experimental
-    @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder stackingRule(@Nullable StackingRule stackingRule) {
-        this.stackingRule = stackingRule;
-        return this;
-    }
-
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack build() {
-        if (amount < 1)
-            return ItemStack.AIR;
-        return new ItemStack(material, amount, metaBuilder.generate(), stackingRule);
+        if (amount < 1) return ItemStack.AIR;
+        return new ItemStack(material, amount, metaBuilder.build());
     }
 
     private static final class DefaultMeta extends ItemMetaBuilder {
@@ -124,11 +118,6 @@ public class ItemStackBuilder {
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
             // Empty
-        }
-
-        @Override
-        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
-            return DefaultMeta::new;
         }
     }
 }

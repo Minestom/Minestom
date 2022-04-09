@@ -6,14 +6,12 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ExplosionPacket implements ServerPacket {
-
-    public float x, y, z;
-    public float radius; // UNUSED
-    public byte[] records = new byte[0];
-    public float playerMotionX, playerMotionY, playerMotionZ;
-
-    public ExplosionPacket() {
+public record ExplosionPacket(float x, float y, float z, float radius, byte @NotNull [] records,
+                              float playerMotionX, float playerMotionY, float playerMotionZ) implements ServerPacket {
+    public ExplosionPacket(BinaryReader reader) {
+        this(reader.readFloat(), reader.readFloat(), reader.readFloat(),
+                reader.readFloat(), reader.readBytes(reader.readVarInt() * 3),
+                reader.readFloat(), reader.readFloat(), reader.readFloat());
     }
 
     @Override
@@ -23,24 +21,10 @@ public class ExplosionPacket implements ServerPacket {
         writer.writeFloat(z);
         writer.writeFloat(radius);
         writer.writeVarInt(records.length / 3); // each record is 3 bytes long
-        for (byte record : records)
-            writer.writeByte(record);
+        writer.writeBytes(records);
         writer.writeFloat(playerMotionX);
         writer.writeFloat(playerMotionY);
         writer.writeFloat(playerMotionZ);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        x = reader.readFloat();
-        y = reader.readFloat();
-        z = reader.readFloat();
-        radius = reader.readFloat();
-        int recordCount = reader.readVarInt() * 3;
-        records = reader.readBytes(recordCount);
-        playerMotionX = reader.readFloat();
-        playerMotionY = reader.readFloat();
-        playerMotionZ = reader.readFloat();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -7,133 +8,82 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.item.Material;
+import net.minestom.server.utils.chunk.ChunkCache;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
 
-public class CollisionUtils {
-
-    private static final Vec Y_AXIS = new Vec(0, 1, 0);
-    private static final Vec X_AXIS = new Vec(1, 0, 0);
-    private static final Vec Z_AXIS = new Vec(0, 0, 1);
+@ApiStatus.Internal
+@ApiStatus.Experimental
+public final class CollisionUtils {
 
     /**
      * Moves an entity with physics applied (ie checking against blocks)
+     * <p>
+     * Works by getting all the full blocks that an entity could interact with.
+     * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
      * @param entity the entity to move
      * @return the result of physics simulation
      */
-    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition) {
-        // TODO handle collisions with nearby entities (should it be done here?)
-        final Instance instance = entity.getInstance();
-        final Chunk originChunk = entity.getChunk();
-        final Pos currentPosition = entity.getPosition();
-        final BoundingBox boundingBox = entity.getBoundingBox();
-
-        Vec stepVec = currentPosition.asVec();
-        boolean xCheck = false, yCheck = false, zCheck = false;
-
-        if (deltaPosition.y() != 0) {
-            final StepResult yCollision = stepAxis(instance, originChunk, stepVec, Y_AXIS, deltaPosition.y(),
-                    deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
-            yCheck = yCollision.foundCollision;
-            stepVec = yCollision.newPosition;
-        }
-
-        if (deltaPosition.x() != 0) {
-            final StepResult xCollision = stepAxis(instance, originChunk, stepVec, X_AXIS, deltaPosition.x(),
-                    deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
-            xCheck = xCollision.foundCollision;
-            stepVec = xCollision.newPosition;
-        }
-
-        if (deltaPosition.z() != 0) {
-            final StepResult zCollision = stepAxis(instance, originChunk, stepVec, Z_AXIS, deltaPosition.z(),
-                    deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
-            zCheck = zCollision.foundCollision;
-            stepVec = zCollision.newPosition;
-        }
-
-        return new PhysicsResult(currentPosition.samePoint(stepVec) ? currentPosition : currentPosition.withCoord(stepVec),
-                new Vec(xCheck ? 0 : deltaPosition.x(),
-                        yCheck ? 0 : deltaPosition.y(),
-                        zCheck ? 0 : deltaPosition.z()),
-                yCheck && deltaPosition.y() < 0);
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
+                                              @Nullable PhysicsResult lastPhysicsResult) {
+        assert entity.getInstance() != null;
+        return handlePhysics(entity.getInstance(), entity.getChunk(),
+                entity.getBoundingBox(),
+                entity.getPosition(), entityVelocity,
+                lastPhysicsResult);
     }
 
     /**
-     * Steps on a single axis. Checks against collisions for each point of 'corners'. This method assumes that startPosition is valid.
-     * Immediately return false if corners is of length 0.
+     * Moves bounding box with physics applied (ie checking against blocks)
+     * <p>
+     * Works by getting all the full blocks that a bounding box could interact with.
+     * All bounding boxes inside the full blocks are checked for collisions with the given bounding box.
      *
-     * @param instance      instance to check blocks from
-     * @param startPosition starting position for stepping, can be intermediary position from last step
-     * @param axis          step direction. Works best if unit vector and aligned to an axis
-     * @param stepAmount    how much to step in the direction (in blocks)
-     * @param corners       the corners to check against
-     * @return result of the step
+     * @param boundingBox the bounding box to move
+     * @return the result of physics simulation
      */
-    private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, List<Vec> corners) {
-        final List<Vec> mutableCorners = new ArrayList<>(corners);
-        final double sign = Math.signum(stepAmount);
-        final int blockLength = (int) stepAmount;
-        final double remainingLength = stepAmount - blockLength;
-        // used to determine if 'remainingLength' should be used
-        boolean collisionFound = false;
-        for (int i = 0; i < Math.abs(blockLength); i++) {
-            collisionFound = stepOnce(instance, originChunk, axis, sign, mutableCorners);
-            if (collisionFound) break;
-        }
-
-        // add remainingLength
-        if (!collisionFound) {
-            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, mutableCorners);
-        }
-
-        // find the corner which moved the least
-        double smallestDisplacement = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < corners.size(); i++) {
-            final double displacement = corners.get(i).distance(mutableCorners.get(i));
-            if (displacement < smallestDisplacement) {
-                smallestDisplacement = displacement;
-            }
-        }
-
-        return new StepResult(startPosition.add(new Vec(smallestDisplacement).mul(axis).mul(sign)), collisionFound);
+    public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
+                                               @NotNull BoundingBox boundingBox,
+                                               @NotNull Pos position, @NotNull Vec velocity,
+                                               @Nullable PhysicsResult lastPhysicsResult) {
+        final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
+        return BlockCollision.handlePhysics(boundingBox,
+                velocity, position,
+                getter, lastPhysicsResult);
     }
 
     /**
-     * Steps once (by a length of 1 block) on the given axis.
+     * Checks whether shape is reachable by the given line of sight
+     * (ie there are no blocks colliding with it).
      *
-     * @param instance instance to get blocks from
-     * @param axis     the axis to move along
-     * @param corners  the corners of the bounding box to consider
-     * @return true if found collision
+     * @param instance the instance.
+     * @param chunk    optional chunk reference for speedup purposes.
+     * @param start    start of the line of sight.
+     * @param end      end of the line of sight.
+     * @param shape    shape to check.
+     * @return true is shape is reachable by the given line of sight; false otherwise.
      */
-    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, List<Vec> corners) {
-        final double sign = Math.signum(amount);
-        for (int cornerIndex = 0; cornerIndex < corners.size(); cornerIndex++) {
-            final Vec originalCorner = corners.get(cornerIndex);
-            final Vec newCorner = originalCorner.add(axis.mul(amount));
-            final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
-            if (!ChunkUtils.isLoaded(chunk)) {
-                // Collision at chunk border
-                return true;
-            }
-            final Block block = chunk.getBlock(newCorner);
-            // TODO: block collision boxes
-            // TODO: for the moment, always consider a full block
-            if (block.isSolid()) {
-                corners.set(cornerIndex, new Vec(
-                        Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : originalCorner.x(),
-                        Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : originalCorner.y(),
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z()));
-                return true;
-            }
-            corners.set(cornerIndex, newCorner);
-        }
-        return false;
+    public static boolean isLineOfSightReachingShape(@NotNull Instance instance, @Nullable Chunk chunk,
+                                             @NotNull Point start, @NotNull Point end,
+                                             @NotNull Shape shape) {
+        final PhysicsResult result = handlePhysics(instance, chunk,
+                BoundingBox.ZERO,
+                Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
+                null);
+        return shape.intersectBox(end.sub(result.newPosition()), BoundingBox.ZERO);
+    }
+
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
+        return handlePhysics(entity, entityVelocity, null);
+    }
+
+    public static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+        return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
     }
 
     /**
@@ -148,54 +98,23 @@ public class CollisionUtils {
                                                 @NotNull Pos currentPosition, @NotNull Pos newPosition) {
         final WorldBorder worldBorder = instance.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
-        switch (collisionAxis) {
-            case NONE:
+        return switch (collisionAxis) {
+            case NONE ->
                 // Apply velocity + gravity
-                return newPosition;
-            case BOTH:
+                    newPosition;
+            case BOTH ->
                 // Apply Y velocity/gravity
-                return new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
-            case X:
+                    new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
+            case X ->
                 // Apply Y/Z velocity/gravity
-                return new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
-            case Z:
+                    new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
+            case Z ->
                 // Apply X/Y velocity/gravity
-                return new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
-        }
-        throw new IllegalStateException("Something weird happened...");
+                    new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
+        };
     }
 
-    public static class PhysicsResult {
-        private final Pos newPosition;
-        private final Vec newVelocity;
-        private final boolean isOnGround;
-
-        public PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround) {
-            this.newPosition = newPosition;
-            this.newVelocity = newVelocity;
-            this.isOnGround = isOnGround;
-        }
-
-        public Pos newPosition() {
-            return newPosition;
-        }
-
-        public Vec newVelocity() {
-            return newVelocity;
-        }
-
-        public boolean isOnGround() {
-            return isOnGround;
-        }
-    }
-
-    private static class StepResult {
-        private final Vec newPosition;
-        private final boolean foundCollision;
-
-        public StepResult(Vec newPosition, boolean foundCollision) {
-            this.newPosition = newPosition;
-            this.foundCollision = foundCollision;
-        }
+    public static Shape parseBlockShape(String str, Supplier<Material> block) {
+        return ShapeImpl.parseBlockFromRegistry(str, block);
     }
 }

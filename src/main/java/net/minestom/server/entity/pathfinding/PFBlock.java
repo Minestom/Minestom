@@ -3,14 +3,14 @@ package net.minestom.server.entity.pathfinding;
 import com.extollit.gaming.ai.path.model.IBlockDescription;
 import com.extollit.gaming.ai.path.model.IBlockObject;
 import com.extollit.linalg.immutable.AxisAlignedBBox;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import space.vectrix.flare.fastutil.Short2ObjectSyncMap;
 
-public class PFBlock implements IBlockDescription, IBlockObject {
-
-    private static final Short2ObjectMap<PFBlock> BLOCK_DESCRIPTION_MAP = new Short2ObjectOpenHashMap<>();
+@ApiStatus.Internal
+public final class PFBlock implements IBlockDescription, IBlockObject {
+    private static final Short2ObjectSyncMap<PFBlock> BLOCK_DESCRIPTION_MAP = Short2ObjectSyncMap.hashmap();
 
     /**
      * Gets the {@link PFBlock} linked to the block state id.
@@ -21,22 +21,12 @@ public class PFBlock implements IBlockDescription, IBlockObject {
      * @return the {@link PFBlock} linked to {@code blockStateId}
      */
     public static @NotNull PFBlock get(@NotNull Block block) {
-        final short blockStateId = block.stateId();
-        if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
-            synchronized (BLOCK_DESCRIPTION_MAP) {
-                if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
-                    final var pfBlock = new PFBlock(block);
-                    BLOCK_DESCRIPTION_MAP.put(blockStateId, pfBlock);
-                    return pfBlock;
-                }
-            }
-        }
-        return BLOCK_DESCRIPTION_MAP.get(blockStateId);
+        return BLOCK_DESCRIPTION_MAP.computeIfAbsent(block.stateId(), state -> new PFBlock(block));
     }
 
     private final Block block;
 
-    public PFBlock(Block block) {
+    PFBlock(Block block) {
         this.block = block;
     }
 
@@ -73,6 +63,12 @@ public class PFBlock implements IBlockDescription, IBlockObject {
         // Return all normal doors and trap doors.
         // It just so happens that their namespace IDs all end with "door".
         return block.namespace().asString().endsWith("door");
+    }
+
+    @Override
+    public boolean isIntractable() {
+        // TODO: Interactability of blocks.
+        return false;
     }
 
     @Override

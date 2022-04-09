@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Manager used to register {@link Command commands}.
@@ -81,7 +80,7 @@ public final class CommandManager {
     }
 
     /**
-     * Gets if a command with the name {@code commandName} already exists or name.
+     * Gets if a command with the name {@code commandName} already exists or not.
      *
      * @param commandName the command name to check
      * @return true if the command does exist
@@ -92,7 +91,7 @@ public final class CommandManager {
     }
 
     /**
-     * Executes a command for a {@link ConsoleSender}.
+     * Executes a command for a {@link CommandSender}.
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
@@ -100,8 +99,7 @@ public final class CommandManager {
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
         // Command event
-        if (sender instanceof Player) {
-            final Player player = (Player) sender;
+        if (sender instanceof Player player) {
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
             EventDispatcher.call(playerCommandEvent);
             if (playerCommandEvent.isCancelled())
@@ -119,8 +117,8 @@ public final class CommandManager {
     }
 
     /**
-     * Executes the command using a {@link ServerSender} to do not
-     * print the command messages, and rely instead on the command return data.
+     * Executes the command using a {@link ServerSender}. This can be used
+     * to run a silent command (nothing is printed to console).
      *
      * @see #execute(CommandSender, String)
      */
@@ -179,8 +177,6 @@ public final class CommandManager {
      * @return the commands packet for the specific player
      */
     private @NotNull DeclareCommandsPacket buildPacket(@NotNull Player player) {
-        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
-
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         // Contains the children of the main node (all commands name)
         IntList rootChildren = new IntArrayList();
@@ -206,34 +202,29 @@ public final class CommandManager {
             String input = pair.left();
             NodeMaker.Request request = pair.right();
 
-            final CommandQueryResult commandQueryResult = CommandParser.findCommand(input);
+            final CommandQueryResult commandQueryResult = CommandParser.findCommand(dispatcher, input);
             if (commandQueryResult == null) {
                 // Invalid command, return root node
                 request.retrieve(0);
                 continue;
             }
 
-            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, input, false, true, syntax -> true, argument -> true);
+            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
+                    commandQueryResult.args(), input, false, true, syntax -> true, argument -> true);
             if (queryResult == null) {
                 // Invalid argument, return command node (default to root)
-                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
+                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command(), 0);
                 request.retrieve(commandNode);
                 continue;
             }
 
             // Retrieve argument node
-            final Argument<?> argument = queryResult.argument;
-            final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
+            final int argumentNode = argumentIdentityMap.getOrDefault(queryResult.argument(), 0);
             request.retrieve(argumentNode);
         }
         // Add root node children
-        rootNode.children = ArrayUtils.toArray(rootChildren);
-
-        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
-        declareCommandsPacket.rootIndex = 0;
-
-        return declareCommandsPacket;
+        rootNode.children = rootChildren.toIntArray();
+        return new DeclareCommandsPacket(nodes, 0);
     }
 
     private int serializeCommand(CommandSender sender, Command command,
@@ -316,7 +307,7 @@ public final class CommandManager {
         Map<IndexedArgument, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         // Sort syntaxes by argument count. Brigadier requires it.
-        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).collect(Collectors.toList());
+        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).toList();
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
             if (commandCondition != null && !commandCondition.canUse(sender, null)) {
@@ -390,7 +381,7 @@ public final class CommandManager {
 
                             // Append to the last node
                             {
-                                final int[] children = ArrayUtils.toArray(argChildren);
+                                final int[] children = argChildren.toIntArray();
                                 for (DeclareCommandsPacket.Node lastNode : lastNodes) {
                                     lastNode.children = lastNode.children == null ?
                                             children :
@@ -431,12 +422,11 @@ public final class CommandManager {
             argumentIdentityMap.put(indexedArgument.argument, value);
         });
 
-        literalNode.children = ArrayUtils.toArray(cmdChildren);
+        literalNode.children = cmdChildren.toIntArray();
         return literalNode;
     }
 
-    @NotNull
-    private DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
+    private @NotNull DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
         literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, false, false);
         literalNode.name = name;

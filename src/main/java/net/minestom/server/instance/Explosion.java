@@ -57,30 +57,22 @@ public abstract class Explosion {
      */
     public void apply(@NotNull Instance instance) {
         List<Point> blocks = prepare(instance);
-        ExplosionPacket packet = new ExplosionPacket();
-        packet.x = getCenterX();
-        packet.y = getCenterY();
-        packet.z = getCenterZ();
-        packet.radius = getStrength();
-        packet.playerMotionX = 0.0f; // TODO: figure out why this is here
-        packet.playerMotionY = 0.0f; // TODO: figure out why this is here
-        packet.playerMotionZ = 0.0f; // TODO: figure out why this is here
-
-        packet.records = new byte[3 * blocks.size()];
+        byte[] records = new byte[3 * blocks.size()];
         for (int i = 0; i < blocks.size(); i++) {
             final var pos = blocks.get(i);
             instance.setBlock(pos, Block.AIR);
             final byte x = (byte) (pos.x() - Math.floor(getCenterX()));
             final byte y = (byte) (pos.y() - Math.floor(getCenterY()));
             final byte z = (byte) (pos.z() - Math.floor(getCenterZ()));
-            packet.records[i * 3 + 0] = x;
-            packet.records[i * 3 + 1] = y;
-            packet.records[i * 3 + 2] = z;
+            records[i * 3 + 0] = x;
+            records[i * 3 + 1] = y;
+            records[i * 3 + 2] = z;
         }
 
-        postExplosion(instance, blocks, packet);
-
         // TODO send only to close players
+        ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
+                records, 0, 0, 0);
+        postExplosion(instance, blocks, packet);
         PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
 
         postSend(instance, blocks);

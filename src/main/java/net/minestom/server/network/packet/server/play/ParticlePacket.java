@@ -6,19 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ParticlePacket implements ServerPacket {
-
-    public int particleId;
-    public boolean longDistance;
-    public double x, y, z;
-    public float offsetX, offsetY, offsetZ;
-    public float particleData;
-    public int particleCount;
-
-    public byte[] data;
-
-    public ParticlePacket() {
-        data = new byte[0];
+public record ParticlePacket(int particleId, boolean longDistance,
+                             double x, double y, double z,
+                             float offsetX, float offsetY, float offsetZ,
+                             float particleData, int particleCount, byte[] data) implements ServerPacket {
+    public ParticlePacket(BinaryReader reader) {
+        this(reader.readInt(), reader.readBoolean(),
+                reader.readDouble(), reader.readDouble(), reader.readDouble(),
+                reader.readFloat(), reader.readFloat(), reader.readFloat(),
+                reader.readFloat(), reader.readInt(), reader.readRemainingBytes());
     }
 
     @Override
@@ -35,22 +31,6 @@ public class ParticlePacket implements ServerPacket {
         writer.writeInt(particleCount);
 
         writer.writeBytes(data);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        particleId = reader.readInt();
-        longDistance = reader.readBoolean();
-        x = reader.readDouble();
-        y = reader.readDouble();
-        z = reader.readDouble();
-        offsetX = reader.readFloat();
-        offsetY = reader.readFloat();
-        offsetZ = reader.readFloat();
-        particleData = reader.readFloat();
-        particleCount = reader.readInt();
-
-        data = reader.readRemainingBytes();
     }
 
     @Override

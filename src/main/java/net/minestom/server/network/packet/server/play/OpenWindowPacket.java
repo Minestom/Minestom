@@ -7,17 +7,10 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class OpenWindowPacket implements ServerPacket {
-
-    public int windowId;
-    public int windowType;
-    public Component title = Component.text("");
-
-    public OpenWindowPacket() {
-    }
-
-    public OpenWindowPacket(Component title) {
-        this.title = title;
+public record OpenWindowPacket(int windowId, int windowType,
+                               @NotNull Component title) implements ServerPacket {
+    public OpenWindowPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readVarInt(), reader.readComponent());
     }
 
     @Override
@@ -25,13 +18,6 @@ public class OpenWindowPacket implements ServerPacket {
         writer.writeVarInt(windowId);
         writer.writeVarInt(windowType);
         writer.writeComponent(title);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        windowId = reader.readVarInt();
-        windowType = reader.readVarInt();
-        title = reader.readComponent();
     }
 
     @Override

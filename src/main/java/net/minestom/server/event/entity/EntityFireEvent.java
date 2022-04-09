@@ -2,13 +2,13 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 
-public class EntityFireEvent implements EntityEvent, CancellableEvent {
+public class EntityFireEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
     private Duration duration;

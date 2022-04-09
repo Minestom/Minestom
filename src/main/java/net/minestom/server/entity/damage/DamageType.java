@@ -5,11 +5,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.Taggable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
  * Represents a type of damage, required when calling {@link LivingEntity#damage(DamageType, float)}
@@ -17,7 +16,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
  * <p>
  * This class can be extended if you need to include custom fields and/or methods.
  */
-public class DamageType implements TagHandler {
+public class DamageType implements Taggable {
 
     public static final DamageType VOID = new DamageType("attack.outOfWorld");
     public static final DamageType GRAVITY = new DamageType("attack.fall");
@@ -28,8 +27,7 @@ public class DamageType implements TagHandler {
         }
     };
     private final String identifier;
-    private final Object nbtLock = new Object();
-    private final NBTCompound nbt = new NBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
     /**
      * Creates a new damage type.
@@ -127,16 +125,7 @@ public class DamageType implements TagHandler {
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        synchronized (nbtLock) {
-            return tag.read(nbt);
-        }
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        synchronized (nbtLock) {
-            tag.write(nbt, value);
-        }
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 }

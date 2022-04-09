@@ -1,14 +1,14 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.*;
+import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
@@ -18,18 +18,18 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 @ApiStatus.Internal
 public final class InventoryClickProcessor {
     // Dragging maps
-    private final Map<Player, IntSet> leftDraggingMap = new ConcurrentHashMap<>();
-    private final Map<Player, IntSet> rightDraggingMap = new ConcurrentHashMap<>();
+    private final Map<Player, List<DragData>> leftDraggingMap = new ConcurrentHashMap<>();
+    private final Map<Player, List<DragData>> rightDraggingMap = new ConcurrentHashMap<>();
 
     public @NotNull InventoryClickResult leftClick(@NotNull Player player, @NotNull AbstractInventory inventory,
                                                    int slot,
@@ -38,20 +38,19 @@ public final class InventoryClickProcessor {
         if (result.isCancel()) return result;
         clicked = result.getClicked();
         cursor = result.getCursor();
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final StackingRule clickedRule = clicked.getStackingRule();
-        if (cursorRule.canBeStacked(cursor, clicked)) {
+        final StackingRule rule = StackingRule.get();
+        if (rule.canBeStacked(cursor, clicked)) {
             // Try to stack items
-            final int totalAmount = cursorRule.getAmount(cursor) + clickedRule.getAmount(clicked);
-            final int maxSize = cursorRule.getMaxSize(cursor);
-            if (!clickedRule.canApply(clicked, totalAmount)) {
+            final int totalAmount = rule.getAmount(cursor) + rule.getAmount(clicked);
+            final int maxSize = rule.getMaxSize(cursor);
+            if (!rule.canApply(clicked, totalAmount)) {
                 // Size is too big, stack as much as possible into clicked
-                result.setCursor(cursorRule.apply(cursor, totalAmount - maxSize));
-                result.setClicked(clickedRule.apply(clicked, maxSize));
+                result.setCursor(rule.apply(cursor, totalAmount - maxSize));
+                result.setClicked(rule.apply(clicked, maxSize));
             } else {
                 // Merge cursor item clicked
-                result.setCursor(cursorRule.apply(cursor, 0));
-                result.setClicked(clickedRule.apply(clicked, totalAmount));
+                result.setCursor(rule.apply(cursor, 0));
+                result.setClicked(rule.apply(clicked, totalAmount));
             }
         } else {
             // Items are not compatible, swap them
@@ -68,31 +67,30 @@ public final class InventoryClickProcessor {
         if (result.isCancel()) return result;
         clicked = result.getClicked();
         cursor = result.getCursor();
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final StackingRule clickedRule = clicked.getStackingRule();
-        if (clickedRule.canBeStacked(clicked, cursor)) {
+        final StackingRule rule = StackingRule.get();
+        if (rule.canBeStacked(clicked, cursor)) {
             // Items can be stacked
-            final int amount = clickedRule.getAmount(clicked) + 1;
-            if (!clickedRule.canApply(clicked, amount)) {
+            final int amount = rule.getAmount(clicked) + 1;
+            if (!rule.canApply(clicked, amount)) {
                 // Size too large, stop here
                 return result;
             } else {
                 // Add 1 to clicked
-                result.setCursor(cursorRule.apply(cursor, operand -> operand - 1));
-                result.setClicked(clickedRule.apply(clicked, amount));
+                result.setCursor(rule.apply(cursor, operand -> operand - 1));
+                result.setClicked(rule.apply(clicked, amount));
             }
         } else {
             // Items cannot be stacked
             if (cursor.isAir()) {
                 // Take half of clicked
-                final int amount = (int) Math.ceil((double) clickedRule.getAmount(clicked) / 2d);
-                result.setCursor(cursorRule.apply(clicked, amount));
-                result.setClicked(clickedRule.apply(clicked, operand -> operand / 2));
+                final int amount = (int) Math.ceil((double) rule.getAmount(clicked) / 2d);
+                result.setCursor(rule.apply(clicked, amount));
+                result.setClicked(rule.apply(clicked, operand -> operand / 2));
             } else {
                 if (clicked.isAir()) {
                     // Put 1 to clicked
-                    result.setCursor(cursorRule.apply(cursor, operand -> operand - 1));
-                    result.setClicked(clickedRule.apply(cursor, 1));
+                    result.setCursor(rule.apply(cursor, operand -> operand - 1));
+                    result.setClicked(rule.apply(cursor, 1));
                 } else {
                     // Swap items
                     result.setCursor(clicked);
@@ -145,40 +143,45 @@ public final class InventoryClickProcessor {
             }
         }
 
+        clickResult.setCancel(true);
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
-                clickResult.setCancel(true);
                 return false;
             }
+            clickResult.setCancel(false);
             return true;
         }, start, end, step);
-        ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
+
+        final ItemStack itemResult = pair.left();
+        final Map<Integer, ItemStack> itemChangesMap = pair.right();
+        itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
+            targetInventory.setItemStack(s, itemStack);
+            callClickEvent(player, targetInventory, s, ClickType.SHIFT_CLICK, itemStack, cursor);
+        });
         clickResult.setClicked(itemResult);
         return clickResult;
     }
 
     public @Nullable InventoryClickResult dragging(@NotNull Player player, @Nullable AbstractInventory inventory,
                                                    int slot, int button,
-                                                   @NotNull ItemStack clicked, @NotNull ItemStack cursor,
-                                                   @NotNull Int2ObjectFunction<ItemStack> itemGetter,
-                                                   @NotNull BiConsumer<Integer, ItemStack> itemSetter) {
+                                                   @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickResult clickResult = null;
-        final StackingRule stackingRule = cursor.getStackingRule();
+        final StackingRule stackingRule = StackingRule.get();
         if (slot != -999) {
             // Add slot
             if (button == 1) {
                 // Add left
-                IntSet left = leftDraggingMap.get(player);
+                List<DragData> left = leftDraggingMap.get(player);
                 if (left == null) return null;
-                left.add(slot);
+                left.add(new DragData(slot, inventory));
             } else if (button == 5) {
                 // Add right
-                IntSet right = rightDraggingMap.get(player);
+                List<DragData> right = rightDraggingMap.get(player);
                 if (right == null) return null;
-                right.add(slot);
+                right.add(new DragData(slot, inventory));
             } else if (button == 9) {
                 // Add middle
                 // TODO
@@ -188,18 +191,18 @@ public final class InventoryClickProcessor {
             if (button == 0) {
                 // Start left
                 clickResult = startCondition(player, inventory, slot, ClickType.START_LEFT_DRAGGING, clicked, cursor);
-                if (!clickResult.isCancel()) this.leftDraggingMap.put(player, new IntOpenHashSet());
+                if (!clickResult.isCancel()) this.leftDraggingMap.put(player, new ArrayList<>());
             } else if (button == 2) {
                 // End left
-                final IntSet slots = leftDraggingMap.remove(player);
+                final List<DragData> slots = leftDraggingMap.remove(player);
                 if (slots == null) return null;
                 final int slotCount = slots.size();
                 final int cursorAmount = stackingRule.getAmount(cursor);
                 if (slotCount > cursorAmount) return null;
-                for (int s : slots) {
+                for (DragData s : slots) {
                     // Apply each drag element
-                    final ItemStack slotItem = itemGetter.apply(s);
-                    clickResult = startCondition(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+                    final ItemStack slotItem = s.inventory.getItemStack(s.slot);
+                    clickResult = startCondition(player, s.inventory, s.slot, ClickType.LEFT_DRAGGING, slotItem, cursor);
                     if (clickResult.isCancel()) {
                         return clickResult;
                     }
@@ -210,10 +213,11 @@ public final class InventoryClickProcessor {
                 final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
                 // Place all waiting drag action
                 int finalCursorAmount = cursorAmount;
-                for (int s : slots) {
-                    ItemStack slotItem = itemGetter.apply(s);
-                    final StackingRule slotItemRule = slotItem.getStackingRule();
-                    final int amount = slotItemRule.getAmount(slotItem);
+                for (DragData dragData : slots) {
+                    final var inv = dragData.inventory;
+                    final int s = dragData.slot;
+                    ItemStack slotItem = inv.getItemStack(s);
+                    final int amount = stackingRule.getAmount(slotItem);
                     if (stackingRule.canBeStacked(cursor, slotItem)) {
                         if (stackingRule.canApply(slotItem, amount + slotSize)) {
                             // Append divided amount to slot
@@ -231,26 +235,26 @@ public final class InventoryClickProcessor {
                         slotItem = stackingRule.apply(cursor, slotSize);
                         finalCursorAmount -= slotSize;
                     }
-                    itemSetter.accept(s, slotItem);
-                    callClickEvent(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+                    inv.setItemStack(s, slotItem);
+                    callClickEvent(player, inv, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
                 }
                 // Update the cursor
                 clickResult.setCursor(stackingRule.apply(cursor, finalCursorAmount));
             } else if (button == 4) {
                 // Start right
                 clickResult = startCondition(player, inventory, slot, ClickType.START_RIGHT_DRAGGING, clicked, cursor);
-                if (!clickResult.isCancel()) this.rightDraggingMap.put(player, new IntOpenHashSet());
+                if (!clickResult.isCancel()) this.rightDraggingMap.put(player, new ArrayList<>());
             } else if (button == 6) {
                 // End right
-                final IntSet slots = rightDraggingMap.remove(player);
+                final List<DragData> slots = rightDraggingMap.remove(player);
                 if (slots == null) return null;
                 final int size = slots.size();
                 int cursorAmount = stackingRule.getAmount(cursor);
                 if (size > cursorAmount) return null;
                 // Verify if each slot can be modified (or cancel the whole drag)
-                for (int s : slots) {
-                    ItemStack slotItem = itemGetter.apply(s);
-                    clickResult = startCondition(player, inventory, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
+                for (DragData s : slots) {
+                    final ItemStack slotItem = s.inventory.getItemStack(s.slot);
+                    clickResult = startCondition(player, s.inventory, s.slot, ClickType.RIGHT_DRAGGING, slotItem, cursor);
                     if (clickResult.isCancel()) {
                         return clickResult;
                     }
@@ -259,12 +263,13 @@ public final class InventoryClickProcessor {
                 if (clickResult.isCancel()) return clickResult;
                 // Place all waiting drag action
                 int finalCursorAmount = cursorAmount;
-                for (int s : slots) {
-                    ItemStack slotItem = itemGetter.apply(s);
-                    StackingRule slotItemRule = slotItem.getStackingRule();
+                for (DragData dragData : slots) {
+                    final var inv = dragData.inventory;
+                    final int s = dragData.slot;
+                    ItemStack slotItem = inv.getItemStack(s);
                     if (stackingRule.canBeStacked(cursor, slotItem)) {
                         // Compatible item in the slot, increment by 1
-                        final int amount = slotItemRule.getAmount(slotItem) + 1;
+                        final int amount = stackingRule.getAmount(slotItem) + 1;
                         if (stackingRule.canApply(slotItem, amount)) {
                             slotItem = stackingRule.apply(slotItem, amount);
                             finalCursorAmount -= 1;
@@ -274,8 +279,8 @@ public final class InventoryClickProcessor {
                         slotItem = stackingRule.apply(cursor, 1);
                         finalCursorAmount -= 1;
                     }
-                    itemSetter.accept(s, slotItem);
-                    callClickEvent(player, inventory, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
+                    inv.setItemStack(s, slotItem);
+                    callClickEvent(player, inv, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
                 }
                 // Update the cursor
                 clickResult.setCursor(stackingRule.apply(cursor, finalCursorAmount));
@@ -286,13 +291,13 @@ public final class InventoryClickProcessor {
 
     public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
                                                      @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
+        InventoryClickResult clickResult = startCondition(player, clickedInventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
         if (cursor.isAir()) return clickResult.cancelled();
 
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final int amount = cursorRule.getAmount(cursor);
-        final int maxSize = cursorRule.getMaxSize(cursor);
+        final StackingRule rule = StackingRule.get();
+        final int amount = rule.getAmount(cursor);
+        final int maxSize = rule.getMaxSize(cursor);
         final int remainingAmount = maxSize - amount;
         if (remainingAmount == 0) {
             // Item is already full
@@ -302,15 +307,19 @@ public final class InventoryClickProcessor {
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
                 if (index == slot) // Prevent item lose/duplication
                     return false;
-                final InventoryClickResult result = startCondition(player, inventory, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
+                final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
             });
-            var itemResult = pair.left();
-            var map = pair.right();
-            return TransactionOption.ALL.fill(inv, itemResult, map);
+            final ItemStack itemResult = pair.left();
+            var itemChangesMap = pair.right();
+            itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
+                inv.setItemStack(s, itemStack);
+                callClickEvent(player, inv, s, ClickType.DOUBLE_CLICK, itemStack, cursor);
+            });
+            return itemResult;
         };
 
-        ItemStack remain = cursorRule.apply(cursor, remainingAmount);
+        ItemStack remain = rule.apply(cursor, remainingAmount);
         final var playerInventory = player.getInventory();
         // Retrieve remain
         if (Objects.equals(clickedInventory, inventory)) {
@@ -333,10 +342,10 @@ public final class InventoryClickProcessor {
         // Update cursor based on the remaining
         if (remain.isAir()) {
             // Item has been filled
-            clickResult.setCursor(cursorRule.apply(cursor, maxSize));
+            clickResult.setCursor(rule.apply(cursor, maxSize));
         } else {
-            final int tookAmount = remainingAmount - cursorRule.getAmount(remain);
-            clickResult.setCursor(cursorRule.apply(cursor, amount + tookAmount));
+            final int tookAmount = remainingAmount - rule.getAmount(remain);
+            clickResult.setCursor(rule.apply(cursor, amount + tookAmount));
         }
         return clickResult;
     }
@@ -347,8 +356,7 @@ public final class InventoryClickProcessor {
         final InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.DROP, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
 
-        final StackingRule clickedRule = clicked.getStackingRule();
-        final StackingRule cursorRule = cursor.getStackingRule();
+        final StackingRule rule = StackingRule.get();
 
         ItemStack resultClicked = clicked;
         ItemStack resultCursor = cursor;
@@ -357,44 +365,44 @@ public final class InventoryClickProcessor {
             // Click outside
             if (button == 0) {
                 // Left (drop all)
-                final int amount = cursorRule.getAmount(resultCursor);
-                final ItemStack dropItem = cursorRule.apply(resultCursor, amount);
+                final int amount = rule.getAmount(resultCursor);
+                final ItemStack dropItem = rule.apply(resultCursor, amount);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    resultCursor = cursorRule.apply(resultCursor, 0);
+                    resultCursor = rule.apply(resultCursor, 0);
                 }
             } else if (button == 1) {
                 // Right (drop 1)
-                final ItemStack dropItem = cursorRule.apply(resultCursor, 1);
+                final ItemStack dropItem = rule.apply(resultCursor, 1);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    final int amount = cursorRule.getAmount(resultCursor);
+                    final int amount = rule.getAmount(resultCursor);
                     final int newAmount = amount - 1;
-                    resultCursor = cursorRule.apply(resultCursor, newAmount);
+                    resultCursor = rule.apply(resultCursor, newAmount);
                 }
             }
 
         } else if (!all) {
             if (button == 0) {
                 // Drop key Q (drop 1)
-                final ItemStack dropItem = cursorRule.apply(resultClicked, 1);
+                final ItemStack dropItem = rule.apply(resultClicked, 1);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    final int amount = clickedRule.getAmount(resultClicked);
+                    final int amount = rule.getAmount(resultClicked);
                     final int newAmount = amount - 1;
-                    resultClicked = cursorRule.apply(resultClicked, newAmount);
+                    resultClicked = rule.apply(resultClicked, newAmount);
                 }
             } else if (button == 1) {
                 // Ctrl + Drop key Q (drop all)
-                final int amount = cursorRule.getAmount(resultClicked);
-                final ItemStack dropItem = clickedRule.apply(resultClicked, amount);
+                final int amount = rule.getAmount(resultClicked);
+                final ItemStack dropItem = rule.apply(resultClicked, amount);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    resultClicked = cursorRule.apply(resultClicked, 0);
+                    resultClicked = rule.apply(resultClicked, 0);
                 }
             }
         }
@@ -461,5 +469,8 @@ public final class InventoryClickProcessor {
     public void clearCache(@NotNull Player player) {
         this.leftDraggingMap.remove(player);
         this.rightDraggingMap.remove(player);
+    }
+
+    private record DragData(int slot, AbstractInventory inventory) {
     }
 }

@@ -5,34 +5,18 @@ import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
 
 /**
  * Represents an immutable 3D vector.
  * <p>
- * To become record and primitive.
+ * To become a value then primitive type.
  */
-public final class Vec implements Point {
+public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
 
     public static final double EPSILON = 0.000001;
-
-    private final double x, y, z;
-
-    /**
-     * Creates a new vec with the 3 coordinates set.
-     *
-     * @param x the X coordinate
-     * @param y the Y coordinate
-     * @param z the Z coordinate
-     */
-    public Vec(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
 
     /**
      * Creates a new vec with the [x;z] coordinates set. Y is set to 0.
@@ -61,8 +45,7 @@ public final class Vec implements Point {
      * @return the converted vector
      */
     public static @NotNull Vec fromPoint(@NotNull Point point) {
-        if (point instanceof Vec)
-            return (Vec) point;
+        if (point instanceof Vec vec) return vec;
         return new Vec(point.x(), point.y(), point.z());
     }
 
@@ -485,43 +468,6 @@ public final class Vec implements Point {
     @Contract(pure = true)
     public @NotNull Vec interpolate(@NotNull Vec target, double alpha, @NotNull Interpolation interpolation) {
         return lerp(target, interpolation.apply(alpha));
-    }
-
-    @Override
-    public double x() {
-        return x;
-    }
-
-    @Override
-    public double y() {
-        return y;
-    }
-
-    @Override
-    public double z() {
-        return z;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vec vec = (Vec) o;
-        return Double.compare(vec.x, x) == 0 && Double.compare(vec.y, y) == 0 && Double.compare(vec.z, z) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y, z);
-    }
-
-    @Override
-    public String toString() {
-        return "Vec{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
     }
 
     @FunctionalInterface

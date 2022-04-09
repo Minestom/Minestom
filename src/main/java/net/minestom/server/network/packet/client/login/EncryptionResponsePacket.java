@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.client.login;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -25,23 +24,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class EncryptionResponsePacket implements ClientPreplayPacket {
+public record EncryptionResponsePacket(byte[] sharedSecret, byte[] verifyToken) implements ClientPreplayPacket {
     private static final Gson GSON = new Gson();
-    private byte[] sharedSecret;
-    private byte[] verifyToken;
 
-    public EncryptionResponsePacket() {
-        sharedSecret = new byte[0];
-        verifyToken = new byte[0];
+    public EncryptionResponsePacket(BinaryReader reader) {
+        this(reader.readByteArray(), reader.readByteArray());
     }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
         // Encryption is only support for socket connection
-        if (!(connection instanceof PlayerSocketConnection)) {
-            return;
-        }
-        final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+        if (!(connection instanceof PlayerSocketConnection socketConnection)) return;
         AsyncUtils.runAsync(() -> {
             final String loginUsername = socketConnection.getLoginUsername();
             if (loginUsername == null || loginUsername.isEmpty()) {
@@ -64,9 +57,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
             final String serverId = new BigInteger(digestedData).toString(16);
             final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
 
-            final String url = "https://sessionserver.mojang.com/session/minecraft/hasJoined?"
-                    + "username=" + username + "&"
-                    + "serverId=" + serverId;
+            final String url = String.format(MojangAuth.AUTH_URL, username, serverId);
             // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
 
             final HttpClient client = HttpClient.newHttpClient();
@@ -97,15 +88,9 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.sharedSecret = ByteArrayData.decodeByteArray(reader);
-        this.verifyToken = ByteArrayData.decodeByteArray(reader);
-    }
-
-    @Override
     public void write(@NotNull BinaryWriter writer) {
-        ByteArrayData.encodeByteArray(writer, sharedSecret);
-        ByteArrayData.encodeByteArray(writer, verifyToken);
+        writer.writeByteArray(sharedSecret);
+        writer.writeByteArray(verifyToken);
     }
 
     private SecretKey getSecretKey() {

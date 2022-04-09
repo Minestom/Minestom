@@ -22,10 +22,7 @@ import net.minestom.server.entity.metadata.monster.raider.*;
 import net.minestom.server.entity.metadata.monster.skeleton.SkeletonMeta;
 import net.minestom.server.entity.metadata.monster.skeleton.StrayMeta;
 import net.minestom.server.entity.metadata.monster.skeleton.WitherSkeletonMeta;
-import net.minestom.server.entity.metadata.monster.zombie.DrownedMeta;
-import net.minestom.server.entity.metadata.monster.zombie.ZombieMeta;
-import net.minestom.server.entity.metadata.monster.zombie.ZombieVillagerMeta;
-import net.minestom.server.entity.metadata.monster.zombie.ZombifiedPiglinMeta;
+import net.minestom.server.entity.metadata.monster.zombie.*;
 import net.minestom.server.entity.metadata.other.*;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.entity.metadata.villager.WanderingTraderMeta;
@@ -45,12 +42,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-final class EntityTypeImpl implements EntityType {
-    private static final Registry.Container<EntityType> CONTAINER = new Registry.Container<>(Registry.Resource.ENTITIES,
-            (container, namespace, object) -> container.register(new EntityTypeImpl(Registry.entity(namespace, object, null))));
-    private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
-    private static final Map<String, Double> ACCELERATION_MAP = createAccelerationMap();
-    private static final Map<String, Double> DRAG_MAP = createDragMap();
+record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
+    private static final Registry.Container<EntityType> CONTAINER = Registry.createContainer(Registry.Resource.ENTITIES,
+            (namespace, properties) -> new EntityTypeImpl(Registry.entity(namespace, properties)));
+    static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
     static EntityType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -72,14 +67,6 @@ final class EntityTypeImpl implements EntityType {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
-    static double getAcceleration(String namespace) {
-        return ACCELERATION_MAP.getOrDefault(namespace, 0.08);
-    }
-
-    static double getDrag(String namespace) {
-        return DRAG_MAP.getOrDefault(namespace, 0.02);
-    }
-
     private static Map<String, BiFunction<Entity, Metadata, EntityMeta>> createMetaMap() {
         Map<String, BiFunction<Entity, Metadata, EntityMeta>> supplier = new HashMap<>();
         supplier.put("minecraft:area_effect_cloud", AreaEffectCloudMeta::new);
@@ -88,6 +75,7 @@ final class EntityTypeImpl implements EntityType {
         supplier.put("minecraft:axolotl", AxolotlMeta::new);
         supplier.put("minecraft:bat", BatMeta::new);
         supplier.put("minecraft:bee", BeeMeta::new);
+        supplier.put("minecraft:blaze", BlazeMeta::new);
         supplier.put("minecraft:boat", BoatMeta::new);
         supplier.put("minecraft:cat", CatMeta::new);
         supplier.put("minecraft:cave_spider", CaveSpiderMeta::new);
@@ -119,6 +107,7 @@ final class EntityTypeImpl implements EntityType {
         supplier.put("minecraft:guardian", GuardianMeta::new);
         supplier.put("minecraft:hoglin", HoglinMeta::new);
         supplier.put("minecraft:horse", HorseMeta::new);
+        supplier.put("minecraft:husk", HuskMeta::new);
         supplier.put("minecraft:illusioner", IllusionerMeta::new);
         supplier.put("minecraft:iron_golem", IronGolemMeta::new);
         supplier.put("minecraft:item", ItemEntityMeta::new);
@@ -194,65 +183,6 @@ final class EntityTypeImpl implements EntityType {
         supplier.put("minecraft:player", PlayerMeta::new);
         supplier.put("minecraft:fishing_bobber", FishingHookMeta::new);
         return supplier;
-    }
-
-    private static Map<String, Double> createDragMap() {
-        Map<String, Double> result = new HashMap<>();
-        result.put("minecraft:boat", 0d);
-
-        result.put("minecraft:llama_spit", 0.01);
-        result.put("minecraft:ender_pearl", 0.01);
-        result.put("minecraft:potion", 0.01);
-        result.put("minecraft:snowball", 0.01);
-        result.put("minecraft:egg", 0.01);
-        result.put("minecraft:trident", 0.01);
-        result.put("minecraft:spectral_arrow", 0.01);
-        result.put("minecraft:arrow", 0.01);
-
-        result.put("minecraft:minecart", 0.05);
-
-        result.put("minecraft:fishing_bobber", 0.08);
-        return result;
-    }
-
-    private static Map<String, Double> createAccelerationMap() {
-        Map<String, Double> result = new HashMap<>();
-        result.put("minecraft:item_frame", 0d);
-
-        result.put("minecraft:egg", 0.03);
-        result.put("minecraft:fishing_bobber", 0.03);
-        result.put("minecraft:experience_bottle", 0.03);
-        result.put("minecraft:ender_pearl", 0.03);
-        result.put("minecraft:potion", 0.03);
-        result.put("minecraft:snowball", 0.03);
-
-        result.put("minecraft:boat", 0.04);
-        result.put("minecraft:tnt", 0.04);
-        result.put("minecraft:falling_block", 0.04);
-        result.put("minecraft:item", 0.04);
-        result.put("minecraft:minecart", 0.04);
-
-        result.put("minecraft:arrow", 0.05);
-        result.put("minecraft:spectral_arrow", 0.05);
-        result.put("minecraft:trident", 0.05);
-
-        result.put("minecraft:llama_spit", 0.06);
-
-        result.put("minecraft:fireball", 0.1);
-        result.put("minecraft:wither_skull", 0.1);
-        result.put("minecraft:dragon_fireball", 0.1);
-        return result;
-    }
-
-    private final Registry.EntityEntry registry;
-
-    EntityTypeImpl(Registry.EntityEntry registry) {
-        this.registry = registry;
-    }
-
-    @Override
-    public @NotNull Registry.EntityEntry registry() {
-        return registry;
     }
 
     @Override

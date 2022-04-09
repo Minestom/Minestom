@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.function.Supplier;
+import java.util.Objects;
 
 public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkEffectMeta.Builder> {
 
@@ -28,7 +28,7 @@ public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Prov
 
         public Builder effect(@Nullable FireworkEffect fireworkEffect) {
             this.fireworkEffect = fireworkEffect;
-            mutateNbt(compound -> compound.set("Explosion", this.fireworkEffect.asCompound()));
+            handleNullable(fireworkEffect, "Explosion", () -> Objects.requireNonNull(fireworkEffect).asCompound());
             return this;
         }
 
@@ -39,14 +39,9 @@ public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Prov
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Explosion")) {
-                effect(FireworkEffect.fromCompound(nbtCompound.getCompound("Explosion")));
+            if (nbtCompound.get("Explosion") instanceof NBTCompound explosionCompound) {
+                this.fireworkEffect = FireworkEffect.fromCompound(explosionCompound);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

@@ -3,16 +3,19 @@ package net.minestom.server.item.metadata;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.AdventureSerializer;
+import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.adventure.Localizable;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
 
@@ -31,7 +34,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         this.generation = generation;
         this.author = author;
         this.title = title;
-        this.pages = new ArrayList<>(pages);
+        this.pages = List.copyOf(pages);
     }
 
     public boolean isResolved() {
@@ -51,7 +54,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
     }
 
     public @NotNull List<@NotNull Component> getPages() {
-        return Collections.unmodifiableList(pages);
+        return pages;
     }
 
     public enum WrittenBookGeneration {
@@ -70,8 +73,8 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         return new Builder()
                 .resolved(false)
                 .generation(WrittenBookGeneration.ORIGINAL)
-                .author(AdventureSerializer.translateAndSerialize(book.author(), localizable))
-                .title(AdventureSerializer.translateAndSerialize(book.title(), localizable))
+                .author(GsonComponentSerializer.gson().serialize(GlobalTranslator.render(book.author(), Objects.requireNonNullElse(localizable.getLocale(), MinestomAdventure.getDefaultLocale()))))
+                .title(GsonComponentSerializer.gson().serialize(GlobalTranslator.render(book.title(), Objects.requireNonNullElse(localizable.getLocale(), MinestomAdventure.getDefaultLocale()))))
                 .pages(book.pages())
                 .build();
     }
@@ -86,7 +89,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         public Builder resolved(boolean resolved) {
             this.resolved = resolved;
-            mutateNbt(compound -> compound.setByte("resolved", (byte) (resolved ? 1 : 0)));
+            mutableNbt().set("resolved", NBT.Boolean(resolved));
             return this;
         }
 
@@ -114,13 +117,12 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = new ArrayList<>(pages);
 
-            handleCollection(pages, "pages", () -> {
-                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-                for (Component page : pages) {
-                    list.add(new NBTString(GsonComponentSerializer.gson().serialize(page)));
-                }
-                return list;
-            });
+            handleCollection(pages, "pages", () -> NBT.List(
+                    NBTType.TAG_String,
+                    pages.stream()
+                            .map(page -> new NBTString(GsonComponentSerializer.gson().serialize(page)))
+                            .toList()
+            ));
 
             return this;
         }
@@ -136,30 +138,24 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("resolved")) {
-                resolved(nbtCompound.getByte("resolved") == 1);
+            if (nbtCompound.get("resolved") instanceof NBTByte resolved) {
+                this.resolved = resolved.asBoolean();
             }
-            if (nbtCompound.containsKey("generation")) {
-                generation(WrittenBookGeneration.values()[nbtCompound.getInt("generation")]);
+            if (nbtCompound.get("generation") instanceof NBTInt generation) {
+                this.generation = WrittenBookGeneration.values()[generation.getValue()];
             }
-            if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
+            if (nbtCompound.get("author") instanceof NBTString author) {
+                this.author = author.getValue();
             }
-            if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
+            if (nbtCompound.get("title") instanceof NBTString title) {
+                this.title = title.getValue();
             }
-            if (nbtCompound.containsKey("pages")) {
-                final NBTList<NBTString> list = nbtCompound.getList("pages");
-                for (NBTString page : list) {
+            if (nbtCompound.get("pages") instanceof NBTList<?> list &&
+                    list.getSubtagType() == NBTType.TAG_String) {
+                for (NBTString page : list.<NBTString>asListOf()) {
                     this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
                 }
-                pages(pages);
             }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

@@ -8,8 +8,9 @@ import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
@@ -19,10 +20,12 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * This class acts as a client controller for {@link FakePlayer}.
  * <p>
- * The main use is to simulate the receiving of {@link ClientPlayPacket}
+ * The main use is to simulate the receiving of {@link ClientPacket}
  */
 public class FakePlayerController {
 
@@ -54,13 +57,9 @@ public class FakePlayerController {
 
         ItemStack itemStack = abstractInventory.getItemStack(slot);
 
-        ClientClickWindowPacket clickWindowPacket = new ClientClickWindowPacket();
-        clickWindowPacket.windowId = playerInventory ? 0 : inventory.getWindowId();
-        clickWindowPacket.slot = slot;
-        clickWindowPacket.button = button;
-        clickWindowPacket.clickType = clickType;
-        clickWindowPacket.item = itemStack;
-        addToQueue(clickWindowPacket);
+        addToQueue(new ClientClickWindowPacket(playerInventory ? 0 : inventory.getWindowId(), 0,
+                slot, button, clickType,
+                List.of(), itemStack));
     }
 
     /**
@@ -68,10 +67,7 @@ public class FakePlayerController {
      */
     public void closeWindow() {
         Inventory openInventory = fakePlayer.getOpenInventory();
-
-        ClientCloseWindowPacket closeWindow = new ClientCloseWindowPacket();
-        closeWindow.windowId = openInventory == null ? 0 : openInventory.getWindowId();
-        addToQueue(closeWindow);
+        addToQueue(new ClientCloseWindowPacket(openInventory == null ? 0 : openInventory.getWindowId()));
     }
 
     /**
@@ -81,10 +77,7 @@ public class FakePlayerController {
      * @param message The message data.
      */
     public void sendPluginMessage(String channel, byte[] message) {
-        ClientPluginMessagePacket pluginMessagePacket = new ClientPluginMessagePacket();
-        pluginMessagePacket.channel = channel;
-        pluginMessagePacket.data = message;
-        addToQueue(pluginMessagePacket);
+        addToQueue(new ClientPluginMessagePacket(channel, message));
     }
 
     /**
@@ -103,10 +96,7 @@ public class FakePlayerController {
      * @param entity The entity that is to be attacked.
      */
     public void attackEntity(Entity entity) {
-        ClientInteractEntityPacket interactEntityPacket = new ClientInteractEntityPacket();
-        interactEntityPacket.targetId = entity.getEntityId();
-        interactEntityPacket.type = ClientInteractEntityPacket.Type.ATTACK;
-        addToQueue(interactEntityPacket);
+        addToQueue(new ClientInteractEntityPacket(entity.getEntityId(), new ClientInteractEntityPacket.Attack(), fakePlayer.isSneaking()));
     }
 
     /**
@@ -131,10 +121,7 @@ public class FakePlayerController {
      */
     public void setHeldItem(short slot) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "Slot has to be between 0 and 8!");
-
-        ClientHeldItemChangePacket heldItemChangePacket = new ClientHeldItemChangePacket();
-        heldItemChangePacket.slot = slot;
-        addToQueue(heldItemChangePacket);
+        addToQueue(new ClientHeldItemChangePacket(slot));
     }
 
     /**
@@ -143,9 +130,7 @@ public class FakePlayerController {
      * @param hand The hand of the arm to be animated.
      */
     public void sendArmAnimation(Player.Hand hand) {
-        ClientAnimationPacket animationPacket = new ClientAnimationPacket();
-        animationPacket.hand = hand;
-        addToQueue(animationPacket);
+        addToQueue(new ClientAnimationPacket(hand));
     }
 
     /**
@@ -154,9 +139,7 @@ public class FakePlayerController {
      * @param hand The hand in which an ite mshould be.
      */
     public void useItem(Player.Hand hand) {
-        ClientUseItemPacket useItemPacket = new ClientUseItemPacket();
-        useItemPacket.hand = hand;
-        addToQueue(useItemPacket);
+        addToQueue(new ClientUseItemPacket(hand));
     }
 
     /**
@@ -166,11 +149,7 @@ public class FakePlayerController {
      * @param pitch The new pitch for the fake player.
      */
     public void rotate(float yaw, float pitch) {
-        ClientPlayerRotationPacket playerRotationPacket = new ClientPlayerRotationPacket();
-        playerRotationPacket.yaw = yaw;
-        playerRotationPacket.pitch = pitch;
-        playerRotationPacket.onGround = fakePlayer.isOnGround();
-        addToQueue(playerRotationPacket);
+        addToQueue(new ClientPlayerRotationPacket(yaw, pitch, fakePlayer.isOnGround()));
     }
 
     /**
@@ -180,11 +159,7 @@ public class FakePlayerController {
      * @param blockFace     From where the block is struck.
      */
     public void startDigging(Point blockPosition, BlockFace blockFace) {
-        ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
-        playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.STARTED_DIGGING;
-        playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = blockFace;
-        addToQueue(playerDiggingPacket);
+        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.STARTED_DIGGING, blockPosition, blockFace));
     }
 
     /**
@@ -194,11 +169,7 @@ public class FakePlayerController {
      * @param blockFace     From where the block is struck.
      */
     public void stopDigging(Point blockPosition, BlockFace blockFace) {
-        ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
-        playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING;
-        playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = blockFace;
-        addToQueue(playerDiggingPacket);
+        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, blockPosition, blockFace));
     }
 
     /**
@@ -208,29 +179,21 @@ public class FakePlayerController {
      * @param blockFace     From where the block is struck.
      */
     public void finishDigging(Point blockPosition, BlockFace blockFace) {
-        ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
-        playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.FINISHED_DIGGING;
-        playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = blockFace;
-        addToQueue(playerDiggingPacket);
+        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, blockPosition, blockFace));
     }
 
     /**
      * Makes the player receives a packet
      * WARNING: pretty much unsafe, used internally to redirect packets here,
-     * you should instead use {@link PlayerConnection#sendPacket(ServerPacket)}
+     * you should instead use {@link PlayerConnection#sendPacket(SendablePacket)}
      *
      * @param serverPacket the packet to consume
      */
     public void consumePacket(ServerPacket serverPacket) {
-        if (serverPacket instanceof PlayerPositionAndLookPacket) {
-            ClientTeleportConfirmPacket teleportConfirmPacket = new ClientTeleportConfirmPacket();
-            teleportConfirmPacket.teleportId = ((PlayerPositionAndLookPacket) serverPacket).teleportId;
-            addToQueue(teleportConfirmPacket);
-        } else if (serverPacket instanceof KeepAlivePacket) {
-            ClientKeepAlivePacket keepAlivePacket = new ClientKeepAlivePacket();
-            keepAlivePacket.id = ((KeepAlivePacket) serverPacket).id;
-            addToQueue(keepAlivePacket);
+        if (serverPacket instanceof PlayerPositionAndLookPacket playerPositionAndLookPacket) {
+            addToQueue(new ClientTeleportConfirmPacket(playerPositionAndLookPacket.teleportId()));
+        } else if (serverPacket instanceof KeepAlivePacket keepAlivePacket) {
+            addToQueue(new ClientKeepAlivePacket(keepAlivePacket.id()));
         }
     }
 
@@ -240,7 +203,7 @@ public class FakePlayerController {
      *
      * @param clientPlayPacket The packet to add in the queue.
      */
-    private void addToQueue(ClientPlayPacket clientPlayPacket) {
+    private void addToQueue(ClientPacket clientPlayPacket) {
         this.fakePlayer.addPacketToQueue(clientPlayPacket);
     }
 }

@@ -21,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
-        final ClientPlayerDiggingPacket.Status status = packet.status;
-        final Point blockPosition = packet.blockPosition;
+        final ClientPlayerDiggingPacket.Status status = packet.status();
+        final Point blockPosition = packet.blockPosition();
         final Instance instance = player.getInstance();
         if (instance == null) return;
 
@@ -97,7 +97,7 @@ public final class PlayerDiggingListener {
 
     private static void dropSingle(Player player) {
         final ItemStack handItem = player.getInventory().getItemInMainHand();
-        final StackingRule stackingRule = handItem.getStackingRule();
+        final StackingRule stackingRule = StackingRule.get();
         final int handAmount = stackingRule.getAmount(handItem);
         if (handAmount <= 1) {
             // Drop the whole item without copy

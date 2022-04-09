@@ -1,11 +1,10 @@
 package net.minestom.server.utils.block;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

@@ -3,15 +3,13 @@ package net.minestom.server.entity;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-@ApiStatus.NonExtendable
-public interface EntityType extends ProtocolObject, EntityTypeConstants {
+public sealed interface EntityType extends ProtocolObject, EntityTypes permits EntityTypeImpl {
     /**
      * Returns the entity registry.
      *

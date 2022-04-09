@@ -4,8 +4,8 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
+import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,7 @@ public final class ChunkUtils {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
-            // WARNING: if auto-load is disabled and no chunks are loaded beforehand, player will be stuck.
+            // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
             instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
                     .thenAccept((chunk) -> {
                         OptionalCallback.execute(eachCallback, chunk);
@@ -54,12 +54,6 @@ public final class ChunkUtils {
         return completableFuture;
     }
 
-    /**
-     * Gets if a chunk is loaded.
-     *
-     * @param chunk the chunk to check
-     * @return true if the chunk is loaded, false otherwise
-     */
     public static boolean isLoaded(@Nullable Chunk chunk) {
         return chunk != null && chunk.isLoaded();
     }
@@ -78,14 +72,15 @@ public final class ChunkUtils {
     }
 
     public static boolean isLoaded(@NotNull Instance instance, @NotNull Point point) {
-        return isLoaded(instance, point.x(), point.z());
+        final Chunk chunk = instance.getChunk(point.chunkX(), point.chunkZ());
+        return isLoaded(chunk);
     }
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);
-        final boolean sameChunk = originChunk.getChunkX() == chunkX &&
-                originChunk.getChunkZ() == chunkZ;
+        final boolean sameChunk = originChunk != null &&
+                originChunk.getChunkX() == chunkX && originChunk.getChunkZ() == chunkZ;
         return sameChunk ? originChunk : instance.getChunk(chunkX, chunkZ);
     }
 
@@ -98,8 +93,12 @@ public final class ChunkUtils {
      * @return the chunk X or Z based on the argument
      */
     public static int getChunkCoordinate(double xz) {
-        assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        return Math.floorDiv((int) Math.floor(xz), Chunk.CHUNK_SIZE_X);
+        return getChunkCoordinate((int) Math.floor(xz));
+    }
+
+    public static int getChunkCoordinate(int xz) {
+        // Assume chunk/section size being 16 (4 bits)
+        return xz >> 4;
     }
 
     /**
@@ -120,12 +119,8 @@ public final class ChunkUtils {
         return getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
     }
 
-    public static long getChunkIndexWithSection(int chunkX, int chunkZ, int section) {
-        long l = 0L;
-        l |= ((long) chunkX & 4194303L) << 42;
-        l |= ((long) section & 1048575L);
-        l |= ((long) chunkZ & 4194303L) << 20;
-        return l;
+    public static long getChunkIndex(@NotNull Point point) {
+        return getChunkIndex(point.chunkX(), point.chunkZ());
     }
 
     /**
@@ -148,56 +143,46 @@ public final class ChunkUtils {
         return (int) index;
     }
 
-    public static int getSectionAt(int y) {
-        return y / Chunk.CHUNK_SECTION_SIZE;
+    public static int getChunkCount(int range) {
+        if (range < 0) {
+            throw new IllegalArgumentException("Range cannot be negative");
+        }
+        final int square = range * 2 + 1;
+        return square * square;
     }
 
-    /**
-     * Gets the chunks in range of a position.
-     *
-     * @param point the initial point
-     * @param range how far should it retrieves chunk
-     * @return an array containing chunks index
-     */
-    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
-        long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
-        int xDistance = 0;
-        int xDirection = 1;
-        int zDistance = 0;
-        int zDirection = -1;
-        int len = 1;
-        int corner = 0;
-
-        for (int i = 0; i < visibleChunks.length; i++) {
-            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + point.x());
-            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + point.z());
-            visibleChunks[i] = getChunkIndex(chunkX, chunkZ);
-
-            if (corner % 2 == 0) {
-                // step on X axis
-                xDistance += xDirection;
-
-                if (Math.abs(xDistance) == len) {
-                    // hit corner
-                    corner++;
-                    xDirection = -xDirection;
-                }
-            } else {
-                // step on Z axis
-                zDistance += zDirection;
-
-                if (Math.abs(zDistance) == len) {
-                    // hit corner
-                    corner++;
-                    zDirection = -zDirection;
-
-                    if (corner % 4 == 0) {
-                        len++;
-                    }
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
+                                                 int oldChunkX, int oldChunkZ,
+                                                 int range, @NotNull IntegerBiConsumer callback) {
+        for (int x = newChunkX - range; x <= newChunkX + range; x++) {
+            for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
+                if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
+                    callback.accept(x, z);
                 }
             }
         }
-        return visibleChunks;
+    }
+
+    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
+                                                 int oldChunkX, int oldChunkZ,
+                                                 int range,
+                                                 @NotNull IntegerBiConsumer newCallback, @NotNull IntegerBiConsumer oldCallback) {
+        // Find the new chunks
+        forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
+        // Find the old chunks
+        forDifferingChunksInRange(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
+    }
+
+    public static void forChunksInRange(int chunkX, int chunkZ, int range, IntegerBiConsumer consumer) {
+        for (int x = -range; x <= range; ++x) {
+            for (int z = -range; z <= range; ++z) {
+                consumer.accept(chunkX + x, chunkZ + z);
+            }
+        }
+    }
+
+    public static void forChunksInRange(@NotNull Point point, int range, IntegerBiConsumer consumer) {
+        forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
     }
 
     /**
@@ -213,7 +198,12 @@ public final class ChunkUtils {
         z = z % Chunk.CHUNK_SIZE_Z;
 
         int index = x & 0xF; // 4 bits
-        index |= (y << 4) & 0x0FFFFFF0; // 24 bits
+        if(y > 0) {
+            index |= (y << 4) & 0x07FFFFF0; // 23 bits (24th bit is always 0 because y is positive)
+        } else {
+            index |= ((-y) << 4) & 0x7FFFFF0; // Make positive and use 23 bits
+            index |= 1 << 27; // Set negative sign at 24th bit
+        }
         index |= (z << 28) & 0xF0000000; // 4 bits
         return index;
     }
@@ -225,42 +215,10 @@ public final class ChunkUtils {
      * @return the instance position of the block located in {@code index}
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
-        final int x = blockIndexToPositionX(index, chunkX);
-        final int y = blockIndexToPositionY(index);
-        final int z = blockIndexToPositionZ(index, chunkZ);
+        final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
+        final int y = blockIndexToChunkPositionY(index);
+        final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
         return new Vec(x, y, z);
-    }
-
-    /**
-     * Converts a block chunk index to its instance position X.
-     *
-     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @param chunkX the chunk X
-     * @return the X coordinate of the block index
-     */
-    public static int blockIndexToPositionX(int index, int chunkX) {
-        return blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
-    }
-
-    /**
-     * Converts a block chunk index to its instance position Y.
-     *
-     * @param index the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @return the Y coordinate of the block index
-     */
-    public static int blockIndexToPositionY(int index) {
-        return (index >>> 4 & 0xFF);
-    }
-
-    /**
-     * Converts a block chunk index to its instance position Z.
-     *
-     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
-     * @param chunkZ the chunk Z
-     * @return the Z coordinate of the block index
-     */
-    public static int blockIndexToPositionZ(int index, int chunkZ) {
-        return blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
     }
 
     /**
@@ -280,7 +238,9 @@ public final class ChunkUtils {
      * @return the chunk position Y of the specified index
      */
     public static int blockIndexToChunkPositionY(int index) {
-        return (index >> 4) & 0x0FFFFFF; // 4-28 bits
+        int y = (index & 0x07FFFFF0) >>> 4;
+        if(((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
+        return y; // 4-28 bits
     }
 
     /**
@@ -294,23 +254,20 @@ public final class ChunkUtils {
     }
 
     /**
-     * Returns the section, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     * Converts a global coordinate value to a section coordinate
+     *
+     * @param xyz global coordinate
+     * @return section coordinate
      */
-    public static int getSectionFromChunkIndexWithSection(long index) {
-        return (int) (index & 1048575L);
+    public static int toSectionRelativeCoordinate(int xyz) {
+        return xyz & 0xF;
     }
 
-    /**
-     * Returns the chunk X, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
-     */
-    public static int getChunkXFromChunkIndexWithSection(long index) {
-        return (int) ((index >> 42) & 4194303L);
+    public static int floorSection(int coordinate) {
+        return coordinate - (coordinate & 0xF);
     }
 
-    /**
-     * Returns the chunk Z, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
-     */
-    public static int getChunkZFromChunkIndexWithSection(long index) {
-        return (int) ((index >> 20) & 4194303L);
+    public static int ceilSection(int coordinate) {
+        return ((coordinate - 1) | 15) + 1;
     }
 }

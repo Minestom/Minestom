@@ -6,12 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-final class SoundEventImpl implements SoundEvent {
-    private static final Registry.Container<SoundEvent> CONTAINER = new Registry.Container<>(Registry.Resource.SOUNDS,
-            (container, namespace, object) -> {
-                final int id = object.get("id").getAsInt();
-                container.register(new SoundEventImpl(NamespaceID.from(namespace), id));
-            });
+record SoundEventImpl(NamespaceID namespace, int id) implements SoundEvent {
+    private static final Registry.Container<SoundEvent> CONTAINER = Registry.createContainer(Registry.Resource.SOUNDS,
+            (namespace, properties) -> new SoundEventImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static SoundEvent get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -27,24 +24,6 @@ final class SoundEventImpl implements SoundEvent {
 
     static Collection<SoundEvent> values() {
         return CONTAINER.values();
-    }
-
-    private final NamespaceID namespaceID;
-    private final int id;
-
-    SoundEventImpl(NamespaceID namespaceID, int id) {
-        this.namespaceID = namespaceID;
-        this.id = id;
-    }
-
-    @Override
-    public @NotNull NamespaceID namespace() {
-        return namespaceID;
-    }
-
-    @Override
-    public int id() {
-        return id;
     }
 
     @Override

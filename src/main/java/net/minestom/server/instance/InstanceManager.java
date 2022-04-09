@@ -1,9 +1,9 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,16 +35,26 @@ public final class InstanceManager {
     }
 
     /**
-     * Creates and register an {@link InstanceContainer}
-     * with the specified {@link DimensionType} and {@link StorageLocation}.
+     * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
      *
      * @param dimensionType the {@link DimensionType} of the instance
+     * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
-        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType);
+    @ApiStatus.Experimental
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
+        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
         registerInstance(instanceContainer);
         return instanceContainer;
+    }
+
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
+        return createInstanceContainer(dimensionType, null);
+    }
+
+    @ApiStatus.Experimental
+    public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
+        return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
 
     /**
@@ -53,7 +63,7 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public @NotNull InstanceContainer createInstanceContainer() {
-        return createInstanceContainer(DimensionType.OVERWORLD);
+        return createInstanceContainer(DimensionType.OVERWORLD, null);
     }
 
     /**
@@ -102,11 +112,12 @@ public final class InstanceManager {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
                 instance.getChunks().forEach(instance::unloadChunk);
+                var dispatcher = MinecraftServer.process().dispatcher();
+                instance.getChunks().forEach(dispatcher::deletePartition);
             }
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
-            MinecraftServer.getUpdateManager().signalInstanceDelete(instance);
         }
     }
 
@@ -143,6 +154,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
-        MinecraftServer.getUpdateManager().signalInstanceCreate(instance);
+        var dispatcher = MinecraftServer.process().dispatcher();
+        instance.getChunks().forEach(dispatcher::createPartition);
     }
 }

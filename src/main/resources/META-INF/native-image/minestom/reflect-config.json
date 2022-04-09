@@ -1,0 +1,202 @@
+[
+{
+  "name":"com.github.benmanes.caffeine.cache.BBHeader$ReadAndWriteCounterRef",
+  "fields":[{"name":"writeCounter"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.BBHeader$ReadCounterRef",
+  "fields":[{"name":"readCounter"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.BLCHeader$DrainStatusRef",
+  "fields":[{"name":"drainStatus"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.BaseMpscLinkedArrayQueueColdProducerFields",
+  "fields":[{"name":"producerLimit"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.BaseMpscLinkedArrayQueueConsumerFields",
+  "fields":[{"name":"consumerIndex"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.BaseMpscLinkedArrayQueueProducerFields",
+  "fields":[{"name":"producerIndex"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.BoundedLocalCache",
+  "fields":[{"name":"refreshes"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.FS",
+  "fields":[
+    {"name":"key"}, 
+    {"name":"value"}
+  ],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.FW",
+  "fields":[{"name":"value"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.PS",
+  "fields":[
+    {"name":"key"}, 
+    {"name":"value"}
+  ]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.PSW",
+  "fields":[{"name":"writeTime"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.PW",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.PWW",
+  "fields":[{"name":"writeTime"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.SIW",
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.SSW",
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.StripedBuffer",
+  "fields":[{"name":"tableBusy"}]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.WI",
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+},
+{
+  "name":"com.github.benmanes.caffeine.cache.WS",
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+},
+{
+  "name":"java.lang.ProcessHandle",
+  "methods":[{"name":"current","parameterTypes":[] }]
+},
+{
+  "name":"java.security.SecureRandomParameters"
+},
+{
+  "name":"java.sql.Date"
+},
+{
+  "name":"kotlin.jvm.internal.DefaultConstructorMarker"
+},
+{
+  "name":"kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.event.EventNodeImpl$Handle",
+  "fields":[{"name":"updated"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.CachedPacket",
+  "fields":[{"name":"packet"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.LazyPacket",
+  "fields":[{"name":"packet"}]
+},
+{
+  "name":"net.minestom.server.thread.AcquirableImpl",
+  "fields":[{"name":"assignedThread"}]
+},
+{
+  "name":"org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
+  "fields":[{"name":"producerLimit"}]
+},
+{
+  "name":"org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
+  "fields":[{"name":"consumerIndex"}]
+},
+{
+  "name":"org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
+  "fields":[{"name":"producerIndex"}]
+},
+{
+  "name":"org.jctools.queues.MpUnboundedXaddArrayQueueConsumerFields",
+  "fields":[
+    {"name":"consumerChunk"}, 
+    {"name":"consumerIndex"}
+  ]
+},
+{
+  "name":"org.jctools.queues.MpUnboundedXaddArrayQueueProducerChunk",
+  "fields":[
+    {"name":"producerChunk"}, 
+    {"name":"producerChunkIndex"}
+  ]
+},
+{
+  "name":"org.jctools.queues.MpUnboundedXaddArrayQueueProducerFields",
+  "fields":[{"name":"producerIndex"}]
+},
+{
+  "name":"org.jctools.queues.MpUnboundedXaddChunk",
+  "fields":[
+    {"name":"index"}, 
+    {"name":"next"}, 
+    {"name":"prev"}
+  ]
+},
+{
+  "name":"org.jctools.queues.SpscArrayQueueConsumerIndexField",
+  "fields":[{"name":"consumerIndex"}]
+},
+{
+  "name":"org.jctools.queues.SpscArrayQueueProducerIndexFields",
+  "fields":[{"name":"producerIndex"}]
+},
+{
+  "name":"org.tinylog.configuration.PropertiesConfigurationLoader",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.tinylog.core.TinylogLoggingProvider",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.tinylog.writers.ConsoleWriter",
+  "methods":[{"name":"<init>","parameterTypes":["java.util.Map"] }]
+},
+{
+  "name":"sun.misc.Signal",
+  "methods":[
+    {"name":"<init>","parameterTypes":["java.lang.String"] }, 
+    {"name":"handle","parameterTypes":["sun.misc.Signal","sun.misc.SignalHandler"] }
+  ]
+},
+{
+  "name":"sun.misc.SignalHandler",
+  "fields":[{"name":"SIG_DFL"}]
+},
+{
+  "name":"sun.misc.Unsafe",
+  "fields":[{"name":"theUnsafe"}],
+  "queriedMethods":[
+    {"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, 
+    {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }
+  ]
+},
+{
+  "name":"sun.security.provider.NativePRNG",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+}
+]

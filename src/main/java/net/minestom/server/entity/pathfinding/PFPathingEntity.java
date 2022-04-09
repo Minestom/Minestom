@@ -9,15 +9,15 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class PFPathingEntity implements IPathingEntity {
-
+@ApiStatus.Internal
+public final class PFPathingEntity implements IPathingEntity {
     private final Navigator navigator;
     private final Entity entity;
 
     private float searchRange;
-    private Point targetPosition;
 
     // Capacities
     private boolean fireResistant;
@@ -35,10 +35,6 @@ public class PFPathingEntity implements IPathingEntity {
         this.entity = navigator.getEntity();
 
         this.searchRange = getAttributeValue(Attribute.FOLLOW_RANGE);
-    }
-
-    public Point getTargetPosition() {
-        return targetPosition;
     }
 
     @Override
@@ -194,7 +190,8 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
-        this.targetPosition = new Vec(position.x, position.y, position.z);
+        final Point targetPosition = new Vec(position.x, position.y, position.z);
+        this.navigator.moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
         final double entityY = entity.getPosition().y();
         if (entityY < targetPosition.y()) {
             this.navigator.jump(1);
@@ -209,12 +206,12 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public float width() {
-        return (float) entity.getBoundingBox().getWidth();
+        return (float) entity.getBoundingBox().width();
     }
 
     @Override
     public float height() {
-        return (float) entity.getBoundingBox().getHeight();
+        return (float) entity.getBoundingBox().height();
     }
 
     private float getAttributeValue(@NotNull Attribute attribute) {

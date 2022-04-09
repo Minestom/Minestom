@@ -18,7 +18,7 @@ public abstract class CampfireCookingRecipe extends Recipe {
             float experience,
             int cookingTime
     ) {
-        super(RecipeType.CAMPFIRE_COOKING, recipeId);
+        super(Type.CAMPFIRE_COOKING, recipeId);
         this.group = group;
         this.result = result;
         this.experience = experience;

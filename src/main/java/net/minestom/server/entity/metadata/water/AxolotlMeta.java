@@ -2,10 +2,11 @@ package net.minestom.server.entity.metadata.water;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class AxolotlMeta extends WaterAnimalMeta {
-    public static final byte OFFSET = WaterAnimalMeta.MAX_OFFSET;
+public class AxolotlMeta extends AnimalMeta {
+    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 3;
 
     public AxolotlMeta(@NotNull Entity entity, @NotNull Metadata metadata) {

@@ -1,27 +1,28 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.Direction;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
  */
-public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
+public class PlayerUseItemOnBlockEvent implements PlayerEvent, EntityInstanceEvent, ItemEvent {
 
     private final Player player;
     private final Player.Hand hand;
     private final ItemStack itemStack;
     private final Point position;
-    private final Direction blockFace;
+    private final BlockFace blockFace;
 
     public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull Player.Hand hand,
                                      @NotNull ItemStack itemStack,
-                                     @NotNull Point position, @NotNull Direction blockFace) {
+                                     @NotNull Point position, @NotNull BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -43,7 +44,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
      *
      * @return the block face
      */
-    public @NotNull Direction getBlockFace() {
+    public @NotNull BlockFace getBlockFace() {
         return blockFace;
     }
 

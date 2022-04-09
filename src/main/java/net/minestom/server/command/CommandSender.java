@@ -4,7 +4,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
-import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.Taggable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
-public interface CommandSender extends PermissionHandler, Audience, TagHandler {
+public interface CommandSender extends PermissionHandler, Audience, Taggable {
 
     /**
      * Sends a raw string message.
@@ -36,18 +36,24 @@ public interface CommandSender extends PermissionHandler, Audience, TagHandler {
 
     /**
      * Gets if the sender is a {@link Player}.
+     * <p>
+     * Consider using {@code instanceof} instead.
      *
      * @return true if 'this' is a player, false otherwise
      */
+    @Deprecated
     default boolean isPlayer() {
         return false;
     }
 
     /**
      * Gets if the sender is a {@link ConsoleSender}.
+     * <p>
+     * Consider using {@code instanceof} instead.
      *
      * @return true if 'this' is the console, false otherwise
      */
+    @Deprecated
     default boolean isConsole() {
         return false;
     }
@@ -59,6 +65,7 @@ public interface CommandSender extends PermissionHandler, Audience, TagHandler {
      * @throws ClassCastException if 'this' is not a player
      * @see #isPlayer()
      */
+    @Deprecated
     default Player asPlayer() {
         throw new ClassCastException("CommandSender is not a Player");
     }
@@ -70,6 +77,7 @@ public interface CommandSender extends PermissionHandler, Audience, TagHandler {
      * @throws ClassCastException if 'this' is not a console sender
      * @see #isConsole()
      */
+    @Deprecated
     default ConsoleSender asConsole() {
         throw new ClassCastException("CommandSender is not the ConsoleSender");
     }

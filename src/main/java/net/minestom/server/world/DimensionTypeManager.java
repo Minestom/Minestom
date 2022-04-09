@@ -3,13 +3,13 @@ package net.minestom.server.world;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Allows servers to register custom dimensions. Also used during player login to send the list of all existing dimensions.
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public final class DimensionTypeManager {
 
-    private final List<DimensionType> dimensionTypes = new LinkedList<>();
+    private final List<DimensionType> dimensionTypes = new CopyOnWriteArrayList<>();
 
     public DimensionTypeManager() {
         addDimension(DimensionType.OVERWORLD);
@@ -65,10 +65,9 @@ public final class DimensionTypeManager {
      * Return to a @{@link DimensionType} only if present and registered
      *
      * @param namespaceID The Dimension Name
-     * @return an a DimensionType if it present and registered
+     * @return a DimensionType if it is present and registered
      */
-    @Nullable
-    public DimensionType getDimension(@NotNull NamespaceID namespaceID) {
+    public @Nullable DimensionType getDimension(@NotNull NamespaceID namespaceID) {
         return unmodifiableList().stream().filter(dimensionType -> dimensionType.getName().equals(namespaceID)).filter(DimensionType::isRegistered).findFirst().orElse(null);
     }
 
@@ -77,8 +76,7 @@ public final class DimensionTypeManager {
      *
      * @return an unmodifiable {@link List} containing all the added dimensions
      */
-    @NotNull
-    public List<DimensionType> unmodifiableList() {
+    public @NotNull List<DimensionType> unmodifiableList() {
         return Collections.unmodifiableList(dimensionTypes);
     }
 
@@ -89,15 +87,15 @@ public final class DimensionTypeManager {
      *
      * @return an nbt compound containing the registered dimensions
      */
-    @NotNull
-    public NBTCompound toNBT() {
-        NBTCompound dimensions = new NBTCompound();
-        dimensions.setString("type", "minecraft:dimension_type");
-        NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
-        for (DimensionType dimensionType : dimensionTypes) {
-            dimensionList.add(dimensionType.toIndexedNBT());
-        }
-        dimensions.set("value", dimensionList);
-        return dimensions;
+    public @NotNull NBTCompound toNBT() {
+        return NBT.Compound(dimensions -> {
+            dimensions.setString("type", "minecraft:dimension_type");
+            dimensions.set("value", NBT.List(
+                    NBTType.TAG_Compound,
+                    dimensionTypes.stream()
+                            .map(DimensionType::toIndexedNBT)
+                            .toList()
+            ));
+        });
     }
 }

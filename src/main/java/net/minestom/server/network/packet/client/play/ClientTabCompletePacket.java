@@ -1,19 +1,13 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientTabCompletePacket extends ClientPlayPacket {
-
-    public int transactionId;
-    public String text = "";
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.transactionId = reader.readVarInt();
-        this.text = reader.readSizedString(Short.MAX_VALUE);
+public record ClientTabCompletePacket(int transactionId, @NotNull String text) implements ClientPacket {
+    public ClientTabCompletePacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readSizedString(Short.MAX_VALUE));
     }
 
     @Override

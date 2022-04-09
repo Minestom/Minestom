@@ -82,12 +82,8 @@ public interface BlockHandler {
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
-     * <p>
-     * Will in the future rely on sealed classes (https://openjdk.java.net/jeps/409)
-     * and record pattern for the implementations (https://openjdk.java.net/jeps/405).
      */
-    @ApiStatus.NonExtendable
-    class Placement {
+    sealed class Placement permits PlayerPlacement {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -114,14 +110,16 @@ public interface BlockHandler {
 
     final class PlayerPlacement extends Placement {
         private final Player player;
+        private final Player.Hand hand;
         private final BlockFace blockFace;
         private final float cursorX, cursorY, cursorZ;
 
         @ApiStatus.Internal
         public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+                               Player player, Player.Hand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
             super(block, instance, blockPosition);
             this.player = player;
+            this.hand = hand;
             this.blockFace = blockFace;
             this.cursorX = cursorX;
             this.cursorY = cursorY;
@@ -130,6 +128,10 @@ public interface BlockHandler {
 
         public @NotNull Player getPlayer() {
             return player;
+        }
+
+        public @NotNull Player.Hand getHand() {
+            return hand;
         }
 
         public @NotNull BlockFace getBlockFace() {
@@ -149,8 +151,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Destroy {
+    sealed class Destroy permits PlayerDestroy {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -189,8 +190,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Interaction {
+    final class Interaction {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -227,8 +227,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Touch {
+    final class Touch {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -259,8 +258,7 @@ public interface BlockHandler {
         }
     }
 
-    @ApiStatus.NonExtendable
-    class Tick {
+    final class Tick {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -289,23 +287,23 @@ public interface BlockHandler {
      * Handler used for loaded blocks with unknown namespace
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
-    class Dummy implements BlockHandler {
+    @ApiStatus.Internal
+    final class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        @ApiStatus.Internal
         public static @NotNull BlockHandler get(@NotNull String namespace) {
-            return DUMMY_CACHE.computeIfAbsent(namespace, s -> new Dummy(NamespaceID.from(namespace)));
+            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespaceID;
+        private final NamespaceID namespace;
 
-        private Dummy(NamespaceID namespaceID) {
-            this.namespaceID = namespaceID;
+        private Dummy(String name) {
+            namespace = NamespaceID.from(name);
         }
 
         @Override
         public @NotNull NamespaceID getNamespaceId() {
-            return namespaceID;
+            return namespace;
         }
     }
 }

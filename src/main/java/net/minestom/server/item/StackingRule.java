@@ -12,6 +12,10 @@ import java.util.function.IntUnaryOperator;
  */
 public interface StackingRule {
 
+    static @NotNull StackingRule get() {
+        return ItemStack.DEFAULT_STACKING_RULE;
+    }
+
     /**
      * Used to know if two {@link ItemStack} can be stacked together.
      *
@@ -25,7 +29,7 @@ public interface StackingRule {
     /**
      * Used to know if an {@link ItemStack} can have the size {@code newAmount} applied.
      *
-     * @param item      the {@link ItemStack} to check
+     * @param item   the {@link ItemStack} to check
      * @param amount the desired new amount
      * @return true if {@code item} can have its stack size set to newAmount
      */
@@ -49,7 +53,7 @@ public interface StackingRule {
 
     /**
      * Used to determine the current stack size of an {@link ItemStack}.
-     * It is possible to have it stored in its {@link net.minestom.server.data.Data} object, lore, etc...
+     * It is possible to have it stored in its nbt.
      *
      * @param itemStack the {@link ItemStack} to check the size
      * @return the correct size of {@link ItemStack}

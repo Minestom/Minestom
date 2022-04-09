@@ -6,27 +6,19 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
-import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
-import net.minestom.server.event.player.PlayerChunkLoadEvent;
-import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
-import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.tag.Tag;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
 
@@ -41,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler {
+public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, Taggable, Snapshotable {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
@@ -49,37 +41,31 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     private final UUID identifier;
 
     protected Instance instance;
-    @NotNull
-    protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
+    protected final int minSection, maxSection;
 
     // Options
     private final boolean shouldGenerate;
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final ChunkView viewers;
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
 
     // Data
-    private final NBTCompound nbt = new NBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
-    public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
+    public Chunk(@NotNull Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-
-        final int biomeCount = Biome.getBiomeCount(instance.getDimensionType());
-        if (biomes != null && biomes.length == biomeCount) {
-            this.biomes = biomes;
-        } else {
-            this.biomes = new Biome[biomeCount];
-        }
+        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
+        this.viewers = new ChunkView(instance, toPosition());
     }
 
     /**
@@ -99,9 +85,13 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
-    public abstract @NotNull Map<Integer, Section> getSections();
+    public abstract @NotNull List<Section> getSections();
 
     public abstract @NotNull Section getSection(int section);
+
+    public @NotNull Section getSectionAt(int blockY) {
+        return getSection(ChunkUtils.getChunkCoordinate(blockY));
+    }
 
     /**
      * Executes a chunk tick.
@@ -172,10 +162,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         return instance;
     }
 
-    public Biome[] getBiomes() {
-        return biomes;
-    }
-
     /**
      * Gets the chunk X.
      *
@@ -195,12 +181,30 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     }
 
     /**
+     * Gets the lowest (inclusive) section Y available in this chunk
+     *
+     * @return the lowest (inclusive) section Y available in this chunk
+     */
+    public int getMinSection() {
+        return minSection;
+    }
+
+    /**
+     * Gets the highest (exclusive) section Y available in this chunk
+     *
+     * @return the highest (exclusive) section Y available in this chunk
+     */
+    public int getMaxSection() {
+        return maxSection;
+    }
+
+    /**
      * Gets the world position of this chunk.
      *
      * @return the position of this chunk
      */
     public @NotNull Point toPosition() {
-        return new Vec(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+        return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
     /**
@@ -261,67 +265,24 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
     }
 
-    /**
-     * Sends the chunk to {@code player} and add it to the player viewing chunks collection
-     * and send a {@link PlayerChunkLoadEvent}.
-     *
-     * @param player the viewer to add
-     * @return true if the player has just been added to the viewer collection
-     */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
-
-        // Add to the viewable chunks set
-        player.getViewableChunks().add(this);
-
-        // Send the chunk data & light packets to the player
-        sendChunk(player);
-
-        if (result) {
-            PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-            GlobalHandles.PLAYER_CHUNK_LOAD.call(playerChunkLoadEvent);
-        }
-
-        return result;
+        throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
-    /**
-     * Removes the chunk to the player viewing chunks collection
-     * and send a {@link PlayerChunkUnloadEvent}.
-     *
-     * @param player the viewer to remove
-     * @return true if the player has just been removed to the viewer collection
-     */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
-
-        // Remove from the viewable chunks set
-        player.getViewableChunks().remove(this);
-
-        if (result) {
-            PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
-            EventDispatcher.call(playerChunkUnloadEvent);
-        }
-
-        return result;
-    }
-
-    @NotNull
-    @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+        throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbt);
+    public @NotNull Set<Player> getViewers() {
+        return viewers.set;
     }
 
     @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        tag.write(nbt, value);
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 
     /**

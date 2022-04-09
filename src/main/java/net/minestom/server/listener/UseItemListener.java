@@ -15,7 +15,7 @@ public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
         final PlayerInventory inventory = player.getInventory();
-        final Player.Hand hand = packet.hand;
+        final Player.Hand hand = packet.hand();
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
@@ -34,8 +34,10 @@ public class UseItemListener {
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
         if (equipmentSlot != null) {
             final ItemStack currentlyEquipped = playerInventory.getEquipment(equipmentSlot);
-            playerInventory.setEquipment(equipmentSlot, itemStack);
-            playerInventory.setItemInHand(hand, currentlyEquipped);
+            if (currentlyEquipped.isAir()) {
+                playerInventory.setEquipment(equipmentSlot, itemStack);
+                playerInventory.setItemInHand(hand, currentlyEquipped);
+            }
         }
 
         PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;

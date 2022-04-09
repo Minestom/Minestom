@@ -7,20 +7,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetTitleTextPacket implements ServerPacket {
-
-    public Component title = Component.empty();
-
-    public SetTitleTextPacket() {
-    }
-
-    public SetTitleTextPacket(Component title) {
-        this.title = title;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.title = reader.readComponent();
+public record SetTitleTextPacket(@NotNull Component title) implements ServerPacket {
+    public SetTitleTextPacket(BinaryReader reader) {
+        this(reader.readComponent());
     }
 
     @Override

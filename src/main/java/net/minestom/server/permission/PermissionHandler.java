@@ -3,7 +3,7 @@ package net.minestom.server.permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.SNBTParser;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.util.Set;
 

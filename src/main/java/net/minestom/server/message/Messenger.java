@@ -1,7 +1,5 @@
 package net.minestom.server.message;
 
-import java.util.*;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
@@ -9,6 +7,10 @@ import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Utility class to handle client chat settings.
@@ -79,7 +81,7 @@ public class Messenger {
      * @param player the player
      */
     public static void sendRejectionMessage(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(CANNOT_SEND_PACKET, false);
+        player.getPlayerConnection().sendPacket(CANNOT_SEND_PACKET);
     }
 
     /**

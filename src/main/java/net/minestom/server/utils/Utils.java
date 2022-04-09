@@ -1,7 +1,5 @@
 package net.minestom.server.utils;
 
-import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
-import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,18 +40,14 @@ public final class Utils {
     }
 
     public static void writeVarIntHeader(@NotNull ByteBuffer buffer, int startIndex, int value) {
-        final int indexCache = buffer.position();
-        buffer.position(startIndex);
-        buffer.put((byte) (value & 0x7F | 0x80));
-        buffer.put((byte) ((value >>> 7) & 0x7F | 0x80));
-        buffer.put((byte) (value >>> 14));
-        buffer.position(indexCache);
+        buffer.put(startIndex, (byte) (value & 0x7F | 0x80));
+        buffer.put(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+        buffer.put(startIndex + 2, (byte) (value >>> 14));
     }
 
     public static int writeEmptyVarIntHeader(@NotNull ByteBuffer buffer) {
         final int index = buffer.position();
-        buffer.putShort((short) 0);
-        buffer.put((byte) 0);
+        buffer.position(index + 3); // Skip 3 bytes
         return index;
     }
 
@@ -113,30 +107,6 @@ public final class Utils {
         final long uuidLeast = (long) array[2] << 32 | array[3] & 0xFFFFFFFFL;
 
         return new UUID(uuidMost, uuidLeast);
-    }
-
-    public static void writePaletteBlocks(ByteBuffer buffer, Palette palette) {
-        final short blockCount = palette.getBlockCount();
-        final int bitsPerEntry = palette.getBitsPerEntry();
-
-        buffer.putShort(blockCount);
-        buffer.put((byte) bitsPerEntry);
-
-        // Palette
-        if (bitsPerEntry < 9) {
-            // Palette has to exist
-            final Short2ShortLinkedOpenHashMap paletteBlockMap = palette.getPaletteBlockMap();
-            writeVarInt(buffer, paletteBlockMap.size());
-            for (short paletteValue : paletteBlockMap.values()) {
-                writeVarInt(buffer, paletteValue);
-            }
-        }
-
-        final long[] blocks = palette.getBlocks();
-        writeVarInt(buffer, blocks.length);
-        for (long datum : blocks) {
-            buffer.putLong(datum);
-        }
     }
 
     private static final int[] MAGIC = {

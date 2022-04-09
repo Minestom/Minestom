@@ -4,32 +4,27 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.listener.manager.ClientPacketConsumer;
-import net.minestom.server.listener.manager.ServerPacketConsumer;
-import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
-import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -40,21 +35,15 @@ public final class ConnectionManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
-    private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
+    private final MessagePassingQueue<Player> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
-    // All the consumers to call once a packet is received
-    private final List<ClientPacketConsumer> receiveClientPacketConsumers = new CopyOnWriteArrayList<>();
-    // All the consumers to call once a packet is sent
-    private final List<ServerPacketConsumer> sendClientPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
-    private UuidProvider uuidProvider;
+    private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
     // The player provider to have your own Player implementation
-    private PlayerProvider playerProvider;
-
-    private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
+    private volatile PlayerProvider playerProvider = Player::new;
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
@@ -130,56 +119,6 @@ public final class ConnectionManager {
     }
 
     /**
-     * Gets all the listeners which are called for each packet received.
-     *
-     * @return a list of packet's consumers
-     * @deprecated see {@link net.minestom.server.event.player.PlayerPacketEvent}
-     */
-    @NotNull
-    @Deprecated
-    public List<ClientPacketConsumer> getReceivePacketConsumers() {
-        return receiveClientPacketConsumers;
-    }
-
-    /**
-     * Adds a consumer to call once a packet is received.
-     *
-     * @param clientPacketConsumer the packet consumer
-     * @deprecated listen to {@link net.minestom.server.event.player.PlayerPacketEvent}
-     */
-    @Deprecated
-    public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
-        this.receiveClientPacketConsumers.add(clientPacketConsumer);
-    }
-
-    /**
-     * Gets all the listeners which are called for each packet sent.
-     *
-     * @return a list of packet's consumers
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
-     */
-    @NotNull
-    @Deprecated
-    public List<ServerPacketConsumer> getSendPacketConsumers() {
-        return sendClientPacketConsumers;
-    }
-
-    /**
-     * Adds a consumer to call once a packet is sent.
-     *
-     * @param serverPacketConsumer the packet consumer
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
-     */
-    @Deprecated
-    public void onPacketSend(@NotNull ServerPacketConsumer serverPacketConsumer) {
-        this.sendClientPacketConsumers.add(serverPacketConsumer);
-    }
-
-    /**
      * Changes how {@link UUID} are attributed to players.
      * <p>
      * Shouldn't be override if already defined.
@@ -191,7 +130,7 @@ public final class ConnectionManager {
      * @see #getPlayerConnectionUuid(PlayerConnection, String)
      */
     public void setUuidProvider(@Nullable UuidProvider uuidProvider) {
-        this.uuidProvider = uuidProvider;
+        this.uuidProvider = uuidProvider != null ? uuidProvider : (playerConnection, username) -> UUID.randomUUID();
     }
 
     /**
@@ -205,8 +144,6 @@ public final class ConnectionManager {
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
     public @NotNull UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
-        if (uuidProvider == null)
-            return UUID.randomUUID();
         return uuidProvider.provide(playerConnection, username);
     }
 
@@ -216,7 +153,7 @@ public final class ConnectionManager {
      * @param playerProvider the new {@link PlayerProvider}, can be set to null to apply the default provider
      */
     public void setPlayerProvider(@Nullable PlayerProvider playerProvider) {
-        this.playerProvider = playerProvider;
+        this.playerProvider = playerProvider != null ? playerProvider : Player::new;
     }
 
     /**
@@ -225,36 +162,9 @@ public final class ConnectionManager {
      * @return the current {@link PlayerProvider}
      */
     public @NotNull PlayerProvider getPlayerProvider() {
-        return playerProvider == null ? playerProvider = Player::new : playerProvider;
+        return playerProvider;
     }
 
-    /**
-     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
-     *
-     * @return the kick reason in case on a shutdown
-     */
-    public @NotNull Component getShutdownText() {
-        return shutdownText;
-    }
-
-    /**
-     * Changes the kick reason in case of a shutdown.
-     *
-     * @param shutdownText the new shutdown kick reason
-     * @see #getShutdownText()
-     */
-    public void setShutdownText(@NotNull Component shutdownText) {
-        this.shutdownText = shutdownText;
-    }
-
-    /**
-     * Adds a new {@link Player} in the players list.
-     * Is currently used at
-     * {@link LoginStartPacket#process(PlayerConnection)}
-     * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}.
-     *
-     * @param player the player to add
-     */
     public synchronized void registerPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
@@ -269,11 +179,9 @@ public final class ConnectionManager {
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
     public synchronized void removePlayer(@NotNull PlayerConnection connection) {
-        final Player player = this.connectionPlayerMap.get(connection);
-        if (player == null)
-            return;
+        final Player player = this.connectionPlayerMap.remove(connection);
+        if (player == null) return;
         this.players.remove(player);
-        this.connectionPlayerMap.remove(connection);
     }
 
     /**
@@ -285,18 +193,19 @@ public final class ConnectionManager {
      * @param player   the player
      * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
-    public void startPlayState(@NotNull Player player, boolean register) {
-        AsyncUtils.runAsync(() -> {
+    public CompletableFuture<Void> startPlayState(@NotNull Player player, boolean register) {
+        return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
+            // Compression
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                final int threshold = MinecraftServer.getCompressionThreshold();
+                if (threshold > 0) socketConnection.startCompression();
+            }
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
-            // Close the player channel if he has been disconnected (kick)
-            if (!player.isOnline()) {
-                playerConnection.flush();
-                //playerConnection.disconnect();
-                return;
-            }
+            if (!player.isOnline())
+                return; // Player has been kicked
             // Change UUID/Username based on the event
             {
                 final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
@@ -310,17 +219,10 @@ public final class ConnectionManager {
             }
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
-            if (playerConnection instanceof PlayerSocketConnection) {
-                ((PlayerSocketConnection) playerConnection).writeAndFlush(loginSuccessPacket);
-            } else {
-                playerConnection.sendPacket(loginSuccessPacket);
-            }
+            playerConnection.sendPacket(loginSuccessPacket);
             playerConnection.setConnectionState(ConnectionState.PLAY);
-            // Add the player to the waiting list
-            this.waitingPlayers.add(player);
-            if (register) {
-                registerPlayer(player);
-            }
+            if (register) registerPlayer(player);
+            this.waitingPlayers.relaxedOffer(player);
         });
     }
 
@@ -334,7 +236,7 @@ public final class ConnectionManager {
     public @NotNull Player startPlayState(@NotNull PlayerConnection connection,
                                           @NotNull UUID uuid, @NotNull String username,
                                           boolean register) {
-        final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
+        final Player player = playerProvider.createPlayer(uuid, username, connection);
         startPlayState(player, register);
         return player;
     }
@@ -343,22 +245,6 @@ public final class ConnectionManager {
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public synchronized void shutdown() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
-        for (Player player : getOnlinePlayers()) {
-            final PlayerConnection playerConnection = player.getPlayerConnection();
-            if (playerConnection instanceof PlayerSocketConnection) {
-                final PlayerSocketConnection socketConnection = (PlayerSocketConnection) playerConnection;
-                socketConnection.writeAndFlush(disconnectPacket);
-                playerConnection.disconnect();
-                try {
-                    socketConnection.getChannel().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                player.remove();
-            }
-        }
         this.players.clear();
         this.connectionPlayerMap.clear();
     }
@@ -367,15 +253,19 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+        this.waitingPlayers.drain(waitingPlayer -> {
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             EventDispatcher.call(loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
             // Spawn the player at Player#getRespawnPoint
-            waitingPlayer.UNSAFE_init(spawningInstance);
-        }
+            if (DebugUtils.INSIDE_TEST) {
+                // Required to get the exact moment the player spawns
+                waitingPlayer.UNSAFE_init(spawningInstance).join();
+            } else {
+                waitingPlayer.UNSAFE_init(spawningInstance);
+            }
+        });
     }
 
     /**

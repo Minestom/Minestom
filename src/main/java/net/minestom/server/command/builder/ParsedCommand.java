@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,6 +16,7 @@ import java.util.Objects;
 public class ParsedCommand {
 
     // Command
+    protected List<Command> parents;
     protected Command command;
     protected String commandString;
 
@@ -41,10 +43,23 @@ public class ParsedCommand {
         // Global listener
         command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString)), commandString);
         // Command condition check
-        final CommandCondition condition = command.getCondition();
-        if (condition != null) {
-            final boolean result = condition.canUse(source, commandString);
-            if (!result) return null;
+        {
+            // Parents
+            if (parents != null) {
+                for (Command parent : parents) {
+                    final CommandCondition condition = parent.getCondition();
+                    if (condition != null) {
+                        final boolean result = condition.canUse(source, commandString);
+                        if (!result) return null;
+                    }
+                }
+            }
+            // Self
+            final CommandCondition condition = command.getCondition();
+            if (condition != null) {
+                final boolean result = condition.canUse(source, commandString);
+                if (!result) return null;
+            }
         }
         // Condition is respected
         if (executor != null) {

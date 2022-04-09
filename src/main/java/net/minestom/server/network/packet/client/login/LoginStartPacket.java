@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.client.login;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -21,41 +20,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LoginStartPacket implements ClientPreplayPacket {
-
+public record LoginStartPacket(@NotNull String username) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
-    public String username = "";
+    public LoginStartPacket(BinaryReader reader) {
+        this(reader.readSizedString(16));
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
-        // Cache the login username and start compression if enabled
+        // Proxy support (only for socket clients) and cache the login username
         if (isSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.UNSAFE_setLoginUsername(username);
-
-            // Compression
-            final int threshold = MinecraftServer.getCompressionThreshold();
-            if (threshold > 0) {
-                socketConnection.startCompression();
-            }
-        }
-        // Proxy support (only for socket clients)
-        if (isSocketConnection) {
-            final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             // Velocity support
             if (VelocityProxy.isEnabled()) {
                 final int messageId = ThreadLocalRandom.current().nextInt();
                 final String channel = VelocityProxy.PLAYER_INFO_CHANNEL;
                 // Important in order to retrieve the channel in the response packet
                 socketConnection.addPluginRequestEntry(messageId, channel);
-
-                LoginPluginRequestPacket loginPluginRequestPacket = new LoginPluginRequestPacket();
-                loginPluginRequestPacket.messageId = messageId;
-                loginPluginRequestPacket.channel = channel;
-                loginPluginRequestPacket.data = null;
-                connection.sendPacket(loginPluginRequestPacket);
+                connection.sendPacket(new LoginPluginRequestPacket(messageId, channel, null));
                 return;
             }
         }
@@ -69,8 +54,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
             }
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.setConnectionState(ConnectionState.LOGIN);
-            EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(socketConnection);
-            socketConnection.sendPacket(encryptionRequestPacket);
+
+            final byte[] publicKey = MojangAuth.getKeyPair().getPublic().getEncoded();
+            byte[] nonce = new byte[4];
+            ThreadLocalRandom.current().nextBytes(nonce);
+            socketConnection.setNonce(nonce);
+            socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce));
         } else {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
@@ -83,11 +72,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
                 player.setSkin(((PlayerSocketConnection) connection).getBungeeSkin());
             }
         }
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.username = reader.readSizedString(16);
     }
 
     @Override

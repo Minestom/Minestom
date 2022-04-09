@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -15,11 +14,11 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
@@ -35,9 +34,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
@@ -52,7 +53,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
+    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
 
     // Abilities
     protected boolean invulnerable;
@@ -202,32 +203,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-
-            final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            for (Entity entity : entities) {
-                if (entity instanceof ItemEntity) {
-                    // Do not pick up if not visible
-                    if (this instanceof Player && !entity.isViewer((Player) this))
-                        continue;
-
-                    final ItemEntity itemEntity = (ItemEntity) entity;
-                    if (!itemEntity.isPickable())
-                        continue;
-
-                    final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
-                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
-                            continue;
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                        EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                            final ItemStack item = itemEntity.getItemStack();
-                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
-                            entity.remove();
-                        });
-                    }
-                }
-            }
+            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
+                    EntityTracker.Target.ITEMS, itemEntity -> {
+                        if (this instanceof Player player && !itemEntity.isViewer(player)) return;
+                        if (!itemEntity.isPickable()) return;
+                        if (expandedBoundingBox.intersectEntity(position, itemEntity)) {
+                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                                final ItemStack item = itemEntity.getItemStack();
+                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
+                                itemEntity.remove();
+                            });
+                        }
+                    });
         }
     }
 
@@ -346,18 +334,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             return false;
         }
 
-        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value);
+        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value, type.getSound(this));
         EventDispatcher.callCancellable(entityDamageEvent, () -> {
             // Set the last damage type since the event is not cancelled
             this.lastDamageSource = entityDamageEvent.getDamageType();
 
             float remainingDamage = entityDamageEvent.getDamage();
 
-            sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+            if (entityDamageEvent.shouldAnimate()) {
+                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+            }
 
             // Additional hearts support
-            if (this instanceof Player) {
-                final Player player = (Player) this;
+            if (this instanceof Player player) {
                 final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
                     if (remainingDamage > additionalHearts) {
@@ -374,7 +363,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             setHealth(getHealth() - remainingDamage);
 
             // play damage sound
-            final SoundEvent sound = type.getSound(this);
+            final SoundEvent sound = entityDamageEvent.getSound();
             if (sound != null) {
                 Source soundCategory;
                 if (this instanceof Player) {
@@ -383,12 +372,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-
-                SoundEffectPacket damageSoundPacket =
-                        SoundEffectPacket.create(soundCategory, sound,
-                                getPosition(),
-                                1.0f, 1.0f);
-                sendPacketToViewersAndSelf(damageSoundPacket);
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory,
+                        getPosition(), 1.0f, 1.0f));
             }
         });
 
@@ -441,7 +426,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attributes#MAX_HEALTH}.
+     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}.
      *
      * @return the entity max health
      */
@@ -452,7 +437,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
         setHealth(getAttributeValue(Attribute.MAX_HEALTH));
@@ -464,9 +449,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute instance to get
      * @return the attribute instance
      */
-    @NotNull
-    public AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        return attributeModifiers.computeIfAbsent(attribute.getKey(),
+    public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
+        return attributeModifiers.computeIfAbsent(attribute.key(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
@@ -476,20 +460,17 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attributeInstance the modified attribute instance
      */
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
-        if (attributeInstance.getAttribute().isShared()) {
-            boolean self = false;
-            if (this instanceof Player) {
-                Player player = (Player) this;
-                PlayerConnection playerConnection = player.playerConnection;
-                // connection null during Player initialization (due to #super call)
-                self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
-            }
-            EntityPropertiesPacket propertiesPacket = getPropertiesPacket(Collections.singleton(attributeInstance));
-            if (self) {
-                sendPacketToViewersAndSelf(propertiesPacket);
-            } else {
-                sendPacketToViewers(propertiesPacket);
-            }
+        boolean self = false;
+        if (this instanceof Player player) {
+            PlayerConnection playerConnection = player.playerConnection;
+            // connection null during Player initialization (due to #super call)
+            self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
+        }
+        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket(getEntityId(), List.of(attributeInstance));
+        if (self) {
+            sendPacketToViewersAndSelf(propertiesPacket);
+        } else {
+            sendPacketToViewers(propertiesPacket);
         }
     }
 
@@ -500,8 +481,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the attribute value
      */
     public float getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.getKey());
-        return (instance != null) ? instance.getValue() : attribute.getDefaultValue();
+        AttributeInstance instance = attributeModifiers.get(attribute.key());
+        return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
 
     /**
@@ -532,17 +513,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        if (!super.addViewer0(player)) {
-            return false;
-        }
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEquipmentsPacket());
-        playerConnection.sendPacket(getPropertiesPacket());
-        if (getTeam() != null) {
-            playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
-        }
-        return true;
+    public void updateNewViewer(@NotNull Player player) {
+        super.updateNewViewer(player);
+        player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
+        player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+        if (getTeam() != null) player.sendPacket(getTeam().createTeamsCreationPacket());
     }
 
     @Override
@@ -600,43 +575,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return an {@link EntityPropertiesPacket} linked to this entity
      */
-    @NotNull
-    protected EntityPropertiesPacket getPropertiesPacket() {
-        return getPropertiesPacket(attributeModifiers.values());
-    }
-
-    /**
-     * Gets an {@link EntityPropertiesPacket} for this entity with the specified attribute values.
-     *
-     * @param attributes the attributes to include in the packet
-     * @return an {@link EntityPropertiesPacket} linked to this entity
-     */
-    @NotNull
-    protected EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
-        // Get all the attributes which should be sent to the client
-        final AttributeInstance[] instances = attributes.stream()
-                .filter(i -> i.getAttribute().isShared())
-                .toArray(AttributeInstance[]::new);
-
-
-        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
-        propertiesPacket.entityId = getEntityId();
-
-        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
-        for (int i = 0; i < properties.length; ++i) {
-            EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
-
-            final float value = instances[i].getBaseValue();
-
-            property.instance = instances[i];
-            property.attribute = instances[i].getAttribute();
-            property.value = value;
-
-            properties[i] = property;
-        }
-
-        propertiesPacket.properties = properties;
-        return propertiesPacket;
+    protected @NotNull EntityPropertiesPacket getPropertiesPacket() {
+        return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
     }
 
     @Override
@@ -683,20 +623,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setTeam(Team team) {
         if (this.team == team) return;
-
-        String member;
-
-        if (this instanceof Player) {
-            Player player = (Player) this;
-            member = player.getUsername();
-        } else {
-            member = this.uuid.toString();
-        }
-
+        String member = this instanceof Player player ? player.getUsername() : uuid.toString();
         if (this.team != null) {
             this.team.removeMember(member);
         }
-
         this.team = team;
         if (team != null) {
             team.addMember(member);

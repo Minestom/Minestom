@@ -73,7 +73,7 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     public void setArrowCount(int value) {
-        super.metadata.getIndex(OFFSET + 4, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
     }
 
     public int getHealthAddedByAbsorption() {
@@ -81,7 +81,7 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     public void setHealthAddedByAbsorption(int value) {
-        super.metadata.getIndex(OFFSET + 5, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
     }
 
     @Nullable

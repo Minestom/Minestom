@@ -7,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.function.Supplier;
-
 public class SpawnEggMeta extends ItemMeta implements ItemMetaBuilder.Provider<SpawnEggMeta.Builder> {
 
     private final EntityType entityType;
@@ -40,11 +38,6 @@ public class SpawnEggMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
             // TODO
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

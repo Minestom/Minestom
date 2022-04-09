@@ -6,30 +6,15 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityAnimationPacket implements ServerPacket {
-
-    public int entityId;
-    public Animation animation;
-
-    public EntityAnimationPacket(int entityId, Animation animation) {
-        this.entityId = entityId;
-        this.animation = animation;
-    }
-
-    public EntityAnimationPacket() {
-        this(0, Animation.SWING_MAIN_ARM);
+public record EntityAnimationPacket(int entityId, @NotNull Animation animation) implements ServerPacket {
+    public EntityAnimationPacket(BinaryReader reader) {
+        this(reader.readVarInt(), Animation.values()[reader.readByte()]);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeByte((byte) animation.ordinal());
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        animation = Animation.values()[reader.readByte()];
     }
 
     @Override

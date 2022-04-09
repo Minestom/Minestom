@@ -11,12 +11,8 @@ import java.util.function.DoubleUnaryOperator;
 
 /**
  * Represents a 3D point.
- * <p>
- * Can either be a {@link Pos} or {@link Vec}.
- * Interface will become {@code sealed} in the future.
  */
-@ApiStatus.NonExtendable
-public interface Point {
+public sealed interface Point permits Vec, Pos {
 
     /**
      * Gets the X coordinate.
@@ -70,6 +66,22 @@ public interface Point {
     @Contract(pure = true)
     default int blockZ() {
         return (int) Math.floor(z());
+    }
+
+    @Contract(pure = true)
+    default int chunkX() {
+        return ChunkUtils.getChunkCoordinate(x());
+    }
+
+    @Contract(pure = true)
+    @ApiStatus.Experimental
+    default int section() {
+        return ChunkUtils.getChunkCoordinate(y());
+    }
+
+    @Contract(pure = true)
+    default int chunkZ() {
+        return ChunkUtils.getChunkCoordinate(z());
     }
 
     /**
@@ -164,22 +176,35 @@ public interface Point {
 
     @Contract(pure = true)
     default @NotNull Point relative(@NotNull BlockFace face) {
-        switch (face) {
-            case BOTTOM:
-                return sub(0, 1, 0);
-            case TOP:
-                return add(0, 1, 0);
-            case NORTH:
-                return sub(0, 0, 1);
-            case SOUTH:
-                return add(0, 0, 1);
-            case WEST:
-                return sub(1, 0, 0);
-            case EAST:
-                return add(1, 0, 0);
-            default: // should never be called
-                return this;
-        }
+        return switch (face) {
+            case BOTTOM -> sub(0, 1, 0);
+            case TOP -> add(0, 1, 0);
+            case NORTH -> sub(0, 0, 1);
+            case SOUTH -> add(0, 0, 1);
+            case WEST -> sub(1, 0, 0);
+            case EAST -> add(1, 0, 0);
+        };
+    }
+
+    @Contract(pure = true)
+    default double distanceSquared(double x, double y, double z) {
+        return MathUtils.square(x() - x) + MathUtils.square(y() - y) + MathUtils.square(z() - z);
+    }
+
+    /**
+     * Gets the squared distance between this point and another.
+     *
+     * @param point the other point
+     * @return the squared distance
+     */
+    @Contract(pure = true)
+    default double distanceSquared(@NotNull Point point) {
+        return distanceSquared(point.x(), point.y(), point.z());
+    }
+
+    @Contract(pure = true)
+    default double distance(double x, double y, double z) {
+        return Math.sqrt(distanceSquared(x, y, z));
     }
 
     /**
@@ -194,22 +219,11 @@ public interface Point {
      */
     @Contract(pure = true)
     default double distance(@NotNull Point point) {
-        return Math.sqrt(MathUtils.square(x() - point.x()) +
-                MathUtils.square(y() - point.y()) +
-                MathUtils.square(z() - point.z()));
+        return distance(point.x(), point.y(), point.z());
     }
 
-    /**
-     * Gets the squared distance between this point and another.
-     *
-     * @param point the other point
-     * @return the squared distance
-     */
-    @Contract(pure = true)
-    default double distanceSquared(@NotNull Point point) {
-        return MathUtils.square(x() - point.x()) +
-                MathUtils.square(y() - point.y()) +
-                MathUtils.square(z() - point.z());
+    default boolean samePoint(double x, double y, double z) {
+        return Double.compare(x, x()) == 0 && Double.compare(y, y()) == 0 && Double.compare(z, z()) == 0;
     }
 
     /**
@@ -219,9 +233,7 @@ public interface Point {
      * @return true if the two positions are similar
      */
     default boolean samePoint(@NotNull Point point) {
-        return Double.compare(point.x(), x()) == 0 &&
-                Double.compare(point.y(), y()) == 0 &&
-                Double.compare(point.z(), z()) == 0;
+        return samePoint(point.x(), point.y(), point.z());
     }
 
     /**
@@ -241,7 +253,20 @@ public interface Point {
      * @return true if 'this' is in the same chunk as {@code point}
      */
     default boolean sameChunk(@NotNull Point point) {
-        return ChunkUtils.getChunkCoordinate(x()) == ChunkUtils.getChunkCoordinate(point.x()) &&
-                ChunkUtils.getChunkCoordinate(z()) == ChunkUtils.getChunkCoordinate(point.z());
+        return chunkX() == point.chunkX() && chunkZ() == point.chunkZ();
+    }
+
+    default boolean sameBlock(int blockX, int blockY, int blockZ) {
+        return blockX() == blockX && blockY() == blockY && blockZ() == blockZ;
+    }
+
+    /**
+     * Gets if two points are in the same chunk.
+     *
+     * @param point the point to compare two
+     * @return true if 'this' is in the same chunk as {@code point}
+     */
+    default boolean sameBlock(@NotNull Point point) {
+        return sameBlock(point.blockX(), point.blockY(), point.blockZ());
     }
 }

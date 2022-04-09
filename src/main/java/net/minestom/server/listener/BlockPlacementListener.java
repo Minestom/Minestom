@@ -1,12 +1,10 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
@@ -23,21 +21,17 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
-
-import java.util.Set;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
-        final Player.Hand hand = packet.hand;
-        final BlockFace blockFace = packet.blockFace;
-        final Point blockPosition = packet.blockPosition;
-        final Direction direction = blockFace.toDirection();
+        final Player.Hand hand = packet.hand();
+        final BlockFace blockFace = packet.blockFace();
+        final Point blockPosition = packet.blockPosition();
 
         final Instance instance = player.getInstance();
         if (instance == null)
@@ -72,7 +66,7 @@ public class BlockPlacementListener {
         final Material useMaterial = usedItem.getMaterial();
         if (!useMaterial.isBlock()) {
             // Player didn't try to place a block but interacted with one
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, direction);
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace);
             EventDispatcher.call(event);
             return;
         }
@@ -94,10 +88,11 @@ public class BlockPlacementListener {
         final Point placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
-            // Send a block change with AIR as block to keep the client in sync,
+            // Send a block change with the real block in the instance to keep the client in sync,
             // using refreshChunk results in the client not being in sync
             // after rapid invalid block placements
-            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, Block.AIR));
+            final Block block = instance.getBlock(placementPosition);
+            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, block));
             return;
         }
 
@@ -110,34 +105,12 @@ public class BlockPlacementListener {
         }
 
         final Block placedBlock = useMaterial.block();
-        final Set<Entity> entities = instance.getChunkEntities(chunk);
-        // Check if the player is trying to place a block in an entity
-        boolean intersect = player.getBoundingBox().intersectWithBlock(placementPosition);
-        if (!intersect && placedBlock.isSolid()) {
-            // TODO push entities too close to the position
-            for (Entity entity : entities) {
-                // 'player' has already been checked
-                if (entity == player ||
-                        entity.getEntityType() == EntityType.ITEM)
-                    continue;
-                // Marker Armor Stands should not prevent block placement
-                if (entity.getEntityMeta() instanceof ArmorStandMeta) {
-                    ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
-                    if (armorStandMeta.isMarker()) {
-                        continue;
-                    }
-                }
-                intersect = entity.getBoundingBox().intersectWithBlock(placementPosition);
-                if (intersect)
-                    break;
-            }
-        }
-        if (intersect) {
+        if (!CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock)) {
             refresh(player, chunk);
             return;
         }
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand);
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
@@ -157,12 +130,12 @@ public class BlockPlacementListener {
             return;
         }
         // Place the block
-        instance.placeBlock(player, resultBlock, placementPosition,
-                blockFace, packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ);
+        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
+                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
-            final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
+            final ItemStack newUsedItem = usedItem.consume(1);
             playerInventory.setItemInHand(hand, newUsedItem);
         }
     }

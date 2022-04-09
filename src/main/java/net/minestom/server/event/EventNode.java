@@ -23,8 +23,7 @@ import java.util.function.Predicate;
  *
  * @param <T> The event type accepted by this node
  */
-@ApiStatus.NonExtendable
-public interface EventNode<T extends Event> {
+public sealed interface EventNode<T extends Event> permits EventNodeImpl {
 
     /**
      * Creates an event node which accepts any event type with no filtering.
@@ -191,6 +190,10 @@ public interface EventNode<T extends Event> {
         getHandle((Class<T>) event.getClass()).call(event);
     }
 
+    default boolean hasListener(@NotNull Class<? extends T> type) {
+        return getHandle(type).hasListener();
+    }
+
     /**
      * Gets the handle of an event type.
      *
@@ -335,20 +338,20 @@ public interface EventNode<T extends Event> {
      * Be aware that such structure have huge performance penalty as they will
      * always require a map lookup. Use only at last resort.
      *
-     * @param node  the node to map
-     * @param value the mapped value
+     * @param value  the mapped value
+     * @param filter the filter to use
+     * @return the node (which may have already been registered) directly linked to {@code value}
      */
     @ApiStatus.Experimental
-    void map(@NotNull EventNode<? extends T> node, @NotNull Object value);
+    <E extends T, H> @NotNull EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter);
 
     /**
-     * Undo {@link #map(EventNode, Object)}
+     * Prevents the node from {@link #map(Object, EventFilter)} to be called.
      *
      * @param value the value to unmap
-     * @return true if the value has been unmapped, false if nothing happened
      */
     @ApiStatus.Experimental
-    boolean unmap(@NotNull Object value);
+    void unmap(@NotNull Object value);
 
     @ApiStatus.Experimental
     void register(@NotNull EventBinding<? extends T> binding);
