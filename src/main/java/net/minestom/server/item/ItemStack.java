@@ -10,7 +10,9 @@ import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTByte;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTString;
 
 import java.util.List;
 import java.util.Map;
@@ -231,17 +233,11 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      */
     @ApiStatus.Experimental
     public @NotNull NBTCompound toItemNBT() {
+        final NBTString material = NBT.String(getMaterial().name());
+        final NBTByte amount = NBT.Byte(getAmount());
         final NBTCompound nbt = getMeta().toNBT();
-        if (nbt.isEmpty()) {
-            return NBT.Compound(Map.of(
-                    "id", NBT.String(getMaterial().name()),
-                    "Count", NBT.Byte(getAmount())));
-        } else {
-            return NBT.Compound(Map.of(
-                    "id", NBT.String(getMaterial().name()),
-                    "Count", NBT.Byte(getAmount()),
-                    "tag", getMeta().toNBT()));
-        }
+        if (nbt.isEmpty()) return NBT.Compound(Map.of("id", material, "Count", amount));
+        return NBT.Compound(Map.of("id", material, "Count", amount, "tag", nbt));
     }
 
     @Contract(value = "-> new", pure = true)

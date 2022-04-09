@@ -92,7 +92,12 @@ final class TagHandlerImpl implements TagHandler {
                     // Existing path, continue navigating
                     local = handler;
                 } else {
-                    throw new IllegalStateException("Cannot set a path-able tag on a non-path-able entry: " + entry.value.getClass());
+                    // Probably is a Structure entry,
+                    // convert it to nbt to allow mutation (and drop the cached object)
+                    if (value == null) return;
+                    final NBT nbt = entry.updatedNbt();
+                    local = nbt instanceof NBTCompound compound ? fromCompound(compound) : new TagHandlerImpl();
+                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.VOID), local);
                 }
                 entries = local.entries;
                 pathHandlers[i] = local;
