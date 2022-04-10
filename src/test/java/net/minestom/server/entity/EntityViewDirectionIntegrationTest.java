@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
-public class EntityViewDirectionTest {
+public class EntityViewDirectionIntegrationTest {
     private static final float EPSILON = 0.01f;
 
     @Test
