@@ -87,7 +87,7 @@ final class TagHandlerImpl implements TagHandler {
                     if (value == null) return;
                     // Empty path, create a new handler
                     local = new TagHandlerImpl();
-                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.VOID), local);
+                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.PATH), local);
                 } else if (entry.value instanceof TagHandlerImpl handler) {
                     // Existing path, continue navigating
                     local = handler;
@@ -97,7 +97,7 @@ final class TagHandlerImpl implements TagHandler {
                     if (value == null) return;
                     final NBT nbt = entry.updatedNbt();
                     local = nbt instanceof NBTCompound compound ? fromCompound(compound) : new TagHandlerImpl();
-                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.VOID), local);
+                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.PATH), local);
                 }
                 entries = local.entries;
                 pathHandlers[i] = local;

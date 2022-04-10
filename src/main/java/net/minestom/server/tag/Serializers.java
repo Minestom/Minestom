@@ -9,7 +9,7 @@ import java.util.function.Function;
  * Basic serializers for {@link Tag tags}.
  */
 final class Serializers {
-    static final Entry<?, ?> VOID = new Entry<>(null, null);
+    static final Entry<TagHandlerImpl, NBTCompound> PATH = new Entry<>(TagHandlerImpl::fromCompound, TagHandlerImpl::asCompound);
 
     static final Entry<Byte, NBTByte> BYTE = new Entry<>(NBTByte::getValue, NBT::Byte);
     static final Entry<Short, NBTShort> SHORT = new Entry<>(NBTShort::getValue, NBT::Short);
