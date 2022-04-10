@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
@@ -31,13 +32,16 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     static final @NotNull StackingRule DEFAULT_STACKING_RULE;
 
     static {
-        String stackingRuleProperty = System.getProperty("minestom.stacking-rule",
-                "net.minestom.server.item.rule.VanillaStackingRule");
-        try {
-            DEFAULT_STACKING_RULE = (StackingRule) Class.forName(stackingRuleProperty).getDeclaredConstructor()
-                    .newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException("Could not instantiate default stacking rule", e);
+        final String stackingRuleProperty = System.getProperty("minestom.stacking-rule");
+        if (stackingRuleProperty == null) {
+            DEFAULT_STACKING_RULE = new VanillaStackingRule();
+        } else {
+            try {
+                DEFAULT_STACKING_RULE = (StackingRule) Class.forName(stackingRuleProperty).getDeclaredConstructor()
+                        .newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException("Could not instantiate default stacking rule", e);
+            }
         }
     }
 
