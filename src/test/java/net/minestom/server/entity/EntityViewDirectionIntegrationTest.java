@@ -53,10 +53,12 @@ public class EntityViewDirectionIntegrationTest {
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
 
-        // look at itself
+        // look at itself, direction should not change
+        float prevYaw = entity.getPosition().yaw();
+        float prevPitch = entity.getPosition().pitch();
         entity.lookAt(entity.getPosition());
-        assertEquals(Float.NaN, entity.getPosition().yaw());
-        assertEquals(Float.NaN, entity.getPosition().pitch());
+        assertEquals(prevYaw, entity.getPosition().yaw());
+        assertEquals(prevPitch, entity.getPosition().pitch());
 
         entity.lookAt(new Pos(16, 40, 16));
         assertEquals(-45f, entity.getPosition().yaw());
@@ -93,10 +95,13 @@ public class EntityViewDirectionIntegrationTest {
         e1.setInstance(instance, new Pos(0, 40, 0)).join();
         e2.setInstance(instance, new Pos(0, 40, 0)).join();
 
-        // look at an entity with the same eye height and same position
+        // look at an entity with the same eye height and same position,
+        // direction should not change
+        float prevYaw = e1.getPosition().yaw();
+        float prevPitch = e1.getPosition().pitch();
         e1.lookAt(e2);
-        assertEquals(Float.NaN, e1.getPosition().yaw());
-        assertEquals(Float.NaN, e1.getPosition().pitch());
+        assertEquals(prevYaw, e1.getPosition().yaw());
+        assertEquals(prevPitch, e1.getPosition().pitch());
 
         e2.teleport(new Pos(0, 50, 0)).join();
         e1.lookAt(e2);
@@ -133,10 +138,12 @@ public class EntityViewDirectionIntegrationTest {
         assertTrue(eyeDifference > 0);
         var pos = new Pos(0, e1.getPosition().y() + eyeDifference, 0);
         e2.teleport(pos).join();
-        // e2 eyes are in the same position as e1
+        // e2 eyes are in the same position as e1, direction should not change
+        float prevYaw = e1.getPosition().yaw();
+        float prevPitch = e1.getPosition().pitch();
         e1.lookAt(e2);
-        assertEquals(Float.NaN, e1.getPosition().yaw());
-        assertEquals(Float.NaN, e1.getPosition().pitch());
+        assertEquals(prevYaw, e1.getPosition().yaw());
+        assertEquals(prevPitch, e1.getPosition().pitch());
 
         pos = new Pos(10, e1.getPosition().y() + eyeDifference, 10);
         e2.teleport(pos).join();
