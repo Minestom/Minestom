@@ -29,7 +29,7 @@ import java.util.function.UnaryOperator;
  */
 public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
 
-    static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+    static @NotNull StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
@@ -123,7 +123,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @ApiStatus.Experimental
     @Contract(value = "_, -> new", pure = true)
     public @NotNull ItemStack consume(int amount) {
-        return DEFAULT_STACKING_RULE.apply(this, currentAmount -> currentAmount - amount);
+        return StackingRule.get().apply(this, currentAmount -> currentAmount - amount);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
