@@ -329,11 +329,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Changes the view of the entity so that it looks in a direction to the given position.
+     * Changes the view of the entity so that it looks in a direction to the given position if
+     * it is different from the entity's current position.
      *
      * @param position the position to look at.
      */
     public void lookAt(@NotNull Pos position) {
+        if (this.position.samePoint(position)) {
+            return;
+        }
+
         Vec delta = position.sub(getPosition()).asVec().normalize();
         setView(
                 PositionUtils.getLookYaw(delta.x(), delta.z()),
@@ -348,7 +353,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void lookAt(@NotNull Entity entity) {
         Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
-        lookAt(entity.position);
+        double eyeHeightDifference = entity.getEyeHeight() - getEyeHeight();
+        lookAt(entity.position.withY(entity.position.y() + eyeHeightDifference));
     }
 
     /**
