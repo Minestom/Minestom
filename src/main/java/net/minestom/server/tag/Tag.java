@@ -14,6 +14,7 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -93,6 +94,8 @@ public class Tag<T> {
     @Contract(value = "_, _ -> new", pure = true)
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
+        if (entry == Serializers.NBT_ENTRY)
+            throw new IllegalArgumentException("Cannot create a list from a NBT entry");
         var entry = this.entry;
         final Function<NBT, R> readFunction = entry.read().andThen(t -> {
             if (t == null) return null;
@@ -109,6 +112,8 @@ public class Tag<T> {
     @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
+        if (entry == Serializers.NBT_ENTRY)
+            throw new IllegalArgumentException("Cannot create a list from a NBT entry");
         var entry = this.entry;
         var readFunction = entry.read();
         var writeFunction = entry.write();
@@ -217,6 +222,24 @@ public class Tag<T> {
     final T createDefault() {
         final var supplier = defaultValue;
         return supplier != null ? supplier.get() : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tag<?> tag)) return false;
+        return index == tag.index &&
+                listScope == tag.listScope &&
+                readComparator.equals(tag.readComparator) &&
+                Objects.equals(defaultValue, tag.defaultValue) &&
+                Arrays.equals(path, tag.path) && Objects.equals(copy, tag.copy);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(index, readComparator, defaultValue, copy, listScope);
+        result = 31 * result + Arrays.hashCode(path);
+        return result;
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {

@@ -102,8 +102,7 @@ public class TagItemTest {
                 {
                   "item": {
                     "id":"minecraft:diamond",
-                    "Count":1B,
-                    "tag":{}
+                    "Count":1B
                   }
                 }
                 """, handler.asCompound());
