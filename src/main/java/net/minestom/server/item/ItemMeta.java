@@ -93,20 +93,17 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder damage(int damage) {
-            setTag(ItemTags.DAMAGE, damage);
-            return this;
+            return set(ItemTags.DAMAGE, damage);
         }
 
         @Contract("_ -> this")
         default @NotNull Builder unbreakable(boolean unbreakable) {
-            setTag(ItemTags.UNBREAKABLE, (byte) (unbreakable ? 1 : 0));
-            return this;
+            return set(ItemTags.UNBREAKABLE, (byte) (unbreakable ? 1 : 0));
         }
 
         @Contract("_ -> this")
         default @NotNull Builder hideFlag(int hideFlag) {
-            setTag(ItemTags.HIDE_FLAGS, hideFlag);
-            return this;
+            return set(ItemTags.HIDE_FLAGS, hideFlag);
         }
 
         @Contract("_ -> this")
@@ -118,14 +115,12 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder displayName(@Nullable Component displayName) {
-            setTag(ItemTags.NAME, displayName);
-            return this;
+            return set(ItemTags.NAME, displayName);
         }
 
         @Contract("_ -> this")
         default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            setTag(ItemTags.LORE, List.class.cast(lore));
-            return this;
+            return set(ItemTags.LORE, List.class.cast(lore));
         }
 
         @Contract("_ -> this")
@@ -155,8 +150,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder customModelData(int customModelData) {
-            setTag(ItemTags.CUSTOM_MODEL_DATA, customModelData);
-            return this;
+            return set(ItemTags.CUSTOM_MODEL_DATA, customModelData);
         }
 
         @Contract("_ -> this")
