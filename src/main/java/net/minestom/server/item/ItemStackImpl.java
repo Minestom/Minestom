@@ -13,9 +13,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-record ItemStackImpl(@NotNull Material material, int amount,
-                     @NotNull ItemMeta meta) implements ItemStack {
+record ItemStackImpl(Material material, int amount, ItemMeta meta) implements ItemStack {
     static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+
+    ItemStackImpl(Material material, int amount) {
+        this(material, amount, ItemMetaImpl.EMPTY);
+    }
 
     @Override
     public @NotNull ItemStack with(@NotNull Consumer<ItemStack.@NotNull Builder> builderConsumer) {
@@ -42,8 +45,7 @@ record ItemStackImpl(@NotNull Material material, int amount,
 
     @Override
     public boolean isSimilar(@NotNull ItemStack itemStack) {
-        return material == itemStack.material() &&
-                meta.equals(itemStack.meta());
+        return material == itemStack.material() && meta.equals(itemStack.meta());
     }
 
     @Override

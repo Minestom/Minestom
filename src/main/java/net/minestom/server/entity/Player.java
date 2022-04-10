@@ -355,7 +355,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.getMaterial().isFood();
+                final boolean isFood = foodItem.material().isFood();
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
@@ -1814,7 +1814,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.getMaterial().isFood();
+        final boolean isFood = updatedItem.material().isFood();
 
         if (isFood && !allowFood)
             return null;

@@ -36,7 +36,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_ ,_ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material, int amount) {
-        return builder(material).amount(amount).build();
+        return new ItemStackImpl(material, amount);
     }
 
     @Contract(value = "_ -> new", pure = true)
