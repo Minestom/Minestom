@@ -35,6 +35,7 @@ import net.minestom.server.world.DimensionType;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -91,10 +92,18 @@ public class PlayerInit {
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.setPermissionLevel(4);
-                ItemStack itemStack = ItemStack.of(Material.STONE,64);
+                ItemStack itemStack = ItemStack.builder(Material.STONE)
+                        .amount(64)
+                        .meta(itemMetaBuilder ->
+                                itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
+                                        .canDestroy(Set.of(Block.DIAMOND_ORE)))
+                        .build();
                 player.getInventory().addItemStack(itemStack);
+
+                ItemStack bundle = ItemStack.builder(Material.BUNDLE).build();
+                player.getInventory().addItemStack(bundle);
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());

@@ -57,16 +57,22 @@ record ItemStackImpl(@NotNull Material material, int amount,
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
-        return new Builder(material).amount(amount).meta(meta);
+        return new Builder(material, amount, new ItemMetaImpl.Builder(TagHandler.fromCompound(meta.toNBT())));
     }
 
     static final class Builder implements ItemStack.Builder {
         final Material material;
         int amount;
-        ItemMeta.Builder metaBuilder = new ItemMetaImpl.Builder(TagHandler.newHandler());
+        ItemMeta.Builder metaBuilder;
 
-        Builder(Material material) {
+        Builder(Material material, int amount, ItemMeta.Builder metaBuilder) {
             this.material = material;
+            this.amount = amount;
+            this.metaBuilder = metaBuilder;
+        }
+
+        Builder(Material material, int amount) {
+            this(material, amount, new ItemMetaImpl.Builder(TagHandler.newHandler()));
         }
 
         @Override

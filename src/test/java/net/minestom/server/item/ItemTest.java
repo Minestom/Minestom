@@ -30,6 +30,21 @@ public class ItemTest {
     }
 
     @Test
+    public void defaultBuilder() {
+        var item = ItemStack.builder(Material.DIAMOND_SWORD).build();
+        assertEquals(item.material(), Material.DIAMOND_SWORD, "Material must be the same");
+        assertEquals(item.amount(), 1, "Default item amount must be 1");
+        assertNull(item.getDisplayName(), "Default item display name must be null");
+        assertTrue(item.getLore().isEmpty(), "Default item lore must be empty");
+        ItemStack finalItem = item;
+        assertThrows(Exception.class, () -> finalItem.getLore().add(Component.text("Hey!")), "Lore list cannot be modified directly");
+
+        item = item.withAmount(5);
+        assertEquals(item.amount(), 5, "Items with different amount should not be equals");
+        assertEquals(item.withAmount(amount -> amount * 2).amount(), 10, "Amount must be multiplied by 2");
+    }
+
+    @Test
     public void testEquality() {
         var item1 = ItemStack.of(Material.DIAMOND_SWORD);
         var item2 = ItemStack.of(Material.DIAMOND_SWORD);

@@ -14,7 +14,7 @@ import java.util.List;
 
 @ApiStatus.Experimental
 public record BundleMeta(TagReadable readable) implements ItemMetaView {
-    private static final Tag<List<ItemStack>> ITEMS = Tag.ItemStack("Items").list();
+    private static final Tag<List<ItemStack>> ITEMS = Tag.ItemStack("Items").list().defaultValue(List.of());
 
     public @NotNull List<ItemStack> getItems() {
         return getTag(ITEMS);
@@ -33,20 +33,16 @@ public record BundleMeta(TagReadable readable) implements ItemMetaView {
 
         @ApiStatus.Experimental
         public Builder addItem(@NotNull ItemStack item) {
-            var current = getTag(ITEMS);
-            var newList = new ArrayList<>(current);
+            var newList = new ArrayList<>(getTag(ITEMS));
             newList.add(item);
-            setTag(ITEMS, newList);
-            return this;
+            return items(newList);
         }
 
         @ApiStatus.Experimental
         public Builder removeItem(@NotNull ItemStack item) {
-            var current = getTag(ITEMS);
-            var newList = new ArrayList<>(current);
+            var newList = new ArrayList<>(getTag(ITEMS));
             newList.remove(item);
-            setTag(ITEMS, newList);
-            return this;
+            return items(newList);
         }
     }
 }

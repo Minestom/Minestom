@@ -59,7 +59,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
     @Contract(pure = true)
     default @NotNull List<@NotNull ItemAttribute> getAttributes() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getTag(ItemTags.ATTRIBUTES);
     }
 
     @Contract(pure = true)
@@ -69,12 +69,12 @@ public interface ItemMeta extends TagReadable, Writeable {
 
     @Contract(pure = true)
     default @NotNull Set<@NotNull Block> getCanDestroy() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Set.copyOf(getTag(ItemTags.CAN_DESTROY));
     }
 
     @Contract(pure = true)
     default @NotNull Set<@NotNull Block> getCanPlaceOn() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
     }
 
     interface Builder extends TagWritable, TagReadable {
@@ -147,7 +147,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return set(ItemTags.ATTRIBUTES, attributes.isEmpty() ? null : attributes);
         }
 
         @Contract("_ -> this")
@@ -157,7 +157,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return set(ItemTags.CAN_PLACE_ON, List.copyOf(blocks));
         }
 
         @Contract("_ -> this")
@@ -167,7 +167,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder canDestroy(@NotNull Set<@NotNull Block> blocks) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return set(ItemTags.CAN_DESTROY, List.copyOf(blocks));
         }
 
         @Contract("_ -> this")

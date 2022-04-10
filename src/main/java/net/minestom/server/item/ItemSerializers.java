@@ -1,11 +1,20 @@
 package net.minestom.server.item;
 
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.item.attribute.AttributeSlot;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import net.minestom.server.tag.TagWritable;
+import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTIntArray;
+
+import java.util.UUID;
 
 final class ItemSerializers {
     static final TagSerializer<EnchantmentEntry> ENCHANTMENT_SERIALIZER = new TagSerializer<>() {
@@ -30,4 +39,55 @@ final class ItemSerializers {
 
     record EnchantmentEntry(Enchantment enchantment, short level) {
     }
+
+    static final TagSerializer<ItemAttribute> ATTRIBUTE_SERIALIZER = new TagSerializer<>() {
+        static final Tag<NBT> ID = Tag.NBT("UUID");
+        static final Tag<Double> AMOUNT = Tag.Double("Amount");
+        static final Tag<String> SLOT = Tag.String("Slot").defaultValue("MAINHAND");
+        static final Tag<String> ATTRIBUTE_NAME = Tag.String("AttributeName");
+        static final Tag<Integer> OPERATION = Tag.Integer("Operation");
+        static final Tag<String> NAME = Tag.String("Name");
+
+        @Override
+        public @Nullable ItemAttribute read(@NotNull TagReadable reader) {
+            final UUID uuid;
+            {
+                final NBT nbt = reader.getTag(ID);
+                if (!(nbt instanceof NBTIntArray intArray)) return null;
+                uuid = Utils.intArrayToUuid(intArray.getValue().copyArray());
+            }
+
+            final double amount = reader.getTag(AMOUNT);
+            final String slot = reader.getTag(SLOT);
+            final String attributeName = reader.getTag(ATTRIBUTE_NAME);
+            final int operation = reader.getTag(OPERATION);
+            final String name = reader.getTag(NAME);
+
+            final Attribute attribute = Attribute.fromKey(attributeName);
+            // Wrong attribute name, stop here
+            if (attribute == null) return null;
+            final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);
+            // Wrong attribute operation, stop here
+            if (attributeOperation == null) return null;
+
+            // Find slot, default to the main hand if the nbt tag is invalid
+            AttributeSlot attributeSlot;
+            try {
+                attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                attributeSlot = AttributeSlot.MAINHAND;
+            }
+            return new ItemAttribute(uuid, name, attribute, attributeOperation, amount, attributeSlot);
+        }
+
+        @Override
+        public void write(@NotNull TagWritable writer, @NotNull ItemAttribute value) {
+            writer.setTag(ID, NBT.IntArray(Utils.uuidToIntArray(value.uuid())));
+            writer.setTag(AMOUNT, value.amount());
+            writer.setTag(SLOT, value.slot().name());
+            writer.setTag(ATTRIBUTE_NAME, value.attribute().key());
+            writer.setTag(OPERATION, value.operation().getId());
+            writer.setTag(NAME, value.name());
+        }
+    };
 }
