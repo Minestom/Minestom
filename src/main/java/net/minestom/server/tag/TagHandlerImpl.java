@@ -16,6 +16,16 @@ final class TagHandlerImpl implements TagHandler {
     private volatile Entry<?>[] entries = new Entry[0];
     private Cache cache;
 
+    static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
+        TagHandlerImpl handler = new TagHandlerImpl();
+        for (var entry : compound) {
+            final Tag<NBT> tag = Tag.NBT(entry.getKey());
+            final NBT nbt = entry.getValue();
+            handler.setTag(tag, nbt);
+        }
+        return handler;
+    }
+
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         if (tag.isView()) return tag.read(asCompound());
@@ -87,17 +97,17 @@ final class TagHandlerImpl implements TagHandler {
                     if (value == null) return;
                     // Empty path, create a new handler
                     local = new TagHandlerImpl();
-                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.PATH), local);
-                } else if (entry.value instanceof TagHandlerImpl handler) {
+                    entries[pathIndex] = new PathEntry(path.name(), local);
+                } else if (entry instanceof PathEntry pathEntry) {
                     // Existing path, continue navigating
-                    local = handler;
+                    local = pathEntry.value;
                 } else {
                     // Probably is a Structure entry,
                     // convert it to nbt to allow mutation (and drop the cached object)
                     if (value == null) return;
                     final NBT nbt = entry.updatedNbt();
                     local = nbt instanceof NBTCompound compound ? fromCompound(compound) : new TagHandlerImpl();
-                    entries[pathIndex] = new Entry(Tag.tag(path.name(), Serializers.PATH), local);
+                    entries[pathIndex] = new PathEntry(path.name(), local);
                 }
                 entries = local.entries;
                 pathHandlers[i] = local;
@@ -129,7 +139,7 @@ final class TagHandlerImpl implements TagHandler {
             if (value == null) return;
             local.entries = entries = Arrays.copyOf(entries, tagIndex + 1);
         }
-        entries[tagIndex] = value != null ? new Entry<>(tag, value) : null;
+        entries[tagIndex] = value != null ? new TagEntry<>(tag, value) : null;
         this.cache = null;
         if (pathHandlers != null) {
             for (var handler : pathHandlers) handler.cache = null;
@@ -139,44 +149,58 @@ final class TagHandlerImpl implements TagHandler {
     private synchronized Cache updatedCache() {
         Cache cache = this.cache;
         if (cache == null) {
-            Entry<?>[] entries = this.entries;
+            final Entry<?>[] entries = this.entries;
             if (entries.length > 0) {
-                entries = entries.clone();
                 MutableNBTCompound tmp = new MutableNBTCompound();
                 for (Entry<?> entry : entries) {
-                    if (entry == null) continue;
-                    final Tag<?> tag = entry.tag;
-                    final Object value = entry.value;
-                    if (value instanceof TagHandler handler) {
-                        // Path-able entry
-                        tmp.put(tag.getKey(), handler.asCompound());
-                    } else {
-                        tag.writeUnsafe(tmp, value);
-                    }
+                    if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
                 }
-                cache = !tmp.isEmpty() ? new Cache(entries, tmp.toCompound()) : Cache.EMPTY;
-            } else {
-                cache = Cache.EMPTY;
-            }
+                cache = !tmp.isEmpty() ? new Cache(entries.clone(), tmp.toCompound()) : Cache.EMPTY;
+            } else cache = Cache.EMPTY;
             this.cache = cache;
         }
         return cache;
     }
 
-    private static final class Entry<T> {
-        final Tag<T> tag;
-        final T value; // TagHandler type for path-able tags
-        volatile NBT nbt;
-
-        Entry(Tag<T> tag, T value) {
-            this.tag = tag;
-            this.value = value;
+    private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
+        Entry<?> entry;
+        final var paths = tag.path;
+        if (paths != null) {
+            // Must be a path-able entry
+            for (var path : paths) {
+                final int pathIndex = path.index();
+                if (pathIndex >= entries.length || (entry = entries[pathIndex]) == null) {
+                    return tag.createDefault();
+                }
+                if (entry instanceof PathEntry pathEntry) {
+                    entries = pathEntry.value.entries;
+                } else if (entry.updatedNbt() instanceof NBTCompound compound) {
+                    // Slow path forcing a conversion of the structure to NBTCompound
+                    // TODO should the handler be cached inside the entry?
+                    TagHandlerImpl tmp = fromCompound(compound);
+                    entries = tmp.entries;
+                } else {
+                    // Entry is not path-able
+                    return tag.createDefault();
+                }
+            }
         }
-
-        NBT updatedNbt() {
-            NBT nbt = this.nbt;
-            if (nbt == null) this.nbt = nbt = tag.entry.write().apply(value);
-            return nbt;
+        final int index = tag.index;
+        if (index >= entries.length || (entry = entries[index]) == null) {
+            return tag.createDefault();
+        }
+        if (entry.tag().shareValue(tag)) {
+            // The tag used to write the entry is compatible with the one used to get
+            // return the value directly
+            //noinspection unchecked
+            return (T) entry.value();
+        }
+        // Value must be parsed from nbt if the tag is different
+        final NBT nbt = entry.updatedNbt();
+        try {
+            return tag.entry.read().apply(nbt);
+        } catch (ClassCastException e) {
+            return tag.createDefault();
         }
     }
 
@@ -190,51 +214,51 @@ final class TagHandlerImpl implements TagHandler {
         }
     }
 
-    private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
-        final int index = tag.index;
-        Entry<?> entry;
-        final var paths = tag.path;
-        if (paths != null) {
-            // Must be a path-able entry
-            for (var path : paths) {
-                final int pathIndex = path.index();
-                if (pathIndex >= entries.length || (entry = entries[pathIndex]) == null) {
-                    return tag.createDefault();
-                }
-                if (entry.value instanceof TagHandlerImpl handler) {
-                    entries = handler.entries;
-                } else if (entry.updatedNbt() instanceof NBTCompound compound) {
-                    TagHandlerImpl tmp = fromCompound(compound);
-                    entries = tmp.entries;
-                }
-            }
+    private sealed interface Entry<T> permits TagEntry, PathEntry {
+        Tag<T> tag();
+
+        T value();
+
+        NBT updatedNbt();
+    }
+
+    private static final class TagEntry<T> implements Entry<T> {
+        final Tag<T> tag;
+        final T value;
+        volatile NBT nbt;
+
+        TagEntry(Tag<T> tag, T value) {
+            this.tag = tag;
+            this.value = value;
         }
-        if (index >= entries.length || (entry = entries[index]) == null) {
-            return tag.createDefault();
+
+        @Override
+        public Tag<T> tag() {
+            return tag;
         }
-        final Object value = entry.value;
-        final Tag entryTag = entry.tag;
-        if (entryTag.shareValue(tag)) {
-            // Tag is the same, return the value
-            //noinspection unchecked
-            return (T) value;
+
+        @Override
+        public T value() {
+            return value;
         }
-        // Value must be parsed from nbt if the tag is different
-        final NBT nbt = value instanceof TagHandlerImpl impl ? impl.asCompound() : entry.updatedNbt();
-        try {
-            return tag.entry.read().apply(nbt);
-        } catch (ClassCastException e) {
-            return tag.createDefault();
+
+        @Override
+        public NBT updatedNbt() {
+            NBT nbt = this.nbt;
+            if (nbt == null) this.nbt = nbt = tag.entry.write().apply(value);
+            return nbt;
         }
     }
 
-    static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
-        TagHandlerImpl handler = new TagHandlerImpl();
-        for (var entry : compound) {
-            final Tag<NBT> tag = Tag.NBT(entry.getKey());
-            final NBT nbt = entry.getValue();
-            handler.setTag(tag, nbt);
+    private record PathEntry(Tag<TagHandlerImpl> tag,
+                             TagHandlerImpl value) implements Entry<TagHandlerImpl> {
+        PathEntry(String key, TagHandlerImpl value) {
+            this(Tag.tag(key, Serializers.PATH), value);
         }
-        return handler;
+
+        @Override
+        public NBT updatedNbt() {
+            return value.asCompound();
+        }
     }
 }
