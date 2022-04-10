@@ -16,10 +16,6 @@ public interface StackingRule {
         return ItemStack.DEFAULT_STACKING_RULE;
     }
 
-    static void set(@NotNull StackingRule rule) {
-        ItemStack.DEFAULT_STACKING_RULE = rule;
-    }
-
     /**
      * Used to know if two {@link ItemStack} can be stacked together.
      *
