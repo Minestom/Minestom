@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 record ItemMetaImpl(TagReadable tagReadable, NBTCompound nbt) implements ItemMeta {
@@ -46,10 +47,27 @@ record ItemMetaImpl(TagReadable tagReadable, NBTCompound nbt) implements ItemMet
         writer.write(cachedBuffer.flip());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemMetaImpl itemMeta)) return false;
+        return nbt.equals(itemMeta.nbt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nbt);
+    }
+
     record Builder(TagHandler tagHandler) implements ItemMeta.Builder {
         @Override
         public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
             this.tagHandler.setTag(tag, value);
+        }
+
+        @Override
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+            return tagHandler.getTag(tag);
         }
 
         @Override

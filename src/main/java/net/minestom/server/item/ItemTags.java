@@ -4,7 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.tag.Tag;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static net.minestom.server.item.ItemSerializers.ENCHANTMENT_SERIALIZER;
@@ -21,7 +24,15 @@ final class ItemTags {
     static final Tag<List<Component>> LORE = Tag.String("Lore").path("display").map(stringToComponent(), componentToString()).list().defaultValue(List.of());
 
     // Enchantments
-    static final Tag<List<EnchantmentEntry>> ENCHANTMENTS = Tag.Structure("Enchantments", ENCHANTMENT_SERIALIZER).list();
+    static final Tag<Map<Enchantment, Short>> ENCHANTMENTS = Tag.Structure("Enchantments", ENCHANTMENT_SERIALIZER).list().map(enchantmentEntry -> {
+        Map<Enchantment, Short> map = new HashMap<>();
+        for (var entry : enchantmentEntry) map.put(entry.enchantment(), entry.level());
+        return Map.copyOf(map);
+    }, o -> {
+        List<EnchantmentEntry> entries = new ArrayList<>();
+        for (var entry : o.entrySet()) entries.add(new EnchantmentEntry(entry.getKey(), entry.getValue()));
+        return List.copyOf(entries);
+    }).defaultValue(Map.of());
 
     // Attributes
     //static final Tag<List<ItemAttribute>> ATTRIBUTES = Tag.String("AttributeModifiers").map(toAttribute(), fromAttribute()).list();
@@ -30,7 +41,7 @@ final class ItemTags {
 
     static Function<String, Component> stringToComponent() {
         return s -> {
-            if(s == null) return null;
+            if (s == null) return null;
             return GsonComponentSerializer.gson().deserialize(s);
         };
     }

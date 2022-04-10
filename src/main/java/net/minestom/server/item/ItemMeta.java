@@ -13,10 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public interface ItemMeta extends TagReadable, Writeable {
@@ -57,7 +54,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
     @Contract(pure = true)
     default @NotNull Map<Enchantment, Short> getEnchantmentMap() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getTag(ItemTags.ENCHANTMENTS);
     }
 
     @Contract(pure = true)
@@ -80,9 +77,12 @@ public interface ItemMeta extends TagReadable, Writeable {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    interface Builder extends TagWritable {
+    interface Builder extends TagWritable, TagReadable {
         @Override
         <T> void setTag(@NotNull Tag<T> tag, @Nullable T value);
+
+        @Override
+        <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
         @NotNull ItemMeta build();
 
@@ -120,7 +120,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            return set(ItemTags.LORE, List.class.cast(lore));
+            return set(ItemTags.LORE, lore.isEmpty() ? null : List.class.cast(lore));
         }
 
         @Contract("_ -> this")
@@ -130,17 +130,19 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return set(ItemTags.ENCHANTMENTS, Map.copyOf(enchantments));
         }
 
         @Contract("_, _ -> this")
         default @NotNull Builder enchantment(@NotNull Enchantment enchantment, short level) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            var enchantments = new HashMap<>(getTag(ItemTags.ENCHANTMENTS));
+            enchantments.put(enchantment, level);
+            return enchantments(enchantments);
         }
 
         @Contract("-> this")
         default @NotNull Builder clearEnchantment() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return enchantments(Map.of());
         }
 
         @Contract("_ -> this")
