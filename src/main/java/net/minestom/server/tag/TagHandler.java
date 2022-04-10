@@ -12,6 +12,8 @@ public interface TagHandler extends TagReadable, TagWritable {
 
     @NotNull TagReadable readableCopy();
 
+    @NotNull TagHandler copy();
+
     void updateContent(@NotNull NBTCompoundLike compound);
 
     @NotNull NBTCompound asCompound();

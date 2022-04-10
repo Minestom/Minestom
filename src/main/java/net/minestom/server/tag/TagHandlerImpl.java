@@ -13,8 +13,17 @@ import java.util.Arrays;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
-    private volatile Entry<?>[] entries = new Entry[0];
+    private volatile Entry<?>[] entries;
     private Cache cache;
+
+    TagHandlerImpl(Entry<?>[] entries, Cache cache) {
+        this.entries = entries;
+        this.cache = cache;
+    }
+
+    TagHandlerImpl() {
+        this(new Entry[0], null);
+    }
 
     static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
         TagHandlerImpl handler = new TagHandlerImpl();
@@ -58,6 +67,11 @@ final class TagHandlerImpl implements TagHandler {
     @Override
     public @NotNull TagReadable readableCopy() {
         return updatedCache();
+    }
+
+    @Override
+    public synchronized @NotNull TagHandler copy() {
+        return new TagHandlerImpl(entries.clone(), cache);
     }
 
     @Override
