@@ -14,6 +14,7 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -93,6 +94,8 @@ public class Tag<T> {
     @Contract(value = "_, _ -> new", pure = true)
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
+        if (entry == Serializers.NBT_ENTRY)
+            throw new IllegalArgumentException("Cannot create a list from a NBT entry");
         var entry = this.entry;
         final Function<NBT, R> readFunction = entry.read().andThen(t -> {
             if (t == null) return null;
@@ -109,6 +112,8 @@ public class Tag<T> {
     @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
+        if (entry == Serializers.NBT_ENTRY)
+            throw new IllegalArgumentException("Cannot create a list from a NBT entry");
         var entry = this.entry;
         var readFunction = entry.read();
         var writeFunction = entry.write();
@@ -219,6 +224,24 @@ public class Tag<T> {
         return supplier != null ? supplier.get() : null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tag<?> tag)) return false;
+        return index == tag.index &&
+                listScope == tag.listScope &&
+                readComparator.equals(tag.readComparator) &&
+                Objects.equals(defaultValue, tag.defaultValue) &&
+                Arrays.equals(path, tag.path) && Objects.equals(copy, tag.copy);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(index, readComparator, defaultValue, copy, listScope);
+        result = 31 * result + Arrays.hashCode(path);
+        return result;
+    }
+
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
         return tag(key, Serializers.BYTE);
     }
@@ -247,16 +270,23 @@ public class Tag<T> {
         return tag(key, Serializers.STRING);
     }
 
-    public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
-        return tag(key, (Serializers.Entry<T, ? extends NBT>) Serializers.NBT_ENTRY);
-    }
-
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
         return tag(key, Serializers.ITEM);
     }
 
     /**
-     * Create a wrapper around a compound.
+     * Creates a flexible tag able to read and write any {@link NBT} objects.
+     * <p>
+     * Specialized tags are recommended if the type is known as conversion will be required both way (read and write).
+     */
+    public static @NotNull Tag<NBT> NBT(@NotNull String key) {
+        return tag(key, Serializers.NBT_ENTRY);
+    }
+
+    /**
+     * Creates a tag containing multiple fields.
+     * <p>
+     * Those fields cannot be modified from an outside tag. (This is to prevent the backed object from becoming out of sync)
      *
      * @param key        the tag key
      * @param serializer the tag serializer
@@ -267,6 +297,11 @@ public class Tag<T> {
         return fromSerializer(key, serializer);
     }
 
+    /**
+     * Specialized Structure tag affecting the src of the handler (i.e. overwrite all its data).
+     * <p>
+     * Must be used with care.
+     */
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
         return Structure("", serializer);
     }

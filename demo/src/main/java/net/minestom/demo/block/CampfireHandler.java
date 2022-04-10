@@ -18,16 +18,15 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CampfireHandler implements BlockHandler {
 
     public static final Tag<List<ItemStack>> ITEMS = Tag.View(new TagSerializer<>() {
-        private final Tag<NBTList<NBTCompound>> internal = Tag.NBT("Items");
+        private final Tag<NBT> internal = Tag.NBT("Items");
 
         @Override
         public @Nullable List<ItemStack> read(@NotNull TagReadable reader) {
-            NBTList<NBTCompound> item = reader.getTag(internal);
+            NBTList<NBTCompound> item = (NBTList<NBTCompound>) reader.getTag(internal);
             if (item == null)
                 return null;
             List<ItemStack> result = new ArrayList<>();
