@@ -97,20 +97,23 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#asCompound()" class="member-name-link">asCompound</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">fromCompound</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">fromCompound</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Copy the content of the given <code>NBTCompoundLike</code> into a new <a href="TagHandler.html" title="interface in net.minestom.server.tag"><code>TagHandler</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#newHandler()" class="member-name-link">newHandler</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableCopy()" class="member-name-link">readableCopy</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateContent(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">updateContent</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#newHandler()" class="member-name-link">newHandler</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableCopy()" class="member-name-link">readableCopy</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateContent(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">updateContent</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -136,6 +139,13 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <h3>readableCopy</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></span>&nbsp;<span class="element-name">readableCopy</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="copy()">
+<h3>copy</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">copy</span>()</div>
 </section>
 </li>
 <li>
