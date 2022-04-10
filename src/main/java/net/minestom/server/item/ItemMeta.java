@@ -16,7 +16,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.*;
 import java.util.function.Consumer;
 
-public interface ItemMeta extends TagReadable, Writeable {
+public sealed interface ItemMeta extends TagReadable, Writeable
+        permits ItemMetaImpl {
     @Override
     <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
