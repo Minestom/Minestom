@@ -10,12 +10,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 public record CompassMeta(TagReadable readable) implements ItemMetaView {
-    private static final Tag<Byte> LODESTONE_TRACKED = Tag.Byte("LodestoneTracked");
+    private static final Tag<Boolean> LODESTONE_TRACKED = Tag.Boolean("LodestoneTracked").defaultValue(false);
     private static final Tag<String> LODESTONE_DIMENSION = Tag.String("LodestoneDimension");
     private static final Tag<Point> LODESTONE_POSITION = null;
 
     public boolean isLodestoneTracked() {
-        return getTag(LODESTONE_TRACKED) == 1;
+        return getTag(LODESTONE_TRACKED);
     }
 
     public @Nullable String getLodestoneDimension() {
@@ -33,7 +33,7 @@ public record CompassMeta(TagReadable readable) implements ItemMetaView {
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
         public Builder lodestoneTracked(boolean lodestoneTracked) {
-            setTag(LODESTONE_TRACKED, lodestoneTracked ? (byte) 1 : (byte) 0);
+            setTag(LODESTONE_TRACKED, lodestoneTracked);
             return this;
         }
 

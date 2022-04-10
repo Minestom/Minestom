@@ -17,7 +17,7 @@ import static net.minestom.server.item.ItemSerializers.*;
 
 final class ItemTags {
     static final Tag<Integer> DAMAGE = Tag.Integer("Damage").defaultValue(0);
-    static final Tag<Byte> UNBREAKABLE = Tag.Byte("Unbreakable").defaultValue((byte) 0);
+    static final Tag<Boolean> UNBREAKABLE = Tag.Boolean("Unbreakable").defaultValue(false);
     static final Tag<Integer> HIDE_FLAGS = Tag.Integer("HideFlags").defaultValue(0);
     static final Tag<Integer> CUSTOM_MODEL_DATA = Tag.Integer("CustomModelData").defaultValue(0);
     static final Tag<Component> NAME = Tag.String("Name").path("display").map(stringToComponent(), componentToString());

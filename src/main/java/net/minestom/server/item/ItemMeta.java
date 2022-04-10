@@ -34,7 +34,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
     @Contract(pure = true)
     default boolean isUnbreakable() {
-        return getTag(ItemTags.UNBREAKABLE) == 1;
+        return getTag(ItemTags.UNBREAKABLE);
     }
 
     @Contract(pure = true)
@@ -98,7 +98,7 @@ public interface ItemMeta extends TagReadable, Writeable {
 
         @Contract("_ -> this")
         default @NotNull Builder unbreakable(boolean unbreakable) {
-            return set(ItemTags.UNBREAKABLE, (byte) (unbreakable ? 1 : 0));
+            return set(ItemTags.UNBREAKABLE, unbreakable);
         }
 
         @Contract("_ -> this")

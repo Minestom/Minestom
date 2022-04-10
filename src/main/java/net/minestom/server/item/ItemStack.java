@@ -47,7 +47,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @Contract(value = "_, _, _ -> new", pure = true)
     static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
         final TagHandler handler = nbtCompound == null ? TagHandler.newHandler() : TagHandler.fromCompound(nbtCompound);
-        final ItemMeta meta = new ItemMetaImpl(handler.readableCopy(), handler.asCompound());
+        final ItemMeta meta = new ItemMetaImpl(handler.copy());
         return new ItemStackImpl(material, amount, meta);
     }
 
