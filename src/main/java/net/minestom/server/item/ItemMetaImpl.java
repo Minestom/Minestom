@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
@@ -44,6 +45,18 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
         w.writeNBT("", nbt);
         var cachedBuffer = w.getBuffer();
         writer.write(cachedBuffer.flip());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemMetaImpl itemMeta)) return false;
+        return toNBT().equals(itemMeta.toNBT());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toNBT());
     }
 
     record Builder(TagHandler tagHandler) implements ItemMeta.Builder {
