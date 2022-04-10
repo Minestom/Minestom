@@ -32,6 +32,19 @@ public class EntityViewDirectionIntegrationTest {
         entity.setView(37, 26);
         assertEquals(37, entity.getPosition().yaw());
         assertEquals(26, entity.getPosition().pitch());
+
+        // check for NaN values
+        entity.setView(Float.NaN, 0);
+        assertTrue(Float.isNaN(entity.getPosition().yaw()));
+        assertEquals(0, entity.getPosition().pitch());
+
+        entity.setView(0, Float.NaN);
+        assertEquals(0, entity.getPosition().yaw());
+        assertTrue(Float.isNaN(entity.getPosition().pitch()));
+
+        entity.setView(Float.NaN, Float.NaN);
+        assertTrue(Float.isNaN(entity.getPosition().yaw()));
+        assertTrue(Float.isNaN(entity.getPosition().pitch()));
     }
 
     @Test
@@ -39,6 +52,11 @@ public class EntityViewDirectionIntegrationTest {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
+
+        // look at itself
+        entity.lookAt(entity.getPosition());
+        assertEquals(Float.NaN, entity.getPosition().yaw());
+        assertEquals(Float.NaN, entity.getPosition().pitch());
 
         entity.lookAt(new Pos(16, 40, 16));
         assertEquals(-45f, entity.getPosition().yaw());
@@ -73,8 +91,14 @@ public class EntityViewDirectionIntegrationTest {
         var e1 = new Entity(EntityType.ZOMBIE);
         var e2 = new Entity(EntityType.ZOMBIE);
         e1.setInstance(instance, new Pos(0, 40, 0)).join();
-        e2.setInstance(instance, new Pos(0, 50, 0)).join();
+        e2.setInstance(instance, new Pos(0, 40, 0)).join();
 
+        // look at an entity with the same eye height and same position
+        e1.lookAt(e2);
+        assertEquals(Float.NaN, e1.getPosition().yaw());
+        assertEquals(Float.NaN, e1.getPosition().pitch());
+
+        e2.teleport(new Pos(0, 50, 0)).join();
         e1.lookAt(e2);
         // e2 is above e1, the pich should be negative
         assertEquals(-90f, e1.getPosition().pitch(), EPSILON);
@@ -107,7 +131,14 @@ public class EntityViewDirectionIntegrationTest {
 
         double eyeDifference = e1.getEyeHeight() - e2.getEyeHeight();
         assertTrue(eyeDifference > 0);
-        var pos = new Pos(10, e1.getPosition().y() + eyeDifference, 10);
+        var pos = new Pos(0, e1.getPosition().y() + eyeDifference, 0);
+        e2.teleport(pos).join();
+        // e2 eyes are in the same position as e1
+        e1.lookAt(e2);
+        assertEquals(Float.NaN, e1.getPosition().yaw());
+        assertEquals(Float.NaN, e1.getPosition().pitch());
+
+        pos = new Pos(10, e1.getPosition().y() + eyeDifference, 10);
         e2.teleport(pos).join();
         e1.lookAt(e2);
         // e2 eyes are at the same height as e1's, the pitch should be 0
