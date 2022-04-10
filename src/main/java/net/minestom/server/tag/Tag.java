@@ -245,6 +245,10 @@ public class Tag<T> {
         return tag(key, Serializers.BYTE);
     }
 
+    public static @NotNull Tag<Boolean> Boolean(@NotNull String key) {
+        return tag(key, Serializers.BOOLEAN);
+    }
+
     public static @NotNull Tag<Short> Short(@NotNull String key) {
         return tag(key, Serializers.SHORT);
     }

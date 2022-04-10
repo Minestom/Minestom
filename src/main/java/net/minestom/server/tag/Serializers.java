@@ -12,6 +12,7 @@ final class Serializers {
     static final Entry<TagHandlerImpl, NBTCompound> PATH = new Entry<>(TagHandlerImpl::fromCompound, TagHandlerImpl::asCompound);
 
     static final Entry<Byte, NBTByte> BYTE = new Entry<>(NBTByte::getValue, NBT::Byte);
+    static final Entry<Boolean, NBTByte> BOOLEAN = new Entry<>(NBTByte::asBoolean, NBT::Boolean);
     static final Entry<Short, NBTShort> SHORT = new Entry<>(NBTShort::getValue, NBT::Short);
     static final Entry<Integer, NBTInt> INT = new Entry<>(NBTInt::getValue, NBT::Int);
     static final Entry<Long, NBTLong> LONG = new Entry<>(NBTLong::getValue, NBT::Long);
