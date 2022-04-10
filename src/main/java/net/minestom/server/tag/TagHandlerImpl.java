@@ -214,7 +214,8 @@ final class TagHandlerImpl implements TagHandler {
         }
     }
 
-    private sealed interface Entry<T> permits TagEntry, PathEntry {
+    private sealed interface Entry<T>
+            permits TagEntry, PathEntry {
         Tag<T> tag();
 
         T value();
@@ -223,8 +224,8 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private static final class TagEntry<T> implements Entry<T> {
-        final Tag<T> tag;
-        final T value;
+        private final Tag<T> tag;
+        private final T value;
         volatile NBT nbt;
 
         TagEntry(Tag<T> tag, T value) {

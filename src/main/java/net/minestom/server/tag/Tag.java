@@ -67,6 +67,7 @@ public class Tag<T> {
     static <T> Tag<T> fromSerializer(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         if (serializer instanceof TagRecord.Serializer recordSerializer) {
             // Allow fast retrieval
+            //noinspection unchecked
             return tag(key, recordSerializer.serializerEntry);
         }
         return tag(key, Serializers.fromTagSerializer(serializer));
@@ -178,7 +179,6 @@ public class Tag<T> {
     }
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
-        final String key = this.key;
         final NBT readable = isView() ? nbt.toCompound() : nbt.get(key);
         final T result;
         try {
@@ -191,7 +191,6 @@ public class Tag<T> {
     }
 
     public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
-        final String key = this.key;
         if (value != null) {
             final NBT nbt = entry.write().apply(value);
             if (isView()) nbtCompound.copyFrom((NBTCompoundLike) nbt);

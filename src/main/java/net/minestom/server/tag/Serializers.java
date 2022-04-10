@@ -22,7 +22,7 @@ final class Serializers {
 
     static final Entry<ItemStack, NBTCompound> ITEM = new Entry<>(ItemStack::fromItemNBT, ItemStack::toItemNBT);
 
-    static <T> Entry<T, ?> fromTagSerializer(TagSerializer<T> serializer) {
+    static <T> Entry<T, NBTCompound> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(
                 (NBTCompound compound) -> {
                     if (compound.isEmpty()) return null;
