@@ -92,7 +92,7 @@ public class PlayerInit {
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
