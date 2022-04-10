@@ -1,100 +1,50 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTByte;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.Map;
-
-public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
-
-    private final boolean lodestoneTracked;
-    private final String lodestoneDimension;
-    private final Point lodestonePosition;
-
-    protected CompassMeta(ItemMetaBuilder metaBuilder,
-                          boolean lodestoneTracked,
-                          @Nullable String lodestoneDimension,
-                          @Nullable Point lodestonePosition) {
-        super(metaBuilder);
-        this.lodestoneTracked = lodestoneTracked;
-        this.lodestoneDimension = lodestoneDimension;
-        this.lodestonePosition = lodestonePosition;
-    }
+public record CompassMeta(TagReadable readable) implements ItemMetaView {
+    private static final Tag<Byte> LODESTONE_TRACKED = Tag.Byte("LodestoneTracked");
+    private static final Tag<String> LODESTONE_DIMENSION = Tag.String("LodestoneDimension");
+    private static final Tag<Point> LODESTONE_POSITION = null;
 
     public boolean isLodestoneTracked() {
-        return lodestoneTracked;
+        return getTag(LODESTONE_TRACKED) == 1;
     }
 
     public @Nullable String getLodestoneDimension() {
-        return lodestoneDimension;
+        return getTag(LODESTONE_DIMENSION);
     }
 
     public @Nullable Point getLodestonePosition() {
-        return lodestonePosition;
+        return getTag(LODESTONE_POSITION);
     }
 
-    public static class Builder extends ItemMetaBuilder {
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
+    }
 
-        private boolean lodestoneTracked;
-        private String lodestoneDimension;
-        private Point lodestonePosition;
-
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
         public Builder lodestoneTracked(boolean lodestoneTracked) {
-            this.lodestoneTracked = lodestoneTracked;
-            mutableNbt().setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
+            setTag(LODESTONE_TRACKED, lodestoneTracked ? (byte) 1 : (byte) 0);
             return this;
         }
 
         public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
-            this.lodestoneDimension = lodestoneDimension;
-            if (lodestoneDimension != null) {
-                mutableNbt().setString("LodestoneDimension", lodestoneDimension);
-            } else {
-                mutableNbt().remove("LodestoneDimension");
-            }
+            setTag(LODESTONE_DIMENSION, lodestoneDimension);
             return this;
         }
 
         public Builder lodestonePosition(@Nullable Point lodestonePosition) {
-            this.lodestonePosition = lodestonePosition;
-            if (lodestonePosition != null) {
-                mutableNbt().set("LodestonePos", NBT.Compound(Map.of(
-                        "X", NBT.Int(lodestonePosition.blockX()),
-                        "Y", NBT.Int(lodestonePosition.blockY()),
-                        "Z", NBT.Int(lodestonePosition.blockZ()))));
-            } else {
-                mutableNbt().remove("LodestonePos");
-            }
+            setTag(LODESTONE_POSITION, lodestonePosition);
             return this;
-        }
-
-        @Override
-        public @NotNull CompassMeta build() {
-            return new CompassMeta(this, lodestoneTracked, lodestoneDimension, lodestonePosition);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.get("LodestoneTracked") instanceof NBTByte tracked) {
-                this.lodestoneTracked = tracked.asBoolean();
-            }
-            if (nbtCompound.get("LodestoneDimension") instanceof NBTString dimension) {
-                this.lodestoneDimension = dimension.getValue();
-            }
-            if (nbtCompound.get("LodestonePos") instanceof NBTCompound posCompound) {
-                final int x = posCompound.getInt("X");
-                final int y = posCompound.getInt("Y");
-                final int z = posCompound.getInt("Z");
-                this.lodestonePosition = new Vec(x, y, z);
-            }
         }
     }
 }

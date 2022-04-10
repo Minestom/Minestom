@@ -41,9 +41,9 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -264,7 +264,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             if (player != this) sendPacket(player.getAddPlayerToList());
         }
-        
+
         //Teams
         for (Team team : MinecraftServer.getTeamManager().getTeams()) {
             sendPacket(team.createTeamsCreationPacket());
@@ -747,7 +747,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void openBook(@NotNull Book book) {
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .meta((ItemMeta) null)
                 .build();
         // Set book in offhand
         playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
@@ -2098,9 +2098,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return mainHand;
         }
 
-        public boolean enableTextFiltering() { return enableTextFiltering; }
+        public boolean enableTextFiltering() {
+            return enableTextFiltering;
+        }
 
-        public boolean allowServerListings() { return allowServerListings; }
+        public boolean allowServerListings() {
+            return allowServerListings;
+        }
 
         /**
          * Changes the player settings internally.
