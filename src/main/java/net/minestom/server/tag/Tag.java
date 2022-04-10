@@ -179,7 +179,7 @@ public class Tag<T> {
 
     public @Nullable T read(@NotNull NBTCompoundLike nbt) {
         final String key = this.key;
-        final NBT readable = key.isEmpty() ? nbt.toCompound() : nbt.get(key);
+        final NBT readable = isView() ? nbt.toCompound() : nbt.get(key);
         final T result;
         try {
             if (readable == null || (result = entry.read().apply(readable)) == null)
@@ -194,10 +194,10 @@ public class Tag<T> {
         final String key = this.key;
         if (value != null) {
             final NBT nbt = entry.write().apply(value);
-            if (key.isEmpty()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
+            if (isView()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
             else nbtCompound.set(key, nbt);
         } else {
-            if (key.isEmpty()) nbtCompound.clear();
+            if (isView()) nbtCompound.clear();
             else nbtCompound.remove(key);
         }
     }
