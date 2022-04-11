@@ -9,6 +9,7 @@ import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.Utils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -16,8 +17,9 @@ import org.jglrxavpok.hephaistos.nbt.NBTIntArray;
 
 import java.util.UUID;
 
-final class ItemSerializers {
-    static final TagSerializer<EnchantmentEntry> ENCHANTMENT_SERIALIZER = new TagSerializer<>() {
+@ApiStatus.Internal
+public final class ItemSerializers {
+    public static final TagSerializer<EnchantmentEntry> ENCHANTMENT_SERIALIZER = new TagSerializer<>() {
         static final Tag<Short> LEVEL = Tag.Short("Level");
         static final Tag<String> ID = Tag.String("Id");
 
@@ -37,7 +39,7 @@ final class ItemSerializers {
         }
     };
 
-    record EnchantmentEntry(Enchantment enchantment, short level) {
+    public record EnchantmentEntry(Enchantment enchantment, short level) {
     }
 
     static final TagSerializer<ItemAttribute> ATTRIBUTE_SERIALIZER = new TagSerializer<>() {
