@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApiStatus.Experimental
-public record BundleMeta(TagReadable readable) implements ItemMetaView {
+public record BundleMeta(TagReadable readable) implements ItemMetaView<BundleMeta.Builder> {
     private static final Tag<List<ItemStack>> ITEMS = Tag.ItemStack("Items").list().defaultValue(List.of());
 
     public @NotNull List<ItemStack> getItems() {

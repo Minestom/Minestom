@@ -85,6 +85,9 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @NotNull ItemMeta meta();
 
     @Contract(pure = true)
+    <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass);
+
+    @Contract(pure = true)
     default @Nullable Component getDisplayName() {
         return meta().getDisplayName();
     }
@@ -98,8 +101,8 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> builderConsumer);
 
     @Contract(value = "_, _ -> new", pure = true)
-    <T extends ItemMeta.Builder> @NotNull ItemStack withMeta(@NotNull Class<T> metaType,
-                                                             @NotNull Consumer<T> metaConsumer);
+    <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull ItemStack withMeta(@NotNull Class<T> metaType,
+                                                                                            @NotNull Consumer<V> metaConsumer);
 
     @Contract(value = "_ -> new", pure = true)
     @NotNull ItemStack withMeta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> metaOperator);
@@ -203,10 +206,10 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         @NotNull Builder meta(@NotNull ItemMeta itemMeta);
 
         @Contract(value = "_ -> this")
-        <T extends ItemMeta.Builder> @NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> consumer);
+        @NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> consumer);
 
         @Contract(value = "_, _ -> this")
-        <T extends ItemMeta.Builder> @NotNull Builder meta(@NotNull Class<T> metaType, @NotNull Consumer<@NotNull T> itemMetaConsumer);
+        <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull Builder meta(@NotNull Class<T> metaType, @NotNull Consumer<@NotNull V> itemMetaConsumer);
 
         @Contract(value = "-> new", pure = true)
         @NotNull ItemStack build();

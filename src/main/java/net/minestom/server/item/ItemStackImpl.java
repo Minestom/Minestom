@@ -26,15 +26,20 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
     }
 
     @Override
+    public <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass) {
+        return ItemMetaViewImpl.construct(metaClass, meta);
+    }
+
+    @Override
     public @NotNull ItemStack with(@NotNull Consumer<ItemStack.@NotNull Builder> builderConsumer) {
-        var builder = builder();
+        ItemStack.Builder builder = builder();
         builderConsumer.accept(builder);
         return builder.build();
     }
 
     @Override
-    public @NotNull <T extends ItemMeta.Builder> ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                    @NotNull Consumer<T> metaConsumer) {
+    public @NotNull <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack withMeta(@NotNull Class<T> metaType,
+                                                                                                   @NotNull Consumer<V> metaConsumer) {
         return builder().meta(metaType, metaConsumer).build();
     }
 
@@ -95,14 +100,17 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
         }
 
         @Override
-        public <T extends ItemMeta.Builder> ItemStack.@NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.Builder> consumer) {
+        public ItemStack.@NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.Builder> consumer) {
             this.metaBuilder = consumer.apply(metaBuilder);
             return this;
         }
 
         @Override
-        public <T extends ItemMeta.Builder> ItemStack.@NotNull Builder meta(@NotNull Class<T> metaType, @NotNull Consumer<@NotNull T> itemMetaConsumer) {
-            throw new UnsupportedOperationException("Not implemented yet");
+        public <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack.@NotNull Builder meta(@NotNull Class<T> metaType,
+                                                                                                           @NotNull Consumer<@NotNull V> itemMetaConsumer) {
+            V view = ItemMetaViewImpl.constructBuilder(metaType, metaBuilder.tagHandler());
+            itemMetaConsumer.accept(view);
+            return this;
         }
 
         @Override
