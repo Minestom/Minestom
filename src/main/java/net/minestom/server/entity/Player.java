@@ -41,9 +41,9 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -747,7 +747,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void openBook(@NotNull Book book) {
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta((ItemMeta) null)
+                .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
+                        .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
+                        .author(book.author())
+                        .title(book.title())
+                        .pages(book.pages()))
                 .build();
         // Set book in offhand
         playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
