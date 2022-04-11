@@ -74,6 +74,9 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">GenerationUnit</span></div>
+<div class="block">Represents an area that can be generated.
+ <p>
+ The size is guaranteed to be a multiple of 16 (section).</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -155,7 +158,9 @@ loadScripts(document, 'script');</script>
 <h3>size</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">size</span>()</div>
-<div class="block">The size of this unit in blocks.</div>
+<div class="block">The size of this unit in blocks.
+ <p>
+ Guaranteed to be a multiple of 16.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the size of this unit</dd>
