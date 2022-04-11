@@ -5,7 +5,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.tag.TagWritable;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -78,13 +78,7 @@ public sealed interface ItemMeta extends TagReadable, Writeable
         return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
     }
 
-    interface Builder extends TagWritable, TagReadable {
-        @Override
-        <T> void setTag(@NotNull Tag<T> tag, @Nullable T value);
-
-        @Override
-        <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
-
+    interface Builder extends Taggable {
         @NotNull ItemMeta build();
 
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {

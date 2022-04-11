@@ -4,7 +4,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -13,6 +12,7 @@ import java.util.function.Consumer;
 
 record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
     static final ItemMeta EMPTY = new ItemMetaImpl(TagHandler.newHandler());
+
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         return tagHandler.getTag(tag);
@@ -61,16 +61,6 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
     }
 
     record Builder(TagHandler tagHandler) implements ItemMeta.Builder {
-        @Override
-        public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-            this.tagHandler.setTag(tag, value);
-        }
-
-        @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-            return tagHandler.getTag(tag);
-        }
-
         @Override
         public @NotNull ItemMeta build() {
             return new ItemMetaImpl(tagHandler.copy());
