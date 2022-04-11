@@ -36,7 +36,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_ ,_ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material, int amount) {
-        return new ItemStackImpl(material, amount);
+        return ItemStackImpl.create(material, amount);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -46,9 +46,10 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_, _, _ -> new", pure = true)
     static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
-        final TagHandler handler = nbtCompound == null ? TagHandler.newHandler() : TagHandler.fromCompound(nbtCompound);
+        if (nbtCompound == null) return of(material, amount);
+        final TagHandler handler = TagHandler.fromCompound(nbtCompound);
         final ItemMeta meta = new ItemMetaImpl(handler.copy());
-        return new ItemStackImpl(material, amount, meta);
+        return ItemStackImpl.create(material, amount, meta);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -105,8 +106,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withAmount(int amount) {
-        if (amount < 1) return AIR;
-        return new ItemStackImpl(material(), amount, meta());
+        return ItemStackImpl.create(material(), amount, meta());
     }
 
     @Contract(value = "_, -> new", pure = true)

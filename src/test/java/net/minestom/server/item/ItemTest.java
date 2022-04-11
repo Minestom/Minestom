@@ -65,6 +65,9 @@ public class ItemTest {
         assertTrue(emptyItem.isAir());
         assertEquals(emptyItem, ItemStack.AIR, "AIR item can be compared to empty item");
         assertSame(emptyItem, ItemStack.AIR, "AIR item identity can be compared to empty item");
+
+        assertSame(ItemStack.AIR, ItemStack.fromNBT(Material.DIAMOND, null, 0));
+        assertSame(ItemStack.AIR, ItemStack.builder(Material.DIAMOND).amount(0).build());
     }
 
     @Test
@@ -170,8 +173,8 @@ public class ItemTest {
         assertNotNull(item2.getDisplayName());
         assertNotEquals(item1, item2, "Item builder should be reusable");
     }
-    
-    static ItemStack createItem(){
+
+    static ItemStack createItem() {
         return ItemStack.builder(Material.STONE)
                 .displayName(Component.text("Display name!", NamedTextColor.GREEN))
                 .lore(Component.text("Line 1"), Component.text("Line 2"))

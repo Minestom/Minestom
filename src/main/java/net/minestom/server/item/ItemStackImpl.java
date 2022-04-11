@@ -16,8 +16,13 @@ import java.util.function.UnaryOperator;
 record ItemStackImpl(Material material, int amount, ItemMeta meta) implements ItemStack {
     static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
 
-    ItemStackImpl(Material material, int amount) {
-        this(material, amount, ItemMetaImpl.EMPTY);
+    static ItemStack create(Material material, int amount, ItemMeta meta) {
+        if (amount <= 0) return AIR;
+        return new ItemStackImpl(material, amount, meta);
+    }
+
+    static ItemStack create(Material material, int amount) {
+        return create(material, amount, ItemMetaImpl.EMPTY);
     }
 
     @Override
@@ -102,7 +107,7 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
 
         @Override
         public @NotNull ItemStack build() {
-            return new ItemStackImpl(material, amount, metaBuilder.build());
+            return ItemStackImpl.create(material, amount, metaBuilder.build());
         }
     }
 }
