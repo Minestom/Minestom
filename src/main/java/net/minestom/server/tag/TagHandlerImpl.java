@@ -177,7 +177,6 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
-        Entry<?> entry;
         final Tag.PathEntry[] paths = tag.path;
         if (paths != null) {
             // Must be a path-able entry
@@ -185,6 +184,7 @@ final class TagHandlerImpl implements TagHandler {
                 return tag.createDefault();
         }
         final int index = tag.index;
+        final Entry<?> entry;
         if (index >= entries.length || (entry = entries[index]) == null) {
             return tag.createDefault();
         }
