@@ -94,7 +94,7 @@ final class TagHandlerImpl implements TagHandler {
         Entry<?>[] entries = this.entries;
         final Entry<?>[] localEntries = entries;
 
-        final var paths = tag.path;
+        final Tag.PathEntry[] paths = tag.path;
         TagHandlerImpl[] pathHandlers = null;
         if (paths != null) {
             final int length = paths.length;
@@ -107,20 +107,14 @@ final class TagHandlerImpl implements TagHandler {
                     local.entries = entries = Arrays.copyOf(entries, pathIndex + 1);
                 }
                 final Entry<?> entry = entries[pathIndex];
-                if (entry == null) {
-                    if (value == null) return;
-                    // Empty path, create a new handler
-                    local = new TagHandlerImpl();
-                    entries[pathIndex] = new PathEntry(path.name(), local);
-                } else if (entry instanceof PathEntry pathEntry) {
+                if (entry instanceof PathEntry pathEntry) {
                     // Existing path, continue navigating
                     local = pathEntry.value;
                 } else {
-                    // Probably is a Structure entry,
-                    // convert it to nbt to allow mutation (and drop the cached object)
                     if (value == null) return;
-                    final NBT nbt = entry.updatedNbt();
-                    local = nbt instanceof NBTCompound compound ? fromCompound(compound) : new TagHandlerImpl();
+                    // Empty path, create a new handler.
+                    // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
+                    local = entry != null && entry.updatedNbt() instanceof NBTCompound compound ? fromCompound(compound) : new TagHandlerImpl();
                     entries[pathIndex] = new PathEntry(path.name(), local);
                 }
                 entries = local.entries;
@@ -203,7 +197,7 @@ final class TagHandlerImpl implements TagHandler {
         }
     }
 
-    static Entry<?>[] traversePath(Tag.PathEntry[] paths, Entry<?>[] entries) {
+    private static Entry<?>[] traversePath(Tag.PathEntry[] paths, Entry<?>[] entries) {
         for (var path : paths) {
             final int pathIndex = path.index();
             final Entry<?> entry;

@@ -219,7 +219,7 @@ public class Tag<T> {
     }
 
     final T createDefault() {
-        final var supplier = defaultValue;
+        final Supplier<T> supplier = defaultValue;
         return supplier != null ? supplier.get() : null;
     }
 
