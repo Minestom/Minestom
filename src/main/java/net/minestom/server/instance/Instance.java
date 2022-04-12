@@ -30,6 +30,7 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -78,6 +79,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     private long lastTickAge = System.currentTimeMillis();
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
+
+    private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -517,11 +520,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-        final Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at {0}:{1} is not loaded", x, z);
-        synchronized (chunk) {
-            return chunk.getBlock(x, y, z, condition);
-        }
+        final Block block = blockRetriever.getBlock(x, y, z, condition);
+        if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
+        return block;
     }
 
     /**
