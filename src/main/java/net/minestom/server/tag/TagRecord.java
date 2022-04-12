@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ import static java.util.Map.entry;
 final class TagRecord {
     static final Map<Class<?>, Function<String, Tag<?>>> SUPPORTED_TYPES = Map.ofEntries(
             entry(Byte.class, Tag::Byte), entry(byte.class, Tag::Byte),
+            entry(Boolean.class, Tag::Boolean), entry(boolean.class, Tag::Boolean),
             entry(Short.class, Tag::Short), entry(short.class, Tag::Short),
             entry(Integer.class, Tag::Integer), entry(int.class, Tag::Integer),
             entry(Long.class, Tag::Long), entry(long.class, Tag::Long),
@@ -25,7 +27,8 @@ final class TagRecord {
             entry(Double.class, Tag::Double), entry(double.class, Tag::Double),
             entry(String.class, Tag::String),
 
-            entry(ItemStack.class, Tag::ItemStack));
+            entry(ItemStack.class, Tag::ItemStack),
+            entry(Component.class, Tag::Component));
 
     static final ClassValue<Serializer<? extends Record>> serializers = new ClassValue<>() {
         @Override

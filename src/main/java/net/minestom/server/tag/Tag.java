@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.collection.IndexMap;
 import org.jetbrains.annotations.ApiStatus;
@@ -275,6 +276,10 @@ public class Tag<T> {
 
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
         return tag(key, Serializers.ITEM);
+    }
+
+    public static @NotNull Tag<Component> Component(@NotNull String key) {
+        return tag(key, Serializers.COMPONENT);
     }
 
     /**

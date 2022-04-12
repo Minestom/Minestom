@@ -1,5 +1,7 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.item.ItemStack;
 import org.jglrxavpok.hephaistos.nbt.*;
 
@@ -22,6 +24,8 @@ final class Serializers {
     static final Entry<NBT, NBT> NBT_ENTRY = new Entry<>(Function.identity(), Function.identity());
 
     static final Entry<ItemStack, NBTCompound> ITEM = new Entry<>(ItemStack::fromItemNBT, ItemStack::toItemNBT);
+    static final Entry<Component, NBTString> COMPONENT = new Entry<>(input -> GsonComponentSerializer.gson().deserialize(input.getValue()),
+            component -> NBT.String(GsonComponentSerializer.gson().serialize(component)));
 
     static <T> Entry<T, NBTCompound> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(
