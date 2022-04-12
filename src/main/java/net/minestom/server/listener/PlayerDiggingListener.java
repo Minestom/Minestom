@@ -166,13 +166,6 @@ public final class PlayerDiggingListener {
         }
     }
 
-    private static final class DiggingResult {
-        public final Block block;
-        public final boolean success;
-
-        public DiggingResult(Block block, boolean success) {
-            this.block = block;
-            this.success = success;
-        }
+    private record DiggingResult(Block block, boolean success) {
     }
 }
