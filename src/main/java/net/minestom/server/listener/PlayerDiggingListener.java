@@ -24,7 +24,7 @@ public final class PlayerDiggingListener {
         final ClientPlayerDiggingPacket.Status status = packet.status();
         final Point blockPosition = packet.blockPosition();
         final Instance instance = player.getInstance();
-        if (instance == null) return;
+        if (instance == null || !instance.isChunkLoaded(blockPosition)) return;
 
         DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
