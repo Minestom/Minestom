@@ -178,26 +178,11 @@ final class TagHandlerImpl implements TagHandler {
 
     private static <T> T read(Entry<?>[] entries, Tag<T> tag) {
         Entry<?> entry;
-        final var paths = tag.path;
+        final Tag.PathEntry[] paths = tag.path;
         if (paths != null) {
             // Must be a path-able entry
-            for (var path : paths) {
-                final int pathIndex = path.index();
-                if (pathIndex >= entries.length || (entry = entries[pathIndex]) == null) {
-                    return tag.createDefault();
-                }
-                if (entry instanceof PathEntry pathEntry) {
-                    entries = pathEntry.value.entries;
-                } else if (entry.updatedNbt() instanceof NBTCompound compound) {
-                    // Slow path forcing a conversion of the structure to NBTCompound
-                    // TODO should the handler be cached inside the entry?
-                    TagHandlerImpl tmp = fromCompound(compound);
-                    entries = tmp.entries;
-                } else {
-                    // Entry is not path-able
-                    return tag.createDefault();
-                }
-            }
+            if ((entries = traversePath(paths, entries)) == null)
+                return tag.createDefault();
         }
         final int index = tag.index;
         if (index >= entries.length || (entry = entries[index]) == null) {
@@ -216,6 +201,27 @@ final class TagHandlerImpl implements TagHandler {
         } catch (ClassCastException e) {
             return tag.createDefault();
         }
+    }
+
+    static Entry<?>[] traversePath(Tag.PathEntry[] paths, Entry<?>[] entries) {
+        for (var path : paths) {
+            final int pathIndex = path.index();
+            final Entry<?> entry;
+            if (pathIndex >= entries.length || (entry = entries[pathIndex]) == null)
+                return null;
+            if (entry instanceof PathEntry pathEntry) {
+                entries = pathEntry.value.entries;
+            } else if (entry.updatedNbt() instanceof NBTCompound compound) {
+                // Slow path forcing a conversion of the structure to NBTCompound
+                // TODO should the handler be cached inside the entry?
+                TagHandlerImpl tmp = fromCompound(compound);
+                entries = tmp.entries;
+            } else {
+                // Entry is not path-able
+                return null;
+            }
+        }
+        return entries;
     }
 
     private record Cache(Entry<?>[] entries, NBTCompound compound) implements TagReadable {
