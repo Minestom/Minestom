@@ -94,9 +94,19 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
         }
 
         @Override
+        public ItemStack.@NotNull Builder meta(@NotNull TagHandler tagHandler) {
+            return metaBuilder(new ItemMetaImpl.Builder(tagHandler.copy()));
+        }
+
+        @Override
+        public ItemStack.@NotNull Builder meta(@NotNull NBTCompound compound) {
+            return metaBuilder(new ItemMetaImpl.Builder(TagHandler.fromCompound(compound)));
+        }
+
+        @Override
         public ItemStack.@NotNull Builder meta(@NotNull ItemMeta itemMeta) {
-            this.metaBuilder = new ItemMetaImpl.Builder(TagHandler.fromCompound(itemMeta.toNBT()));
-            return this;
+            final TagHandler tagHandler = ((ItemMetaImpl) itemMeta).tagHandler();
+            return metaBuilder(new ItemMetaImpl.Builder(tagHandler.copy()));
         }
 
         @Override
@@ -116,6 +126,11 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
         @Override
         public @NotNull ItemStack build() {
             return ItemStackImpl.create(material, amount, metaBuilder.build());
+        }
+
+        private ItemStack.@NotNull Builder metaBuilder(@NotNull ItemMeta.Builder builder) {
+            this.metaBuilder = builder;
+            return this;
         }
     }
 }

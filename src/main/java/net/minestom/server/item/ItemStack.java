@@ -47,9 +47,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @Contract(value = "_, _, _ -> new", pure = true)
     static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
         if (nbtCompound == null) return of(material, amount);
-        final TagHandler handler = TagHandler.fromCompound(nbtCompound);
-        final ItemMeta meta = new ItemMetaImpl(handler.copy());
-        return ItemStackImpl.create(material, amount, meta);
+        return builder(material).amount(amount).meta(nbtCompound).build();
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -201,6 +199,12 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     interface Builder {
         @Contract(value = "_ -> this")
         @NotNull Builder amount(int amount);
+
+        @Contract(value = "_ -> this")
+        @NotNull Builder meta(@NotNull TagHandler tagHandler);
+
+        @Contract(value = "_ -> this")
+        @NotNull Builder meta(@NotNull NBTCompound compound);
 
         @Contract(value = "_ -> this")
         @NotNull Builder meta(@NotNull ItemMeta itemMeta);
