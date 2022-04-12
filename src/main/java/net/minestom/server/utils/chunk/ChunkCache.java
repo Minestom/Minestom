@@ -32,7 +32,8 @@ public final class ChunkCache implements Block.Getter {
         Chunk chunk = this.chunk;
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);
-        if (chunk == null || chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ) {
+        if (chunk == null || !chunk.isLoaded() ||
+                chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ) {
             this.chunk = chunk = this.instance.getChunk(chunkX, chunkZ);
         }
         if (chunk != null) {
