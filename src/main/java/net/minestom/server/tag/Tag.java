@@ -16,6 +16,7 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -272,6 +273,11 @@ public class Tag<T> {
 
     public static @NotNull Tag<String> String(@NotNull String key) {
         return tag(key, Serializers.STRING);
+    }
+
+    @ApiStatus.Experimental
+    public static @NotNull Tag<UUID> UUID(@NotNull String key) {
+        return tag(key, Serializers.UUID);
     }
 
     public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {

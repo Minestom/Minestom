@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static java.util.Map.entry;
@@ -27,6 +28,7 @@ final class TagRecord {
             entry(Double.class, Tag::Double), entry(double.class, Tag::Double),
             entry(String.class, Tag::String),
 
+            entry(UUID.class, Tag::UUID),
             entry(ItemStack.class, Tag::ItemStack),
             entry(Component.class, Tag::Component));
 
