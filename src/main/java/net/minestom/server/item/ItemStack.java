@@ -196,7 +196,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         return meta();
     }
 
-    interface Builder {
+    sealed interface Builder permits ItemStackImpl.Builder {
         @Contract(value = "_ -> this")
         @NotNull Builder amount(int amount);
 
