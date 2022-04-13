@@ -8,12 +8,9 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import net.minestom.server.tag.TagWritable;
-import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTIntArray;
 
 import java.util.UUID;
 
@@ -43,7 +40,7 @@ public final class ItemSerializers {
     }
 
     static final TagSerializer<ItemAttribute> ATTRIBUTE_SERIALIZER = new TagSerializer<>() {
-        static final Tag<NBT> ID = Tag.NBT("UUID");
+        static final Tag<UUID> ID = Tag.UUID("UUID");
         static final Tag<Double> AMOUNT = Tag.Double("Amount");
         static final Tag<String> SLOT = Tag.String("Slot").defaultValue("MAINHAND");
         static final Tag<String> ATTRIBUTE_NAME = Tag.String("AttributeName");
@@ -52,13 +49,7 @@ public final class ItemSerializers {
 
         @Override
         public @Nullable ItemAttribute read(@NotNull TagReadable reader) {
-            final UUID uuid;
-            {
-                final NBT nbt = reader.getTag(ID);
-                if (!(nbt instanceof NBTIntArray intArray)) return null;
-                uuid = Utils.intArrayToUuid(intArray.getValue().copyArray());
-            }
-
+            final UUID uuid = reader.getTag(ID);
             final double amount = reader.getTag(AMOUNT);
             final String slot = reader.getTag(SLOT);
             final String attributeName = reader.getTag(ATTRIBUTE_NAME);
@@ -84,7 +75,7 @@ public final class ItemSerializers {
 
         @Override
         public void write(@NotNull TagWritable writer, @NotNull ItemAttribute value) {
-            writer.setTag(ID, NBT.IntArray(Utils.uuidToIntArray(value.uuid())));
+            writer.setTag(ID, value.uuid());
             writer.setTag(AMOUNT, value.amount());
             writer.setTag(SLOT, value.slot().name());
             writer.setTag(ATTRIBUTE_NAME, value.attribute().key());
