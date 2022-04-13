@@ -24,14 +24,17 @@ public final class PlayerDiggingListener {
         final ClientPlayerDiggingPacket.Status status = packet.status();
         final Point blockPosition = packet.blockPosition();
         final Instance instance = player.getInstance();
-        if (instance == null || !instance.isChunkLoaded(blockPosition)) return;
+        if (instance == null) return;
 
         DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = startDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = cancelDigging(instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = finishDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
             dropStack(player);
