@@ -122,7 +122,12 @@ final class TagHandlerImpl implements TagHandler {
             }
             // Handle removal if the tag was present (recursively)
             if (value == null) {
-                pathHandlers[length - 1].entries[tagIndex] = null;
+                // Remove entry
+                {
+                    Entry<?>[] finalEntries = pathHandlers[length - 1].entries;
+                    if (finalEntries.length >= tagIndex) finalEntries[tagIndex] = null;
+                }
+                // Clear empty parents
                 boolean empty = false;
                 for (int i = length - 1; i >= 0; i--) {
                     TagHandlerImpl handler = pathHandlers[i];
