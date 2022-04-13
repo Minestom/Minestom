@@ -4,9 +4,10 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,24 +36,31 @@ public class TagNbtSeparatorTest {
     }
 
     @Test
+    public void compoundMultiple() {
+        assertSeparation(Set.of(new TagNbtSeparator.Entry<>(Tag.Byte("key").path("path"), (byte) 1),
+                        new TagNbtSeparator.Entry<>(Tag.Integer("key2").path("path"), 2)),
+                "path", NBT.Compound(Map.of("key", NBT.Byte(1), "key2", NBT.Int(2))));
+    }
+
+    @Test
     public void list() {
         assertSeparation(new TagNbtSeparator.Entry<>(Tag.Integer("key").list(), List.of(1)),
                 "key", NBT.List(NBTType.TAG_Int, NBT.Int(1)));
     }
 
-    void assertSeparation(List<TagNbtSeparator.Entry<?>> expected, String key, NBT nbt) {
+    void assertSeparation(Set<TagNbtSeparator.Entry<?>> expected, String key, NBT nbt) {
         assertEquals(expected, retrieve(key, nbt));
     }
 
     void assertSeparation(TagNbtSeparator.Entry<?> expected, String key, NBT nbt) {
         var entries = retrieve(key, nbt);
         assertEquals(1, entries.size());
-        assertEquals(expected, entries.get(0));
+        assertEquals(expected, entries.iterator().next());
     }
 
-    List<TagNbtSeparator.Entry<?>> retrieve(String key, NBT nbt) {
-        List<TagNbtSeparator.Entry<?>> entries = new ArrayList<>();
+    Set<TagNbtSeparator.Entry<?>> retrieve(String key, NBT nbt) {
+        Set<TagNbtSeparator.Entry<?>> entries = new HashSet<>();
         TagNbtSeparator.separate(key, nbt, entries::add);
-        return entries;
+        return Set.copyOf(entries);
     }
 }
