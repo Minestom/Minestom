@@ -12,7 +12,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EntityTrackerTest {
-
     @Test
     public void register() {
         var ent1 = new Entity(EntityType.ZOMBIE);

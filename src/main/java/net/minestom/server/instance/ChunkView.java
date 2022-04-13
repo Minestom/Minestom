@@ -32,26 +32,20 @@ final class ChunkView {
 
         Int2ObjectOpenHashMap<Player> entityMap = new Int2ObjectOpenHashMap<>(lastReferenceCount);
 
-        final List<SharedInstance> shared = instance instanceof InstanceContainer container && !container.getSharedInstances().isEmpty() ?
-                container.getSharedInstances() : List.of();
-        Long2ObjectSyncMap<List<Entity>>[] entries = new Long2ObjectSyncMap[1 + shared.size()];
-        entries[0] = entities(instance);
-        for (int i = 0; i < shared.size(); i++) {
-            entries[i + 1] = entities(shared.get(i));
+        final List<Instance> instances;
+        if (instance instanceof InstanceContainer container && !container.getSharedInstances().isEmpty()) {
+            instances = new ArrayList<>(container.getSharedInstances().size() + 1);
+            instances.add(instance);
+            instances.addAll(container.getSharedInstances());
+        } else {
+            instances = Collections.singletonList(instance);
         }
 
-        forChunksInRange(point, MinecraftServer.getChunkViewDistance(),
-                (chunkX, chunkZ) -> {
-                    final long index = getChunkIndex(chunkX, chunkZ);
-                    for (var entry : entries) {
-                        var chunkEntities = entry.get(index);
-                        if (chunkEntities != null && !chunkEntities.isEmpty()) {
-                            for (var player : chunkEntities) {
-                                entityMap.putIfAbsent(player.getEntityId(), (Player) player);
-                            }
-                        }
-                    }
-                });
+        for (Instance inst : instances) {
+            inst.getEntityTracker().nearbyEntitiesByChunkRange(point, MinecraftServer.getChunkViewDistance(),
+                    EntityTracker.Target.PLAYERS, (player) -> entityMap.putIfAbsent(player.getEntityId(), player));
+        }
+
         this.lastReferenceCount = entityMap.size();
         return entityMap.values();
     }
