@@ -126,6 +126,7 @@ final class TagHandlerImpl implements TagHandler {
                 {
                     Entry<?>[] finalEntries = pathHandlers[length - 1].entries;
                     if (finalEntries.length > tagIndex) finalEntries[tagIndex] = null;
+                    else return;
                 }
                 // Clear empty parents
                 boolean empty = false;
