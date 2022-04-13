@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientClickWindowPacket</span>(byte&nbsp;windowId, int&nbsp;stateId, short&nbsp;slot, byte&nbsp;button, @NotNull <a href="ClientClickWindowPacket.ClickType.html" title="enum class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ClickType</a>&nbsp;clickType, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClientClickWindowPacket.ChangedSlot.html" title="class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ChangedSlot</a>&gt;&nbsp;changedSlots, @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientClickWindowPacket</span>(byte&nbsp;windowId, int&nbsp;stateId, short&nbsp;slot, byte&nbsp;button, @NotNull <a href="ClientClickWindowPacket.ClickType.html" title="enum class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ClickType</a>&nbsp;clickType, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClientClickWindowPacket.ChangedSlot.html" title="class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ChangedSlot</a>&gt;&nbsp;changedSlots, @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span></div>
 </section>
@@ -120,7 +120,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
  byte&nbsp;button,
  @NotNull <a href="ClientClickWindowPacket.ClickType.html" title="enum class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ClickType</a>&nbsp;clickType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClientClickWindowPacket.ChangedSlot.html" title="class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ChangedSlot</a>&gt;&nbsp;changedSlots,
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</code></div>
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientClickWindowPacket</code> record class.</div>
 </div>
@@ -150,7 +150,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>changedSlots</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clickedItem()" class="member-name-link">clickedItem</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>clickedItem</code> record component.</div>
@@ -224,7 +224,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClientClickWindowPacket.ChangedSlot.html" title="class in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ChangedSlot</a>&gt;&nbsp;changedSlots,
  @NotNull
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</span></div>
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</span></div>
 <div class="block">Creates an instance of a <code>ClientClickWindowPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -380,7 +380,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="clickedItem()">
 <h3>clickedItem</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">clickedItem</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">clickedItem</span>()</div>
 <div class="block">Returns the value of the <code>clickedItem</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

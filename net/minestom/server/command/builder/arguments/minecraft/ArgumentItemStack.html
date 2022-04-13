@@ -72,15 +72,15 @@ loadScripts(document, 'script');</script>
 <h1 title="Class ArgumentItemStack" class="title">Class ArgumentItemStack</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;
+<div class="inheritance"><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;
 <div class="inheritance">net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ArgumentItemStack</span>
-<span class="extends-implements">extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</span></div>
-<div class="block">Argument which can be used to retrieve an <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> from its material and with NBT data.
+<span class="extends-implements">extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;</span></div>
+<div class="block">Argument which can be used to retrieve an <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> from its material and with NBT data.
  <p>
  It is the same type as the one used in the /give command.
  <p>
@@ -136,7 +136,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parse(java.lang.String)" class="member-name-link">parse</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#staticParse(java.lang.String)" class="member-name-link">staticParse</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
 <div class="block"><span class="deprecated-label">Deprecated.</span>
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="parse(java.lang.String)">
 <h3>parse</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">parse</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">parse</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span>
                          throws <span class="exceptions"><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
@@ -254,7 +254,7 @@ loadScripts(document, 'script');</script>
  if the input cannot be converted to <code>T</code></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</code></dd>
+<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - the argument to parse</dd>
 <dt>Returns:</dt>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</code></dd>
+<dd><code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
 <dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
@@ -285,7 +285,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="staticParse(java.lang.String)">
 <h3>staticParse</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">staticParse</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">staticParse</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span>
                              throws <span class="exceptions"><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></span></div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>

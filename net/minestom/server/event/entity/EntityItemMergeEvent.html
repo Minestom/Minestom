@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EntityItemMergeEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.minestom.server.event.trait">EntityInstanceEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></span></div>
-<div class="block">Called when two <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> are merging their <a href="../../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> together to form a sole entity.</div>
+<div class="block">Called when two <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> are merging their <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> together to form a sole entity.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -97,7 +97,7 @@ implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.m
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.ItemEntity,net.minestom.server.entity.ItemEntity,net.minestom.server.item.ItemStack)" class="member-name-link">EntityItemMergeEvent</a><wbr>(@NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;source,
  @NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;merged,
- @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></div>
+ @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -123,7 +123,7 @@ implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.m
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the entity who will be merged.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResult()" class="member-name-link">getResult</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the final item stack on the ground.</div>
@@ -139,7 +139,7 @@ implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.m
 <div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResult(net.minestom.server.item.ItemStack)" class="member-name-link">setResult</a><wbr>(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResult(net.minestom.server.item.ItemStack)" class="member-name-link">setResult</a><wbr>(@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the item stack which will appear on the ground.</div>
 </div>
@@ -171,7 +171,7 @@ implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.m
  @NotNull
  @NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;merged,
  @NotNull
- @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</span></div>
+ @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result)</span></div>
 </section>
 </li>
 </ul>
@@ -216,7 +216,7 @@ implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.m
 <section class="detail" id="getResult()">
 <h3>getResult</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">getResult</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">getResult</span>()</div>
 <div class="block">Gets the final item stack on the ground.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -228,7 +228,7 @@ implements <a href="../trait/EntityInstanceEvent.html" title="interface in net.m
 <section class="detail" id="setResult(net.minestom.server.item.ItemStack)">
 <h3>setResult</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setResult</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</span></div>
+ @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result)</span></div>
 <div class="block">Changes the item stack which will appear on the ground.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

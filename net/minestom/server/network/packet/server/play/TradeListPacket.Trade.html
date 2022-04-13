@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="TradeListPacket.html" title="class in net.minestom.server.network.packet.server.play">TradeListPacket</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">TradeListPacket.Trade</span>(<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;inputItem1, <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result, <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;inputItem2, boolean&nbsp;tradeDisabled, int&nbsp;tradeUsesNumber, int&nbsp;maxTradeUsesNumber, int&nbsp;exp, int&nbsp;specialPrice, float&nbsp;priceMultiplier, int&nbsp;demand)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">TradeListPacket.Trade</span>(<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;inputItem1, <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result, <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;inputItem2, boolean&nbsp;tradeDisabled, int&nbsp;tradeUsesNumber, int&nbsp;maxTradeUsesNumber, int&nbsp;exp, int&nbsp;specialPrice, float&nbsp;priceMultiplier, int&nbsp;demand)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></span></div>
 </section>
@@ -100,9 +100,9 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,boolean,int,int,int,int,float,int)" class="member-name-link">Trade</a><wbr>(<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;inputItem1,
- <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result,
- <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;inputItem2,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,boolean,int,int,int,int,float,int)" class="member-name-link">Trade</a><wbr>(<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;inputItem1,
+ <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result,
+ <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;inputItem2,
  boolean&nbsp;tradeDisabled,
  int&nbsp;tradeUsesNumber,
  int&nbsp;maxTradeUsesNumber,
@@ -149,12 +149,12 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputItem1()" class="member-name-link">inputItem1</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>inputItem1</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputItem2()" class="member-name-link">inputItem2</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>inputItem2</code> record component.</div>
@@ -169,7 +169,7 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>priceMultiplier</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#result()" class="member-name-link">result</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>result</code> record component.</div>
@@ -225,9 +225,9 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <li>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,boolean,int,int,int,int,float,int)">
 <h3>Trade</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Trade</span><wbr><span class="parameters">(<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;inputItem1,
- <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result,
- <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;inputItem2,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Trade</span><wbr><span class="parameters">(<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;inputItem1,
+ <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;result,
+ <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;inputItem2,
  boolean&nbsp;tradeDisabled,
  int&nbsp;tradeUsesNumber,
  int&nbsp;maxTradeUsesNumber,
@@ -317,7 +317,7 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <li>
 <section class="detail" id="inputItem1()">
 <h3>inputItem1</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">inputItem1</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">inputItem1</span>()</div>
 <div class="block">Returns the value of the <code>inputItem1</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -328,7 +328,7 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <li>
 <section class="detail" id="result()">
 <h3>result</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">result</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">result</span>()</div>
 <div class="block">Returns the value of the <code>result</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -339,7 +339,7 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <li>
 <section class="detail" id="inputItem2()">
 <h3>inputItem2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">inputItem2</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">inputItem2</span>()</div>
 <div class="block">Returns the value of the <code>inputItem2</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

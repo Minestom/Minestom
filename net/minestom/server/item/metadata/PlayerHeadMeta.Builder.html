@@ -5,7 +5,7 @@
 <title>PlayerHeadMeta.Builder (Minestom 1.0 API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.item.metadata, class: PlayerHeadMeta, class: Builder">
+<meta name="description" content="declaration: package: net.minestom.server.item.metadata, record: PlayerHeadMeta, record: Builder">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -44,8 +44,8 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -69,46 +69,29 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.item.metadata</a></div>
-<h1 title="Class PlayerHeadMeta.Builder" class="title">Class PlayerHeadMeta.Builder</h1>
+<h1 title="Record Class PlayerHeadMeta.Builder" class="title">Record Class PlayerHeadMeta.Builder</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">net.minestom.server.item.ItemMetaBuilder</a>
+<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">java.lang.Record</a>
 <div class="inheritance">net.minestom.server.item.metadata.PlayerHeadMeta.Builder</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dd><code><a href="../ItemMetaView.Builder.html" title="interface in net.minestom.server.item">ItemMetaView.Builder</a></code>, <code><a href="../../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Enclosing class:</dt>
 <dd><a href="PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name type-name-label">PlayerHeadMeta.Builder</span>
-<span class="extends-implements">extends <a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></span></div>
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">PlayerHeadMeta.Builder</span>(<a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a>&nbsp;tagHandler)
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
+implements <a href="../ItemMetaView.Builder.html" title="interface in net.minestom.server.item">ItemMetaView.Builder</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="inherited-list">
-<h2 id="nested-classes-inherited-from-class-net.minestom.server.item.ItemMetaBuilder">Nested classes/interfaces inherited from class&nbsp;net.minestom.server.item.<a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></h2>
-<code><a href="../ItemMetaBuilder.Provider.html" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;<a href="../ItemMetaBuilder.Provider.html" title="type parameter in ItemMetaBuilder.Provider">T</a> extends <a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&gt;</code></div>
-</section>
-</li>
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="inherited-list">
-<h3 id="fields-inherited-from-class-net.minestom.server.item.ItemMetaBuilder">Fields inherited from class&nbsp;net.minestom.server.item.<a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></h3>
-<code><a href="../ItemMetaBuilder.html#attributes">attributes</a>, <a href="../ItemMetaBuilder.html#canDestroy">canDestroy</a>, <a href="../ItemMetaBuilder.html#canPlaceOn">canPlaceOn</a>, <a href="../ItemMetaBuilder.html#customModelData">customModelData</a>, <a href="../ItemMetaBuilder.html#damage">damage</a>, <a href="../ItemMetaBuilder.html#displayName">displayName</a>, <a href="../ItemMetaBuilder.html#enchantmentMap">enchantmentMap</a>, <a href="../ItemMetaBuilder.html#hideFlag">hideFlag</a>, <a href="../ItemMetaBuilder.html#lore">lore</a>, <a href="../ItemMetaBuilder.html#unbreakable">unbreakable</a></code></div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -117,8 +100,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">Builder</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.tag.TagHandler)" class="member-name-link">Builder</a><wbr>(<a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a>&nbsp;tagHandler)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates an instance of a <code>Builder</code> record class.</div>
+</div>
 </div>
 </section>
 </li>
@@ -133,30 +118,41 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PlayerHeadMeta.Builder.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerSkin(net.minestom.server.entity.PlayerSkin)" class="member-name-link">playerSkin</a><wbr>(@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">read</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Indicates whether some other object is "equal to" this one.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a hash code value for this object.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PlayerHeadMeta.Builder.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerSkin(net.minestom.server.entity.PlayerSkin)" class="member-name-link">playerSkin</a><wbr>(@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PlayerHeadMeta.Builder.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skullOwner(java.util.UUID)" class="member-name-link">skullOwner</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;skullOwner)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>tagHandler</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.item.ItemMetaBuilder">Methods inherited from class&nbsp;net.minestom.server.item.<a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></h3>
-<code><a href="../ItemMetaBuilder.html#attributes(java.util.List)">attributes</a>, <a href="../ItemMetaBuilder.html#canDestroy(java.util.Set)">canDestroy</a>, <a href="../ItemMetaBuilder.html#canDestroy(net.minestom.server.instance.block.Block...)">canDestroy</a>, <a href="../ItemMetaBuilder.html#canPlaceOn(java.util.Set)">canPlaceOn</a>, <a href="../ItemMetaBuilder.html#canPlaceOn(net.minestom.server.instance.block.Block...)">canPlaceOn</a>, <a href="../ItemMetaBuilder.html#clearEnchantment()">clearEnchantment</a>, <a href="../ItemMetaBuilder.html#createEmpty()">createEmpty</a>, <a href="../ItemMetaBuilder.html#customModelData(int)">customModelData</a>, <a href="../ItemMetaBuilder.html#damage(int)">damage</a>, <a href="../ItemMetaBuilder.html#displayName(net.kyori.adventure.text.Component)">displayName</a>, <a href="../ItemMetaBuilder.html#enchantment(net.minestom.server.item.Enchantment,short)">enchantment</a>, <a href="../ItemMetaBuilder.html#enchantments(java.util.Map)">enchantments</a>, <a href="../ItemMetaBuilder.html#handleCollection(java.util.Collection,java.lang.String,java.util.function.Supplier)">handleCollection</a>, <a href="../ItemMetaBuilder.html#handleCompound(java.lang.String,java.util.function.Consumer)">handleCompound</a>, <a href="../ItemMetaBuilder.html#handleMap(java.util.Map,java.lang.String,java.util.function.Consumer)">handleMap</a>, <a href="../ItemMetaBuilder.html#handleNullable(java.lang.Object,java.lang.String,java.util.function.Supplier)">handleNullable</a>, <a href="../ItemMetaBuilder.html#hideFlag(int)">hideFlag</a>, <a href="../ItemMetaBuilder.html#hideFlag(net.minestom.server.item.ItemHideFlag...)">hideFlag</a>, <a href="../ItemMetaBuilder.html#lore(java.util.List)">lore</a>, <a href="../ItemMetaBuilder.html#lore(net.kyori.adventure.text.Component...)">lore</a>, <a href="../ItemMetaBuilder.html#mutableNbt()">mutableNbt</a>, <a href="../ItemMetaBuilder.html#mutateNbt(java.util.function.Consumer)">mutateNbt</a>, <a href="../ItemMetaBuilder.html#resetMeta(net.minestom.server.item.ItemMetaBuilder,org.jglrxavpok.hephaistos.nbt.NBTCompound)">resetMeta</a>, <a href="../ItemMetaBuilder.html#set(net.minestom.server.tag.Tag,T)">set</a>, <a href="../ItemMetaBuilder.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="../ItemMetaBuilder.html#unbreakable(boolean)">unbreakable</a></code></div>
+</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagWritable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
-<code><a href="../../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.tag.Taggable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></h3>
+<code><a href="../../tag/Taggable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../../tag/Taggable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a>, <a href="../../tag/Taggable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../../tag/Taggable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code></div>
 </section>
 </li>
 </ul>
@@ -169,9 +165,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.tag.TagHandler)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Builder</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Builder</span><wbr><span class="parameters">(<a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a>&nbsp;tagHandler)</span></div>
+<div class="block">Creates an instance of a <code>Builder</code> record class.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>tagHandler</code> - the value for the <code>tagHandler</code> record component</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -197,24 +198,56 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="build()">
-<h3>build</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></span>&nbsp;<span class="element-name">build</span>()</div>
+<section class="detail" id="toString()">
+<h3>toString</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
+<div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../ItemMetaBuilder.html#build()">build</a></code>&nbsp;in class&nbsp;<code><a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Returns:</dt>
+<dd>a string representation of this object</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
-<h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">read</span><wbr><span class="parameters">(@NotNull
- @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</span></div>
+<section class="detail" id="hashCode()">
+<h3>hashCode</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
+<div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../ItemMetaBuilder.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></code>&nbsp;in class&nbsp;<code><a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Returns:</dt>
+<dd>a hash code value for this object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="equals(java.lang.Object)">
+<h3>equals</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>o</code> - the object with which to compare</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="tagHandler()">
+<h3>tagHandler</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">tagHandler</span>()</div>
+<div class="block">Returns the value of the <code>tagHandler</code> record component.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../tag/Taggable.html#tagHandler()">tagHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code></dd>
+<dt>Returns:</dt>
+<dd>the value of the <code>tagHandler</code> record component</dd>
 </dl>
 </section>
 </li>

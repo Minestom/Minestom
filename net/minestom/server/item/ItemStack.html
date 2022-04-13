@@ -5,7 +5,7 @@
 <title>ItemStack (Minestom 1.0 API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.item, class: ItemStack">
+<meta name="description" content="declaration: package: net.minestom.server.item, interface: ItemStack">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -44,7 +44,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -69,20 +69,16 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.item</a></div>
-<h1 title="Class ItemStack" class="title">Class ItemStack</h1>
-</div>
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">net.minestom.server.item.ItemStack</div>
+<h1 title="Interface ItemStack" class="title">Interface ItemStack</h1>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
-<dt>All Implemented Interfaces:</dt>
+<dt>All Superinterfaces:</dt>
 <dd><code><a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ItemStack</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>, <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">ItemStack</span><span class="extends-implements">
+extends <a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>, <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</span></div>
 <div class="block">Represents an immutable item to be placed inside <a href="../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory"><code>PlayerInventory</code></a>,
  <a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a> or even on the ground <a href="../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a>.
  <p>
@@ -90,6 +86,21 @@ implements <a href="../tag/TagReadable.html" title="interface in net.minestom.se
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Interface</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="ItemStack.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack.Builder</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -99,7 +110,7 @@ implements <a href="../tag/TagReadable.html" title="interface in net.minestom.se
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color"><code><a href="#AIR" class="member-name-link">AIR</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Constant AIR item.</div>
@@ -112,124 +123,133 @@ implements <a href="../tag/TagReadable.html" title="interface in net.minestom.se
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asHoverEvent(java.util.function.UnaryOperator)" class="member-name-link">asHoverEvent</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;&nbsp;op)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ItemStackBuilder.html" title="class in net.minestom.server.item">ItemStackBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#builder(net.minestom.server.item.Material)" class="member-name-link">builder</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consume(int)" class="member-name-link">consume</a><wbr>(int&nbsp;amount)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromItemNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">fromItemNBT</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#amount()" class="member-name-link">amount</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#asHoverEvent(java.util.function.UnaryOperator)" class="member-name-link">asHoverEvent</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;&nbsp;op)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ItemStack.Builder.html" title="interface in net.minestom.server.item">ItemStack.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder(net.minestom.server.item.Material)" class="member-name-link">builder</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#consume(int)" class="member-name-link">consume</a><wbr>(int&nbsp;amount)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromItemNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">fromItemNBT</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromNBT(net.minestom.server.item.Material,org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">fromNBT</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNBT(net.minestom.server.item.Material,org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">fromNBT</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
  @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromNBT(net.minestom.server.item.Material,org.jglrxavpok.hephaistos.nbt.NBTCompound,int)" class="member-name-link">fromNBT</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNBT(net.minestom.server.item.Material,org.jglrxavpok.hephaistos.nbt.NBTCompound,int)" class="member-name-link">fromNBT</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
  @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound,
  int&nbsp;amount)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAmount()" class="member-name-link">getAmount</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDisplayName()" class="member-name-link">getDisplayName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLore()" class="member-name-link">getLore</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaterial()" class="member-name-link">getMaterial</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMeta()" class="member-name-link">getMeta</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTag(net.minestom.server.tag.Tag)" class="member-name-link">getTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code>default int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code><a href="#getAmount()" class="member-name-link">getAmount</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getDisplayName()" class="member-name-link">getDisplayName</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getLore()" class="member-name-link">getLore</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code>default @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code><a href="#getMaterial()" class="member-name-link">getMaterial</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code>default @NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code><a href="#getMeta()" class="member-name-link">getMeta</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getTag(net.minestom.server.tag.Tag)" class="member-name-link">getTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Reads the specified tag.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAir()" class="member-name-link">isAir</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSimilar(net.minestom.server.item.ItemStack)" class="member-name-link">isSimilar</a><wbr>(@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(net.minestom.server.item.Material)" class="member-name-link">of</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(net.minestom.server.item.Material,int)" class="member-name-link">of</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isAir()" class="member-name-link">isAir</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#isSimilar(net.minestom.server.item.ItemStack)" class="member-name-link">isSimilar</a><wbr>(@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#material()" class="member-name-link">material</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#meta()" class="member-name-link">meta</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="ItemMetaView.html" title="interface in net.minestom.server.item">ItemMetaView</a>&lt;?&gt;&gt;<br>T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#meta(java.lang.Class)" class="member-name-link">meta</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;metaClass)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(net.minestom.server.item.Material)" class="member-name-link">of</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(net.minestom.server.item.Material,int)" class="member-name-link">of</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
  int&nbsp;amount)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toItemNBT()" class="member-name-link">toItemNBT</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toItemNBT()" class="member-name-link">toItemNBT</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta)</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#with(java.util.function.Consumer)" class="member-name-link">with</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="ItemStackBuilder.html" title="class in net.minestom.server.item">ItemStackBuilder</a>&gt;&nbsp;builderConsumer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAmount(int)" class="member-name-link">withAmount</a><wbr>(int&nbsp;amount)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAmount(java.util.function.IntUnaryOperator)" class="member-name-link">withAmount</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/IntUnaryOperator.html" title="class or interface in java.util.function" class="external-link">IntUnaryOperator</a>&nbsp;intUnaryOperator)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDisplayName(java.util.function.UnaryOperator)" class="member-name-link">withDisplayName</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;componentUnaryOperator)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDisplayName(net.kyori.adventure.text.Component)" class="member-name-link">withDisplayName</a><wbr>(@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withLore(java.util.function.UnaryOperator)" class="member-name-link">withLore</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&gt;&nbsp;loreUnaryOperator)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withLore(java.util.List)" class="member-name-link">withLore</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;lore)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&gt;<br>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withMeta(java.util.function.UnaryOperator)" class="member-name-link">withMeta</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull T&gt;&nbsp;metaOperator)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withMeta(net.minestom.server.item.ItemMeta)" class="member-name-link">withMeta</a><wbr>(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a>&nbsp;meta)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>,<wbr>
-U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;T&gt;&gt;<br>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withMeta(java.lang.Class,java.util.function.Consumer)" class="member-name-link">withMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;U&gt;&nbsp;metaType,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;T&gt;&nbsp;metaConsumer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTag(net.minestom.server.tag.Tag,T)" class="member-name-link">withTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#with(java.util.function.Consumer)" class="member-name-link">with</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="ItemStack.Builder.html" title="interface in net.minestom.server.item">ItemStack.Builder</a>&gt;&nbsp;builderConsumer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withAmount(int)" class="member-name-link">withAmount</a><wbr>(int&nbsp;amount)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withAmount(java.util.function.IntUnaryOperator)" class="member-name-link">withAmount</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/IntUnaryOperator.html" title="class or interface in java.util.function" class="external-link">IntUnaryOperator</a>&nbsp;intUnaryOperator)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withDisplayName(java.util.function.UnaryOperator)" class="member-name-link">withDisplayName</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;componentUnaryOperator)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withDisplayName(net.kyori.adventure.text.Component)" class="member-name-link">withDisplayName</a><wbr>(@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withLore(java.util.function.UnaryOperator)" class="member-name-link">withLore</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&gt;&nbsp;loreUnaryOperator)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withLore(java.util.List)" class="member-name-link">withLore</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;lore)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withMaterial(net.minestom.server.item.Material)" class="member-name-link">withMaterial</a><wbr>(@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;V extends <a href="ItemMetaView.Builder.html" title="interface in net.minestom.server.item">ItemMetaView.Builder</a>,<wbr>
+T extends <a href="ItemMetaView.html" title="interface in net.minestom.server.item">ItemMetaView</a>&lt;V&gt;&gt;<br>@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#withMeta(java.lang.Class,java.util.function.Consumer)" class="member-name-link">withMeta</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;metaType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;V&gt;&nbsp;metaConsumer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#withMeta(java.util.function.UnaryOperator)" class="member-name-link">withMeta</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="ItemMeta.Builder.html" title="interface in net.minestom.server.item">ItemMeta.Builder</a>&gt;&nbsp;metaOperator)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withMeta(net.minestom.server.item.ItemMeta)" class="member-name-link">withMeta</a><wbr>(@NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a>&nbsp;meta)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#withTag(net.minestom.server.tag.Tag,T)" class="member-name-link">withTag</a><wbr>(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
  T&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.kyori.adventure.text.event.HoverEventSource">Methods inherited from interface&nbsp;net.kyori.adventure.text.event.<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a></h3>
 <code><a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html#asHoverEvent()" title="class or interface in net.kyori.adventure.text.event" class="external-link">asHoverEvent</a></code></div>
@@ -251,7 +271,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <section class="detail" id="AIR">
 <h3>AIR</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">AIR</span></div>
+</span><span class="modifiers">static final</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">AIR</span></div>
 <div class="block">Constant AIR item. Should be used instead of 'null'.</div>
 </section>
 </li>
@@ -269,7 +289,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStackBuilder.html" title="class in net.minestom.server.item">ItemStackBuilder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.Builder.html" title="interface in net.minestom.server.item">ItemStack.Builder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</span></div>
 </section>
 </li>
@@ -279,7 +299,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_ ,_ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
  int&nbsp;amount)</span></div>
 </section>
@@ -290,7 +310,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</span></div>
 </section>
 </li>
@@ -300,7 +320,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, _, _ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">fromNBT</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">fromNBT</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
  @Nullable
  @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound,
@@ -313,7 +333,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, _ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">fromNBT</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">fromNBT</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material,
  @Nullable
  @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</span></div>
@@ -324,7 +344,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <h3>fromItemNBT</h3>
 <div class="member-signature"><span class="annotations">@Experimental
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">fromItemNBT</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">fromItemNBT</span><wbr><span class="parameters">(@NotNull
  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</span></div>
 <div class="block">Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta).</div>
 <dl class="notes">
@@ -334,11 +354,36 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 </section>
 </li>
 <li>
-<section class="detail" id="getMaterial()">
-<h3>getMaterial</h3>
+<section class="detail" id="material()">
+<h3>material</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a></span>&nbsp;<span class="element-name">getMaterial</span>()</div>
+</span><span class="return-type">@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a></span>&nbsp;<span class="element-name">material</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="amount()">
+<h3>amount</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">amount</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="meta()">
+<h3>meta</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="return-type">@NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></span>&nbsp;<span class="element-name">meta</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="meta(java.lang.Class)">
+<h3>meta</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@Experimental
+@NotNull
+</span><span class="type-parameters">&lt;T extends <a href="ItemMetaView.html" title="interface in net.minestom.server.item">ItemMetaView</a>&lt;?&gt;&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">meta</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;metaClass)</span></div>
 </section>
 </li>
 <li>
@@ -347,15 +392,43 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">with</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="ItemStackBuilder.html" title="class in net.minestom.server.item">ItemStackBuilder</a>&gt;&nbsp;builderConsumer)</span></div>
+</span><span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">with</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="ItemStack.Builder.html" title="interface in net.minestom.server.item">ItemStack.Builder</a>&gt;&nbsp;builderConsumer)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="getAmount()">
-<h3>getAmount</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getAmount</span>()</div>
+<section class="detail" id="withMeta(java.lang.Class,java.util.function.Consumer)">
+<h3>withMeta</h3>
+<div class="member-signature"><span class="annotations">@Contract(value="_, _ -&gt; new",
+          pure=true)
+@Experimental
+@NotNull
+</span><span class="type-parameters-long">&lt;V extends <a href="ItemMetaView.Builder.html" title="interface in net.minestom.server.item">ItemMetaView.Builder</a>,<wbr>
+T extends <a href="ItemMetaView.html" title="interface in net.minestom.server.item">ItemMetaView</a>&lt;V&gt;&gt;</span>
+<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;metaType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;V&gt;&nbsp;metaConsumer)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="withMeta(java.util.function.UnaryOperator)">
+<h3>withMeta</h3>
+<div class="member-signature"><span class="annotations">@Contract(value="_ -&gt; new",
+          pure=true)
+@NotNull
+</span><span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="ItemMeta.Builder.html" title="interface in net.minestom.server.item">ItemMeta.Builder</a>&gt;&nbsp;metaOperator)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="withMaterial(net.minestom.server.item.Material)">
+<h3>withMaterial</h3>
+<div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
+          pure=true)
+@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMaterial</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;material)</span></div>
 </section>
 </li>
 <li>
@@ -364,7 +437,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withAmount</span><wbr><span class="parameters">(int&nbsp;amount)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withAmount</span><wbr><span class="parameters">(int&nbsp;amount)</span></div>
 </section>
 </li>
 <li>
@@ -373,7 +446,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withAmount</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withAmount</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/IntUnaryOperator.html" title="class or interface in java.util.function" class="external-link">IntUnaryOperator</a>&nbsp;intUnaryOperator)</span></div>
 </section>
 </li>
@@ -384,30 +457,23 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 @Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">consume</span><wbr><span class="parameters">(int&nbsp;amount)</span></div>
+</span><span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">consume</span><wbr><span class="parameters">(int&nbsp;amount)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="withMeta(java.lang.Class,java.util.function.Consumer)">
-<h3>withMeta</h3>
-<div class="member-signature"><span class="annotations">@Contract(value="_, _ -&gt; new",
-          pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters-long">&lt;T extends <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>,<wbr>
-U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;T&gt;&gt;</span>
-<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;U&gt;&nbsp;metaType,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;T&gt;&nbsp;metaConsumer)</span></div>
+<section class="detail" id="getDisplayName()">
+<h3>getDisplayName</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">getDisplayName</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="withMeta(java.util.function.UnaryOperator)">
-<h3>withMeta</h3>
-<div class="member-signature"><span class="annotations">@Contract(value="_ -&gt; new",
-          pure=true)
+<section class="detail" id="getLore()">
+<h3>getLore</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&gt;</span>
-<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull T&gt;&nbsp;metaOperator)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">getLore</span>()</div>
 </section>
 </li>
 <li>
@@ -417,16 +483,8 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 @Contract(value="_ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a>&nbsp;meta)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="getDisplayName()">
-<h3>getDisplayName</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">getDisplayName</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a>&nbsp;meta)</span></div>
 </section>
 </li>
 <li>
@@ -435,7 +493,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withDisplayName</span><wbr><span class="parameters">(@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withDisplayName</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName)</span></div>
 </section>
 </li>
@@ -445,16 +503,8 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withDisplayName</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withDisplayName</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;componentUnaryOperator)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="getLore()">
-<h3>getLore</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">getLore</span>()</div>
 </section>
 </li>
 <li>
@@ -463,7 +513,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withLore</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withLore</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;lore)</span></div>
 </section>
 </li>
@@ -473,61 +523,23 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withLore</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withLore</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&gt;&nbsp;loreUnaryOperator)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="getMeta()">
-<h3>getMeta</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></span>&nbsp;<span class="element-name">getMeta</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="isAir()">
 <h3>isAir</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAir</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAir</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="isSimilar(net.minestom.server.item.ItemStack)">
 <h3>isSimilar</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isSimilar</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="equals(java.lang.Object)">
-<h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="hashCode()">
-<h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="toString()">
-<h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
+</span><span class="return-type">boolean</span>&nbsp;<span class="element-name">isSimilar</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
 </section>
 </li>
 <li>
@@ -536,7 +548,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <div class="member-signature"><span class="annotations">@Contract(value="_, _ -&gt; new",
           pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withTag</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">withTag</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
  @Nullable
  T&nbsp;value)</span></div>
@@ -545,7 +557,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <li>
 <section class="detail" id="getTag(net.minestom.server.tag.Tag)">
 <h3>getTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getTag</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getTag</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">TagReadable</a></code></span></div>
 <div class="block">Reads the specified tag.</div>
@@ -565,7 +577,7 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <section class="detail" id="asHoverEvent(java.util.function.UnaryOperator)">
 <h3>asHoverEvent</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</span>&nbsp;<span class="element-name">asHoverEvent</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;</span>&nbsp;<span class="element-name">asHoverEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEvent.ShowItem.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowItem</a>&gt;&nbsp;op)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -578,12 +590,41 @@ U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minest
 <h3>toItemNBT</h3>
 <div class="member-signature"><span class="annotations">@Experimental
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">toItemNBT</span>()</div>
+</span><span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">toItemNBT</span>()</div>
 <div class="block">Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta)</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The nbt representation of the item</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaterial()">
+<h3>getMaterial</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="Material.html" title="interface in net.minestom.server.item">Material</a></span>&nbsp;<span class="element-name">getMaterial</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getAmount()">
+<h3>getAmount</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+@Contract(pure=true)
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getAmount</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getMeta()">
+<h3>getMeta</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></span>&nbsp;<span class="element-name">getMeta</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 </section>
 </li>
 </ul>

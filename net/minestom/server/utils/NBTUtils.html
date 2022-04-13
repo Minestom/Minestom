@@ -44,7 +44,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -76,26 +76,12 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">NBTUtils</span>
+<div class="type-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public final class </span><span class="element-name type-name-label">NBTUtils</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="NBTUtils.EnchantmentSetter.html" class="type-name-link" title="interface in net.minestom.server.utils">NBTUtils.EnchantmentSetter</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -137,22 +123,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Loads all the items from the 'items' list into the given inventory</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadEnchantments(org.jglrxavpok.hephaistos.nbt.NBTList,net.minestom.server.utils.NBTUtils.EnchantmentSetter)" class="member-name-link">loadEnchantments</a><wbr>(org.jglrxavpok.hephaistos.nbt.NBTList&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;enchantments,
- <a href="NBTUtils.EnchantmentSetter.html" title="interface in net.minestom.server.utils">NBTUtils.EnchantmentSetter</a>&nbsp;setter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readItemStack(net.minestom.server.utils.binary.BinaryReader)" class="member-name-link">readItemStack</a><wbr>(@NotNull <a href="binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#saveAllItems(java.util.List,net.minestom.server.inventory.Inventory)" class="member-name-link">saveAllItems</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;list,
- @NotNull <a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readItemStack(net.minestom.server.utils.binary.BinaryReader)" class="member-name-link">readItemStack</a><wbr>(@NotNull <a href="binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#writeEnchant(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound,java.lang.String,java.util.Map)" class="member-name-link">writeEnchant</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;nbt,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#saveAllItems(java.util.List,net.minestom.server.inventory.Inventory)" class="member-name-link">saveAllItems</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;list,
+ @NotNull <a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#writeEnchant(org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound,java.lang.String,java.util.Map)" class="member-name-link">writeEnchant</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound&nbsp;nbt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;listName,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link">Short</a>&gt;&nbsp;enchantmentMap)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -243,15 +225,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="readItemStack(net.minestom.server.utils.binary.BinaryReader)">
 <h3>readItemStack</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">readItemStack</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">readItemStack</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="loadEnchantments(org.jglrxavpok.hephaistos.nbt.NBTList,net.minestom.server.utils.NBTUtils.EnchantmentSetter)">
-<h3>loadEnchantments</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadEnchantments</span><wbr><span class="parameters">(org.jglrxavpok.hephaistos.nbt.NBTList&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;enchantments,
- <a href="NBTUtils.EnchantmentSetter.html" title="interface in net.minestom.server.utils">NBTUtils.EnchantmentSetter</a>&nbsp;setter)</span></div>
 </section>
 </li>
 </ul>

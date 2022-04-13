@@ -59,10 +59,12 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMeta.html" class="type-name-link" title="class in net.minestom.server.item">ItemMeta</a> (implements net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>, net.minestom.server.utils.binary.<a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>)</li>
-<li class="circle">net.minestom.server.item.<a href="ItemMetaBuilder.html" class="type-name-link" title="class in net.minestom.server.item">ItemMetaBuilder</a> (implements net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a>)</li>
-<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="class in net.minestom.server.item">ItemStack</a> (implements net.kyori.adventure.text.event.<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;V&gt;, net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
-<li class="circle">net.minestom.server.item.<a href="ItemStackBuilder.html" class="type-name-link" title="class in net.minestom.server.item">ItemStackBuilder</a></li>
+<li class="circle">net.minestom.server.item.<a href="ItemSerializers.html" class="type-name-link" title="class in net.minestom.server.item">ItemSerializers</a></li>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
+<ul>
+<li class="circle">net.minestom.server.item.<a href="ItemSerializers.EnchantmentEntry.html" class="type-name-link" title="class in net.minestom.server.item">ItemSerializers.EnchantmentEntry</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -75,7 +77,12 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.item.<a href="Enchantment.html" class="type-name-link" title="interface in net.minestom.server.item">Enchantment</a> (also extends net.minestom.server.registry.<a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>)</li>
 </ul>
 </li>
-<li class="circle">net.minestom.server.item.<a href="ItemMetaBuilder.Provider.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;T&gt;</li>
+<li class="circle">net.kyori.adventure.text.event.<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" class="type-name-link external-link" title="class or interface in net.kyori.adventure.text.event">HoverEventSource</a>&lt;V&gt;
+<ul>
+<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.item.<a href="ItemStack.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack.Builder</a></li>
 <li class="circle">net.kyori.adventure.key.Keyed
 <ul>
 <li class="circle">net.minestom.server.registry.<a href="../registry/ProtocolObject.html" class="type-name-link" title="interface in net.minestom.server.registry">ProtocolObject</a>
@@ -92,6 +99,34 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">net.minestom.server.item.<a href="StackingRule.html" class="type-name-link" title="interface in net.minestom.server.item">StackingRule</a></li>
+<li class="circle">net.minestom.server.tag.<a href="../tag/TagReadable.html" class="type-name-link" title="interface in net.minestom.server.tag">TagReadable</a>
+<ul>
+<li class="circle">net.minestom.server.item.<a href="ItemMeta.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta</a> (also extends net.minestom.server.utils.binary.<a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>)</li>
+<li class="circle">net.minestom.server.item.<a href="ItemMetaView.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaView</a>&lt;T&gt;</li>
+<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.kyori.adventure.text.event.<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;V&gt;)</li>
+<li class="circle">net.minestom.server.tag.<a href="../tag/Taggable.html" class="type-name-link" title="interface in net.minestom.server.tag">Taggable</a> (also extends net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a>)
+<ul>
+<li class="circle">net.minestom.server.item.<a href="ItemMeta.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta.Builder</a></li>
+<li class="circle">net.minestom.server.item.<a href="ItemMetaView.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaView.Builder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.tag.<a href="../tag/TagWritable.html" class="type-name-link" title="interface in net.minestom.server.tag">TagWritable</a>
+<ul>
+<li class="circle">net.minestom.server.tag.<a href="../tag/Taggable.html" class="type-name-link" title="interface in net.minestom.server.tag">Taggable</a> (also extends net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)
+<ul>
+<li class="circle">net.minestom.server.item.<a href="ItemMeta.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta.Builder</a></li>
+<li class="circle">net.minestom.server.item.<a href="ItemMetaView.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaView.Builder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.utils.binary.<a href="../utils/binary/Writeable.html" class="type-name-link" title="interface in net.minestom.server.utils.binary">Writeable</a>
+<ul>
+<li class="circle">net.minestom.server.item.<a href="ItemMeta.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta</a> (also extends net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
+</ul>
+</li>
 </ul>
 </section>
 <section class="hierarchy">

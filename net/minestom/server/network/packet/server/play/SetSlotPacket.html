@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">SetSlotPacket</span>(byte&nbsp;windowId, int&nbsp;stateId, short&nbsp;slot, @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">SetSlotPacket</span>(byte&nbsp;windowId, int&nbsp;stateId, short&nbsp;slot, @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -99,7 +99,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(byte,int,short,net.minestom.server.item.ItemStack)" class="member-name-link">SetSlotPacket</a><wbr>(byte&nbsp;windowId,
  int&nbsp;stateId,
  short&nbsp;slot,
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>SetSlotPacket</code> record class.</div>
 </div>
@@ -120,7 +120,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play">SetSlotPacket</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createCursorPacket(net.minestom.server.item.ItemStack)" class="member-name-link">createCursorPacket</a><wbr>(@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createCursorPacket(net.minestom.server.item.ItemStack)" class="member-name-link">createCursorPacket</a><wbr>(@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns a <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>SetSlotPacket</code></a> used to change a player cursor item.</div>
 </div>
@@ -139,7 +139,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#itemStack()" class="member-name-link">itemStack</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>itemStack</code> record component.</div>
@@ -199,7 +199,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
  int&nbsp;stateId,
  short&nbsp;slot,
  @NotNull
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
 <div class="block">Creates an instance of a <code>SetSlotPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -254,7 +254,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <h3>createCursorPacket</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play">SetSlotPacket</a></span>&nbsp;<span class="element-name">createCursorPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</span></div>
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</span></div>
 <div class="block">Returns a <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>SetSlotPacket</code></a> used to change a player cursor item.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -342,7 +342,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="itemStack()">
 <h3>itemStack</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">itemStack</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">itemStack</span>()</div>
 <div class="block">Returns the value of the <code>itemStack</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">WindowItemsPacket</span>(byte&nbsp;windowId, int&nbsp;stateId, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;items, @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">WindowItemsPacket</span>(byte&nbsp;windowId, int&nbsp;stateId, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;&nbsp;items, @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -98,8 +98,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(byte,int,java.util.List,net.minestom.server.item.ItemStack)" class="member-name-link">WindowItemsPacket</a><wbr>(byte&nbsp;windowId,
  int&nbsp;stateId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;items,
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;&nbsp;items,
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>WindowItemsPacket</code> record class.</div>
 </div>
@@ -119,7 +119,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#carriedItem()" class="member-name-link">carriedItem</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>carriedItem</code> record component.</div>
@@ -139,7 +139,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#items()" class="member-name-link">items</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>items</code> record component.</div>
@@ -187,9 +187,9 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">WindowItemsPacket</span><wbr><span class="parameters">(byte&nbsp;windowId,
  int&nbsp;stateId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;items,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;&nbsp;items,
  @NotNull
- @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)</span></div>
+ @NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)</span></div>
 <div class="block">Creates an instance of a <code>WindowItemsPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -312,7 +312,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="items()">
 <h3>items</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</span>&nbsp;<span class="element-name">items</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;</span>&nbsp;<span class="element-name">items</span>()</div>
 <div class="block">Returns the value of the <code>items</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -324,7 +324,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="carriedItem()">
 <h3>carriedItem</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">carriedItem</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">carriedItem</span>()</div>
 <div class="block">Returns the value of the <code>carriedItem</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
