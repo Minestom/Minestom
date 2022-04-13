@@ -57,6 +57,10 @@ public record MapMeta(TagReadable readable) implements ItemMetaView<MapMeta.Buil
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder mapId(int value) {
             setTag(MAP_ID, value);
             return this;

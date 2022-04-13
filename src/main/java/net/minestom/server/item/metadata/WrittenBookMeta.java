@@ -53,6 +53,10 @@ public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<Writ
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder resolved(boolean resolved) {
             setTag(RESOLVED, resolved);
             return this;

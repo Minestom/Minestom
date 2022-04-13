@@ -38,6 +38,10 @@ public record EnchantedBookMeta(TagReadable readable) implements ItemMetaView<En
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
             setTag(ENCHANTMENTS, Map.copyOf(enchantments));
             return this;

@@ -26,6 +26,10 @@ public record BundleMeta(TagReadable readable) implements ItemMetaView<BundleMet
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder items(@NotNull List<ItemStack> items) {
             setTag(ITEMS, items);
             return this;

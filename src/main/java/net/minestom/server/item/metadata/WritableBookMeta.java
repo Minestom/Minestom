@@ -27,6 +27,10 @@ public record WritableBookMeta(TagReadable readable) implements ItemMetaView<Wri
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder pages(@NotNull List<@NotNull Component> pages) {
             setTag(PAGES, pages);
             return this;

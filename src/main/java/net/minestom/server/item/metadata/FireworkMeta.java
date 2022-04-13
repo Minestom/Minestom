@@ -31,6 +31,10 @@ public record FireworkMeta(TagReadable readable) implements ItemMetaView<Firewor
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder effects(List<FireworkEffect> effects) {
             setTag(EFFECTS, effects);
             return this;

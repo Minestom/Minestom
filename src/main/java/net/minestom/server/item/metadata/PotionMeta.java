@@ -59,6 +59,10 @@ public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMet
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder potionType(@NotNull PotionType potionType) {
             setTag(POTION_TYPE, potionType);
             return this;

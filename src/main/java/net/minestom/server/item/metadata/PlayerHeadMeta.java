@@ -41,6 +41,10 @@ public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<Playe
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder skullOwner(@Nullable UUID skullOwner) {
             setTag(SKULL_OWNER, skullOwner);
             return this;

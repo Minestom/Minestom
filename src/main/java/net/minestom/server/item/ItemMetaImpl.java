@@ -60,6 +60,11 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
         return Objects.hash(toNBT());
     }
 
+    @Override
+    public String toString() {
+        return toSNBT();
+    }
+
     record Builder(TagHandler tagHandler) implements ItemMeta.Builder {
         @Override
         public @NotNull ItemMeta build() {

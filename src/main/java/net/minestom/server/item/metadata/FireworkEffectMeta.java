@@ -24,6 +24,10 @@ public record FireworkEffectMeta(TagReadable readable) implements ItemMetaView<F
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder effect(@Nullable FireworkEffect fireworkEffect) {
             setTag(FIREWORK_EFFECT, fireworkEffect);
             return this;

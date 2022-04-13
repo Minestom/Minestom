@@ -28,6 +28,10 @@ public record CrossbowMeta(TagReadable readable) implements ItemMetaView<Crossbo
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder projectile(@NotNull ItemStack projectile) {
             setTag(PROJECTILES, List.of(projectile));
             return this;

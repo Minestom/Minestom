@@ -22,6 +22,10 @@ public record LeatherArmorMeta(TagReadable readable) implements ItemMetaView<Lea
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder color(@Nullable Color color) {
             setTag(COLOR, color);
             return this;

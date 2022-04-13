@@ -47,6 +47,10 @@ public record CompassMeta(TagReadable readable) implements ItemMetaView<CompassM
     }
 
     public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
+
         public Builder lodestoneTracked(boolean lodestoneTracked) {
             setTag(LODESTONE_TRACKED, lodestoneTracked);
             return this;

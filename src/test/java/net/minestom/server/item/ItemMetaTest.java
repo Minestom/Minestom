@@ -1,10 +1,14 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.text.Component;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.item.metadata.BundleMeta;
+import net.minestom.server.item.metadata.PlayerHeadMeta;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,5 +36,22 @@ public class ItemMetaTest {
                 })
                 .build();
         assertEquals(2, item.meta(BundleMeta.class).getItems().size());
+    }
+
+    @Test
+    public void buildView() {
+        var uuid = UUID.randomUUID();
+        var skin = new PlayerSkin("xx", "yy");
+        var meta = new PlayerHeadMeta.Builder()
+                .skullOwner(uuid)
+                .playerSkin(skin)
+                .build();
+        var item = ItemStack.builder(Material.PLAYER_HEAD)
+                .meta(meta)
+                .displayName(Component.text("Name"))
+                .build();
+        PlayerHeadMeta view = item.meta(PlayerHeadMeta.class);
+        assertEquals(uuid, view.getSkullOwner());
+        assertEquals(skin, view.getPlayerSkin());
     }
 }
