@@ -52,6 +52,12 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     }
 
     /**
+     * Gets the entities within a chunk range.
+     */
+    <T extends Entity> void nearbyEntitiesByChunkRange(@NotNull Point point, int chunkRange,
+                                           @NotNull Target<T> target, @NotNull Consumer<T> query);
+
+    /**
      * Gets the entities within a range.
      */
     <T extends Entity> void nearbyEntities(@NotNull Point point, double range,

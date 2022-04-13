@@ -45,7 +45,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, this);
-            nearbyEntities(point, MinecraftServer.getEntityViewDistance() * 16, target, newEntity -> {
+            nearbyEntitiesByChunkRange(point, MinecraftServer.getEntityViewDistance(), target, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
@@ -66,7 +66,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, null);
-            nearbyEntities(point, MinecraftServer.getEntityViewDistance() * 16, target, newEntity -> {
+            nearbyEntitiesByChunkRange(point, MinecraftServer.getEntityViewDistance(), target, newEntity -> {
                 if (newEntity == entity) return;
                 update.remove(newEntity);
             });
@@ -108,6 +108,25 @@ final class EntityTrackerImpl implements EntityTracker {
         //noinspection unchecked
         var chunkEntities = (List<T>) entry.chunkEntities(getChunkIndex(chunkX, chunkZ));
         return Collections.unmodifiableList(chunkEntities);
+    }
+
+    @Override
+    public <T extends Entity> void nearbyEntitiesByChunkRange(@NotNull Point point, int chunkRange, @NotNull Target<T> target, @NotNull Consumer<T> query) {
+        final Long2ObjectSyncMap<List<Entity>> entities = entries[target.ordinal()].chunkEntities;
+        if (chunkRange == 0) {
+            // Single chunk
+            final var chunkEntities = (List<T>) entities.get(getChunkIndex(point));
+            if (chunkEntities != null && !chunkEntities.isEmpty()) {
+                chunkEntities.forEach(query);
+            }
+        } else {
+            // Multiple chunks
+            forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+                final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
+                if (chunkEntities == null || chunkEntities.isEmpty()) return;
+                chunkEntities.forEach(query);
+            });
+        }
     }
 
     @Override
