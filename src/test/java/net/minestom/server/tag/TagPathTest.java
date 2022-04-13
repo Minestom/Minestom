@@ -153,6 +153,15 @@ public class TagPathTest {
     }
 
     @Test
+    public void pathInvalidClear() {
+        var handler = TagHandler.newHandler();
+        var tag1 = Tag.Integer("pathInvalidClear1").path("key");
+        var tag2 = Tag.Integer("pathInvalidClear2").path("key");
+        handler.setTag(tag1, 5);
+        handler.setTag(tag2, null);
+    }
+
+    @Test
     public void chaining() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("key");
