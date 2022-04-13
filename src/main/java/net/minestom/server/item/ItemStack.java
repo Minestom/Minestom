@@ -85,16 +85,6 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @Contract(pure = true)
     <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass);
 
-    @Contract(pure = true)
-    default @Nullable Component getDisplayName() {
-        return meta().getDisplayName();
-    }
-
-    @Contract(pure = true)
-    default @NotNull List<@NotNull Component> getLore() {
-        return meta().getLore();
-    }
-
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> builderConsumer);
 
@@ -104,6 +94,11 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_ -> new", pure = true)
     @NotNull ItemStack withMeta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> metaOperator);
+
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withMaterial(@NotNull Material material) {
+        return ItemStackImpl.create(material, amount(), meta());
+    }
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withAmount(int amount) {
@@ -118,6 +113,16 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @ApiStatus.Experimental
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack consume(int amount);
+
+    @Contract(pure = true)
+    default @Nullable Component getDisplayName() {
+        return meta().getDisplayName();
+    }
+
+    @Contract(pure = true)
+    default @NotNull List<@NotNull Component> getLore() {
+        return meta().getLore();
+    }
 
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
