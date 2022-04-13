@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-public record CompassMeta(TagReadable readable) implements ItemMetaView {
+public record CompassMeta(TagReadable readable) implements ItemMetaView<CompassMeta.Builder> {
     private static final Tag<Boolean> LODESTONE_TRACKED = Tag.Boolean("LodestoneTracked").defaultValue(false);
     private static final Tag<String> LODESTONE_DIMENSION = Tag.String("LodestoneDimension");
     private static final Tag<Point> LODESTONE_POSITION = null;
