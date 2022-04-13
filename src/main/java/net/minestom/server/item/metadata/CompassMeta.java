@@ -1,10 +1,9 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemMetaView;
-import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -12,7 +11,23 @@ import org.jetbrains.annotations.UnknownNullability;
 public record CompassMeta(TagReadable readable) implements ItemMetaView<CompassMeta.Builder> {
     private static final Tag<Boolean> LODESTONE_TRACKED = Tag.Boolean("LodestoneTracked").defaultValue(false);
     private static final Tag<String> LODESTONE_DIMENSION = Tag.String("LodestoneDimension");
-    private static final Tag<Point> LODESTONE_POSITION = null;
+    private static final Tag<Point> LODESTONE_POSITION = Tag.Structure("LodestonePos", new TagSerializer<>() {
+        @Override
+        public @Nullable Point read(@NotNull TagReadable reader) {
+            final Integer x = reader.getTag(Tag.Integer("X"));
+            final Integer y = reader.getTag(Tag.Integer("Y"));
+            final Integer z = reader.getTag(Tag.Integer("Z"));
+            if (x == null || y == null || z == null) return null;
+            return new Vec(x, y, z);
+        }
+
+        @Override
+        public void write(@NotNull TagWritable writer, @NotNull Point value) {
+            writer.setTag(Tag.Integer("X"), value.blockX());
+            writer.setTag(Tag.Integer("Y"), value.blockY());
+            writer.setTag(Tag.Integer("Z"), value.blockZ());
+        }
+    });
 
     public boolean isLodestoneTracked() {
         return getTag(LODESTONE_TRACKED);
