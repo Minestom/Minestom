@@ -1,89 +1,54 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.entity.PlayerSkin;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
-import net.minestom.server.utils.Utils;
+import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.tag.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
-public class PlayerHeadMeta extends ItemMeta implements ItemMetaBuilder.Provider<PlayerHeadMeta.Builder> {
+public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<PlayerHeadMeta.Builder> {
+    private static final Tag<UUID> SKULL_OWNER = Tag.UUID("Id").path("SkullOwner");
+    private static final Tag<PlayerSkin> SKIN = Tag.Structure("Properties", new TagSerializer<PlayerSkin>() {
+        @Override
+        public @Nullable PlayerSkin read(@NotNull TagReadable reader) {
+            final String value = reader.getTag(Tag.String("Value"));
+            final String signature = reader.getTag(Tag.String("Signature"));
+            if (value == null || signature == null) return null;
+            return new PlayerSkin(value, signature);
+        }
 
-    private final UUID skullOwner;
-    private final PlayerSkin playerSkin;
-
-    protected PlayerHeadMeta(@NotNull ItemMetaBuilder metaBuilder, UUID skullOwner,
-                             @Nullable PlayerSkin playerSkin) {
-        super(metaBuilder);
-        this.skullOwner = skullOwner;
-        this.playerSkin = playerSkin;
-    }
+        @Override
+        public void write(@NotNull TagWritable writer, @NotNull PlayerSkin value) {
+            writer.setTag(Tag.String("Value"), value.textures());
+            writer.setTag(Tag.String("Signature"), value.signature());
+        }
+    }).path("SkullOwner");
 
     public UUID getSkullOwner() {
-        return skullOwner;
+        return getTag(SKULL_OWNER);
     }
 
     public @Nullable PlayerSkin getPlayerSkin() {
-        return playerSkin;
+        return getTag(SKIN);
     }
 
-    public static class Builder extends ItemMetaBuilder {
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
+    }
 
-        private UUID skullOwner;
-        private PlayerSkin playerSkin;
-
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
         public Builder skullOwner(@Nullable UUID skullOwner) {
-            this.skullOwner = skullOwner;
-            handleCompound("SkullOwner", nbtCompound ->
-                    nbtCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner)));
+            setTag(SKULL_OWNER, skullOwner);
             return this;
         }
 
         public Builder playerSkin(@Nullable PlayerSkin playerSkin) {
-            this.playerSkin = playerSkin;
-            handleCompound("SkullOwner", nbtCompound -> {
-                if (playerSkin == null) {
-                    nbtCompound.remove("Properties");
-                    return;
-                }
-
-                final String value = Objects.requireNonNullElse(this.playerSkin.textures(), "");
-                final String signature = Objects.requireNonNullElse(this.playerSkin.signature(), "");
-                NBTList<NBTCompound> textures = new NBTList<>(NBTType.TAG_Compound,
-                        List.of(NBT.Compound(Map.of(
-                                "Value", NBT.String(value),
-                                "Signature", NBT.String(signature)))));
-                nbtCompound.set("Properties", NBT.Compound(Map.of("textures", textures)));
-            });
+            setTag(SKIN, playerSkin);
             return this;
-        }
-
-        @Override
-        public @NotNull PlayerHeadMeta build() {
-            return new PlayerHeadMeta(this, skullOwner, playerSkin);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.get("SkullOwner") instanceof NBTCompound skullOwnerCompound) {
-                if (skullOwnerCompound.get("Id") instanceof NBTIntArray id) {
-                    this.skullOwner = Utils.intArrayToUuid(id.getValue().copyArray());
-                }
-
-                if (skullOwnerCompound.get("Properties") instanceof NBTCompound propertyCompound) {
-                    if (propertyCompound.get("textures") instanceof NBTList<?> textures &&
-                            textures.getSubtagType() == NBTType.TAG_Compound) {
-                        NBTCompound nbt = (NBTCompound) textures.get(0);
-                        this.playerSkin = new PlayerSkin(nbt.getString("Value"), nbt.getString("Signature"));
-                    }
-                }
-            }
         }
     }
 }

@@ -1,78 +1,44 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.item.firework.FireworkEffect;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkMeta.Builder> {
-
-    private final List<FireworkEffect> effects;
-    private final byte flightDuration;
-
-    protected FireworkMeta(@NotNull ItemMetaBuilder metaBuilder, List<FireworkEffect> effects,
-                           byte flightDuration) {
-        super(metaBuilder);
-        this.effects = List.copyOf(effects);
-        this.flightDuration = flightDuration;
-    }
+public record FireworkMeta(TagReadable readable) implements ItemMetaView<FireworkMeta.Builder> {
+    private static final Tag<List<FireworkEffect>> EFFECTS = Tag.NBT("Explosions").path("Fireworks")
+            .map(nbt -> FireworkEffect.fromCompound((NBTCompound) nbt), FireworkEffect::asCompound)
+            .list().defaultValue(List.of());
+    private static final Tag<Byte> FLIGHT_DURATION = Tag.Byte("Flight").path("Fireworks");
 
     public List<FireworkEffect> getEffects() {
-        return effects;
+        return getTag(EFFECTS);
     }
 
     public byte getFlightDuration() {
-        return flightDuration;
+        return getTag(FLIGHT_DURATION);
     }
 
-    public static class Builder extends ItemMetaBuilder {
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
+    }
 
-        private List<FireworkEffect> effects = new CopyOnWriteArrayList<>();
-        private byte flightDuration;
-
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
         public Builder effects(List<FireworkEffect> effects) {
-            this.effects = effects;
-            handleCompound("Fireworks", nbtCompound -> {
-                nbtCompound.set("Explosions", NBT.List(
-                        NBTType.TAG_Compound,
-                        effects.stream()
-                                .map(FireworkEffect::asCompound)
-                                .toList()
-                ));
-            });
+            setTag(EFFECTS, effects);
             return this;
         }
 
         public Builder flightDuration(byte flightDuration) {
-            this.flightDuration = flightDuration;
-            handleCompound("Fireworks", nbtCompound ->
-                    nbtCompound.setByte("Flight", this.flightDuration));
+            setTag(FLIGHT_DURATION, flightDuration);
             return this;
-        }
-
-        @Override
-        public @NotNull FireworkMeta build() {
-            return new FireworkMeta(this, effects, flightDuration);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.get("Fireworks") instanceof NBTCompound fireworksCompound) {
-                if (fireworksCompound.get("Flight") instanceof NBTByte flight) {
-                    this.flightDuration = flight.getValue();
-                }
-
-                if (fireworksCompound.get("Explosions") instanceof NBTList<?> list &&
-                        list.getSubtagType() == NBTType.TAG_Compound) {
-                    for (NBTCompound explosion : list.<NBTCompound>asListOf()) {
-                        this.effects.add(FireworkEffect.fromCompound(explosion));
-                    }
-                }
-            }
         }
     }
 }

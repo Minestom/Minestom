@@ -49,9 +49,9 @@ public class CampfireHandler implements BlockHandler {
                     NBTType.TAG_Compound,
                     value.stream()
                             .map(item -> NBT.Compound(nbt -> {
-                                nbt.setByte("Count", (byte) item.getAmount());
+                                nbt.setByte("Count", (byte) item.amount());
                                 nbt.setByte("Slot", (byte) 1);
-                                nbt.setString("id", item.getMaterial().name());
+                                nbt.setString("id", item.material().name());
                             }))
                             .toList()
             ));

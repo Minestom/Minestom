@@ -60,7 +60,7 @@ public final class PlayerDiggingListener {
         } else if (gameMode == GameMode.ADVENTURE) {
             // Check if the item can break the block with the current item
             final ItemStack itemInMainHand = player.getItemInMainHand();
-            if (!itemInMainHand.getMeta().getCanDestroy().contains(block)) {
+            if (!itemInMainHand.meta().getCanDestroy().contains(block)) {
                 return new DiggingResult(block, false);
             }
         } else if (gameMode == GameMode.CREATIVE) {

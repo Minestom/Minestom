@@ -63,7 +63,7 @@ public class BlockPlacementListener {
             return;
         }
 
-        final Material useMaterial = usedItem.getMaterial();
+        final Material useMaterial = usedItem.material();
         if (!useMaterial.isBlock()) {
             // Player didn't try to place a block but interacted with one
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace);
@@ -78,7 +78,7 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-            canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(interactedBlock);
+            canPlaceBlock = usedItem.meta().getCanPlaceOn().contains(interactedBlock);
         }
 
         // Get the newly placed block position

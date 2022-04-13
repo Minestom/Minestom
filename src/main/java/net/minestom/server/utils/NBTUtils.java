@@ -8,20 +8,19 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 
 // for lack of a better name
+@ApiStatus.Internal
 public final class NBTUtils {
-    private final static Logger LOGGER = LoggerFactory.getLogger(NBTUtils.class);
 
     /**
      * An Adventure codec to convert between NBT and SNBT.
@@ -32,7 +31,6 @@ public final class NBTUtils {
     public static final Codec<NBT, String, NBTException, RuntimeException> SNBT_CODEC = MinestomAdventure.NBT_CODEC;
 
     private NBTUtils() {
-
     }
 
     /**
@@ -76,15 +74,13 @@ public final class NBTUtils {
     public static void saveAllItems(@NotNull List<NBTCompound> list, @NotNull Inventory inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
             final ItemStack stack = inventory.getItemStack(i);
-
-            NBTCompound tag = stack.getMeta().toNBT();
-
+            final NBTCompound tag = stack.meta().toNBT();
             final int slotIndex = i;
             list.add(NBT.Compound(nbt -> {
                 nbt.set("tag", tag);
                 nbt.setByte("Slot", (byte) slotIndex);
-                nbt.setByte("Count", (byte) stack.getAmount());
-                nbt.setString("id", stack.getMaterial().name());
+                nbt.setByte("Count", (byte) stack.amount());
+                nbt.setString("id", stack.material().name());
             }));
         }
     }
@@ -116,23 +112,5 @@ public final class NBTUtils {
         NBTCompound nbtCompound = reader.readTag() instanceof NBTCompound compound ?
                 compound : null;
         return ItemStack.fromNBT(material, nbtCompound, count);
-    }
-
-    public static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
-        for (NBTCompound enchantment : enchantments) {
-            final short level = enchantment.getAsShort("lvl");
-            final String id = enchantment.getString("id");
-            final Enchantment enchant = Enchantment.fromNamespaceId(id);
-            if (enchant != null) {
-                setter.applyEnchantment(enchant, level);
-            } else {
-                LOGGER.warn("Unknown enchantment type: {}", id);
-            }
-        }
-    }
-
-    @FunctionalInterface
-    public interface EnchantmentSetter {
-        void applyEnchantment(Enchantment name, short level);
     }
 }

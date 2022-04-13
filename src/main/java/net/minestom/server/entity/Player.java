@@ -264,7 +264,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             if (player != this) sendPacket(player.getAddPlayerToList());
         }
-        
+
         //Teams
         for (Team team : MinecraftServer.getTeamManager().getTeams()) {
             sendPacket(team.createTeamsCreationPacket());
@@ -355,7 +355,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.getMaterial().isFood();
+                final boolean isFood = foodItem.material().isFood();
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
@@ -747,7 +747,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void openBook(@NotNull Book book) {
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
+                        .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
+                        .author(book.author())
+                        .title(book.title())
+                        .pages(book.pages()))
                 .build();
         // Set book in offhand
         playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
@@ -1814,7 +1818,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.getMaterial().isFood();
+        final boolean isFood = updatedItem.material().isFood();
 
         if (isFood && !allowFood)
             return null;
@@ -2098,9 +2102,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return mainHand;
         }
 
-        public boolean enableTextFiltering() { return enableTextFiltering; }
+        public boolean enableTextFiltering() {
+            return enableTextFiltering;
+        }
 
-        public boolean allowServerListings() { return allowServerListings; }
+        public boolean allowServerListings() {
+            return allowServerListings;
+        }
 
         /**
          * Changes the player settings internally.

@@ -28,7 +28,7 @@ public class UseItemListener {
         }
 
         itemStack = useItemEvent.getItemStack();
-        final Material material = itemStack.getMaterial();
+        final Material material = itemStack.material();
 
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();

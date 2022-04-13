@@ -307,9 +307,9 @@ public class BinaryWriter extends OutputStream {
             writeBoolean(false);
         } else {
             writeBoolean(true);
-            writeVarInt(itemStack.getMaterial().id());
-            writeByte((byte) itemStack.getAmount());
-            write(itemStack.getMeta());
+            writeVarInt(itemStack.material().id());
+            writeByte((byte) itemStack.amount());
+            write(itemStack.meta());
         }
     }
 
@@ -324,7 +324,7 @@ public class BinaryWriter extends OutputStream {
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
-    
+
     /**
      * Writes the given writeable object into this writer.
      *

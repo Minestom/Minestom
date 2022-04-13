@@ -1,54 +1,30 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.color.Color;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTInt;
+import org.jetbrains.annotations.UnknownNullability;
 
-public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provider<LeatherArmorMeta.Builder> {
-
-    private final Color color;
-
-    protected LeatherArmorMeta(@NotNull ItemMetaBuilder metaBuilder, @Nullable Color color) {
-        super(metaBuilder);
-        this.color = color;
-    }
+public record LeatherArmorMeta(TagReadable readable) implements ItemMetaView<LeatherArmorMeta.Builder> {
+    private static final Tag<Color> COLOR = Tag.Integer("color").path("display").map(Color::new, Color::asRGB);
 
     public @Nullable Color getColor() {
-        return color;
+        return getTag(COLOR);
     }
 
-    public static class Builder extends ItemMetaBuilder {
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
+    }
 
-        private Color color;
-
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
         public Builder color(@Nullable Color color) {
-            this.color = color;
-            handleCompound("display", nbtCompound -> {
-                if (color != null) {
-                    nbtCompound.setInt("color", color.asRGB());
-                } else {
-                    nbtCompound.remove("color");
-                }
-            });
+            setTag(COLOR, color);
             return this;
-        }
-
-        @Override
-        public @NotNull LeatherArmorMeta build() {
-            return new LeatherArmorMeta(this, color);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.get("display") instanceof NBTCompound displayCompound) {
-                if (displayCompound.get("color") instanceof NBTInt colorInt) {
-                    this.color = new Color(colorInt.getValue());
-                }
-            }
         }
     }
 }
