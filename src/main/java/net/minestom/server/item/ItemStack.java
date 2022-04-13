@@ -83,12 +83,14 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @NotNull ItemMeta meta();
 
     @Contract(pure = true)
+    @ApiStatus.Experimental
     <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass);
 
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> builderConsumer);
 
     @Contract(value = "_, _ -> new", pure = true)
+    @ApiStatus.Experimental
     <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull ItemStack withMeta(@NotNull Class<T> metaType,
                                                                                             @NotNull Consumer<V> metaConsumer);
 
