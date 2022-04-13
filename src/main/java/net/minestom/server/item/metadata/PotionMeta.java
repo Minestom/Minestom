@@ -38,7 +38,7 @@ public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMet
             writer.setTag(Tag.Boolean("ShowParticles"), value.showParticles());
             writer.setTag(Tag.Boolean("ShowIcon"), value.showIcon());
         }
-    }).list();
+    }).list().defaultValue(List.of());
     private static final Tag<Color> CUSTOM_POTION_COLOR = Tag.Integer("CustomPotionColor").path("display").map(Color::new, Color::asRGB);
 
     public PotionType getPotionType() {
