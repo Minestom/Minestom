@@ -6,24 +6,39 @@ import net.minestom.server.tag.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<PlayerHeadMeta.Builder> {
     private static final Tag<UUID> SKULL_OWNER = Tag.UUID("Id").path("SkullOwner");
     private static final Tag<PlayerSkin> SKIN = Tag.Structure("Properties", new TagSerializer<PlayerSkin>() {
+        private static final Tag<NBT> TEXTURES = Tag.NBT("textures");
+
         @Override
         public @Nullable PlayerSkin read(@NotNull TagReadable reader) {
-            final String value = reader.getTag(Tag.String("Value"));
-            final String signature = reader.getTag(Tag.String("Signature"));
-            if (value == null || signature == null) return null;
+            final NBT result = reader.getTag(TEXTURES);
+            if (!(result instanceof NBTList)) return null;
+            final NBTList<NBTCompound> textures = (NBTList<NBTCompound>) result;
+            final NBTCompound texture = textures.get(0);
+            final String value = texture.getString("Value");
+            final String signature = texture.getString("Signature");
             return new PlayerSkin(value, signature);
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @NotNull PlayerSkin value) {
-            writer.setTag(Tag.String("Value"), value.textures());
-            writer.setTag(Tag.String("Signature"), value.signature());
+        public void write(@NotNull TagWritable writer, @NotNull PlayerSkin playerSkin) {
+            final String value = Objects.requireNonNullElse(playerSkin.textures(), "");
+            final String signature = Objects.requireNonNullElse(playerSkin.signature(), "");
+            NBTList<NBTCompound> textures = new NBTList<>(NBTType.TAG_Compound,
+                    List.of(NBT.Compound(Map.of("Value", NBT.String(value), "Signature", NBT.String(signature)))));
+            writer.setTag(TEXTURES, textures);
         }
     }).path("SkullOwner");
 
