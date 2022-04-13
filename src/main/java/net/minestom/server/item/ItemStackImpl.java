@@ -14,7 +14,21 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 record ItemStackImpl(Material material, int amount, ItemMeta meta) implements ItemStack {
-    static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+    static final @NotNull StackingRule DEFAULT_STACKING_RULE;
+
+    static {
+        final String stackingRuleProperty = System.getProperty("minestom.stacking-rule");
+        if (stackingRuleProperty == null) {
+            DEFAULT_STACKING_RULE = new VanillaStackingRule();
+        } else {
+            try {
+                DEFAULT_STACKING_RULE = (StackingRule) ClassLoader.getSystemClassLoader()
+                        .loadClass(stackingRuleProperty).getConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException("Could not instantiate default stacking rule", e);
+            }
+        }
+    }
 
     static ItemStack create(Material material, int amount, ItemMeta meta) {
         if (amount <= 0) return AIR;
