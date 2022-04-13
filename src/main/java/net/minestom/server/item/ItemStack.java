@@ -129,7 +129,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     default @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return new ItemStackImpl(material(), amount(), meta);
+        return ItemStackImpl.create(material(), amount(), meta);
     }
 
     @Contract(value = "_, -> new", pure = true)

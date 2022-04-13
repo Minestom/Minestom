@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-record ItemStackImpl(Material material, int amount, ItemMeta meta) implements ItemStack {
+record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implements ItemStack {
     static final @NotNull StackingRule DEFAULT_STACKING_RULE;
 
     static {
@@ -32,7 +32,7 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
 
     static ItemStack create(Material material, int amount, ItemMeta meta) {
         if (amount <= 0) return AIR;
-        return new ItemStackImpl(material, amount, meta);
+        return new ItemStackImpl(material, amount, (ItemMetaImpl) meta);
     }
 
     static ItemStack create(Material material, int amount) {
@@ -83,15 +83,15 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, new ItemMetaImpl.Builder(TagHandler.fromCompound(meta.toNBT())));
+        return new Builder(material, amount, new ItemMetaImpl.Builder(meta.tagHandler().copy()));
     }
 
     static final class Builder implements ItemStack.Builder {
         final Material material;
         int amount;
-        ItemMeta.Builder metaBuilder;
+        ItemMetaImpl.Builder metaBuilder;
 
-        Builder(Material material, int amount, ItemMeta.Builder metaBuilder) {
+        Builder(Material material, int amount, ItemMetaImpl.Builder metaBuilder) {
             this.material = material;
             this.amount = amount;
             this.metaBuilder = metaBuilder;
@@ -125,7 +125,7 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
 
         @Override
         public ItemStack.@NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.Builder> consumer) {
-            this.metaBuilder = consumer.apply(metaBuilder);
+            this.metaBuilder = (ItemMetaImpl.Builder) consumer.apply(metaBuilder);
             return this;
         }
 
@@ -142,7 +142,7 @@ record ItemStackImpl(Material material, int amount, ItemMeta meta) implements It
             return ItemStackImpl.create(material, amount, metaBuilder.build());
         }
 
-        private ItemStack.@NotNull Builder metaBuilder(@NotNull ItemMeta.Builder builder) {
+        private ItemStack.@NotNull Builder metaBuilder(@NotNull ItemMetaImpl.Builder builder) {
             this.metaBuilder = builder;
             return this;
         }

@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
-    static final ItemMeta EMPTY = new ItemMetaImpl(TagHandler.newHandler());
+    static final ItemMetaImpl EMPTY = new ItemMetaImpl(TagHandler.newHandler());
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
