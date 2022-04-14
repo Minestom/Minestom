@@ -44,6 +44,8 @@ public class PlayerMoveEvent implements PlayerEvent, EntityInstanceEvent, Cancel
 
     /**
      * Gets if the player is now on the ground.
+     * This is the original value that the client sent,
+     * and is not modified by setting the new position.
      *
      * @return onGround
      */
