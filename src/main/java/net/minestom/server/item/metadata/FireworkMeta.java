@@ -5,16 +5,16 @@ import net.minestom.server.item.firework.FireworkEffect;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.TagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 
 public record FireworkMeta(TagReadable readable) implements ItemMetaView<FireworkMeta.Builder> {
-    private static final Tag<List<FireworkEffect>> EFFECTS = Tag.NBT("Explosions").path("Fireworks")
-            .map(nbt -> FireworkEffect.fromCompound((NBTCompound) nbt), FireworkEffect::asCompound)
-            .list().defaultValue(List.of());
+    private static final Tag<List<FireworkEffect>> EFFECTS = Tag.Structure("Explosions",
+                    TagSerializer.fromCompound(FireworkEffect::fromCompound, FireworkEffect::asCompound))
+            .path("Fireworks").list().defaultValue(List.of());
     private static final Tag<Byte> FLIGHT_DURATION = Tag.Byte("Flight").path("Fireworks");
 
     public List<FireworkEffect> getEffects() {

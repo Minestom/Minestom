@@ -1,7 +1,11 @@
 package net.minestom.server.tag;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+
+import java.util.function.Function;
 
 /**
  * Interface used to create custom {@link Tag tags}.
@@ -25,4 +29,10 @@ public interface TagSerializer<T> {
      * @param value  the value to serialize
      */
     void write(@NotNull TagWritable writer, @NotNull T value);
+
+    @ApiStatus.Experimental
+    static <T> TagSerializer<T> fromCompound(@NotNull Function<NBTCompound, T> reader,
+                                             @NotNull Function<T, NBTCompound> writer) {
+        return TagSerializerImpl.fromCompound(reader, writer);
+    }
 }

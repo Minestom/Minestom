@@ -23,6 +23,12 @@ final class TagNbtSeparator {
             entry(NBTType.TAG_Double, Tag::Double),
             entry(NBTType.TAG_String, Tag::String));
 
+    static void separate(NBTCompound nbtCompound, Consumer<Entry> consumer) {
+        for (var ent : nbtCompound) {
+            convert(new ArrayList<>(), ent.getKey(), ent.getValue(), consumer);
+        }
+    }
+
     static void separate(String key, NBT nbt, Consumer<Entry> consumer) {
         convert(new ArrayList<>(), key, nbt, consumer);
     }
