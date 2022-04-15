@@ -19,6 +19,7 @@ public class TagWriteBenchmark {
     TagHandler tagHandler;
     Tag<String> secondTag;
 
+    MutableNBTCompound concurrentCompound;
     MutableNBTCompound compound;
 
     @Setup
@@ -27,7 +28,10 @@ public class TagWriteBenchmark {
         this.tagHandler = TagHandler.newHandler();
         tagHandler.setTag(TAG, "value");
         secondTag = Tag.String("key");
-        // NBT benchmark
+        // Concurrent map benchmark
+        this.concurrentCompound = new MutableNBTCompound(new ConcurrentHashMap<>());
+        concurrentCompound.set("key", NBT.String("value"));
+        // Hash map benchmark
         this.compound = new MutableNBTCompound(new ConcurrentHashMap<>());
         compound.set("key", NBT.String("value"));
     }
@@ -48,7 +52,12 @@ public class TagWriteBenchmark {
     }
 
     @Benchmark
-    public void writeConstantTagFromCompound() {
+    public void writeConcurrentCompound() {
+        concurrentCompound.setString("key", "value");
+    }
+
+    @Benchmark
+    public void writeCompound() {
         compound.setString("key", "value");
     }
 }
