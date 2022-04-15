@@ -74,7 +74,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dd><code><a href="ItemMeta.Builder.html" title="interface in net.minestom.server.item">ItemMeta.Builder</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -86,8 +86,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">public static interface </span><span class="element-name type-name-label">ItemMetaView.Builder</span><span class="extends-implements">
-extends <a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></span></div>
+</span><span class="modifiers">public static non-sealed interface </span><span class="element-name type-name-label">ItemMetaView.Builder</span><span class="extends-implements">
+extends <a href="ItemMeta.Builder.html" title="interface in net.minestom.server.item">ItemMeta.Builder</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,6 +109,9 @@ extends <a href="../tag/Taggable.html" title="interface in net.minestom.server.t
 </div>
 </div>
 <div class="inherited-list">
+<h3 id="methods-inherited-from-class-net.minestom.server.item.ItemMeta.Builder">Methods inherited from interface&nbsp;net.minestom.server.item.<a href="ItemMeta.Builder.html" title="interface in net.minestom.server.item">ItemMeta.Builder</a></h3>
+<code><a href="ItemMeta.Builder.html#attributes(java.util.List)">attributes</a>, <a href="ItemMeta.Builder.html#canDestroy(java.util.Set)">canDestroy</a>, <a href="ItemMeta.Builder.html#canDestroy(net.minestom.server.instance.block.Block...)">canDestroy</a>, <a href="ItemMeta.Builder.html#canPlaceOn(java.util.Set)">canPlaceOn</a>, <a href="ItemMeta.Builder.html#canPlaceOn(net.minestom.server.instance.block.Block...)">canPlaceOn</a>, <a href="ItemMeta.Builder.html#clearEnchantment()">clearEnchantment</a>, <a href="ItemMeta.Builder.html#customModelData(int)">customModelData</a>, <a href="ItemMeta.Builder.html#damage(int)">damage</a>, <a href="ItemMeta.Builder.html#displayName(net.kyori.adventure.text.Component)">displayName</a>, <a href="ItemMeta.Builder.html#enchantment(net.minestom.server.item.Enchantment,short)">enchantment</a>, <a href="ItemMeta.Builder.html#enchantments(java.util.Map)">enchantments</a>, <a href="ItemMeta.Builder.html#hideFlag(int)">hideFlag</a>, <a href="ItemMeta.Builder.html#hideFlag(net.minestom.server.item.ItemHideFlag...)">hideFlag</a>, <a href="ItemMeta.Builder.html#lore(java.util.List)">lore</a>, <a href="ItemMeta.Builder.html#lore(net.kyori.adventure.text.Component...)">lore</a>, <a href="ItemMeta.Builder.html#set(net.minestom.server.tag.Tag,T)">set</a>, <a href="ItemMeta.Builder.html#unbreakable(boolean)">unbreakable</a></code></div>
+<div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.tag.Taggable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></h3>
 <code><a href="../tag/Taggable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../tag/Taggable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a>, <a href="../tag/Taggable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/Taggable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="../tag/Taggable.html#tagHandler()">tagHandler</a></code></div>
 </section>
@@ -127,6 +130,10 @@ extends <a href="../tag/Taggable.html" title="interface in net.minestom.server.t
 <h3>build</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></span>&nbsp;<span class="element-name">build</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="ItemMeta.Builder.html#build()">build</a></code>&nbsp;in interface&nbsp;<code><a href="ItemMeta.Builder.html" title="interface in net.minestom.server.item">ItemMeta.Builder</a></code></dd>
+</dl>
 </section>
 </li>
 </ul>
