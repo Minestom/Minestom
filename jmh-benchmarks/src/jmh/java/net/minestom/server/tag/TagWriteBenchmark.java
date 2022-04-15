@@ -4,6 +4,7 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.openjdk.jmh.annotations.*;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +33,7 @@ public class TagWriteBenchmark {
         this.concurrentCompound = new MutableNBTCompound(new ConcurrentHashMap<>());
         concurrentCompound.set("key", NBT.String("value"));
         // Hash map benchmark
-        this.compound = new MutableNBTCompound(new ConcurrentHashMap<>());
+        this.compound = new MutableNBTCompound(new HashMap<>());
         compound.set("key", NBT.String("value"));
     }
 
