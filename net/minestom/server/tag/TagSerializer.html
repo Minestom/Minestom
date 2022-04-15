@@ -87,21 +87,25 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TagSerializer.html" title="type parameter in TagSerializer">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(net.minestom.server.tag.TagReadable)" class="member-name-link">read</a><wbr>(@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>&nbsp;reader)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;<a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(java.util.function.Function,java.util.function.Function)" class="member-name-link">fromCompound</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,<wbr>T&gt;&nbsp;reader,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;writer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TagSerializer.html" title="type parameter in TagSerializer">T</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(net.minestom.server.tag.TagReadable)" class="member-name-link">read</a><wbr>(@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>&nbsp;reader)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Reads the custom tag from a <a href="TagReadable.html" title="interface in net.minestom.server.tag"><code>TagReadable</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#write(net.minestom.server.tag.TagWritable,T)" class="member-name-link">write</a><wbr>(@NotNull <a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a>&nbsp;writer,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#write(net.minestom.server.tag.TagWritable,T)" class="member-name-link">write</a><wbr>(@NotNull <a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a>&nbsp;writer,
  <a href="TagSerializer.html" title="type parameter in TagSerializer">T</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Writes the custom tag to a <a href="TagWritable.html" title="interface in net.minestom.server.tag"><code>TagWritable</code></a>.</div>
 </div>
 </div>
@@ -146,6 +150,16 @@ loadScripts(document, 'script');</script>
 <dd><code>writer</code> - the writer</dd>
 <dd><code>value</code> - the value to serialize</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="fromCompound(java.util.function.Function,java.util.function.Function)">
+<h3>fromCompound</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;</span>&nbsp;<span class="element-name">fromCompound</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,<wbr>T&gt;&nbsp;reader,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;writer)</span></div>
 </section>
 </li>
 </ul>
