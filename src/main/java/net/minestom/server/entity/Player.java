@@ -44,6 +44,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
+import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -106,6 +107,8 @@ import java.util.function.UnaryOperator;
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
+    private static final int PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
+    private static final int PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -319,9 +322,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void update(long time) {
-        // Network tick
-        this.playerConnection.update();
-
         // Process received packets
         interpretPacketQueue();
 
@@ -1731,8 +1731,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     public void interpretPacketQueue() {
+        if (this.packets.size() >= PACKET_QUEUE_SIZE) {
+            kick(Component.text("Too Many Packets", NamedTextColor.RED));
+            return;
+        }
+        final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> MinecraftServer.getPacketListenerManager().processClientPacket(packet, this));
+        this.packets.drain(packet -> manager.processClientPacket(packet, this), PACKET_PER_TICK);
     }
 
     /**
