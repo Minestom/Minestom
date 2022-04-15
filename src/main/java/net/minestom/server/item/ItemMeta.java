@@ -78,7 +78,8 @@ public sealed interface ItemMeta extends TagReadable, Writeable
         return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
     }
 
-    sealed interface Builder extends Taggable permits ItemMetaImpl.Builder {
+    sealed interface Builder extends Taggable
+            permits ItemMetaImpl.Builder, ItemMetaView.Builder {
         @NotNull ItemMeta build();
 
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
