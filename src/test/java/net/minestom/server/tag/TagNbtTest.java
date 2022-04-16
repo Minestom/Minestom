@@ -1,13 +1,16 @@
 package net.minestom.server.tag;
 
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTInt;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 /**
  * Ensure that NBT tag can be read from other tags properly.
@@ -15,13 +18,36 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TagNbtTest {
 
     @Test
-    public void invalidListTag() {
-        assertThrows(IllegalArgumentException.class, () -> Tag.NBT("nbt").list());
+    public void list() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.NBT("nbt").list();
+        List<NBT> list = List.of(NBT.Int(1), NBT.Int(2), NBT.Int(3));
+        handler.setTag(tag, list);
+        assertEquals(list, handler.getTag(tag));
+        assertEqualsSNBT("""
+                {
+                  "nbt": [1,2,3]
+                }
+                """, handler.asCompound());
+
+        handler.removeTag(tag);
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test
-    public void invalidMapTag() {
-        assertThrows(IllegalArgumentException.class, () -> Tag.NBT("nbt").map(nbt -> 1, NBT::Int));
+    public void map() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.NBT("nbt").map(nbt -> ((NBTInt) nbt).getValue(), NBT::Int);
+        handler.setTag(tag, 5);
+        assertEquals(5, handler.getTag(tag));
+        assertEqualsSNBT("""
+                {
+                  "nbt":5
+                }
+                """, handler.asCompound());
+
+        handler.removeTag(tag);
+        assertEqualsSNBT("{}", handler.asCompound());
     }
 
     @Test

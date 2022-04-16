@@ -97,8 +97,6 @@ public class Tag<T> {
     @Contract(value = "_, _ -> new", pure = true)
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
-        if (entry == Serializers.NBT_ENTRY)
-            throw new IllegalArgumentException("Cannot create a list from a NBT entry");
         var entry = this.entry;
         final Function<NBT, R> readFunction = entry.read().andThen(t -> {
             if (t == null) return null;
@@ -115,8 +113,6 @@ public class Tag<T> {
     @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
-        if (entry == Serializers.NBT_ENTRY)
-            throw new IllegalArgumentException("Cannot create a list from a NBT entry");
         var entry = this.entry;
         var readFunction = entry.read();
         var writeFunction = entry.write();
