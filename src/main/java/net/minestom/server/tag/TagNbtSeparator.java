@@ -1,6 +1,9 @@
 package net.minestom.server.tag;
 
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,20 +50,10 @@ final class TagNbtSeparator {
     }
 
     private static void convert(List<String> path, String key, NBT nbt, Consumer<Entry> consumer) {
-        if (nbt instanceof NBTByte nbtByte) {
-            consumer.accept(makeEntry(path, Tag.Byte(key), nbtByte.getValue()));
-        } else if (nbt instanceof NBTShort nbtShort) {
-            consumer.accept(makeEntry(path, Tag.Short(key), nbtShort.getValue()));
-        } else if (nbt instanceof NBTInt nbtInt) {
-            consumer.accept(makeEntry(path, Tag.Integer(key), nbtInt.getValue()));
-        } else if (nbt instanceof NBTLong nbtLong) {
-            consumer.accept(makeEntry(path, Tag.Long(key), nbtLong.getValue()));
-        } else if (nbt instanceof NBTFloat nbtFloat) {
-            consumer.accept(makeEntry(path, Tag.Float(key), nbtFloat.getValue()));
-        } else if (nbt instanceof NBTDouble nbtDouble) {
-            consumer.accept(makeEntry(path, Tag.Double(key), nbtDouble.getValue()));
-        } else if (nbt instanceof NBTString nbtString) {
-            consumer.accept(makeEntry(path, Tag.String(key), nbtString.getValue()));
+        var tagFunction = SUPPORTED_TYPES.get(nbt.getID());
+        if (tagFunction != null) {
+            Tag tag = tagFunction.apply(key);
+            consumer.accept(makeEntry(path, tag, nbt.getValue()));
         } else if (nbt instanceof NBTCompound nbtCompound) {
             for (var ent : nbtCompound) {
                 var newPath = new ArrayList<>(path);
@@ -68,7 +61,7 @@ final class TagNbtSeparator {
                 convert(newPath, ent.getKey(), ent.getValue(), consumer);
             }
         } else if (nbt instanceof NBTList<?> nbtList) {
-            var tagFunction = SUPPORTED_TYPES.get(nbtList.getSubtagType());
+            tagFunction = SUPPORTED_TYPES.get(nbtList.getSubtagType());
             if (tagFunction == null) {
                 // Invalid list subtype, fallback to nbt
                 consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
@@ -77,7 +70,7 @@ final class TagNbtSeparator {
                     var tag = tagFunction.apply(key).list();
                     Object[] values = new Object[nbtList.getSize()];
                     for (int i = 0; i < values.length; i++) {
-                        values[i] = nbtValue(nbtList.get(i));
+                        values[i] = nbtList.get(i).getValue();
                     }
                     consumer.accept(makeEntry(path, Tag.class.cast(tag), List.of(values)));
                 } catch (Exception e) {
@@ -96,25 +89,5 @@ final class TagNbtSeparator {
     }
 
     record Entry<T>(Tag<T> tag, T value) {
-    }
-
-    private static Object nbtValue(NBT nbt) throws IllegalArgumentException {
-        if (nbt instanceof NBTByte nbtByte) {
-            return nbtByte.getValue();
-        } else if (nbt instanceof NBTShort nbtShort) {
-            return nbtShort.getValue();
-        } else if (nbt instanceof NBTInt nbtInt) {
-            return nbtInt.getValue();
-        } else if (nbt instanceof NBTLong nbtLong) {
-            return nbtLong.getValue();
-        } else if (nbt instanceof NBTFloat nbtFloat) {
-            return nbtFloat.getValue();
-        } else if (nbt instanceof NBTDouble nbtDouble) {
-            return nbtDouble.getValue();
-        } else if (nbt instanceof NBTString nbtString) {
-            return nbtString.getValue();
-        } else {
-            throw new IllegalArgumentException("Unsupported NBT type: " + nbt.getClass().getName());
-        }
     }
 }
