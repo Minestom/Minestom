@@ -16,7 +16,7 @@ public class TagUuidTest {
         var tag = Tag.UUID("uuid");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, uuid);
-        assertSame(uuid, handler.getTag(tag));
+        assertEquals(uuid, handler.getTag(tag));
     }
 
     @Test

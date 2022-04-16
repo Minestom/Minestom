@@ -3,7 +3,8 @@ package net.minestom.server.tag;
 import net.kyori.adventure.text.Component;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TagComponentTest {
 
@@ -13,7 +14,7 @@ public class TagComponentTest {
         var tag = Tag.Component("component");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, component);
-        assertSame(component, handler.getTag(tag));
+        assertEquals(component, handler.getTag(tag));
     }
 
     @Test

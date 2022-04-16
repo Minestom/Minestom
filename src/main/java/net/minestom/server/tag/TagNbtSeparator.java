@@ -5,6 +5,7 @@ import org.jglrxavpok.hephaistos.nbt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -31,6 +32,18 @@ final class TagNbtSeparator {
 
     static void separate(String key, NBT nbt, Consumer<Entry> consumer) {
         convert(new ArrayList<>(), key, nbt, consumer);
+    }
+
+    static Entry separateSingle(String key, NBT nbt) {
+        assert !(nbt instanceof NBTCompound);
+        AtomicReference<Entry<?>> entryRef = new AtomicReference<>();
+        convert(new ArrayList<>(), key, nbt, entry -> {
+            assert entryRef.getPlain() == null : "Multiple entries found for nbt tag: " + key + " -> " + nbt;
+            entryRef.setPlain(entry);
+        });
+        var entry = entryRef.getPlain();
+        assert entry != null;
+        return entry;
     }
 
     private static void convert(List<String> path, String key, NBT nbt, Consumer<Entry> consumer) {

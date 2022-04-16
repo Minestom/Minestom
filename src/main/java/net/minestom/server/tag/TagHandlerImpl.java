@@ -49,19 +49,25 @@ final class TagHandlerImpl implements TagHandler {
             tag.writeUnsafe(viewCompound, value);
             updateContent(viewCompound);
         } else {
-            if (value instanceof NBT nbt) {
-                synchronized (this) {
-                    write(tag, null);
-                    TagNbtSeparator.separate(tag.getKey(), nbt,
-                            entry -> write(entry.tag(), entry.value()));
-                }
+            final Entry<?> entry = valueToEntry(tag, value);
+            updateEntry(tag, entry);
+        }
+    }
+
+    private <T> Entry<?> valueToEntry(Tag<T> tag, @Nullable T value) {
+        if (value == null) return null;
+        if (value instanceof NBT nbt) {
+            if (nbt instanceof NBTCompound compound) {
+                final TagHandlerImpl handler = fromCompound(compound);
+                return new PathEntry(tag.getKey(), handler);
             } else {
-                if (value != null) {
-                    final UnaryOperator<T> copy = tag.copy;
-                    if (copy != null) value = copy.apply(value);
-                }
-                write(tag, value);
+                final var nbtEntry = TagNbtSeparator.separateSingle(tag.getKey(), nbt);
+                return new TagEntry<>(nbtEntry.tag(), nbtEntry.value());
             }
+        } else {
+            final UnaryOperator<T> copy = tag.copy;
+            if (copy != null) value = copy.apply(value);
+            return new TagEntry<>(tag, value);
         }
     }
 
@@ -89,7 +95,7 @@ final class TagHandlerImpl implements TagHandler {
         return updatedCache().compound;
     }
 
-    private synchronized <T> void write(@NotNull Tag<T> tag, @Nullable T value) {
+    private synchronized <T> void updateEntry(@NotNull Tag<T> tag, @Nullable Entry<?> value) {
         int tagIndex = tag.index;
         TagHandlerImpl local = this;
 
@@ -137,7 +143,7 @@ final class TagHandlerImpl implements TagHandler {
             }
         }
         // Normal tag
-        if (value != null) local.entries.put(tagIndex, new TagEntry<>(tag, value));
+        if (value != null) local.entries.put(tagIndex, value);
         else local.entries.remove(tagIndex);
         this.cache = null;
         if (pathHandlers != null) {
@@ -262,7 +268,7 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         @Override
-        public NBT updatedNbt() {
+        public NBTCompound updatedNbt() {
             return value.asCompound();
         }
     }
