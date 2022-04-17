@@ -78,6 +78,13 @@ public class TagTest {
     }
 
     @Test
+    public void defaultMapped() {
+        var mapped = Tag.Int("key").map(String::valueOf, Integer::parseInt);
+        var handler = TagHandler.newHandler();
+        assertNull(handler.getTag(mapped));
+    }
+
+    @Test
     public void invalidType() {
         var tag1 = Tag.Integer("key");
         var tag2 = Tag.String("key");
