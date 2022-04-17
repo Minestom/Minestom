@@ -17,8 +17,8 @@ import java.util.UUID;
 @ApiStatus.Internal
 public final class ItemSerializers {
     public static final TagSerializer<EnchantmentEntry> ENCHANTMENT_SERIALIZER = new TagSerializer<>() {
-        static final Tag<Short> LEVEL = Tag.Short("Level");
-        static final Tag<String> ID = Tag.String("Id");
+        static final Tag<Short> LEVEL = Tag.Short("lvl");
+        static final Tag<String> ID = Tag.String("id");
 
         @Override
         public @Nullable EnchantmentEntry read(@NotNull TagReadable reader) {
