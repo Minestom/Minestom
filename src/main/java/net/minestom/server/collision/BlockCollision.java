@@ -329,7 +329,7 @@ final class BlockCollision {
                 Vec.ZERO, finalResult.collidedShapePosition, finalResult.blockType);
     }
 
-    static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
             final EntityType type = entity.getEntityType();
             if (type == EntityType.ITEM)
@@ -348,9 +348,9 @@ final class BlockCollision {
             } else {
                 intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
             }
-            if (intersects) return false;
+            if (intersects) return entity;
         }
-        return true;
+        return null;
     }
 
     /**

@@ -80,7 +80,7 @@ public final class CollisionUtils {
         return handlePhysics(entity, entityVelocity, null);
     }
 
-    public static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
     }
 
