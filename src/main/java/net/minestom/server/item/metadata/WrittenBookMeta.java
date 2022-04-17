@@ -23,7 +23,7 @@ public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<Writ
                     textComponent -> LegacyComponentSerializer.legacySection().serialize(textComponent))
             .list().defaultValue(List.of());
 
-    public boolean isResolved() {
+    public @Nullable Boolean isResolved() {
         return getTag(RESOLVED);
     }
 

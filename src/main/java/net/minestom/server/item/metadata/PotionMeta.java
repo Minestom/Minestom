@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.List;
 
 public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMeta.Builder> {
-    private static final Tag<PotionType> POTION_TYPE = Tag.String("Potion").map(PotionType::fromNamespaceId, ProtocolObject::name);
+    private static final Tag<PotionType> POTION_TYPE = Tag.String("Potion").map(PotionType::fromNamespaceId, ProtocolObject::name).defaultValue(PotionType.EMPTY);
     private static final Tag<List<CustomPotionEffect>> CUSTOM_POTION_EFFECTS = Tag.Structure("CustomPotionEffects", new TagSerializer<CustomPotionEffect>() {
         @Override
         public @Nullable CustomPotionEffect read(@NotNull TagReadable reader) {
@@ -41,15 +41,15 @@ public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMet
     }).list().defaultValue(List.of());
     private static final Tag<Color> CUSTOM_POTION_COLOR = Tag.Integer("CustomPotionColor").path("display").map(Color::new, Color::asRGB);
 
-    public PotionType getPotionType() {
+    public @NotNull PotionType getPotionType() {
         return getTag(POTION_TYPE);
     }
 
-    public List<CustomPotionEffect> getCustomPotionEffects() {
+    public @NotNull List<CustomPotionEffect> getCustomPotionEffects() {
         return getTag(CUSTOM_POTION_EFFECTS);
     }
 
-    public Color getColor() {
+    public @Nullable Color getColor() {
         return getTag(CUSTOM_POTION_COLOR);
     }
 

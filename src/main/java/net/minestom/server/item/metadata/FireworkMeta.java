@@ -7,6 +7,7 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
@@ -17,11 +18,11 @@ public record FireworkMeta(TagReadable readable) implements ItemMetaView<Firewor
             .path("Fireworks").list().defaultValue(List.of());
     private static final Tag<Byte> FLIGHT_DURATION = Tag.Byte("Flight").path("Fireworks");
 
-    public List<FireworkEffect> getEffects() {
+    public @NotNull List<FireworkEffect> getEffects() {
         return getTag(EFFECTS);
     }
 
-    public byte getFlightDuration() {
+    public @Nullable Byte getFlightDuration() {
         return getTag(FLIGHT_DURATION);
     }
 
