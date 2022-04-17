@@ -131,7 +131,6 @@ public class WorldBorder {
         this.newDiameter = diameter;
         this.speed = speed;
         this.lerpStartTime = System.currentTimeMillis();
-
         sendPacket(new WorldBorderLerpSizePacket(oldDiameter, newDiameter, speed));
     }
 
