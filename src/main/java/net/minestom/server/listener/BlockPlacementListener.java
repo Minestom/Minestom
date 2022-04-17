@@ -106,7 +106,6 @@ public class BlockPlacementListener {
 
         final Block placedBlock = useMaterial.block();
         if (!CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock)) {
-            refresh(player, chunk);
             return;
         }
         // BlockPlaceEvent check
