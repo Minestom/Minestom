@@ -12,7 +12,7 @@ import java.util.List;
 
 public record CrossbowMeta(TagReadable readable) implements ItemMetaView<CrossbowMeta.Builder> {
     private static final Tag<List<ItemStack>> PROJECTILES = Tag.ItemStack("ChargedProjectiles").list();
-    private static final Tag<Boolean> CHARGED = Tag.Boolean("Charged");
+    private static final Tag<Boolean> CHARGED = Tag.Boolean("Charged").defaultValue(false);
 
     public @NotNull List<ItemStack> getProjectiles() {
         return getTag(PROJECTILES);
