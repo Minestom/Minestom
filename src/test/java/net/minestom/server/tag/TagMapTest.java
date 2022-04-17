@@ -26,11 +26,17 @@ public class TagMapTest {
         var intTag = Tag.Integer("key");
         var tag = intTag.map(Entry::new, Entry::value);
 
-        assertNull(handler.getTag(tag));
         assertEquals(new Entry(1), handler.getTag(tag.defaultValue(new Entry(1))));
 
         handler.setTag(tag, new Entry(2));
         assertEquals(2, handler.getTag(intTag));
         assertEquals(new Entry(2), handler.getTag(tag));
+    }
+
+    @Test
+    public void mapDefaultAbsent() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("key").map(Entry::new, Entry::value);
+        assertNull(handler.getTag(tag));
     }
 }
