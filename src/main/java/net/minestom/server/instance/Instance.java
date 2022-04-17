@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
@@ -13,7 +14,11 @@ import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventHandler;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
@@ -58,7 +63,8 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, Snapshotable, Taggable, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter,
+        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
 
     private boolean registered;
 
@@ -87,8 +93,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     // instance custom data
     private final TagHandler tagHandler = TagHandler.newHandler();
-
     private final Scheduler scheduler = Scheduler.newScheduler();
+    private final EventNode<InstanceEvent> eventNode;
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
@@ -116,6 +122,14 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
                 .build();
+
+        final ServerProcess process = MinecraftServer.process();
+        if (process != null) {
+            this.eventNode = process.eventHandler().map(this, EventFilter.INSTANCE);
+        } else {
+            // Local nodes require a server process
+            this.eventNode = null;
+        }
     }
 
     /**
@@ -615,6 +629,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Scheduler scheduler() {
         return scheduler;
+    }
+
+    @Override
+    @ApiStatus.Experimental
+    public @NotNull EventNode<InstanceEvent> eventNode() {
+        return eventNode;
     }
 
     @Override

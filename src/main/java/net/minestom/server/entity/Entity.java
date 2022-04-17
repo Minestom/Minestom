@@ -82,7 +82,8 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
+        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -1618,7 +1619,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Raycasts current entity's eye position to target eye position.
      *
-     * @param entity the entity to be checked.
+     * @param entity    the entity to be checked.
      * @param exactView if set to TRUE, checks whether target is IN the line of sight of the current one;
      *                  otherwise checks if the current entity can rotate so that target will be in its line of sight.
      * @return true if the ray reaches the target bounding box before hitting a block.
@@ -1639,9 +1640,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * @see Entity#hasLineOfSight(Entity, boolean)
      * @param entity the entity to be checked.
      * @return if the current entity has line of sight to the given one.
+     * @see Entity#hasLineOfSight(Entity, boolean)
      */
     public boolean hasLineOfSight(Entity entity) {
         return hasLineOfSight(entity, false);
@@ -1650,7 +1651,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets first entity on the line of sight of the current one that matches the given predicate.
      *
-     * @param range max length of the line of sight of the current entity to be checked.
+     * @param range     max length of the line of sight of the current entity to be checked.
      * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
@@ -1666,7 +1667,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
                 && predicate.test(e)
                 && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
-                    e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
+                e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(finalPredicate)
