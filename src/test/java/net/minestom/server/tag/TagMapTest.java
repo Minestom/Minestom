@@ -26,6 +26,7 @@ public class TagMapTest {
         var intTag = Tag.Integer("key");
         var tag = intTag.map(Entry::new, Entry::value);
 
+        assertNull(handler.getTag(tag));
         assertEquals(new Entry(1), handler.getTag(tag.defaultValue(new Entry(1))));
 
         handler.setTag(tag, new Entry(2));
