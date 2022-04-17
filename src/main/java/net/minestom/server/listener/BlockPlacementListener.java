@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -105,9 +106,18 @@ public class BlockPlacementListener {
         }
 
         final Block placedBlock = useMaterial.block();
-        if (!CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock)) {
+        Entity collisionEntity = CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock);
+        if (collisionEntity != null) {
+            // If a player is trying to place a block on themselves, the client will send a block change but will not set the block on the client
+            // For this reason, the block doesn't need to be updated for the client
+
+            // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
+            if (collisionEntity != player)
+                refresh(player, chunk);
+            
             return;
         }
+
         // BlockPlaceEvent check
         PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
