@@ -20,7 +20,7 @@ public class WorldBorderIntegrationTest {
     }
 
     @Test
-    public void resizeWorldBorder(Env env) {
+    public void resizeWorldBorder(Env env) throws InterruptedException {
         Instance instance = env.createFlatInstance();
 
         instance.getWorldBorder().setDiameter(50.0);
@@ -28,15 +28,8 @@ public class WorldBorderIntegrationTest {
         instance.getWorldBorder().setDiameter(10.0, 1);
         assertEquals(50.0, instance.getWorldBorder().getDiameter());
 
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        instance.getWorldBorder().update();
-                        assertEquals(10.0, instance.getWorldBorder().getDiameter());
-                    }
-                },
-                2
-        );
+        Thread.sleep(10);
+        instance.getWorldBorder().update();
+        assertEquals(10.0, instance.getWorldBorder().getDiameter());
     }
 }
