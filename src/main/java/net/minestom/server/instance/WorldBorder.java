@@ -209,9 +209,7 @@ public class WorldBorder {
         } else {
             double diameterDelta = newDiameter - oldDiameter;
             long elapsedTime = System.currentTimeMillis() - lerpStartTime;
-
             double percentage = (double) elapsedTime / (double) speed;
-
             this.currentDiameter = oldDiameter + (diameterDelta * percentage);
 
             // World border finished lerp
