@@ -106,7 +106,11 @@ public class Tag<T> {
         return new Tag<>(index, key, readMap,
                 new Serializers.Entry<>(readFunction, writeFunction),
                 // Default value
-                () -> readMap.apply(createDefault()),
+                () -> {
+                    T defaultValue = createDefault();
+                    if (defaultValue == null) return null;
+                    return readMap.apply(defaultValue);
+                },
                 path, null, listScope);
     }
 

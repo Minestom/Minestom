@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<WrittenBookMeta.Builder> {
-    private static final Tag<Boolean> RESOLVED = Tag.Boolean("resolved");
+    private static final Tag<Boolean> RESOLVED = Tag.Boolean("resolved").defaultValue(false);
     private static final Tag<WrittenBookGeneration> GENERATION = Tag.Integer("resolved").map(integer -> WrittenBookGeneration.values()[integer], Enum::ordinal);
     private static final Tag<String> AUTHOR = Tag.String("author");
     private static final Tag<String> TITLE = Tag.String("title");

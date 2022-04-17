@@ -42,7 +42,7 @@ public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<Playe
         }
     }).path("SkullOwner");
 
-    public UUID getSkullOwner() {
+    public @Nullable UUID getSkullOwner() {
         return getTag(SKULL_OWNER);
     }
 
