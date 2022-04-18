@@ -617,8 +617,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
             final double airDrag = this instanceof LivingEntity ? 0.91 : 0.98;
-            final double drag = this.onGround ?
-                    finalChunk.getBlock(position).registry().friction() * airDrag : airDrag;
+            final double drag;
+            if (onGround) {
+                synchronized (finalChunk) {
+                    drag = finalChunk.getBlock(position).registry().friction() * airDrag;
+                }
+            } else drag = airDrag;
             this.velocity = newVelocity
                     // Convert from block/tick to block/sec
                     .mul(tps)
