@@ -1582,7 +1582,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param x        knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
      * @param z        knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
      */
-    public void takeKnockback(final float strength, final double x, final double z) {
+    public void takeKnockback(float strength, final double x, final double z) {
         if (strength > 0) {
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
             strength *= MinecraftServer.TICK_PER_SECOND;
