@@ -1585,11 +1585,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void takeKnockback(final float strength, final double x, final double z) {
         if (strength > 0) {
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
-            final Vec velocityModifier = new Vec(x, z)
-                    .normalize()
-                    .mul(strength * MinecraftServer.TICK_PER_SECOND / 2);
+            strength *= MinecraftServer.TICK_PER_SECOND;
+            final Vec velocityModifier = new Vec(x, z).normalize().mul(strength);
+            final double verticalLimit = .4d * MinecraftServer.TICK_PER_SECOND;
+
             setVelocity(new Vec(velocity.x() / 2d - velocityModifier.x(),
-                    onGround ? Math.min(.4d, velocity.y() / 2d + strength) * MinecraftServer.TICK_PER_SECOND : velocity.y(),
+                    onGround ? Math.min(verticalLimit, velocity.y() / 2d + strength) : velocity.y(),
                     velocity.z() / 2d - velocityModifier.z()
             ));
         }
