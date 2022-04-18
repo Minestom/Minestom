@@ -339,12 +339,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (this.position.samePoint(position)) {
             return;
         }
+        Pos newPosition = this.position.withLookAt(position);
 
-        Vec delta = position.sub(getPosition()).asVec().normalize();
-        setView(
-                PositionUtils.getLookYaw(delta.x(), delta.z()),
-                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
-        );
+        setView(newPosition.yaw(), newPosition.pitch());
     }
 
     /**
