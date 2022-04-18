@@ -58,6 +58,7 @@ public class EntityVelocityTest {
 
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
+        env.tick(); // Ensures the entity is onGround
         entity.takeKnockback(0.4f, 0, -1);
 
         testMovement(singleTest, env, entity);
@@ -69,6 +70,7 @@ public class EntityVelocityTest {
 
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
+        env.tick(); // Ensures the entity is onGround
         entity.takeKnockback(0.4f, 0, -1);
         entity.takeKnockback(0.5f, 0, -1);
 
