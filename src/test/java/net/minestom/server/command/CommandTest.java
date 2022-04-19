@@ -1,6 +1,8 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -101,6 +103,32 @@ public class CommandTest {
         assertTrue(childConditionTriggered.get());
         assertFalse(parentExecuted.get());
         assertFalse(childExecuted.get());
+    }
+
+    @Test
+    public void testGlobalListener() {
+        var manager = new CommandManager();
+
+        AtomicBoolean hasRun = new AtomicBoolean(false);
+
+        var command = new Command("command") {
+            @Override
+            public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
+                hasRun.set(true);
+                context.setArg("key", "value", "value");
+            }
+        };
+
+        manager.register(command);
+
+        AtomicBoolean checkSet = new AtomicBoolean(false);
+        command.setDefaultExecutor((sender, context) -> checkSet.set("value".equals(context.get("key"))));
+
+        manager.executeServerCommand("command");
+
+        assertTrue(hasRun.get());
+        assertTrue(checkSet.get());
+
     }
 
 }
