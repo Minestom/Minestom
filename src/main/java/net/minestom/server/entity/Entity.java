@@ -56,7 +56,6 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -336,12 +335,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param position the position to look at.
      */
     public void lookAt(@NotNull Pos position) {
-        if (this.position.samePoint(position)) {
-            return;
-        }
-        Pos newPosition = this.position.withLookAt(position);
-
-        setView(newPosition.yaw(), newPosition.pitch());
+        final Pos newPosition = this.position.withLookAt(position);
+        if (!newPosition.sameView(this.position)) setView(newPosition.yaw(), newPosition.pitch());
     }
 
     /**
