@@ -323,7 +323,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param pitch the new pitch
      */
     public void setView(float yaw, float pitch) {
-        this.position = position.withView(yaw, pitch);
+        final Pos currentPosition = this.position;
+        if (currentPosition.sameView(yaw, pitch)) return;
+        this.position = currentPosition.withView(yaw, pitch);
         sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), yaw));
         sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), yaw, pitch, onGround));
     }
@@ -336,7 +338,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void lookAt(@NotNull Pos position) {
         final Pos newPosition = this.position.withLookAt(position);
-        if (!newPosition.sameView(this.position)) setView(newPosition.yaw(), newPosition.pitch());
+        setView(newPosition.yaw(), newPosition.pitch());
     }
 
     /**

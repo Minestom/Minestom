@@ -133,8 +133,12 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @return true if the two positions have the same view
      */
     public boolean sameView(@NotNull Pos position) {
-        return Float.compare(position.yaw, yaw) == 0 &&
-                Float.compare(position.pitch, pitch) == 0;
+        return sameView(position.yaw(), position.pitch());
+    }
+
+    public boolean sameView(float yaw, float pitch) {
+        return Float.compare(this.yaw, yaw) == 0 &&
+                Float.compare(this.pitch, pitch) == 0;
     }
 
     /**
