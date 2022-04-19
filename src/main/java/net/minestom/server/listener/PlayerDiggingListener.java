@@ -93,6 +93,20 @@ public final class PlayerDiggingListener {
         return breakBlock(instance, player, blockPosition, block);
     }
 
+    private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            // Spectators can't break blocks
+            return true;
+        } else if (player.getGameMode() == GameMode.ADVENTURE) {
+            // Check if the item can break the block with the current item
+            final ItemStack itemInMainHand = player.getItemInMainHand();
+            if (!itemInMainHand.meta().getCanDestroy().contains(block)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static void dropStack(Player player) {
         final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
         dropItem(player, droppedItemStack, ItemStack.AIR);
@@ -167,20 +181,6 @@ public final class PlayerDiggingListener {
         } else {
             playerInventory.update();
         }
-    }
-
-    private static boolean shouldPreventBreaking(Player player, Block block) {
-        if (player.getGameMode() == GameMode.SPECTATOR) {
-            // Spectators can't break blocks
-            return true;
-        } else if (player.getGameMode() == GameMode.ADVENTURE) {
-            // Check if the item can break the block with the current item
-            final ItemStack itemInMainHand = player.getItemInMainHand();
-            if (!itemInMainHand.meta().getCanDestroy().contains(block)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private record DiggingResult(Block block, boolean success) {
