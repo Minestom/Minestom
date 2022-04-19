@@ -57,16 +57,12 @@ public final class PlayerDiggingListener {
         final Block block = instance.getBlock(blockPosition);
         final GameMode gameMode = player.getGameMode();
 
-        if (gameMode == GameMode.SPECTATOR) {
-            // Spectators can't break blocks
+        // Prevent spectators and check players in adventure mode
+        if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
-        } else if (gameMode == GameMode.ADVENTURE) {
-            // Check if the item can break the block with the current item
-            final ItemStack itemInMainHand = player.getItemInMainHand();
-            if (!itemInMainHand.meta().getCanDestroy().contains(block)) {
-                return new DiggingResult(block, false);
-            }
-        } else if (gameMode == GameMode.CREATIVE) {
+        }
+
+        if (gameMode == GameMode.CREATIVE) {
             return breakBlock(instance, player, blockPosition, block);
         }
 
@@ -89,7 +85,11 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
-        // TODO sanity check
+
+        if (shouldPreventBreaking(player, block)) {
+            return new DiggingResult(block, false);
+        }
+
         return breakBlock(instance, player, blockPosition, block);
     }
 
@@ -167,6 +167,20 @@ public final class PlayerDiggingListener {
         } else {
             playerInventory.update();
         }
+    }
+
+    private static boolean shouldPreventBreaking(Player player, Block block) {
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            // Spectators can't break blocks
+            return true;
+        } else if (player.getGameMode() == GameMode.ADVENTURE) {
+            // Check if the item can break the block with the current item
+            final ItemStack itemInMainHand = player.getItemInMainHand();
+            if (!itemInMainHand.meta().getCanDestroy().contains(block)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private record DiggingResult(Block block, boolean success) {
