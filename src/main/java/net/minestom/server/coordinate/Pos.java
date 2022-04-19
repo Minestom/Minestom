@@ -120,10 +120,8 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         }
 
         Vec delta = Vec.fromPoint(point.sub(this)).normalize();
-        return new Pos(x, y, z,
-                PositionUtils.getLookYaw(delta.x(), delta.z()),
-                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
-        );
+        return withView(PositionUtils.getLookYaw(delta.x(), delta.z()),
+                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z()));
     }
 
     @Contract(pure = true)
