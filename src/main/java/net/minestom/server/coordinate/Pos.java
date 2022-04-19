@@ -2,6 +2,7 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -110,6 +111,14 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     @Contract(pure = true)
     public @NotNull Pos withPitch(float pitch) {
         return new Pos(x, y, z, yaw, pitch);
+    }
+
+    @Contract(pure = true)
+    public @NotNull Pos withLookAt(@NotNull Point point) {
+        if (samePoint(point)) return this;
+        final Vec delta = Vec.fromPoint(point.sub(this)).normalize();
+        return withView(PositionUtils.getLookYaw(delta.x(), delta.z()),
+                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z()));
     }
 
     @Contract(pure = true)
