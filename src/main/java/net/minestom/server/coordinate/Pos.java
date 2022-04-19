@@ -114,12 +114,12 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withLookAt(@NotNull Pos position) {
-        if (this.samePoint(position)) {
+    public @NotNull Pos withLookAt(@NotNull Point point) {
+        if (this.samePoint(point)) {
             return this;
         }
 
-        Vec delta = position.sub(this).asVec().normalize();
+        Vec delta = Vec.fromPoint(point.sub(this)).normalize();
         return new Pos(x, y, z,
                 PositionUtils.getLookYaw(delta.x(), delta.z()),
                 PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
