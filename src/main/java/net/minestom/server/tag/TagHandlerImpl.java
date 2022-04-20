@@ -186,11 +186,9 @@ final class TagHandlerImpl implements TagHandler {
         }
         // Value must be parsed from nbt if the tag is different
         final NBT nbt = entry.updatedNbt();
-        try {
-            return tag.entry.read().apply(nbt);
-        } catch (ClassCastException e) {
-            return tag.createDefault();
-        }
+        final Serializers.Entry<T, NBT> serializerEntry = tag.entry;
+        return serializerEntry.nbtType().isAssignableFrom(nbt.getClass()) ?
+                serializerEntry.read(nbt) : tag.createDefault();
     }
 
     private static Int2ObjectOpenHashMap<Entry<?>> traversePath(Tag.PathEntry[] paths,
@@ -256,7 +254,7 @@ final class TagHandlerImpl implements TagHandler {
         @Override
         public NBT updatedNbt() {
             NBT nbt = this.nbt;
-            if (nbt == null) this.nbt = nbt = tag.entry.write().apply(value);
+            if (nbt == null) this.nbt = nbt = tag.entry.write(value);
             return nbt;
         }
     }

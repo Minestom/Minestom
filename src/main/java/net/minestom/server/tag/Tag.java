@@ -62,7 +62,7 @@ public class Tag<T> {
     }
 
     static <T, N extends NBT> Tag<T> tag(@NotNull String key, @NotNull Serializers.Entry<T, N> entry) {
-        return new Tag<>(INDEX_MAP.get(key), key, entry.read(), (Serializers.Entry<T, NBT>) entry,
+        return new Tag<>(INDEX_MAP.get(key), key, entry.reader(), (Serializers.Entry<T, NBT>) entry,
                 null, null, null, 0);
     }
 
@@ -98,13 +98,13 @@ public class Tag<T> {
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
         var entry = this.entry;
-        final Function<NBT, R> readFunction = entry.read().andThen(t -> {
+        final Function<NBT, R> readFunction = entry.reader().andThen(t -> {
             if (t == null) return null;
             return readMap.apply(t);
         });
-        final Function<R, NBT> writeFunction = writeMap.andThen(entry.write());
+        final Function<R, NBT> writeFunction = writeMap.andThen(entry.writer());
         return new Tag<>(index, key, readMap,
-                new Serializers.Entry<>(readFunction, writeFunction),
+                new Serializers.Entry<>(entry.nbtType(), readFunction, writeFunction),
                 // Default value
                 () -> {
                     T defaultValue = createDefault();
@@ -118,9 +118,10 @@ public class Tag<T> {
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
         var entry = this.entry;
-        var readFunction = entry.read();
-        var writeFunction = entry.write();
-        var listEntry = new Serializers.Entry<List<T>, NBT>(
+        var readFunction = entry.reader();
+        var writeFunction = entry.writer();
+        var listEntry = new Serializers.Entry<List<T>, NBTList>(
+                NBTList.class,
                 read -> {
                     var list = (NBTList<?>) read;
                     final int size = list.getSize();
@@ -161,7 +162,8 @@ public class Tag<T> {
             }
             return shallowCopy ? List.copyOf(ts) : List.of(array);
         } : List::copyOf;
-        return new Tag<>(index, key, readComparator, listEntry, null, path, co, listScope + 1);
+        return new Tag<>(index, key, readComparator, Serializers.Entry.class.cast(listEntry),
+                null, path, co, listScope + 1);
     }
 
     @ApiStatus.Experimental
@@ -184,7 +186,7 @@ public class Tag<T> {
         final NBT readable = isView() ? nbt.toCompound() : nbt.get(key);
         final T result;
         try {
-            if (readable == null || (result = entry.read().apply(readable)) == null)
+            if (readable == null || (result = entry.read(readable)) == null)
                 return createDefault();
             return result;
         } catch (ClassCastException e) {
@@ -194,7 +196,7 @@ public class Tag<T> {
 
     public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
         if (value != null) {
-            final NBT nbt = entry.write().apply(value);
+            final NBT nbt = entry.write(value);
             if (isView()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
             else nbtCompound.set(key, nbt);
         } else {
