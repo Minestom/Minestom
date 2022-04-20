@@ -4,6 +4,8 @@ import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,6 +15,7 @@ public class EntityVelocityIntegrationTest {
     @Test
     public void singleKnockback(Env env) {
         var instance = env.createFlatInstance();
+        loadChunks(instance);
 
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
@@ -44,6 +47,7 @@ public class EntityVelocityIntegrationTest {
     @Test
     public void doubleKnockback(Env env) {
         var instance = env.createFlatInstance();
+        loadChunks(instance);
 
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
@@ -79,5 +83,19 @@ public class EntityVelocityIntegrationTest {
             assertTrue(vec.sub(entity.getPosition()).apply(Vec.Operator.EPSILON).isZero());
             env.tick();
         }
+    }
+
+    private void loadChunks(Instance instance) {
+        ChunkUtils.optionalLoadAll(instance, new long[] {
+                ChunkUtils.getChunkIndex(-1, -1),
+                ChunkUtils.getChunkIndex(-1, 0),
+                ChunkUtils.getChunkIndex(-1, 1),
+                ChunkUtils.getChunkIndex(0, -1),
+                ChunkUtils.getChunkIndex(0, 0),
+                ChunkUtils.getChunkIndex(0, 1),
+                ChunkUtils.getChunkIndex(1, -1),
+                ChunkUtils.getChunkIndex(1, 0),
+                ChunkUtils.getChunkIndex(1, 1),
+        }, null).join();
     }
 }
