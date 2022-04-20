@@ -138,6 +138,11 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
 
         @Override
+        public @NotNull TagHandler tagHandler() {
+            return metaBuilder.tagHandler();
+        }
+
+        @Override
         public @NotNull ItemStack build() {
             return ItemStackImpl.create(material, amount, metaBuilder.build());
         }
