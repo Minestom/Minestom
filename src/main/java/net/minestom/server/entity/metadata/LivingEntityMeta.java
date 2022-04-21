@@ -76,11 +76,11 @@ public class LivingEntityMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
     }
 
-    public int getHealthAddedByAbsorption() {
+    public int getBeeStingerCount() {
         return super.metadata.getIndex(OFFSET + 5, 0);
     }
 
-    public void setHealthAddedByAbsorption(int value) {
+    public void setBeeStingerCount(int value) {
         super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
     }
 
