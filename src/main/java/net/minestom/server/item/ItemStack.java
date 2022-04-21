@@ -88,15 +88,15 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass);
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> builderConsumer);
+    @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> consumer);
 
     @Contract(value = "_, _ -> new", pure = true)
     @ApiStatus.Experimental
     <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                                            @NotNull Consumer<V> metaConsumer);
+                                                                                            @NotNull Consumer<V> consumer);
 
     @Contract(value = "_ -> new", pure = true)
-    @NotNull ItemStack withMeta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> metaOperator);
+    @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withMaterial(@NotNull Material material) {
@@ -204,7 +204,8 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         return meta();
     }
 
-    sealed interface Builder extends Taggable permits ItemStackImpl.Builder {
+    sealed interface Builder extends Taggable
+            permits ItemStackImpl.Builder {
         @Contract(value = "_ -> this")
         @NotNull Builder amount(int amount);
 
@@ -218,10 +219,11 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         @NotNull Builder meta(@NotNull ItemMeta itemMeta);
 
         @Contract(value = "_ -> this")
-        @NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> consumer);
+        @NotNull Builder meta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
 
         @Contract(value = "_, _ -> this")
-        <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull Builder meta(@NotNull Class<T> metaType, @NotNull Consumer<@NotNull V> itemMetaConsumer);
+        <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull Builder meta(@NotNull Class<T> metaType,
+                                                                                          @NotNull Consumer<@NotNull V> itemMetaConsumer);
 
         @Contract(value = "-> new", pure = true)
         @NotNull ItemStack build();
