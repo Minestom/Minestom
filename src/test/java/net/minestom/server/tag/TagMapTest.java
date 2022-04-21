@@ -3,6 +3,7 @@ package net.minestom.server.tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TagMapTest {
 
@@ -31,5 +32,12 @@ public class TagMapTest {
         handler.setTag(tag, new Entry(2));
         assertEquals(2, handler.getTag(intTag));
         assertEquals(new Entry(2), handler.getTag(tag));
+    }
+
+    @Test
+    public void mapDefaultAbsent() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("key").map(Entry::new, Entry::value);
+        assertNull(handler.getTag(tag));
     }
 }

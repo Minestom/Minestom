@@ -181,7 +181,7 @@ public class EventNodeTest {
         AtomicBoolean childResult = new AtomicBoolean(false);
 
         var node = EventNode.type("item_node", EventFilter.ITEM,
-                (event, item) -> item.getMaterial() == Material.DIAMOND);
+                (event, item) -> item.material() == Material.DIAMOND);
         var child = EventNode.type("item_node2", EventFilter.ITEM)
                 .addListener(ItemTestEvent.class, event -> childResult.set(true));
         node.addChild(child);
@@ -204,7 +204,7 @@ public class EventNodeTest {
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
-        var binding = EventBinding.filtered(EventFilter.ITEM, itemStack -> itemStack.getMaterial() == Material.DIAMOND)
+        var binding = EventBinding.filtered(EventFilter.ITEM, itemStack -> itemStack.material() == Material.DIAMOND)
                 .map(ItemTestEvent.class, (itemStack, itemTestEvent) -> result.set(true))
                 .build();
         node.register(binding);

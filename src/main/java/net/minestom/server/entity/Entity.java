@@ -56,7 +56,6 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -82,7 +81,8 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
+        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -323,22 +323,22 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param pitch the new pitch
      */
     public void setView(float yaw, float pitch) {
-        this.position = position.withView(yaw, pitch);
+        final Pos currentPosition = this.position;
+        if (currentPosition.sameView(yaw, pitch)) return;
+        this.position = currentPosition.withView(yaw, pitch);
         sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), yaw));
         sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), yaw, pitch, onGround));
     }
 
     /**
-     * Changes the view of the entity so that it looks in a direction to the given position.
+     * Changes the view of the entity so that it looks in a direction to the given position if
+     * it is different from the entity's current position.
      *
      * @param position the position to look at.
      */
     public void lookAt(@NotNull Pos position) {
-        Vec delta = position.sub(getPosition()).asVec().normalize();
-        setView(
-                PositionUtils.getLookYaw(delta.x(), delta.z()),
-                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z())
-        );
+        final Pos newPosition = this.position.withLookAt(position);
+        setView(newPosition.yaw(), newPosition.pitch());
     }
 
     /**
@@ -348,7 +348,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void lookAt(@NotNull Entity entity) {
         Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
-        lookAt(entity.position);
+        double eyeHeightDifference = entity.getEyeHeight() - getEyeHeight();
+        lookAt(entity.position.withY(entity.position.y() + eyeHeightDifference));
     }
 
     /**
@@ -1612,7 +1613,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Raycasts current entity's eye position to target eye position.
      *
-     * @param entity the entity to be checked.
+     * @param entity    the entity to be checked.
      * @param exactView if set to TRUE, checks whether target is IN the line of sight of the current one;
      *                  otherwise checks if the current entity can rotate so that target will be in its line of sight.
      * @return true if the ray reaches the target bounding box before hitting a block.
@@ -1633,9 +1634,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * @see Entity#hasLineOfSight(Entity, boolean)
      * @param entity the entity to be checked.
      * @return if the current entity has line of sight to the given one.
+     * @see Entity#hasLineOfSight(Entity, boolean)
      */
     public boolean hasLineOfSight(Entity entity) {
         return hasLineOfSight(entity, false);
@@ -1644,7 +1645,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets first entity on the line of sight of the current one that matches the given predicate.
      *
-     * @param range max length of the line of sight of the current entity to be checked.
+     * @param range     max length of the line of sight of the current entity to be checked.
      * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
@@ -1660,7 +1661,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
                 && predicate.test(e)
                 && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
-                    e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
+                e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(finalPredicate)

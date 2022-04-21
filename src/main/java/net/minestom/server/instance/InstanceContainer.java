@@ -57,7 +57,7 @@ public class InstanceContainer extends Instance {
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
-    private final Long2ObjectSyncMap<CompletableFuture<Chunk>> loadingChunks = Long2ObjectSyncMap.hashmap();
+    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
@@ -275,7 +275,7 @@ public class InstanceContainer extends Instance {
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
                     assert future == completableFuture : "Invalid future: " + future;
-                    future.complete(chunk);
+                    completableFuture.complete(chunk);
                 })
                 .exceptionally(throwable -> {
                     MinecraftServer.getExceptionManager().handleException(throwable);

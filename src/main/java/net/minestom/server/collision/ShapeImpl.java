@@ -4,10 +4,10 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.item.Material;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,11 +15,13 @@ final class ShapeImpl implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d{1,3}", Pattern.MULTILINE);
     private final BoundingBox[] blockSections;
     private final Point relativeStart, relativeEnd;
-    private final Supplier<Material> block;
 
-    private ShapeImpl(BoundingBox[] boundingBoxes, Supplier<Material> block) {
+    private final Registry.BlockEntry blockEntry;
+    private Block block;
+
+    private ShapeImpl(BoundingBox[] boundingBoxes, Registry.BlockEntry blockEntry) {
         this.blockSections = boundingBoxes;
-        this.block = block;
+        this.blockEntry = blockEntry;
         // Find bounds
         {
             double minX = 1, minY = 1, minZ = 1;
@@ -39,7 +41,7 @@ final class ShapeImpl implements Shape {
         }
     }
 
-    static ShapeImpl parseBlockFromRegistry(String str, Supplier<Material> block) {
+    static ShapeImpl parseBlockFromRegistry(String str, Registry.BlockEntry blockEntry) {
         final Matcher matcher = PATTERN.matcher(str);
         DoubleList vals = new DoubleArrayList();
         while (matcher.find()) {
@@ -64,7 +66,7 @@ final class ShapeImpl implements Shape {
             assert bb.minZ() == minZ;
             boundingBoxes[i] = bb;
         }
-        return new ShapeImpl(boundingBoxes, block);
+        return new ShapeImpl(boundingBoxes, blockEntry);
     }
 
     @Override
@@ -86,7 +88,8 @@ final class ShapeImpl implements Shape {
     }
 
     @Override
-    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
+    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection,
+                                     @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         boolean hitBlock = false;
         for (BoundingBox blockSection : blockSections) {
             // Fast check to see if a collision happens
@@ -97,10 +100,16 @@ final class ShapeImpl implements Shape {
             if (RayUtils.SweptAABB(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
                 finalResult.collidedShapePosition = shapePos;
                 finalResult.collidedShape = this;
-                finalResult.blockType = block.get().block();
+                finalResult.blockType = block();
             }
             hitBlock = true;
         }
         return hitBlock;
+    }
+
+    private Block block() {
+        Block block = this.block;
+        if (block == null) this.block = block = Block.fromStateId((short) blockEntry.stateId());
+        return block;
     }
 }

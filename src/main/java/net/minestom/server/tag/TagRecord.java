@@ -1,15 +1,18 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static java.util.Map.entry;
@@ -17,6 +20,7 @@ import static java.util.Map.entry;
 final class TagRecord {
     static final Map<Class<?>, Function<String, Tag<?>>> SUPPORTED_TYPES = Map.ofEntries(
             entry(Byte.class, Tag::Byte), entry(byte.class, Tag::Byte),
+            entry(Boolean.class, Tag::Boolean), entry(boolean.class, Tag::Boolean),
             entry(Short.class, Tag::Short), entry(short.class, Tag::Short),
             entry(Integer.class, Tag::Integer), entry(int.class, Tag::Integer),
             entry(Long.class, Tag::Long), entry(long.class, Tag::Long),
@@ -24,7 +28,9 @@ final class TagRecord {
             entry(Double.class, Tag::Double), entry(double.class, Tag::Double),
             entry(String.class, Tag::String),
 
-            entry(ItemStack.class, Tag::ItemStack));
+            entry(UUID.class, Tag::UUID),
+            entry(ItemStack.class, Tag::ItemStack),
+            entry(Component.class, Tag::Component));
 
     static final ClassValue<Serializer<? extends Record>> serializers = new ClassValue<>() {
         @Override
@@ -67,7 +73,7 @@ final class TagRecord {
     static final class Serializer<T extends Record> implements TagSerializer<T> {
         Constructor<T> constructor;
         Entry[] entries;
-        Serializers.Entry<T, ?> serializerEntry;
+        Serializers.Entry<T, NBTCompound> serializerEntry;
 
         Serializer(Constructor<T> constructor, Entry[] entries) {
             this.constructor = constructor;

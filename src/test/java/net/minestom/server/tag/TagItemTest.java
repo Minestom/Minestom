@@ -8,7 +8,8 @@ import java.lang.ref.WeakReference;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static net.minestom.server.api.TestUtils.waitUntilCleared;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TagItemTest {
 
@@ -19,7 +20,7 @@ public class TagItemTest {
         var handler = TagHandler.newHandler();
         handler.setTag(tag, item);
 
-        assertSame(item, handler.getTag(tag));
+        assertEquals(item, handler.getTag(tag));
     }
 
     @Test
@@ -37,7 +38,7 @@ public class TagItemTest {
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, item);
-        assertSame(item, handler.getTag(tag));
+        assertEquals(item, handler.getTag(tag));
 
         handler.setTag(tag, null);
         assertNull(handler.getTag(tag));
@@ -49,7 +50,7 @@ public class TagItemTest {
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, item);
-        assertSame(item, handler.getTag(tag));
+        assertEquals(item, handler.getTag(tag));
         handler.setTag(tag, null);
 
         var ref = new WeakReference<>(item);
@@ -66,9 +67,9 @@ public class TagItemTest {
 
         var tag = Tag.ItemStack("item");
         handler.setTag(tag, item);
-        assertSame(item, handler.getTag(tag));
+        assertEquals(item, handler.getTag(tag));
         handler.setTag(tag, item2);
-        assertSame(item2, handler.getTag(tag));
+        assertEquals(item2, handler.getTag(tag));
     }
 
     @Test
@@ -82,7 +83,7 @@ public class TagItemTest {
         // Write the item using the ItemStack tag
         {
             handler.setTag(itemTag, item);
-            assertSame(item, handler.getTag(itemTag));
+            assertEquals(item, handler.getTag(itemTag));
             assertEquals(item.toItemNBT(), handler.getTag(nbtTag));
         }
         // Override it with an NBT tag
@@ -102,8 +103,7 @@ public class TagItemTest {
                 {
                   "item": {
                     "id":"minecraft:diamond",
-                    "Count":1B,
-                    "tag":{}
+                    "Count":1B
                   }
                 }
                 """, handler.asCompound());

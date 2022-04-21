@@ -79,7 +79,12 @@ final class SchedulerImpl implements Scheduler {
         // By either adding the task to the execution queue or submitting it to the pool
         switch (task.executionType()) {
             case SYNC -> taskQueue.offer(task);
-            case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
+            case ASYNC -> EXECUTOR.submit(() -> {
+                if (!task.isAlive()) {
+                    return;
+                }
+                handleTask(task);
+            });
         }
     }
 
