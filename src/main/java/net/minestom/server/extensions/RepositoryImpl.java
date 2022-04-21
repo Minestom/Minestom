@@ -32,7 +32,7 @@ record RepositoryImpl(
             return new RepositoryImpl(id, url);
         } else if (json.isJsonPrimitive()) {
             String name = json.getAsString().toLowerCase(Locale.ROOT);
-            Check.argCondition(PREDEFINED_REPOSITORIES.containsKey(name), "Unknown repository '" + name + "'.");
+            Check.argCondition(!PREDEFINED_REPOSITORIES.containsKey(name), "Unknown repository '" + name + "'.");
 
             return PREDEFINED_REPOSITORIES.get(name);
         }
