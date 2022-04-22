@@ -111,7 +111,7 @@ public class ExtensionManagerTest {
                     List.of(), dependencies, new JsonObject(), Paths.get("."),
                     new HierarchyClassLoader("Ext_" + stub.name, new URL[0])
             );
-            extensionsByName.put(descriptor.name().toLowerCase(), descriptor);
+            extensionsByName.put(descriptor.name().toUpperCase(Locale.ROOT), descriptor);
         }
         return extensionsByName;
     }
