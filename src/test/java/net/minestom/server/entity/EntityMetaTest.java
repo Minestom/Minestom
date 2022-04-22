@@ -1,16 +1,9 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.api.Collector;
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
