@@ -616,7 +616,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            final double airDrag = this instanceof LivingEntity ? 0.91 : 0.98;
+            EntitySpawnType type = entityType.registry().spawnType();
+            final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
             final double drag;
             if (onGround) {
                 synchronized (finalChunk) {
