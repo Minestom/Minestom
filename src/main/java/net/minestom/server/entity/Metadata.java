@@ -214,13 +214,13 @@ public class Metadata {
                 if (entries.isEmpty()) {
                     return;
                 }
-                this.notNotifiedChanges.clear();
             }
         }
         if (entries == null || this.entity == null || !this.entity.isActive()) {
             return;
         }
         this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
+        this.notNotifiedChanges.clear();
     }
 
     public @NotNull Collection<Entry<?>> getEntries() {
