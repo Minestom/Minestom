@@ -31,6 +31,9 @@ public interface TagSerializer<T> {
     void write(@NotNull TagWritable writer, @NotNull T value);
 
     @ApiStatus.Experimental
+    TagSerializer<NBTCompound> COMPOUND = TagSerializerImpl.COMPOUND;
+
+    @ApiStatus.Experimental
     static <T> TagSerializer<T> fromCompound(@NotNull Function<NBTCompound, T> reader,
                                              @NotNull Function<T, NBTCompound> writer) {
         return TagSerializerImpl.fromCompound(reader, writer);
