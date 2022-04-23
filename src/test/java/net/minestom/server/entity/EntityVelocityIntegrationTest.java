@@ -81,8 +81,13 @@ public class EntityVelocityIntegrationTest {
     }
 
     private void testMovement(Env env, Entity entity, Vec[] sample) {
+        final double epsilon = 0.003;
         for (Vec vec : sample) {
-            assertTrue(vec.sub(entity.getPosition()).apply(Vec.Operator.EPSILON).isZero());
+            assertTrue(vec.sub(entity.getPosition()).apply((x, y, z) -> new Vec(
+                    Math.abs(x) < epsilon ? 0 : x,
+                    Math.abs(y) < epsilon ? 0 : y,
+                    Math.abs(z) < epsilon ? 0 : z
+            )).isZero());
             env.tick();
         }
     }
