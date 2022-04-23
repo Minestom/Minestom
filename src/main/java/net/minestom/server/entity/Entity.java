@@ -555,7 +555,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void velocityTick() {
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-        if (PlayerUtils.isSocketClient(this)) return;
         if (vehicle != null) return;
 
         final boolean noGravity = hasNoGravity();
@@ -574,7 +573,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (this.hasPhysics) {
             final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
             this.lastPhysicsResult = physicsResult;
-            this.onGround = physicsResult.isOnGround();
+            if (!PlayerUtils.isSocketClient(this))
+                this.onGround = physicsResult.isOnGround();
+
             newPosition = physicsResult.newPosition();
             newVelocity = physicsResult.newVelocity();
         } else {
@@ -609,7 +610,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 this.position = finalVelocityPosition;
                 refreshCoordinate(finalVelocityPosition);
             } else {
-                refreshPosition(finalVelocityPosition, true);
+                if (!PlayerUtils.isSocketClient(this))
+                    refreshPosition(finalVelocityPosition, true);
             }
         }
 
@@ -1259,14 +1261,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (position.equals(lastSyncedPosition)) return;
         this.position = position;
         this.previousPosition = previousPosition;
-        if (!position.samePoint(previousPosition)) {
-            refreshCoordinate(position);
-            // Update player velocity
-            if (PlayerUtils.isSocketClient(this)) {
-                // Calculate from client
-                this.velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
-            }
-        }
+        if (!position.samePoint(previousPosition)) refreshCoordinate(position);
         // Update viewers
         final boolean viewChange = !position.sameView(lastSyncedPosition);
         final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
