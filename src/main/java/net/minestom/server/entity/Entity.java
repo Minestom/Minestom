@@ -549,7 +549,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void velocityTick() {
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-        if (PlayerUtils.isSocketClient(this)) return;
         if (vehicle != null) return;
 
         final boolean noGravity = hasNoGravity();
@@ -558,19 +557,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return;
         }
         final float tps = MinecraftServer.TICK_PER_SECOND;
+        final Pos positionBeforeMove = getPosition();
         final Vec currentVelocity = getVelocity();
-        final Vec deltaPos = new Vec(
-                currentVelocity.x() / tps,
-                currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
-                currentVelocity.z() / tps
-        );
+        final boolean wasOnGround = this.onGround;
+        final Vec deltaPos = currentVelocity.div(tps);
 
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
             final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
             this.lastPhysicsResult = physicsResult;
-            this.onGround = physicsResult.isOnGround();
+            if (!PlayerUtils.isSocketClient(this))
+                this.onGround = physicsResult.isOnGround();
+
             newPosition = physicsResult.newPosition();
             newVelocity = physicsResult.newVelocity();
         } else {
@@ -582,11 +581,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
         if (!positionChanged) {
-            if (!hasVelocity && newVelocity.isZero()) {
-                return;
-            }
-            if (hasVelocity) {
-                this.velocity = Vec.ZERO;
+            if (hasVelocity || newVelocity.isZero()) {
+                this.velocity = noGravity ? Vec.ZERO : new Vec(
+                        0,
+                        -gravityAcceleration * tps * (1 - gravityDragPerTick),
+                        0
+                );
                 sendPacketToViewers(getVelocityPacket());
                 return;
             }
@@ -604,31 +604,43 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 this.position = finalVelocityPosition;
                 refreshCoordinate(finalVelocityPosition);
             } else {
-                refreshPosition(finalVelocityPosition, true);
+                if (!PlayerUtils.isSocketClient(this))
+                    refreshPosition(finalVelocityPosition, true);
             }
         }
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            final double airDrag = this instanceof LivingEntity ? 0.91 : 0.98;
-            final double drag = this.onGround ?
-                    finalChunk.getBlock(position).registry().friction() : airDrag;
-            this.velocity = newVelocity
-                    // Convert from block/tick to block/sec
-                    .mul(tps)
-                    // Apply drag
-                    .apply((x, y, z) -> new Vec(
-                            x * drag,
-                            !noGravity ? y * (1 - gravityDragPerTick) : y,
-                            z * drag
-                    ))
-                    // Prevent infinitely decreasing velocity
-                    .apply(Vec.Operator.EPSILON);
+            updateVelocity(wasOnGround, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (hasVelocity || gravityTickCount > 0) {
+        if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
             sendPacketToViewers(getVelocityPacket());
         }
+    }
+
+    protected void updateVelocity(boolean wasOnGround, Pos positionBeforeMove, Vec newVelocity) {
+        EntitySpawnType type = entityType.registry().spawnType();
+        final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
+        final double drag;
+        if (wasOnGround) {
+            final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
+            synchronized (chunk) {
+                drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
+            }
+        } else drag = airDrag;
+
+        this.velocity = newVelocity
+                // Apply drag
+                .apply((x, y, z) -> new Vec(
+                        x * drag,
+                        !hasNoGravity() ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
+                        z * drag
+                ))
+                // Convert from block/tick to block/sec
+                .mul(MinecraftServer.TICK_PER_SECOND)
+                // Prevent infinitely decreasing velocity
+                .apply(Vec.Operator.EPSILON);
     }
 
     private void touchTick() {
@@ -1243,14 +1255,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (position.equals(lastSyncedPosition)) return;
         this.position = position;
         this.previousPosition = previousPosition;
-        if (!position.samePoint(previousPosition)) {
-            refreshCoordinate(position);
-            // Update player velocity
-            if (PlayerUtils.isSocketClient(this)) {
-                // Calculate from client
-                this.velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
-            }
-        }
+        if (!position.samePoint(previousPosition)) refreshCoordinate(position);
         // Update viewers
         final boolean viewChange = !position.sameView(lastSyncedPosition);
         final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
@@ -1576,14 +1581,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param x        knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
      * @param z        knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
      */
-    public void takeKnockback(final float strength, final double x, final double z) {
+    public void takeKnockback(float strength, final double x, final double z) {
         if (strength > 0) {
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
-            final Vec velocityModifier = new Vec(x, z)
-                    .normalize()
-                    .mul(strength * MinecraftServer.TICK_PER_SECOND / 2);
+            strength *= MinecraftServer.TICK_PER_SECOND;
+            final Vec velocityModifier = new Vec(x, z).normalize().mul(strength);
+            final double verticalLimit = .4d * MinecraftServer.TICK_PER_SECOND;
+
             setVelocity(new Vec(velocity.x() / 2d - velocityModifier.x(),
-                    onGround ? Math.min(.4d, velocity.y() / 2d + strength) * MinecraftServer.TICK_PER_SECOND : velocity.y(),
+                    onGround ? Math.min(verticalLimit, velocity.y() / 2d + strength) : velocity.y(),
                     velocity.z() / 2d - velocityModifier.z()
             ));
         }
