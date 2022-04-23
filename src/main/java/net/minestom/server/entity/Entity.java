@@ -620,7 +620,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             updateVelocity(wasOnGround, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (hasVelocity || gravityTickCount > 0) {
+        if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
             sendPacketToViewers(getVelocityPacket());
         }
     }
