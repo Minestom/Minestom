@@ -13,6 +13,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @EnvTest
 public class EntityVelocityIntegrationTest {
     @Test
+    public void gravity(Env env) {
+        var instance = env.createFlatInstance();
+        loadChunks(instance);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        env.tick(); // Ensure velocity downwards is present
+
+        testMovement(env, entity, new Vec[] {
+                new Vec(0.0, 42.0, 0.0),
+                new Vec(0.0, 41.92159999847412, 0.0),
+                new Vec(0.0, 41.76636799395752, 0.0),
+                new Vec(0.0, 41.53584062504456, 0.0),
+                new Vec(0.0, 41.231523797587016, 0.0),
+                new Vec(0.0, 40.85489329934836, 0.0),
+                new Vec(0.0, 40.40739540236494, 0.0),
+                new Vec(0.0, 40.0, 0.0)
+        });
+    }
+
+    @Test
     public void singleKnockback(Env env) {
         var instance = env.createFlatInstance();
         loadChunks(instance);
