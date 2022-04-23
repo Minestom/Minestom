@@ -8,6 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
@@ -104,11 +105,9 @@ public class EntityVelocityIntegrationTest {
     private void testMovement(Env env, Entity entity, Vec[] sample) {
         final double epsilon = 0.003;
         for (Vec vec : sample) {
-            assertTrue(vec.sub(entity.getPosition()).apply((x, y, z) -> new Vec(
-                    Math.abs(x) < epsilon ? 0 : x,
-                    Math.abs(y) < epsilon ? 0 : y,
-                    Math.abs(z) < epsilon ? 0 : z
-            )).isZero());
+            assertEquals(vec.x(), entity.getPosition().x(), epsilon);
+            assertEquals(vec.y(), entity.getPosition().y(), epsilon);
+            assertEquals(vec.z(), entity.getPosition().z(), epsilon);
             env.tick();
         }
     }
