@@ -565,11 +565,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         final float tps = MinecraftServer.TICK_PER_SECOND;
         final Vec currentVelocity = getVelocity();
-        final Vec deltaPos = new Vec(
-                currentVelocity.x() / tps,
-                currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
-                currentVelocity.z() / tps
-        );
+        final Vec deltaPos = currentVelocity.div(tps);
 
         final Pos newPosition;
         final Vec newVelocity;
@@ -588,11 +584,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
         if (!positionChanged) {
-            if (!hasVelocity && newVelocity.isZero()) {
-                return;
-            }
-            if (hasVelocity) {
-                this.velocity = Vec.ZERO;
+            if (hasVelocity || newVelocity.isZero()) {
+                this.velocity = noGravity ? Vec.ZERO : new Vec(
+                        0,
+                        -gravityAcceleration * tps * (1 - gravityDragPerTick),
+                        0
+                );
                 sendPacketToViewers(getVelocityPacket());
                 return;
             }
@@ -625,14 +622,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 }
             } else drag = airDrag;
             this.velocity = newVelocity
-                    // Convert from block/tick to block/sec
-                    .mul(tps)
                     // Apply drag
                     .apply((x, y, z) -> new Vec(
                             x * drag,
-                            !noGravity ? y * (1 - gravityDragPerTick) : y,
+                            !noGravity ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
                             z * drag
                     ))
+                    // Convert from block/tick to block/sec
+                    .mul(tps)
                     // Prevent infinitely decreasing velocity
                     .apply(Vec.Operator.EPSILON);
         }

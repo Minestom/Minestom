@@ -19,6 +19,7 @@ public class EntityVelocityIntegrationTest {
 
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
+        env.tick();
         env.tick(); // Ensures the entity is onGround
         entity.takeKnockback(0.4f, 0, -1);
 
@@ -51,6 +52,7 @@ public class EntityVelocityIntegrationTest {
 
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
+        env.tick();
         env.tick(); // Ensures the entity is onGround
         entity.takeKnockback(0.4f, 0, -1);
         entity.takeKnockback(0.5f, 0, -1);
