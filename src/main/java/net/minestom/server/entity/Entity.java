@@ -615,30 +615,36 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            EntitySpawnType type = entityType.registry().spawnType();
-            final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
-            final double drag;
-            if (wasOnGround) {
-                synchronized (finalChunk) {
-                    drag = finalChunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
-                }
-            } else drag = airDrag;
-            this.velocity = newVelocity
-                    // Apply drag
-                    .apply((x, y, z) -> new Vec(
-                            x * drag,
-                            !noGravity ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
-                            z * drag
-                    ))
-                    // Convert from block/tick to block/sec
-                    .mul(tps)
-                    // Prevent infinitely decreasing velocity
-                    .apply(Vec.Operator.EPSILON);
+            updateVelocity(wasOnGround, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
         if (hasVelocity || gravityTickCount > 0) {
             sendPacketToViewers(getVelocityPacket());
         }
+    }
+
+    protected void updateVelocity(boolean wasOnGround, Pos positionBeforeMove, Vec newVelocity) {
+        EntitySpawnType type = entityType.registry().spawnType();
+        final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
+        final double drag;
+        if (wasOnGround) {
+            final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
+            synchronized (chunk) {
+                drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
+            }
+        } else drag = airDrag;
+
+        this.velocity = newVelocity
+                // Apply drag
+                .apply((x, y, z) -> new Vec(
+                        x * drag,
+                        !hasNoGravity() ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
+                        z * drag
+                ))
+                // Convert from block/tick to block/sec
+                .mul(MinecraftServer.TICK_PER_SECOND)
+                // Prevent infinitely decreasing velocity
+                .apply(Vec.Operator.EPSILON);
     }
 
     private void touchTick() {
