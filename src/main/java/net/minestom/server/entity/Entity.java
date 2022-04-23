@@ -564,7 +564,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return;
         }
         final float tps = MinecraftServer.TICK_PER_SECOND;
+        final Pos positionBeforeMove = getPosition();
         final Vec currentVelocity = getVelocity();
+        final boolean wasOnGround = this.onGround;
         final Vec deltaPos = currentVelocity.div(tps);
 
         final Pos newPosition;
@@ -616,9 +618,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             EntitySpawnType type = entityType.registry().spawnType();
             final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
             final double drag;
-            if (onGround) {
+            if (wasOnGround) {
                 synchronized (finalChunk) {
-                    drag = finalChunk.getBlock(position).registry().friction() * airDrag;
+                    drag = finalChunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
                 }
             } else drag = airDrag;
             this.velocity = newVelocity
