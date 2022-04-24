@@ -210,7 +210,8 @@ public final class Metadata {
         return metadataMap;
     }
 
-    public interface Entry<T> extends Writeable {
+    public sealed interface Entry<T> extends Writeable
+            permits MetadataImpl.EntryImpl {
         int type();
 
         @UnknownNullability T value();
