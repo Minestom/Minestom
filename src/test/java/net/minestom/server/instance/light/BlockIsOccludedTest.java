@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BlockIsOccludedTest {
     @Test
     public void blockAir() {
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
         
         for (BlockFace face : BlockFace.values()) {
             assertFalse(airBlock.isOccluded(airBlock, face));
@@ -22,8 +22,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockLantern() {
-        Shape shape = Block.LANTERN.registry().shape();
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape shape = Block.LANTERN.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         for (BlockFace face : BlockFace.values()) {
             assertFalse(shape.isOccluded(airBlock, face));
@@ -32,8 +32,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockCauldron() {
-        Shape shape = Block.CAULDRON.registry().shape();
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape shape = Block.CAULDRON.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         for (BlockFace face : BlockFace.values()) {
             assertFalse(shape.isOccluded(airBlock, face));
@@ -42,8 +42,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockSlabBottomAir() {
-        Shape shape = Block.SANDSTONE_SLAB.registry().shape();
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape shape = Block.SANDSTONE_SLAB.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         assertTrue(shape.isOccluded(airBlock, BlockFace.BOTTOM));
 
@@ -56,8 +56,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockSlabTopEnchantingTable() {
-        Shape shape1 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().shape();
-        Shape shape2 = Block.ENCHANTING_TABLE.registry().shape();
+        Shape shape1 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().collisionShape();
+        Shape shape2 = Block.ENCHANTING_TABLE.registry().collisionShape();
 
         assertFalse(shape1.isOccluded(shape2, BlockFace.BOTTOM));
 
@@ -73,9 +73,9 @@ public class BlockIsOccludedTest {
         Shape shape = Block.SANDSTONE_STAIRS.withProperties(Map.of(
                 "facing", "west",
                 "half", "bottom",
-                "shape", "straight")).registry().shape();
+                "shape", "straight")).registry().collisionShape();
 
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         assertTrue(shape.isOccluded(airBlock, BlockFace.WEST));
         assertTrue(shape.isOccluded(airBlock, BlockFace.BOTTOM));
@@ -88,8 +88,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockSlabBottomStone() {
-        Shape shape = Block.SANDSTONE_SLAB.registry().shape();
-        Shape stoneBlock = Block.STONE.registry().shape();
+        Shape shape = Block.SANDSTONE_SLAB.registry().collisionShape();
+        Shape stoneBlock = Block.STONE.registry().collisionShape();
 
         assertTrue(shape.isOccluded(stoneBlock, BlockFace.BOTTOM));
         assertTrue(shape.isOccluded(stoneBlock, BlockFace.NORTH));
@@ -101,8 +101,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockStone() {
-        Shape shape = Block.STONE.registry().shape();
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape shape = Block.STONE.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         for (BlockFace face : BlockFace.values()) {
             assertTrue(shape.isOccluded(airBlock, face));
@@ -111,8 +111,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockStair() {
-        Shape shape = Block.SANDSTONE_STAIRS.registry().shape();
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape shape = Block.SANDSTONE_STAIRS.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         assertTrue(shape.isOccluded(airBlock, BlockFace.NORTH));
         assertTrue(shape.isOccluded(airBlock, BlockFace.BOTTOM));
@@ -125,8 +125,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockSlab() {
-        Shape shape = Block.SANDSTONE_SLAB.registry().shape();
-        Shape airBlock = Block.AIR.registry().shape();
+        Shape shape = Block.SANDSTONE_SLAB.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
 
         assertTrue(shape.isOccluded(airBlock, BlockFace.BOTTOM));
 
@@ -139,8 +139,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockSlabBottomAndSlabTop() {
-        Shape shape1 = Block.SANDSTONE_SLAB.registry().shape();
-        Shape shape2 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().shape();
+        Shape shape1 = Block.SANDSTONE_SLAB.registry().collisionShape();
+        Shape shape2 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().collisionShape();
 
         assertFalse(shape1.isOccluded(shape2, BlockFace.TOP));
 
@@ -153,7 +153,7 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockSlabBottomAndSlabBottom() {
-        Shape shape = Block.SANDSTONE_SLAB.registry().shape();
+        Shape shape = Block.SANDSTONE_SLAB.registry().collisionShape();
 
         assertTrue(shape.isOccluded(shape, BlockFace.BOTTOM));
         assertTrue(shape.isOccluded(shape, BlockFace.TOP));
@@ -166,8 +166,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockStairAndSlabBottom() {
-        Shape shape1 = Block.STONE_STAIRS.registry().shape();
-        Shape shape2 = Block.SANDSTONE_SLAB.registry().shape();
+        Shape shape1 = Block.STONE_STAIRS.registry().collisionShape();
+        Shape shape2 = Block.SANDSTONE_SLAB.registry().collisionShape();
 
         assertTrue(shape1.isOccluded(shape2, BlockFace.BOTTOM));
         assertTrue(shape1.isOccluded(shape2, BlockFace.NORTH));
@@ -180,8 +180,8 @@ public class BlockIsOccludedTest {
 
     @Test
     public void blockStairAndSlabTop() {
-        Shape shape1 = Block.STONE_STAIRS.registry().shape();
-        Shape shape2 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().shape();
+        Shape shape1 = Block.STONE_STAIRS.registry().collisionShape();
+        Shape shape2 = Block.SANDSTONE_SLAB.withProperty("type", "top").registry().collisionShape();
 
         assertTrue(shape1.isOccluded(shape2, BlockFace.NORTH));
         assertTrue(shape1.isOccluded(shape2, BlockFace.BOTTOM));
