@@ -174,25 +174,27 @@ public final class Metadata {
     public void setIndex(int index, @NotNull Entry<?> entry) {
         this.metadataMap.put(index, entry);
         // Send metadata packet to update viewers and self
-        if (this.entity != null && this.entity.isActive()) {
+        final Entity entity = this.entity;
+        if (entity != null && entity.isActive()) {
             if (!this.notifyAboutChanges) {
                 synchronized (this.notNotifiedChanges) {
                     this.notNotifiedChanges.put(index, entry);
                 }
             } else {
-                this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
+                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
             }
         }
     }
 
     public void setNotifyAboutChanges(boolean notifyAboutChanges) {
-        if (!NOTIFIED_CHANGES.compareAndSet(this, !notifyAboutChanges, notifyAboutChanges)) {
+        if (!NOTIFIED_CHANGES.compareAndSet(this, !notifyAboutChanges, notifyAboutChanges))
             return;
-        }
         if (!notifyAboutChanges) {
             // Ask future metadata changes to be cached
             return;
         }
+        final Entity entity = this.entity;
+        if (entity == null || !entity.isActive()) return;
         Map<Integer, Entry<?>> entries;
         synchronized (this.notNotifiedChanges) {
             Map<Integer, Entry<?>> awaitingChanges = this.notNotifiedChanges;
@@ -200,10 +202,7 @@ public final class Metadata {
             entries = Map.copyOf(awaitingChanges);
             awaitingChanges.clear();
         }
-        if (entries == null || this.entity == null || !this.entity.isActive()) {
-            return;
-        }
-        this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
+        entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
     }
 
     public @NotNull Map<Integer, Entry<?>> getEntries() {
