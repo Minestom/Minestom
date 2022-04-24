@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntityMetaDataPacket</span>(int&nbsp;entityId, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../../entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;&nbsp;entries)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntityMetaDataPacket</span>(int&nbsp;entityId, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../../../../entity/Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;&nbsp;entries)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -96,8 +96,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,java.util.Collection)" class="member-name-link">EntityMetaDataPacket</a><wbr>(int&nbsp;entityId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../../entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;&nbsp;entries)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,java.util.Map)" class="member-name-link">EntityMetaDataPacket</a><wbr>(int&nbsp;entityId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../../../../entity/Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;&nbsp;entries)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>EntityMetaDataPacket</code> record class.</div>
 </div>
@@ -122,7 +122,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>entityId</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../../entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../../../../entity/Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entries()" class="member-name-link">entries</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>entries</code> record component.</div>
@@ -170,11 +170,11 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(int,java.util.Collection)">
+<section class="detail" id="&lt;init&gt;(int,java.util.Map)">
 <h3>EntityMetaDataPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntityMetaDataPacket</span><wbr><span class="parameters">(int&nbsp;entityId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../../entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;&nbsp;entries)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../../../../entity/Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;&nbsp;entries)</span></div>
 <div class="block">Creates an instance of a <code>EntityMetaDataPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -284,7 +284,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="entries()">
 <h3>entries</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../../entity/Metadata.Entry.html" title="class in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">entries</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../../../../entity/Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">entries</span>()</div>
 <div class="block">Returns the value of the <code>entries</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
