@@ -8,6 +8,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -115,7 +117,15 @@ public class EntityVelocityIntegrationTest {
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         env.tick();
 
-        // Should still be false, because the entity should only have gravity
+        // Should be true: The entity is currently falling (in the air), so it does have a velocity.
+        // Only entities on the ground should ignore the default velocity.
+        assertTrue(entity.hasVelocity());
+
+        // Test until the entity is on the ground
+        boolean tickedSuccessfully = env.tickWhile(() -> !entity.isOnGround(), Duration.ofMillis(50));
+        assertTrue(tickedSuccessfully);
+
+        // Now that the entity is on the ground, it should no longer have a velocity.
         assertFalse(entity.hasVelocity());
     }
 
