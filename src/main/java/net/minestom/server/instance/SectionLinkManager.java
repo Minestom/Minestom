@@ -88,6 +88,7 @@ public class SectionLinkManager {
 
     public static Map<BlockFace, Section> getNeighbors(Section section) {
         Point sectionPos = sectionLookup.get(section);
+        if (sectionPos == null) return null;
         return getLinks(sectionPos);
     }
 }
