@@ -64,6 +64,19 @@ public class TagNbtTest {
     }
 
     @Test
+    public void compoundPathRead() {
+        var handler = TagHandler.newHandler();
+        var nbtTag = Tag.NBT("compound").path("path");
+
+        var nbt = NBT.Compound(Map.of("key", NBT.Int(5)));
+        handler.setTag(nbtTag, nbt);
+        assertEquals(nbt, handler.getTag(nbtTag));
+
+        var path = Tag.Integer("key").path("path", "compound");
+        assertEquals(5, handler.getTag(path));
+    }
+
+    @Test
     public void doubleCompoundRead() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");

@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.utils.PropertyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -10,24 +11,34 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.lang.invoke.VarHandle;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
+    private static final boolean CACHE_ENABLE = PropertyUtils.getBoolean("minestom.tag-handler-cache", true);
+
+    private final TagHandlerImpl parent;
     private volatile SPMCMap entries;
     private Cache cache;
 
-    TagHandlerImpl(SPMCMap entries, Cache cache) {
+    TagHandlerImpl(TagHandlerImpl parent, SPMCMap entries, Cache cache) {
+        this.parent = parent;
         this.entries = entries;
         this.cache = cache;
     }
 
-    TagHandlerImpl() {
-        this.entries = new SPMCMap();
+    TagHandlerImpl(TagHandlerImpl parent) {
+        this.parent = parent;
+        this.entries = new SPMCMap(this);
         this.cache = null;
     }
 
+    TagHandlerImpl() {
+        this(null);
+    }
+
     static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
-        TagHandlerImpl handler = new TagHandlerImpl();
+        TagHandlerImpl handler = new TagHandlerImpl(null);
         for (var entry : compound) {
             final Tag<NBT> tag = Tag.NBT(entry.getKey());
             final NBT nbt = entry.getValue();
@@ -46,11 +57,25 @@ final class TagHandlerImpl implements TagHandler {
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         if (tag.isView()) {
             MutableNBTCompound viewCompound = new MutableNBTCompound();
-            tag.writeUnsafe(viewCompound, value);
+            tag.write(viewCompound, value);
             updateContent(viewCompound);
         } else {
             final Entry<?> entry = valueToEntry(tag, value);
-            updateEntry(tag, entry);
+            final int tagIndex = tag.index;
+            final Tag.PathEntry[] paths = tag.path;
+            final boolean present = entry != null;
+            TagHandlerImpl local = this;
+            synchronized (this) {
+                if (paths != null) {
+                    if ((local = traversePathWrite(this, tagIndex, paths, present)) == null)
+                        return;
+                }
+                SPMCMap entries = local.entries;
+                if (present) entries.put(tagIndex, entry);
+                else entries.remove(tagIndex);
+                entries.invalidate();
+                assert !local.entries.rehashed;
+            }
         }
     }
 
@@ -78,7 +103,8 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public synchronized @NotNull TagHandler copy() {
-        return new TagHandlerImpl(entries.clone(), cache);
+        assert parent == null;
+        return new TagHandlerImpl(null, entries.clone(), cache);
     }
 
     @Override
@@ -86,7 +112,7 @@ final class TagHandlerImpl implements TagHandler {
         final TagHandlerImpl converted = fromCompound(compound);
         synchronized (this) {
             this.cache = converted.cache;
-            this.entries = converted.entries;
+            this.entries = new SPMCMap(this, converted.entries);
         }
     }
 
@@ -95,74 +121,70 @@ final class TagHandlerImpl implements TagHandler {
         return updatedCache().compound;
     }
 
-    private synchronized <T> void updateEntry(@NotNull Tag<T> tag, @Nullable Entry<?> value) {
-        int tagIndex = tag.index;
-        TagHandlerImpl local = this;
-
-        final Tag.PathEntry[] paths = tag.path;
-        TagHandlerImpl[] pathHandlers = null;
-        if (paths != null) {
-            final int length = paths.length;
-            pathHandlers = new TagHandlerImpl[length];
-            for (int i = 0; i < length; i++) {
-                final Tag.PathEntry path = paths[i];
-                final int pathIndex = path.index();
-                final Entry<?> entry = local.entries.get(pathIndex);
-                if (entry instanceof PathEntry pathEntry) {
-                    // Existing path, continue navigating
-                    local = pathEntry.value;
+    private static TagHandlerImpl traversePathWrite(TagHandlerImpl root, int tagIndex,
+                                                    Tag.PathEntry[] paths, boolean present) {
+        final int length = paths.length;
+        TagHandlerImpl local = root;
+        TagHandlerImpl[] pathHandlers = new TagHandlerImpl[length];
+        for (int i = 0; i < length; i++) {
+            final Tag.PathEntry path = paths[i];
+            final int pathIndex = path.index();
+            final Entry<?> entry = local.entries.get(pathIndex);
+            if (entry instanceof PathEntry pathEntry) {
+                // Existing path, continue navigating
+                local = pathEntry.value;
+            } else {
+                if (!present) return null;
+                // Empty path, create a new handler.
+                // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
+                TagHandlerImpl tmp = local;
+                local = new TagHandlerImpl(tmp);
+                if (entry != null && entry.updatedNbt() instanceof NBTCompound compound) {
+                    local.updateContent(compound);
+                }
+                tmp.entries.put(pathIndex, new PathEntry(path.name(), local));
+            }
+            pathHandlers[i] = local;
+        }
+        // Handle removal if the tag was present (recursively)
+        if (!present) {
+            // Remove entry
+            TagHandlerImpl targetHandler = pathHandlers[length - 1];
+            if (targetHandler.entries.remove(tagIndex) == null) return null;
+            // Clear empty parents
+            for (int i = length - 1; i >= 0; i--) {
+                final TagHandlerImpl handler = pathHandlers[i];
+                if (!handler.entries.isEmpty()) break;
+                final int pathIndex = paths[i].index();
+                if (i == 0) {
+                    // Remove the root handler
+                    root.entries.remove(pathIndex);
                 } else {
-                    if (value == null) return;
-                    // Empty path, create a new handler.
-                    // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
-                    TagHandlerImpl tmp = local;
-                    local = entry != null && entry.updatedNbt() instanceof NBTCompound compound ?
-                            fromCompound(compound) : new TagHandlerImpl();
-                    tmp.entries.put(pathIndex, new PathEntry(path.name(), local));
-                }
-                pathHandlers[i] = local;
-            }
-            // Handle removal if the tag was present (recursively)
-            if (value == null) {
-                // Remove entry
-                if (pathHandlers[length - 1].entries.remove(tagIndex) == null) return;
-                // Clear empty parents
-                for (int i = length - 1; i >= 0; i--) {
-                    final TagHandlerImpl handler = pathHandlers[i];
-                    if (!handler.entries.isEmpty()) break;
-                    final int pathIndex = paths[i].index();
-                    if (i == 0) {
-                        // Remove the root handler
-                        local = this;
-                        tagIndex = pathIndex;
-                    } else {
-                        TagHandlerImpl parent = pathHandlers[i - 1];
-                        parent.entries.remove(pathIndex);
-                    }
+                    TagHandlerImpl parent = pathHandlers[i - 1];
+                    parent.entries.remove(pathIndex);
                 }
             }
+            targetHandler.entries.invalidate();
+            return null;
         }
-        // Normal tag
-        if (value != null) local.entries.put(tagIndex, value);
-        else local.entries.remove(tagIndex);
-        this.cache = null;
-        if (pathHandlers != null) {
-            for (var handler : pathHandlers) handler.cache = null;
-        }
+        return local;
     }
 
-    private synchronized Cache updatedCache() {
-        Cache cache = this.cache;
-        if (cache == null) {
-            final var entries = this.entries;
-            if (!entries.isEmpty()) {
-                MutableNBTCompound tmp = new MutableNBTCompound();
-                for (Entry<?> entry : entries.values()) {
-                    if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
-                }
-                cache = new Cache(entries.clone(), tmp.toCompound());
-            } else cache = Cache.EMPTY;
-            this.cache = cache;
+    private Cache updatedCache() {
+        VarHandle.fullFence();
+        Cache cache;
+        if (!CACHE_ENABLE || (cache = this.cache) == null) {
+            synchronized (this) {
+                final SPMCMap entries = this.entries;
+                if (!entries.isEmpty()) {
+                    MutableNBTCompound tmp = new MutableNBTCompound();
+                    for (Entry<?> entry : entries.values()) {
+                        if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
+                    }
+                    cache = new Cache(entries.clone(), tmp.toCompound());
+                } else cache = Cache.EMPTY;
+                this.cache = cache;
+            }
         }
         return cache;
     }
@@ -171,7 +193,7 @@ final class TagHandlerImpl implements TagHandler {
         final Tag.PathEntry[] paths = tag.path;
         if (paths != null) {
             // Must be a path-able entry
-            if ((entries = traversePath(paths, entries)) == null)
+            if ((entries = traversePathRead(paths, entries)) == null)
                 return tag.createDefault();
         }
         final Entry<?> entry;
@@ -191,8 +213,8 @@ final class TagHandlerImpl implements TagHandler {
                 serializerEntry.read(nbt) : tag.createDefault();
     }
 
-    private static Int2ObjectOpenHashMap<Entry<?>> traversePath(Tag.PathEntry[] paths,
-                                                                Int2ObjectOpenHashMap<Entry<?>> entries) {
+    private static Int2ObjectOpenHashMap<Entry<?>> traversePathRead(Tag.PathEntry[] paths,
+                                                                    Int2ObjectOpenHashMap<Entry<?>> entries) {
         for (var path : paths) {
             final Entry<?> entry;
             if ((entry = entries.get(path.index())) == null)
@@ -271,32 +293,27 @@ final class TagHandlerImpl implements TagHandler {
         }
     }
 
-    final class SPMCMap extends Int2ObjectOpenHashMap<Entry<?>> {
-        boolean rehashed;
+    static final class SPMCMap extends Int2ObjectOpenHashMap<Entry<?>> {
+        final TagHandlerImpl handler;
+        volatile boolean rehashed;
 
-        SPMCMap() {
-        }
-
-        SPMCMap(Int2ObjectMap<TagHandlerImpl.Entry<?>> m) {
-            super(m);
-        }
-
-        @Override
-        public TagHandlerImpl.Entry<?> put(int k, TagHandlerImpl.Entry<?> entry) {
+        SPMCMap(TagHandlerImpl handler) {
+            super();
+            this.handler = handler;
             assertState();
-            return super.put(k, entry);
         }
 
-        @Override
-        public boolean remove(int k, Object v) {
+        SPMCMap(TagHandlerImpl handler, Int2ObjectMap<TagHandlerImpl.Entry<?>> m) {
+            super(m.size(), DEFAULT_LOAD_FACTOR);
+            this.handler = handler;
             assertState();
-            return super.remove(k, v);
+            putAll(m);
         }
 
         @Override
         protected void rehash(int newSize) {
             assertState();
-            TagHandlerImpl.this.entries = new SPMCMap(this);
+            this.handler.entries = new SPMCMap(handler, this);
             this.rehashed = true;
         }
 
@@ -305,8 +322,18 @@ final class TagHandlerImpl implements TagHandler {
             return (SPMCMap) super.clone();
         }
 
+        void invalidate() {
+            if (!CACHE_ENABLE) return;
+            TagHandlerImpl tmp = handler;
+            do {
+                tmp.cache = null;
+            } while ((tmp = tmp.parent) != null);
+            VarHandle.fullFence();
+        }
+
         private void assertState() {
             assert !rehashed;
+            assert handler != null;
         }
     }
 }
