@@ -12,6 +12,7 @@ import java.util.Map;
 final class BlockLight implements Light {
     private final Palette blockPalette;
     private volatile byte[] content;
+    private volatile byte[][] borders;
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -26,10 +27,15 @@ final class BlockLight implements Light {
                 if (content == null) {
                     var result = BlockLightCompute.compute(blockPalette, SectionLinkManager.getNeighbors(section));
                     this.content = content = result.light();
+                    this.borders = result.borders();
                 }
             }
         }
         return content.clone();
+    }
+
+    public byte[][] getBorders() {
+        return borders;
     }
 
     @Override

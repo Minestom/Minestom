@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,9 +87,9 @@ public class SectionLinkManager {
         return foundZ.get(sectionY);
     }
 
-    public static Map<BlockFace, Section> getNeighbors(Section section) {
+    public static @NotNull Map<BlockFace, Section> getNeighbors(Section section) {
         Point sectionPos = sectionLookup.get(section);
-        if (sectionPos == null) return null;
+        if (sectionPos == null) return new HashMap<>();
         return getLinks(sectionPos);
     }
 }

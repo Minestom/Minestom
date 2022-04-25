@@ -20,6 +20,17 @@ final class BlockLightCompute {
     static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
 
     static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors) {
+        for (Map.Entry<BlockFace, Section> entry : neighbors.entrySet()) {
+            final BlockFace face = entry.getKey();
+            final Section section = entry.getValue();
+
+            Light light = section.blockLight();
+
+            if (light instanceof BlockLight blockLight) {
+                byte[] border = blockLight.getBorders()[face.getOppositeFace().ordinal()];
+            }
+        }
+
         Block[] blocks = new Block[4096];
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[DIRECTIONS.length][];
