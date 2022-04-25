@@ -7,35 +7,40 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
+
+import static net.minestom.server.instance.light.BlockLight.buildInternalQueue;
 
 final class BlockLightCompute {
-    private static final BlockFace[] FACES = BlockFace.values();
-    private static final Direction[] DIRECTIONS = Direction.values();
-    static final int SECTION_SIZE = 16;
+    static final BlockFace[] FACES = BlockFace.values();
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
-    static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
+    static final int SIDE_LENGTH = 16 * 16;
+    static final int SECTION_SIZE = 16;
 
-    static @NotNull Result compute(Palette blockPalette) {
+    static @NotNull Result compute(Palette palette) {
         Block[] blocks = new Block[4096];
-        byte[] lightArray = new byte[LIGHT_LENGTH];
-        byte[][] borders = new byte[DIRECTIONS.length][];
+        return BlockLightCompute.compute(blocks, buildInternalQueue(palette, blocks));
+    }
+
+    static @NotNull Result compute(Block[] blocks, IntArrayFIFOQueue lightPre) {
+        byte[][] borders = new byte[FACES.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
+        byte[] lightArray = new byte[LIGHT_LENGTH];
+
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
 
-        blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId((short) stateId);
-            assert block != null;
-            final byte lightEmission = (byte) block.registry().lightEmission();
+        while(!lightPre.isEmpty()) {
+            int index = lightPre.dequeueInt();
 
-            final int index = x | (z << 4) | (y << 8);
-            blocks[index] = block;
-            if (lightEmission > 0) {
-                lightSources.enqueue(index | (lightEmission << 12));
-                placeLight(lightArray, index, lightEmission);
-            }
-        });
+            final int x = index & 15;
+            final int z = (index >> 4) & 15;
+            final int y = (index >> 8) & 15;
+            final int newLightLevel = (index >> 12) & 15;
+            final int newIndex = x | (z << 4) | (y << 8);
+            placeLight(lightArray, newIndex, newLightLevel);
+
+            lightSources.enqueue(index);
+        }
 
         while (!lightSources.isEmpty()) {
             final int index = lightSources.dequeueInt();
@@ -58,6 +63,7 @@ final class BlockLightCompute {
                         case BOTTOM, TOP -> x * SECTION_SIZE + z;
                         case NORTH, SOUTH -> x * SECTION_SIZE + y;
                     };
+
                     border[borderIndex] = newLightLevel;
                     continue;
                 }
@@ -73,37 +79,17 @@ final class BlockLightCompute {
                 }
             }
         }
+
         return new Result(lightArray, borders);
     }
 
     record Result(byte[] light, byte[][] borders) {
         Result {
             assert light.length == LIGHT_LENGTH : "Only 16x16x16 sections are supported: " + light.length;
-            assert borders.length == FACES.length;
         }
 
         public byte getLight(int x, int y, int z) {
-            final boolean outX = x < 0 || x >= SECTION_SIZE;
-            final boolean outY = y < 0 || y >= SECTION_SIZE;
-            final boolean outZ = z < 0 || z >= SECTION_SIZE;
-            if (outX || outY || outZ) {
-                final boolean multipleOut = outX ? (outY || outZ) : (outY && outZ);
-                if (multipleOut)
-                    throw new IllegalArgumentException("Coordinates are out of bounds: " + x + ", " + y + ", " + z);
-                if (outX) {
-                    // WEST or EAST
-                    if (x < 0) return borders[BlockFace.WEST.ordinal()][y * SECTION_SIZE + z];
-                    else return borders[BlockFace.EAST.ordinal()][y * SECTION_SIZE + z];
-                } else if (outY) {
-                    // BOTTOM or TOP
-                    if (y < 0) return borders[BlockFace.BOTTOM.ordinal()][x * SECTION_SIZE + z];
-                    else return borders[BlockFace.TOP.ordinal()][x * SECTION_SIZE + z];
-                } else {
-                    // NORTH or SOUTH
-                    if (z < 0) return borders[BlockFace.NORTH.ordinal()][x * SECTION_SIZE + y];
-                    else return borders[BlockFace.SOUTH.ordinal()][x * SECTION_SIZE + y];
-                }
-            } else return (byte) BlockLightCompute.getLight(light, x | (z << 4) | (y << 8));
+            return (byte) BlockLightCompute.getLight(light, x | (z << 4) | (y << 8));
         }
     }
 
@@ -113,7 +99,7 @@ final class BlockLightCompute {
         light[i] = (byte) ((light[i] & (0xF0 >>> shift)) | (value << shift));
     }
 
-    private static int getLight(byte[] light, int index) {
+    static int getLight(byte[] light, int index) {
         final int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }

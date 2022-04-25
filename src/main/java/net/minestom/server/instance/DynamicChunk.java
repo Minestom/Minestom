@@ -8,6 +8,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -16,6 +17,7 @@ import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -38,7 +40,6 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
  * WARNING: not thread-safe.
  */
 public class DynamicChunk extends Chunk {
-
     private List<Section> sections;
 
     // Key = ChunkUtils#getBlockIndex
@@ -72,7 +73,7 @@ public class DynamicChunk extends Chunk {
         section.blockPalette()
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
-        section.blockLight().invalidate();
+        section.blockLight().invalidate(instance, chunkX, y / 16, chunkZ);
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -185,6 +186,12 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
+    @Override
+    public void invalidate() {
+        this.chunkCache.invalidate();
+        this.lightCache.invalidate();
+    }
+
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {
         final NBTCompound heightmapsNBT;
         // TODO: don't hardcode heightmaps
@@ -207,6 +214,7 @@ public class DynamicChunk extends Chunk {
         // Data
         final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
         for (Section section : sections) writer.write(section);
+
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
                 createLightData());
@@ -227,8 +235,9 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
+
+            final byte[] skyLight = section.skyLight().bake();
+            final byte[] blockLight = section.blockLight().bake();
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
@@ -242,6 +251,7 @@ public class DynamicChunk extends Chunk {
                 emptyBlockMask.set(index);
             }
         }
+
         return new LightData(true,
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,

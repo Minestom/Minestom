@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayFIFOQueue;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
@@ -20,6 +21,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
@@ -34,6 +36,7 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -104,6 +107,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // Adventure
     private final Pointers pointers;
+
+    // Lighting
+    private ObjectArrayFIFOQueue<UpdateSectionRequest> updateQueue = new ObjectArrayFIFOQueue<>();
+    record UpdateSectionRequest(SectionLocation from, SectionLocation to, BlockFace face, byte[] data) { }
+    public record SectionLocation(Chunk chunk, int sectionY) {}
 
     /**
      * Creates a new instance.
@@ -676,6 +684,51 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         Check.stateCondition(explosionSupplier == null, "Tried to create an explosion with no explosion supplier");
         final Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
         explosion.apply(this);
+    }
+
+    public Map<BlockFace, SectionLocation> getNeighbors(Chunk chunk, int sectionY) {
+        int chunkX = chunk.chunkX;
+        int chunkZ = chunk.chunkZ;
+
+        Map<BlockFace, SectionLocation> links = new HashMap<>();
+
+        for (BlockFace face : BlockFace.values()) {
+            Direction direction = face.toDirection();
+            int x = chunkX + direction.normalX();
+            int z = chunkZ + direction.normalZ();
+            int y = sectionY + direction.normalY();
+
+            Chunk foundChunk = getChunk(x, z);
+
+            if (foundChunk == null) continue;
+            if (y - foundChunk.minSection > foundChunk.maxSection || y - foundChunk.minSection < 0) continue;
+
+            links.put(face, new SectionLocation(foundChunk, y));
+        }
+
+        return links;
+    }
+
+    public static Section getSection(Chunk chunk, int sectionY) {
+        return chunk.getSection(sectionY);
+    }
+
+    public int flushQueue() {
+        ObjectArrayFIFOQueue<UpdateSectionRequest> queue = updateQueue;
+        this.updateQueue = new ObjectArrayFIFOQueue<>();
+
+        while (!queue.isEmpty()) {
+            final UpdateSectionRequest index = queue.dequeue();
+            getSection(index.to.chunk, index.to.sectionY).blockLight().applyPropagations(this, index.to.chunk, index.to.sectionY);
+            index.to.chunk.invalidate();
+        }
+
+        return this.updateQueue.size();
+    }
+
+    public void addUpdate(SectionLocation current, SectionLocation neighbor, BlockFace face, byte[] light) {
+        if (neighbor == null) return;
+        updateQueue.enqueue(new UpdateSectionRequest(current, neighbor, face, light));
     }
 
     /**

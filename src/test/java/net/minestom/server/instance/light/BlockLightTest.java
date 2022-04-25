@@ -214,9 +214,9 @@ public class BlockLightTest {
 
     void assertLight(BlockLightCompute.Result result, Map<Vec, Integer> expectedLights) {
         List<String> errors = new ArrayList<>();
-        for (int x = -1; x < 17; x++) {
-            for (int y = -1; y < 17; y++) {
-                for (int z = -1; z < 17; z++) {
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
                     var expected = expectedLights.get(new Vec(x, y, z));
                     if (expected != null) {
                         final byte light = result.getLight(x, y, z);

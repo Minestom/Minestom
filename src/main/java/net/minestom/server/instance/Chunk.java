@@ -291,4 +291,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     protected void unload() {
         this.loaded = false;
     }
+
+    public abstract void invalidate();
 }
