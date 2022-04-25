@@ -54,6 +54,12 @@ public class DynamicChunk extends Chunk {
         var sectionsTemp = new Section[maxSection - minSection];
         Arrays.setAll(sectionsTemp, value -> Section.create());
         this.sections = List.of(sectionsTemp);
+
+        int sectionHeight = minSection;
+        for (Section section : sections) {
+            SectionLinkManager.addSection(section, chunkX, chunkZ, sectionHeight);
+            sectionHeight += 1;
+        }
     }
 
     @Override
