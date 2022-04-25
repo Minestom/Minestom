@@ -33,8 +33,6 @@ final class BlockLightCompute {
             final Section section = entry.getValue();
             Light light = section.blockLight();
 
-            System.out.println("Adding light from " + SectionLinkManager.getPosition(section));
-
             if (light instanceof BlockLight blockLight) {
                 if (blockLight.getBorders() == null) continue;
 
@@ -45,25 +43,21 @@ final class BlockLightCompute {
                     for (int bx = 0; bx < SECTION_SIZE; bx++) {
                         for (int by = 0; by < SECTION_SIZE; by++) {
                             int lightLevel = border[bx * SECTION_SIZE + by];
-                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, SECTION_SIZE - 1));
-                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, 0));
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, 0));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, SECTION_SIZE - 1));
 
                             assert blockOutside != null;
                             assert blockInside != null;
 
-                            final int index = bx | (by << 4) | (0 << 8);
+                            final int index = bx | (0 << 4) | (by << 8);
 
-                            // lightSources.enqueue(index | (15 << 12));
-                            // placeLight(lightArray, index, 15);
-
-                            if (lightLevel > 0 && blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
                                 lightSources.enqueue(index | (lightLevel << 12));
                                 placeLight(lightArray, index, lightLevel);
                             }
                         }
                     }
                 }
-
             }
         }
 

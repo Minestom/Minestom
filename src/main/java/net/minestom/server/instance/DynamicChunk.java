@@ -62,6 +62,11 @@ public class DynamicChunk extends Chunk {
         }
     }
 
+    void invalidate() {
+        chunkCache.invalidate();
+        lightCache.invalidate();
+    }
+
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         assertLock();
@@ -80,7 +85,14 @@ public class DynamicChunk extends Chunk {
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
 
-        SectionLinkManager.getNeighbors(section).values().forEach(s -> s.blockLight().invalidate());
+        SectionLinkManager.getNeighbors(section).values().forEach(s -> {
+            Point chunkPoint = SectionLinkManager.getPosition(s);
+            s.blockLight().invalidate();
+
+            Chunk c = getInstance().getChunk(chunkPoint.blockX(), chunkPoint.blockZ());
+            ((DynamicChunk)c).invalidate();
+            c.sendChunk();
+        });
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
