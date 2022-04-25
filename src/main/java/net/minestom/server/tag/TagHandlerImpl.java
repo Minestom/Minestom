@@ -21,12 +21,6 @@ final class TagHandlerImpl implements TagHandler {
     private volatile SPMCMap entries;
     private Cache cache;
 
-    TagHandlerImpl(TagHandlerImpl parent, SPMCMap entries, Cache cache) {
-        this.parent = parent;
-        this.entries = entries;
-        this.cache = cache;
-    }
-
     TagHandlerImpl(TagHandlerImpl parent) {
         this.parent = parent;
         this.entries = new SPMCMap(this);
@@ -60,7 +54,7 @@ final class TagHandlerImpl implements TagHandler {
             tag.write(viewCompound, value);
             updateContent(viewCompound);
         } else {
-            final Entry<?> entry = valueToEntry(tag, value);
+            Entry<?> entry = valueToEntry(tag, value);
             final int tagIndex = tag.index;
             final Tag.PathEntry[] paths = tag.path;
             final boolean present = entry != null;
@@ -71,6 +65,11 @@ final class TagHandlerImpl implements TagHandler {
                         return;
                 }
                 SPMCMap entries = local.entries;
+                if (entry instanceof PathEntry pathEntry) {
+                    var childHandler = new TagHandlerImpl(local);
+                    childHandler.updateContent(pathEntry.updatedNbt());
+                    entry = new PathEntry(tag.getKey(), childHandler);
+                }
                 if (present) entries.put(tagIndex, entry);
                 else entries.remove(tagIndex);
                 entries.invalidate();
@@ -102,9 +101,8 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public synchronized @NotNull TagHandler copy() {
-        assert parent == null;
-        return new TagHandlerImpl(null, entries.clone(), cache);
+    public @NotNull TagHandler copy() {
+        return fromCompound(asCompound());
     }
 
     @Override
@@ -132,6 +130,12 @@ final class TagHandlerImpl implements TagHandler {
             final Entry<?> entry = local.entries.get(pathIndex);
             if (entry instanceof PathEntry pathEntry) {
                 // Existing path, continue navigating
+                {
+                    // FIXME
+                    //assert pathEntry.value.parent == local : "Path parent is invalid: " + pathEntry.value.parent + " != " + local;
+                    pathEntry.value.cache = null;
+                    pathEntry.value.parent.cache = null;
+                }
                 local = pathEntry.value;
             } else {
                 if (!present) return null;
@@ -170,21 +174,18 @@ final class TagHandlerImpl implements TagHandler {
         return local;
     }
 
-    private Cache updatedCache() {
-        VarHandle.fullFence();
+    private synchronized Cache updatedCache() {
         Cache cache;
         if (!CACHE_ENABLE || (cache = this.cache) == null) {
-            synchronized (this) {
-                final SPMCMap entries = this.entries;
-                if (!entries.isEmpty()) {
-                    MutableNBTCompound tmp = new MutableNBTCompound();
-                    for (Entry<?> entry : entries.values()) {
-                        if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
-                    }
-                    cache = new Cache(entries.clone(), tmp.toCompound());
-                } else cache = Cache.EMPTY;
-                this.cache = cache;
-            }
+            final SPMCMap entries = this.entries;
+            if (!entries.isEmpty()) {
+                MutableNBTCompound tmp = new MutableNBTCompound();
+                for (Entry<?> entry : entries.values()) {
+                    if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
+                }
+                cache = new Cache(entries.clone(), tmp.toCompound());
+            } else cache = Cache.EMPTY;
+            this.cache = cache;
         }
         return cache;
     }
