@@ -1,7 +1,13 @@
 package net.minestom.server.instance.light;
 
+import net.minestom.server.instance.Section;
+import net.minestom.server.instance.SectionLinkManager;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 final class BlockLight implements Light {
     private final Palette blockPalette;
@@ -12,13 +18,13 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public byte @NotNull [] array() {
+    public byte @NotNull [] array(Section section) {
         byte[] content = this.content;
         if (content == null) {
             synchronized (this) {
                 content = this.content;
                 if (content == null) {
-                    var result = BlockLightCompute.compute(blockPalette);
+                    var result = BlockLightCompute.compute(blockPalette, SectionLinkManager.getNeighbors(section));
                     this.content = content = result.light();
                 }
             }

@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.Direction;
 
@@ -9,6 +11,7 @@ import java.util.Map;
 public class SectionLinkManager {
     private record SectionLink(Section section, Map<BlockFace, Section> faces, int chunkX, int chunkZ, int sectionY) {}
     private static final Map<Integer, Map<Integer, Map<Integer, SectionLink>>> sectionLinks = new HashMap<>();
+    private static final Map<Section, Point> sectionLookup = new HashMap<>();
 
     public static void addSection(Section section, int chunkX, int chunkZ, int sectionY) {
         Map<Integer, Map<Integer, SectionLink>> foundX = sectionLinks.get(chunkX);
@@ -23,7 +26,10 @@ public class SectionLinkManager {
             foundX.put(chunkZ, foundZ);
         }
 
-        Map<BlockFace, Section> links = getLinks(chunkX, chunkZ, sectionY);
+        Vec sectionPos = new Vec(chunkX, sectionY, chunkZ);
+        sectionLookup.put(section, sectionPos);
+
+        Map<BlockFace, Section> links = getLinks(sectionPos);
 
         var newLink = new SectionLink(section, links, chunkX, chunkZ, sectionY);
 
@@ -50,7 +56,11 @@ public class SectionLinkManager {
         }
     }
 
-    private static Map<BlockFace, Section> getLinks(int chunkX, int chunkZ, int sectionY) {
+    private static Map<BlockFace, Section> getLinks(Point section) {
+        int chunkX = section.blockX();
+        int chunkZ = section.blockZ();
+        int sectionY = section.blockY();
+
         Map<BlockFace, Section> links = new HashMap<>();
 
         for (BlockFace face : BlockFace.values()) {
@@ -74,5 +84,10 @@ public class SectionLinkManager {
         if (foundZ == null) return null;
 
         return foundZ.get(sectionY);
+    }
+
+    public static Map<BlockFace, Section> getNeighbors(Section section) {
+        Point sectionPos = sectionLookup.get(section);
+        return getLinks(sectionPos);
     }
 }

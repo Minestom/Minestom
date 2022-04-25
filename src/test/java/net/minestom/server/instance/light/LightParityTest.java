@@ -29,7 +29,7 @@ public class LightParityTest {
         for (var entry : sections.entrySet()) {
             var vec = entry.getKey();
             var palette = entry.getValue().blocks;
-            results.put(vec, BlockLightCompute.compute(palette));
+            results.put(vec, BlockLightCompute.compute(palette, new HashMap<>()));
         }
         // TODO merge lights and compare
     }

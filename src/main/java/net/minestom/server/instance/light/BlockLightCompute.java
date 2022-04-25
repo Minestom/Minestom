@@ -1,6 +1,7 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -8,6 +9,7 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 final class BlockLightCompute {
@@ -17,7 +19,7 @@ final class BlockLightCompute {
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
 
-    static @NotNull Result compute(Palette blockPalette) {
+    static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors) {
         Block[] blocks = new Block[4096];
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[DIRECTIONS.length][];

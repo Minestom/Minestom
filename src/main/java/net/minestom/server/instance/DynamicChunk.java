@@ -233,8 +233,8 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
+            final byte[] skyLight = section.skyLight().array(section);
+            final byte[] blockLight = section.blockLight().array(section);
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
