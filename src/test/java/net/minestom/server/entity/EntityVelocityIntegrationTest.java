@@ -8,8 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityVelocityIntegrationTest {
@@ -79,6 +78,8 @@ public class EntityVelocityIntegrationTest {
         entity.takeKnockback(0.4f, 0, -1);
         entity.takeKnockback(0.5f, 0, -1);
 
+        assertTrue(entity.hasVelocity());
+
         testMovement(env, entity, new Vec[] {
                 new Vec(0.0, 40.0, 0.0),
                 new Vec(0.0, 40.4, 0.7000000029802322),
@@ -100,6 +101,22 @@ public class EntityVelocityIntegrationTest {
                 new Vec(0.0, 40.0, 3.6120913306338815),
                 new Vec(0.0, 40.0, 3.616034640835186)
         });
+    }
+
+    @Test
+    public void testHasVelocity(Env env) {
+        var instance = env.createFlatInstance();
+        loadChunks(instance);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        // Should  be false because the new entity should have no velocity
+        assertFalse(entity.hasVelocity());
+
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        env.tick();
+
+        // Should still be false, because the entity should only have gravity
+        assertFalse(entity.hasVelocity());
     }
 
     private void testMovement(Env env, Entity entity, Vec[] sample) {
