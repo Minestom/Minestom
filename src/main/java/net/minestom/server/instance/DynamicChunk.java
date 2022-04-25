@@ -80,6 +80,8 @@ public class DynamicChunk extends Chunk {
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
 
+        SectionLinkManager.getNeighbors(section).values().forEach(s -> s.blockLight().invalidate());
+
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
