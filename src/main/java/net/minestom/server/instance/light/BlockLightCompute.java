@@ -2,6 +2,7 @@ package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import net.minestom.server.instance.Section;
+import net.minestom.server.instance.SectionLinkManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -32,59 +33,30 @@ final class BlockLightCompute {
             final Section section = entry.getValue();
             Light light = section.blockLight();
 
+            System.out.println("Adding light from " + SectionLinkManager.getPosition(section));
+
             if (light instanceof BlockLight blockLight) {
                 if (blockLight.getBorders() == null) continue;
 
                 byte[] border = blockLight.getBorders()[face.getOppositeFace().ordinal()];
                 Palette facePalette = section.blockPalette();
 
-                if (face == BlockFace.BOTTOM) {
-                    for (int bx = 0; bx < SECTION_SIZE; bx++) {
-                        for (int bz = 0; bz < SECTION_SIZE; bz++) {
-                            int lightLevel = border[bx * SECTION_SIZE + bz];
-                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, SECTION_SIZE - 1, bz));
-                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, 0, bz));
-
-                            assert blockOutside != null;
-                            assert blockInside != null;
-
-                            final int index = bx | (0 << 4) | (bz << 8);
-                            if (blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
-                                lightSources.enqueue(index | (lightLevel << 12));
-                                placeLight(lightArray, index, lightLevel);
-                            }
-                        }
-                    }
-                } else if (face == BlockFace.TOP) {
-                    for (int bx = 0; bx < SECTION_SIZE; bx++) {
-                        for (int bz = 0; bz < SECTION_SIZE; bz++) {
-                            int lightLevel = border[bx * SECTION_SIZE + bz];
-                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, 0, bz));
-                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, SECTION_SIZE - 1, bz));
-
-                            assert blockOutside != null;
-                            assert blockInside != null;
-
-                            final int index = bx | (SECTION_SIZE - 1 << 4) | (bz << 8);
-                            if (blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
-                                lightSources.enqueue(index | (lightLevel << 12));
-                                placeLight(lightArray, index, lightLevel);
-                            }
-                        }
-                    }
-                } else if (face == BlockFace.WEST) {
+                if (face == BlockFace.NORTH) {
                     for (int bx = 0; bx < SECTION_SIZE; bx++) {
                         for (int by = 0; by < SECTION_SIZE; by++) {
                             int lightLevel = border[bx * SECTION_SIZE + by];
-                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, 0));
-                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, SECTION_SIZE - 1));
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, SECTION_SIZE - 1));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, 0));
 
                             assert blockOutside != null;
                             assert blockInside != null;
 
                             final int index = bx | (by << 4) | (0 << 8);
 
-                            if (blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                            // lightSources.enqueue(index | (15 << 12));
+                            // placeLight(lightArray, index, 15);
+
+                            if (lightLevel > 0 && blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
                                 lightSources.enqueue(index | (lightLevel << 12));
                                 placeLight(lightArray, index, lightLevel);
                             }

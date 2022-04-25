@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SectionLinkManager {
+    public static Point getPosition(Section section) {
+        return sectionLookup.get(section);
+    }
+
     private record SectionLink(Section section, Map<BlockFace, Section> faces, int chunkX, int chunkZ, int sectionY) {}
     private static final Map<Integer, Map<Integer, Map<Integer, SectionLink>>> sectionLinks = new HashMap<>();
     private static final Map<Section, Point> sectionLookup = new HashMap<>();
