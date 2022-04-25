@@ -912,7 +912,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return true if velocity is not set to 0 or the default velocity.
      */
     public boolean hasVelocity() {
-        return !(velocity.isZero() ||
+        return !(velocity.isZero() || // The entity does not have velocity if the velocity is zero
+                // or the entity does not have velocity if the velocity is equal to the default (gravity) velocity
                 (velocity.x() == 0 && velocity.z() == 0 && Math.abs(velocity.y() + 1.568) < 0.001));
     }
 
