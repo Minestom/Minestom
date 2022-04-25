@@ -20,6 +20,13 @@ final class BlockLightCompute {
     static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
 
     static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors) {
+        Block[] blocks = new Block[4096];
+        byte[] lightArray = new byte[LIGHT_LENGTH];
+        byte[][] borders = new byte[DIRECTIONS.length][];
+        Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
+        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+
+        // Apply border light
         for (Map.Entry<BlockFace, Section> entry : neighbors.entrySet()) {
             final BlockFace face = entry.getKey();
             final Section section = entry.getValue();
@@ -28,15 +35,31 @@ final class BlockLightCompute {
 
             if (light instanceof BlockLight blockLight) {
                 byte[] border = blockLight.getBorders()[face.getOppositeFace().ordinal()];
+                Palette facePalette = section.blockPalette();
+
+                if (face == BlockFace.BOTTOM) {
+                    for (int bx = 0; bx < SIDE_LENGTH; bx++) {
+                        for (int bz = 0; bz < SIDE_LENGTH; bz++) {
+                            int lightLevel = border[bx * SIDE_LENGTH + bz];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, bz, SECTION_SIZE - 1));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, bz, 0));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = bx | (bz << 4) | (0 << 8);
+                            if (blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                }
+
             }
         }
 
-        Block[] blocks = new Block[4096];
-        byte[] lightArray = new byte[LIGHT_LENGTH];
-        byte[][] borders = new byte[DIRECTIONS.length][];
-        Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
-
+        // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
             final Block block = Block.fromStateId((short) stateId);
             assert block != null;
@@ -44,7 +67,7 @@ final class BlockLightCompute {
 
             final int index = x | (z << 4) | (y << 8);
             blocks[index] = block;
-            if (lightEmission > 0) {
+            if (lightEmission > 0 && getLight(lightArray, index) + 2 <= lightEmission) {
                 lightSources.enqueue(index | (lightEmission << 12));
                 placeLight(lightArray, index, lightEmission);
             }
