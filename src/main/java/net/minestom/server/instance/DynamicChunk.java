@@ -286,8 +286,8 @@ public class DynamicChunk extends Chunk {
     }
 
     public void updateLighting() {
-        createLightData();
-        System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
+        invalidateLighting();
+        System.out.println("[Update] Triggering update from " + this.chunkX + " " + chunkZ);
         while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
     }
 }
