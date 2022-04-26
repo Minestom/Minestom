@@ -62,9 +62,10 @@ public class DynamicChunk extends Chunk {
         }
     }
 
-    void invalidate() {
-        chunkCache.invalidate();
+    void invalidateLighting() {
         lightCache.invalidate();
+        UpdateLightPacket lp = createLightPacket();
+        getViewers().forEach(player -> player.sendPacket(lp));
     }
 
     @Override
@@ -222,9 +223,11 @@ public class DynamicChunk extends Chunk {
         System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
         while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
 
-        return new ChunkDataPacket(chunkX, chunkZ,
+        ChunkDataPacket pp = new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
                 createLightData());
+
+        return pp;
     }
 
     public synchronized @NotNull UpdateLightPacket createLightPacket() {

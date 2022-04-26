@@ -113,7 +113,7 @@ public class SectionLinkManager {
 
         for (Chunk c : invalidChunks) {
             if (c instanceof DynamicChunk) {
-                ((DynamicChunk) c).invalidate();
+                ((DynamicChunk) c).invalidateLighting();
                 ((DynamicChunk) c).updateLighting();
             }
         }
