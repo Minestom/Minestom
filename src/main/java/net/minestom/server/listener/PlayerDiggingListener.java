@@ -28,10 +28,13 @@ public final class PlayerDiggingListener {
 
         DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = startDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = cancelDigging(instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = finishDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
             dropStack(player);
@@ -54,16 +57,12 @@ public final class PlayerDiggingListener {
         final Block block = instance.getBlock(blockPosition);
         final GameMode gameMode = player.getGameMode();
 
-        if (gameMode == GameMode.SPECTATOR) {
-            // Spectators can't break blocks
+        // Prevent spectators and check players in adventure mode
+        if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
-        } else if (gameMode == GameMode.ADVENTURE) {
-            // Check if the item can break the block with the current item
-            final ItemStack itemInMainHand = player.getItemInMainHand();
-            if (!itemInMainHand.getMeta().getCanDestroy().contains(block)) {
-                return new DiggingResult(block, false);
-            }
-        } else if (gameMode == GameMode.CREATIVE) {
+        }
+
+        if (gameMode == GameMode.CREATIVE) {
             return breakBlock(instance, player, blockPosition, block);
         }
 
@@ -86,8 +85,26 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
-        // TODO sanity check
+
+        if (shouldPreventBreaking(player, block)) {
+            return new DiggingResult(block, false);
+        }
+
         return breakBlock(instance, player, blockPosition, block);
+    }
+
+    private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            // Spectators can't break blocks
+            return true;
+        } else if (player.getGameMode() == GameMode.ADVENTURE) {
+            // Check if the item can break the block with the current item
+            final ItemStack itemInMainHand = player.getItemInMainHand();
+            if (!itemInMainHand.meta().getCanDestroy().contains(block)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void dropStack(Player player) {
@@ -166,13 +183,6 @@ public final class PlayerDiggingListener {
         }
     }
 
-    private static final class DiggingResult {
-        public final Block block;
-        public final boolean success;
-
-        public DiggingResult(Block block, boolean success) {
-            this.block = block;
-            this.success = success;
-        }
+    private record DiggingResult(Block block, boolean success) {
     }
 }

@@ -2,6 +2,7 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -113,6 +114,14 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     @Contract(pure = true)
+    public @NotNull Pos withLookAt(@NotNull Point point) {
+        if (samePoint(point)) return this;
+        final Vec delta = Vec.fromPoint(point.sub(this)).normalize();
+        return withView(PositionUtils.getLookYaw(delta.x(), delta.z()),
+                PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z()));
+    }
+
+    @Contract(pure = true)
     public @NotNull Pos withPitch(@NotNull DoubleUnaryOperator operator) {
         return withPitch((float) operator.applyAsDouble(pitch));
     }
@@ -124,8 +133,12 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @return true if the two positions have the same view
      */
     public boolean sameView(@NotNull Pos position) {
-        return Float.compare(position.yaw, yaw) == 0 &&
-                Float.compare(position.pitch, pitch) == 0;
+        return sameView(position.yaw(), position.pitch());
+    }
+
+    public boolean sameView(float yaw, float pitch) {
+        return Float.compare(this.yaw, yaw) == 0 &&
+                Float.compare(this.pitch, pitch) == 0;
     }
 
     /**

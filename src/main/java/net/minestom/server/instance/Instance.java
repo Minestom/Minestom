@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
@@ -13,9 +14,14 @@ import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventHandler;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.ChunkSnapshot;
@@ -29,6 +35,7 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -56,7 +63,8 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, Snapshotable, Taggable, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter,
+        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
 
     private boolean registered;
 
@@ -78,13 +86,15 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
+    private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
+
     // the uuid of this instance
     protected UUID uniqueId;
 
     // instance custom data
     private final TagHandler tagHandler = TagHandler.newHandler();
-
     private final Scheduler scheduler = Scheduler.newScheduler();
+    private final EventNode<InstanceEvent> eventNode;
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
@@ -112,6 +122,14 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
                 .build();
+
+        final ServerProcess process = MinecraftServer.process();
+        if (process != null) {
+            this.eventNode = process.eventHandler().map(this, EventFilter.INSTANCE);
+        } else {
+            // Local nodes require a server process
+            this.eventNode = null;
+        }
     }
 
     /**
@@ -252,18 +270,29 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Gets the instance {@link ChunkGenerator}.
-     *
-     * @return the {@link ChunkGenerator} of the instance
-     */
-    public abstract @Nullable ChunkGenerator getChunkGenerator();
-
-    /**
      * Changes the instance {@link ChunkGenerator}.
      *
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
+     * @deprecated Use {@link #setGenerator(Generator)}
      */
-    public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
+    @Deprecated
+    public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
+        setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
+    }
+
+    /**
+     * Gets the generator associated with the instance
+     *
+     * @return the generator if any
+     */
+    public abstract @Nullable Generator generator();
+
+    /**
+     * Changes the generator of the instance
+     *
+     * @param generator the new generator, or null to disable generation
+     */
+    public abstract void setGenerator(@Nullable Generator generator);
 
     /**
      * Gets all the instance's loaded chunks.
@@ -505,11 +534,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-        final Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at {0}:{1} is not loaded", x, z);
-        synchronized (chunk) {
-            return chunk.getBlock(x, y, z, condition);
-        }
+        final Block block = blockRetriever.getBlock(x, y, z, condition);
+        if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
+        return block;
     }
 
     /**
@@ -602,6 +629,12 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Scheduler scheduler() {
         return scheduler;
+    }
+
+    @Override
+    @ApiStatus.Experimental
+    public @NotNull EventNode<InstanceEvent> eventNode() {
+        return eventNode;
     }
 
     @Override

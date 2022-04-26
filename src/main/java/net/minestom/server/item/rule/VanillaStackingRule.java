@@ -24,12 +24,12 @@ public final class VanillaStackingRule implements StackingRule {
 
     @Override
     public int getAmount(@NotNull ItemStack itemStack) {
-        return itemStack.getAmount();
+        return itemStack.amount();
     }
 
     @Override
     public int getMaxSize(@NotNull ItemStack itemStack) {
-        return itemStack.getMaterial().maxStackSize();
+        return itemStack.material().maxStackSize();
     }
 
     @Override

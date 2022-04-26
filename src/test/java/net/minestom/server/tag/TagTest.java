@@ -121,4 +121,15 @@ public class TagTest {
         assertEquals(5, handler.getTag(Tag.Integer("tag1")));
         assertEquals(1, handler.getTag(Tag.Integer("tag2")));
     }
+
+    @Test
+    public void rehashing() {
+        var handler = TagHandler.newHandler();
+        for (int i = 0; i < 1000; i++) {
+            handler.setTag(Tag.Integer("rehashing" + i), i);
+            for (int j = i; j > 0; j--) {
+                assertEquals(j, handler.getTag(Tag.Integer("rehashing" + j)));
+            }
+        }
+    }
 }

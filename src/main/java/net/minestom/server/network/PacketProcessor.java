@@ -1,6 +1,5 @@
 package net.minestom.server.network;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.ClientPacketsHandler;
@@ -41,11 +40,7 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
     }
 
     public void process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
-        if (MinecraftServer.getRateLimit() > 0) {
-            // Increment packet count (checked in PlayerConnection#update)
-            connection.getPacketCounter().incrementAndGet();
-        }
-        var packet = create(connection.getConnectionState(), packetId, body);
+        final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
         if (packet instanceof ClientPreplayPacket prePlayPacket) {
             prePlayPacket.process(connection);
         } else {

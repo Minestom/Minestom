@@ -5,6 +5,7 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +24,7 @@ public class TagReadBenchmark {
     TagHandler tagHandler;
     Tag<String> secondTag;
 
+    MutableNBTCompound concurrentCompound;
     MutableNBTCompound compound;
 
     @Setup
@@ -31,8 +33,11 @@ public class TagReadBenchmark {
         this.tagHandler = TagHandler.newHandler();
         if (present) tagHandler.setTag(TAG, "value");
         secondTag = Tag.String("key");
-        // NBT benchmark
-        this.compound = new MutableNBTCompound(new ConcurrentHashMap<>());
+        // Concurrent map benchmark
+        this.concurrentCompound = new MutableNBTCompound(new ConcurrentHashMap<>());
+        if (present) concurrentCompound.set("key", NBT.String("value"));
+        // Hash map benchmark
+        this.compound = new MutableNBTCompound(new HashMap<>());
         if (present) compound.set("key", NBT.String("value"));
     }
 
@@ -52,7 +57,12 @@ public class TagReadBenchmark {
     }
 
     @Benchmark
-    public void readConstantTagFromCompound(Blackhole blackhole) {
+    public void readConcurrentCompound(Blackhole blackhole) {
+        blackhole.consume(concurrentCompound.getString("key"));
+    }
+
+    @Benchmark
+    public void readCompound(Blackhole blackhole) {
         blackhole.consume(compound.getString("key"));
     }
 }

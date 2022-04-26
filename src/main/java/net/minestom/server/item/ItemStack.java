@@ -3,18 +3,16 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
-import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -25,50 +23,36 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
-
-    static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
-
+public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEvent.ShowItem>
+        permits ItemStackImpl {
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
-    public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
-
-    private final Material material;
-    private final int amount;
-    private final ItemMeta meta;
-
-    ItemStack(@NotNull Material material, int amount,
-              @NotNull ItemMeta meta) {
-        this.material = material;
-        this.amount = amount;
-        this.meta = meta;
-    }
+    @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull ItemStackBuilder builder(@NotNull Material material) {
-        return new ItemStackBuilder(material);
+    static @NotNull Builder builder(@NotNull Material material) {
+        return new ItemStackImpl.Builder(material, 1);
     }
 
     @Contract(value = "_ ,_ -> new", pure = true)
-    public static @NotNull ItemStack of(@NotNull Material material, int amount) {
-        return builder(material).amount(amount).build();
+    static @NotNull ItemStack of(@NotNull Material material, int amount) {
+        return ItemStackImpl.create(material, amount);
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull ItemStack of(@NotNull Material material) {
+    static @NotNull ItemStack of(@NotNull Material material) {
         return of(material, 1);
     }
 
     @Contract(value = "_, _, _ -> new", pure = true)
-    public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
-        ItemMetaBuilder builder = ItemStackBuilder.getMetaBuilder(material);
-        if (nbtCompound != null) ItemMetaBuilder.resetMeta(builder, nbtCompound);
-        return new ItemStack(material, amount, builder.build());
+    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
+        if (nbtCompound == null) return of(material, amount);
+        return builder(material).amount(amount).meta(nbtCompound).build();
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound) {
+    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound) {
         return fromNBT(material, nbtCompound, 1);
     }
 
@@ -78,150 +62,119 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      * @param nbtCompound The nbt representation of the item
      */
     @ApiStatus.Experimental
-    public static @NotNull ItemStack fromItemNBT(@NotNull NBTCompound nbtCompound) {
+    static @NotNull ItemStack fromItemNBT(@NotNull NBTCompound nbtCompound) {
         String id = nbtCompound.getString("id");
         Check.notNull(id, "Item NBT must contain an id field.");
         Material material = Material.fromNamespaceId(id);
         Check.notNull(material, "Unknown material: {0}", id);
 
         Byte amount = nbtCompound.getByte("Count");
-        return fromNBT(material,
-                nbtCompound.getCompound("tag"),
-                amount == null ? 1 : amount);
+        if (amount == null) amount = 1;
+        final NBTCompound tag = nbtCompound.getCompound("tag");
+        return tag != null ? fromNBT(material, tag, amount) : of(material, amount);
     }
 
     @Contract(pure = true)
-    public @NotNull Material getMaterial() {
-        return material;
-    }
-
-    @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack with(@NotNull Consumer<@NotNull ItemStackBuilder> builderConsumer) {
-        var builder = builder();
-        builderConsumer.accept(builder);
-        return builder.build();
-    }
+    @NotNull Material material();
 
     @Contract(pure = true)
-    public int getAmount() {
-        return amount;
-    }
+    int amount();
 
-    @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withAmount(int amount) {
-        if (amount < 1) return AIR;
-        return new ItemStack(material, amount, meta);
-    }
+    @Contract(pure = true)
+    @NotNull ItemMeta meta();
 
-    @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
-        return withAmount(intUnaryOperator.applyAsInt(amount));
-    }
-
+    @Contract(pure = true)
     @ApiStatus.Experimental
+    <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass);
+
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack consume(int amount) {
-        return DEFAULT_STACKING_RULE.apply(this, currentAmount -> currentAmount - amount);
-    }
+    @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> consumer);
 
     @Contract(value = "_, _ -> new", pure = true)
-    public <T extends ItemMetaBuilder, U extends ItemMetaBuilder.Provider<T>> @NotNull ItemStack withMeta(Class<U> metaType, Consumer<T> metaConsumer) {
-        return builder().meta(metaType, metaConsumer).build();
-    }
+    @ApiStatus.Experimental
+    <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull ItemStack withMeta(@NotNull Class<T> metaType,
+                                                                                            @NotNull Consumer<V> consumer);
 
     @Contract(value = "_ -> new", pure = true)
-    public <T extends ItemMetaBuilder> @NotNull ItemStack withMeta(@NotNull UnaryOperator<@NotNull T> metaOperator) {
-        return builder().meta(metaOperator).build();
+    @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
+
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withMaterial(@NotNull Material material) {
+        return ItemStackImpl.create(material, amount(), meta());
+    }
+
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withAmount(int amount) {
+        return ItemStackImpl.create(material(), amount, meta());
+    }
+
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
+        return withAmount(intUnaryOperator.applyAsInt(amount()));
+    }
+
+    @ApiStatus.Experimental
+    @Contract(value = "_, -> new", pure = true)
+    @NotNull ItemStack consume(int amount);
+
+    @Contract(pure = true)
+    default @Nullable Component getDisplayName() {
+        return meta().getDisplayName();
+    }
+
+    @Contract(pure = true)
+    default @NotNull List<@NotNull Component> getLore() {
+        return meta().getLore();
     }
 
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
-    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return new ItemStack(material, amount, meta);
-    }
-
-    @Contract(pure = true)
-    public @Nullable Component getDisplayName() {
-        return meta.getDisplayName();
+    default @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
+        return ItemStackImpl.create(material(), amount(), meta);
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withDisplayName(@Nullable Component displayName) {
-        return builder().displayName(displayName).build();
+    default @NotNull ItemStack withDisplayName(@Nullable Component displayName) {
+        return withMeta(builder -> builder.displayName(displayName));
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
+    default @NotNull ItemStack withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
         return withDisplayName(componentUnaryOperator.apply(getDisplayName()));
     }
 
-    @Contract(pure = true)
-    public @NotNull List<@NotNull Component> getLore() {
-        return meta.getLore();
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withLore(@NotNull List<? extends Component> lore) {
+        return withMeta(builder -> builder.lore(lore));
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withLore(@NotNull List<? extends Component> lore) {
-        return builder().lore(lore).build();
-    }
-
-    @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withLore(@NotNull UnaryOperator<@NotNull List<@NotNull Component>> loreUnaryOperator) {
+    default @NotNull ItemStack withLore(@NotNull UnaryOperator<@NotNull List<@NotNull Component>> loreUnaryOperator) {
         return withLore(loreUnaryOperator.apply(getLore()));
     }
 
     @Contract(pure = true)
-    public @NotNull ItemMeta getMeta() {
-        return meta;
+    default boolean isAir() {
+        return material() == Material.AIR;
     }
 
     @Contract(pure = true)
-    public boolean isAir() {
-        return material == Material.AIR;
-    }
-
-    @Contract(pure = true)
-    public boolean isSimilar(@NotNull ItemStack itemStack) {
-        return material == itemStack.material &&
-                meta.equals(itemStack.meta);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ItemStack itemStack)) return false;
-        return amount == itemStack.amount && material.equals(itemStack.material) && meta.equals(itemStack.meta);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(material, amount, meta);
-    }
-
-    @Override
-    public String toString() {
-        return "ItemStack{" +
-                "material=" + material +
-                ", amount=" + amount +
-                ", meta=" + meta +
-                '}';
-    }
+    boolean isSimilar(@NotNull ItemStack itemStack);
 
     @Contract(value = "_, _ -> new", pure = true)
-    public <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        return builder().meta(metaBuilder -> metaBuilder.set(tag, value)).build();
+    default <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
+        return withMeta(builder -> builder.set(tag, value));
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return meta.getTag(tag);
+    default <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return meta().getTag(tag);
     }
 
     @Override
-    public @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
-                this.amount,
-                NBTUtils.asBinaryTagHolder(this.meta.toNBT()))));
+    default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(material(), amount(),
+                NBTUtils.asBinaryTagHolder(meta().toNBT()))));
     }
 
     /**
@@ -230,15 +183,70 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      * @return The nbt representation of the item
      */
     @ApiStatus.Experimental
-    public @NotNull NBTCompound toItemNBT() {
-        return NBT.Compound(Map.of(
-                "id", NBT.String(getMaterial().name()),
-                "Count", NBT.Byte(getAmount()),
-                "tag", getMeta().toNBT()));
+    @NotNull NBTCompound toItemNBT();
+
+
+    @Deprecated
+    @Contract(pure = true)
+    default @NotNull Material getMaterial() {
+        return material();
     }
 
-    @Contract(value = "-> new", pure = true)
-    private @NotNull ItemStackBuilder builder() {
-        return new ItemStackBuilder(material, meta.builder()).amount(amount);
+    @Deprecated
+    @Contract(pure = true)
+    default int getAmount() {
+        return amount();
+    }
+
+    @Deprecated
+    @Contract(pure = true)
+    default @NotNull ItemMeta getMeta() {
+        return meta();
+    }
+
+    sealed interface Builder extends Taggable
+            permits ItemStackImpl.Builder {
+        @Contract(value = "_ -> this")
+        @NotNull Builder amount(int amount);
+
+        @Contract(value = "_ -> this")
+        @NotNull Builder meta(@NotNull TagHandler tagHandler);
+
+        @Contract(value = "_ -> this")
+        @NotNull Builder meta(@NotNull NBTCompound compound);
+
+        @Contract(value = "_ -> this")
+        @NotNull Builder meta(@NotNull ItemMeta itemMeta);
+
+        @Contract(value = "_ -> this")
+        @NotNull Builder meta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
+
+        @Contract(value = "_, _ -> this")
+        <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull Builder meta(@NotNull Class<T> metaType,
+                                                                                          @NotNull Consumer<@NotNull V> itemMetaConsumer);
+
+        @Contract(value = "-> new", pure = true)
+        @NotNull ItemStack build();
+
+        @Contract(value = "_, _ -> this")
+        default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
+            setTag(tag, value);
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        default @NotNull Builder displayName(@Nullable Component displayName) {
+            return meta(builder -> builder.displayName(displayName));
+        }
+
+        @Contract(value = "_ -> this")
+        default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
+            return meta(builder -> builder.lore(lore));
+        }
+
+        @Contract(value = "_ -> this")
+        default @NotNull Builder lore(Component... lore) {
+            return meta(builder -> builder.lore(lore));
+        }
     }
 }

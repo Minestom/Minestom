@@ -2,94 +2,38 @@ package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
-
-    private final String author;
-    private final String title;
-    private final List<Component> pages;
-
-    protected WritableBookMeta(@NotNull ItemMetaBuilder metaBuilder,
-                               @Nullable String author, @Nullable String title,
-                               @NotNull List<@NotNull Component> pages) {
-        super(metaBuilder);
-        this.author = author;
-        this.title = title;
-        this.pages = List.copyOf(pages);
-    }
-
-    public @Nullable String getAuthor() {
-        return author;
-    }
-
-    public @Nullable String getTitle() {
-        return title;
-    }
+public record WritableBookMeta(TagReadable readable) implements ItemMetaView<WritableBookMeta.Builder> {
+    private static final Tag<List<Component>> PAGES = Tag.String("pages")
+            .<Component>map(s -> LegacyComponentSerializer.legacySection().deserialize(s),
+                    textComponent -> LegacyComponentSerializer.legacySection().serialize(textComponent))
+            .list().defaultValue(List.of());
 
     public @NotNull List<@NotNull Component> getPages() {
-        return pages;
+        return getTag(PAGES);
     }
 
-    public static class Builder extends ItemMetaBuilder {
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
+    }
 
-        private String author;
-        private String title;
-        private List<Component> pages = new ArrayList<>();
-
-        public Builder author(@Nullable String author) {
-            this.author = author;
-            handleNullable(author, "author",
-                    () -> new NBTString(Objects.requireNonNull(author)));
-            return this;
-        }
-
-        public Builder title(@Nullable String title) {
-            this.title = title;
-            handleNullable(title, "title", () -> NBT.String(Objects.requireNonNull(title)));
-            return this;
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
         }
 
         public Builder pages(@NotNull List<@NotNull Component> pages) {
-            this.pages = new ArrayList<>(pages);
-
-            handleCollection(pages, "pages", () -> NBT.List(
-                    NBTType.TAG_String,
-                    pages.stream()
-                            .map(page -> new NBTString(LegacyComponentSerializer.legacySection().serialize(page)))
-                            .toList()
-            ));
-
+            setTag(PAGES, pages);
             return this;
-        }
-
-        @Override
-        public @NotNull WritableBookMeta build() {
-            return new WritableBookMeta(this, author, title, pages);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.get("author") instanceof NBTString author) {
-                this.author = author.getValue();
-            }
-            if (nbtCompound.get("title") instanceof NBTString title) {
-                this.title = title.getValue();
-            }
-            if (nbtCompound.get("pages") instanceof NBTList<?> list &&
-                    list.getSubtagType() == NBTType.TAG_String) {
-                for (NBTString page : list.<NBTString>asListOf()) {
-                    this.pages.add(LegacyComponentSerializer.legacySection().deserialize(page.getValue()));
-                }
-            }
         }
     }
 }

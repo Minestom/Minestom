@@ -200,7 +200,7 @@ public final class Registry {
             }
             {
                 final String string = main.getString("collisionShape");
-                this.shape = CollisionUtils.parseBlockShape(string, this.materialSupplier);
+                this.shape = CollisionUtils.parseBlockShape(string, this);
             }
         }
 

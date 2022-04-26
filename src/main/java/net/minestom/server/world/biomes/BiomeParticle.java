@@ -58,7 +58,7 @@ public record BiomeParticle(float probability, Option option) {
         @Override
         public NBTCompound toNbt() {
             //todo test count might be wrong type
-            NBTCompound nbtCompound = item.getMeta().toNBT();
+            NBTCompound nbtCompound = item.meta().toNBT();
             return nbtCompound.modify(n -> {
                 n.setString("type", type);
             });
