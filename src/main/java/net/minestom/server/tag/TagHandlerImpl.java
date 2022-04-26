@@ -31,13 +31,10 @@ final class TagHandlerImpl implements TagHandler {
         this(null);
     }
 
-    static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
+    static TagHandlerImpl fromCompound(NBTCompoundLike compoundLike) {
+        final NBTCompound compound = compoundLike.toCompound();
         TagHandlerImpl handler = new TagHandlerImpl(null);
-        for (var entry : compound) {
-            final Tag<NBT> tag = Tag.NBT(entry.getKey());
-            final NBT nbt = entry.getValue();
-            handler.setTag(tag, nbt);
-        }
+        TagNbtSeparator.separate(compound, entry -> handler.setTag(entry.tag(), entry.value()));
         return handler;
     }
 
@@ -54,10 +51,9 @@ final class TagHandlerImpl implements TagHandler {
             tag.write(viewCompound, value);
             updateContent(viewCompound);
         } else {
-            Entry<?> entry = valueToEntry(tag, value);
             final int tagIndex = tag.index;
             final Tag.PathEntry[] paths = tag.path;
-            final boolean present = entry != null;
+            final boolean present = value != null;
             TagHandlerImpl local = this;
             synchronized (this) {
                 if (paths != null) {
@@ -65,12 +61,7 @@ final class TagHandlerImpl implements TagHandler {
                         return;
                 }
                 SPMCMap entries = local.entries;
-                if (entry instanceof PathEntry pathEntry) {
-                    var childHandler = new TagHandlerImpl(local);
-                    childHandler.updateContent(pathEntry.updatedNbt());
-                    entry = new PathEntry(tag.getKey(), childHandler);
-                }
-                if (present) entries.put(tagIndex, entry);
+                if (present) entries.put(tagIndex, valueToEntry(local, tag, value));
                 else entries.remove(tagIndex);
                 entries.invalidate();
                 assert !local.entries.rehashed;
@@ -78,11 +69,11 @@ final class TagHandlerImpl implements TagHandler {
         }
     }
 
-    private <T> Entry<?> valueToEntry(Tag<T> tag, @Nullable T value) {
-        if (value == null) return null;
+    private <T> Entry<?> valueToEntry(TagHandlerImpl parent, Tag<T> tag, @NotNull T value) {
         if (value instanceof NBT nbt) {
             if (nbt instanceof NBTCompound compound) {
-                final TagHandlerImpl handler = fromCompound(compound);
+                var handler = new TagHandlerImpl(parent);
+                handler.updateContent(compound);
                 return new PathEntry(tag.getKey(), handler);
             } else {
                 final var nbtEntry = TagNbtSeparator.separateSingle(tag.getKey(), nbt);
@@ -130,12 +121,7 @@ final class TagHandlerImpl implements TagHandler {
             final Entry<?> entry = local.entries.get(pathIndex);
             if (entry instanceof PathEntry pathEntry) {
                 // Existing path, continue navigating
-                {
-                    // FIXME
-                    //assert pathEntry.value.parent == local : "Path parent is invalid: " + pathEntry.value.parent + " != " + local;
-                    pathEntry.value.cache = null;
-                    pathEntry.value.parent.cache = null;
-                }
+                assert pathEntry.value.parent == local : "Path parent is invalid: " + pathEntry.value.parent + " != " + local;
                 local = pathEntry.value;
             } else {
                 if (!present) return null;
