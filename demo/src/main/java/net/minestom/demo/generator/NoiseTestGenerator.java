@@ -1,32 +1,18 @@
 package net.minestom.demo.generator;
 
-import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.generators.noise_parameters.interpolation.Interpolation;
 import de.articdive.jnoise.generators.noisegen.opensimplex.FastSimplexNoiseGenerator;
 import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator;
-import de.articdive.jnoise.interpolation.InterpolationType;
 import de.articdive.jnoise.pipeline.JNoise;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.ChunkGenerator;
-import net.minestom.server.instance.ChunkPopulator;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class NoiseTestGenerator implements Generator {
-
-    public NoiseTestGenerator() {
-        treeNoise.getNoise(0, 0);
-        jNoise.getNoise(0, 0);
-    }
 
     private final JNoise treeNoise = JNoise.newBuilder()
             .fastSimplex(FastSimplexNoiseGenerator.newBuilder().setSeed(123).build())
