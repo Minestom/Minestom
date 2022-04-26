@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 final class BlockLightCompute {
     private static final BlockFace[] FACES = BlockFace.values();
@@ -19,6 +20,10 @@ final class BlockLightCompute {
     static final int SECTION_SIZE = 16;
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SIDE_LENGTH = 16 * 16;
+
+    static @NotNull Result compute(Palette blockPalette) {
+        return compute(blockPalette, new ConcurrentHashMap<>());
+    }
 
     static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors) {
         Block[] blocks = new Block[4096];

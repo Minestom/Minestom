@@ -1,5 +1,6 @@
 package net.minestom.server.instance.light;
 
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.SectionLinkManager;
 import net.minestom.server.instance.block.BlockFace;
@@ -19,13 +20,13 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public byte @NotNull [] array(Section section) {
+    public byte @NotNull [] array(Instance instance, Section section) {
         byte[] content = this.content;
         if (content == null) {
             synchronized (this) {
                 content = this.content;
                 if (content == null) {
-                    var result = BlockLightCompute.compute(blockPalette, SectionLinkManager.getNeighbors(section));
+                    var result = BlockLightCompute.compute(blockPalette, instance.getSectionManager().getNeighbors(section));
                     this.content = content = result.light();
                     this.borders = result.borders();
                 }

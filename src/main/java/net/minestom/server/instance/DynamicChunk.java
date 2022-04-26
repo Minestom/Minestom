@@ -57,7 +57,7 @@ public class DynamicChunk extends Chunk {
 
         int sectionHeight = minSection;
         for (Section section : sections) {
-            SectionLinkManager.addSection(section, chunkX, chunkZ, sectionHeight);
+            instance.getSectionManager().addSection(section, chunkX, chunkZ, sectionHeight);
             sectionHeight += 1;
         }
     }
@@ -85,8 +85,8 @@ public class DynamicChunk extends Chunk {
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
 
-        SectionLinkManager.getNeighbors(section).values().forEach(s -> {
-            Point chunkPoint = SectionLinkManager.getPosition(s);
+        instance.getSectionManager().getNeighbors(section).values().forEach(s -> {
+            Point chunkPoint = instance.getSectionManager().getPosition(s);
             s.blockLight().invalidate();
 
             Chunk c = getInstance().getChunk(chunkPoint.blockX(), chunkPoint.blockZ());
@@ -247,8 +247,8 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            final byte[] skyLight = section.skyLight().array(section);
-            final byte[] blockLight = section.blockLight().array(section);
+            final byte[] skyLight = section.skyLight().array(this.instance, section);
+            final byte[] blockLight = section.blockLight().array(this.instance, section);
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);

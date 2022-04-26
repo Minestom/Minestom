@@ -8,29 +8,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SectionLinkManager {
-    public static Point getPosition(Section section) {
+    public Point getPosition(Section section) {
         return sectionLookup.get(section);
     }
 
     private record SectionLink(Section section, Map<BlockFace, Section> faces, int chunkX, int chunkZ, int sectionY) {}
-    private static final Map<Integer, Map<Integer, Map<Integer, SectionLink>>> sectionLinks = new HashMap<>();
-    private static final Map<Section, Point> sectionLookup = new HashMap<>();
+    private final Map<Point, SectionLink> sectionLinks = new ConcurrentHashMap<>();
+    private final Map<Section, Point> sectionLookup = new ConcurrentHashMap<>();
 
-    public static void addSection(Section section, int chunkX, int chunkZ, int sectionY) {
-        Map<Integer, Map<Integer, SectionLink>> foundX = sectionLinks.get(chunkX);
-        if (foundX == null) {
-            foundX = new HashMap<>();
-            sectionLinks.put(chunkX, foundX);
-        }
-
-        Map<Integer, SectionLink> foundZ = foundX.get(chunkZ);
-        if (foundZ == null) {
-            foundZ = new HashMap<>();
-            foundX.put(chunkZ, foundZ);
-        }
-
+    public void addSection(Section section, int chunkX, int chunkZ, int sectionY) {
         Vec sectionPos = new Vec(chunkX, sectionY, chunkZ);
         sectionLookup.put(section, sectionPos);
 
@@ -50,18 +39,18 @@ public class SectionLinkManager {
                     face.getOppositeFace(),
                     link);
         }
-        foundZ.put(sectionY, newLink);
+        sectionLinks.put(new Vec(chunkX, sectionY, chunkZ), newLink);
     }
 
     // Look up section from given coordinates and link it to the provided section based on the block face
-    private static void propagateLink(int chunkX, int chunkZ, int sectionY, BlockFace face, Section section) {
+    private void propagateLink(int chunkX, int chunkZ, int sectionY, BlockFace face, Section section) {
         SectionLink foundLink = getSectionLink(chunkX, chunkZ, sectionY);
         if (foundLink != null) {
             foundLink.faces.put(face, section);
         }
     }
 
-    private static Map<BlockFace, Section> getLinks(Point section) {
+    private Map<BlockFace, Section> getLinks(Point section) {
         int chunkX = section.blockX();
         int chunkZ = section.blockZ();
         int sectionY = section.blockY();
@@ -81,17 +70,11 @@ public class SectionLinkManager {
         return links;
     }
 
-    private static SectionLink getSectionLink(int chunkX, int chunkZ, int sectionY) {
-        Map<Integer, Map<Integer, SectionLink>> foundX = sectionLinks.get(chunkX);
-        if (foundX == null) return null;
-
-        Map<Integer, SectionLink> foundZ = foundX.get(chunkZ);
-        if (foundZ == null) return null;
-
-        return foundZ.get(sectionY);
+    private SectionLink getSectionLink(int chunkX, int chunkZ, int sectionY) {
+        return sectionLinks.get(new Vec(chunkX, sectionY, chunkZ));
     }
 
-    public static @NotNull Map<BlockFace, Section> getNeighbors(Section section) {
+    public @NotNull Map<BlockFace, Section> getNeighbors(Section section) {
         Point sectionPos = sectionLookup.get(section);
         if (sectionPos == null) return new HashMap<>();
         return getLinks(sectionPos);

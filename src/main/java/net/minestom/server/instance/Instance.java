@@ -104,6 +104,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // Adventure
     private final Pointers pointers;
+    private SectionLinkManager sectionManager;
 
     /**
      * Creates a new instance.
@@ -122,6 +123,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
                 .build();
+
+        this.sectionManager = new SectionLinkManager();
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -711,5 +714,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    public @NotNull SectionLinkManager getSectionManager() {
+        return sectionManager;
     }
 }

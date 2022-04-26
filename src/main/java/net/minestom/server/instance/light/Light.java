@@ -1,5 +1,6 @@
 package net.minestom.server.instance.light;
 
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -18,7 +19,7 @@ public interface Light {
     }
 
     @ApiStatus.Internal
-    byte @NotNull [] array(Section section);
+    byte @NotNull [] array(Instance instance, Section section);
 
     void copyFrom(byte @NotNull [] array);
 
