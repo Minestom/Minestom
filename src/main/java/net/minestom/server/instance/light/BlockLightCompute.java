@@ -124,7 +124,7 @@ final class BlockLightCompute {
         Set<BlockFace> updates = new HashSet<>();
 
         for (BlockFace face : BlockFace.values()) {
-            if (!Arrays.equals(borders[face.ordinal()], previousBorders[face.ordinal()]))
+            if (previousBorders == null || !Arrays.equals(borders[face.ordinal()], previousBorders[face.ordinal()]))
                 updates.add(face);
         }
 

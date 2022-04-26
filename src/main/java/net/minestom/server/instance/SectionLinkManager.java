@@ -7,6 +7,7 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,7 +20,7 @@ public class SectionLinkManager {
     private record SectionLink(Section section, Map<BlockFace, Section> faces, int chunkX, int chunkZ, int sectionY) {}
     private final Map<Point, SectionLink> sectionLinks = new ConcurrentHashMap<>();
     private final Map<Section, Point> sectionLookup = new ConcurrentHashMap<>();
-    private final Set<Section> requiresLightUpdate = ConcurrentHashMap.newKeySet();
+    private Set<Section> requiresLightUpdate = ConcurrentHashMap.newKeySet();
 
     public void addSection(Section section, int chunkX, int chunkZ, int sectionY) {
         Vec sectionPos = new Vec(chunkX, sectionY, chunkZ);
@@ -83,6 +84,35 @@ public class SectionLinkManager {
     }
 
     public void queueLightUpdate(Section section) {
+        section.invalidate();
         requiresLightUpdate.add(section);
+    }
+
+    public boolean emptyLightUpdateQueue(Instance instance) {
+        System.out.println("Light update queue size: " + requiresLightUpdate.size());
+
+        Set<Section> currentQueue = requiresLightUpdate;
+        requiresLightUpdate = new HashSet<>();
+
+        // empty requiresLightUpdate queue
+        for (Section section : currentQueue) {
+            section.blockLight().array(instance, section);
+            section.invalidate();
+
+            Point p = sectionLookup.get(section);
+            if (p != null) {
+                int chunkX = p.blockX();
+                int chunkZ = p.blockZ();
+                Chunk c = instance.getChunk(chunkX, chunkZ);
+
+                if (c instanceof DynamicChunk) {
+                    ((DynamicChunk) c).invalidate();
+                }
+            }
+
+            System.out.println("Light update for section " + sectionLookup.get(section));
+        }
+
+        return requiresLightUpdate.isEmpty();
     }
 }

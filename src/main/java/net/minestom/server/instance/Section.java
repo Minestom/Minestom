@@ -16,6 +16,11 @@ public record Section(Palette blockPalette, Palette biomePalette,
         return new Section(blockPalette, biomePalette, skyLight, blockLight);
     }
 
+    public void invalidate() {
+        skyLight.invalidate();
+        blockLight.invalidate();
+    }
+
     public void clear() {
         this.blockPalette.fill(0);
         this.biomePalette.fill(0);

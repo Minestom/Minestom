@@ -85,15 +85,6 @@ public class DynamicChunk extends Chunk {
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
 
-        instance.getSectionManager().getNeighbors(section).values().forEach(s -> {
-            Point chunkPoint = instance.getSectionManager().getPosition(s);
-            s.blockLight().invalidate();
-
-            Chunk c = getInstance().getChunk(chunkPoint.blockX(), chunkPoint.blockZ());
-            ((DynamicChunk)c).invalidate();
-            c.sendChunk();
-        });
-
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
@@ -227,13 +218,21 @@ public class DynamicChunk extends Chunk {
         // Data
         final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
         for (Section section : sections) writer.write(section);
-        return new ChunkDataPacket(chunkX, chunkZ,
+        var lightPacket = new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
                 createLightData());
+
+        while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
+
+        return lightPacket;
     }
 
     public synchronized @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
+        UpdateLightPacket lightPacket = new UpdateLightPacket(chunkX, chunkZ, createLightData());
+
+        while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
+
+        return lightPacket;
     }
 
     private LightData createLightData() {

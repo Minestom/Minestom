@@ -29,7 +29,10 @@ final class BlockLight implements Light {
                     this.borders = result.borders();
 
                     for (BlockFace update : result.updates()) {
-                        instance.getSectionManager().queueLightUpdate(neighbors.get(update));
+                        Section toUpdate = neighbors.get(update);
+
+                        if (toUpdate != null)
+                            instance.getSectionManager().queueLightUpdate(toUpdate);
                     }
                 }
             }
