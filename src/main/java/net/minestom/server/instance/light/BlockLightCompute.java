@@ -62,6 +62,60 @@ final class BlockLightCompute {
                             }
                         }
                     }
+                } else if (face == BlockFace.SOUTH) {
+                    for (int bx = 0; bx < SECTION_SIZE; bx++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[bx * SECTION_SIZE + by];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, SECTION_SIZE - 1));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, 0));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = bx | ((SECTION_SIZE - 1) << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                } else if (face == BlockFace.WEST) {
+                    for (int bz = 0; bz < SECTION_SIZE; bz++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[by * SECTION_SIZE + bz];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(0, by, bz));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(SECTION_SIZE - 1, by, bz));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = (0) | (bz << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                } else if (face == BlockFace.EAST) {
+                    for (int bz = 0; bz < SECTION_SIZE; bz++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[by * SECTION_SIZE + bz];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(SECTION_SIZE - 1, by, bz));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(0, by, bz));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = (SECTION_SIZE - 1) | (bz << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
                 }
             }
         }

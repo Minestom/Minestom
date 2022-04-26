@@ -89,10 +89,10 @@ public class SectionLinkManager {
     }
 
     public boolean emptyLightUpdateQueue(Instance instance) {
-        System.out.println("Light update queue size: " + requiresLightUpdate.size());
-
         Set<Section> currentQueue = requiresLightUpdate;
         requiresLightUpdate = new HashSet<>();
+
+        Set<Chunk> invalidChunks = new HashSet<>();
 
         // empty requiresLightUpdate queue
         for (Section section : currentQueue) {
@@ -105,12 +105,17 @@ public class SectionLinkManager {
                 int chunkZ = p.blockZ();
                 Chunk c = instance.getChunk(chunkX, chunkZ);
 
-                if (c instanceof DynamicChunk) {
-                    ((DynamicChunk) c).invalidate();
-                }
+                invalidChunks.add(c);
             }
 
             System.out.println("Light update for section " + sectionLookup.get(section));
+        }
+
+        for (Chunk c : invalidChunks) {
+            if (c instanceof DynamicChunk) {
+                ((DynamicChunk) c).invalidate();
+                ((DynamicChunk) c).updateLighting();
+            }
         }
 
         return requiresLightUpdate.isEmpty();

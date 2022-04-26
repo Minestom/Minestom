@@ -218,21 +218,20 @@ public class DynamicChunk extends Chunk {
         // Data
         final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
         for (Section section : sections) writer.write(section);
-        var lightPacket = new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
-                createLightData());
 
+        System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
         while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
 
-        return lightPacket;
+        return new ChunkDataPacket(chunkX, chunkZ,
+                new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
+                createLightData());
     }
 
     public synchronized @NotNull UpdateLightPacket createLightPacket() {
-        UpdateLightPacket lightPacket = new UpdateLightPacket(chunkX, chunkZ, createLightData());
-
+        createLightData();
+        System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
         while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
-
-        return lightPacket;
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
     }
 
     private LightData createLightData() {
@@ -281,5 +280,11 @@ public class DynamicChunk extends Chunk {
 
     private void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
+    }
+
+    public void updateLighting() {
+        createLightData();
+        System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
+        while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
     }
 }
