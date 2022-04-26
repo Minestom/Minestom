@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SectionLinkManager {
@@ -18,6 +19,7 @@ public class SectionLinkManager {
     private record SectionLink(Section section, Map<BlockFace, Section> faces, int chunkX, int chunkZ, int sectionY) {}
     private final Map<Point, SectionLink> sectionLinks = new ConcurrentHashMap<>();
     private final Map<Section, Point> sectionLookup = new ConcurrentHashMap<>();
+    private final Set<Section> requiresLightUpdate = ConcurrentHashMap.newKeySet();
 
     public void addSection(Section section, int chunkX, int chunkZ, int sectionY) {
         Vec sectionPos = new Vec(chunkX, sectionY, chunkZ);
@@ -78,5 +80,9 @@ public class SectionLinkManager {
         Point sectionPos = sectionLookup.get(section);
         if (sectionPos == null) return new HashMap<>();
         return getLinks(sectionPos);
+    }
+
+    public void queueLightUpdate(Section section) {
+        requiresLightUpdate.add(section);
     }
 }

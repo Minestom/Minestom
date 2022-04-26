@@ -6,8 +6,6 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public record Section(Palette blockPalette, Palette biomePalette,
                       Light skyLight, Light blockLight) implements Writeable {
     static Section create() {

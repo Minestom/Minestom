@@ -9,9 +9,7 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 final class BlockLightCompute {
@@ -22,10 +20,12 @@ final class BlockLightCompute {
     static final int SIDE_LENGTH = 16 * 16;
 
     static @NotNull Result compute(Palette blockPalette) {
-        return compute(blockPalette, new ConcurrentHashMap<>());
+        var borders = new byte[DIRECTIONS.length][];
+        Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
+        return compute(blockPalette, new ConcurrentHashMap<>(), borders);
     }
 
-    static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors) {
+    static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors, byte[][] previousBorders) {
         Block[] blocks = new Block[4096];
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[DIRECTIONS.length][];
@@ -116,10 +116,22 @@ final class BlockLightCompute {
                 }
             }
         }
-        return new Result(lightArray, borders);
+
+        return new Result(lightArray, borders, getUpdates(borders, previousBorders));
     }
 
-    record Result(byte[] light, byte[][] borders) {
+    private static Set<BlockFace> getUpdates(byte[][] borders, byte[][] previousBorders) {
+        Set<BlockFace> updates = new HashSet<>();
+
+        for (BlockFace face : BlockFace.values()) {
+            if (!Arrays.equals(borders[face.ordinal()], previousBorders[face.ordinal()]))
+                updates.add(face);
+        }
+
+        return updates;
+    }
+
+    record Result(byte[] light, byte[][] borders, Set<BlockFace> updates) {
         Result {
             assert light.length == LIGHT_LENGTH : "Only 16x16x16 sections are supported: " + light.length;
             assert borders.length == FACES.length;

@@ -2,13 +2,9 @@ package net.minestom.server.instance.light;
 
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
-import net.minestom.server.instance.SectionLinkManager;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 final class BlockLight implements Light {
     private final Palette blockPalette;
@@ -26,9 +22,15 @@ final class BlockLight implements Light {
             synchronized (this) {
                 content = this.content;
                 if (content == null) {
-                    var result = BlockLightCompute.compute(blockPalette, instance.getSectionManager().getNeighbors(section));
+                    var neighbors = instance.getSectionManager().getNeighbors(section);
+
+                    var result = BlockLightCompute.compute(blockPalette, neighbors, this.borders);
                     this.content = content = result.light();
                     this.borders = result.borders();
+
+                    for (BlockFace update : result.updates()) {
+                        instance.getSectionManager().queueLightUpdate(neighbors.get(update));
+                    }
                 }
             }
         }
