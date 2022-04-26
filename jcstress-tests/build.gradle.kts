@@ -7,3 +7,7 @@ dependencies {
     jcstressImplementation(rootProject)
     jcstress(libs.jcstress.core)
 }
+
+jcstress {
+    verbose = "true"
+}
