@@ -36,7 +36,8 @@ jNoise = "b93008e35e"
 # JMH
 jmh = "1.35"
 
-
+# JCStress
+jcstress = "0.8"
 
 [libraries]
 
@@ -91,6 +92,9 @@ jNoise = { group = "com.github.Articdive.JNoise", name = "jnoise-pipeline", vers
 # JMH
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
 jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
+
+# JCStress
+jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
 
 [bundles]
 
