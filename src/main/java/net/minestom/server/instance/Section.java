@@ -38,4 +38,9 @@ public record Section(Palette blockPalette, Palette biomePalette,
         writer.write(blockPalette);
         writer.write(biomePalette);
     }
+
+    public void invalidate() {
+        this.skyLight.invalidate();
+        this.blockLight.invalidate();
+    }
 }

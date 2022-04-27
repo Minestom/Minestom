@@ -1,29 +1,126 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import net.minestom.server.instance.Section;
+import net.minestom.server.instance.SectionLinkManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 final class BlockLightCompute {
     private static final BlockFace[] FACES = BlockFace.values();
     private static final Direction[] DIRECTIONS = Direction.values();
     static final int SECTION_SIZE = 16;
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
-    static final int SIDE_LENGTH = 16 * 16 * DIRECTIONS.length / 2;
+    static final int SIDE_LENGTH = 16 * 16;
 
     static @NotNull Result compute(Palette blockPalette) {
+        var borders = new byte[DIRECTIONS.length][];
+        Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
+        return compute(blockPalette, new ConcurrentHashMap<>(), borders);
+    }
+
+    static @NotNull Result compute(Palette blockPalette, Map<BlockFace, Section> neighbors, byte[][] previousBorders) {
         Block[] blocks = new Block[4096];
         byte[] lightArray = new byte[LIGHT_LENGTH];
         byte[][] borders = new byte[DIRECTIONS.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
 
+        // Apply border light
+        for (Map.Entry<BlockFace, Section> entry : neighbors.entrySet()) {
+            final BlockFace face = entry.getKey();
+            final Section section = entry.getValue();
+            Light light = section.blockLight();
+
+            if (light instanceof BlockLight blockLight) {
+                if (blockLight.getBorders() == null) continue;
+
+                byte[] border = blockLight.getBorders()[face.getOppositeFace().ordinal()];
+                Palette facePalette = section.blockPalette();
+
+                if (face == BlockFace.NORTH) {
+                    for (int bx = 0; bx < SECTION_SIZE; bx++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[bx * SECTION_SIZE + by];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, 0));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, SECTION_SIZE - 1));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = bx | (0 << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                } else if (face == BlockFace.SOUTH) {
+                    for (int bx = 0; bx < SECTION_SIZE; bx++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[bx * SECTION_SIZE + by];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(bx, by, SECTION_SIZE - 1));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(bx, by, 0));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = bx | ((SECTION_SIZE - 1) << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                } else if (face == BlockFace.WEST) {
+                    for (int bz = 0; bz < SECTION_SIZE; bz++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[by * SECTION_SIZE + bz];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(0, by, bz));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(SECTION_SIZE - 1, by, bz));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = (0) | (bz << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                } else if (face == BlockFace.EAST) {
+                    for (int bz = 0; bz < SECTION_SIZE; bz++) {
+                        for (int by = 0; by < SECTION_SIZE; by++) {
+                            int lightLevel = border[by * SECTION_SIZE + bz];
+                            final Block blockOutside = Block.fromStateId((short) facePalette.get(SECTION_SIZE - 1, by, bz));
+                            final Block blockInside = Block.fromStateId((short) blockPalette.get(0, by, bz));
+
+                            assert blockOutside != null;
+                            assert blockInside != null;
+
+                            final int index = (SECTION_SIZE - 1) | (bz << 4) | (by << 8);
+
+                            if (lightLevel > 0 && !blockOutside.registry().collisionShape().isOccluded(blockInside.registry().collisionShape(), face)) {
+                                lightSources.enqueue(index | (lightLevel << 12));
+                                placeLight(lightArray, index, lightLevel);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
             final Block block = Block.fromStateId((short) stateId);
             assert block != null;
@@ -31,7 +128,7 @@ final class BlockLightCompute {
 
             final int index = x | (z << 4) | (y << 8);
             blocks[index] = block;
-            if (lightEmission > 0) {
+            if (lightEmission > 0 && getLight(lightArray, index) + 2 <= lightEmission) {
                 lightSources.enqueue(index | (lightEmission << 12));
                 placeLight(lightArray, index, lightEmission);
             }
@@ -73,10 +170,22 @@ final class BlockLightCompute {
                 }
             }
         }
-        return new Result(lightArray, borders);
+
+        return new Result(lightArray, borders, getUpdates(borders, previousBorders));
     }
 
-    record Result(byte[] light, byte[][] borders) {
+    private static Set<BlockFace> getUpdates(byte[][] borders, byte[][] previousBorders) {
+        Set<BlockFace> updates = new HashSet<>();
+
+        for (BlockFace face : BlockFace.values()) {
+            if (previousBorders == null || !Arrays.equals(borders[face.ordinal()], previousBorders[face.ordinal()]))
+                updates.add(face);
+        }
+
+        return updates;
+    }
+
+    record Result(byte[] light, byte[][] borders, Set<BlockFace> updates) {
         Result {
             assert light.length == LIGHT_LENGTH : "Only 16x16x16 sections are supported: " + light.length;
             assert borders.length == FACES.length;

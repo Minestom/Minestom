@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -48,12 +49,21 @@ public class DynamicChunk extends Chunk {
     private long lastChange;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
+    private LightData lightData;
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         var sectionsTemp = new Section[maxSection - minSection];
         Arrays.setAll(sectionsTemp, value -> Section.create());
         this.sections = List.of(sectionsTemp);
+
+        int sectionHeight = minSection;
+        for (Section section : sections) {
+            instance.getSectionManager().addSection(section, chunkX, chunkZ, sectionHeight);
+            sectionHeight += 1;
+        }
+
+        lightData = createLightData();
     }
 
     @Override
@@ -73,6 +83,8 @@ public class DynamicChunk extends Chunk {
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
+
+        this.lightData = createLightData();
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -207,13 +219,17 @@ public class DynamicChunk extends Chunk {
         // Data
         final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
         for (Section section : sections) writer.write(section);
+
+        System.out.println("[Chunk] Triggering update from " + this.chunkX + " " + chunkZ);
+
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
-                createLightData());
+                lightData);
     }
 
     public synchronized @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
+        System.out.println("[Create light] Triggering update from " + this.chunkX + " " + chunkZ);
+        return new UpdateLightPacket(chunkX, chunkZ, this.lightData);
     }
 
     private LightData createLightData() {
@@ -227,8 +243,8 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
+            final byte[] skyLight = section.skyLight().array(this.instance, section);
+            final byte[] blockLight = section.blockLight().array(this.instance, section);
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
@@ -242,6 +258,9 @@ public class DynamicChunk extends Chunk {
                 emptyBlockMask.set(index);
             }
         }
+
+        instance.getSectionManager().emptyLightUpdateQueue(instance);
+
         return new LightData(true,
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
@@ -262,5 +281,11 @@ public class DynamicChunk extends Chunk {
 
     private void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
+    }
+
+    public void invalidateLighting() {
+        lightCache.invalidate();
+        chunkCache.invalidate();
+        this.lightData = createLightData();
     }
 }
