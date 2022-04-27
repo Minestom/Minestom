@@ -6,10 +6,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SectionLinkManager {
@@ -85,26 +82,24 @@ public class SectionLinkManager {
 
     public void queueLightUpdate(Section section) {
         section.invalidate();
+        System.out.println("Adding section to light update queue: " + sectionLookup.get(section));
         requiresLightUpdate.add(section);
     }
 
-    public boolean emptyLightUpdateQueue(Instance instance) {
-        Set<Section> currentQueue = requiresLightUpdate;
-        requiresLightUpdate = new HashSet<>();
-
+    public void emptyLightUpdateQueue(Instance instance) {
+        Set<Section> currentQueue = new HashSet<>(requiresLightUpdate);
         Set<Chunk> invalidChunks = new HashSet<>();
+        requiresLightUpdate.clear();
 
         // empty requiresLightUpdate queue
         for (Section section : currentQueue) {
             section.blockLight().array(instance, section);
-            section.invalidate();
 
             Point p = sectionLookup.get(section);
             if (p != null) {
                 int chunkX = p.blockX();
                 int chunkZ = p.blockZ();
                 Chunk c = instance.getChunk(chunkX, chunkZ);
-
                 invalidChunks.add(c);
             }
 
@@ -114,10 +109,9 @@ public class SectionLinkManager {
         for (Chunk c : invalidChunks) {
             if (c instanceof DynamicChunk) {
                 ((DynamicChunk) c).invalidateLighting();
-                ((DynamicChunk) c).updateLighting();
             }
         }
 
-        return requiresLightUpdate.isEmpty();
+        if (!requiresLightUpdate.isEmpty()) emptyLightUpdateQueue(instance);
     }
 }

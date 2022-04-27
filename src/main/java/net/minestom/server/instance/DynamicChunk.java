@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Utils;
@@ -48,6 +49,7 @@ public class DynamicChunk extends Chunk {
     private long lastChange;
     private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
+    private LightData lightData;
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -60,12 +62,8 @@ public class DynamicChunk extends Chunk {
             instance.getSectionManager().addSection(section, chunkX, chunkZ, sectionHeight);
             sectionHeight += 1;
         }
-    }
 
-    void invalidateLighting() {
-        lightCache.invalidate();
-        UpdateLightPacket lp = createLightPacket();
-        getViewers().forEach(player -> player.sendPacket(lp));
+        lightData = createLightData();
     }
 
     @Override
@@ -85,6 +83,8 @@ public class DynamicChunk extends Chunk {
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
+
+        this.lightData = createLightData();
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -220,21 +220,16 @@ public class DynamicChunk extends Chunk {
         final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
         for (Section section : sections) writer.write(section);
 
-        System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
-        while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
+        System.out.println("[Chunk] Triggering update from " + this.chunkX + " " + chunkZ);
 
-        ChunkDataPacket pp = new ChunkDataPacket(chunkX, chunkZ,
+        return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
-                createLightData());
-
-        return pp;
+                lightData);
     }
 
     public synchronized @NotNull UpdateLightPacket createLightPacket() {
-        createLightData();
-        System.out.println("Triggering update from " + this.chunkX + " " + chunkZ);
-        while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
+        System.out.println("[Create light] Triggering update from " + this.chunkX + " " + chunkZ);
+        return new UpdateLightPacket(chunkX, chunkZ, this.lightData);
     }
 
     private LightData createLightData() {
@@ -263,6 +258,9 @@ public class DynamicChunk extends Chunk {
                 emptyBlockMask.set(index);
             }
         }
+
+        instance.getSectionManager().emptyLightUpdateQueue(instance);
+
         return new LightData(true,
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
@@ -285,9 +283,13 @@ public class DynamicChunk extends Chunk {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
 
-    public void updateLighting() {
-        invalidateLighting();
-        System.out.println("[Update] Triggering update from " + this.chunkX + " " + chunkZ);
-        while (!instance.getSectionManager().emptyLightUpdateQueue(instance)) {}
+    public void invalidateLighting() {
+        lightCache.invalidate();
+        chunkCache.invalidate();
+        this.lightData = createLightData();
+
+        MinecraftServer.getSchedulerManager().scheduleTask(() -> {
+            sendPacketToViewers(lightCache.packet());
+        }, TaskSchedule.seconds(5), TaskSchedule.stop());
     }
 }
