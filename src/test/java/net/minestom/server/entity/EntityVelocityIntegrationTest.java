@@ -114,16 +114,13 @@ public class EntityVelocityIntegrationTest {
         // Should  be false because the new entity should have no velocity
         assertFalse(entity.hasVelocity());
 
-        entity.setInstance(instance, new Pos(0, 42, 0)).join();
-        env.tick();
+        entity.setInstance(instance, new Pos(0, 40.1, 0)).join();
 
         // Should be true: The entity is currently falling (in the air), so it does have a velocity.
         // Only entities on the ground should ignore the default velocity.
         assertTrue(entity.hasVelocity());
 
-        // Test until the entity is on the ground
-        boolean tickedSuccessfully = env.tickWhile(() -> !entity.isOnGround(), Duration.ofMillis(50));
-        assertTrue(tickedSuccessfully);
+        env.tick();
 
         // Now that the entity is on the ground, it should no longer have a velocity.
         assertFalse(entity.hasVelocity());
