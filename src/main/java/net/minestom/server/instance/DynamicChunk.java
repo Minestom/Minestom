@@ -287,9 +287,5 @@ public class DynamicChunk extends Chunk {
         lightCache.invalidate();
         chunkCache.invalidate();
         this.lightData = createLightData();
-
-        MinecraftServer.getSchedulerManager().scheduleTask(() -> {
-            sendPacketToViewers(lightCache.packet());
-        }, TaskSchedule.seconds(5), TaskSchedule.stop());
     }
 }
