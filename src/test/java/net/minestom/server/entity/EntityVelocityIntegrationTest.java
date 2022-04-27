@@ -115,8 +115,6 @@ public class EntityVelocityIntegrationTest {
         assertFalse(entity.hasVelocity());
 
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
-        // A newly spawned entity does not have any velocity until the server ticks
-        assertFalse(entity.hasVelocity());
 
         env.tick();
         // Should be true: The entity is currently falling (in the air), so it does have a velocity.
