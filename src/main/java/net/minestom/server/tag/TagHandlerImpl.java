@@ -57,12 +57,25 @@ final class TagHandlerImpl implements TagHandler {
             TagHandlerImpl local = this;
             synchronized (this) {
                 if (paths != null) {
-                    if ((local = traversePathWrite(this, tagIndex, paths, present)) == null)
-                        return;
+                    if ((local = traversePathWrite(this, paths, present)) == null)
+                        return; // Tried to remove an absent tag. Do nothing
                 }
                 SPMCMap entries = local.entries;
-                if (present) entries.put(tagIndex, valueToEntry(local, tag, value));
-                else entries.remove(tagIndex);
+                if (present) {
+                    entries.put(tagIndex, valueToEntry(local, tag, value));
+                } else {
+                    // Remove recursively
+                    if (entries.remove(tagIndex) == null) return;
+                    if (paths != null) {
+                        TagHandlerImpl tmp = local;
+                        int i = paths.length;
+                        do {
+                            if (!tmp.entries.isEmpty()) break;
+                            tmp = tmp.parent;
+                            tmp.entries.remove(paths[--i].index());
+                        } while (i > 0);
+                    }
+                }
                 entries.invalidate();
                 assert !local.entries.rehashed;
             }
@@ -110,13 +123,10 @@ final class TagHandlerImpl implements TagHandler {
         return updatedCache().compound;
     }
 
-    private static TagHandlerImpl traversePathWrite(TagHandlerImpl root, int tagIndex,
-                                                    Tag.PathEntry[] paths, boolean present) {
-        final int length = paths.length;
+    private static TagHandlerImpl traversePathWrite(TagHandlerImpl root, Tag.PathEntry[] paths,
+                                                    boolean present) {
         TagHandlerImpl local = root;
-        TagHandlerImpl[] pathHandlers = new TagHandlerImpl[length];
-        for (int i = 0; i < length; i++) {
-            final Tag.PathEntry path = paths[i];
+        for (Tag.PathEntry path : paths) {
             final int pathIndex = path.index();
             final Entry<?> entry = local.entries.get(pathIndex);
             if (entry instanceof PathEntry pathEntry) {
@@ -134,28 +144,6 @@ final class TagHandlerImpl implements TagHandler {
                 }
                 tmp.entries.put(pathIndex, new PathEntry(path.name(), local));
             }
-            pathHandlers[i] = local;
-        }
-        // Handle removal if the tag was present (recursively)
-        if (!present) {
-            // Remove entry
-            TagHandlerImpl targetHandler = pathHandlers[length - 1];
-            if (targetHandler.entries.remove(tagIndex) == null) return null;
-            // Clear empty parents
-            for (int i = length - 1; i >= 0; i--) {
-                final TagHandlerImpl handler = pathHandlers[i];
-                if (!handler.entries.isEmpty()) break;
-                final int pathIndex = paths[i].index();
-                if (i == 0) {
-                    // Remove the root handler
-                    root.entries.remove(pathIndex);
-                } else {
-                    TagHandlerImpl parent = pathHandlers[i - 1];
-                    parent.entries.remove(pathIndex);
-                }
-            }
-            targetHandler.entries.invalidate();
-            return null;
         }
         return local;
     }
