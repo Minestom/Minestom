@@ -117,6 +117,7 @@ public class EntityVelocityIntegrationTest {
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
 
         env.tick();
+
         // Should be true: The entity is currently falling (in the air), so it does have a velocity.
         // Only entities on the ground should ignore the default velocity.
         assertTrue(entity.hasVelocity());
