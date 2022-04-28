@@ -909,10 +909,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets if the entity currently has a velocity applied.
      *
-     * @return true if velocity is not set to 0
+     * @return true if the entity is moving
      */
     public boolean hasVelocity() {
-        return !velocity.isZero();
+        if (isOnGround()) {
+            // if the entity is on the ground and only "moves" downwards, it does not have a velocity.
+            return Double.compare(velocity.x(), 0) != 0 || Double.compare(velocity.z(), 0) != 0 || velocity.y() > 0;
+        } else {
+            // The entity does not have velocity if the velocity is zero
+            return !velocity.isZero();
+        }
     }
 
     /**
