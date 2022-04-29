@@ -9,6 +9,9 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;
+import org.jglrxavpok.hephaistos.mca.readers.ChunkReader;
+import org.jglrxavpok.hephaistos.mca.readers.ChunkSectionReader;
+import org.jglrxavpok.hephaistos.mca.readers.SectionBiomeInformation;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
@@ -76,61 +79,36 @@ public class AnvilLoader implements IChunkLoader {
         final RegionFile mcaFile = getMCAFile(instance, chunkX, chunkZ);
         if (mcaFile == null)
             return CompletableFuture.completedFuture(null);
-        final ChunkColumn fileChunk = mcaFile.getChunk(chunkX, chunkZ);
-        if (fileChunk == null)
+        final NBTCompound chunkData = mcaFile.getChunkData(chunkX, chunkZ);
+        if (chunkData == null)
             return CompletableFuture.completedFuture(null);
 
+        final ChunkReader chunkReader = new ChunkReader(chunkData);
+
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
-        if(fileChunk.getMinY() < instance.getDimensionType().getMinY()) {
+        if(chunkReader.getYRange().getStart() < instance.getDimensionType().getMinY()) {
             throw new AnvilException(
                     String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
-                            fileChunk.getMinY(),
+                            chunkReader.getYRange().getStart(),
                             instance.getDimensionType().getName().asString(),
                             instance.getDimensionType().getMinY()
                             ));
         }
-        if(fileChunk.getMaxY() > instance.getDimensionType().getMaxY()) {
+        if(chunkReader.getYRange().getEndInclusive() > instance.getDimensionType().getMaxY()) {
             throw new AnvilException(
                     String.format("Trying to load chunk with maxY = %d, but instance dimension type (%s) has a maxY of %d",
-                            fileChunk.getMaxY(),
+                            chunkReader.getYRange().getEndInclusive(),
                             instance.getDimensionType().getName().asString(),
                             instance.getDimensionType().getMaxY()
                     ));
         }
 
         // TODO: Parallelize block, block entities and biome loading
+        // Blocks + Biomes
+        loadSections(chunk, chunkReader);
 
-        if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
-            HashMap<String, Biome> biomeCache = new HashMap<>();
-
-            for (ChunkSection section : fileChunk.getSections().values()) {
-                if (section.getEmpty()) continue;
-                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                            int finalX = fileChunk.getX() * Chunk.CHUNK_SIZE_X + x;
-                            int finalZ = fileChunk.getZ() * Chunk.CHUNK_SIZE_Z + z;
-                            int finalY = section.getY() * Chunk.CHUNK_SECTION_SIZE + y;
-                            String biomeName = section.getBiome(x, y, z);
-                            Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
-                                    Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
-                            chunk.setBiome(finalX, finalY, finalZ, biome);
-                        }
-                    }
-                }
-            }
-        }
-        // Blocks
-        loadBlocks(chunk, fileChunk);
-        loadTileEntities(chunk, fileChunk);
-        // Lights
-        for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
-            var section = chunk.getSection(sectionY);
-            var chunkSection = fileChunk.getSection((byte) sectionY);
-            section.setSkyLight(chunkSection.getSkyLights());
-            section.setBlockLight(chunkSection.getBlockLights());
-        }
-        mcaFile.forget(fileChunk);
+        // Block entities
+        loadTileEntities(chunk, chunkReader);
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -151,28 +129,111 @@ public class AnvilLoader implements IChunkLoader {
         });
     }
 
-    private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
-        for (var section : fileChunk.getSections().values()) {
-            if (section.getEmpty()) continue;
-            final int yOffset = Chunk.CHUNK_SECTION_SIZE * section.getY();
-            for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
-                for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
-                    for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                        try {
-                            final BlockState blockState = section.get(x, y, z);
-                            final String blockName = blockState.getName();
-                            if (blockName.equals("minecraft:air")) continue;
-                            Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName));
-                            // Properties
-                            final Map<String, String> properties = blockState.getProperties();
-                            if (!properties.isEmpty()) block = block.withProperties(properties);
-                            // Handler
-                            final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
-                            if (handler != null) block = block.withHandler(handler);
+    private void loadSections(Chunk chunk, ChunkReader chunkReader) {
+        for (var sectionNBT : chunkReader.getSections()) {
+            ChunkSectionReader sectionReader = new ChunkSectionReader(chunkReader.getMinecraftVersion(), sectionNBT);
+            Section section = chunk.getSection(sectionReader.getY());
 
-                            chunk.setBlock(x, y + yOffset, z, block);
-                        } catch (Exception e) {
-                            MinecraftServer.getExceptionManager().handleException(e);
+            if(sectionReader.getSkyLight() != null) {
+                section.setSkyLight(sectionReader.getSkyLight().copyArray());
+            }
+            if(sectionReader.getBlockLight() != null) {
+                section.setBlockLight(sectionReader.getBlockLight().copyArray());
+            }
+
+            if (sectionReader.isSectionEmpty()) continue;
+            final int sectionY = sectionReader.getY();
+            final int yOffset = Chunk.CHUNK_SECTION_SIZE * sectionY;
+
+            // Biomes
+            if(chunkReader.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
+                HashMap<String, Biome> biomeCache = new HashMap<>();
+                SectionBiomeInformation sectionBiomeInformation = chunkReader.readSectionBiomes(sectionReader);
+
+                if(sectionBiomeInformation != null && sectionBiomeInformation.hasBiomeInformation()) {
+                    if(sectionBiomeInformation.isFilledWithSingleBiome()) {
+                        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+                            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                                for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                                    int finalX = chunk.chunkX * Chunk.CHUNK_SIZE_X + x;
+                                    int finalZ = chunk.chunkZ * Chunk.CHUNK_SIZE_Z + z;
+                                    int finalY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
+                                    String biomeName = sectionBiomeInformation.getBaseBiome();
+                                    Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
+                                            Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
+                                    chunk.setBiome(finalX, finalY, finalZ, biome);
+                                }
+                            }
+                        }
+                    } else {
+                        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+                            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                                for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                                    int finalX = chunk.chunkX * Chunk.CHUNK_SIZE_X + x;
+                                    int finalZ = chunk.chunkZ * Chunk.CHUNK_SIZE_Z + z;
+                                    int finalY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
+
+                                    int index = x/4 + (z/4) * 4 + (y/4) * 16;
+                                    String biomeName = sectionBiomeInformation.getBiomes()[index];
+                                    Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
+                                            Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
+                                    chunk.setBiome(finalX, finalY, finalZ, biome);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Blocks
+            final NBTList<NBTCompound> blockPalette = sectionReader.getBlockPalette();
+            if(blockPalette != null) {
+                int[] blockStateIndices = sectionReader.getUncompressedBlockStateIDs();
+                Block[] convertedPalette = new Block[blockPalette.getSize()];
+                for (int i = 0; i < convertedPalette.length; i++) {
+                    final NBTCompound paletteEntry = blockPalette.get(i);
+                    String blockName = Objects.requireNonNull(paletteEntry.getString("Name"));
+                    if (blockName.equals("minecraft:air")) {
+                        convertedPalette[i] = Block.AIR;
+                    } else {
+                        Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName));
+                        // Properties
+                        final Map<String, String> properties = new HashMap<>();
+                        NBTCompound propertiesNBT = paletteEntry.getCompound("Properties");
+                        if (propertiesNBT != null) {
+                            for (var property : propertiesNBT) {
+                                if (property.getValue().getID() != NBTType.TAG_String) {
+                                    LOGGER.warn("Fail to parse block state properties {}, expected a TAG_String for {}, but contents were {}",
+                                            propertiesNBT,
+                                            property.getKey(),
+                                            property.getValue().toSNBT());
+                                } else {
+                                    properties.put(property.getKey(), ((NBTString) property.getValue()).getValue());
+                                }
+                            }
+                        }
+
+                        if (!properties.isEmpty()) block = block.withProperties(properties);
+                        // Handler
+                        final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
+                        if (handler != null) block = block.withHandler(handler);
+
+                        convertedPalette[i] = block;
+                    }
+                }
+
+                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+                    for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
+                        for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
+                            try {
+                                int blockIndex = y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE + z * Chunk.CHUNK_SECTION_SIZE + x;
+                                int paletteIndex = blockStateIndices[blockIndex];
+                                Block block = convertedPalette[paletteIndex];
+
+                                chunk.setBlock(x, y + yOffset, z, block);
+                            } catch (Exception e) {
+                                MinecraftServer.getExceptionManager().handleException(e);
+                            }
                         }
                     }
                 }
@@ -180,8 +241,8 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void loadTileEntities(Chunk loadedChunk, ChunkColumn fileChunk) {
-        for (NBTCompound te : fileChunk.getTileEntities()) {
+    private void loadTileEntities(Chunk loadedChunk, ChunkReader chunkReader) {
+        for (NBTCompound te : chunkReader.getTileEntities()) {
             final var x = te.getInt("x");
             final var y = te.getInt("y");
             final var z = te.getInt("z");
