@@ -9,6 +9,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.VarHandle;
@@ -184,8 +185,8 @@ final class TagHandlerImpl implements TagHandler {
         // Value must be parsed from nbt if the tag is different
         final NBT nbt = entry.updatedNbt();
         final Serializers.Entry<T, NBT> serializerEntry = tag.entry;
-        return serializerEntry.nbtType().isAssignableFrom(nbt.getClass()) ?
-                serializerEntry.read(nbt) : tag.createDefault();
+        final NBTType<NBT> type = serializerEntry.nbtType();
+        return type == null || type == nbt.getID() ? serializerEntry.read(nbt) : tag.createDefault();
     }
 
     private static Int2ObjectOpenHashMap<Entry<?>> traversePathRead(Tag.PathEntry[] paths,
