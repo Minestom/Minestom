@@ -86,18 +86,19 @@ public class AnvilLoader implements IChunkLoader {
         final ChunkReader chunkReader = new ChunkReader(chunkData);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
-        if(chunkReader.getYRange().getStart() < instance.getDimensionType().getMinY()) {
+        var yRange = chunkReader.getYRange();
+        if(yRange.getStart() < instance.getDimensionType().getMinY()) {
             throw new AnvilException(
                     String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
-                            chunkReader.getYRange().getStart(),
+                            yRange.getStart(),
                             instance.getDimensionType().getName().asString(),
                             instance.getDimensionType().getMinY()
                             ));
         }
-        if(chunkReader.getYRange().getEndInclusive() > instance.getDimensionType().getMaxY()) {
+        if(yRange.getEndInclusive() > instance.getDimensionType().getMaxY()) {
             throw new AnvilException(
                     String.format("Trying to load chunk with maxY = %d, but instance dimension type (%s) has a maxY of %d",
-                            chunkReader.getYRange().getEndInclusive(),
+                            yRange.getEndInclusive(),
                             instance.getDimensionType().getName().asString(),
                             instance.getDimensionType().getMaxY()
                     ));
@@ -130,6 +131,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void loadSections(Chunk chunk, ChunkReader chunkReader) {
+        final HashMap<String, Biome> biomeCache = new HashMap<>();
         for (var sectionNBT : chunkReader.getSections()) {
             ChunkSectionReader sectionReader = new ChunkSectionReader(chunkReader.getMinecraftVersion(), sectionNBT);
             Section section = chunk.getSection(sectionReader.getY());
@@ -147,7 +149,6 @@ public class AnvilLoader implements IChunkLoader {
 
             // Biomes
             if(chunkReader.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
-                HashMap<String, Biome> biomeCache = new HashMap<>();
                 SectionBiomeInformation sectionBiomeInformation = chunkReader.readSectionBiomes(sectionReader);
 
                 if(sectionBiomeInformation != null && sectionBiomeInformation.hasBiomeInformation()) {
