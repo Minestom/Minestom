@@ -54,5 +54,4 @@ public class PlayerBlockPlacementIntegrationTest {
                 Arguments.of(Block.AMETHYST_BLOCK, Block.AMETHYST_BLOCK));
     }
 
-
 }
