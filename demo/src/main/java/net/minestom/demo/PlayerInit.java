@@ -98,8 +98,8 @@ public class PlayerInit {
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .meta(itemMetaBuilder ->
-                                itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
-                                        .canDestroy(Set.of(Block.DIAMOND_ORE)))
+                                itemMetaBuilder.canPlaceOn(Set.of(Material.STONE))
+                                        .canDestroy(Set.of(Material.DIAMOND_ORE)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
 
