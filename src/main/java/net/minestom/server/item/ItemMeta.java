@@ -15,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public sealed interface ItemMeta extends TagReadable, Writeable
         permits ItemMetaImpl {
@@ -69,12 +70,12 @@ public sealed interface ItemMeta extends TagReadable, Writeable
     }
 
     @Contract(pure = true)
-    default @NotNull Set<@NotNull Block> getCanDestroy() {
+    default @NotNull Set<@NotNull Material> getCanDestroy() {
         return Set.copyOf(getTag(ItemTags.CAN_DESTROY));
     }
 
     @Contract(pure = true)
-    default @NotNull Set<@NotNull Block> getCanPlaceOn() {
+    default @NotNull Set<@NotNull Material> getCanPlaceOn() {
         return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
     }
 
@@ -152,23 +153,23 @@ public sealed interface ItemMeta extends TagReadable, Writeable
         }
 
         @Contract("_ -> this")
-        default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_PLACE_ON, List.copyOf(blocks));
+        default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Material> materials) {
+            return set(ItemTags.CAN_PLACE_ON, List.copyOf(materials));
         }
 
         @Contract("_ -> this")
-        default @NotNull Builder canPlaceOn(@NotNull Block... blocks) {
-            return canPlaceOn(Set.of(blocks));
+        default @NotNull Builder canPlaceOn(@NotNull Material... materials) {
+            return canPlaceOn(Set.of(materials));
         }
 
         @Contract("_ -> this")
-        default @NotNull Builder canDestroy(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_DESTROY, List.copyOf(blocks));
+        default @NotNull Builder canDestroy(@NotNull Set<@NotNull Material> materials) {
+            return set(ItemTags.CAN_DESTROY, List.copyOf(materials));
         }
 
         @Contract("_ -> this")
-        default @NotNull Builder canDestroy(@NotNull Block... blocks) {
-            return canDestroy(Set.of(blocks));
+        default @NotNull Builder canDestroy(@NotNull Material... materials) {
+            return canDestroy(Set.of(materials));
         }
     }
 }
