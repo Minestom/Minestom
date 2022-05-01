@@ -10,16 +10,13 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @EnvTest
 public class PlayerBlockPlacementIntegrationTest {
@@ -53,6 +50,7 @@ public class PlayerBlockPlacementIntegrationTest {
         return Stream.of(
                 Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), Block.ACACIA_STAIRS),
                 Arguments.of(Block.ACACIA_STAIRS, Block.ACACIA_STAIRS.withProperty("facing", "south")),
+                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), Block.ACACIA_STAIRS.withProperty("facing", "south")),
                 Arguments.of(Block.AMETHYST_BLOCK, Block.AMETHYST_BLOCK));
     }
 
