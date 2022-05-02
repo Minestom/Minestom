@@ -13,6 +13,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.VarHandle;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
@@ -41,45 +42,48 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        if (tag.isView()) return tag.read(asCompound());
-        return read(entries, tag);
+        return read(entries, tag, this::asCompound);
     }
 
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        if (tag.isView()) {
-            MutableNBTCompound viewCompound = new MutableNBTCompound();
-            tag.write(viewCompound, value);
-            updateContent(viewCompound);
-        } else {
-            final int tagIndex = tag.index;
-            final Tag.PathEntry[] paths = tag.path;
-            final boolean present = value != null;
-            TagHandlerImpl local = this;
-            synchronized (this) {
-                if (paths != null) {
-                    if ((local = traversePathWrite(this, paths, present)) == null)
-                        return; // Tried to remove an absent tag. Do nothing
-                }
-                SPMCMap entries = local.entries;
-                if (present) {
+        TagHandlerImpl local = this;
+        final Tag.PathEntry[] paths = tag.path;
+        final boolean present = value != null;
+        final int tagIndex = tag.index;
+        final boolean isView = tag.isView();
+        synchronized (this) {
+            if (paths != null) {
+                if ((local = traversePathWrite(this, paths, present)) == null)
+                    return; // Tried to remove an absent tag. Do nothing
+            }
+            SPMCMap entries = local.entries;
+            if (present) {
+                if (!isView) {
                     entries.put(tagIndex, valueToEntry(local, tag, value));
                 } else {
-                    // Remove recursively
-                    if (entries.remove(tagIndex) == null) return;
-                    if (paths != null) {
-                        TagHandlerImpl tmp = local;
-                        int i = paths.length;
-                        do {
-                            if (!tmp.entries.isEmpty()) break;
-                            tmp = tmp.parent;
-                            tmp.entries.remove(paths[--i].index());
-                        } while (i > 0);
-                    }
+                    local.updateContent((NBTCompound) tag.entry.write(value));
+                    return;
                 }
-                entries.invalidate();
-                assert !local.entries.rehashed;
+            } else {
+                // Remove recursively
+                if (!isView) {
+                    if (entries.remove(tagIndex) == null) return;
+                } else {
+                    entries.clear();
+                }
+                if (paths != null) {
+                    TagHandlerImpl tmp = local;
+                    int i = paths.length;
+                    do {
+                        if (!tmp.entries.isEmpty()) break;
+                        tmp = tmp.parent;
+                        tmp.entries.remove(paths[--i].index());
+                    } while (i > 0);
+                }
             }
+            entries.invalidate();
+            assert !local.entries.rehashed;
         }
     }
 
@@ -165,13 +169,21 @@ final class TagHandlerImpl implements TagHandler {
         return cache;
     }
 
-    private static <T> T read(Int2ObjectOpenHashMap<Entry<?>> entries, Tag<T> tag) {
+    private static <T> T read(Int2ObjectOpenHashMap<Entry<?>> entries, Tag<T> tag,
+                              Supplier<NBTCompound> rootCompoundSupplier) {
         final Tag.PathEntry[] paths = tag.path;
+        TagHandlerImpl pathHandler = null;
         if (paths != null) {
-            // Must be a path-able entry
-            if ((entries = traversePathRead(paths, entries)) == null)
-                return tag.createDefault();
+            if ((pathHandler = traversePathRead(paths, entries)) == null)
+                return tag.createDefault(); // Must be a path-able entry, but not present
+            entries = pathHandler.entries;
         }
+
+        if (tag.isView()) {
+            return tag.read(pathHandler != null ?
+                    pathHandler.asCompound() : rootCompoundSupplier.get());
+        }
+
         final Entry<?> entry;
         if ((entry = entries.get(tag.index)) == null) {
             return tag.createDefault();
@@ -189,25 +201,29 @@ final class TagHandlerImpl implements TagHandler {
         return type == null || type == nbt.getID() ? serializerEntry.read(nbt) : tag.createDefault();
     }
 
-    private static Int2ObjectOpenHashMap<Entry<?>> traversePathRead(Tag.PathEntry[] paths,
-                                                                    Int2ObjectOpenHashMap<Entry<?>> entries) {
+    private static TagHandlerImpl traversePathRead(Tag.PathEntry[] paths,
+                                                   Int2ObjectOpenHashMap<Entry<?>> entries) {
+        assert paths != null && paths.length > 0;
+        TagHandlerImpl result = null;
         for (var path : paths) {
             final Entry<?> entry;
             if ((entry = entries.get(path.index())) == null)
                 return null;
             if (entry instanceof PathEntry pathEntry) {
-                entries = pathEntry.value.entries;
+                result = pathEntry.value;
             } else if (entry.updatedNbt() instanceof NBTCompound compound) {
                 // Slow path forcing a conversion of the structure to NBTCompound
                 // TODO should the handler be cached inside the entry?
-                TagHandlerImpl tmp = fromCompound(compound);
-                entries = tmp.entries;
+                result = fromCompound(compound);
             } else {
                 // Entry is not path-able
                 return null;
             }
+            assert result != null;
+            entries = result.entries;
         }
-        return entries;
+        assert result != null;
+        return result;
     }
 
     private record Cache(Int2ObjectOpenHashMap<Entry<?>> entries, NBTCompound compound) implements TagReadable {
@@ -215,8 +231,7 @@ final class TagHandlerImpl implements TagHandler {
 
         @Override
         public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-            if (tag.isView()) return tag.read(compound);
-            return read(entries, tag);
+            return read(entries, tag, () -> compound);
         }
     }
 
