@@ -96,10 +96,14 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#asCompound()" class="member-name-link">asCompound</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Converts the content of this handler into a <code>NBTCompound</code>.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Creates a copy of this handler.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">fromCompound</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
@@ -110,10 +114,14 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableCopy()" class="member-name-link">readableCopy</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Creates a readable copy of this handler.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateContent(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">updateContent</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Updates the content of this handler.</div>
+</div>
 </div>
 </div>
 </div>
@@ -139,6 +147,14 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <h3>readableCopy</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></span>&nbsp;<span class="element-name">readableCopy</span>()</div>
+<div class="block">Creates a readable copy of this handler.
+ <p>
+ Similar to <a href="#asCompound()"><code>asCompound()</code></a> with the advantage that cached objects
+ and adaptive optimizations may be reused.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a copy of this handler</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -146,6 +162,14 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <h3>copy</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></span>&nbsp;<span class="element-name">copy</span>()</div>
+<div class="block">Creates a copy of this handler.
+ <p>
+ Similar to <a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)"><code>fromCompound(NBTCompoundLike)</code></a> using <a href="#asCompound()"><code>asCompound()</code></a>
+ with the advantage that cached objects and adaptive optimizations may be reused.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a copy of this handler</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -153,6 +177,13 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <h3>updateContent</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">updateContent</span><wbr><span class="parameters">(@NotNull
  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</span></div>
+<div class="block">Updates the content of this handler.
+ <p>
+ Can be used as a clearing method with <code>NBTCompound.EMPTY</code>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>compound</code> - the new content of this handler</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -160,6 +191,11 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <h3>asCompound</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">asCompound</span>()</div>
+<div class="block">Converts the content of this handler into a <code>NBTCompound</code>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a nbt compound representation of this handler</dd>
+</dl>
 </section>
 </li>
 <li>
