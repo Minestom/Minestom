@@ -10,12 +10,40 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
  */
 public interface TagHandler extends TagReadable, TagWritable {
 
+    /**
+     * Creates a readable copy of this handler.
+     * <p>
+     * Similar to {@link #asCompound()} with the advantage that cached objects
+     * and adaptive optimizations may be reused.
+     *
+     * @return a copy of this handler
+     */
     @NotNull TagReadable readableCopy();
 
+    /**
+     * Creates a copy of this handler.
+     * <p>
+     * Similar to {@link #fromCompound(NBTCompoundLike)} using {@link #asCompound()}
+     * with the advantage that cached objects and adaptive optimizations may be reused.
+     *
+     * @return a copy of this handler
+     */
     @NotNull TagHandler copy();
 
+    /**
+     * Updates the content of this handler.
+     * <p>
+     * Can be used as a clearing method with {@link NBTCompound#EMPTY}.
+     *
+     * @param compound the new content of this handler
+     */
     void updateContent(@NotNull NBTCompoundLike compound);
 
+    /**
+     * Converts the content of this handler into a {@link NBTCompound}.
+     *
+     * @return a nbt compound representation of this handler
+     */
     @NotNull NBTCompound asCompound();
 
     @ApiStatus.Experimental
