@@ -6,11 +6,15 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public final class BoundingBox implements Shape {
+    private static final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
+    private static final BoundingBox sneakingBoundingBox = new BoundingBox(0.6, 1.5, 0.6);
+    private static final BoundingBox smallBoundingBox = new BoundingBox(0.6, 0.6, 0.6);
 
     final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
 
@@ -165,5 +169,14 @@ public final class BoundingBox implements Shape {
         if (Double.compare(that.height, height) != 0) return false;
         if (Double.compare(that.depth, depth) != 0) return false;
         return offset.equals(that.offset);
+    }
+
+    public static @Nullable BoundingBox getPoseBoundingBox(@NotNull Entity.Pose pose) {
+        return switch (pose) {
+            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> smallBoundingBox;
+            case SLEEPING, DYING -> sleepingBoundingBox;
+            case SNEAKING -> sneakingBoundingBox;
+            default -> null;
+        };
     }
 }

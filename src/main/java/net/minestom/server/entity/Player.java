@@ -106,9 +106,6 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
-    private static final BoundingBox sneakingBoundingBox = new BoundingBox(0.6, 1.5, 0.6);
-    private static final BoundingBox smallBoundingBox = new BoundingBox(0.6, 0.6, 0.6);
-
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final int PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     private static final int PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
@@ -873,17 +870,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDefaultEatingTime(long defaultEatingTime) {
         this.defaultEatingTime = defaultEatingTime;
-    }
-
-    @Override
-    public @NotNull BoundingBox getBoundingBox() {
-        if (getPose() == Pose.SPIN_ATTACK || getPose() == Pose.SWIMMING || getPose() == Pose.FALL_FLYING) {
-            return smallBoundingBox;
-        } else if (getPose() == Pose.SNEAKING) {
-            return sneakingBoundingBox;
-        } else {
-            return super.getBoundingBox();
-        }
     }
 
     @Override
