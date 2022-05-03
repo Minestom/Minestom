@@ -30,4 +30,22 @@ public class EntityBoundingBoxIntegrationTest {
         player.setPose(Entity.Pose.FALL_FLYING);
         assertEquals(new BoundingBox(0.6, 0.6, 0.6), player.getBoundingBox());
     }
+
+    @Test
+    public void eyeHeight(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+
+        assertEquals(1.62, player.getEyeHeight());
+
+        player.setPose(Entity.Pose.SLEEPING);
+        assertEquals(0.2, player.getEyeHeight());
+
+        player.setPose(Entity.Pose.SNEAKING);
+        assertEquals(1.27, player.getEyeHeight());
+
+        player.setPose(Entity.Pose.FALL_FLYING);
+        assertEquals(0.4, player.getEyeHeight());
+    }
 }
