@@ -11,6 +11,7 @@ import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.EntityCollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -106,6 +107,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean hasPhysics = true;
+    protected boolean hasCollisions = true;
 
     /**
      * The amount of drag applied on the Y axle.
@@ -213,6 +215,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
+    }
+
+    public boolean getHasCollisions() {
+        return hasCollisions;
+    }
+
+    public void setHasCollisions(boolean hasCollisions) {
+        this.hasCollisions = hasCollisions;
     }
 
     /**
@@ -566,7 +576,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
+            final Vec sumDeltaPos = deltaPos.add(EntityCollisionUtils.calculateEntityCollisions(this));
+            final var physicsResult = CollisionUtils.handlePhysics(this, sumDeltaPos, lastPhysicsResult);
+
             this.lastPhysicsResult = physicsResult;
             if (!PlayerUtils.isSocketClient(this))
                 this.onGround = physicsResult.isOnGround();
