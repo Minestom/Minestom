@@ -20,6 +20,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
@@ -105,7 +106,6 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
-
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final int PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     private static final int PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
@@ -201,8 +201,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.username = username;
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
-
-        setBoundingBox(0.6f, 1.8f, 0.6f);
 
         setRespawnPoint(Pos.ZERO);
 
@@ -435,6 +433,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(respawnEvent);
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level
         refreshIsDead(false);
+        updatePose();
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
@@ -871,6 +870,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDefaultEatingTime(long defaultEatingTime) {
         this.defaultEatingTime = defaultEatingTime;
+    }
+
+    @Override
+    public double getEyeHeight() {
+        return switch (getPose()) {
+            case SLEEPING -> 0.2;
+            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> 0.4;
+            case SNEAKING -> 1.27;
+            default -> 1.62;
+        };
     }
 
     /**
