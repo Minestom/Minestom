@@ -781,7 +781,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param pose the pose
      * @return the entity bounding box for the pose
      */
-    public @NotNull BoundingBox getBoundingBox(Pose pose) {
+    private @NotNull BoundingBox getBoundingBox(Pose pose) {
         if (pose == Pose.SLEEPING || pose == Pose.DYING)
             return sleepingBoundingBox;
 
@@ -1210,7 +1210,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.boundingBox = getBoundingBox(pose);
     }
 
-    public void updatePose() {
+    private void updatePose() {
         if (entityMeta.isFlyingWithElytra()) {
             setPose(Pose.FALL_FLYING);
         } else if (entityMeta.isSwimming()) {
