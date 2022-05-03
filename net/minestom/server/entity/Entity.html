@@ -270,7 +270,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBoundingBox()" class="member-name-link">getBoundingBox</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Is used to check collision with coordinates or other blocks/entities.</div>
+<div class="block">Returns the current bounding box (based on pose).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChunk()" class="member-name-link">getChunk</a>()</code></div>
@@ -567,12 +567,12 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  double&nbsp;height,
  double&nbsp;depth)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the internal entity bounding box.</div>
+<div class="block">Changes the internal entity standing bounding box.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBoundingBox(net.minestom.server.collision.BoundingBox)" class="member-name-link">setBoundingBox</a><wbr>(<a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the internal entity bounding box.</div>
+<div class="block">Changes the internal entity standing bounding box.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCustomName(net.kyori.adventure.text.Component)" class="member-name-link">setCustomName</a><wbr>(@Nullable <a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;customName)</code></div>
@@ -729,28 +729,31 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a viewer must be destroyed.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/EntitySnapshot.html" title="interface in net.minestom.server.snapshot">EntitySnapshot</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updatePose()" class="member-name-link">updatePose</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/EntitySnapshot.html" title="interface in net.minestom.server.snapshot">EntitySnapshot</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates the currently cached snapshot if required.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateVelocity(boolean,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec)" class="member-name-link">updateVelocity</a><wbr>(boolean&nbsp;wasOnGround,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateVelocity(boolean,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec)" class="member-name-link">updateVelocity</a><wbr>(boolean&nbsp;wasOnGround,
  <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;positionBeforeMove,
  <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;newVelocity)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewableRule()" class="member-name-link">updateViewableRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewableRule(java.util.function.Predicate)" class="member-name-link">updateViewableRule</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;predicate)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewableRule()" class="member-name-link">updateViewableRule</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewerRule()" class="member-name-link">updateViewerRule</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewableRule(java.util.function.Predicate)" class="member-name-link">updateViewableRule</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;predicate)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewerRule(java.util.function.Predicate)" class="member-name-link">updateViewerRule</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;predicate)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewerRule()" class="member-name-link">updateViewerRule</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateViewerRule(java.util.function.Predicate)" class="member-name-link">updateViewerRule</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;predicate)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -1403,7 +1406,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <h3>getBoundingBox</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></span>&nbsp;<span class="element-name">getBoundingBox</span>()</div>
-<div class="block">Is used to check collision with coordinates or other blocks/entities.</div>
+<div class="block">Returns the current bounding box (based on pose).
+ Is used to check collision with coordinates or other blocks/entities.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the entity bounding box</dd>
@@ -1416,7 +1420,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBoundingBox</span><wbr><span class="parameters">(double&nbsp;width,
  double&nbsp;height,
  double&nbsp;depth)</span></div>
-<div class="block">Changes the internal entity bounding box.
+<div class="block">Changes the internal entity standing bounding box.
+ When the pose is not standing, a different bounding box may be used for collision.
  <p>
  WARNING: this does not change the entity hit-box which is client-side.</div>
 <dl class="notes">
@@ -1431,7 +1436,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <section class="detail" id="setBoundingBox(net.minestom.server.collision.BoundingBox)">
 <h3>setBoundingBox</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBoundingBox</span><wbr><span class="parameters">(<a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</span></div>
-<div class="block">Changes the internal entity bounding box.
+<div class="block">Changes the internal entity standing bounding box.
+ When the pose is not standing, a different bounding box may be used for collision.
  <p>
  WARNING: this does not change the entity hit-box which is client-side.</div>
 <dl class="notes">
@@ -1872,6 +1878,12 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <dt>Parameters:</dt>
 <dd><code>pose</code> - the new entity pose</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updatePose()">
+<h3>updatePose</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updatePose</span>()</div>
 </section>
 </li>
 <li>
