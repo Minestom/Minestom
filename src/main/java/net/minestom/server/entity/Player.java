@@ -876,13 +876,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public @NotNull BoundingBox getBoundingBox(Pose pose) {
-        if (pose == Pose.SPIN_ATTACK || pose == Pose.SWIMMING || pose == Pose.FALL_FLYING) {
+    public @NotNull BoundingBox getBoundingBox() {
+        if (getPose() == Pose.SPIN_ATTACK || getPose() == Pose.SWIMMING || getPose() == Pose.FALL_FLYING) {
             return smallBoundingBox;
-        } else if (pose == Pose.SNEAKING) {
+        } else if (getPose() == Pose.SNEAKING) {
             return sneakingBoundingBox;
         } else {
-            return super.getBoundingBox(pose);
+            return super.getBoundingBox();
         }
     }
 
