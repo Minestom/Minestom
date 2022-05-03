@@ -11,8 +11,8 @@ import java.util.Objects;
 public final class CreativeInventoryActionListener {
     public static void listener(ClientCreativeInventoryActionPacket packet, Player player) {
         if (!player.isCreative()) return;
-        short slot = packet.slot;
-        final ItemStack item = packet.item;
+        short slot = packet.slot();
+        final ItemStack item = packet.item();
         if (slot == -1) {
             // Drop item
             player.dropItem(item);

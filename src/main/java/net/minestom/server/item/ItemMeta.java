@@ -5,163 +5,170 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
-public class ItemMeta implements TagReadable, Writeable {
-
-    private final int damage;
-    private final boolean unbreakable;
-    private final int hideFlag;
-    private final Component displayName;
-    private final List<Component> lore;
-
-    private final Map<Enchantment, Short> enchantmentMap;
-    private final List<ItemAttribute> attributes;
-
-    private final int customModelData;
-
-    private final Set<Block> canDestroy;
-    private final Set<Block> canPlaceOn;
-
-    private final ItemMetaBuilder metaBuilder;
-    private final NBTCompound nbt;
-
-    private String cachedSNBT;
-    private ByteBuffer cachedBuffer;
-
-    protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
-        this.damage = metaBuilder.damage;
-        this.unbreakable = metaBuilder.unbreakable;
-        this.hideFlag = metaBuilder.hideFlag;
-        this.displayName = metaBuilder.displayName;
-        this.lore = List.copyOf(metaBuilder.lore);
-        this.enchantmentMap = Map.copyOf(metaBuilder.enchantmentMap);
-        this.attributes = List.copyOf(metaBuilder.attributes);
-        this.customModelData = metaBuilder.customModelData;
-        this.canDestroy = Set.copyOf(metaBuilder.canDestroy);
-        this.canPlaceOn = Set.copyOf(metaBuilder.canPlaceOn);
-
-        this.metaBuilder = metaBuilder;
-        this.nbt = metaBuilder.nbt();
-    }
+public sealed interface ItemMeta extends TagReadable, Writeable
+        permits ItemMetaImpl {
+    @Override
+    <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemMeta with(@NotNull Consumer<@NotNull ItemMetaBuilder> builderConsumer) {
-        var builder = builder();
-        builderConsumer.accept(builder);
-        return builder.build();
+    @NotNull ItemMeta with(@NotNull Consumer<@NotNull Builder> builderConsumer);
+
+    @NotNull NBTCompound toNBT();
+
+    @NotNull String toSNBT();
+
+    @Contract(pure = true)
+    default int getDamage() {
+        return getTag(ItemTags.DAMAGE);
     }
 
     @Contract(pure = true)
-    public int getDamage() {
-        return damage;
+    default boolean isUnbreakable() {
+        return getTag(ItemTags.UNBREAKABLE);
     }
 
     @Contract(pure = true)
-    public boolean isUnbreakable() {
-        return unbreakable;
+    default int getHideFlag() {
+        return getTag(ItemTags.HIDE_FLAGS);
     }
 
     @Contract(pure = true)
-    public int getHideFlag() {
-        return hideFlag;
+    default @Nullable Component getDisplayName() {
+        return getTag(ItemTags.NAME);
     }
 
     @Contract(pure = true)
-    public @Nullable Component getDisplayName() {
-        return displayName;
+    default @NotNull List<@NotNull Component> getLore() {
+        return getTag(ItemTags.LORE);
     }
 
     @Contract(pure = true)
-    public @NotNull List<@NotNull Component> getLore() {
-        return lore;
+    default @NotNull Map<Enchantment, Short> getEnchantmentMap() {
+        return getTag(ItemTags.ENCHANTMENTS);
     }
 
     @Contract(pure = true)
-    public @NotNull Map<Enchantment, Short> getEnchantmentMap() {
-        return enchantmentMap;
+    default @NotNull List<@NotNull ItemAttribute> getAttributes() {
+        return getTag(ItemTags.ATTRIBUTES);
     }
 
     @Contract(pure = true)
-    public @NotNull List<@NotNull ItemAttribute> getAttributes() {
-        return attributes;
+    default int getCustomModelData() {
+        return getTag(ItemTags.CUSTOM_MODEL_DATA);
     }
 
     @Contract(pure = true)
-    public int getCustomModelData() {
-        return customModelData;
+    default @NotNull Set<@NotNull Block> getCanDestroy() {
+        return Set.copyOf(getTag(ItemTags.CAN_DESTROY));
     }
 
     @Contract(pure = true)
-    public @NotNull Set<@NotNull Block> getCanDestroy() {
-        return canDestroy;
+    default @NotNull Set<@NotNull Block> getCanPlaceOn() {
+        return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
     }
 
-    @Contract(pure = true)
-    public @NotNull Set<@NotNull Block> getCanPlaceOn() {
-        return canPlaceOn;
-    }
+    sealed interface Builder extends Taggable
+            permits ItemMetaImpl.Builder, ItemMetaView.Builder {
+        @NotNull ItemMeta build();
 
-    @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbt);
-    }
-
-    public @NotNull NBTCompound toNBT() {
-        return nbt.deepClone();
-    }
-
-    public @NotNull String toSNBT() {
-        if (cachedSNBT == null) {
-            this.cachedSNBT = nbt.toSNBT();
+        default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
+            setTag(tag, value);
+            return this;
         }
-        return cachedSNBT;
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ItemMeta itemMeta = (ItemMeta) o;
-        return nbt.equals(itemMeta.nbt);
-    }
-
-    @Override
-    public int hashCode() {
-        return nbt.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "nbt=" + nbt +
-                '}';
-    }
-
-    @Contract(value = "-> new", pure = true)
-    protected @NotNull ItemMetaBuilder builder() {
-        return ItemMetaBuilder.fromNBT(metaBuilder, nbt);
-    }
-
-    @Override
-    public synchronized void write(@NotNull BinaryWriter writer) {
-        if (cachedBuffer == null) {
-            BinaryWriter w = new BinaryWriter();
-            w.writeNBT("", nbt);
-            this.cachedBuffer = w.getBuffer();
+        @Contract("_ -> this")
+        default @NotNull Builder damage(int damage) {
+            return set(ItemTags.DAMAGE, damage);
         }
-        writer.write(cachedBuffer);
+
+        @Contract("_ -> this")
+        default @NotNull Builder unbreakable(boolean unbreakable) {
+            return set(ItemTags.UNBREAKABLE, unbreakable);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder hideFlag(int hideFlag) {
+            return set(ItemTags.HIDE_FLAGS, hideFlag);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder hideFlag(@NotNull ItemHideFlag... hideFlags) {
+            int result = 0;
+            for (ItemHideFlag hideFlag : hideFlags) result |= hideFlag.getBitFieldPart();
+            return hideFlag(result);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder displayName(@Nullable Component displayName) {
+            return set(ItemTags.NAME, displayName);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
+            return set(ItemTags.LORE, lore.isEmpty() ? null : List.class.cast(lore));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder lore(Component... lore) {
+            return lore(Arrays.asList(lore));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
+            return set(ItemTags.ENCHANTMENTS, Map.copyOf(enchantments));
+        }
+
+        @Contract("_, _ -> this")
+        default @NotNull Builder enchantment(@NotNull Enchantment enchantment, short level) {
+            var enchantments = new HashMap<>(getTag(ItemTags.ENCHANTMENTS));
+            enchantments.put(enchantment, level);
+            return enchantments(enchantments);
+        }
+
+        @Contract("-> this")
+        default @NotNull Builder clearEnchantment() {
+            return enchantments(Map.of());
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
+            return set(ItemTags.ATTRIBUTES, attributes.isEmpty() ? null : attributes);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder customModelData(int customModelData) {
+            return set(ItemTags.CUSTOM_MODEL_DATA, customModelData);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
+            return set(ItemTags.CAN_PLACE_ON, List.copyOf(blocks));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder canPlaceOn(@NotNull Block... blocks) {
+            return canPlaceOn(Set.of(blocks));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder canDestroy(@NotNull Set<@NotNull Block> blocks) {
+            return set(ItemTags.CAN_DESTROY, List.copyOf(blocks));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder canDestroy(@NotNull Block... blocks) {
+            return canDestroy(Set.of(blocks));
+        }
     }
 }

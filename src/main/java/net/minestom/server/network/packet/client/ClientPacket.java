@@ -1,18 +1,11 @@
 package net.minestom.server.network.packet.client;
 
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a packet received from a client.
+ * <p>
+ * Packets are value-based, and should therefore be reliant on identity.
  */
-public interface ClientPacket extends Readable, Writeable {
-
-    @Override
-    default void write(@NotNull BinaryWriter writer) {
-        // FIXME: remove when all packets are written and read properly
-        throw new UnsupportedOperationException("WIP: This packet is not setup to be written from Minestom code at the moment.");
-    }
+public interface ClientPacket extends Writeable {
 }

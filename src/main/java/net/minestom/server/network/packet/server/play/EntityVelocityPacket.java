@@ -7,24 +7,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityVelocityPacket implements ServerPacket {
-
-    public int entityId;
-    public short velocityX, velocityY, velocityZ;
-
-    public EntityVelocityPacket(int entityId, short velocityX, short velocityY, short velocityZ) {
-        this.entityId = entityId;
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
+public record EntityVelocityPacket(int entityId, short velocityX, short velocityY,
+                                   short velocityZ) implements ServerPacket {
+    public EntityVelocityPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readShort(), reader.readShort(), reader.readShort());
     }
 
     public EntityVelocityPacket(int entityId, Point velocity) {
         this(entityId, (short) velocity.x(), (short) velocity.y(), (short) velocity.z());
-    }
-
-    public EntityVelocityPacket() {
-        this(0, (short) 0, (short) 0, (short) 0);
     }
 
     @Override
@@ -33,14 +23,6 @@ public class EntityVelocityPacket implements ServerPacket {
         writer.writeShort(velocityX);
         writer.writeShort(velocityY);
         writer.writeShort(velocityZ);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        velocityX = reader.readShort();
-        velocityY = reader.readShort();
-        velocityZ = reader.readShort();
     }
 
     @Override

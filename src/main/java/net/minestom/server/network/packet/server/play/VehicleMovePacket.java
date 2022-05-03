@@ -1,37 +1,25 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class VehicleMovePacket implements ServerPacket {
-
-    public double x, y, z;
-    public float yaw, pitch;
-
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public VehicleMovePacket() {}
-
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(x);
-        writer.writeDouble(y);
-        writer.writeDouble(z);
-        writer.writeFloat(yaw);
-        writer.writeFloat(pitch);
+public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
+    public VehicleMovePacket(BinaryReader reader) {
+        this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
+                reader.readFloat(), reader.readFloat()));
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        x = reader.readDouble();
-        y = reader.readDouble();
-        z = reader.readDouble();
-        yaw = reader.readFloat();
-        pitch = reader.readFloat();
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeDouble(position.x());
+        writer.writeDouble(position.y());
+        writer.writeDouble(position.z());
+        writer.writeFloat(position.yaw());
+        writer.writeFloat(position.pitch());
     }
 
     @Override

@@ -1,10 +1,63 @@
 package net.minestom.server.tag;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
 
 /**
  * Represents an element which can read and write {@link Tag tags}.
  */
-@ApiStatus.Experimental
 public interface TagHandler extends TagReadable, TagWritable {
+
+    /**
+     * Creates a readable copy of this handler.
+     * <p>
+     * Similar to {@link #asCompound()} with the advantage that cached objects
+     * and adaptive optimizations may be reused.
+     *
+     * @return a copy of this handler
+     */
+    @NotNull TagReadable readableCopy();
+
+    /**
+     * Creates a copy of this handler.
+     * <p>
+     * Similar to {@link #fromCompound(NBTCompoundLike)} using {@link #asCompound()}
+     * with the advantage that cached objects and adaptive optimizations may be reused.
+     *
+     * @return a copy of this handler
+     */
+    @NotNull TagHandler copy();
+
+    /**
+     * Updates the content of this handler.
+     * <p>
+     * Can be used as a clearing method with {@link NBTCompound#EMPTY}.
+     *
+     * @param compound the new content of this handler
+     */
+    void updateContent(@NotNull NBTCompoundLike compound);
+
+    /**
+     * Converts the content of this handler into a {@link NBTCompound}.
+     *
+     * @return a nbt compound representation of this handler
+     */
+    @NotNull NBTCompound asCompound();
+
+    @ApiStatus.Experimental
+    static @NotNull TagHandler newHandler() {
+        return new TagHandlerImpl();
+    }
+
+    /**
+     * Copy the content of the given {@link NBTCompoundLike} into a new {@link TagHandler}.
+     *
+     * @param compound the compound to read tags from
+     * @return a new tag handler with the content of the given compound
+     */
+    static @NotNull TagHandler fromCompound(@NotNull NBTCompoundLike compound) {
+        return TagHandlerImpl.fromCompound(compound);
+    }
 }

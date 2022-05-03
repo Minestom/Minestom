@@ -6,14 +6,14 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EnterCombatEventPacket  implements ServerPacket {
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
+public record EnterCombatEventPacket() implements ServerPacket {
+    public EnterCombatEventPacket(BinaryReader reader) {
+        this();
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
+        // Empty
     }
 
     @Override

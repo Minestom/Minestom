@@ -1,121 +1,81 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.color.Color;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.tag.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
-public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<PotionMeta.Builder> {
+public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMeta.Builder> {
+    private static final Tag<PotionType> POTION_TYPE = Tag.String("Potion").map(PotionType::fromNamespaceId, ProtocolObject::name).defaultValue(PotionType.EMPTY);
+    private static final Tag<List<CustomPotionEffect>> CUSTOM_POTION_EFFECTS = Tag.Structure("CustomPotionEffects", new TagSerializer<CustomPotionEffect>() {
+        @Override
+        public @Nullable CustomPotionEffect read(@NotNull TagReadable reader) {
+            final Byte id = reader.getTag(Tag.Byte("Id"));
+            final Byte amplifier = reader.getTag(Tag.Byte("Amplifier"));
+            final Integer duration = reader.getTag(Tag.Integer("Duration"));
+            final Boolean ambient = reader.getTag(Tag.Boolean("Ambient"));
+            final Boolean showParticles = reader.getTag(Tag.Boolean("ShowParticles"));
+            final Boolean showIcon = reader.getTag(Tag.Boolean("ShowIcon"));
+            if (id == null || amplifier == null || duration == null || ambient == null || showParticles == null || showIcon == null) {
+                return null;
+            }
+            return new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon);
+        }
 
-    private final PotionType potionType;
-    private final List<CustomPotionEffect> customPotionEffects;
-    private final Color color;
+        @Override
+        public void write(@NotNull TagWritable writer, @NotNull CustomPotionEffect value) {
+            writer.setTag(Tag.Byte("Id"), value.id());
+            writer.setTag(Tag.Byte("Amplifier"), value.amplifier());
+            writer.setTag(Tag.Integer("Duration"), value.duration());
+            writer.setTag(Tag.Boolean("Ambient"), value.isAmbient());
+            writer.setTag(Tag.Boolean("ShowParticles"), value.showParticles());
+            writer.setTag(Tag.Boolean("ShowIcon"), value.showIcon());
+        }
+    }).list().defaultValue(List.of());
+    private static final Tag<Color> CUSTOM_POTION_COLOR = Tag.Integer("CustomPotionColor").path("display").map(Color::new, Color::asRGB);
 
-    protected PotionMeta(@NotNull ItemMetaBuilder metaBuilder, @Nullable PotionType potionType,
-                         List<CustomPotionEffect> customPotionEffects,
-                         Color color) {
-        super(metaBuilder);
-        this.potionType = potionType;
-        this.customPotionEffects = new ArrayList<>(customPotionEffects);
-        this.color = color;
+    public @NotNull PotionType getPotionType() {
+        return getTag(POTION_TYPE);
     }
 
-    public PotionType getPotionType() {
-        return potionType;
+    public @NotNull List<CustomPotionEffect> getCustomPotionEffects() {
+        return getTag(CUSTOM_POTION_EFFECTS);
     }
 
-    public List<CustomPotionEffect> getCustomPotionEffects() {
-        return customPotionEffects;
+    public @Nullable Color getColor() {
+        return getTag(CUSTOM_POTION_COLOR);
     }
 
-    public Color getColor() {
-        return color;
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
     }
 
-    public static class Builder extends ItemMetaBuilder {
-
-        private PotionType potionType;
-        private List<CustomPotionEffect> customPotionEffects = new ArrayList<>();
-        private Color color;
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
 
         public Builder potionType(@NotNull PotionType potionType) {
-            this.potionType = potionType;
-            mutateNbt(compound -> compound.setString("Potion", potionType.name()));
+            setTag(POTION_TYPE, potionType);
             return this;
         }
 
         public Builder effects(@NotNull List<CustomPotionEffect> customPotionEffects) {
-            this.customPotionEffects = customPotionEffects;
-
-            NBTList<NBTCompound> potionList = new NBTList<>(NBTTypes.TAG_Compound);
-            for (CustomPotionEffect customPotionEffect : customPotionEffects) {
-                NBTCompound potionCompound = new NBTCompound();
-                potionCompound.setByte("Id", customPotionEffect.getId());
-                potionCompound.setByte("Amplifier", customPotionEffect.getAmplifier());
-                potionCompound.setInt("Duration", customPotionEffect.getDuration());
-                potionCompound.setByte("Ambient", (byte) (customPotionEffect.isAmbient() ? 1 : 0));
-                potionCompound.setByte("ShowParticles", (byte) (customPotionEffect.showParticles() ? 1 : 0));
-                potionCompound.setByte("ShowIcon", (byte) (customPotionEffect.showIcon() ? 1 : 0));
-
-                potionList.add(potionCompound);
-            }
-            mutateNbt(compound -> compound.set("CustomPotionEffects", potionList));
-
+            setTag(CUSTOM_POTION_EFFECTS, customPotionEffects);
             return this;
         }
 
         public Builder color(@NotNull Color color) {
-            this.color = color;
-            mutateNbt(compound -> compound.setInt("CustomPotionColor", color.asRGB()));
+            setTag(CUSTOM_POTION_COLOR, color);
             return this;
-        }
-
-        @Override
-        public @NotNull PotionMeta build() {
-            return new PotionMeta(this, potionType, customPotionEffects, color);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Potion")) {
-                potionType(PotionType.fromNamespaceId(nbtCompound.getString("Potion")));
-            }
-
-            if (nbtCompound.containsKey("CustomPotionEffects")) {
-                NBTList<NBTCompound> customEffectList = nbtCompound.getList("CustomPotionEffects");
-                for (NBTCompound potionCompound : customEffectList) {
-                    final byte id = potionCompound.getAsByte("Id");
-                    final byte amplifier = potionCompound.getAsByte("Amplifier");
-                    final int duration = potionCompound.containsKey("Duration") ? potionCompound.getNumber("Duration").intValue() : (int) Duration.ofSeconds(30).toMillis();
-                    final boolean ambient = potionCompound.containsKey("Ambient") ? potionCompound.getAsByte("Ambient") == 1 : false;
-                    final boolean showParticles = potionCompound.containsKey("ShowParticles") ? potionCompound.getAsByte("ShowParticles") == 1 : true;
-                    final boolean showIcon = potionCompound.containsKey("ShowIcon") ? potionCompound.getAsByte("ShowIcon") == 1 : true;
-
-                    this.customPotionEffects.add(
-                            new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon));
-                }
-                effects(customPotionEffects);
-            }
-
-            if (nbtCompound.containsKey("CustomPotionColor")) {
-                color(new Color(nbtCompound.getInt("CustomPotionColor")));
-            }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

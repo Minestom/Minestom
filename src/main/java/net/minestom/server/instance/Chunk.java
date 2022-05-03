@@ -7,19 +7,16 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
-import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.tag.Tag;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.utils.ViewEngine;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,7 +33,7 @@ import java.util.UUID;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler {
+public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, Taggable, Snapshotable {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
@@ -44,39 +41,31 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     private final UUID identifier;
 
     protected Instance instance;
-    @NotNull
-    protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
+    protected final int minSection, maxSection;
 
     // Options
     private final boolean shouldGenerate;
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    private final ViewEngine viewers = new ViewEngine();
+    private final ChunkView viewers;
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
 
     // Data
-    private final NBTCompound nbt = new NBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
-    public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
+    public Chunk(@NotNull Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-
-        final int biomeCount = Biome.getBiomeCount(instance.getDimensionType());
-        if (biomes != null && biomes.length == biomeCount) {
-            this.biomes = biomes;
-        } else {
-            this.biomes = new Biome[biomeCount];
-        }
-
-        final EntityTracker tracker = instance.getEntityTracker();
-        this.viewers.updateTracker(toPosition(), tracker);
+        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
+        this.viewers = new ChunkView(instance, toPosition());
     }
 
     /**
@@ -96,9 +85,13 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
-    public abstract @NotNull Map<Integer, Section> getSections();
+    public abstract @NotNull List<Section> getSections();
 
     public abstract @NotNull Section getSection(int section);
+
+    public @NotNull Section getSectionAt(int blockY) {
+        return getSection(ChunkUtils.getChunkCoordinate(blockY));
+    }
 
     /**
      * Executes a chunk tick.
@@ -169,10 +162,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         return instance;
     }
 
-    public Biome[] getBiomes() {
-        return biomes;
-    }
-
     /**
      * Gets the chunk X.
      *
@@ -189,6 +178,24 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    /**
+     * Gets the lowest (inclusive) section Y available in this chunk
+     *
+     * @return the lowest (inclusive) section Y available in this chunk
+     */
+    public int getMinSection() {
+        return minSection;
+    }
+
+    /**
+     * Gets the highest (exclusive) section Y available in this chunk
+     *
+     * @return the highest (exclusive) section Y available in this chunk
+     */
+    public int getMaxSection() {
+        return maxSection;
     }
 
     /**
@@ -258,41 +265,24 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
     }
 
-    /**
-     * Adds the player to the viewing collection. Chunk packet must be sent manually.
-     *
-     * @param player the viewer to add
-     * @return true if the player has just been added to the viewer collection
-     */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        return viewers.manualAdd(player);
+        throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
-    /**
-     * Removes the player from the viewing collection. Chunk packet must be sent manually.
-     *
-     * @param player the viewer to remove
-     * @return true if the player has just been removed to the viewer collection
-     */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        return viewers.manualRemove(player);
+        throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        return viewers.asSet();
+        return viewers.set;
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbt);
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        tag.write(nbt, value);
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 
     /**

@@ -3,8 +3,6 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.GlobalHandles;
-import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -12,6 +10,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
@@ -167,11 +167,6 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
     }
 
-    @Override
-    protected void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current) {
-        GlobalHandles.PLAYER_INVENTORY_ITEM_CHANGE_EVENT.call(new PlayerInventoryItemChangeEvent(player, slot, previous, current));
-    }
-
     /**
      * Refreshes an inventory slot.
      *
@@ -194,7 +189,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
             final int slot = convertToPacketSlot(i);
             convertedSlots[slot] = itemStacks[i];
         }
-        return new WindowItemsPacket((byte) 0, 0, convertedSlots, cursorItem);
+        return new WindowItemsPacket((byte) 0, 0, List.of(convertedSlots), cursorItem);
     }
 
     @Override

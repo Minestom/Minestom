@@ -1,11 +1,10 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.PooledBuffers;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,20 +16,16 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.Inflater;
 
 @ApiStatus.Internal
 public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
     final Selector selector;
-    private final Context context = new Context();
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
-    private final AtomicBoolean flush = new AtomicBoolean();
 
     Worker(Server server) {
         super("Ms-worker-" + COUNTER.getAndIncrement());
@@ -52,11 +47,11 @@ public final class Worker extends MinestomThread {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
                 // Flush all connections if needed
-                if (flush.compareAndSet(true, false)) {
+                for (PlayerSocketConnection connection : connectionMap.values()) {
                     try {
-                        connectionMap.values().forEach(PlayerSocketConnection::flushSync);
+                        connection.flushSync();
                     } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                        connection.disconnect();
                     }
                 }
                 // Wait for an event
@@ -64,14 +59,22 @@ public final class Worker extends MinestomThread {
                     final SocketChannel channel = (SocketChannel) key.channel();
                     if (!channel.isOpen()) return;
                     if (!key.isReadable()) return;
-                    PlayerSocketConnection connection = connectionMap.get(channel);
+                    final PlayerSocketConnection connection = connectionMap.get(channel);
+                    if (connection == null) {
+                        try {
+                            channel.close();
+                        } catch (IOException e) {
+                           // Empty
+                        }
+                        return;
+                    }
                     try {
-                        BinaryBuffer readBuffer = context.readBuffer.clear();
+                        BinaryBuffer readBuffer = BinaryBuffer.wrap(PooledBuffers.packetBuffer());
                         // Consume last incomplete packet
                         connection.consumeCache(readBuffer);
                         // Read & process
                         readBuffer.readChannel(channel);
-                        connection.processPackets(context, server.packetProcessor());
+                        connection.processPackets(readBuffer, server.packetProcessor());
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
@@ -79,7 +82,7 @@ public final class Worker extends MinestomThread {
                         MinecraftServer.getExceptionManager().handleException(e);
                         connection.disconnect();
                     }
-                });
+                }, MinecraftServer.TICK_MS);
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -87,17 +90,16 @@ public final class Worker extends MinestomThread {
     }
 
     public void disconnect(PlayerSocketConnection connection, SocketChannel channel) {
-        try {
-            channel.close();
-            this.connectionMap.remove(channel);
-            MinecraftServer.getConnectionManager().removePlayer(connection);
-            connection.refreshOnline(false);
-            Player player = connection.getPlayer();
-            if (player != null && !player.isRemoved()) {
-                player.scheduleNextTick(Entity::remove);
+        assert !connection.isOnline();
+        assert Thread.currentThread() == this;
+        this.connectionMap.remove(channel);
+        if (channel.isOpen()) {
+            try {
+                connection.flushSync();
+                channel.close();
+            } catch (IOException e) {
+                // Socket operation may fail if the socket is already closed
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -113,21 +115,7 @@ public final class Worker extends MinestomThread {
         this.selector.wakeup();
     }
 
-    public void flush() {
-        this.flush.set(true);
-        this.selector.wakeup();
-    }
-
     public MessagePassingQueue<Runnable> queue() {
         return queue;
-    }
-
-    /**
-     * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
-     */
-    public static final class Context {
-        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
-        public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
-        public final Inflater inflater = new Inflater();
     }
 }

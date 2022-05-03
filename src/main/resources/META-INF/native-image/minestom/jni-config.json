@@ -1,0 +1,70 @@
+[
+{
+  "name":"java.lang.Boolean",
+  "methods":[{"name":"getBoolean","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.ClassLoader",
+  "methods":[
+    {"name":"getPlatformClassLoader","parameterTypes":[] }, 
+    {"name":"loadClass","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"jdk.internal.loader.ClassLoaders$PlatformClassLoader"
+},
+{
+  "name":"org.fusesource.jansi.internal.CLibrary",
+  "fields":[
+    {"name":"HAVE_ISATTY"}, 
+    {"name":"HAVE_TTYNAME"}, 
+    {"name":"TCSADRAIN"}, 
+    {"name":"TCSAFLUSH"}, 
+    {"name":"TCSANOW"}, 
+    {"name":"TIOCGETD"}, 
+    {"name":"TIOCGWINSZ"}, 
+    {"name":"TIOCSETD"}, 
+    {"name":"TIOCSWINSZ"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.CLibrary$Termios",
+  "fields":[
+    {"name":"SIZEOF"}, 
+    {"name":"c_cc"}, 
+    {"name":"c_cflag"}, 
+    {"name":"c_iflag"}, 
+    {"name":"c_ispeed"}, 
+    {"name":"c_lflag"}, 
+    {"name":"c_oflag"}, 
+    {"name":"c_ospeed"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.CLibrary$WinSize",
+  "fields":[
+    {"name":"SIZEOF"}, 
+    {"name":"ws_col"}, 
+    {"name":"ws_row"}, 
+    {"name":"ws_xpixel"}, 
+    {"name":"ws_ypixel"}
+  ]
+},
+{
+  "name":"org.graalvm.jniutils.JNIExceptionWrapperEntryPoints",
+  "methods":[{"name":"getClassName","parameterTypes":["java.lang.Class"] }]
+},
+{
+  "name":"sun.management.VMManagementImpl",
+  "fields":[
+    {"name":"compTimeMonitoringSupport"}, 
+    {"name":"currentThreadCpuTimeSupport"}, 
+    {"name":"objectMonitorUsageSupport"}, 
+    {"name":"otherThreadCpuTimeSupport"}, 
+    {"name":"remoteDiagnosticCommandsSupport"}, 
+    {"name":"synchronizerUsageSupport"}, 
+    {"name":"threadAllocatedMemorySupport"}, 
+    {"name":"threadContentionMonitoringSupport"}
+  ]
+}
+]

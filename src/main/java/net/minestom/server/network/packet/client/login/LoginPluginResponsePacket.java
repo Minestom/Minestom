@@ -14,19 +14,20 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.UUID;
 
-public class LoginPluginResponsePacket implements ClientPreplayPacket {
+public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) implements ClientPreplayPacket {
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
-    public int messageId;
-    public boolean successful;
-    public byte[] data = new byte[0];
+    public LoginPluginResponsePacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readBoolean() ? reader.readRemainingBytes() : null);
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -83,20 +84,9 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.messageId = reader.readVarInt();
-        this.successful = reader.readBoolean();
-        if (successful) {
-            this.data = reader.readRemainingBytes();
-        }
-    }
-
-    @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(messageId);
-        writer.writeBoolean(successful);
-        if (successful) {
-            writer.writeBytes(data);
-        }
+        writer.writeBoolean(data != null);
+        if (data != null) writer.writeBytes(data);
     }
 }

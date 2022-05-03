@@ -1,10 +1,9 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.StringUtils;
@@ -19,47 +18,37 @@ import static net.minestom.server.command.builder.parser.ArgumentParser.validate
 /**
  * Class used to parse complete command inputs.
  */
-public class CommandParser {
+public final class CommandParser {
 
-    private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
+    private static @Nullable CommandQueryResult recursiveCommandQuery(@NotNull CommandDispatcher dispatcher,
+                                                                      List<Command> parents,
+                                                                      @Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
+        Command command = parentCommand == null ? dispatcher.findCommand(commandName) : parentCommand;
+        if (command == null) return null;
 
-    @Nullable
-    public static CommandQueryResult findCommand(@Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
-        Command command = parentCommand == null ? COMMAND_MANAGER.getDispatcher().findCommand(commandName) : parentCommand;
-        if (command == null) {
-            return null;
-        }
-
-        CommandQueryResult commandQueryResult = new CommandQueryResult();
-        commandQueryResult.command = command;
-        commandQueryResult.commandName = commandName;
-        commandQueryResult.args = args;
-
+        CommandQueryResult commandQueryResult = new CommandQueryResult(parents, command, commandName, args);
         // Search for subcommand
         if (args.length > 0) {
             final String subCommandName = args[0];
             for (Command subcommand : command.getSubcommands()) {
                 if (Command.isValidName(subcommand, subCommandName)) {
                     final String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                    commandQueryResult.command = subcommand;
-                    commandQueryResult.commandName = subCommandName;
-                    commandQueryResult.args = subArgs;
-                    return findCommand(subcommand, subCommandName, subArgs);
+                    parents.add(command);
+                    return recursiveCommandQuery(dispatcher, parents, subcommand, subCommandName, subArgs);
                 }
             }
         }
-
         return commandQueryResult;
     }
 
-    @Nullable
-    public static CommandQueryResult findCommand(@NotNull String input) {
+    public static @Nullable CommandQueryResult findCommand(@NotNull CommandDispatcher dispatcher, @NotNull String input) {
         final String[] parts = input.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
         String[] args = new String[parts.length - 1];
         System.arraycopy(parts, 1, args, 0, args.length);
-        return CommandParser.findCommand(null, commandName, args);
+        List<Command> parents = new ArrayList<>();
+        return recursiveCommandQuery(dispatcher, parents, null, commandName, args);
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
@@ -92,11 +81,7 @@ public class CommandParser {
                 // of correct argument(s) and do not check the next syntax argument
                 syntaxCorrect = false;
                 if (syntaxesSuggestions != null) {
-                    CommandSuggestionHolder suggestionHolder = new CommandSuggestionHolder();
-                    suggestionHolder.syntax = syntax;
-                    suggestionHolder.argumentSyntaxException = argumentResult.argumentSyntaxException;
-                    suggestionHolder.argIndex = argIndex;
-                    syntaxesSuggestions.put(argIndex, suggestionHolder);
+                    syntaxesSuggestions.put(argIndex, new CommandSuggestionHolder(syntax, argumentResult.argumentSyntaxException, argIndex));
                 }
                 break;
             }
@@ -106,12 +91,7 @@ public class CommandParser {
         if (syntaxCorrect) {
             if (commandArguments.length == argumentValueMap.size() || useRemaining) {
                 if (validSyntaxes != null) {
-                    ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
-                    validSyntaxHolder.commandString = commandString;
-                    validSyntaxHolder.syntax = syntax;
-                    validSyntaxHolder.argumentResults = argumentValueMap;
-
-                    validSyntaxes.add(validSyntaxHolder);
+                    validSyntaxes.add(new ValidSyntaxHolder(commandString, syntax, argumentValueMap));
                 }
             }
         }
@@ -137,7 +117,7 @@ public class CommandParser {
         CommandContext finalContext = null;
 
         for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
-            final Map<Argument<?>, ArgumentParser.ArgumentResult> argsValues = validSyntaxHolder.argumentResults;
+            final Map<Argument<?>, ArgumentParser.ArgumentResult> argsValues = validSyntaxHolder.argumentResults();
 
             final int argsSize = argsValues.size();
 
@@ -147,7 +127,7 @@ public class CommandParser {
                 maxArguments = argsSize;
 
                 // Fill arguments map
-                finalContext = new CommandContext(validSyntaxHolder.commandString);
+                finalContext = new CommandContext(validSyntaxHolder.commandString());
                 for (var entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
                     final ArgumentParser.ArgumentResult argumentResult = entry.getValue();
@@ -208,13 +188,7 @@ public class CommandParser {
                 // Save result
                 if ((!forceCorrect || argumentResult.correct) &&
                         argumentPredicate.test(argument)) {
-                    ArgumentQueryResult queryResult = new ArgumentQueryResult();
-                    queryResult.syntax = syntax;
-                    queryResult.argument = argument;
-                    queryResult.context = context;
-                    queryResult.input = argumentResult.rawArg;
-
-                    maxArg = queryResult;
+                    maxArg = new ArgumentQueryResult(syntax, argument, context, argumentResult.rawArg);
                     maxArgIndex = argIndex;
                 }
 

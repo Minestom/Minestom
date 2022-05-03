@@ -9,7 +9,7 @@ import java.time.Duration;
 /**
  * Tick related utilities.
  */
-public class TickUtils {
+public final class TickUtils {
     /**
      * Number of ticks per second for the default Java-edition client.
      */

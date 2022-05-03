@@ -1,16 +1,19 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryItemChangeEvent;
+import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,8 +23,10 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, TagHandler
+public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable
         permits Inventory, PlayerInventory {
+
+    private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 
     private final int size;
     protected final ItemStack[] itemStacks;
@@ -31,13 +36,11 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     // the click processor which process all the clicks in the inventory
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
-    private final Object nbtLock = new Object();
-    private final NBTCompound nbt = new NBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
 
     protected AbstractInventory(int size) {
         this.size = size;
         this.itemStacks = new ItemStack[getSize()];
-
         Arrays.fill(itemStacks, ItemStack.AIR);
     }
 
@@ -61,7 +64,6 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      *
      * @param slot      the internal slot id
      * @param itemStack the item to insert (use air instead of null)
-     *
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      */
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
@@ -75,12 +77,14 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             previous = itemStacks[slot];
             UNSAFE_itemInsert(slot, itemStack);
         }
-        callItemChangeEvent(slot, previous, itemStack);
+        if (this instanceof PlayerInventory inv) {
+            EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
+        } else if (this instanceof Inventory inv) {
+            EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
+        }
     }
 
     protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack);
-
-    protected abstract void callItemChangeEvent(int slot, @NotNull ItemStack previous, @NotNull ItemStack current);
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
@@ -157,7 +161,9 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      */
     public synchronized void clear() {
         // Clear the item array
-        Arrays.fill(itemStacks, ItemStack.AIR);
+        for (int i = 0; i < size; i++) {
+            safeItemInsert(i, ItemStack.AIR);
+        }
         // Send the cleared inventory to viewers
         update();
     }
@@ -171,7 +177,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @return the item in the slot {@code slot}
      */
     public @NotNull ItemStack getItemStack(int slot) {
-        return itemStacks[slot];
+        return (ItemStack) ITEM_UPDATER.getVolatile(itemStacks, slot);
     }
 
     /**
@@ -241,16 +247,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        synchronized (nbtLock) {
-            return tag.read(nbt);
-        }
-    }
-
-    @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        synchronized (nbtLock) {
-            tag.write(nbt, value);
-        }
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 }

@@ -17,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.net.SocketAddress;
 import java.util.UUID;
 
-public class HandshakePacket implements ClientPreplayPacket {
+public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
+                              int serverPort, int nextState) implements ClientPreplayPacket {
 
     /**
      * Text sent if a player tries to connect with an invalid version of the client
@@ -25,24 +26,9 @@ public class HandshakePacket implements ClientPreplayPacket {
     private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
-    private int protocolVersion;
-    private String serverAddress = "";
-    private int serverPort;
-    private int nextState;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.protocolVersion = reader.readVarInt();
-        try {
-            this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
-        } catch (Exception e) {
-            if (BungeeCordProxy.isEnabled()) {
-                System.err.println("Legacy proxy forwarding is enabled but the read did underflow. Please check your proxy.");
-            }
-            e.printStackTrace();
-        }
-        this.serverPort = reader.readUnsignedShort();
-        this.nextState = reader.readVarInt();
+    public HandshakePacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255),
+                reader.readUnsignedShort(), reader.readVarInt());
     }
 
     @Override
@@ -60,13 +46,14 @@ public class HandshakePacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
+        String address = serverAddress;
         // Bungee support (IP forwarding)
-        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection) {
-            if (serverAddress != null) {
-                final String[] split = serverAddress.split("\00");
+        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection && nextState == 2) {
+            if (address != null) {
+                final String[] split = address.split("\00");
 
                 if (split.length == 3 || split.length == 4) {
-                    this.serverAddress = split[0];
+                    address = split[0];
 
                     final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
                             ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
@@ -99,7 +86,7 @@ public class HandshakePacket implements ClientPreplayPacket {
 
         if (connection instanceof PlayerSocketConnection) {
             // Give to the connection the server info that the client used
-            ((PlayerSocketConnection) connection).refreshServerInformation(serverAddress, serverPort, protocolVersion);
+            ((PlayerSocketConnection) connection).refreshServerInformation(address, serverPort, protocolVersion);
         }
 
         switch (nextState) {

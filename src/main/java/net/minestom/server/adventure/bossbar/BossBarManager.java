@@ -44,7 +44,6 @@ public class BossBarManager {
      */
     public void addBossBar(@NotNull Player player, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
-
         if (holder.addViewer(player)) {
             player.getPlayerConnection().sendPacket(holder.createAddPacket());
             this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
@@ -59,7 +58,6 @@ public class BossBarManager {
      */
     public void removeBossBar(@NotNull Player player, @NotNull BossBar bar) {
         BossBarHolder holder = this.bars.get(bar);
-
         if (holder != null && holder.removeViewer(player)) {
             player.getPlayerConnection().sendPacket(holder.createRemovePacket());
             this.removePlayer(player, holder);
@@ -159,9 +157,9 @@ public class BossBarManager {
      * @return the handler
      */
     private @NotNull BossBarHolder getOrCreateHandler(@NotNull BossBar bar) {
-        return this.bars.computeIfAbsent(bar, key -> {
-            BossBarHolder holder = new BossBarHolder(key);
-            bar.addListener(this.listener);
+        return this.bars.computeIfAbsent(bar, bossBar -> {
+            BossBarHolder holder = new BossBarHolder(bossBar);
+            bossBar.addListener(this.listener);
             return holder;
         });
     }

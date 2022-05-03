@@ -15,7 +15,7 @@ public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
         final PlayerInventory inventory = player.getInventory();
-        final Player.Hand hand = packet.hand;
+        final Player.Hand hand = packet.hand();
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
@@ -28,7 +28,7 @@ public class UseItemListener {
         }
 
         itemStack = useItemEvent.getItemStack();
-        final Material material = itemStack.getMaterial();
+        final Material material = itemStack.material();
 
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();

@@ -23,11 +23,13 @@ public class PufferfishMeta extends AbstractFishMeta {
     }
 
     private void updateBoundingBox(State state) {
-        switch (state) {
-            case UNPUFFED -> setBoundingBox(.35D, .35D);
-            case SEMI_PUFFED -> setBoundingBox(.5D, .5D);
-            default -> setBoundingBox(.7D, .7D);
-        }
+        this.consumeEntity((entity) -> {
+            switch (state) {
+                case UNPUFFED -> entity.setBoundingBox(.35D, .35D, .35D);
+                case SEMI_PUFFED -> entity.setBoundingBox(.5D, .5D, .5D);
+                default -> entity.setBoundingBox(.7D, .7D, .7D);
+            }
+        });
     }
 
     public enum State {

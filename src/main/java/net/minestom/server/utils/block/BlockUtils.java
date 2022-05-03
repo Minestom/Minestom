@@ -4,10 +4,16 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 public class BlockUtils {
 
@@ -56,31 +62,53 @@ public class BlockUtils {
     }
 
     public static Map<String, String> parseProperties(String query) {
-        if (!query.startsWith("[") || !query.endsWith("]") ||
-                query.equals("[]")) {
-            return Collections.emptyMap();
-        }
-        final int capacity = StringUtils.countMatches(query, ',') + 1;
-        Object2ObjectArrayMap<String, String> result = new Object2ObjectArrayMap<>(capacity);
-        final String propertiesString = query.substring(1);
-        StringBuilder keyBuilder = new StringBuilder();
-        StringBuilder valueBuilder = new StringBuilder();
-        StringBuilder builder = keyBuilder;
-        for (int i = 0; i < propertiesString.length(); i++) {
-            final char c = propertiesString.charAt(i);
-            if (c == '=') {
-                // Switch to value builder
-                builder = valueBuilder;
-            } else if (c == ',' || c == ']') {
-                // Append current text
-                result.put(keyBuilder.toString().intern(), valueBuilder.toString().intern());
-                keyBuilder = new StringBuilder();
-                valueBuilder = new StringBuilder();
-                builder = keyBuilder;
-            } else if (c != ' ') {
-                builder.append(c);
+        if (!query.startsWith("[") || !query.endsWith("]")) return Map.of();
+        if (query.length() == 2) return Map.of();
+
+        final int entries = StringUtils.countMatches(query, ',') + 1;
+        assert entries > 0;
+        String[] keys = new String[entries];
+        String[] values = new String[entries];
+        int entryCount = 0;
+
+        final int length = query.length() - 1;
+        int start = 1;
+        int index = 1;
+        while (index <= length) {
+            if (query.charAt(index) == ',' || index == length) {
+                final int equalIndex = query.indexOf('=', start);
+                if (equalIndex != -1) {
+                    final String key = query.substring(start, equalIndex).trim();
+                    final String value = query.substring(equalIndex + 1, index).trim();
+                    keys[entryCount] = key;
+                    values[entryCount++] = value;
+                }
+                start = index + 1;
             }
+            index++;
         }
-        return result;
+        return new Object2ObjectArrayMap<>(keys, values, entryCount);
+    }
+
+    public static @Nullable NBTCompound extractClientNbt(@NotNull Block block) {
+        if (!block.registry().isBlockEntity()) return null;
+        // Append handler tags
+        final BlockHandler handler = block.handler();
+        final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+        if (handler != null) {
+            // Extract explicitly defined tags and keep the rest server-side
+            return NBT.Compound(nbt -> {
+                for (Tag<?> tag : handler.getBlockEntityTags()) {
+                    final var value = tag.read(blockNbt);
+                    if (value != null) {
+                        // Tag is present and valid
+                        tag.writeUnsafe(nbt, value);
+                    }
+                }
+            });
+        }
+        // Complete nbt shall be sent if the block has no handler
+        // Necessary to support all vanilla blocks
+        return blockNbt;
     }
 }

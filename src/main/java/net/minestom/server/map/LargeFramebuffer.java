@@ -2,6 +2,8 @@ package net.minestom.server.map;
 
 import net.minestom.server.network.packet.server.play.MapDataPacket;
 
+import java.util.List;
+
 /**
  * Framebuffer that is meant to be split in sub-framebuffers.
  * Contrary to {@link Framebuffer}, LargeFramebuffer supports sizes over 128x128 pixels.
@@ -26,12 +28,8 @@ public interface LargeFramebuffer {
 
     /**
      * Prepares the packet to render a 128x128 sub view of this framebuffer
-     *
-     * @param packet the {@link MapDataPacket} to prepare
-     * @param left
-     * @param top
      */
-    default void preparePacket(MapDataPacket packet, int left, int top) {
+    default MapDataPacket preparePacket(int mapId, int left, int top) {
         byte[] colors = new byte[Framebuffer.WIDTH * Framebuffer.WIDTH];
         final int width = Math.min(width(), left + Framebuffer.WIDTH) - left;
         final int height = Math.min(height(), top + Framebuffer.HEIGHT) - top;
@@ -41,12 +39,10 @@ public interface LargeFramebuffer {
                 colors[Framebuffer.index(x - left, y - top)] = color;
             }
         }
-
-        packet.columns = (short) width;
-        packet.rows = (short) height;
-        packet.icons = new MapDataPacket.Icon[0];
-        packet.x = 0;
-        packet.z = 0;
-        packet.data = colors;
+        return new MapDataPacket(mapId, (byte) 0, false,
+                false, List.of(),
+                new MapDataPacket.ColorContent((byte) width, (byte) height,
+                        (byte) 0, (byte) 0,
+                        colors));
     }
 }

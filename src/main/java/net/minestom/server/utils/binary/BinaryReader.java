@@ -2,6 +2,7 @@ package net.minestom.server.utils.binary;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NBTUtils;
@@ -9,6 +10,7 @@ import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.NBTReader;
@@ -18,7 +20,10 @@ import java.io.InputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -28,7 +33,7 @@ import java.util.function.Supplier;
  */
 public class BinaryReader extends InputStream {
     private final ByteBuffer buffer;
-    private NBTReader nbtReader;
+    private NBTReader nbtReader = null;
 
     public BinaryReader(@NotNull ByteBuffer buffer) {
         this.buffer = buffer;
@@ -126,6 +131,10 @@ public class BinaryReader extends InputStream {
         return bytes;
     }
 
+    public byte[] readByteArray() {
+        return readBytes(readVarInt());
+    }
+
     public String[] readSizedStringArray(int maxLength) {
         final int size = readVarInt();
         String[] strings = new String[size];
@@ -144,6 +153,15 @@ public class BinaryReader extends InputStream {
         int[] array = new int[size];
         for (int i = 0; i < size; i++) {
             array[i] = readVarInt();
+        }
+        return array;
+    }
+
+    public long[] readVarLongArray() {
+        final int size = readVarInt();
+        long[] array = new long[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = readVarLong();
         }
         return array;
     }
@@ -220,6 +238,22 @@ public class BinaryReader extends InputStream {
         return (T[]) result;
     }
 
+    public <T> List<T> readVarIntList(@NotNull Function<BinaryReader, T> supplier) {
+        return readList(readVarInt(), supplier);
+    }
+
+    public <T> List<T> readByteList(@NotNull Function<BinaryReader, T> supplier) {
+        return readList(readByte(), supplier);
+    }
+
+    private <T> List<T> readList(int length, @NotNull Function<BinaryReader, T> supplier) {
+        List<T> list = new ArrayList<>(length);
+        for (int i = 0; i < length; i++) {
+            list.add(supplier.apply(this));
+        }
+        return list;
+    }
+
     public ByteBuffer getBuffer() {
         return buffer;
     }
@@ -234,13 +268,18 @@ public class BinaryReader extends InputStream {
         return buffer.remaining();
     }
 
-    public NBT readTag() throws IOException, NBTException {
+    public NBT readTag() {
         NBTReader reader = this.nbtReader;
         if (reader == null) {
-            reader = new NBTReader(this, false);
+            reader = new NBTReader(this, CompressedProcesser.NONE);
             this.nbtReader = reader;
         }
-        return reader.read();
+        try {
+            return reader.read();
+        } catch (IOException | NBTException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            throw new RuntimeException();
+        }
     }
 
     /**

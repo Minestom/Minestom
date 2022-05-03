@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -97,14 +98,8 @@ public class Sidebar implements Scoreboard {
      */
     public void setTitle(@NotNull Component title) {
         this.title = title;
-
-        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 2; // Update display text
-        scoreboardObjectivePacket.objectiveValue = title;
-        scoreboardObjectivePacket.type = ScoreboardObjectivePacket.Type.INTEGER;
-
-        sendPacketToViewers(scoreboardObjectivePacket);
+        sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
+                ScoreboardObjectivePacket.Type.INTEGER));
     }
 
     /**
@@ -345,12 +340,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreCreationPacket(String objectiveName) {
-            UpdateScorePacket updateScorePacket = new UpdateScorePacket();
-            updateScorePacket.entityName = entityName;
-            updateScorePacket.action = 0; // Create/Update
-            updateScorePacket.objectiveName = objectiveName;
-            updateScorePacket.value = line;
-            return updateScorePacket;
+            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, line);
         }
 
         /**
@@ -360,11 +350,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreDestructionPacket(String objectiveName) {
-            UpdateScorePacket updateScorePacket = new UpdateScorePacket();
-            updateScorePacket.entityName = entityName;
-            updateScorePacket.action = 1; // Remove
-            updateScorePacket.objectiveName = objectiveName;
-            return updateScorePacket;
+            return new UpdateScorePacket(entityName, (byte) 1, objectiveName, 0);
         }
 
         /**
@@ -375,9 +361,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
-            UpdateScorePacket updateScorePacket = getScoreCreationPacket(objectiveName);
-            updateScorePacket.value = score;
-            return updateScorePacket;
+            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, score);
         }
 
         /**
@@ -428,18 +412,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} which creates a new team
          */
         private TeamsPacket getCreationPacket() {
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = teamName;
-            teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = teamDisplayName;
-            teamsPacket.friendlyFlags = friendlyFlags;
-            teamsPacket.nameTagVisibility = nameTagVisibility;
-            teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix;
-            teamsPacket.teamSuffix = suffix;
-            teamsPacket.entities = new String[]{entityName};
-            return teamsPacket;
+            final var action = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.of(entityName));
+            return new TeamsPacket(teamName, action);
         }
 
         /**
@@ -448,10 +423,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} which destroyed a team
          */
         private TeamsPacket getDestructionPacket() {
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = teamName;
-            teamsPacket.action = TeamsPacket.Action.REMOVE_TEAM;
-            return teamsPacket;
+            return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
         }
 
         /**
@@ -461,17 +433,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} with the updated prefix
          */
         private TeamsPacket updatePrefix(Component prefix) {
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = teamName;
-            teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-            teamsPacket.teamDisplayName = teamDisplayName;
-            teamsPacket.friendlyFlags = friendlyFlags;
-            teamsPacket.nameTagVisibility = nameTagVisibility;
-            teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix;
-            teamsPacket.teamSuffix = suffix;
-            return teamsPacket;
+            final var action = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
+                    nameTagVisibility, collisionRule, teamColor, prefix, suffix);
+            return new TeamsPacket(teamName, action);
         }
 
         /**

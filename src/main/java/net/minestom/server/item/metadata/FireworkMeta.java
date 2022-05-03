@@ -1,91 +1,49 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.item.firework.FireworkEffect;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.TagSerializer;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
-public class FireworkMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkMeta.Builder> {
+public record FireworkMeta(TagReadable readable) implements ItemMetaView<FireworkMeta.Builder> {
+    private static final Tag<List<FireworkEffect>> EFFECTS = Tag.Structure("Explosions",
+                    TagSerializer.fromCompound(FireworkEffect::fromCompound, FireworkEffect::asCompound))
+            .path("Fireworks").list().defaultValue(List.of());
+    private static final Tag<Byte> FLIGHT_DURATION = Tag.Byte("Flight").path("Fireworks");
 
-    private final List<FireworkEffect> effects;
-    private final byte flightDuration;
-
-    protected FireworkMeta(@NotNull ItemMetaBuilder metaBuilder, List<FireworkEffect> effects,
-                           byte flightDuration) {
-        super(metaBuilder);
-        this.effects = new ArrayList<>(effects);
-        this.flightDuration = flightDuration;
+    public @NotNull List<FireworkEffect> getEffects() {
+        return getTag(EFFECTS);
     }
 
-    public List<FireworkEffect> getEffects() {
-        return Collections.unmodifiableList(effects);
+    public @Nullable Byte getFlightDuration() {
+        return getTag(FLIGHT_DURATION);
     }
 
-    public byte getFlightDuration() {
-        return flightDuration;
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
     }
 
-    public static class Builder extends ItemMetaBuilder {
-
-        private List<FireworkEffect> effects = new CopyOnWriteArrayList<>();
-        private byte flightDuration;
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
 
         public Builder effects(List<FireworkEffect> effects) {
-            this.effects = effects;
-            handleCompound("Fireworks", nbtCompound -> {
-                NBTList<NBTCompound> explosions = new NBTList<>(NBTTypes.TAG_Compound);
-                for (FireworkEffect effect : this.effects) {
-                    explosions.add(effect.asCompound());
-                }
-                nbtCompound.set("Explosions", explosions);
-            });
+            setTag(EFFECTS, effects);
             return this;
         }
 
         public Builder flightDuration(byte flightDuration) {
-            this.flightDuration = flightDuration;
-            handleCompound("Fireworks", nbtCompound ->
-                    nbtCompound.setByte("Flight", this.flightDuration));
+            setTag(FLIGHT_DURATION, flightDuration);
             return this;
-        }
-
-        @Override
-        public @NotNull FireworkMeta build() {
-            return new FireworkMeta(this, effects, flightDuration);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Fireworks")) {
-                NBTCompound fireworksCompound = nbtCompound.getCompound("Fireworks");
-
-                if (fireworksCompound.containsKey("Flight")) {
-                    flightDuration(fireworksCompound.getAsByte("Flight"));
-                }
-
-                if (fireworksCompound.containsKey("Explosions")) {
-                    NBTList<NBTCompound> explosions = fireworksCompound.getList("Explosions");
-
-                    for (NBTCompound explosion : explosions) {
-                        this.effects.add(FireworkEffect.fromCompound(explosion));
-                    }
-                    effects(effects);
-                }
-            }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

@@ -10,22 +10,20 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class TagsPacket implements ServerPacket {
+public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket {
     @ApiStatus.Internal
     public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
 
-    public Map<Tag.BasicType, List<Tag>> tagsMap;
-
-    public TagsPacket(Map<Tag.BasicType, List<Tag>> tagsMap) {
-        this.tagsMap = tagsMap;
+    public TagsPacket {
+        tagsMap = Map.copyOf(tagsMap);
     }
 
-    public TagsPacket() {
-        this(new HashMap<>());
+    public TagsPacket(BinaryReader reader) {
+        this(readTagsMap(reader));
     }
 
     @Override
@@ -48,8 +46,12 @@ public class TagsPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.tagsMap = new HashMap<>();
+    public int getId() {
+        return ServerPacketIdentifier.TAGS;
+    }
+
+    private static Map<Tag.BasicType, List<Tag>> readTagsMap(BinaryReader reader) {
+        Map<Tag.BasicType, List<Tag>> tagsMap = new EnumMap<>(Tag.BasicType.class);
         // Read amount of tag types
         final int typeCount = reader.readVarInt();
         for (int i = 0; i < typeCount; i++) {
@@ -66,10 +68,6 @@ public class TagsPacket implements ServerPacket {
                 // TODO convert
             }
         }
-    }
-
-    @Override
-    public int getId() {
-        return ServerPacketIdentifier.TAGS;
+        return tagsMap;
     }
 }

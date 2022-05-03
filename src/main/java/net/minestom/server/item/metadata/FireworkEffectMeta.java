@@ -1,52 +1,36 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.item.firework.FireworkEffect;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.TagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.function.Supplier;
+public record FireworkEffectMeta(TagReadable readable) implements ItemMetaView<FireworkEffectMeta.Builder> {
+    private static final Tag<FireworkEffect> FIREWORK_EFFECT = Tag.Structure("Explosion",
+            TagSerializer.fromCompound(FireworkEffect::fromCompound, FireworkEffect::asCompound));
 
-public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkEffectMeta.Builder> {
-
-    private final FireworkEffect fireworkEffect;
-
-    protected FireworkEffectMeta(@NotNull ItemMetaBuilder metaBuilder, FireworkEffect fireworkEffect) {
-        super(metaBuilder);
-        this.fireworkEffect = fireworkEffect;
+    public @Nullable FireworkEffect getFireworkEffect() {
+        return getTag(FIREWORK_EFFECT);
     }
 
-    public FireworkEffect getFireworkEffect() {
-        return fireworkEffect;
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
     }
 
-    public static class Builder extends ItemMetaBuilder {
-
-        private FireworkEffect fireworkEffect;
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
 
         public Builder effect(@Nullable FireworkEffect fireworkEffect) {
-            this.fireworkEffect = fireworkEffect;
-            mutateNbt(compound -> compound.set("Explosion", this.fireworkEffect.asCompound()));
+            setTag(FIREWORK_EFFECT, fireworkEffect);
             return this;
-        }
-
-        @Override
-        public @NotNull FireworkEffectMeta build() {
-            return new FireworkEffectMeta(this, fireworkEffect);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("Explosion")) {
-                effect(FireworkEffect.fromCompound(nbtCompound.getCompound("Explosion")));
-            }
-        }
-
-        @Override
-        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
-            return Builder::new;
         }
     }
 }

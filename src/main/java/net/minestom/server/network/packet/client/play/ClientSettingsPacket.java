@@ -2,42 +2,36 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientSettingsPacket extends ClientPlayPacket {
+public record ClientSettingsPacket(@NotNull String locale, byte viewDistance,
+                                   @NotNull ChatMessageType chatMessageType, boolean chatColors,
+                                   byte displayedSkinParts, @NotNull Player.MainHand mainHand,
+                                   boolean enableTextFiltering, boolean allowsListing) implements ClientPacket {
+    public ClientSettingsPacket {
+        if (locale.length() > 128)
+            throw new IllegalArgumentException("Locale cannot be longer than 128 characters.");
+    }
 
-    public String locale = "";
-    public byte viewDistance;
-    public ChatMessageType chatMessageType = ChatMessageType.FULL;
-    public boolean chatColors;
-    public byte displayedSkinParts;
-    public Player.MainHand mainHand = Player.MainHand.RIGHT;
-    public boolean disableTextFiltering;
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.locale = reader.readSizedString(128);
-        this.viewDistance = reader.readByte();
-        this.chatMessageType = ChatMessageType.fromPacketID(reader.readVarInt());
-        this.chatColors = reader.readBoolean();
-        this.displayedSkinParts = reader.readByte();
-        this.mainHand = Player.MainHand.values()[reader.readVarInt()];
-        this.disableTextFiltering = reader.readBoolean();
+    public ClientSettingsPacket(BinaryReader reader) {
+        this(reader.readSizedString(128), reader.readByte(),
+                ChatMessageType.fromPacketID(reader.readVarInt()), reader.readBoolean(),
+                reader.readByte(), Player.MainHand.values()[reader.readVarInt()],
+                reader.readBoolean(), reader.readBoolean());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        if (locale.length() > 128)
-            throw new IllegalArgumentException("Locale cannot be longer than 128 characters.");
         writer.writeSizedString(locale);
         writer.writeByte(viewDistance);
         writer.writeVarInt(chatMessageType.getPacketID());
         writer.writeBoolean(chatColors);
         writer.writeByte(displayedSkinParts);
         writer.writeVarInt(mainHand.ordinal());
-        writer.writeBoolean(disableTextFiltering);
+        writer.writeBoolean(enableTextFiltering);
+        writer.writeBoolean(allowsListing);
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Phaser;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,15 +22,14 @@ import java.util.concurrent.locks.ReentrantLock;
 @ApiStatus.Internal
 public final class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
-    private final Phaser phaser;
     private volatile boolean stop;
 
+    private CountDownLatch latch;
     private long tickTime;
-    private final List<ThreadDispatcher.ChunkEntry> entries = new ArrayList<>();
+    private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
-    public TickThread(Phaser phaser, int number) {
+    public TickThread(int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
-        this.phaser = phaser;
     }
 
     @Override
@@ -44,47 +44,46 @@ public final class TickThread extends MinestomThread {
             }
             this.lock.unlock();
             // #acquire() callbacks
-            this.phaser.arriveAndDeregister();
+            this.latch.countDown();
             LockSupport.park(this);
         }
     }
 
     private void tick() {
-        for (ThreadDispatcher.ChunkEntry entry : entries) {
-            final Chunk chunk = entry.chunk();
-            try {
-                chunk.tick(tickTime);
-            } catch (Throwable e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-            final List<Entity> entities = entry.entities();
-            if (!entities.isEmpty()) {
-                for (Entity entity : entities) {
-                    if (lock.hasQueuedThreads()) {
-                        this.lock.unlock();
-                        // #acquire() callbacks should be called here
-                        this.lock.lock();
-                    }
-                    try {
-                        entity.tick(tickTime);
-                    } catch (Throwable e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
+        final ReentrantLock lock = this.lock;
+        final long tickTime = this.tickTime;
+        for (ThreadDispatcher.Partition entry : entries) {
+            assert entry.thread() == this;
+            final List<Tickable> elements = entry.elements();
+            if (elements.isEmpty()) continue;
+            for (Tickable element : elements) {
+                if (lock.hasQueuedThreads()) {
+                    lock.unlock();
+                    // #acquire() callbacks should be called here
+                    lock.lock();
+                }
+                try {
+                    element.tick(tickTime);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
         }
     }
 
-    void startTick(long tickTime) {
-        if (entries.isEmpty())
-            return; // Nothing to tick
-        this.phaser.register();
+    void startTick(CountDownLatch latch, long tickTime) {
+        if (entries.isEmpty()) {
+            // Nothing to tick
+            latch.countDown();
+            return;
+        }
+        this.latch = latch;
         this.tickTime = tickTime;
         this.stop = false;
         LockSupport.unpark(this);
     }
 
-    public Collection<ThreadDispatcher.ChunkEntry> entries() {
+    public Collection<ThreadDispatcher.Partition> entries() {
         return entries;
     }
 

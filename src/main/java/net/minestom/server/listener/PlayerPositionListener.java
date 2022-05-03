@@ -2,7 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.GlobalHandles;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
@@ -14,23 +14,23 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerPositionListener {
 
     public static void playerPacketListener(ClientPlayerPacket packet, Player player) {
-        player.refreshOnGround(packet.onGround);
+        player.refreshOnGround(packet.onGround());
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
-        processMovement(player, player.getPosition().withView(packet.yaw, packet.pitch), packet.onGround);
+        processMovement(player, player.getPosition().withView(packet.yaw(), packet.pitch()), packet.onGround());
     }
 
     public static void playerPositionListener(ClientPlayerPositionPacket packet, Player player) {
-        processMovement(player, player.getPosition().withCoord(packet.x, packet.y, packet.z), packet.onGround);
+        processMovement(player, player.getPosition().withCoord(packet.position()), packet.onGround());
     }
 
     public static void playerPositionAndLookListener(ClientPlayerPositionAndRotationPacket packet, Player player) {
-        processMovement(player, new Pos(packet.x, packet.y, packet.z, packet.yaw, packet.pitch), packet.onGround);
+        processMovement(player, packet.position(), packet.onGround());
     }
 
     public static void teleportConfirmListener(ClientTeleportConfirmPacket packet, Player player) {
-        player.refreshReceivedTeleportId(packet.teleportId);
+        player.refreshReceivedTeleportId(packet.teleportId());
     }
 
     private static void processMovement(@NotNull Player player, @NotNull Pos packetPosition, boolean onGround) {
@@ -54,8 +54,8 @@ public class PlayerPositionListener {
             return;
         }
 
-        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, packetPosition);
-        GlobalHandles.PLAYER_MOVE.call(playerMoveEvent);
+        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, packetPosition, onGround);
+        EventDispatcher.call(playerMoveEvent);
         if (!currentPosition.equals(player.getPosition())) {
             // Player has been teleported in the event
             return;

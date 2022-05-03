@@ -7,11 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record SoundEventImpl(NamespaceID namespace, int id) implements SoundEvent {
-    private static final Registry.Container<SoundEvent> CONTAINER = new Registry.Container<>(Registry.Resource.SOUNDS,
-            (container, namespace, object) -> {
-                final int id = ((Number) object.get("id")).intValue();
-                container.register(new SoundEventImpl(NamespaceID.from(namespace), id));
-            });
+    private static final Registry.Container<SoundEvent> CONTAINER = Registry.createContainer(Registry.Resource.SOUNDS,
+            (namespace, properties) -> new SoundEventImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static SoundEvent get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

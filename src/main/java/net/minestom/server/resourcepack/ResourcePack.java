@@ -13,30 +13,26 @@ public class ResourcePack {
     private final String url;
     private final String hash;
     private final boolean forced;
-    private final Component forcedMessage;
+    private final Component prompt;
 
-    /**
-     * @deprecated use {@link ResourcePack#optional(String, String)}.
-     */
-    @Deprecated
-    public ResourcePack(@NotNull String url, @Nullable String hash) {
-        this(url, hash, false, null);
-    }
-
-    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, Component forcedMessage) {
+    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, @Nullable Component prompt) {
         this.url = url;
         // Optional, set to empty if null
         this.hash = hash == null ? "" : hash;
         this.forced = forced;
-        this.forcedMessage = forcedMessage;
+        this.prompt = prompt;
+    }
+
+    public static ResourcePack optional(@NotNull String url, @Nullable String hash, @Nullable Component prompt) {
+        return new ResourcePack(url, hash, false, prompt);
     }
 
     public static ResourcePack optional(@NotNull String url, @Nullable String hash) {
-        return new ResourcePack(url, hash);
+        return optional(url, hash, null);
     }
 
-    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component forcedMessage) {
-        return new ResourcePack(url, hash, true, forcedMessage);
+    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component prompt) {
+        return new ResourcePack(url, hash, true, prompt);
     }
 
     public static ResourcePack forced(@NotNull String url, @Nullable String hash) {
@@ -68,7 +64,7 @@ public class ResourcePack {
         return forced;
     }
 
-    public @Nullable Component getForcedMessage() {
-        return forcedMessage;
+    public @Nullable Component getPrompt() {
+        return prompt;
     }
 }

@@ -7,25 +7,10 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class DeathCombatEventPacket implements ServerPacket {
-
-    public int playerId;
-    public int entityId;
-    public Component message = Component.empty();
-
-    public static DeathCombatEventPacket of(int playerId, int entityId, Component message) {
-        DeathCombatEventPacket packet = new DeathCombatEventPacket();
-        packet.playerId = playerId;
-        packet.entityId = entityId;
-        packet.message = message;
-        return packet;
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        this.playerId = reader.readVarInt();
-        this.entityId = reader.readInt();
-        this.message = reader.readComponent();
+public record DeathCombatEventPacket(int playerId, int entityId,
+                                     @NotNull Component message) implements ServerPacket {
+    public DeathCombatEventPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readInt(), reader.readComponent());
     }
 
     @Override

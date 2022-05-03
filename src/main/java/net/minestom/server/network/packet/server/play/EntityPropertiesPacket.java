@@ -8,59 +8,39 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Readable;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
-public class EntityPropertiesPacket implements ServerPacket {
+public record EntityPropertiesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket {
+    public EntityPropertiesPacket {
+        properties = List.copyOf(properties);
+    }
 
-    public int entityId;
-    public Property[] properties = new Property[0];
-
-    public EntityPropertiesPacket() {
+    public EntityPropertiesPacket(BinaryReader reader) {
+        this(reader.readVarInt(), reader.readVarIntList(r -> {
+            final Attribute attribute = Attribute.fromKey(reader.readSizedString());
+            final double value = reader.readDouble();
+            int modifierCount = reader.readVarInt();
+            AttributeInstance instance = new AttributeInstance(attribute, null);
+            for (int i = 0; i < modifierCount; i++) {
+                AttributeModifier modifier = new AttributeModifier(reader.readUuid(), "", (float) reader.readDouble(), AttributeOperation.fromId(reader.readByte()));
+                instance.addModifier(modifier);
+            }
+            return instance;
+        }));
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeVarInt(properties.length);
-        for (Property property : properties) {
-            property.write(writer);
-        }
-    }
+        writer.writeVarInt(properties.size());
+        for (AttributeInstance instance : properties) {
+            final Attribute attribute = instance.getAttribute();
 
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        int propertyCount = reader.readVarInt();
-        properties = new Property[propertyCount];
-        for (int i = 0; i < propertyCount; i++) {
-            properties[i] = new Property();
-            properties[i].read(reader);
-        }
-    }
-
-    @Override
-    public int getId() {
-        return ServerPacketIdentifier.ENTITY_PROPERTIES;
-    }
-
-    public static class Property implements Writeable, Readable {
-
-        public Attribute attribute;
-        public double value;
-        public AttributeInstance instance;
-
-        public void write(BinaryWriter writer) {
-            float maxValue = attribute.getMaxValue();
-
-            // Bypass vanilla limit client-side if needed (by sending the max value allowed)
-            final double v = value > maxValue ? maxValue : value;
-
-            writer.writeSizedString(attribute.getKey());
-            writer.writeDouble(v);
+            writer.writeSizedString(attribute.key());
+            writer.writeDouble(instance.getBaseValue());
 
             {
                 Collection<AttributeModifier> modifiers = instance.getModifiers();
@@ -73,21 +53,10 @@ public class EntityPropertiesPacket implements ServerPacket {
                 }
             }
         }
-
-        @Override
-        public void read(@NotNull BinaryReader reader) {
-            String key = reader.readSizedString();
-            attribute = Attribute.fromKey(key);
-
-            value = reader.readDouble();
-
-            int modifierCount = reader.readVarInt();
-            instance = new AttributeInstance(attribute, null);
-            for (int i = 0; i < modifierCount; i++) {
-                AttributeModifier modifier = new AttributeModifier(reader.readUuid(), "", (float) reader.readDouble(), AttributeOperation.fromId(reader.readByte()));
-                instance.addModifier(modifier);
-            }
-        }
     }
 
+    @Override
+    public int getId() {
+        return ServerPacketIdentifier.ENTITY_PROPERTIES;
+    }
 }

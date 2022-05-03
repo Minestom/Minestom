@@ -1,38 +1,41 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.sound.Sound;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class StopSoundPacket implements ServerPacket {
+public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
+                              @Nullable String sound) implements ServerPacket {
+    public StopSoundPacket(BinaryReader reader) {
+        this(read(reader));
+    }
 
-    public byte flags;
-    public int source;
-    public String sound;
+    private StopSoundPacket(StopSoundPacket packet) {
+        this(packet.flags, packet.source, packet.sound);
+    }
 
-    public StopSoundPacket() {
-        sound = "";
+    private static StopSoundPacket read(BinaryReader reader) {
+        var flags = reader.readByte();
+        var source = flags == 3 || flags == 1 ? Sound.Source.values()[reader.readVarInt()] : null;
+        var sound = flags == 2 || flags == 3 ? reader.readSizedString() : null;
+        return new StopSoundPacket(flags, source, sound);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(flags);
-        if (flags == 3 || flags == 1)
-            writer.writeVarInt(source);
-        if (flags == 2 || flags == 3)
-            writer.writeSizedString(sound);
-    }
-
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        flags = reader.readByte();
         if (flags == 3 || flags == 1) {
-            source = reader.readVarInt();
+            assert source != null;
+            writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(source));
         }
         if (flags == 2 || flags == 3) {
-            sound = reader.readSizedString();
+            assert sound != null;
+            writer.writeSizedString(sound);
         }
     }
 

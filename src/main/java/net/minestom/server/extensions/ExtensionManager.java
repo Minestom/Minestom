@@ -4,22 +4,15 @@ import com.google.gson.Gson;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
-import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
-import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Mixins;
-import org.spongepowered.asm.mixin.throwables.MixinError;
-import org.spongepowered.asm.mixin.throwables.MixinException;
-import org.spongepowered.asm.service.ServiceNotAvailableError;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -34,13 +27,13 @@ import java.util.zip.ZipFile;
 
 public class ExtensionManager {
 
-    public final static String DISABLE_EARLY_LOAD_SYSTEM_KEY = "minestom.extension.disable_early_load";
-
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
     public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
     public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
+
+    private final ServerProcess serverProcess;
 
     // LinkedHashMaps are HashMaps that preserve order
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
@@ -49,12 +42,12 @@ public class ExtensionManager {
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private Path extensionDataRoot = extensionFolder.toPath();
-    private boolean loaded;
 
-    // Option
-    private boolean loadOnStartup = true;
+    private enum State {DO_NOT_START, NOT_STARTED, STARTED, PRE_INIT, INIT, POST_INIT}
+    private State state = State.NOT_STARTED;
 
-    public ExtensionManager() {
+    public ExtensionManager(ServerProcess serverProcess) {
+        this.serverProcess = serverProcess;
     }
 
     /**
@@ -62,10 +55,10 @@ public class ExtensionManager {
      * <p>
      * Default value is 'true'.
      *
-     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
+     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(java.net.SocketAddress)}
      */
     public boolean shouldLoadOnStartup() {
-        return loadOnStartup;
+        return state != State.DO_NOT_START;
     }
 
     /**
@@ -76,8 +69,79 @@ public class ExtensionManager {
      * @param loadOnStartup true to load extensions on startup, false to do nothing
      */
     public void setLoadOnStartup(boolean loadOnStartup) {
-        this.loadOnStartup = loadOnStartup;
+        Check.stateCondition(state.ordinal() > State.NOT_STARTED.ordinal(), "Extensions have already been initialized");
+        this.state = loadOnStartup ? State.NOT_STARTED : State.DO_NOT_START;
     }
+
+    @NotNull
+    public File getExtensionFolder() {
+        return extensionFolder;
+    }
+
+    public @NotNull Path getExtensionDataRoot() {
+        return extensionDataRoot;
+    }
+
+    public void setExtensionDataRoot(@NotNull Path dataRoot) {
+        this.extensionDataRoot = dataRoot;
+    }
+
+    @NotNull
+    public Collection<Extension> getExtensions() {
+        return immutableExtensions.values();
+    }
+
+    @Nullable
+    public Extension getExtension(@NotNull String name) {
+        return extensions.get(name.toLowerCase());
+    }
+
+    public boolean hasExtension(@NotNull String name) {
+        return extensions.containsKey(name);
+    }
+
+    //
+    // Init phases
+    //
+
+    @ApiStatus.Internal
+    public void start() {
+        if (state == State.DO_NOT_START) {
+            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
+            return;
+        }
+        Check.stateCondition(state != State.NOT_STARTED, "ExtensionManager has already been started");
+        loadExtensions();
+        state = State.STARTED;
+    }
+
+    @ApiStatus.Internal
+    public void gotoPreInit() {
+        if (state == State.DO_NOT_START) return;
+        Check.stateCondition(state != State.STARTED, "Extensions have already done pre initialization");
+        extensions.values().forEach(Extension::preInitialize);
+        state = State.PRE_INIT;
+    }
+
+    @ApiStatus.Internal
+    public void gotoInit() {
+        if (state == State.DO_NOT_START) return;
+        Check.stateCondition(state != State.PRE_INIT, "Extensions have already done initialization");
+        extensions.values().forEach(Extension::initialize);
+        state = State.INIT;
+    }
+
+    @ApiStatus.Internal
+    public void gotoPostInit() {
+        if (state == State.DO_NOT_START) return;
+        Check.stateCondition(state != State.INIT, "Extensions have already done post initialization");
+        extensions.values().forEach(Extension::postInitialize);
+        state = State.POST_INIT;
+    }
+
+    //
+    // Loading
+    //
 
     /**
      * Loads all extensions in the extension folder into this server.
@@ -121,10 +185,7 @@ public class ExtensionManager {
      * <p>
      * And finally make a scheduler to clean observers per extension.
      */
-    public void loadExtensions() {
-        Check.stateCondition(loaded, "Extensions are already loaded!");
-        this.loaded = true;
-
+    private void loadExtensions() {
         // Initialize folders
         {
             // Make extensions folder if necessary
@@ -144,13 +205,6 @@ public class ExtensionManager {
             }
         }
 
-        // Periodically cleanup observers
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            for (Extension ext : extensions.values()) {
-                ext.cleanupObservers();
-            }
-        }).repeat(1L, TimeUnit.MINUTE).schedule();
-
         // Load extensions
         {
             // Get all extensions and order them accordingly.
@@ -159,27 +213,26 @@ public class ExtensionManager {
             // Don't waste resources on doing extra actions if there is nothing to do.
             if (discoveredExtensions.isEmpty()) return;
 
+            // Create classloaders for each extension (so that they can be used during dependency resolution)
+            Iterator<DiscoveredExtension> extensionIterator = discoveredExtensions.iterator();
+            while (extensionIterator.hasNext()) {
+                DiscoveredExtension discoveredExtension = extensionIterator.next();
+                try {
+                    discoveredExtension.createClassLoader();
+                } catch (Exception e) {
+                    discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
+                    serverProcess.exception().handleException(e);
+                    LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
+                    LOGGER.error("Failed to load extension", e);
+                    extensionIterator.remove();
+                }
+            }
+
             discoveredExtensions = generateLoadOrder(discoveredExtensions);
             loadDependencies(discoveredExtensions);
 
             // remove invalid extensions
             discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
-
-            // set class loaders for all extensions.
-            for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-                try {
-                    discoveredExtension.setMinestomExtensionClassLoader(discoveredExtension.makeClassLoader());
-                } catch (Exception e) {
-                    discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
-                    LOGGER.error("Failed to load extension", e);
-                }
-            }
-
-            // remove invalid extensions
-            discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
-            setupCodeModifiers(discoveredExtensions);
 
             // Load the extensions
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
@@ -188,10 +241,21 @@ public class ExtensionManager {
                 } catch (Exception e) {
                     discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.LOAD_FAILED;
                     LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
-                    MinecraftServer.getExceptionManager().handleException(e);
+                    serverProcess.exception().handleException(e);
                 }
             }
         }
+    }
+
+    public boolean loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
+        if (!jarFile.exists()) {
+            throw new FileNotFoundException("File '" + jarFile.getAbsolutePath() + "' does not exists. Cannot load extension.");
+        }
+
+        LOGGER.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
+        DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
+        List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
+        return loadExtensionList(extensionsToLoad);
     }
 
     /**
@@ -206,7 +270,7 @@ public class ExtensionManager {
         String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
 
-        MinestomExtensionClassLoader loader = discoveredExtension.getMinestomExtensionClassLoader();
+        ExtensionClassLoader loader = discoveredExtension.getClassLoader();
 
         if (extensions.containsKey(extensionName.toLowerCase())) {
             LOGGER.error("An extension called '{}' has already been registered.", extensionName);
@@ -217,7 +281,7 @@ public class ExtensionManager {
         try {
             jarClass = Class.forName(mainClass, true, loader);
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Could not find main class '{}' in extension '{}'. If it is, be sure to run your server using Bootstrap#bootstrap",
+            LOGGER.error("Could not find main class '{}' in extension '{}'.",
                     mainClass, extensionName, e);
             return null;
         }
@@ -276,7 +340,7 @@ public class ExtensionManager {
             loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur
-            MinecraftServer.getExceptionManager().handleException(e);
+            serverProcess.exception().handleException(e);
         } catch (NoSuchFieldException e) {
             // This should also not occur (unless someone changed the logger in Extension superclass).
             LOGGER.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
@@ -289,10 +353,10 @@ public class ExtensionManager {
             loggerField.setAccessible(true);
             loggerField.set(extension, eventNode);
 
-            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+            serverProcess.eventHandler().addChild(eventNode);
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur
-            MinecraftServer.getExceptionManager().handleException(e);
+            serverProcess.exception().handleException(e);
         } catch (NoSuchFieldException e) {
             // This should also not occur
             LOGGER.error("Main class '{}' in '{}' has no event node field.", mainClass, extensionName, e);
@@ -347,6 +411,9 @@ public class ExtensionManager {
             }
         }
 
+        //TODO(mattw): Extract this into its own method to load an extension given classes and resources directory.
+        //TODO(mattw): Should show a warning if one is set and not the other. It is most likely a mistake.
+
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
         if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
             LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
@@ -365,7 +432,7 @@ public class ExtensionManager {
                     extensions.add(extension);
                 }
             } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
+                serverProcess.exception().handleException(e);
             }
         }
         return extensions;
@@ -398,7 +465,7 @@ public class ExtensionManager {
 
             return extension;
         } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            serverProcess.exception().handleException(e);
             return null;
         }
     }
@@ -470,7 +537,7 @@ public class ExtensionManager {
 
             // While there are entries with no more elements (no more dependencies)
             while (!(
-                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> isLoaded(entry.getValue())).collect(Collectors.toList())
+                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> isLoaded(entry.getValue())).toList()
             ).isEmpty()
             ) {
                 // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
@@ -523,8 +590,6 @@ public class ExtensionManager {
         for (Extension extension : immutableExtensions.values())
             allLoadedExtensions.add(extension.getOrigin());
 
-        ExtensionDependencyResolver extensionDependencyResolver = new ExtensionDependencyResolver(allLoadedExtensions);
-
         for (DiscoveredExtension discoveredExtension : extensions) {
             try {
                 DependencyGetter getter = new DependencyGetter();
@@ -532,27 +597,18 @@ public class ExtensionManager {
                 List<MavenRepository> repoList = new LinkedList<>();
                 for (var repository : externalDependencies.repositories) {
 
-                    if (repository.name == null) {
+                    if (repository.name == null || repository.name.isEmpty()) {
                         throw new IllegalStateException("Missing 'name' element in repository object.");
                     }
 
-                    if (repository.name.isEmpty()) {
-                        throw new IllegalStateException("Invalid 'name' element in repository object.");
-                    }
-
-                    if (repository.url == null) {
+                    if (repository.url == null || repository.url.isEmpty()) {
                         throw new IllegalStateException("Missing 'url' element in repository object.");
-                    }
-
-                    if (repository.url.isEmpty()) {
-                        throw new IllegalStateException("Invalid 'url' element in repository object.");
                     }
 
                     repoList.add(new MavenRepository(repository.name, repository.url));
                 }
 
                 getter.addMavenResolver(repoList);
-                getter.addResolver(extensionDependencyResolver);
 
                 for (String artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
@@ -560,9 +616,16 @@ public class ExtensionManager {
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
 
+                ExtensionClassLoader extensionClassLoader = discoveredExtension.getClassLoader();
                 for (String dependencyName : discoveredExtension.getDependencies()) {
-                    var resolved = getter.get(dependencyName, dependenciesFolder);
-                    addDependencyFile(resolved, discoveredExtension);
+                    var resolved = extensions.stream()
+                            .filter(ext -> ext.getName().equalsIgnoreCase(dependencyName))
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalStateException("Unknown dependency '" + dependencyName + "' of '" + discoveredExtension.getName() + "'"));
+
+                    ExtensionClassLoader dependencyClassLoader = resolved.getClassLoader();
+
+                    extensionClassLoader.addChild(dependencyClassLoader);
                     LOGGER.trace("Dependency of extension {}: {}", discoveredExtension.getName(), resolved);
                 }
             } catch (Exception e) {
@@ -577,6 +640,7 @@ public class ExtensionManager {
     private void addDependencyFile(@NotNull ResolvedDependency dependency, @NotNull DiscoveredExtension extension) {
         URL location = dependency.getContentsLocation();
         extension.files.add(location);
+        extension.getClassLoader().addURL(location);
         LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
 
         // recurse to add full dependency tree
@@ -589,189 +653,6 @@ public class ExtensionManager {
         }
     }
 
-    @NotNull
-    public File getExtensionFolder() {
-        return extensionFolder;
-    }
-
-    public @NotNull Path getExtensionDataRoot() {
-        return extensionDataRoot;
-    }
-
-    public void setExtensionDataRoot(@NotNull Path dataRoot) {
-        this.extensionDataRoot = dataRoot;
-    }
-
-    @NotNull
-    public Collection<Extension> getExtensions() {
-        return immutableExtensions.values();
-    }
-
-    @Nullable
-    public Extension getExtension(@NotNull String name) {
-        return extensions.get(name.toLowerCase());
-    }
-
-    public boolean hasExtension(@NotNull String name) {
-        return extensions.containsKey(name);
-    }
-
-    /**
-     * Extensions are allowed to apply Mixin transformers, the magic happens here.
-     */
-    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
-        final ClassLoader cl = getClass().getClassLoader();
-        if (!(cl instanceof MinestomRootClassLoader modifiableClassLoader)) {
-            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. " +
-                    "This disables code modifiers (Mixin support is therefore disabled). " +
-                    "This can be fixed by starting your server using Bootstrap#bootstrap (optional).", cl);
-            return;
-        }
-        setupCodeModifiers(extensions, modifiableClassLoader);
-    }
-
-    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions, MinestomRootClassLoader modifiableClassLoader) {
-        LOGGER.info("Start loading code modifiers...");
-        for (DiscoveredExtension extension : extensions) {
-            try {
-                for (String codeModifierClass : extension.getCodeModifiers()) {
-                    boolean loaded = modifiableClassLoader.loadModifier(extension.files.toArray(new URL[0]), codeModifierClass);
-                    if (!loaded) {
-                        extension.addMissingCodeModifier(codeModifierClass);
-                    }
-                }
-                if (!extension.getMixinConfig().isEmpty()) {
-                    final String mixinConfigFile = extension.getMixinConfig();
-                    try {
-                        Mixins.addConfiguration(mixinConfigFile);
-                        LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
-                    } catch (ServiceNotAvailableError | MixinError | MixinException e) {
-                        if (MinecraftServer.getExceptionManager() != null) {
-                            MinecraftServer.getExceptionManager().handleException(e);
-                        } else {
-                            e.printStackTrace();
-                        }
-                        LOGGER.error("Could not load Mixin configuration: " + mixinConfigFile);
-                        extension.setFailedToLoadMixinFlag();
-                    }
-                }
-            } catch (Exception e) {
-                if (MinecraftServer.getExceptionManager() != null) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                } else {
-                    e.printStackTrace();
-                }
-                LOGGER.error("Failed to load code modifier for extension in files: " +
-                        extension.files
-                                .stream()
-                                .map(URL::toExternalForm)
-                                .collect(Collectors.joining(", ")), e);
-            }
-        }
-        LOGGER.info("Done loading code modifiers.");
-    }
-
-    private void unload(@NotNull Extension ext) {
-        ext.preTerminate();
-        ext.terminate();
-        // remove callbacks for this extension
-        String extensionName = ext.getOrigin().getName();
-        ext.triggerChange(observer -> observer.onExtensionUnload(extensionName));
-        // TODO: more callback types
-
-        // Remove event node
-        EventNode<Event> eventNode = ext.getEventNode();
-        MinecraftServer.getGlobalEventHandler().removeChild(eventNode);
-
-        ext.postTerminate();
-        ext.unload();
-
-        // remove as dependent of other extensions
-        // this avoids issues where a dependent extension fails to reload, and prevents the base extension to reload too
-        for (Extension e : extensions.values()) {
-            e.getDependents().remove(ext.getOrigin().getName());
-        }
-
-        String id = ext.getOrigin().getName().toLowerCase();
-        // remove from loaded extensions
-        extensions.remove(id);
-
-        // remove class loader, required to reload the classes
-        MinestomExtensionClassLoader classloader = ext.getOrigin().removeMinestomExtensionClassLoader();
-        try {
-            // close resources
-            classloader.close();
-        } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
-        MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
-    }
-
-    public boolean reload(@NotNull String extensionName) {
-        Extension ext = extensions.get(extensionName.toLowerCase());
-        if (ext == null) {
-            throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
-        }
-
-        File originalJar = ext.getOrigin().getOriginalJar();
-        if (originalJar == null) {
-            LOGGER.error("Cannot reload extension {} that is not from a .jar file!", extensionName);
-            return false;
-        }
-
-        LOGGER.info("Reload extension {} from jar file {}", extensionName, originalJar.getAbsolutePath());
-        List<String> dependents = new LinkedList<>(ext.getDependents()); // copy dependents list
-        List<File> originalJarsOfDependents = new LinkedList<>();
-
-        for (String dependentID : dependents) {
-            Extension dependentExt = extensions.get(dependentID.toLowerCase());
-            File dependentOriginalJar = dependentExt.getOrigin().getOriginalJar();
-            originalJarsOfDependents.add(dependentOriginalJar);
-            if (dependentOriginalJar == null) {
-                LOGGER.error("Cannot reload extension {} that is not from a .jar file!", dependentID);
-                return false;
-            }
-
-            LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
-            unload(dependentExt);
-        }
-
-        LOGGER.info("Unloading extension {}", extensionName);
-        unload(ext);
-
-        System.gc();
-
-        // ext and its dependents should no longer be referenced from now on
-
-        // rediscover extension to reload. We allow dependency changes, so we need to fully reload it
-        List<DiscoveredExtension> extensionsToReload = new LinkedList<>();
-        LOGGER.info("Rediscover extension {} from jar {}", extensionName, originalJar.getAbsolutePath());
-        DiscoveredExtension rediscoveredExtension = discoverFromJar(originalJar);
-        extensionsToReload.add(rediscoveredExtension);
-
-        for (File dependentJar : originalJarsOfDependents) {
-            // rediscover dependent extension to reload
-            LOGGER.info("Rediscover dependent extension (depends on {}) from jar {}", extensionName, dependentJar.getAbsolutePath());
-            extensionsToReload.add(discoverFromJar(dependentJar));
-        }
-
-        // ensure correct order of dependencies
-        loadExtensionList(extensionsToReload);
-
-        return true;
-    }
-
-    public boolean loadDynamicExtension(@NotNull File jarFile) throws FileNotFoundException {
-        if (!jarFile.exists()) {
-            throw new FileNotFoundException("File '" + jarFile.getAbsolutePath() + "' does not exists. Cannot load extension.");
-        }
-
-        LOGGER.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
-        DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
-        List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
-        return loadExtensionList(extensionsToLoad);
-    }
-
     private boolean loadExtensionList(@NotNull List<DiscoveredExtension> extensionsToLoad) {
         // ensure correct order of dependencies
         LOGGER.debug("Reorder extensions to ensure proper load order");
@@ -781,12 +662,8 @@ public class ExtensionManager {
         // setup new classloaders for the extensions to reload
         for (DiscoveredExtension toReload : extensionsToLoad) {
             LOGGER.debug("Setting up classloader for extension {}", toReload.getName());
-            toReload.setMinestomExtensionClassLoader(toReload.makeClassLoader());
+//            toReload.setMinestomExtensionClassLoader(toReload.makeClassLoader()); //TODO: Fix this
         }
-
-        // setup code modifiers for these extensions
-        // TODO: it is possible the new modifiers cannot be applied (because the targeted classes are already loaded), should we issue a warning?
-        setupCodeModifiers(extensionsToLoad);
 
         List<Extension> newExtensions = new LinkedList<>();
         for (DiscoveredExtension toReload : extensionsToLoad) {
@@ -811,7 +688,23 @@ public class ExtensionManager {
         return true;
     }
 
-    public void unloadExtension(@NotNull String extensionName) {
+    //
+    // Shutdown / Unload
+    //
+
+    /**
+     * Shutdowns all the extensions by unloading them.
+     */
+    public void shutdown() {// copy names, as the extensions map will be modified via the calls to unload
+        Set<String> extensionNames = new HashSet<>(extensions.keySet());
+        for (String ext : extensionNames) {
+            if (extensions.containsKey(ext)) { // is still loaded? Because extensions can depend on one another, it might have already been unloaded
+                unloadExtension(ext);
+            }
+        }
+    }
+
+    private void unloadExtension(@NotNull String extensionName) {
         Extension ext = extensions.get(extensionName.toLowerCase());
 
         if (ext == null) {
@@ -822,65 +715,31 @@ public class ExtensionManager {
 
         for (String dependentID : dependents) {
             Extension dependentExt = extensions.get(dependentID.toLowerCase());
-            LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
-            unload(dependentExt);
+            if ( dependentExt != null ) { // check if extension isn't already unloaded.
+                LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
+                unload(dependentExt);
+            }
         }
 
         LOGGER.info("Unloading extension {}", extensionName);
         unload(ext);
-
-        // call GC to try to get rid of classes and classloader
-        System.gc();
     }
 
-    /**
-     * Shutdowns all the extensions by unloading them.
-     */
-    public void shutdown() {
-        for (Extension extension : getExtensions()) {
-            extension.unload();
-        }
-    }
+    private void unload(@NotNull Extension ext) {
+        ext.preTerminate();
+        ext.terminate();
 
-    /**
-     * Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.
-     */
-    public static void loadCodeModifiersEarly() {
-        // allow users to disable early code modifier load
-        if ("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
-            return;
-        }
-        LOGGER.info("Early load of code modifiers from extensions.");
-        ExtensionManager manager = new ExtensionManager();
+        // Remove event node
+        EventNode<Event> eventNode = ext.getEventNode();
+        serverProcess.eventHandler().removeChild(eventNode);
 
-        // discover extensions that are present
-        List<DiscoveredExtension> discovered = manager.discoverExtensions();
+        ext.postTerminate();
 
-        // setup extension class loaders, so that Mixin can load the json configuration file correctly
-        for (DiscoveredExtension e : discovered) {
-            e.setMinestomExtensionClassLoader(e.makeClassLoader());
-        }
+        // remove from loaded extensions
+        String id = ext.getOrigin().getName().toLowerCase();
+        extensions.remove(id);
 
-        // setup code modifiers and mixins
-        manager.setupCodeModifiers(discovered, MinestomRootClassLoader.getInstance());
-
-        // setup is done, remove all extension classloaders
-        for (Extension extension : manager.getExtensions()) {
-            MinestomRootClassLoader.getInstance().removeChildInHierarchy(extension.getOrigin().getMinestomExtensionClassLoader());
-        }
-        LOGGER.info("Early load of code modifiers from extensions done!");
-    }
-
-    /**
-     * Unloads all extensions
-     */
-    public void unloadAllExtensions() {
-        // copy names, as the extensions map will be modified via the calls to unload
-        Set<String> extensionNames = new HashSet<>(extensions.keySet());
-        for (String ext : extensionNames) {
-            if (extensions.containsKey(ext)) { // is still loaded? Because extensions can depend on one another, it might have already been unloaded
-                unloadExtension(ext);
-            }
-        }
+        // cleanup classloader
+        // TODO: Is it necessary to remove the CLs since this is only called on shutdown?
     }
 }

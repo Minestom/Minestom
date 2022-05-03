@@ -25,7 +25,7 @@ public class PigMeta extends AnimalMeta {
     }
 
     public void setTimeToBoost(int value) {
-        super.metadata.getIndex(OFFSET + 1, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
 }

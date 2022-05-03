@@ -7,52 +7,40 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class EntityMetaDataPacket implements ServerPacket {
-
-    public int entityId;
-    public Collection<Metadata.Entry<?>> entries;
-
-    public EntityMetaDataPacket(int entityId, Collection<Metadata.Entry<?>> entries) {
-        this.entityId = entityId;
-        this.entries = entries;
+public record EntityMetaDataPacket(int entityId,
+                                   @NotNull Map<Integer, Metadata.Entry<?>> entries) implements ServerPacket {
+    public EntityMetaDataPacket {
+        entries = Map.copyOf(entries);
     }
 
-    public EntityMetaDataPacket() {
-        this(0, Collections.emptyList());
+    public EntityMetaDataPacket(BinaryReader reader) {
+        this(reader.readVarInt(), readEntries(reader));
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-
-        if (entries != null) {
-            // Write all the fields
-            for (Metadata.Entry<?> entry : entries) {
-                entry.write(writer);
-            }
+        for (var entry : entries.entrySet()) {
+            writer.writeByte(entry.getKey().byteValue());
+            writer.write(entry.getValue());
         }
-
         writer.writeByte((byte) 0xFF); // End
     }
 
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-
-        entries = new LinkedList<>();
+    private static Map<Integer, Metadata.Entry<?>> readEntries(BinaryReader reader) {
+        Map<Integer, Metadata.Entry<?>> entries = new HashMap<>();
         while (true) {
-            byte index = reader.readByte();
-
+            final byte index = reader.readByte();
             if (index == (byte) 0xFF) { // reached the end
                 break;
             }
-
-            entries.add(new Metadata.Entry<>(reader));
+            final int type = reader.readVarInt();
+            entries.put((int) index, Metadata.Entry.read(type, reader));
         }
+        return entries;
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTException;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer {
     static final NBTLegacyHoverEventSerializer INSTANCE = new NBTLegacyHoverEventSerializer();
@@ -49,7 +50,6 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
     @Override
     public HoverEvent.@NotNull ShowEntity deserializeShowEntity(@NotNull Component input, Codec.Decoder<Component, String, ? extends RuntimeException> componentDecoder) throws IOException {
         final String raw = PlainTextComponentSerializer.plainText().serialize(input);
-
         try {
             final NBT nbt = MinestomAdventure.NBT_CODEC.decode(raw);
             if (!(nbt instanceof NBTCompound contents)) throw new IOException("contents were not a compound");
@@ -66,32 +66,39 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
 
     @Override
     public @NotNull Component serializeShowItem(HoverEvent.@NotNull ShowItem input) throws IOException {
-        final NBTCompound tag = new NBTCompound();
-        tag.setString(ITEM_TYPE, input.item().asString());
-        tag.setByte(ITEM_COUNT, (byte) input.count());
+        AtomicReference<NBTException> exception = new AtomicReference<>(null);
+        final NBTCompound tag = NBT.Compound(t -> {
+            t.setString(ITEM_TYPE, input.item().asString());
+            t.setByte(ITEM_COUNT, (byte) input.count());
 
-        final BinaryTagHolder nbt = input.nbt();
-        if (nbt != null) {
-            try {
-                tag.set(ITEM_TAG, nbt.get(MinestomAdventure.NBT_CODEC));
-            } catch (NBTException e) {
-                throw new IOException(e);
+            final BinaryTagHolder nbt = input.nbt();
+            if (nbt != null) {
+                try {
+                    t.set(ITEM_TAG, nbt.get(MinestomAdventure.NBT_CODEC));
+                } catch (NBTException e) {
+                    exception.set(e);
+                }
             }
+        });
+
+        if (exception.get() != null) {
+            throw new IOException(exception.get());
         }
 
         return Component.text(MinestomAdventure.NBT_CODEC.encode(tag));
     }
 
     @Override
-    public @NotNull Component serializeShowEntity(HoverEvent.@NotNull ShowEntity input, Codec.Encoder<Component, String, ? extends RuntimeException> componentEncoder) throws IOException {
-        final NBTCompound tag = new NBTCompound();
-        tag.setString(ENTITY_ID, input.id().toString());
-        tag.setString(ENTITY_TYPE, input.type().asString());
+    public @NotNull Component serializeShowEntity(HoverEvent.@NotNull ShowEntity input, Codec.Encoder<Component, String, ? extends RuntimeException> componentEncoder) {
+        final NBTCompound tag = NBT.Compound(t -> {
+            t.setString(ENTITY_ID, input.id().toString());
+            t.setString(ENTITY_TYPE, input.type().asString());
 
-        final Component name = input.name();
-        if (name != null) {
-            tag.setString(ENTITY_NAME, componentEncoder.encode(name));
-        }
+            final Component name = input.name();
+            if (name != null) {
+                t.setString(ENTITY_NAME, componentEncoder.encode(name));
+            }
+        });
 
         return Component.text(MinestomAdventure.NBT_CODEC.encode(tag));
     }

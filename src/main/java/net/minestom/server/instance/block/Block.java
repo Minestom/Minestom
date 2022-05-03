@@ -1,5 +1,8 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
@@ -10,6 +13,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
@@ -63,9 +67,7 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
      * @return a new block with different nbt
      */
     @Contract(pure = true)
-    default @NotNull Block withNbt(@Nullable NBTCompound compound) {
-        return withTag(Tag.NBT, compound);
-    }
+    @NotNull Block withNbt(@Nullable NBTCompound compound);
 
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
@@ -84,12 +86,12 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
      * @return the block nbt, null if not present
      */
     @Contract(pure = true)
-    default @Nullable NBTCompound nbt() {
-        return getTag(Tag.NBT);
-    }
+    @Nullable NBTCompound nbt();
 
     @Contract(pure = true)
-    boolean hasNbt();
+    default boolean hasNbt() {
+        return nbt() != null;
+    }
 
     /**
      * Returns the block handler.
@@ -194,5 +196,60 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
         Comparator ID = (b1, b2) -> b1.id() == b2.id();
 
         Comparator STATE = (b1, b2) -> b1.stateId() == b2.stateId();
+    }
+
+    /**
+     * Represents an element which can place blocks at position.
+     * <p>
+     * Notably used by {@link Instance}, {@link Batch}.
+     */
+    interface Setter {
+        void setBlock(int x, int y, int z, @NotNull Block block);
+
+        default void setBlock(@NotNull Point blockPosition, @NotNull Block block) {
+            setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
+        }
+    }
+
+    interface Getter {
+        @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition);
+
+        default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
+            return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
+        }
+
+        default @NotNull Block getBlock(int x, int y, int z) {
+            return Objects.requireNonNull(getBlock(x, y, z, Condition.NONE));
+        }
+
+        default @NotNull Block getBlock(@NotNull Point point) {
+            return Objects.requireNonNull(getBlock(point, Condition.NONE));
+        }
+
+        /**
+         * Represents a hint to retrieve blocks more efficiently.
+         * Implementing interfaces do not have to honor this.
+         */
+        @ApiStatus.Experimental
+        enum Condition {
+            /**
+             * Returns a block no matter what.
+             * {@link Block#AIR} being the default result.
+             */
+            NONE,
+            /**
+             * Hints that the method should return only if the block is cached.
+             * <p>
+             * Useful if you are only interested in a block handler or nbt.
+             */
+            CACHED,
+            /**
+             * Hints that we only care about the block type.
+             * <p>
+             * Useful if you need to retrieve registry information about the block.
+             * Be aware that the returned block may not return the proper handler/nbt.
+             */
+            TYPE
+        }
     }
 }
