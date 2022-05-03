@@ -102,7 +102,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
-    private BoundingBox standingBoundingBox;
     private BoundingBox boundingBox;
     private PhysicsResult lastPhysicsResult = null;
 
@@ -772,20 +771,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity bounding box
      */
     public @NotNull BoundingBox getBoundingBox() {
-        return boundingBox;
-    }
-
-    /**
-     * Returns the bounding box for a specific pose.
-     *
-     * @param pose the pose
-     * @return the entity bounding box for the pose
-     */
-    private @NotNull BoundingBox getBoundingBox(Pose pose) {
-        if (pose == Pose.SLEEPING || pose == Pose.DYING)
+        if (getPose() == Pose.SLEEPING || getPose() == Pose.DYING)
             return sleepingBoundingBox;
 
-        return standingBoundingBox;
+        return boundingBox;
     }
 
     /**
@@ -811,8 +800,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param boundingBox the new bounding box
      */
     public void setBoundingBox(BoundingBox boundingBox) {
-        this.standingBoundingBox = boundingBox;
-        this.boundingBox = getBoundingBox(getPose());
+        this.boundingBox = boundingBox;
     }
 
     /**
@@ -1207,10 +1195,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
-        this.boundingBox = getBoundingBox(pose);
     }
 
-    private void updatePose() {
+    protected void updatePose() {
         if (entityMeta.isFlyingWithElytra()) {
             setPose(Pose.FALL_FLYING);
         } else if (entityMeta.isSwimming()) {
