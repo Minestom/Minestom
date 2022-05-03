@@ -205,8 +205,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
-        setBoundingBox(0.6f, 1.8f, 0.6f);
-
         setRespawnPoint(Pos.ZERO);
 
         this.settings = new PlayerSettings();
