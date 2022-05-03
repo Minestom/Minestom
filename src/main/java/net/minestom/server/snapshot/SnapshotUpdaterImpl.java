@@ -2,16 +2,13 @@
 
 package net.minestom.server.snapshot;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class SnapshotUpdaterImpl implements SnapshotUpdater {
-    private final Object2ObjectOpenHashMap<Snapshotable, AtomicReference<Snapshot>> referenceMap = new Object2ObjectOpenHashMap<>();
+    private final Map<Snapshotable, AtomicReference<Snapshot>> referenceMap = new IdentityHashMap<>();
     private List<Entry> queue = new ArrayList<>();
 
     static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
