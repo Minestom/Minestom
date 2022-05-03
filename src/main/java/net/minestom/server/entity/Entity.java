@@ -91,7 +91,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
-    private final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
+    private static final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
 
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
