@@ -782,21 +782,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity bounding box for the pose
      */
     public @NotNull BoundingBox getBoundingBox(Pose pose) {
-        if (entityMeta instanceof ArmorStandMeta && ((ArmorStandMeta) entityMeta).isMarker()) {
-            return new BoundingBox(0, 0, 0);
-        }
-
-        if (pose == Pose.SLEEPING || pose == Pose.DYING) {
+        if (pose == Pose.SLEEPING || pose == Pose.DYING)
             return sleepingBoundingBox;
-        }
-
-        if (entityMeta instanceof AgeableMobMeta && ((AgeableMobMeta) entityMeta).isBaby()) {
-            return new BoundingBox(
-                    standingBoundingBox.width() / 2,
-                    standingBoundingBox.height() / 2,
-                    standingBoundingBox.depth() / 2
-            );
-        }
 
         return standingBoundingBox;
     }
