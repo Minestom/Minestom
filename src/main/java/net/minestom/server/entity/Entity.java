@@ -15,10 +15,8 @@ import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.metadata.AgeableMobMeta;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
-import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -770,7 +768,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public @NotNull BoundingBox getBoundingBox() {
         // Check if there is a specific bounding box for this pose
-        BoundingBox poseBoundingBox = BoundingBox.getPoseBoundingBox(getPose());
+        BoundingBox poseBoundingBox = BoundingBox.fromPose(getPose());
         return poseBoundingBox == null ? boundingBox : poseBoundingBox;
     }
 

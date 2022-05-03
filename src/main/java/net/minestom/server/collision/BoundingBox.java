@@ -171,7 +171,7 @@ public final class BoundingBox implements Shape {
         return offset.equals(that.offset);
     }
 
-    public static @Nullable BoundingBox getPoseBoundingBox(@NotNull Entity.Pose pose) {
+    public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
         return switch (pose) {
             case FALL_FLYING, SWIMMING, SPIN_ATTACK -> smallBoundingBox;
             case SLEEPING, DYING -> sleepingBoundingBox;
