@@ -183,9 +183,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
-
         setBoundingBox(entityType.registry().boundingBox());
+
+        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
