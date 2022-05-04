@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -75,8 +79,9 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="caption"><span>Interfaces</span></div>
-<div class="summary-table two-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab4" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab4', 2)" class="table-tab">Record Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel">
+<div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="ChunkSnapshot.html" title="interface in net.minestom.server.snapshot">ChunkSnapshot</a></div>
@@ -99,9 +104,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents an object which is regularly saved into a snapshot.</div>
 </div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SnapshotImpl.html" title="class in net.minestom.server.snapshot">SnapshotImpl</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="SnapshotImpl.Chunk.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Chunk</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="SnapshotImpl.Entity.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Entity</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab4">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="SnapshotImpl.Instance.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Instance</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="SnapshotImpl.Player.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Player</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab4">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="SnapshotImpl.Server.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Server</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">&nbsp;</div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Represents the context of a snapshot build.</div>
+</div>
 </div>
 </div>
 </div>

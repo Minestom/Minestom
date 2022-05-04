@@ -80,9 +80,14 @@ loadScripts(document, 'script');</script>
 <dt>All Known Subinterfaces:</dt>
 <dd><code><a href="PlayerSnapshot.html" title="interface in net.minestom.server.snapshot">PlayerSnapshot</a></code></dd>
 </dl>
+<dl class="notes">
+<dt>All Known Implementing Classes:</dt>
+<dd><code><a href="SnapshotImpl.Entity.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Entity</a></code>, <code><a href="SnapshotImpl.Player.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Player</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">EntitySnapshot</span><span class="extends-implements">
-extends <a href="Snapshot.html" title="interface in net.minestom.server.snapshot">Snapshot</a>, <a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></span></div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">EntitySnapshot</span><span class="extends-implements">
+extends <a href="Snapshot.html" title="interface in net.minestom.server.snapshot">Snapshot</a>, <a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></span>
+<span class="permits">permits <a href="PlayerSnapshot.html" title="interface in net.minestom.server.snapshot">PlayerSnapshot</a>, <a href="SnapshotImpl.Entity.html" title="class in net.minestom.server.snapshot">SnapshotImpl.Entity</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
