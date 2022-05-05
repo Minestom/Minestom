@@ -1978,6 +1978,35 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setBoots(itemStack);
     }
 
+    /**
+     * Sets a cooldown on a material (like when an enderpearl is used)
+     *
+     * @param material the material to add a cooldown to
+     * @param ticks how long the material will be on cooldown
+     */
+    public void setCooldown(Material material, int ticks) {
+        setCooldown(material, ticks, true);
+    }
+
+    /**
+     * Sets a cooldown on a material (like when an enderpearl is used)
+     *
+     * @param material the material to add a cooldown to
+     * @param ticks how long the material will be on cooldown
+     * @param lagCompensation whether another packet is sent later to remove cooldown (incase the server lags)
+     */
+    public void setCooldown(Material material, int ticks, boolean lagCompensation) {
+        final SetCooldownPacket packet = new SetCooldownPacket(material.id(), ticks);
+        playerConnection.sendPacket(packet);
+
+        if (!lagCompensation) return;
+
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            final SetCooldownPacket lagCompensatePacket = new SetCooldownPacket(material.id(), 0);
+            playerConnection.sendPacket(lagCompensatePacket);
+        }).delay(ticks, TimeUnit.CLIENT_TICK).schedule();
+    }
+
     @Override
     public Locale getLocale() {
         final String locale = settings.locale;
