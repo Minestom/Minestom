@@ -34,21 +34,26 @@ public class EntityProjectileIntegrationTest {
         // The entity is currently falling (in the air), so it does have a velocity.
         assertTrue(projectile.hasVelocity());
 
-        var before = projectile.getPosition();
+        var before = projectile.getPosition(); // at start
+        var after = projectile.getPosition(); // now - 1 tick, closest to target
+        var smallestDistance = 1e6;
+        while (true) {
+            final var distance = projectile.getPosition().distanceSquared(target);
+            if (distance <= smallestDistance) smallestDistance = distance;
+            else break;
 
-        for (int i = 0; i < 11; i++) {
-            Vec expected = projectile.velocity
+            after = projectile.getPosition();
+
+            var expected = projectile.velocity
                     .div(20)
                     .apply((x, y, z) -> new Vec(
-                        x * 0.98,
-                        (y - 0.05) * (1 - 0.01),
-                        z * 0.98
+                            x * 0.98,
+                            (y - projectile.gravityAcceleration) * (1 - projectile.gravityDragPerTick),
+                            z * 0.98
                     ))
                     .mul(20);
 
-            // First tick has to be env tick, then entity ticks will work
-            if (i == 0) env.tick();
-            else projectile.tick(0);
+            env.tick();
 
             assertEquals(0, projectile.velocity.x());
             assertEquals(expected.y(), projectile.velocity.y());
@@ -58,7 +63,6 @@ public class EntityProjectileIntegrationTest {
         // Ensure the position is correct.
         // x doesn't change
         // Big delta because ticks aren't very accurate
-        var after = projectile.getPosition();
         assertEquals(before.x(), after.x());
         assertEquals(target.y(), after.y(), 0.6);
         assertEquals(target.z(), after.z(), 0.6);
@@ -83,26 +87,33 @@ public class EntityProjectileIntegrationTest {
         // The entity is currently falling (in the air), so it does have a velocity.
         assertTrue(projectile.hasVelocity());
 
-        var before = projectile.getPosition();
+        var before = projectile.getPosition(); // at start
+        var after = projectile.getPosition(); // now - 1 tick, closest to target
+        var smallestDistance = 1e6;
+        var ticksPassed = 0;
+        while (true) {
+            final var distance = projectile.getPosition().distanceSquared(target);
+            if (distance <= smallestDistance) smallestDistance = distance;
+            else break;
 
-        for (int i = 0; i < 11; i++) {
+            after = projectile.getPosition();
+
             // Only drag for non-living entities should apply since there is no gravity.
             // We do this by multiplying by 0.98, so 20 * 0.98^n.
             assertEquals(0, projectile.velocity.x());
             assertEquals(0, projectile.velocity.y());
-            assertEquals(20 * Math.pow(0.98, i), projectile.velocity.z(), EPSILON);
+            assertEquals(20 * Math.pow(0.98, ticksPassed), projectile.velocity.z(), EPSILON);
 
-            // First tick has to be env tick, then entity ticks will work
-            if (i == 0) env.tick();
-            else projectile.tick(0);
+            env.tick();
+            ticksPassed++;
         }
 
         // Ensure the position is correct.
         // x and y don't change (no gravity) and z changes by Σz velocity.
-        var after = projectile.getPosition();
+        var now = projectile.getPosition();
         assertEquals(before.x(), after.x());
         assertEquals(before.y(), after.y());
-        assertEquals(before.z() + zAfterNoGravity(11), after.z(), EPSILON);
+        assertEquals(before.z() + zAfterNoGravity(ticksPassed), now.z(), EPSILON);
         assertEquals(target.z(), after.z(), 0.05);
     }
 
