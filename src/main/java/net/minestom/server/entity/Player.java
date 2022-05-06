@@ -20,7 +20,6 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
@@ -67,6 +66,7 @@ import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.PlayerSnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.timer.Scheduler;
@@ -1988,7 +1988,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public @NotNull PlayerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final EntitySnapshot snapshot = super.updateSnapshot(updater);
-        return new EntitySnapshotImpl.Player(snapshot, username, gameMode);
+        return new SnapshotImpl.Player(snapshot, username, gameMode);
     }
 
     /**
