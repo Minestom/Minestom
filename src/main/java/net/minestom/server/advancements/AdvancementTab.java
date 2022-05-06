@@ -108,7 +108,6 @@ public class AdvancementTab implements Viewable {
         advancement.setTab(this);
         advancement.setIdentifier(identifier);
         advancement.setParent(parent);
-        advancement.updateCriteria();
         this.advancementMap.put(advancement, parent);
     }
 
