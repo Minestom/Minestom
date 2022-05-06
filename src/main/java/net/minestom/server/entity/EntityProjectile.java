@@ -63,8 +63,10 @@ public class EntityProjectile extends Entity {
         double dx = to.x() - from.x();
         double dy = to.y() - from.y();
         double dz = to.z() - from.z();
-        final double xzLength = Math.sqrt(dx * dx + dz * dz);
-        dy += xzLength * 0.20000000298023224D;
+        if (!hasNoGravity()) {
+            final double xzLength = Math.sqrt(dx * dx + dz * dz);
+            dy += xzLength * 0.20000000298023224D;
+        }
 
         final double length = Math.sqrt(dx * dx + dy * dy + dz * dz);
         dx /= length;
