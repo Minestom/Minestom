@@ -110,15 +110,14 @@ public class EntityProjectileIntegrationTest {
 
         // Ensure the position is correct.
         // x and y don't change (no gravity) and z changes by Σz velocity.
-        var now = projectile.getPosition();
         assertEquals(before.x(), after.x());
         assertEquals(before.y(), after.y());
-        assertEquals(before.z() + zAfterNoGravity(ticksPassed), now.z(), EPSILON);
+        assertEquals(before.z() + zAfterNoGravity(ticksPassed), after.z(), EPSILON);
         assertEquals(target.z(), after.z(), 0.05);
     }
 
     private static double zAfterNoGravity(int ticks) {
-        return IntStream.range(0, ticks)
+        return IntStream.range(0, ticks - 1)
                 .mapToDouble(i -> Math.pow(0.98, i))
                 .sum();
     }
