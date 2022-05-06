@@ -41,6 +41,7 @@ import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
@@ -1588,7 +1589,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
         final int[] passengersId = ArrayUtils.mapToIntArray(passengers, Entity::getEntityId);
         final Entity vehicle = this.vehicle;
-        return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
+        return new SnapshotImpl.Entity(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 tagHandler.readableCopy());
