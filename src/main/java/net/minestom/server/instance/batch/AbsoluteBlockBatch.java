@@ -80,6 +80,16 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
         return chunkBatch.getBlock(relativeX, y, relativeZ);
     }
+    
+    @Override
+    public @Nullable Block getBlock(int x, int y, int z) {
+        return getBlock(x, y, z, Condition.NONE);
+    }
+    
+    @Override
+    public @Nullable Block getBlock(Point point) {
+        return getBlock(point, Condition.NONE);
+    }
 
     @Override
     public void clear() {
