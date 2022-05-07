@@ -105,6 +105,25 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
+    public synchronized <T> void updateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+        setTag(tag, value.apply(getTag(tag)));
+    }
+
+    @Override
+    public synchronized <T> @UnknownNullability T updateAndGetTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+        final T next = value.apply(getTag(tag));
+        setTag(tag, next);
+        return next;
+    }
+
+    @Override
+    public synchronized <T> @UnknownNullability T getAndUpdateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+        final T prev = getTag(tag);
+        setTag(tag, value.apply(prev));
+        return prev;
+    }
+
+    @Override
     public @NotNull TagReadable readableCopy() {
         return updatedCache();
     }
