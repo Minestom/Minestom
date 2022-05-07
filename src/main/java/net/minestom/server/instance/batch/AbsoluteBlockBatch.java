@@ -64,6 +64,22 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
         chunkBatch.setBlock(relativeX, y, relativeZ, block);
     }
+    
+    @Override
+    public Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        
+        final ChunkBatch chunkBatch;
+        synchronized (chunkBatchesMap) {
+            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options));
+        }
+        
+        final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
+        final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
+        return chunkBatch.getBlock(relativeX, y, relativeZ);
+    }
 
     @Override
     public void clear() {
