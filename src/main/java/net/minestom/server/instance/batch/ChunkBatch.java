@@ -59,6 +59,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             this.blocks.put(index, block);
         }
     }
+    
+    @Override
+    public Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
+        synchronized (blocks) {
+            return this.blocks.get(index);
+        }
+    }
 
     @Override
     public void clear() {
