@@ -9,8 +9,7 @@ import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents an advancement located in an {@link AdvancementTab}.
@@ -20,8 +19,6 @@ import java.util.Set;
 public class Advancement {
 
     protected AdvancementTab tab;
-
-    private boolean achieved;
 
     private Component title;
     private Component description;
@@ -39,8 +36,8 @@ public class Advancement {
     private String identifier;
     private Advancement parent;
 
-    // Packet
-    private AdvancementsPacket.Criteria criteria;
+    private final Map<String, Criterion> criteriaMap = new HashMap<>();
+    private final List<List<String>> requirements = new ArrayList<>();
 
     public Advancement(@NotNull Component title, Component description,
                        @NotNull ItemStack icon, @NotNull FrameType frameType,
@@ -60,24 +57,99 @@ public class Advancement {
     }
 
     /**
-     * Gets if the advancement is achieved.
+     * Gets if the criterion is achieved.
      *
+     * @param criterionIdentifier an identifier of added criterion
      * @return true if the advancement is achieved
      */
-    public boolean isAchieved() {
-        return achieved;
+    public boolean isAchieved(String criterionIdentifier) {
+        return criteriaMap.get(criterionIdentifier) != null && criteriaMap.get(criterionIdentifier).isAchieved();
     }
 
     /**
-     * Makes the advancement achieved.
+     * Makes the criterion achieved. Before this
+     * you need to create a criterion from Advancement#addCriterion
      *
+     * @param criterionIdentifier an identifier of added criterion
      * @param achieved true to make it achieved
      * @return this advancement
      */
-    public Advancement setAchieved(boolean achieved) {
-        this.achieved = achieved;
-        update();
+    public Advancement setAchieved(String criterionIdentifier, boolean achieved) {
+        Criterion criterion = criteriaMap.get(criterionIdentifier);
+        if (criterion != null) {
+            criterion.setAchieved(achieved);
+        }
         return this;
+    }
+
+    public void addCriterion(String criterionIdentifier) {
+        this.addCriterion(criterionIdentifier, false);
+    }
+
+    /**
+     * Adds new criterion with its own requirement to the advancement.
+     * You can change its state with Advancement#setAchieved, or you
+     * can get criterion and call Criterion#setAchieved
+     *
+     * @param criterionIdentifier A criterion identifier to add
+     * @param achieved should criterion be achieved
+     */
+    public void addCriterion(String criterionIdentifier, boolean achieved) {
+        this.criteriaMap.put(criterionIdentifier, new Criterion(this, criterionIdentifier, achieved));
+        this.requirements.add(new ArrayList<>(List.of(criterionIdentifier)));
+        update();
+    }
+
+    /**
+     * Adds criteria to the same requirement.
+     *
+     * @param criteriaIdentifiers criteria identifiers
+     */
+    public void addCriteriaToSameRequirement(String... criteriaIdentifiers) {
+        for (String criterionIdentifier : criteriaIdentifiers) {
+            this.criteriaMap.put(criterionIdentifier, new Criterion(this, criterionIdentifier, false));
+        }
+        this.requirements.add(new ArrayList<>(List.of(criteriaIdentifiers)));
+        update();
+    }
+
+    /**
+     * Removes criterion from advancement (from criteria
+     * map and requirements)
+     *
+     * @param criterionIdentifier criterion to remove
+     */
+    public void removeCriterion(String criterionIdentifier) {
+        this.criteriaMap.remove(criterionIdentifier);
+
+        // Remove from requirements
+        var iterator = this.requirements.listIterator();
+        while (iterator.hasNext()) {
+            List<String> requirement = iterator.next();
+            requirement.removeIf(id -> id.equals(criterionIdentifier));
+            if (requirement.size() == 0) {
+                iterator.remove();
+            }
+        }
+        update();
+    }
+
+    @Nullable
+    public Criterion getCriterion(String criterionIdentifier) {
+        return this.criteriaMap.get(criterionIdentifier);
+    }
+
+    /**
+     * Gets all criteria
+     *
+     * @return returns criteria list
+     */
+    public List<Criterion> getCriteriaList() {
+        return List.copyOf(this.criteriaMap.values());
+    }
+
+    public List<List<String>> getRequirements() {
+        return List.copyOf(this.requirements);
     }
 
     /**
@@ -253,9 +325,10 @@ public class Advancement {
      * Gets the identifier of this advancement, used to register the advancement, use it as a parent and to retrieve it later
      * in the {@link AdvancementTab}.
      *
-     * @return the advancement identifier
+     * @return the advancement identifier, null when advancement is not registered
      */
-    protected String getIdentifier() {
+    @Nullable
+    public String getIdentifier() {
         return identifier;
     }
 
@@ -276,16 +349,39 @@ public class Advancement {
      * @return the advancement parent, null for {@link AdvancementRoot}
      */
     @Nullable
-    protected Advancement getParent() {
+    public Advancement getParent() {
         return parent;
     }
 
+    /**
+     * Changes the advancement parent
+     * * <p>
+     * WARNING: unsafe, only used by {@link AdvancementTab} to initialize the advancement.
+     *
+     * @param parent Parent to set
+     */
     protected void setParent(Advancement parent) {
         this.parent = parent;
     }
 
+    protected @NotNull List<AdvancementsPacket.Criteria> toCriteriaPacketList() {
+        List<AdvancementsPacket.Criteria> criteriaPacketList = new ArrayList<>();
+        for (Criterion criteria : criteriaMap.values()) {
+            criteriaPacketList.add(criteria.toCriteriaPacket());
+        }
+        return criteriaPacketList;
+    }
+
+    protected @NotNull List<AdvancementsPacket.Requirement> toRequirementList() {
+        List<AdvancementsPacket.Requirement> requirementList = new ArrayList<>();
+        for (List<String> identifierList : this.requirements) {
+            requirementList.add(new AdvancementsPacket.Requirement(identifierList));
+        }
+        return requirementList;
+    }
+
     protected @NotNull AdvancementsPacket.ProgressMapping toProgressMapping() {
-        final var advancementProgress = new AdvancementsPacket.AdvancementProgress(List.of(criteria));
+        final var advancementProgress = new AdvancementsPacket.AdvancementProgress(toCriteriaPacketList());
         return new AdvancementsPacket.ProgressMapping(identifier, advancementProgress);
     }
 
@@ -303,8 +399,8 @@ public class Advancement {
         final Advancement parent = getParent();
         final String parentIdentifier = parent != null ? parent.getIdentifier() : null;
         AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement(parentIdentifier, toDisplayData(),
-                List.of(criteria.criterionIdentifier()),
-                List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))));
+                criteriaMap.keySet(),
+                toRequirementList());
         return new AdvancementsPacket.AdvancementMapping(getIdentifier(), adv);
     }
 
@@ -322,8 +418,6 @@ public class Advancement {
      * Sends update to all tab viewers if one of the advancement value changes.
      */
     protected void update() {
-        updateCriteria();
-
         if (tab != null) {
             final Set<Player> viewers = tab.getViewers();
             AdvancementsPacket createPacket = tab.createPacket();
@@ -331,12 +425,6 @@ public class Advancement {
             PacketUtils.sendGroupedPacket(viewers, tab.removePacket);
             PacketUtils.sendGroupedPacket(viewers, createPacket);
         }
-    }
-
-    protected void updateCriteria() {
-        final Long achievedDate = achieved ? System.currentTimeMillis() : null;
-        final var progress = new AdvancementsPacket.CriterionProgress(achievedDate);
-        this.criteria = new AdvancementsPacket.Criteria(identifier, progress);
     }
 
     private int getFlags() {

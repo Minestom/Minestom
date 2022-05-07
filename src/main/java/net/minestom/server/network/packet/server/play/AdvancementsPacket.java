@@ -11,6 +11,7 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
@@ -57,8 +58,8 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
-                              @NotNull List<String> criteria,
-                              @NotNull List<Requirement> requirements) implements Writeable {
+                              @NotNull Collection<String> criteria,
+                              @NotNull Collection<Requirement> requirements) implements Writeable {
         public Advancement {
             criteria = List.copyOf(criteria);
             requirements = List.copyOf(requirements);
@@ -82,7 +83,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
     }
 
-    public record Requirement(@NotNull List<String> requirements) implements Writeable {
+    public record Requirement(@NotNull Collection<String> requirements) implements Writeable {
         public Requirement {
             requirements = List.copyOf(requirements);
         }
