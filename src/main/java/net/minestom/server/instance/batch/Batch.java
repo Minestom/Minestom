@@ -26,7 +26,7 @@ import java.util.concurrent.ForkJoinPool;
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
-public interface Batch<C> extends Block.Setter {
+public interface Batch<C> extends Block.Setter, Block.Getter {
 
     ExecutorService BLOCK_BATCH_POOL = ForkJoinPool.commonPool();
 
