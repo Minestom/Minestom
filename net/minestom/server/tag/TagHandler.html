@@ -109,19 +109,31 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Copy the content of the given <code>NBTCompoundLike</code> into a new <a href="TagHandler.html" title="interface in net.minestom.server.tag"><code>TagHandler</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#newHandler()" class="member-name-link">newHandler</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableCopy()" class="member-name-link">readableCopy</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">getAndUpdateTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#newHandler()" class="member-name-link">newHandler</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableCopy()" class="member-name-link">readableCopy</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Creates a readable copy of this handler.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">updateAndGetTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateContent(org.jglrxavpok.hephaistos.nbt.NBTCompoundLike)" class="member-name-link">updateContent</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompoundLike&nbsp;compound)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Updates the content of this handler.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">updateTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -196,6 +208,36 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <dt>Returns:</dt>
 <dd>a nbt compound representation of this handler</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>updateTag</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>updateAndGetTag</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">updateAndGetTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>getAndUpdateTag</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getAndUpdateTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
 </section>
 </li>
 <li>
