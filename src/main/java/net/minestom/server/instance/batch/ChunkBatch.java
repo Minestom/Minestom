@@ -67,6 +67,16 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             return this.blocks.get(index);
         }
     }
+    
+    @Override
+    public @Nullable Block getBlock(int x, int y, int z) {
+        return getBlock(x, y, z, Condition.NONE);
+    }
+    
+    @Override
+    public @Nullable Block getBlock(Point point) {
+        return getBlock(point, Condition.NONE);
+    }
 
     @Override
     public void clear() {
