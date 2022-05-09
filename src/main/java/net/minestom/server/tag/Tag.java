@@ -120,8 +120,8 @@ public class Tag<T> {
         var entry = this.entry;
         var readFunction = entry.reader();
         var writeFunction = entry.writer();
-        var listEntry = new Serializers.Entry<List<T>, NBTList>(
-                NBTList.class,
+        var listEntry = new Serializers.Entry<List<T>, NBTList<?>>(
+                NBTType.TAG_List,
                 read -> {
                     var list = (NBTList<?>) read;
                     final int size = list.getSize();

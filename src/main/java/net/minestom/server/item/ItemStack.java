@@ -6,7 +6,7 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.tag.Taggable;
+import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
@@ -204,7 +204,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         return meta();
     }
 
-    sealed interface Builder extends Taggable
+    sealed interface Builder extends TagWritable
             permits ItemStackImpl.Builder {
         @Contract(value = "_ -> this")
         @NotNull Builder amount(int amount);

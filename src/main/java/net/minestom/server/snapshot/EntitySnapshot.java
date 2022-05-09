@@ -10,7 +10,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public interface EntitySnapshot extends Snapshot, TagReadable {
+public sealed interface EntitySnapshot extends Snapshot, TagReadable
+        permits PlayerSnapshot, SnapshotImpl.Entity {
     @NotNull EntityType type();
 
     @NotNull UUID uuid();

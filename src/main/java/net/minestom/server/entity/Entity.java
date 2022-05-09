@@ -16,6 +16,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -40,6 +41,7 @@ import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
@@ -182,9 +184,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        setBoundingBox(entityType.registry().boundingBox());
-
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+
+        setBoundingBox(entityType.registry().boundingBox());
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
@@ -760,16 +762,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Returns the current bounding box (based on pose).
      * Is used to check collision with coordinates or other blocks/entities.
      *
      * @return the entity bounding box
      */
     public @NotNull BoundingBox getBoundingBox() {
-        return boundingBox;
+        // Check if there is a specific bounding box for this pose
+        BoundingBox poseBoundingBox = BoundingBox.fromPose(getPose());
+        return poseBoundingBox == null ? boundingBox : poseBoundingBox;
     }
 
     /**
-     * Changes the internal entity bounding box.
+     * Changes the internal entity standing bounding box.
+     * When the pose is not standing, a different bounding box may be used for collision.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
@@ -778,11 +784,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param depth  the bounding box Z size
      */
     public void setBoundingBox(double width, double height, double depth) {
-        this.boundingBox = new BoundingBox(width, height, depth);
+        setBoundingBox(new BoundingBox(width, height, depth));
     }
 
     /**
-     * Changes the internal entity bounding box.
+     * Changes the internal entity standing bounding box.
+     * When the pose is not standing, a different bounding box may be used for collision.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
@@ -1102,8 +1109,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param sneaking true to make the entity sneak
      */
     public void setSneaking(boolean sneaking) {
-        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
         this.entityMeta.setSneaking(sneaking);
+        updatePose();
     }
 
     /**
@@ -1184,6 +1191,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
+    }
+
+    protected void updatePose() {
+        if (entityMeta.isFlyingWithElytra()) {
+            setPose(Pose.FALL_FLYING);
+        } else if (entityMeta.isSwimming()) {
+            setPose(Pose.SWIMMING);
+        } else if (this instanceof LivingEntity && ((LivingEntityMeta) entityMeta).isInRiptideSpinAttack()) {
+            setPose(Pose.SPIN_ATTACK);
+        } else if (entityMeta.isSneaking()) {
+            setPose(Pose.SNEAKING);
+        } else {
+            setPose(Pose.STANDING);
+        }
     }
 
     /**
@@ -1379,7 +1400,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return boundingBox.height() * 0.85;
+        return getPose() == Pose.SLEEPING ? 0.2 : (boundingBox.height() * 0.85);
     }
 
     /**
@@ -1568,7 +1589,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
         final int[] passengersId = ArrayUtils.mapToIntArray(passengers, Entity::getEntityId);
         final Entity vehicle = this.vehicle;
-        return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
+        return new SnapshotImpl.Entity(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 tagHandler.readableCopy());
