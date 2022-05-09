@@ -123,32 +123,15 @@ public class Tag<T> {
         var listEntry = new Serializers.Entry<List<T>, NBTList<?>>(
                 NBTType.TAG_List,
                 read -> {
-                    var list = (NBTList<?>) read;
-                    final int size = list.getSize();
-                    if (size == 0)
-                        return List.of();
-                    T[] array = (T[]) new Object[size];
-                    for (int i = 0; i < size; i++) {
-                        array[i] = readFunction.apply(list.get(i));
-                    }
-                    return List.of(array);
+                    if (read.isEmpty()) return List.of();
+                    return read.asListView().stream().map(readFunction).toList();
                 },
                 write -> {
-                    final int size = write.size();
-                    if (size == 0)
-                        return new NBTList<>(NBTType.TAG_String); // String is the default type for lists
-                    NBTType<NBT> type = null;
-                    NBT[] array = new NBT[size];
-                    for (int i = 0; i < size; i++) {
-                        final NBT nbt = writeFunction.apply(write.get(i));
-                        if (type == null) {
-                            type = (NBTType<NBT>) nbt.getID();
-                        } else if (type != nbt.getID()) {
-                            throw new IllegalArgumentException("All elements of the list must have the same type");
-                        }
-                        array[i] = nbt;
-                    }
-                    return NBT.List(type, List.of(array));
+                    if (write.isEmpty())
+                        return NBT.List(NBTType.TAG_String); // String is the default type for lists
+                    final List<NBT> list = write.stream().map(writeFunction).toList();
+                    final NBTType<?> type = list.get(0).getID();
+                    return NBT.List(type, list);
                 });
         UnaryOperator<List<T>> co = this.copy != null ? ts -> {
             final int size = ts.size();
