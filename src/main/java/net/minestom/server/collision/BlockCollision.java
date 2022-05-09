@@ -375,12 +375,30 @@ final class BlockCollision {
                                     Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox,
                                     Block.Getter getter, SweepResult finalResult) {
         // Don't step if chunk isn't loaded yet
-        final Block checkBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
-        boolean hitBlock = false;
-        if (checkBlock.isSolid()) {
-            final Vec blockPos = new Vec(blockX, blockY, blockZ);
-            hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
+        final Block currentBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
+        final Shape currentShape = currentBlock.registry().collisionShape();
+
+        final boolean currentCollidable = !currentShape.relativeEnd().isZero();
+
+        // only consider the block below if current is non-collidable or very short
+        if((!currentCollidable || currentShape.relativeEnd().y() < 0.5)) {
+            // we need to check below for a tall block (fence, wall, ...)
+            final Block belowBlock = getter.getBlock(blockX, blockY - 1, blockZ, Block.Getter.Condition.TYPE);
+            final Shape belowShape = belowBlock.registry().collisionShape();
+
+            if(belowShape.relativeEnd().y() > 1) {
+                final Vec currentPos = new Vec(blockX, blockY, blockZ);
+                final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
+
+                // we should always check both shapes, so no short-circuit here, to handle cases where the bounding box
+                // hits the current solid but misses the tall solid
+                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult)
+                        | (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
+                        currentPos, boundingBox, finalResult));
+            }
         }
-        return hitBlock;
+
+        return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
+                new Vec(blockX, blockY, blockZ), boundingBox, finalResult);
     }
 }

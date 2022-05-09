@@ -60,6 +60,60 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckFallFence(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.OAK_FENCE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 43.5, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -0.25, 0));
+        assertEqualsPoint(new Pos(0.5, 43.5, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckFallCarpetFence(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.OAK_FENCE);
+        instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 54.0625, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -11.03, 0));
+        assertEqualsPoint(new Pos(0, 43.0625, 0), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckHorizontalFence(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 0, Block.OAK_FENCE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 43.25, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(2, 0, 0));
+        assertEqualsPoint(new Pos(1.075, 43.25, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckHorizontalCarpetedFence(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 42, 0, Block.OAK_FENCE);
+        instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 43.25, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(2, 0, 0));
+        assertEqualsPoint(new Pos(1.075, 43.25, 0.5), res.newPosition());
+    }
+
+    @Test
     public void entityPhysicsCheckDiagonal(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
