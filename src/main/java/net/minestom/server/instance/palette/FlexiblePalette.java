@@ -86,9 +86,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         values[index] = block & ~(clear << bitIndex) | (value & clear) << bitIndex;
         // Check if block count needs to be updated
         final boolean currentAir = oldBlock == 0;
-        if (currentAir != (value == 0)) {
-            this.count += currentAir ? 1 : -1;
-        }
+        if (currentAir != (value == 0)) this.count += currentAir ? 1 : -1;
     }
 
     @Override
@@ -312,11 +310,10 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     static int getSectionIndex(int dimension, int x, int y, int z) {
         final int dimensionMask = dimension - 1;
-        y &= dimensionMask;
-        z &= dimensionMask;
-        x &= dimensionMask;
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMask);
-        return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
+        return (y & dimensionMask) << (dimensionBitCount << 1) |
+                (z & dimensionMask) << dimensionBitCount |
+                (x & dimensionMask);
     }
 
     static int maxPaletteSize(int bitsPerEntry) {
