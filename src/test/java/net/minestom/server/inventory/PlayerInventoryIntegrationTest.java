@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class PlayerInventoryTest {
+public class PlayerInventoryIntegrationTest {
 
     private static final ItemStack MAGIC_STACK = ItemStack.of(Material.DIAMOND, 3);
 
@@ -34,6 +34,10 @@ public class PlayerInventoryTest {
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
         player.getInventory().setItemStack(3, MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
+
+        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        player.getInventory().setItemStack(3, ItemStack.AIR);
+        packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
 
     @Test
@@ -50,6 +54,10 @@ public class PlayerInventoryTest {
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
         player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
+
+        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        player.getInventory().setCursorItem(ItemStack.AIR);
+        packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
 
     @Test
