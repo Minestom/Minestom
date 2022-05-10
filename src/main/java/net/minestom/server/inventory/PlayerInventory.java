@@ -140,14 +140,8 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
             case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
             case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
             case BOOTS_SLOT -> EquipmentSlot.BOOTS;
-            default -> {
-                if (slot == player.getHeldSlot()) {
-                    yield EquipmentSlot.MAIN_HAND;
-                } else if (slot == OFFHAND_SLOT) {
-                    yield EquipmentSlot.OFF_HAND;
-                }
-                yield null;
-            }
+            case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
+            default -> slot == player.getHeldSlot() ? EquipmentSlot.MAIN_HAND : null;
         };
         if (equipmentSlot != null) {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);

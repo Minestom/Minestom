@@ -79,14 +79,14 @@ public final class PacketUtils {
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
-        if (audience instanceof Player) {
-            ((Player) audience).getPlayerConnection().sendPacket(packet);
-        } else if (audience instanceof PacketGroupingAudience) {
-            PacketUtils.sendGroupedPacket(((PacketGroupingAudience) audience).getPlayers(), packet);
-        } else if (audience instanceof ForwardingAudience.Single) {
-            PacketUtils.sendPacket(((ForwardingAudience.Single) audience).audience(), packet);
-        } else if (audience instanceof ForwardingAudience) {
-            for (Audience member : ((ForwardingAudience) audience).audiences()) {
+        if (audience instanceof Player player) {
+            player.sendPacket(packet);
+        } else if (audience instanceof PacketGroupingAudience groupingAudience) {
+            PacketUtils.sendGroupedPacket(groupingAudience.getPlayers(), packet);
+        } else if (audience instanceof ForwardingAudience.Single singleAudience) {
+            PacketUtils.sendPacket(singleAudience.audience(), packet);
+        } else if (audience instanceof ForwardingAudience forwardingAudience) {
+            for (Audience member : forwardingAudience.audiences()) {
                 PacketUtils.sendPacket(member, packet);
             }
         }

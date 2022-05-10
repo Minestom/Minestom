@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -26,9 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
 public non-sealed class Inventory extends AbstractInventory implements Viewable {
-
-    // incremented each time an inventory is created (used in the window packets)
-    private static byte LAST_INVENTORY_ID;
+    private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
     // the id of this inventory
     private final byte id;
@@ -58,11 +57,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         this(inventoryType, Component.text(title));
     }
 
-    private static synchronized byte generateId() {
-        if (LAST_INVENTORY_ID == Byte.MAX_VALUE) {
-            LAST_INVENTORY_ID = 0;
-        }
-        return ++LAST_INVENTORY_ID;
+    private static byte generateId() {
+        return (byte) Math.abs((byte) ID_COUNTER.incrementAndGet());
     }
 
     /**
@@ -109,7 +105,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public synchronized void clear() {
-        cursorPlayersItem.clear();
+        this.cursorPlayersItem.clear();
         super.clear();
     }
 
