@@ -109,7 +109,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      */
     @Override
     public void update() {
-        this.player.getPlayerConnection().sendPacket(createWindowItemsPacket());
+        this.player.sendPacket(createWindowItemsPacket());
     }
 
     /**
@@ -128,29 +128,27 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
         if (this.cursorItem.equals(cursorItem)) return;
-
         this.cursorItem = cursorItem;
-
         final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-        player.getPlayerConnection().sendPacket(setSlotPacket);
+        this.player.sendPacket(setSlotPacket);
     }
 
     @Override
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        EquipmentSlot equipmentSlot = null;
-        if (slot == player.getHeldSlot()) {
-            equipmentSlot = EquipmentSlot.MAIN_HAND;
-        } else if (slot == OFFHAND_SLOT) {
-            equipmentSlot = EquipmentSlot.OFF_HAND;
-        } else if (slot == HELMET_SLOT) {
-            equipmentSlot = EquipmentSlot.HELMET;
-        } else if (slot == CHESTPLATE_SLOT) {
-            equipmentSlot = EquipmentSlot.CHESTPLATE;
-        } else if (slot == LEGGINGS_SLOT) {
-            equipmentSlot = EquipmentSlot.LEGGINGS;
-        } else if (slot == BOOTS_SLOT) {
-            equipmentSlot = EquipmentSlot.BOOTS;
-        }
+        final EquipmentSlot equipmentSlot = switch (slot) {
+            case HELMET_SLOT -> EquipmentSlot.HELMET;
+            case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
+            case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
+            case BOOTS_SLOT -> EquipmentSlot.BOOTS;
+            default -> {
+                if (slot == player.getHeldSlot()) {
+                    yield EquipmentSlot.MAIN_HAND;
+                } else if (slot == OFFHAND_SLOT) {
+                    yield EquipmentSlot.OFF_HAND;
+                }
+                yield null;
+            }
+        };
         if (equipmentSlot != null) {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
@@ -160,10 +158,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
         if (sendPacket) {
             // Sync equipment
-            if (equipmentSlot != null) {
-                this.player.syncEquipment(equipmentSlot);
-            }
-
+            if (equipmentSlot != null) this.player.syncEquipment(equipmentSlot);
             // Refresh slot
             sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
         }
@@ -177,7 +172,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * @param itemStack the item stack in the slot
      */
     protected void sendSlotRefresh(short slot, ItemStack itemStack) {
-        player.getPlayerConnection().sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
+        this.player.sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
     }
 
     /**

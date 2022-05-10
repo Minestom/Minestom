@@ -197,9 +197,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     @Override
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         itemStacks[slot] = itemStack;
-        if (sendPacket) {
-            sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
-        }
+        if (sendPacket) sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
