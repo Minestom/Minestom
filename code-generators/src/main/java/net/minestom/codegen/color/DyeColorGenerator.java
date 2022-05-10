@@ -128,7 +128,6 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
         // Use data
         for (JsonObject dyeColorObject : StreamSupport.stream(dyeColors.spliterator(), true).map(JsonElement::getAsJsonObject).sorted(Comparator.comparingInt(o -> o.get("id").getAsInt())).toList()) {
             String dyeColorName = dyeColorObject.get("name").getAsString();
-            System.out.println(dyeColorName);
             dyeColorEnum.addEnumConstant(toConstant(dyeColorName), TypeSpec.anonymousClassBuilder(
                             "new $T(0x$L), new $T(0x$L), new $T(0x$L), $L",
                             colorCN, Integer.toString(dyeColorObject.get("textureDiffuseColor").getAsInt(), 16),
