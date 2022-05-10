@@ -127,7 +127,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * @param cursorItem the new cursor item
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
-        if (this.cursorItem == cursorItem) return;
+        if (this.cursorItem.equals(cursorItem)) return;
 
         this.cursorItem = cursorItem;
 

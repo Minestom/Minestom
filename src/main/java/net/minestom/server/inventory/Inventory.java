@@ -109,10 +109,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public synchronized void clear() {
+        cursorPlayersItem.clear();
         super.clear();
-        // Clear cursor
-        getViewers().forEach(player ->
-                setCursorItem(player, ItemStack.AIR));
     }
 
     /**
@@ -186,7 +184,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        if (!currentCursorItem.isSimilar(cursorItem)) {
+        if (!currentCursorItem.equals(cursorItem)) {
             player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
         }
         if (!cursorItem.isAir()) {

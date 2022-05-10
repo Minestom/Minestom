@@ -75,7 +75,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
                     slot
             );
             previous = itemStacks[slot];
-            if (previous == itemStack) return; // Avoid sending updates if the item has not changed
+            if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
             UNSAFE_itemInsert(slot, itemStack, sendPacket);
         }
         if (this instanceof PlayerInventory inv) {
