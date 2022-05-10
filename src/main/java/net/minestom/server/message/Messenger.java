@@ -15,26 +15,26 @@ import java.util.UUID;
 /**
  * Utility class to handle client chat settings.
  */
-public class Messenger {
+public final class Messenger {
     /**
      * The message sent to the client if they send a chat message but it is rejected by the server.
      */
     public static final Component CANNOT_SEND_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
-
-    private static final ChatMessagePacket CANNOT_SEND_PACKET = new ChatMessagePacket(CANNOT_SEND_MESSAGE, ChatPosition.SYSTEM_MESSAGE, null);
+    private static final UUID NO_SENDER = new UUID(0, 0);
+    private static final ChatMessagePacket CANNOT_SEND_PACKET = new ChatMessagePacket(CANNOT_SEND_MESSAGE, ChatPosition.SYSTEM_MESSAGE, NO_SENDER);
 
     /**
      * Sends a message to a player, respecting their chat settings.
      *
-     * @param player the player
-     * @param message the message
+     * @param player   the player
+     * @param message  the message
      * @param position the position
-     * @param uuid the UUID of the sender, if any
+     * @param uuid     the UUID of the sender, if any
      * @return if the message was sent
      */
     public static boolean sendMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
         if (getChatMessageType(player).accepts(position)) {
-            player.sendPacket(new ChatMessagePacket(message, position, uuid));
+            player.sendPacket(new ChatMessagePacket(message, position, Objects.requireNonNullElse(uuid, NO_SENDER)));
             return true;
         }
         return false;
@@ -43,14 +43,14 @@ public class Messenger {
     /**
      * Sends a message to some players, respecting their chat settings.
      *
-     * @param players the players
-     * @param message the message
+     * @param players  the players
+     * @param message  the message
      * @param position the position
-     * @param uuid the UUID of the sender, if any
+     * @param uuid     the UUID of the sender, if any
      */
     public static void sendMessage(@NotNull Collection<Player> players, @NotNull Component message,
-                                                   @NotNull ChatPosition position, @Nullable UUID uuid) {
-        PacketUtils.sendGroupedPacket(players, new ChatMessagePacket(message, position, uuid),
+                                   @NotNull ChatPosition position, @Nullable UUID uuid) {
+        PacketUtils.sendGroupedPacket(players, new ChatMessagePacket(message, position, Objects.requireNonNullElse(uuid, NO_SENDER)),
                 player -> getChatMessageType(player).accepts(position));
     }
 
