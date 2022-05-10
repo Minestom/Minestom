@@ -60,10 +60,6 @@ public final class MinecraftServer {
     public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
-    // Network monitoring
-    private static int rateLimit = 300;
-    private static int maxPacketSize = 30_000;
-
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
 
@@ -110,42 +106,6 @@ public final class MinecraftServer {
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
         PacketUtils.broadcastPacket(PluginMessagePacket.getBrandPacket());
-    }
-
-    /**
-     * Gets the maximum number of packets a client can send over 1 second.
-     *
-     * @return the packet count limit over 1 second, 0 if not enabled
-     */
-    public static int getRateLimit() {
-        return rateLimit;
-    }
-
-    /**
-     * Changes the number of packet a client can send over 1 second without being disconnected.
-     *
-     * @param rateLimit the number of packet, 0 to disable
-     */
-    public static void setRateLimit(int rateLimit) {
-        MinecraftServer.rateLimit = rateLimit;
-    }
-
-    /**
-     * Gets the maximum packet size (in bytes) that a client can send without getting disconnected.
-     *
-     * @return the maximum packet size
-     */
-    public static int getMaxPacketSize() {
-        return maxPacketSize;
-    }
-
-    /**
-     * Changes the maximum packet size (in bytes) that a client can send without getting disconnected.
-     *
-     * @param maxPacketSize the new max packet size
-     */
-    public static void setMaxPacketSize(int maxPacketSize) {
-        MinecraftServer.maxPacketSize = maxPacketSize;
     }
 
     /**

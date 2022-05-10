@@ -7,6 +7,6 @@ import net.minestom.server.network.packet.server.play.CraftRecipeResponse;
 public class RecipeListener {
 
     public static void listener(ClientCraftRecipeRequest packet, Player player) {
-        player.getPlayerConnection().sendPacket(new CraftRecipeResponse(packet.windowId(), packet.recipe()));
+        player.sendPacket(new CraftRecipeResponse(packet.windowId(), packet.recipe()));
     }
 }

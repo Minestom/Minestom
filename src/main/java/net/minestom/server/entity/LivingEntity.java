@@ -211,7 +211,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                             EventDispatcher.callCancellable(pickupItemEvent, () -> {
                                 final ItemStack item = itemEntity.getItemStack();
-                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
+                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
                                 itemEntity.remove();
                             });
                         }
@@ -265,6 +265,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
+        setPose(Pose.DYING);
         setHealth(0);
 
         // Reset velocity
@@ -521,9 +522,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public void setBoundingBox(double x, double y, double z) {
-        super.setBoundingBox(x, y, z);
-        this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
+    public void setBoundingBox(BoundingBox boundingBox) {
+        super.setBoundingBox(boundingBox);
+        this.expandedBoundingBox = boundingBox.expand(1, 0.5f, 1);
     }
 
     /**
@@ -550,6 +551,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
             meta.setNotifyAboutChanges(true);
+
+            updatePose(); // Riptide spin attack has a pose
         }
     }
 
@@ -559,6 +562,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     public void setFlyingWithElytra(boolean isFlying) {
         this.entityMeta.setFlyingWithElytra(isFlying);
+        updatePose();
     }
 
     /**

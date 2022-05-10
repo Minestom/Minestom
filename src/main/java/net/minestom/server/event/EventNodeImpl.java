@@ -7,8 +7,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,9 +18,9 @@ import java.util.function.Consumer;
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final ClassValue<ListenerHandle<T>> handleMap = new ClassValue<>() {
+    private final ClassValue<Handle<T>> handleMap = new ClassValue<>() {
         @Override
-        protected ListenerHandle<T> computeValue(Class<?> type) {
+        protected Handle<T> computeValue(Class<?> type) {
             //noinspection unchecked
             return new Handle<>((Class<T>) type);
         }
@@ -82,7 +80,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                 if (equals(child, name, eventType)) {
                     removeChild(child);
                     addChild(eventNode);
-                    continue;
+                    break;
                 }
                 child.replaceChildren(name, eventType, eventNode);
             }
@@ -274,8 +272,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
-            ListenerHandle<T> handle = getHandle((Class<T>) type);
-            Handle.UPDATED.setRelease(handle, false);
+            Handle<T> handle = handleMap.get(type);
+            handle.invalidate();
         });
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
@@ -307,20 +305,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @SuppressWarnings("unchecked")
     final class Handle<E extends Event> implements ListenerHandle<E> {
-        private static final VarHandle UPDATED;
-
-        static {
-            try {
-                UPDATED = MethodHandles.lookup().findVarHandle(EventNodeImpl.Handle.class, "updated", boolean.class);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new IllegalStateException(e);
-            }
-        }
-
         private final Class<E> eventType;
         private Consumer<E> listener = null;
-        @SuppressWarnings("unused")
-        private boolean updated; // Use the UPDATED var handle
+        private volatile boolean updated;
 
         Handle(Class<E> eventType) {
             this.eventType = eventType;
@@ -342,13 +329,17 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             return updatedListener() != null;
         }
 
+        void invalidate() {
+            this.updated = false;
+        }
+
         @Nullable Consumer<E> updatedListener() {
-            if ((boolean) UPDATED.getAcquire(this)) return listener;
+            if (updated) return listener;
             synchronized (GLOBAL_CHILD_LOCK) {
-                if ((boolean) UPDATED.getAcquire(this)) return listener;
+                if (updated) return listener;
                 final Consumer<E> listener = createConsumer();
                 this.listener = listener;
-                UPDATED.setRelease(this, true);
+                this.updated = true;
                 return listener;
             }
         }
@@ -492,7 +483,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
-                UPDATED.setRelease(this, false);
+                invalidate();
             }
         }
     }

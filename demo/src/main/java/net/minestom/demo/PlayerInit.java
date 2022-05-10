@@ -1,8 +1,6 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.demo.generator.ChunkGeneratorDemo;
-import net.minestom.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
@@ -31,6 +29,7 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -40,7 +39,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.IntStream;
 
 public class PlayerInit {
 
@@ -122,17 +120,13 @@ public class PlayerInit {
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
 
         if (false) {
             System.out.println("start");
-            IntStream.range(0, 5000).forEach(value -> {
-                instanceContainer.loadChunk(0, value).join();
-            });
+            ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> instanceContainer.loadChunk(x, z).join());
             System.out.println("load end");
         }
 

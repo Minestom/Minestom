@@ -3,10 +3,8 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.permission.Permission;
-import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -133,12 +131,8 @@ public class CommandConditionTest {
         }
 
         @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        public @NotNull TagHandler tagHandler() {
             return null;
-        }
-
-        @Override
-        public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         }
     }
 }

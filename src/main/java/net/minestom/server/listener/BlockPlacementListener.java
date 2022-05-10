@@ -1,12 +1,11 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
@@ -25,8 +24,6 @@ import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacement
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
-
-import java.util.Collection;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -67,7 +64,7 @@ public class BlockPlacementListener {
             return;
         }
 
-        final Material useMaterial = usedItem.getMaterial();
+        final Material useMaterial = usedItem.material();
         if (!useMaterial.isBlock()) {
             // Player didn't try to place a block but interacted with one
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace);
@@ -82,7 +79,7 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-            canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(interactedBlock);
+            canPlaceBlock = usedItem.meta().getCanPlaceOn().contains(Block.fromNamespaceId(interactedBlock.namespace()));
         }
 
         // Get the newly placed block position
@@ -96,7 +93,7 @@ public class BlockPlacementListener {
             // using refreshChunk results in the client not being in sync
             // after rapid invalid block placements
             final Block block = instance.getBlock(placementPosition);
-            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, block));
+            player.sendPacket(new BlockChangePacket(placementPosition, block));
             return;
         }
 
@@ -109,27 +106,18 @@ public class BlockPlacementListener {
         }
 
         final Block placedBlock = useMaterial.block();
-        final Collection<Entity> entities = instance.getNearbyEntities(placementPosition, 5);
+        Entity collisionEntity = CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock);
+        if (collisionEntity != null) {
+            // If a player is trying to place a block on themselves, the client will send a block change but will not set the block on the client
+            // For this reason, the block doesn't need to be updated for the client
 
-        // Check if the player is trying to place a block in an entity
-        boolean intersectPlayer = placedBlock.registry().collisionShape().intersectBox(player.getPosition().sub(placementPosition), player.getBoundingBox());
-
-        boolean hasIntersect = intersectPlayer || entities
-                .stream()
-                .filter(entity -> entity.getEntityType() != EntityType.ITEM)
-                .filter(entity -> {
-                    // Marker Armor Stands should not prevent block placement
-                    if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta) {
-                        return !armorStandMeta.isMarker();
-                    }
-                    return true;
-                })
-                .anyMatch(entity -> placedBlock.registry().collisionShape().intersectBox(entity.getPosition().sub(placementPosition), entity.getBoundingBox()));
-
-        if (hasIntersect) {
-            refresh(player, chunk);
+            // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
+            if (collisionEntity != player)
+                refresh(player, chunk);
+            
             return;
         }
+
         // BlockPlaceEvent check
         PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
@@ -156,8 +144,11 @@ public class BlockPlacementListener {
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
-            final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
+            final ItemStack newUsedItem = usedItem.consume(1);
             playerInventory.setItemInHand(hand, newUsedItem);
+        } else {
+            // Prevent invisible item on client
+            playerInventory.update();   
         }
     }
 

@@ -3,20 +3,10 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 
-class RayUtils {
-    /**
-     * @param rayDirection Ray vector
-     * @param rayStart     Ray start point
-     * @param instance     entity instance
-     * @param originChunk  entity chunk
-     * @param boundingBox  entity bounding box
-     * @param entityCentre position of entity
-     * @param finalResult  place to store final result of collision
-     */
-    public static void RaycastCollision(Vec rayDirection, Point rayStart, Instance instance, Chunk originChunk, BoundingBox boundingBox, Pos entityCentre, SweepResult finalResult) {
+final class RayUtils {
+    public static void RaycastCollision(Vec rayDirection, Point rayStart, Block.Getter getter, BoundingBox boundingBox, Pos entityCentre, SweepResult finalResult) {
         // This works by finding all the x, y and z grid line intersections and calculating the value of the point at that intersection
         // Finding all the intersections will give us all the full blocks that are traversed by the ray
 
@@ -53,7 +43,7 @@ class RayUtils {
 
                 // Check for collisions with the found block
                 // If a collision was found, break
-                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, getter, finalResult))
                     break;
             }
         }
@@ -79,7 +69,7 @@ class RayUtils {
                 zi -= zFix;
                 zStepsCompleted++;
 
-                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, getter, finalResult))
                     break;
             }
         }
@@ -105,7 +95,7 @@ class RayUtils {
                 yi -= yFix;
                 yStepsCompleted++;
 
-                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, instance, originChunk, finalResult))
+                if (BlockCollision.checkBoundingBox(xi, yi, zi, rayDirection, entityCentre, boundingBox, getter, finalResult))
                     break;
             }
         }
@@ -243,7 +233,7 @@ class RayUtils {
     }
 
     // Extended from 2d implementation found here https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/swept-aabb-collision-detection-and-response-r3084/
-    public static void SweptAABB(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult writeTo) {
+    public static boolean SweptAABB(BoundingBox collidableMoving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult finalResult) {
         double normalx, normaly, normalz;
 
         double xInvEntry, yInvEntry, zInvEntry;
@@ -305,13 +295,13 @@ class RayUtils {
         // find the earliest/latest times of collision
         double entryTime = Math.max(Math.max(xEntry, yEntry), zEntry);
         double exitTime = Math.min(Math.max(xExit, yExit), zExit);
+        double moveAmount = entryTime * 0.99999;
 
-        if (entryTime > exitTime || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f)) {
-            writeTo.res = 1;
-            writeTo.normalX = 0;
-            writeTo.normalY = 0;
-            writeTo.normalZ = 0;
-            return;
+        if (entryTime > exitTime
+                || xEntry > 1.0f || yEntry > 1.0f || zEntry > 1.0f
+                || (xEntry < 0.0f && yEntry < 0.0f && zEntry < 0.0f)
+                || moveAmount > finalResult.res) {
+            return false;
         }
 
         // calculate normal of collided surface
@@ -347,14 +337,14 @@ class RayUtils {
             }
         }
 
-        writeTo.res = entryTime * 0.99999;
-        writeTo.normalX = normalx;
-        writeTo.normalY = normaly;
-        writeTo.normalZ = normalz;
+        finalResult.res = moveAmount;
+        finalResult.normalX = normalx;
+        finalResult.normalY = normaly;
+        finalResult.normalZ = normalz;
+        return true;
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        // TODO: BoundingBox.ZERO?
-        return BoundingBoxIntersectionCheck(new BoundingBox(0, 0, 0), start, direction, boundingBox, position);
+        return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position);
     }
 }

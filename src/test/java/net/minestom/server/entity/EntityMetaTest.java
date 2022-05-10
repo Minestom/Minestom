@@ -2,16 +2,23 @@ package net.minestom.server.entity;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EntityMetaTest {
 
     @Test
     public void ensureRegistration() throws IllegalAccessException {
-        var fields = EntityTypes.class.getDeclaredFields();
-        for (var field : fields) {
-            EntityType entityType = (EntityType) field.get(this);
-            assertNotNull(EntityTypeImpl.ENTITY_META_SUPPLIER.get(entityType.name()), "Meta for " + entityType.name() + " is null");
+        List<String> list = new ArrayList<>();
+        for (var field : EntityTypes.class.getDeclaredFields()) {
+            final EntityType entityType = (EntityType) field.get(this);
+            final String name = entityType.name();
+            if (EntityTypeImpl.ENTITY_META_SUPPLIER.get(name) == null) {
+                list.add(name);
+            }
         }
+        assertTrue(list.isEmpty(), "Missing meta for: " + list);
     }
 }

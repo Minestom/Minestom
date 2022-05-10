@@ -1,63 +1,56 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemMetaBuilder;
-import net.minestom.server.utils.NBTUtils;
+import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.item.ItemSerializers;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<EnchantedBookMeta.Builder> {
+import static net.minestom.server.item.ItemSerializers.ENCHANTMENT_SERIALIZER;
 
-    private final Map<Enchantment, Short> storedEnchantmentMap;
+public record EnchantedBookMeta(TagReadable readable) implements ItemMetaView<EnchantedBookMeta.Builder> {
+    static final Tag<Map<Enchantment, Short>> ENCHANTMENTS = Tag.Structure("StoredEnchantments", ENCHANTMENT_SERIALIZER).list().map(enchantmentEntry -> {
+        Map<Enchantment, Short> map = new HashMap<>();
+        for (var entry : enchantmentEntry) map.put(entry.enchantment(), entry.level());
+        return Map.copyOf(map);
+    }, o -> {
+        List<ItemSerializers.EnchantmentEntry> entries = new ArrayList<>();
+        for (var entry : o.entrySet())
+            entries.add(new ItemSerializers.EnchantmentEntry(entry.getKey(), entry.getValue()));
+        return List.copyOf(entries);
+    }).defaultValue(Map.of());
 
-    protected EnchantedBookMeta(@NotNull ItemMetaBuilder metaBuilder, Map<Enchantment, Short> storedEnchantmentMap) {
-        super(metaBuilder);
-        this.storedEnchantmentMap = Map.copyOf(storedEnchantmentMap);
-    }
-
-    /**
-     * Gets the stored enchantment map.
-     * Stored enchantments are used on enchanted book.
-     *
-     * @return an unmodifiable map containing the item stored enchantments
-     */
     public @NotNull Map<Enchantment, Short> getStoredEnchantmentMap() {
-        return storedEnchantmentMap;
+        return getTag(ENCHANTMENTS);
     }
 
-    public static class Builder extends ItemMetaBuilder {
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return readable.getTag(tag);
+    }
 
-        private Map<Enchantment, Short> enchantments = new HashMap<>();
+    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
+        public Builder() {
+            this(TagHandler.newHandler());
+        }
 
         public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
-            this.enchantments = enchantments;
-            NBTUtils.writeEnchant(mutableNbt(), "StoredEnchantments", enchantments);
+            setTag(ENCHANTMENTS, Map.copyOf(enchantments));
             return this;
         }
 
         public @NotNull Builder enchantment(@NotNull Enchantment enchantment, short level) {
-            this.enchantments.put(enchantment, level);
-            enchantments(enchantments);
-            return this;
-        }
-
-        @Override
-        public @NotNull EnchantedBookMeta build() {
-            return new EnchantedBookMeta(this, enchantments);
-        }
-
-        @Override
-        public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.get("StoredEnchantments") instanceof NBTList<?> list &&
-                    list.getSubtagType() == NBTType.TAG_Compound) {
-                NBTUtils.loadEnchantments(list.asListOf(), this::enchantment);
-            }
+            var enchantments = new HashMap<>(getTag(ENCHANTMENTS));
+            enchantments.put(enchantment, level);
+            return enchantments(enchantments);
         }
     }
 }

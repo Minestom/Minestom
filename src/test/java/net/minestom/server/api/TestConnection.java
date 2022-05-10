@@ -7,15 +7,9 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public interface TestConnection {
-    @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos, @NotNull Consumer<Player> loginCallback);
-
-    default @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
-        return connect(instance, pos, (player) -> {
-        });
-    }
+    @NotNull CompletableFuture<@NotNull Player> connect(@NotNull Instance instance, @NotNull Pos pos);
 
     <T extends ServerPacket> @NotNull Collector<T> trackIncoming(@NotNull Class<T> type);
 

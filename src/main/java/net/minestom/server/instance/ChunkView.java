@@ -10,7 +10,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 final class ChunkView {
-    private static final int RANGE = MinecraftServer.getChunkViewDistance() * 16;
     private final Instance instance;
     private final Point point;
     final Set<Player> set = new SetImpl();
@@ -23,26 +22,20 @@ final class ChunkView {
     }
 
     private Collection<Player> references() {
-        final Instance instance = this.instance;
-        final Point point = this.point;
-        final var target = EntityTracker.Target.PLAYERS;
-
         Int2ObjectOpenHashMap<Player> entityMap = new Int2ObjectOpenHashMap<>(lastReferenceCount);
-        // Current Instance
-        instance.getEntityTracker().nearbyEntities(point, RANGE, target,
-                (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
-        // Shared Instances
-        if (instance instanceof InstanceContainer container) {
-            final List<SharedInstance> shared = container.getSharedInstances();
-            if (!shared.isEmpty()) {
-                for (var sharedInstance : shared) {
-                    sharedInstance.getEntityTracker().nearbyEntities(point, RANGE, target,
-                            (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
-                }
+        collectPlayers(instance, entityMap);
+        if (instance instanceof InstanceContainer container && !container.getSharedInstances().isEmpty()) {
+            for (Instance shared : container.getSharedInstances()) {
+                collectPlayers(shared, entityMap);
             }
         }
         this.lastReferenceCount = entityMap.size();
         return entityMap.values();
+    }
+
+    private void collectPlayers(Instance instance, Int2ObjectOpenHashMap<Player> map) {
+        instance.getEntityTracker().nearbyEntitiesByChunkRange(point, MinecraftServer.getChunkViewDistance(),
+                EntityTracker.Target.PLAYERS, (player) -> map.putIfAbsent(player.getEntityId(), player));
     }
 
     final class SetImpl extends AbstractSet<Player> {
