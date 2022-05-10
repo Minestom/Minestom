@@ -73,7 +73,7 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckFallCarpetFence(Env env) {
+    public void entityPhysicsCheckFallHitCarpet(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.OAK_FENCE);
         instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
@@ -84,6 +84,20 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -11.03, 0));
         assertEqualsPoint(new Pos(0, 43.0625, 0), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckFallHitFence(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.OAK_FENCE);
+        instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 54.0625, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -11.03, 0));
+        assertEqualsPoint(new Pos(0.5, 43.5, 0.5), res.newPosition());
     }
 
     @Test
@@ -103,7 +117,7 @@ public class EntityBlockPhysicsIntegrationTest {
     public void entityPhysicsCheckHorizontalCarpetedFence(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.OAK_FENCE);
-        instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
+        instance.setBlock(1, 43, 0, Block.BROWN_CARPET);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0.5, 43.25, 0.5)).join();
@@ -111,6 +125,89 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(2, 0, 0));
         assertEqualsPoint(new Pos(1.075, 43.25, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDiagonalCarpetedFenceX(Env env) {
+        var instance = env.createFlatInstance();
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
+        instance.setBlock(1, 42, 0, Block.OAK_FENCE);
+        instance.setBlock(1, 43, 0, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.075, 44.0625, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(2, -2, 0));
+        assertEqualsPoint(new Pos(1.075, 43.0625, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDiagonalCarpetedFenceZ(Env env) {
+        var instance = env.createFlatInstance();
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
+        instance.setBlock(0, 42, 1, Block.OAK_FENCE);
+        instance.setBlock(0, 43, 1, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 44.0625, 0.075)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 2));
+        assertEqualsPoint(new Pos(0.5, 43.0625, 1.075), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDiagonalCarpetedFenceXZ(Env env) {
+        var instance = env.createFlatInstance();
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
+        instance.setBlock(0, 42, 1, Block.OAK_FENCE.withProperties(Map.of("north", "true", "west", "true")));
+        instance.setBlock(0, 42, 0, Block.OAK_FENCE.withProperties(Map.of("south", "true")));
+        instance.setBlock(-1, 42, 1, Block.OAK_FENCE.withProperties(Map.of("east", "true")));
+
+        instance.setBlock(0, 43, 1, Block.BROWN_CARPET);
+        instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
+        instance.setBlock(-1, 43, 1, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(-0.925, 44.0625, 0.075)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(2, -2, 2));
+        PhysicsResult res2 = CollisionUtils.handlePhysics(entity, new Vec(5, -5, 2));
+        PhysicsResult res3 = CollisionUtils.handlePhysics(entity, new Vec(2, -5, 5));
+
+        Point expected = new Pos(0.075, 43.0625, 1.075);
+
+        assertEqualsPoint(expected, res.newPosition());
+        assertEqualsPoint(expected, res2.newPosition());
+        assertEqualsPoint(expected, res3.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckFenceAboveHead(Env env) {
+        var instance = env.createFlatInstance();
+
+        instance.setBlock(0, 45, 0, Block.OAK_FENCE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 43.0, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 2, 0));
+        assertEqualsPoint(new Pos(0.5, 43.05, 0.5), res.newPosition());
     }
 
     @Test

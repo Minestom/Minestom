@@ -380,15 +380,15 @@ final class BlockCollision {
 
         final boolean currentCollidable = !currentShape.relativeEnd().isZero();
 
-        // only consider the block below if current is non-collidable or very short
-        if((!currentCollidable || currentShape.relativeEnd().y() < 0.5)) {
+        // only consider the block below if our current shape is sufficiently short
+        if(currentShape.relativeEnd().y() < 0.5 && shouldCheckLower(entityVelocity, entityPosition, blockX, blockY, blockZ)) {
             // we need to check below for a tall block (fence, wall, ...)
             final Block belowBlock = getter.getBlock(blockX, blockY - 1, blockZ, Block.Getter.Condition.TYPE);
             final Shape belowShape = belowBlock.registry().collisionShape();
 
             if(belowShape.relativeEnd().y() > 1) {
-                final Vec currentPos = new Vec(blockX, blockY, blockZ);
                 final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
+                final Vec currentPos = new Vec(blockX, blockY, blockZ);
 
                 // we should always check both shapes, so no short-circuit here, to handle cases where the bounding box
                 // hits the current solid but misses the tall solid
@@ -400,5 +400,38 @@ final class BlockCollision {
 
         return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
                 new Vec(blockX, blockY, blockZ), boundingBox, finalResult);
+    }
+
+    private static boolean shouldCheckLower(Vec entityVelocity, Pos entityPosition, int blockX, int blockY, int blockZ) {
+        final double yVelocity = entityVelocity.y();
+
+        if(yVelocity == 0) {
+            // if moving horizontally, just check if the floor of the entity's position is the same as the blockY
+            return Math.floor(entityPosition.y()) == blockY;
+        }
+
+        final double xVelocity = entityVelocity.x();
+        final double zVelocity = entityVelocity.z();
+
+        final double v;
+        final double pos;
+        final int block;
+        if(xVelocity != 0) {
+            v = xVelocity;
+            pos = entityPosition.x();
+            block = blockX;
+        }
+        else if(zVelocity != 0) {
+            v = zVelocity;
+            pos = entityPosition.z();
+            block = blockZ;
+        }
+        else {
+            // if moving straight up, don't bother checking for tall solids beneath anything
+            // if moving straight down, only check for a tall solid underneath the last block
+            return yVelocity < 0 && blockY == Math.floor(entityPosition.y() + yVelocity);
+        }
+
+        return (entityVelocity.y() / v) * (block - pos) + entityPosition.y() >= blockY;
     }
 }
