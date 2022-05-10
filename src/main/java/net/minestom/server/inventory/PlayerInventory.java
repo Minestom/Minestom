@@ -32,9 +32,8 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public synchronized void clear() {
+        cursorItem = ItemStack.AIR;
         super.clear();
-        // Reset cursor
-        setCursorItem(ItemStack.AIR);
         // Update equipments
         this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
     }
@@ -128,17 +127,16 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * @param cursorItem the new cursor item
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
-        final boolean similar = this.cursorItem.isSimilar(cursorItem);
+        if (this.cursorItem.equals(cursorItem)) return;
+
         this.cursorItem = cursorItem;
 
-        if (!similar) {
-            final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-            player.getPlayerConnection().sendPacket(setSlotPacket);
-        }
+        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
+        player.getPlayerConnection().sendPacket(setSlotPacket);
     }
 
     @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         EquipmentSlot equipmentSlot = null;
         if (slot == player.getHeldSlot()) {
             equipmentSlot = EquipmentSlot.MAIN_HAND;
@@ -159,12 +157,16 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
             itemStack = entityEquipEvent.getEquippedItem();
         }
         this.itemStacks[slot] = itemStack;
-        // Sync equipment
-        if (equipmentSlot != null) {
-            this.player.syncEquipment(equipmentSlot);
+
+        if (sendPacket) {
+            // Sync equipment
+            if (equipmentSlot != null) {
+                this.player.syncEquipment(equipmentSlot);
+            }
+
+            // Refresh slot
+            sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
         }
-        // Refresh slot
-        sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
     }
 
     /**
