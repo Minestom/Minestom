@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
-import net.minestom.codegen.fluid.FluidGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -15,19 +14,18 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class DyeColorGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FluidGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DyeColorGenerator.class);
     private final InputStream dyeColorsFile;
     private final File outputFolder;
 
-    public DyeColorGenerator(@Nullable InputStream fluidsFile, @NotNull File outputFolder) {
-        this.dyeColorsFile = fluidsFile;
+    public DyeColorGenerator(@Nullable InputStream dyeColorsFile, @NotNull File outputFolder) {
+        this.dyeColorsFile = dyeColorsFile;
         this.outputFolder = outputFolder;
     }
 
