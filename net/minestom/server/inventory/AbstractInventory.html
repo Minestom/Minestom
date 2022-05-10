@@ -211,37 +211,43 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#safeItemInsert(int,net.minestom.server.item.ItemStack)" class="member-name-link">safeItemInsert</a><wbr>(int&nbsp;slot,
  @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#safeItemInsert(int,net.minestom.server.item.ItemStack,boolean)" class="member-name-link">safeItemInsert</a><wbr>(int&nbsp;slot,
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+ boolean&nbsp;sendPacket)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Inserts safely an item into the inventory.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemStack(int,net.minestom.server.item.ItemStack)" class="member-name-link">setItemStack</a><wbr>(int&nbsp;slot,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemStack(int,net.minestom.server.item.ItemStack)" class="member-name-link">setItemStack</a><wbr>(int&nbsp;slot,
  @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets an <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot and send relevant update to the viewer(s).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
- @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Takes an <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> from the inventory and sends relevant update to the viewer(s).</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStacks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
  @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Takes an <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> from the inventory and sends relevant update to the viewer(s).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)" class="member-name-link">takeItemStacks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
+ @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Takes <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a>s from the inventory and sends relevant updates to the viewer(s).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)" class="member-name-link">UNSAFE_itemInsert</a><wbr>(int&nbsp;slot,
- @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack,boolean)" class="member-name-link">UNSAFE_itemInsert</a><wbr>(int&nbsp;slot,
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+ boolean&nbsp;sendPacket)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -320,11 +326,12 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 </section>
 </li>
 <li>
-<section class="detail" id="safeItemInsert(int,net.minestom.server.item.ItemStack)">
+<section class="detail" id="safeItemInsert(int,net.minestom.server.item.ItemStack,boolean)">
 <h3>safeItemInsert</h3>
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">safeItemInsert</span><wbr><span class="parameters">(int&nbsp;slot,
  @NotNull
- @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+ boolean&nbsp;sendPacket)</span></div>
 <div class="block">Inserts safely an item into the inventory.
  <p>
  This will update the slot for all viewers and warn the inventory that
@@ -339,11 +346,20 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 </section>
 </li>
 <li>
-<section class="detail" id="UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack)">
+<section class="detail" id="safeItemInsert(int,net.minestom.server.item.ItemStack)">
+<h3>safeItemInsert</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">safeItemInsert</span><wbr><span class="parameters">(int&nbsp;slot,
+ @NotNull
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack,boolean)">
 <h3>UNSAFE_itemInsert</h3>
 <div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UNSAFE_itemInsert</span><wbr><span class="parameters">(int&nbsp;slot,
  @NotNull
- @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+ boolean&nbsp;sendPacket)</span></div>
 </section>
 </li>
 <li>
