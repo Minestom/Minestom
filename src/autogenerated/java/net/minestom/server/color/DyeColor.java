@@ -55,18 +55,15 @@ public enum DyeColor implements RGBLike {
         this.mapColorId = mapColorId;
     }
 
-    @NotNull
-    public Color getColor() {
+    public @NotNull Color color() {
         return this.textureDiffuseColor;
     }
 
-    @NotNull
-    public Color getTextColor() {
+    public @NotNull Color textColor() {
         return this.textColor;
     }
 
-    @NotNull
-    public Color getFireworkColor() {
+    public @NotNull Color fireworkColor() {
         return this.fireworkColor;
     }
 
@@ -85,7 +82,7 @@ public enum DyeColor implements RGBLike {
         return this.textureDiffuseColor.blue();
     }
 
-    public int getMapColorId() {
+    public int mapColorId() {
         return this.mapColorId;
     }
 }

@@ -43,7 +43,6 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
             return;
         }
         // Important classes we use alot
-        ClassName namespaceIDCN = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName colorCN = ClassName.get("net.minestom.server.color", "Color");
 
         JsonArray dyeColors = GSON.fromJson(new InputStreamReader(dyeColorsFile), JsonArray.class);
@@ -81,22 +80,19 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
                                 .addStatement("this.fireworkColor = fireworkColor")
                                 .addStatement("this.mapColorId = mapColorId")
                                 .build(),
-                        MethodSpec.methodBuilder("getColor")
+                        MethodSpec.methodBuilder("color")
                                 .addModifiers(Modifier.PUBLIC)
-                                .returns(colorCN)
-                                .addAnnotation(NotNull.class)
+                                .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
                                 .addStatement("return this.textureDiffuseColor")
                                 .build(),
-                        MethodSpec.methodBuilder("getTextColor")
+                        MethodSpec.methodBuilder("textColor")
                                 .addModifiers(Modifier.PUBLIC)
-                                .returns(colorCN)
-                                .addAnnotation(NotNull.class)
+                                .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
                                 .addStatement("return this.textColor")
                                 .build(),
-                        MethodSpec.methodBuilder("getFireworkColor")
+                        MethodSpec.methodBuilder("fireworkColor")
                                 .addModifiers(Modifier.PUBLIC)
-                                .returns(colorCN)
-                                .addAnnotation(NotNull.class)
+                                .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
                                 .addStatement("return this.fireworkColor")
                                 .build(),
                         MethodSpec.methodBuilder("red")
@@ -117,7 +113,7 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
                                 .addAnnotation(Override.class)
                                 .addStatement("return this.textureDiffuseColor.blue()")
                                 .build(),
-                        MethodSpec.methodBuilder("getMapColorId")
+                        MethodSpec.methodBuilder("mapColorId")
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(TypeName.INT)
                                 .addStatement("return this.mapColorId")
