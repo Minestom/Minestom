@@ -197,6 +197,20 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckFallHitFenceLongMove(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.OAK_FENCE);
+        instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 54.0625, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -21, 0));
+        assertEqualsPoint(new Pos(0.5, 43.5, 0.5), res.newPosition());
+    }
+
+    @Test
     public void entityPhysicsCheckFenceAboveHead(Env env) {
         var instance = env.createFlatInstance();
 
