@@ -389,19 +389,17 @@ final class BlockCollision {
             final Shape belowShape = belowBlock.registry().collisionShape();
 
             final Vec currentPos = new Vec(blockX, blockY, blockZ);
-            if(belowShape.relativeEnd().y() > 1) {
+
+            // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
+            // collision check against the current shape since the below shape isn't tall
+            if(belowShape.relativeEnd().y() > 1)
                 // we should always check both shapes, so no short-circuit here, to handle cases where the bounding box
                 // hits the current solid but misses the tall solid
                 return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult)
                         | (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
                         currentPos, boundingBox, finalResult));
-            }
-            else {
-                // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
-                // collision check against the current shape since the below shape isn't tall
-                return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos,
+            else return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos,
                         boundingBox, finalResult);
-            }
         }
 
         if(currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
@@ -413,9 +411,8 @@ final class BlockCollision {
                 final Shape belowShape = belowBlock.registry().collisionShape();
 
                 // only do sweep if the below block is big enough to possibly hit
-                if(belowShape.relativeEnd().y() > 1) {
+                if(belowShape.relativeEnd().y() > 1)
                     belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
-                }
             }
 
             return true;
@@ -427,30 +424,26 @@ final class BlockCollision {
     private static boolean shouldCheckLower(Vec entityVelocity, Pos entityPosition, int blockX, int blockY, int blockZ) {
         final double yVelocity = entityVelocity.y();
 
-        if(yVelocity == 0) {
-            // if moving horizontally, just check if the floor of the entity's position is the same as the blockY
+        // if moving horizontally, just check if the floor of the entity's position is the same as the blockY
+        if(yVelocity == 0)
             return Math.floor(entityPosition.y()) == blockY;
-        }
 
         final double xVelocity = entityVelocity.x();
         final double zVelocity = entityVelocity.z();
 
-        if(xVelocity == 0 && zVelocity == 0) {
-            // if moving straight up, don't bother checking for tall solids beneath anything
-            // if moving straight down, only check for a tall solid underneath the last block
+        // if moving straight up, don't bother checking for tall solids beneath anything
+        // if moving straight down, only check for a tall solid underneath the last block
+        if(xVelocity == 0 && zVelocity == 0)
             return yVelocity < 0 && blockY == Math.floor(entityPosition.y() + yVelocity);
-        }
 
         // default to true: if no x velocity, only consider YZ line, and vice-versa
         boolean underYX = true;
         boolean underYZ = true;
-        if(xVelocity != 0) {
+        if(xVelocity != 0)
             underYX = computeHeight(yVelocity, xVelocity, entityPosition.y(), entityPosition.x(), blockX) >= blockY;
-        }
 
-        if(zVelocity != 0) {
+        if(zVelocity != 0)
             underYZ = computeHeight(yVelocity, zVelocity, entityPosition.y(), entityPosition.z(), blockZ) >= blockY;
-        }
 
         // true if the block is at or below the same height as a line drawn from the entity's position to its final
         // destination
