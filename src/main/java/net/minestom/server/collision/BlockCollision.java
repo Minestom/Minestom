@@ -452,7 +452,8 @@ final class BlockCollision {
             underYZ = computeHeight(yVelocity, zVelocity, entityPosition.y(), entityPosition.z(), blockZ) >= blockY;
         }
 
-        // true if the block is at the same height as a line drawn from the entity's position to its final destination
+        // true if the block is at or below the same height as a line drawn from the entity's position to its final
+        // destination
         return underYX && underYZ;
     }
 
