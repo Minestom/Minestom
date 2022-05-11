@@ -375,12 +375,95 @@ final class BlockCollision {
                                     Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox,
                                     Block.Getter getter, SweepResult finalResult) {
         // Don't step if chunk isn't loaded yet
-        final Block checkBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
-        boolean hitBlock = false;
-        if (checkBlock.isSolid()) {
-            final Vec blockPos = new Vec(blockX, blockY, blockZ);
-            hitBlock = checkBlock.registry().collisionShape().intersectBoxSwept(entityPosition, entityVelocity, blockPos, boundingBox, finalResult);
+        final Block currentBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
+        final Shape currentShape = currentBlock.registry().collisionShape();
+
+        final boolean currentCollidable = !currentShape.relativeEnd().isZero();
+        final boolean currentShort = currentShape.relativeEnd().y() < 0.5;
+
+        // only consider the block below if our current shape is sufficiently short
+        if(currentShort && shouldCheckLower(entityVelocity, entityPosition, blockX, blockY, blockZ)) {
+            // we need to check below for a tall block (fence, wall, ...)
+            final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
+            final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
+            final Shape belowShape = belowBlock.registry().collisionShape();
+
+            final Vec currentPos = new Vec(blockX, blockY, blockZ);
+
+            // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
+            // collision check against the current shape since the below shape isn't tall
+            if(belowShape.relativeEnd().y() > 1)
+                // we should always check both shapes, so no short-circuit here, to handle cases where the bounding box
+                // hits the current solid but misses the tall solid
+                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult)
+                        | (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
+                        currentPos, boundingBox, finalResult));
+            else return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos,
+                        boundingBox, finalResult);
         }
-        return hitBlock;
+
+        if(currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
+                new Vec(blockX, blockY, blockZ), boundingBox, finalResult)) {
+            // if the current collision is sufficiently short, we might need to collide against the block below too
+            if(currentShort) {
+                final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
+                final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
+                final Shape belowShape = belowBlock.registry().collisionShape();
+
+                // only do sweep if the below block is big enough to possibly hit
+                if(belowShape.relativeEnd().y() > 1)
+                    belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean shouldCheckLower(Vec entityVelocity, Pos entityPosition, int blockX, int blockY, int blockZ) {
+        final double yVelocity = entityVelocity.y();
+
+        // if moving horizontally, just check if the floor of the entity's position is the same as the blockY
+        if(yVelocity == 0)
+            return Math.floor(entityPosition.y()) == blockY;
+
+        final double xVelocity = entityVelocity.x();
+        final double zVelocity = entityVelocity.z();
+
+        // if moving straight up, don't bother checking for tall solids beneath anything
+        // if moving straight down, only check for a tall solid underneath the last block
+        if(xVelocity == 0 && zVelocity == 0)
+            return yVelocity < 0 && blockY == Math.floor(entityPosition.y() + yVelocity);
+
+        // default to true: if no x velocity, only consider YZ line, and vice-versa
+        boolean underYX = true;
+        boolean underYZ = true;
+        if(xVelocity != 0)
+            underYX = computeHeight(yVelocity, xVelocity, entityPosition.y(), entityPosition.x(), blockX) >= blockY;
+
+        if(zVelocity != 0)
+            underYZ = computeHeight(yVelocity, zVelocity, entityPosition.y(), entityPosition.z(), blockZ) >= blockY;
+
+        // true if the block is at or below the same height as a line drawn from the entity's position to its final
+        // destination
+        return underYX && underYZ;
+    }
+
+    /*
+    computes the height of the entity at the given block position along a projection of the line it's travelling along
+    (YX or YZ). the returned value will be greater than or equal to the block height if the block is along the lower
+    layer of intersections with this line.
+     */
+    private static double computeHeight(double yVelocity, double velocity, double entityY, double pos, int blockPos) {
+        final double m = yVelocity / velocity;
+
+        /*
+        offsetting by 1 is necessary with a positive slope, because we can clip the bottom-right corner of blocks
+        without clipping the "bottom-left" (the smallest corner of the block on the YZ or YX plane). without the offset
+        these would not be considered to be on the lowest layer, since our block position represents the bottom-left
+        corner
+         */
+        return m * (blockPos - pos + (m > 0 ? 1 : 0)) + entityY;
     }
 }
