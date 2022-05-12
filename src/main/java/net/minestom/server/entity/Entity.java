@@ -336,10 +336,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the view of the entity so that it looks in a direction to the given position if
      * it is different from the entity's current position.
      *
-     * @param position the position to look at.
+     * @param point the point to look at.
      */
-    public void lookAt(@NotNull Pos position) {
-        final Pos newPosition = this.position.add(0, getEyeHeight(), 0).withLookAt(position);
+    public void lookAt(@NotNull Point point) {
+        final Pos newPosition = this.position.add(0, getEyeHeight(), 0).withLookAt(point);
         setView(newPosition.yaw(), newPosition.pitch());
     }
 
