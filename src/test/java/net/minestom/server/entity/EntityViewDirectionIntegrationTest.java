@@ -60,19 +60,19 @@ public class EntityViewDirectionIntegrationTest {
         assertEquals(prevYaw, entity.getPosition().yaw());
         assertEquals(prevPitch, entity.getPosition().pitch());
 
-        entity.lookAt(new Pos(16, 40, 16));
+        entity.lookAt(new Pos(16, 41.6575, 16));
         assertEquals(-45f, entity.getPosition().yaw());
         assertEquals(0f, entity.getPosition().pitch(), EPSILON);
 
-        entity.lookAt(new Pos(-16, 40, 56));
+        entity.lookAt(new Pos(-16, 41.6575, 56));
         assertEquals(15.94f, entity.getPosition().yaw(), EPSILON);
         assertEquals(0f, entity.getPosition().pitch(), EPSILON);
 
-        entity.lookAt(new Pos(48, 36, 48));
+        entity.lookAt(new Pos(48, 37.6575, 48));
         assertEquals(-45f, entity.getPosition().yaw(), EPSILON);
         assertEquals(4.76f, entity.getPosition().pitch(), EPSILON);
 
-        entity.lookAt(new Pos(48, 36, -17));
+        entity.lookAt(new Pos(48, 37.6575, -17));
         assertEquals(-109.50f, entity.getPosition().yaw(), EPSILON);
         // should have the same pitch as the previous position
         assertEquals(4.76f, entity.getPosition().pitch(), EPSILON);
@@ -81,7 +81,7 @@ public class EntityViewDirectionIntegrationTest {
         // looking from below, not checking the yaw
         assertEquals(-90f, entity.getPosition().pitch(), EPSILON);
 
-        entity.lookAt(new Pos(-25, 42, 4));
+        entity.lookAt(new Pos(-25, 43.6575, 4));
         assertEquals(80.90f, entity.getPosition().yaw(), EPSILON);
         assertEquals(-4.57f, entity.getPosition().pitch(), EPSILON);
     }
