@@ -38,7 +38,7 @@
       "pattern":"\\Qitems.json\\E"
     }, 
     {
-      "pattern":"\\Qorg/fusesource/jansi/internal/native/Linux/x86_64/libjansi.so\\E"
+      "pattern":"\\Qorg/fusesource/jansi/internal/native/Windows/x86_64/jansi.dll\\E"
     }, 
     {
       "pattern":"\\Qorg/fusesource/jansi/jansi.properties\\E"
@@ -47,7 +47,7 @@
       "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"
     }, 
     {
-      "pattern":"\\Qorg/jline/utils/xterm-256color.caps\\E"
+      "pattern":"\\Qorg/jline/utils/windows-vtp.caps\\E"
     }, 
     {
       "pattern":"\\Qtags/block_tags.json\\E"
