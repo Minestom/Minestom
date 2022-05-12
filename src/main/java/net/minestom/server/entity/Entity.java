@@ -350,8 +350,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void lookAt(@NotNull Entity entity) {
         Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
-        double eyeHeightDifference = entity.getEyeHeight() - getEyeHeight();
-        lookAt(entity.position.withY(entity.position.y() + eyeHeightDifference));
+        lookAt(entity.position.withY(entity.position.y() + entity.getEyeHeight()));
     }
 
     /**
