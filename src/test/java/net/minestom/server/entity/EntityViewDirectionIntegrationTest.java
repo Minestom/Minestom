@@ -53,12 +53,10 @@ public class EntityViewDirectionIntegrationTest {
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
 
-        // look at itself, direction should not change
-        float prevYaw = entity.getPosition().yaw();
-        float prevPitch = entity.getPosition().pitch();
+        // look at its feet's position, it should look down
         entity.lookAt(entity.getPosition());
-        assertEquals(prevYaw, entity.getPosition().yaw());
-        assertEquals(prevPitch, entity.getPosition().pitch());
+        //looking vertically, not checking yaw
+        assertEquals(90f, entity.getPosition().pitch());
 
         entity.lookAt(new Pos(16, 41.6575, 16));
         assertEquals(-45f, entity.getPosition().yaw());
