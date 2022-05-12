@@ -339,7 +339,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param position the position to look at.
      */
     public void lookAt(@NotNull Pos position) {
-        final Pos newPosition = this.position.withLookAt(position);
+        final Pos newPosition = this.position.add(0, getEyeHeight(), 0).withLookAt(position);
         setView(newPosition.yaw(), newPosition.pitch());
     }
 
