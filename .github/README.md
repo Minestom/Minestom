@@ -1,7 +1,5 @@
-<div align="center">
-   <img src="./blob/master/.github/banner_dark.png?raw=true#gh-light-mode-only">
-   <img src="./blob/master/.github/banner_dark.png?raw=true#gh-dark-mode-only">
-</div>
+![banner](banner_dark.png#gh-dark-mode-only)
+![banner](banner_light.png#gh-light-mode-only)
 
 # Minestom
 
