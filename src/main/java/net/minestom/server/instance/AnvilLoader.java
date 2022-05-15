@@ -86,30 +86,32 @@ public class AnvilLoader implements IChunkLoader {
         final ChunkReader chunkReader = new ChunkReader(chunkData);
 
         Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
-        var yRange = chunkReader.getYRange();
-        if(yRange.getStart() < instance.getDimensionType().getMinY()) {
-            throw new AnvilException(
-                    String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
-                            yRange.getStart(),
-                            instance.getDimensionType().getName().asString(),
-                            instance.getDimensionType().getMinY()
-                            ));
-        }
-        if(yRange.getEndInclusive() > instance.getDimensionType().getMaxY()) {
-            throw new AnvilException(
-                    String.format("Trying to load chunk with maxY = %d, but instance dimension type (%s) has a maxY of %d",
-                            yRange.getEndInclusive(),
-                            instance.getDimensionType().getName().asString(),
-                            instance.getDimensionType().getMaxY()
-                    ));
-        }
+        synchronized (chunk) {
+            var yRange = chunkReader.getYRange();
+            if(yRange.getStart() < instance.getDimensionType().getMinY()) {
+                throw new AnvilException(
+                        String.format("Trying to load chunk with minY = %d, but instance dimension type (%s) has a minY of %d",
+                                yRange.getStart(),
+                                instance.getDimensionType().getName().asString(),
+                                instance.getDimensionType().getMinY()
+                        ));
+            }
+            if(yRange.getEndInclusive() > instance.getDimensionType().getMaxY()) {
+                throw new AnvilException(
+                        String.format("Trying to load chunk with maxY = %d, but instance dimension type (%s) has a maxY of %d",
+                                yRange.getEndInclusive(),
+                                instance.getDimensionType().getName().asString(),
+                                instance.getDimensionType().getMaxY()
+                        ));
+            }
 
-        // TODO: Parallelize block, block entities and biome loading
-        // Blocks + Biomes
-        loadSections(chunk, chunkReader);
+            // TODO: Parallelize block, block entities and biome loading
+            // Blocks + Biomes
+            loadSections(chunk, chunkReader);
 
-        // Block entities
-        loadTileEntities(chunk, chunkReader);
+            // Block entities
+            loadTileEntities(chunk, chunkReader);
+        }
         return CompletableFuture.completedFuture(chunk);
     }
 
