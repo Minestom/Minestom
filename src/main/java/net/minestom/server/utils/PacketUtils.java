@@ -155,6 +155,7 @@ public final class PacketUtils {
     public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
                                                      BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
         BinaryBuffer remaining = null;
+        ByteBuffer pool = ObjectPool.PACKET_POOL.get();
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
             try {
@@ -176,14 +177,12 @@ public final class PacketUtils {
                         decompressedSize = payloadLength;
                     } else {
                         // Decompress to content buffer
-                        try (var hold = ObjectPool.PACKET_POOL.hold()) {
-                            content = BinaryBuffer.wrap(hold.get());
-                            decompressedSize = dataLength;
-                            Inflater inflater = new Inflater(); // TODO: Pool?
-                            inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
-                            inflater.inflate(content.asByteBuffer(0, dataLength));
-                            inflater.reset();
-                        }
+                        content = BinaryBuffer.wrap(pool);
+                        decompressedSize = dataLength;
+                        Inflater inflater = new Inflater(); // TODO: Pool?
+                        inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
+                        inflater.inflate(content.asByteBuffer(0, dataLength));
+                        inflater.reset();
                     }
                 }
                 // Slice packet
@@ -202,6 +201,7 @@ public final class PacketUtils {
                 break;
             }
         }
+        ObjectPool.PACKET_POOL.add(pool);
         return remaining;
     }
 
