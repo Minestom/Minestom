@@ -2,7 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.collection.IndexMap;
+import net.minestom.server.utils.collection.AutoIncrementMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ import java.util.function.UnaryOperator;
  */
 @ApiStatus.NonExtendable
 public class Tag<T> {
-    private static final IndexMap<String> INDEX_MAP = new IndexMap<>();
+    private static final AutoIncrementMap<String> INDEX_MAP = new AutoIncrementMap<>();
 
     record PathEntry(String name, int index) {
     }
