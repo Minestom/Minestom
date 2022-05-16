@@ -352,10 +352,10 @@ public class PlayerSocketConnection extends PlayerConnection {
             writeServerPacketSync(serverPacket, compressed);
         } else if (packet instanceof FramedPacket framedPacket) {
             var buffer = framedPacket.body();
-            writeBufferSync0(buffer, 0, buffer.limit());
+            writeBufferSync(buffer, 0, buffer.limit());
         } else if (packet instanceof CachedPacket cachedPacket) {
             var buffer = cachedPacket.body();
-            if (buffer != null) writeBufferSync0(buffer, buffer.position(), buffer.remaining());
+            if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
             else writeServerPacketSync(cachedPacket.packet(), compressed);
         } else if (packet instanceof LazyPacket lazyPacket) {
             writeServerPacketSync(lazyPacket.packet(), compressed);
@@ -374,34 +374,29 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
             var buffer = PacketUtils.createFramedPacket(hold.get(), serverPacket, compressed);
-            writeBufferSync0(buffer, 0, buffer.limit());
+            writeBufferSync(buffer, 0, buffer.limit());
         }
     }
 
     private void writeBufferSync(@NotNull ByteBuffer buffer, int index, int length) {
-        // TODO read buffer for outgoing event
+        // Encrypt data
+        final EncryptionContext encryptionContext = this.encryptionContext;
+        if (encryptionContext != null) { // Encryption support
+            try (var hold = ObjectPool.PACKET_POOL.hold()) {
+                ByteBuffer output = hold.get();
+                try {
+                    length = encryptionContext.encrypt().update(buffer.slice(index, length), output);
+                    writeBufferSync0(output, 0, length);
+                } catch (ShortBufferException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+                return;
+            }
+        }
         writeBufferSync0(buffer, index, length);
     }
 
     private void writeBufferSync0(@NotNull ByteBuffer buffer, int index, int length) {
-        // Encrypt data
-        {
-            final EncryptionContext encryptionContext = this.encryptionContext;
-            if (encryptionContext != null) { // Encryption support
-                try (var hold = ObjectPool.PACKET_POOL.hold()) {
-                    ByteBuffer output = hold.get();
-                    try {
-                        encryptionContext.encrypt().update(buffer.slice(index, length), output);
-                        buffer = output.flip();
-                        index = 0;
-                    } catch (ShortBufferException e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                        return;
-                    }
-                }
-            }
-        }
-        // Write data
         BinaryBuffer localBuffer = tickBuffer.getPlain();
         final int capacity = localBuffer.capacity();
         if (length <= capacity) {
