@@ -3,8 +3,8 @@ package net.minestom.server.network.socket;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
+import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.PooledBuffers;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -64,17 +64,19 @@ public final class Worker extends MinestomThread {
                         try {
                             channel.close();
                         } catch (IOException e) {
-                           // Empty
+                            // Empty
                         }
                         return;
                     }
                     try {
-                        BinaryBuffer readBuffer = BinaryBuffer.wrap(PooledBuffers.packetBuffer());
-                        // Consume last incomplete packet
-                        connection.consumeCache(readBuffer);
-                        // Read & process
-                        readBuffer.readChannel(channel);
-                        connection.processPackets(readBuffer, server.packetProcessor());
+                        try (var holder = ObjectPool.PACKET_POOL.hold()) {
+                            BinaryBuffer readBuffer = BinaryBuffer.wrap(holder.get());
+                            // Consume last incomplete packet
+                            connection.consumeCache(readBuffer);
+                            // Read & process
+                            readBuffer.readChannel(channel);
+                            connection.processPackets(readBuffer, server.packetProcessor());
+                        }
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
