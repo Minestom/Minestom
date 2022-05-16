@@ -38,9 +38,9 @@ public final class CachedPacket implements SendablePacket {
         return cache != null ? cache.packet() : packetSupplier.get();
     }
 
-    public @NotNull ByteBuffer body() {
+    public @Nullable ByteBuffer body() {
         FramedPacket cache = updatedCache();
-        return cache != null ? cache.body() : PacketUtils.createFramedPacket(packetSupplier.get());
+        return cache != null ? cache.body() : null;
     }
 
     private @Nullable FramedPacket updatedCache() {

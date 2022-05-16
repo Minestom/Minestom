@@ -21,9 +21,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.binary.Writeable;
-import net.minestom.server.utils.cache.LocalCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,7 +45,7 @@ import java.util.zip.Inflater;
  * Be sure to check the implementation code.
  */
 public final class PacketUtils {
-    private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
+    private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
 
     public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);
     public static final boolean CACHED_PACKET = PropertyUtils.getBoolean("minestom.cached-packet", true);
@@ -178,12 +176,14 @@ public final class PacketUtils {
                         decompressedSize = payloadLength;
                     } else {
                         // Decompress to content buffer
-                        content = BinaryBuffer.wrap(PooledBuffers.tempBuffer());
-                        decompressedSize = dataLength;
-                        Inflater inflater = new Inflater(); // TODO: Pool?
-                        inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
-                        inflater.inflate(content.asByteBuffer(0, dataLength));
-                        inflater.reset();
+                        try (var hold = ObjectPool.PACKET_POOL.hold()) {
+                            content = BinaryBuffer.wrap(hold.get());
+                            decompressedSize = dataLength;
+                            Inflater inflater = new Inflater(); // TODO: Pool?
+                            inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
+                            inflater.inflate(content.asByteBuffer(0, dataLength));
+                            inflater.reset();
+                        }
                     }
                 }
                 // Slice packet
@@ -237,12 +237,14 @@ public final class PacketUtils {
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
             // Packet large enough, compress it
-            final ByteBuffer input = PooledBuffers.tempBuffer().put(0, buffer, contentStart, packetSize);
-            Deflater deflater = LOCAL_DEFLATER.get();
-            deflater.setInput(input.limit(packetSize));
-            deflater.finish();
-            deflater.deflate(buffer.position(contentStart));
-            deflater.reset();
+            try (var hold = ObjectPool.PACKET_POOL.hold()) {
+                final ByteBuffer input = hold.get().put(0, buffer, contentStart, packetSize);
+                Deflater deflater = LOCAL_DEFLATER.get();
+                deflater.setInput(input.limit(packetSize));
+                deflater.finish();
+                deflater.deflate(buffer.position(contentStart));
+                deflater.reset();
+            }
         }
         // Packet header (Packet + Data Length)
         Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
@@ -250,54 +252,53 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        ByteBuffer buffer = PooledBuffers.packetBuffer();
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer buffer, @NotNull ServerPacket packet, boolean compression) {
         writeFramedPacket(buffer, packet, compression);
         return buffer.flip();
     }
 
     @ApiStatus.Internal
-    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(packet, MinecraftServer.getCompressionThreshold() > 0);
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer buffer, @NotNull ServerPacket packet) {
+        return createFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
     }
 
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
-        final ByteBuffer temp = PacketUtils.createFramedPacket(packet);
-        final int size = temp.remaining();
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
-        return new FramedPacket(packet, buffer);
+        try (var hold = ObjectPool.PACKET_POOL.hold()) {
+            final ByteBuffer temp = PacketUtils.createFramedPacket(hold.get(), packet);
+            final int size = temp.remaining();
+            final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
+            return new FramedPacket(packet, buffer);
+        }
     }
 
     private static final class ViewableStorage {
         // Player id -> list of offsets to ignore (32:32 bits)
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
-        private final BinaryBuffer buffer = PooledBuffers.get();
-
-        {
-            PooledBuffers.registerBuffer(this, buffer);
-        }
+        private final BinaryBuffer buffer = ObjectPool.BUFFER_POOL.getAndRegister(this);
 
         private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
-            final ByteBuffer framedPacket = createFramedPacket(serverPacket);
-            final int packetSize = framedPacket.limit();
-            if (packetSize >= buffer.capacity()) {
-                process(viewable);
-                for (Player viewer : viewable.getViewers()) {
-                    if (!Objects.equals(player, viewer)) {
-                        writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
+            try (var hold = ObjectPool.PACKET_POOL.hold()) {
+                final ByteBuffer framedPacket = createFramedPacket(hold.get(), serverPacket);
+                final int packetSize = framedPacket.limit();
+                if (packetSize >= buffer.capacity()) {
+                    process(viewable);
+                    for (Player viewer : viewable.getViewers()) {
+                        if (!Objects.equals(player, viewer)) {
+                            writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
+                        }
                     }
+                    return;
                 }
-                return;
-            }
-            if (!buffer.canWrite(packetSize)) process(viewable);
-            final int start = buffer.writerOffset();
-            this.buffer.write(framedPacket);
-            final int end = buffer.writerOffset();
-            if (player != null) {
-                final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
-                LongList list = entityIdMap.computeIfAbsent(player.getEntityId(), id -> new LongArrayList());
-                list.add(offsets);
+                if (!buffer.canWrite(packetSize)) process(viewable);
+                final int start = buffer.writerOffset();
+                this.buffer.write(framedPacket);
+                final int end = buffer.writerOffset();
+                if (player != null) {
+                    final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
+                    LongList list = entityIdMap.computeIfAbsent(player.getEntityId(), id -> new LongArrayList());
+                    list.add(offsets);
+                }
             }
         }
 
