@@ -101,7 +101,7 @@ final class BlockCollision {
         // Z -> X x Y
         if (queryZ != 0) {
             for (int i = 0; i <= ceilHeight; ++i) {
-                for (int j = 0; j <= Math.ceil(boundingBox.width()); ++j) {
+                for (int j = 0; j <= ceilWidth; ++j) {
                     double cellI = i;
                     double cellJ = j;
                     double cellK = queryZ < 0 ? 0 : boundingBox.depth();
