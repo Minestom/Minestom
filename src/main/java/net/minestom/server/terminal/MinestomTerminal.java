@@ -15,6 +15,7 @@ public class MinestomTerminal {
     private static final String PROMPT = "> ";
 
     private static volatile Terminal terminal;
+    private static final MinestomCompleter completer = new MinestomCompleter();;
     private static volatile boolean running = false;
 
     @ApiStatus.Internal
@@ -26,6 +27,7 @@ public class MinestomTerminal {
                 e.printStackTrace();
             }
             LineReader reader = LineReaderBuilder.builder()
+                    .completer(completer)
                     .terminal(terminal)
                     .build();
             running = true;
