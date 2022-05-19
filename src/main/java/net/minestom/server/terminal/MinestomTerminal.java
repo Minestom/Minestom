@@ -2,6 +2,7 @@ package net.minestom.server.terminal;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.listener.TabCompleteListener;
 import org.jetbrains.annotations.ApiStatus;
@@ -85,13 +86,13 @@ public class MinestomTerminal {
                 );
             } else {
                 final String text = line.line();
-                TabCompleteListener.getSuggestion(consoleSender, text)
-                        .ifPresent(suggestion ->
-                                suggestion.getEntries().stream()
-                                        .map(SuggestionEntry::getEntry)
-                                        .map(Candidate::new)
-                                        .forEach(candidates::add)
-                        );
+                final Suggestion suggestion = TabCompleteListener.getSuggestion(consoleSender, text);
+                if (suggestion != null) {
+                    suggestion.getEntries().stream()
+                            .map(SuggestionEntry::getEntry)
+                            .map(Candidate::new)
+                            .forEach(candidates::add);
+                }
             }
         }
     }

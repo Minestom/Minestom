@@ -14,29 +14,29 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
 import net.minestom.server.utils.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class TabCompleteListener {
 
     public static void listener(ClientTabCompletePacket packet, Player player) {
         final String text = packet.text();
-        getSuggestion(player, text)
-                .ifPresent(suggestion ->
-                        player.sendPacket(new TabCompletePacket(
-                                packet.transactionId(),
-                                suggestion.getStart(),
-                                suggestion.getLength(),
-                                suggestion.getEntries().stream()
-                                        .map(suggestionEntry -> new TabCompletePacket.Match(suggestionEntry.getEntry(), suggestionEntry.getTooltip()))
-                                        .toList())
-                        )
-                );
+        final Suggestion suggestion = getSuggestion(player, text);
+        if (suggestion != null) {
+            player.sendPacket(new TabCompletePacket(
+                    packet.transactionId(),
+                    suggestion.getStart(),
+                    suggestion.getLength(),
+                    suggestion.getEntries().stream()
+                            .map(suggestionEntry -> new TabCompletePacket.Match(suggestionEntry.getEntry(), suggestionEntry.getTooltip()))
+                            .toList())
+            );
+        }
     }
 
-    public static Optional<Suggestion> getSuggestion(CommandSender commandSender, String text) {
+    public static @Nullable Suggestion getSuggestion(CommandSender commandSender, String text) {
         String commandString = text.replaceFirst(CommandManager.COMMAND_PREFIX, "");
         String[] split = commandString.split(StringUtils.SPACE);
         String commandName = split[0];
@@ -45,7 +45,7 @@ public class TabCompleteListener {
         final CommandQueryResult commandQueryResult = CommandParser.findCommand(MinecraftServer.getCommandManager().getDispatcher(), commandString);
         if (commandQueryResult == null) {
             // Command not found
-            return Optional.empty();
+            return null;
         }
 
         final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
@@ -53,7 +53,7 @@ public class TabCompleteListener {
                 CommandSyntax::hasSuggestion, Argument::hasSuggestion);
         if (queryResult == null) {
             // Suggestible argument not found
-            return Optional.empty();
+            return null;
         }
 
         final Argument<?> argument = queryResult.argument();
@@ -72,8 +72,8 @@ public class TabCompleteListener {
             Suggestion suggestion = new Suggestion(input, start, inputLength);
             suggestionCallback.apply(commandSender, queryResult.context(), suggestion);
 
-            return Optional.of(suggestion);
+            return suggestion;
         }
-        return Optional.empty();
+        return null;
     }
 }
