@@ -64,7 +64,7 @@ public class ClosestEntityTarget extends TargetSelector {
                 // Don't target our self and make sure entity is valid
                 .filter(ent -> !entityCreature.equals(ent) && !ent.isRemoved())
                 .filter(targetPredicate)
-                .min(Comparator.comparingDouble(e -> e.getDistance(entityCreature.getPosition())))
+                .min(Comparator.comparingDouble(e -> e.getDistanceSquared(entityCreature)))
                 .orElse(null);
 
     }
