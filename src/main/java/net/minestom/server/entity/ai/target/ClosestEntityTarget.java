@@ -26,7 +26,7 @@ public class ClosestEntityTarget extends TargetSelector {
      */
     @SafeVarargs
     @Deprecated
-    public ClosestEntityTarget(@NotNull EntityCreature entityCreature, double range,
+    public ClosestEntityTarget(@NotNull EntityCreature entityCreature, float range,
                                @NotNull Class<? extends LivingEntity>... entitiesTarget) {
         this(entityCreature, range, ent -> {
             Class<? extends Entity> clazz = ent.getClass();
