@@ -87,6 +87,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // the uuid of this instance
     protected UUID uniqueId;
+    protected String alias;
 
     // instance custom data
     private final TagHandler tagHandler = TagHandler.newHandler();
@@ -584,6 +585,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public @NotNull UUID getUniqueId() {
         return uniqueId;
+    }
+
+    /**
+     * Gets the instance alias.
+     *
+     * @return the instance alias
+     */
+    public @NotNull String getAlias() {
+        return alias;
+    }
+
+    /**
+     * Gets the instance alias.
+     *
+     * @return the instance alias
+     */
+    public @NotNull String setAlias(String alias) {
+        this.alias = alias;
     }
 
     /**
