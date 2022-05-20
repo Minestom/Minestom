@@ -103,7 +103,6 @@ public class InstanceBlockPacketIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
 
-
         // setting without update
         var packetTracker = connection.trackIncoming(BlockChangePacket.class);
         instance.setBlock(1, 42, 0, Block.AMETHYST_BLOCK, false);
