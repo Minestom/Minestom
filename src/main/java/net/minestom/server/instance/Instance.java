@@ -597,7 +597,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Gets the instance alias.
+     * Sets the instance alias.
      *
      * @return the instance alias
      */
