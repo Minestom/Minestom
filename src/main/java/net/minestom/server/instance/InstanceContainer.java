@@ -89,6 +89,10 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
+        setBlock(x, y, z, block, true);
+    }
+
+    public void setBlock(int x, int y, int z, @NotNull Block block, boolean resendChunk) {
         Chunk chunk = getChunkAt(x, z);
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
@@ -111,6 +115,23 @@ public class InstanceContainer extends Instance {
      */
     private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy) {
+        UNSAFE_setBlock(chunk, x, y, z, block, placement, destroy, true);
+    }
+
+    /**
+     * Sets a block at the specified position.
+     * <p>
+     * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not.
+     *
+     * @param chunk         the {@link Chunk} which should be loaded
+     * @param x             the block X
+     * @param y             the block Y
+     * @param z             the block Z
+     * @param block         the block to place
+     * @param resendChunk   when false, the chunk doesn't get resend to the viewers after changing. Default: <pre>true</pre>
+     */
+    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
+                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy, boolean resendChunk) {
         if (chunk.isReadOnly()) return;
         synchronized (chunk) {
             // Refresh the last block change time
@@ -139,7 +160,7 @@ public class InstanceContainer extends Instance {
             executeNeighboursBlockPlacementRule(blockPosition);
 
             // Refresh player chunk block
-            {
+            if(resendChunk) {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
                 var registry = block.registry();
                 if (registry.isBlockEntity()) {
