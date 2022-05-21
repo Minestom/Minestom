@@ -1,7 +1,5 @@
 package net.minestom.server.network.packet.client.handshake;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -19,12 +17,6 @@ import java.util.UUID;
 
 public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
                               int serverPort, int nextState) implements ClientPreplayPacket {
-
-    /**
-     * Text sent if a player tries to connect with an invalid version of the client
-     */
-    private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
-    private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     public HandshakePacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255),
@@ -74,7 +66,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                     socketConnection.UNSAFE_setBungeeUuid(playerUuid);
                     socketConnection.UNSAFE_setBungeeSkin(playerSkin);
                 } else {
-                    socketConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
+                    socketConnection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getInvalidBungeeForwarding()));
                     socketConnection.disconnect();
                     return;
                 }
@@ -98,7 +90,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                     connection.setConnectionState(ConnectionState.LOGIN);
                 } else {
                     // Incorrect client version
-                    connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));
+                    connection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getInvalidVersionText()));
                     connection.disconnect();
                 }
                 break;
