@@ -1,7 +1,5 @@
 package net.minestom.server.network.packet.client.handshake;
 
-import java.util.regex.Pattern;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -18,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
                               int serverPort, int nextState) implements ClientPreplayPacket {
@@ -28,6 +27,26 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     public HandshakePacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255),
                 reader.readUnsignedShort(), reader.readVarInt());
+    }
+
+    /**
+     * Sets the text sent if a player tries to connect with an invalid version of the client.
+     *
+     * @param invalidVersionText the text
+     */
+    public static void setInvalidVersionText(@NotNull Component invalidVersionText) {
+        HandshakePacket.invalidVersionText = invalidVersionText.replaceText(
+                builder -> builder.match(Pattern.quote("{version}")).replacement(MinecraftServer.VERSION_NAME)
+        );
+    }
+
+    /**
+     * Sets the text sent if the bungee forwarding is invalid.
+     *
+     * @param invalidBungeeForwarding the text
+     */
+    public static void setInvalidBungeeForwarding(@NotNull Component invalidBungeeForwarding) {
+        HandshakePacket.invalidBungeeForwarding = invalidBungeeForwarding;
     }
 
     @Override
@@ -105,25 +124,5 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                 // Unexpected error
                 break;
         }
-    }
-
-    /**
-     * Sets the text sent if a player tries to connect with an invalid version of the client.
-     *
-     * @param invalidVersionText the text
-     */
-    public static void setInvalidVersionText(@NotNull Component invalidVersionText) {
-        HandshakePacket.invalidVersionText = invalidVersionText.replaceText(
-                builder -> builder.match(Pattern.quote("{version}")).replacement(MinecraftServer.VERSION_NAME)
-        );
-    }
-
-    /**
-     * Sets the text sent if the bungee forwarding is invalid.
-     *
-     * @param invalidBungeeForwarding the text
-     */
-    public static void setInvalidBungeeForwarding(@NotNull Component invalidBungeeForwarding) {
-        HandshakePacket.invalidBungeeForwarding = invalidBungeeForwarding;
     }
 }
