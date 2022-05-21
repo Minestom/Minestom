@@ -220,7 +220,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 final boolean include = !value.startsWith("!");
                 final String gameModeName = include ? value : value.substring(1);
                 try {
-                    final GameMode gameMode = GameMode.valueOf(gameModeName);
+                    final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase());
                     entityFinder.setGameMode(gameMode, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
                 } catch (IllegalArgumentException e) {
                     throw new ArgumentSyntaxException("Invalid entity game mode", input, INVALID_ARGUMENT_VALUE);
@@ -228,11 +228,15 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             }
             case "limit":
+                int limit;
                 try {
-                    final int limit = Integer.parseInt(value);
+                    limit = Integer.parseInt(value);
                     entityFinder.setLimit(limit);
                 } catch (NumberFormatException e) {
                     throw new ArgumentSyntaxException("Invalid limit number", input, INVALID_ARGUMENT_VALUE);
+                }
+                if (limit <= 0) {
+                    throw new ArgumentSyntaxException("Limit must be positive", input, INVALID_ARGUMENT_VALUE);
                 }
                 break;
             case "sort":
