@@ -1,7 +1,5 @@
 package net.minestom.server;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
@@ -37,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.regex.Pattern;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -72,8 +69,6 @@ public final class MinecraftServer {
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
-    private static Component invalidVersionText = Component.text("Invalid Version, please use " + VERSION_NAME, NamedTextColor.RED);
-    private static Component invalidBungeeForwarding = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     public static MinecraftServer init() {
         updateProcess();
@@ -111,46 +106,6 @@ public final class MinecraftServer {
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
         PacketUtils.broadcastPacket(PluginMessagePacket.getBrandPacket());
-    }
-
-    /**
-     * Gets the text sent if a player tries to connect with an invalid version of the client.
-     *
-     * @return the text
-     */
-    @NotNull
-    public static Component getInvalidVersionText() {
-        return invalidVersionText;
-    }
-
-    /**
-     * Sets the text sent if a player tries to connect with an invalid version of the client.
-     *
-     * @param invalidVersionText the text
-     */
-    public static void setInvalidVersionText(@NotNull Component invalidVersionText) {
-        MinecraftServer.invalidVersionText = invalidVersionText.replaceText(
-                builder -> builder.match(Pattern.quote("{version}")).replacement(VERSION_NAME)
-        );
-    }
-
-    /**
-     * Gets the text sent if the bungee forwarding is invalid.
-     *
-     * @return the text
-     */
-    @NotNull
-    public static Component getInvalidBungeeForwarding() {
-        return invalidBungeeForwarding;
-    }
-
-    /**
-     * Sets the text sent if the bungee forwarding is invalid.
-     *
-     * @param invalidBungeeForwarding the text
-     */
-    public static void setInvalidBungeeForwarding(@NotNull Component invalidBungeeForwarding) {
-        MinecraftServer.invalidBungeeForwarding = invalidBungeeForwarding;
     }
 
     /**

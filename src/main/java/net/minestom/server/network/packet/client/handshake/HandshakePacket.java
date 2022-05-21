@@ -1,5 +1,9 @@
 package net.minestom.server.network.packet.client.handshake;
 
+import java.util.regex.Pattern;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -17,6 +21,9 @@ import java.util.UUID;
 
 public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
                               int serverPort, int nextState) implements ClientPreplayPacket {
+
+    private static Component invalidVersionText = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
+    private static Component invalidBungeeForwarding = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     public HandshakePacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255),
@@ -66,7 +73,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                     socketConnection.UNSAFE_setBungeeUuid(playerUuid);
                     socketConnection.UNSAFE_setBungeeSkin(playerSkin);
                 } else {
-                    socketConnection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getInvalidBungeeForwarding()));
+                    socketConnection.sendPacket(new LoginDisconnectPacket(invalidBungeeForwarding));
                     socketConnection.disconnect();
                     return;
                 }
@@ -90,7 +97,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                     connection.setConnectionState(ConnectionState.LOGIN);
                 } else {
                     // Incorrect client version
-                    connection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getInvalidVersionText()));
+                    connection.sendPacket(new LoginDisconnectPacket(invalidVersionText));
                     connection.disconnect();
                 }
                 break;
@@ -98,5 +105,25 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                 // Unexpected error
                 break;
         }
+    }
+
+    /**
+     * Sets the text sent if a player tries to connect with an invalid version of the client.
+     *
+     * @param invalidVersionText the text
+     */
+    public static void setInvalidVersionText(@NotNull Component invalidVersionText) {
+        HandshakePacket.invalidVersionText = invalidVersionText.replaceText(
+                builder -> builder.match(Pattern.quote("{version}")).replacement(MinecraftServer.VERSION_NAME)
+        );
+    }
+
+    /**
+     * Sets the text sent if the bungee forwarding is invalid.
+     *
+     * @param invalidBungeeForwarding the text
+     */
+    public static void setInvalidBungeeForwarding(@NotNull Component invalidBungeeForwarding) {
+        HandshakePacket.invalidBungeeForwarding = invalidBungeeForwarding;
     }
 }
