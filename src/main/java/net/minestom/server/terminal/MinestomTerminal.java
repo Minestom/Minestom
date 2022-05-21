@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.listener.TabCompleteListener;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
 import org.jline.reader.EndOfFileException;
@@ -21,8 +22,8 @@ import java.util.List;
 
 public class MinestomTerminal {
     private static final String PROMPT = "> ";
-    private static final MinestomCompleter completer = new MinestomCompleter();
     private static volatile Terminal terminal;
+    private static volatile LineReader reader;
     private static volatile boolean running = false;
 
     @ApiStatus.Internal
@@ -33,8 +34,8 @@ public class MinestomTerminal {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            LineReader reader = LineReaderBuilder.builder()
-                    .completer(completer)
+            reader = LineReaderBuilder.builder()
+                    .completer(new MinestomCompleter())
                     .terminal(terminal)
                     .build();
             running = true;
@@ -67,7 +68,13 @@ public class MinestomTerminal {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            reader = null;
         }
+    }
+
+    @Nullable
+    public static LineReader getReader() {
+        return reader;
     }
 
     private static final class MinestomCompleter implements Completer {
