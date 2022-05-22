@@ -581,8 +581,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // World border collision
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
+        final boolean flying = this instanceof Player player && player.isFlying();
         if (!positionChanged) {
-            if (this instanceof Player player && player.isFlying()) {
+            if (flying) {
                 this.velocity = Vec.ZERO;
                 sendPacketToViewers(getVelocityPacket());
                 return;
@@ -616,7 +617,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            updateVelocity(wasOnGround, positionBeforeMove, newVelocity);
+            updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
         if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
@@ -624,7 +625,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-    protected void updateVelocity(boolean wasOnGround, Pos positionBeforeMove, Vec newVelocity) {
+    protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
         EntitySpawnType type = entityType.registry().spawnType();
         final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
         final double drag;
@@ -635,7 +636,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
         } else drag = airDrag;
 
-        boolean flying = this instanceof Player player && player.isFlying();
         double gravity = flying ? 0 : gravityAcceleration;
         double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
 
