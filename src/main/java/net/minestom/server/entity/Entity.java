@@ -582,7 +582,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
         if (!positionChanged) {
-            if (hasVelocity || newVelocity.isZero()) {
+            if (this instanceof Player player && player.isFlying()) {
+                this.velocity = Vec.ZERO;
+                sendPacketToViewers(getVelocityPacket());
+                return;
+            } else if (hasVelocity || newVelocity.isZero()) {
                 this.velocity = noGravity ? Vec.ZERO : new Vec(
                         0,
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
@@ -631,11 +635,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
         } else drag = airDrag;
 
+        boolean flying = this instanceof Player player && player.isFlying();
+        double gravity = flying ? 0 : gravityAcceleration;
+        double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
+        if (this instanceof Player player) player.sendMessage(Component.text(newVelocity.toString()));
+
         this.velocity = newVelocity
-                // Apply drag
+                // Apply gravity and drag
                 .apply((x, y, z) -> new Vec(
                         x * drag,
-                        !hasNoGravity() ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
+                        !hasNoGravity() ? (y - gravity) * gravityDrag : y,
                         z * drag
                 ))
                 // Convert from block/tick to block/sec
