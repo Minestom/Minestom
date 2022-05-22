@@ -638,7 +638,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         boolean flying = this instanceof Player player && player.isFlying();
         double gravity = flying ? 0 : gravityAcceleration;
         double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
-        if (this instanceof Player player) player.sendMessage(Component.text(newVelocity.toString()));
 
         this.velocity = newVelocity
                 // Apply gravity and drag
