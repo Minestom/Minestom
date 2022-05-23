@@ -8,8 +8,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -103,6 +101,31 @@ public class EntityVelocityIntegrationTest {
                 new Vec(0.0, 40.0, 3.6120913306338815),
                 new Vec(0.0, 40.0, 3.616034640835186)
         });
+    }
+
+    @Test
+    public void flyingVelocity(Env env) {
+        var instance = env.createFlatInstance();
+        loadChunks(instance);
+
+        var player = env.createPlayer(instance, new Pos(0, 42, 0));
+        env.tick();
+
+        final double epsilon = 0.0000001;
+
+        assertEquals(player.getVelocity().y(), -1.568, epsilon);
+        double previousVelocity = player.getVelocity().y();
+
+        player.setFlying(true);
+        env.tick();
+
+        // Every tick, the y velocity is multiplied by 0.6, and after 27 ticks it should be 0
+        for (int i = 0; i < 27; i++) {
+            assertEquals(player.getVelocity().y(), previousVelocity * 0.6, epsilon);
+            previousVelocity = player.getVelocity().y();
+            env.tick();
+        }
+        assertEquals(player.getVelocity().y(), 0);
     }
 
     @Test
