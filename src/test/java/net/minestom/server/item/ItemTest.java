@@ -121,7 +121,7 @@ public class ItemTest {
             assertEquals(lore, item.getLore());
             var loreNbt = item.meta().toNBT().getCompound("display").<NBTString>getList("Lore");
             assertNotNull(loreNbt);
-            assertEquals(loreNbt.getSize(), 1);
+            assertEquals(1, loreNbt.getSize());
             assertEquals(lore, loreNbt.asListView().stream().map(line -> GsonComponentSerializer.gson().deserialize(line.getValue())).toList());
         }
 
@@ -131,7 +131,7 @@ public class ItemTest {
             assertEquals(lore, item.getLore());
             var loreNbt = item.meta().toNBT().getCompound("display").<NBTString>getList("Lore");
             assertNotNull(loreNbt);
-            assertEquals(loreNbt.getSize(), 2);
+            assertEquals(2, loreNbt.getSize());
             assertEquals(lore, loreNbt.asListView().stream().map(line -> GsonComponentSerializer.gson().deserialize(line.getValue())).toList());
         }
 
@@ -141,7 +141,7 @@ public class ItemTest {
             assertEquals(lore, item.getLore());
             var loreNbt = item.meta().toNBT().getCompound("display").<NBTString>getList("Lore");
             assertNotNull(loreNbt);
-            assertEquals(loreNbt.getSize(), 1);
+            assertEquals(1, loreNbt.getSize());
             assertEquals(lore, loreNbt.asListView().stream().map(line -> GsonComponentSerializer.gson().deserialize(line.getValue())).toList());
         }
 

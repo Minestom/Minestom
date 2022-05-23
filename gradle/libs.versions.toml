@@ -7,7 +7,7 @@ adventure = "4.10.1"
 kotlin = "1.6.20"
 hydrazine = "1.7.2"
 dependencyGetter = "v1.0.1"
-minestomData = "895581d464"
+minestomData = "3e211f3953"
 hephaistos = "2.4.4"
 jetbrainsAnnotations = "23.0.0"
 
@@ -31,12 +31,13 @@ mockito = "4.2.0"
 javaPoet = "1.13.0"
 
 # Demo
-jNoise = "3.0.1"
+jNoise = "b93008e35e"
 
 # JMH
 jmh = "1.35"
 
-
+# JCStress
+jcstress = "0.8"
 
 [libraries]
 
@@ -86,11 +87,14 @@ mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mo
 javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 
 # Demo
-jNoise = { group = "com.github.Articdive", name = "JNoise", version.ref = "jNoise" }
+jNoise = { group = "com.github.Articdive.JNoise", name = "jnoise-pipeline", version.ref = "jNoise" }
 
 # JMH
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
 jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
+
+# JCStress
+jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
 
 [bundles]
 

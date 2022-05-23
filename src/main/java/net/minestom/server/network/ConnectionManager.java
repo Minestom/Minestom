@@ -278,9 +278,8 @@ public final class ConnectionManager {
         for (Player player : getOnlinePlayers()) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
             if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
                 player.refreshKeepAlive(tickStart);
-                playerConnection.sendPacket(keepAlivePacket);
+                player.sendPacket(keepAlivePacket);
             } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
                 player.kick(TIMEOUT_TEXT);
             }

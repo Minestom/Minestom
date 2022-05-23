@@ -6,8 +6,8 @@ import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.PingPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
-import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -19,7 +19,7 @@ import java.util.function.Function;
  * Packets are registered using {@link #register(int, Function)} and created using {@link #create(int, BinaryReader)}.
  */
 public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, ClientPacketsHandler.Login, ClientPacketsHandler.Play {
-    private final ObjectArray<Function<BinaryReader, ClientPacket>> suppliers = new ObjectArray<>(0x10);
+    private final ObjectArray<Function<BinaryReader, ClientPacket>> suppliers = ObjectArray.singleThread(0x10);
 
     private ClientPacketsHandler() {
     }

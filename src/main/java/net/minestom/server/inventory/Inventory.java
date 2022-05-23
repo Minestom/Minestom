@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -26,9 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
 public non-sealed class Inventory extends AbstractInventory implements Viewable {
-
-    // incremented each time an inventory is created (used in the window packets)
-    private static byte LAST_INVENTORY_ID;
+    private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
     // the id of this inventory
     private final byte id;
@@ -58,11 +57,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         this(inventoryType, Component.text(title));
     }
 
-    private static synchronized byte generateId() {
-        if (LAST_INVENTORY_ID == Byte.MAX_VALUE) {
-            LAST_INVENTORY_ID = 0;
-        }
-        return ++LAST_INVENTORY_ID;
+    private static byte generateId() {
+        return (byte) Math.abs((byte) ID_COUNTER.incrementAndGet());
     }
 
     /**
@@ -109,10 +105,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public synchronized void clear() {
+        this.cursorPlayersItem.clear();
         super.clear();
-        // Clear cursor
-        getViewers().forEach(player ->
-                setCursorItem(player, ItemStack.AIR));
     }
 
     /**
@@ -186,7 +180,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        if (!currentCursorItem.isSimilar(cursorItem)) {
+        if (!currentCursorItem.equals(cursorItem)) {
             player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
         }
         if (!cursorItem.isAir()) {
@@ -197,9 +191,9 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         itemStacks[slot] = itemStack;
-        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
+        if (sendPacket) sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {

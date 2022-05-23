@@ -1,15 +1,17 @@
 package net.minestom.server.utils.collection;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ObjectArrayTest {
 
-    @Test
-    public void testArray() {
-        ObjectArray<String> array = new ObjectArray<>();
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testArray(boolean concurrent) {
+        ObjectArray<String> array = concurrent ? ObjectArray.concurrent() : ObjectArray.singleThread();
 
         array.set(50, "Hey");
         assertEquals("Hey", array.get(50));

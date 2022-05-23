@@ -1,9 +1,11 @@
 package net.minestom.server.item;
 
 import net.minestom.server.item.rule.VanillaStackingRule;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTByte;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -11,7 +13,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTString;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implements ItemStack {
     static final @NotNull StackingRule DEFAULT_STACKING_RULE;
@@ -45,21 +46,21 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
     }
 
     @Override
-    public @NotNull ItemStack with(@NotNull Consumer<ItemStack.@NotNull Builder> builderConsumer) {
+    public @NotNull ItemStack with(@NotNull Consumer<ItemStack.@NotNull Builder> consumer) {
         ItemStack.Builder builder = builder();
-        builderConsumer.accept(builder);
+        consumer.accept(builder);
         return builder.build();
     }
 
     @Override
     public @NotNull <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                                                   @NotNull Consumer<V> metaConsumer) {
-        return builder().meta(metaType, metaConsumer).build();
+                                                                                                   @NotNull Consumer<V> consumer) {
+        return builder().meta(metaType, consumer).build();
     }
 
     @Override
-    public @NotNull ItemStack withMeta(@NotNull UnaryOperator<ItemMeta.@NotNull Builder> metaOperator) {
-        return builder().meta(metaOperator).build();
+    public @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer) {
+        return builder().meta(consumer).build();
     }
 
     @Override
@@ -124,8 +125,8 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
 
         @Override
-        public ItemStack.@NotNull Builder meta(@NotNull UnaryOperator<ItemMeta.Builder> consumer) {
-            this.metaBuilder = (ItemMetaImpl.Builder) consumer.apply(metaBuilder);
+        public ItemStack.@NotNull Builder meta(@NotNull Consumer<ItemMeta.Builder> consumer) {
+            consumer.accept(metaBuilder);
             return this;
         }
 
@@ -138,8 +139,8 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
 
         @Override
-        public @NotNull TagHandler tagHandler() {
-            return metaBuilder.tagHandler();
+        public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+            this.metaBuilder.setTag(tag, value);
         }
 
         @Override

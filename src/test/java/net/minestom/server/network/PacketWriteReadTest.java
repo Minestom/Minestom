@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatPosition;
@@ -18,6 +19,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.PongPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -25,8 +27,6 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -84,19 +84,19 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, 5, COMPONENT));
         SERVER_PACKETS.add(new DeclareRecipesPacket(
                 List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
-                            "minecraft:sticks",
-                            "sticks",
-                            List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
-                            ItemStack.of(Material.STICK)
+                                "minecraft:sticks",
+                                "sticks",
+                                List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
+                                ItemStack.of(Material.STICK)
                         ),
                         new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
-                            "minecraft:torch",
-                            1,
-                            2,
-                            "",
-                            List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                    new Ingredient(List.of(ItemStack.of(Material.STICK)))),
-                            ItemStack.of(Material.TORCH)
+                                "minecraft:torch",
+                                1,
+                                2,
+                                "",
+                                List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
+                                        new Ingredient(List.of(ItemStack.of(Material.STICK)))),
+                                ItemStack.of(Material.TORCH)
                         ))));
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
@@ -108,7 +108,8 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new EntityAnimationPacket(5, EntityAnimationPacket.Animation.TAKE_DAMAGE));
         SERVER_PACKETS.add(new EntityEquipmentPacket(6, Map.of(EquipmentSlot.MAIN_HAND, ItemStack.of(Material.DIAMOND_SWORD))));
         SERVER_PACKETS.add(new EntityHeadLookPacket(5, 90f));
-        SERVER_PACKETS.add(new EntityMetaDataPacket(5, List.of()));
+        SERVER_PACKETS.add(new EntityMetaDataPacket(5, Map.of()));
+        SERVER_PACKETS.add(new EntityMetaDataPacket(5, Map.of(1, Metadata.VarInt(5))));
         SERVER_PACKETS.add(new EntityPositionAndRotationPacket(5, (short) 0, (short) 0, (short) 0, 45f, 45f, false));
         SERVER_PACKETS.add(new EntityPositionPacket(5, (short) 0, (short) 0, (short) 0, true));
         SERVER_PACKETS.add(new EntityPropertiesPacket(5, List.of()));
@@ -154,7 +155,7 @@ public class PacketWriteReadTest {
             var createdPacket = readerConstructor.newInstance(reader);
             assertEquals(writeable, createdPacket);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
-                | IllegalAccessException e) {
+                 | IllegalAccessException e) {
             fail(writeable.toString(), e);
         }
     }

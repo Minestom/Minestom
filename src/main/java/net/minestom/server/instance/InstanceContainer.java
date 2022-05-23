@@ -199,7 +199,7 @@ public class InstanceContainer extends Instance {
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player));
             // Send the block break effect packet
             PacketUtils.sendGroupedPacket(chunk.getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, resultBlock.stateId(), false),
+                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
@@ -572,7 +572,7 @@ public class InstanceContainer extends Instance {
      */
     private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
-        return changedBlock != null && changedBlock.id() == block.id();
+        return Objects.equals(changedBlock, block);
     }
 
     /**

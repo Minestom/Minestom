@@ -130,7 +130,7 @@ public class FakePlayer extends Player implements NavigableEntity {
 
     @Override
     public void updateNewViewer(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(getAddPlayerToList());
+        player.sendPacket(getAddPlayerToList());
         handleTabList(player.getPlayerConnection());
         super.updateNewViewer(player);
     }

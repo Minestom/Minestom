@@ -24,9 +24,8 @@ public class StatusListener {
                             playerStatistic.getStatisticId(), value));
                 }
                 StatisticsPacket statisticsPacket = new StatisticsPacket(statisticList);
-                player.getPlayerConnection().sendPacket(statisticsPacket);
+                player.sendPacket(statisticsPacket);
             }
         }
     }
-
 }

@@ -8,7 +8,6 @@ import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -208,17 +207,15 @@ public class Sidebar implements Scoreboard {
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
-        PlayerConnection playerConnection = player.getPlayerConnection();
 
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
         DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
 
-        playerConnection.sendPacket(scoreboardObjectivePacket); // Creative objective
-        playerConnection.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
-
+        player.sendPacket(scoreboardObjectivePacket); // Creative objective
+        player.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
         for (ScoreboardLine line : lines) {
-            playerConnection.sendPacket(line.sidebarTeam.getCreationPacket());
-            playerConnection.sendPacket(line.getScoreCreationPacket(objectiveName));
+            player.sendPacket(line.sidebarTeam.getCreationPacket());
+            player.sendPacket(line.getScoreCreationPacket(objectiveName));
         }
         return result;
     }
@@ -226,13 +223,11 @@ public class Sidebar implements Scoreboard {
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
-        PlayerConnection playerConnection = player.getPlayerConnection();
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
-        playerConnection.sendPacket(scoreboardObjectivePacket);
-
+        player.sendPacket(scoreboardObjectivePacket);
         for (ScoreboardLine line : lines) {
-            playerConnection.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
-            playerConnection.sendPacket(line.sidebarTeam.getDestructionPacket());
+            player.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
+            player.sendPacket(line.sidebarTeam.getDestructionPacket());
         }
         return result;
     }

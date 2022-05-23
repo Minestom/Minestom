@@ -79,7 +79,7 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-            canPlaceBlock = usedItem.meta().getCanPlaceOn().contains(interactedBlock);
+            canPlaceBlock = usedItem.meta().getCanPlaceOn().contains(Block.fromNamespaceId(interactedBlock.namespace()));
         }
 
         // Get the newly placed block position
@@ -93,7 +93,7 @@ public class BlockPlacementListener {
             // using refreshChunk results in the client not being in sync
             // after rapid invalid block placements
             final Block block = instance.getBlock(placementPosition);
-            player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, block));
+            player.sendPacket(new BlockChangePacket(placementPosition, block));
             return;
         }
 
@@ -146,6 +146,9 @@ public class BlockPlacementListener {
             // Consume the block in the player's hand
             final ItemStack newUsedItem = usedItem.consume(1);
             playerInventory.setItemInHand(hand, newUsedItem);
+        } else {
+            // Prevent invisible item on client
+            playerInventory.update();   
         }
     }
 

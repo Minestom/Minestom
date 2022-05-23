@@ -3,6 +3,7 @@ package net.minestom.server.utils.collection;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.AbstractList;
+import java.util.Objects;
 import java.util.function.IntFunction;
 
 @ApiStatus.Internal
@@ -18,8 +19,7 @@ public final class IntMappedArray<R> extends AbstractList<R> {
     @Override
     public R get(int index) {
         final int[] elements = this.elements;
-        if (index < 0 || index >= elements.length)
-            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + elements.length);
+        Objects.checkIndex(index, elements.length);
         return function.apply(elements[index]);
     }
 
