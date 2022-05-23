@@ -49,9 +49,15 @@ public final class NamespaceID implements CharSequence, Key {
         this.full = full;
         this.domain = domain;
         this.path = path;
-        assert !domain.contains(".") && !domain.contains("/") : "Domain cannot contain a dot nor a slash character (" + full + ")";
-        assert domain.matches(legalLetters) : "Illegal character in domain (" + full + "). Must match " + legalLetters;
-        assert path.matches(legalPathLetters) : "Illegal character in path (" + full + "). Must match " + legalPathLetters;
+        if(domain.contains(".") || domain.contains("/")) {
+            throw new IllegalArgumentException("Domain cannot contain a dot nor a slash character (" + full + ")");
+        }
+        if(!domain.matches(legalLetters)) {
+            throw new IllegalArgumentException("Illegal character in domain (" + full + "). Must match " + legalLetters);
+        }
+        if(!path.matches(legalPathLetters)) {
+            throw new IllegalArgumentException("Illegal character in path (" + full + "). Must match " + legalPathLetters);
+        }
     }
 
     public @NotNull String domain() {

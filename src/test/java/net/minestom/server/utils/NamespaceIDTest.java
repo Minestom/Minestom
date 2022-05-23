@@ -30,35 +30,35 @@ public class NamespaceIDTest {
 
     @Test
     public void atMostOneColon() {
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:block:wool"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft:block:wool"));
     }
 
     @Test
     public void noSlashInDomain() {
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft/java_edition:any"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft/java_edition:any"));
     }
 
     @Test
     public void noDotInDomain() {
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft.java:game"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft.java:game"));
     }
 
     @Test
     public void noUppercase() {
-        assertThrows(AssertionError.class, () -> NamespaceID.from("Minecraft:any"));
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:Any"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("Minecraft:any"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft:Any"));
     }
 
     @Test
     public void noSpace() {
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:a n y"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft:a n y"));
     }
 
     @Test
     public void onlyLatinLowercase() {
-        assertThrows(AssertionError.class, () -> NamespaceID.from("Minecraft:voilà"));
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:où_ça"));
-        assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:schrödingers_var"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("Minecraft:voilà"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft:où_ça"));
+        assertThrows(IllegalArgumentException.class, () -> NamespaceID.from("minecraft:schrödingers_var"));
     }
 
     @Test
