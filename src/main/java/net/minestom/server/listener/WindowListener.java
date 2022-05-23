@@ -90,7 +90,7 @@ public class WindowListener {
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
         EventDispatcher.call(inventoryCloseEvent);
 
-        player.closeInventory();
+        player.closeInventoryFromClient(packet.windowId());
 
         Inventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
