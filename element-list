@@ -48,6 +48,7 @@ net.minestom.server.entity.metadata.water.fish
 net.minestom.server.entity.pathfinding
 net.minestom.server.entity.vehicle
 net.minestom.server.event
+net.minestom.server.event.book
 net.minestom.server.event.entity
 net.minestom.server.event.entity.projectile
 net.minestom.server.event.instance

@@ -138,18 +138,23 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertPlayerInventorySlot(int,int)" class="member-name-link">convertPlayerInventorySlot</a><wbr>(int&nbsp;slot,
- int&nbsp;offset)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertClientInventorySlot(int)" class="member-name-link">convertClientInventorySlot</a><wbr>(int&nbsp;slot)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Converts a packet slot to an internal one.</div>
+<div class="block">Used to convert the clients inventory slot to a Minestom slot.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertSlot(int,int)" class="member-name-link">convertSlot</a><wbr>(int&nbsp;slot,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertPlayerInventorySlot(int,int)" class="member-name-link">convertPlayerInventorySlot</a><wbr>(int&nbsp;slot,
  int&nbsp;offset)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Converts a packet slot to an internal one.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertToPacketSlot(int)" class="member-name-link">convertToPacketSlot</a><wbr>(int&nbsp;slot)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertSlot(int,int)" class="member-name-link">convertSlot</a><wbr>(int&nbsp;slot,
+ int&nbsp;offset)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertToPacketSlot(int)" class="member-name-link">convertToPacketSlot</a><wbr>(int&nbsp;slot)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Used to convert internal slot to one used in packets</div>
 </div>
 </div>
@@ -364,6 +369,20 @@ loadScripts(document, 'script');</script>
 <dd><code>slot</code> - the internal slot</dd>
 <dt>Returns:</dt>
 <dd>a slot id which can be used for packets</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="convertClientInventorySlot(int)">
+<h3>convertClientInventorySlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertClientInventorySlot</span><wbr><span class="parameters">(int&nbsp;slot)</span></div>
+<div class="block">Used to convert the clients inventory slot to a Minestom slot.
+ The client's inventory does not count the crafting slots.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>slot</code> - the client slot</dd>
+<dt>Returns:</dt>
+<dd>a slot which can be used internally with Minestom</dd>
 </dl>
 </section>
 </li>
