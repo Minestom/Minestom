@@ -40,14 +40,14 @@ public final class BungeeCordProxy {
         for (JsonElement element : array) {
             JsonObject jsonObject = element.getAsJsonObject();
             JsonElement name = jsonObject.get("name");
-            if (name != null && name.getAsString().equals("textures")) {
-                JsonElement value = jsonObject.get("value");
-                JsonElement signature = jsonObject.get("signature");
-                if (value == null || signature == null) continue;
+            if (name == null || !name.getAsString().equals("textures")) continue;
 
-                skinTexture = value.getAsString();
-                skinSignature = signature.getAsString();
-            }
+            JsonElement value = jsonObject.get("value");
+            JsonElement signature = jsonObject.get("signature");
+            if (value == null || signature == null) continue;
+
+            skinTexture = value.getAsString();
+            skinSignature = signature.getAsString();
         }
 
         if (skinTexture != null && skinSignature != null) {
