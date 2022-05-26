@@ -12,7 +12,10 @@ import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static net.minestom.server.instance.light.BlockLightCompute.*;
 
@@ -22,8 +25,8 @@ final class BlockLight implements Light {
     private volatile byte[] content;
     private volatile byte[] contentPropagation;
 
-    private byte[][] borders;
-    private byte[][] bordersPropagation;
+    private volatile byte[][] borders;
+    private volatile byte[][] bordersPropagation;
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -107,7 +110,6 @@ final class BlockLight implements Light {
                 }
             }
         }
-
         return lightSources;
     }
 
@@ -117,7 +119,9 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public void invalidate(Instance instance, int chunkX, int sectionY, int chunkZ) {
+    public Stream<Instance.SectionLocation> calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
+        System.out.println("Calculating internal light for chunk " + chunkX + " " + " " + sectionY + " " + chunkZ);
+
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
                 for (int y = -1; y <= 1; y++) {
@@ -126,43 +130,39 @@ final class BlockLight implements Light {
                     Chunk neighborChunk = instance.getChunk(neighborPos.blockX(), neighborPos.blockZ());
                     if (neighborChunk == null) continue;
 
-                    neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
-                    neighborChunk.invalidate();
+                    if (neighborPos.blockY() >= neighborChunk.getMinSection()  && neighborPos.blockY() < neighborChunk.getMaxSection()) {
+                        neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
+                        neighborChunk.invalidate();
+                    }
                 }
             }
         }
 
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk == null) return;
+        if (chunk == null) return Stream.empty();
+
+        Set<Instance.SectionLocation> toUpdate = new HashSet<>();
 
         // Update single section with base lighting changes
         Block[] blocks = new Block[SECTION_SIZE * SECTION_SIZE * SECTION_SIZE];
-        var queue = buildInternalQueue(blockPalette, blocks);
+        IntArrayFIFOQueue queue = buildInternalQueue(blockPalette, blocks);
 
         Result result = BlockLightCompute.compute(blocks, queue);
         this.content = result.light();
-
         this.borders = new byte[FACES.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
-        var sectionLocation = new Instance.SectionLocation(chunk, sectionY);
 
         // Propagate changes to neighbors and self
         for (BlockFace face : BlockFace.values()) {
             Instance.SectionLocation neighbor = neighbors.get(face);
             if (neighbor == null) continue;
-            instance.addUpdate(sectionLocation, neighbor, face, content);
+            toUpdate.add(neighbor);
         }
 
         this.borders = result.borders();
-        while (instance.flushQueue() != 0) {
-        }
-
-        Section section = chunk.getSection(sectionY);
-        section.blockLight().applyPropagations(instance, chunk, sectionY);
-        while (instance.flushQueue() != 0) {
-        }
+        return toUpdate.stream();
     }
 
     @Override
@@ -190,8 +190,11 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public void applyPropagations(Instance instance, Chunk chunk, int sectionY) {
+    public Stream<Instance.SectionLocation> calculateExternal(Instance instance, Chunk chunk, int sectionY) {
+        System.out.println("Calculating external light for chunk " + chunk + " " + sectionY);
+
         var neighbors = instance.getNeighbors(chunk, sectionY);
+        Set<Instance.SectionLocation> needsUpdate = new HashSet<>();
 
         IntArrayFIFOQueue queue = buildExternalQueue(neighbors, chunk, sectionY);
         BlockLightCompute.Result result = BlockLightCompute.compute(blocks(blockPalette), queue);
@@ -201,21 +204,27 @@ final class BlockLight implements Light {
 
         synchronized (this) {
             this.contentPropagation = bake(contentPropagation, contentPropagationTemp);
+        }
 
-            // Propagate changes to neighbors and self
-            for (BlockFace face : BlockFace.values()) {
-                var next = result.borders()[face.ordinal()];
-                var current = combineBorders(bordersPropagation[face.ordinal()], this.borders[face.ordinal()]);
-                // var current = bordersPropagation[face.ordinal()];
+        // Propagate changes to neighbors and self
+        for (var entry : neighbors.entrySet()) {
+            var neighbor = entry.getValue();
+            var face = entry.getKey();
 
-                if (!compareBorders(next, current)) {
-                    Instance.SectionLocation neighbor = neighbors.get(face);
-                    instance.addUpdate(new Instance.SectionLocation(chunk, sectionY), neighbor, face, this.contentPropagation);
-                }
+            byte[] next = result.borders()[face.ordinal()];
+            byte[] current = combineBorders(bordersPropagation[face.ordinal()], this.borders[face.ordinal()]);
+            // var current = bordersPropagation[face.ordinal()];
+
+            if (!compareBorders(next, current)) {
+                needsUpdate.add(neighbor);
             }
+        }
 
+        synchronized (this) {
             this.bordersPropagation = combineBorders(bordersPropagation, borderTemp);
         }
+
+        return needsUpdate.stream();
     }
 
     private byte[][] combineBorders(byte[][] b1, byte[][] b2) {

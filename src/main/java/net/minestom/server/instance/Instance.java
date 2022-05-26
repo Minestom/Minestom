@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayFIFOQueue;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
@@ -52,9 +51,12 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -109,9 +111,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final Pointers pointers;
 
     // Lighting
-    private ObjectArrayFIFOQueue<UpdateSectionRequest> updateQueue = new ObjectArrayFIFOQueue<>();
-    record UpdateSectionRequest(SectionLocation from, SectionLocation to, BlockFace face, byte[] data) { }
-    public record SectionLocation(Chunk chunk, int sectionY) {}
+    private Set<SectionLocation> updateQueue = ConcurrentHashMap.newKeySet();
+
+    public record SectionLocation(Chunk chunk, int sectionY) {
+        @Override
+        public int hashCode() {
+            return chunk.hashCode() ^ sectionY; // idk about this
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (!(obj instanceof SectionLocation other)) return false;
+            return (other.chunk.equals(chunk) && other.sectionY == sectionY);
+        }
+    }
 
     /**
      * Creates a new instance.
@@ -713,22 +727,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return chunk.getSection(sectionY);
     }
 
-    public int flushQueue() {
-        ObjectArrayFIFOQueue<UpdateSectionRequest> queue = updateQueue;
-        this.updateQueue = new ObjectArrayFIFOQueue<>();
+    public void flushQueue(Stream<SectionLocation> queue) {
+        while (flushQueue() > 0);
 
-        while (!queue.isEmpty()) {
-            final UpdateSectionRequest index = queue.dequeue();
-            getSection(index.to.chunk, index.to.sectionY).blockLight().applyPropagations(this, index.to.chunk, index.to.sectionY);
-            index.to.chunk.invalidate();
-        }
-
-        return this.updateQueue.size();
+        this.updateQueue = queue.flatMap(sectionLocation -> {
+            sectionLocation.chunk.invalidate();
+            return getSection(sectionLocation.chunk, sectionLocation.sectionY)
+                    .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+        }).collect(Collectors.toSet());
     }
 
-    public void addUpdate(SectionLocation current, SectionLocation neighbor, BlockFace face, byte[] light) {
-        if (neighbor == null) return;
-        updateQueue.enqueue(new UpdateSectionRequest(current, neighbor, face, light));
+    public int flushQueue() {
+        this.updateQueue = updateQueue.stream().flatMap(sectionLocation -> {
+            sectionLocation.chunk.invalidate();
+            return getSection(sectionLocation.chunk, sectionLocation.sectionY)
+                    .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+        }).collect(Collectors.toSet());
+
+        return this.updateQueue.size();
     }
 
     /**

@@ -7,6 +7,8 @@ import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.stream.Stream;
+
 public interface Light {
     static Light sky(@NotNull Palette blockPalette) {
         return new BlockLight(blockPalette);
@@ -21,7 +23,7 @@ public interface Light {
 
     void copyFrom(byte @NotNull [] array);
 
-    void applyPropagations(Instance instance, Chunk chunk, int sectionY);
+    Stream<Instance.SectionLocation> calculateExternal(Instance instance, Chunk chunk, int sectionY);
 
     byte[] getBorderPropagation(BlockFace oppositeFace);
 
@@ -29,5 +31,5 @@ public interface Light {
 
     int getLevel(int x, int y, int z);
 
-    void invalidate(Instance instance, int chunkX, int chunkY, int chunkZ);
+    Stream<Instance.SectionLocation> calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ);
 }

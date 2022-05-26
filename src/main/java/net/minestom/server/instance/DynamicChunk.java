@@ -71,7 +71,8 @@ public class DynamicChunk extends Chunk {
         section.blockPalette()
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
-        section.blockLight().invalidate(instance, chunkX, y / 16, chunkZ);
+
+        ChunkUtils.relight(this, y / 16);
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler

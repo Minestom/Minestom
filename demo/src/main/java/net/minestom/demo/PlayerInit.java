@@ -144,7 +144,12 @@ public class PlayerInit {
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.setTime(18000);
         instanceContainer.setTimeRate(0);
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+
+        instanceContainer.setGenerator(unit -> {
+            unit.modifier().fillHeight(39, 40, Block.STONE);
+            unit.subdivide().forEach(u -> u.modifier().setBlock(0, 10, 0, Block.GLOWSTONE));
+            unit.modifier().fillHeight(50, 51, Block.STONE);
+        });
 
         if (false) {
             System.out.println("start");

@@ -22,6 +22,12 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testPropagationAir(Env env) {
         Instance instance = env.createFlatInstance();
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
         instance.setBlock(8, 100,8 , Block.TORCH);
 
         Map<Vec, Integer> expectedLights = new HashMap<>();
