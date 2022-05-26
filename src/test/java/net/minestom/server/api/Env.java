@@ -47,14 +47,4 @@ public interface Env {
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         return instance;
     }
-
-    default @NotNull Instance createLightingInstance() {
-        var instance = process().instance().createInstanceContainer();
-        instance.setGenerator(unit -> {
-            unit.modifier().fillHeight(0, 40, Block.STONE);
-            unit.subdivide().forEach(u -> u.modifier().setBlock(10, 10, 10, Block.GLOWSTONE));
-            unit.modifier().fillHeight(50, 51, Block.STONE);
-        });
-        return instance;
-    }
 }

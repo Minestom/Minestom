@@ -31,6 +31,7 @@ public class LightParityTest {
             var palette = entry.getValue().blocks;
             results.put(vec, BlockLightCompute.compute(palette));
         }
+        // TODO merge lights and compare
     }
 
     record SectionEntry(Palette blocks, byte[] sky, byte[] block) {

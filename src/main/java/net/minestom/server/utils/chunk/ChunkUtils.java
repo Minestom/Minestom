@@ -3,8 +3,8 @@ package net.minestom.server.utils.chunk;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.light.Light;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
@@ -12,14 +12,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -280,34 +279,40 @@ public final class ChunkUtils {
     }
 
     public static void relight(Instance instance, Collection<Chunk> chunks) {
-        Stream<Instance.SectionLocation> toPropagate = chunks
-                .parallelStream()
-                .flatMap(chunk -> IntStream
-                    .range(chunk.getMinSection(), chunk.getMaxSection())
-                    .mapToObj(index -> Map.entry(index, chunk)))
-                .flatMap(chunkIndex -> {
-                    final Chunk chunk = chunkIndex.getValue();
-                    final int section = chunkIndex.getKey();
-                    return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
-                })
-                .collect(Collectors.toSet())
-                .parallelStream()
-                .flatMap(sectionLocation -> {
-                    final Chunk chunk = sectionLocation.chunk();
-                    final int section = sectionLocation.sectionY();
+        synchronized (instance) {
+            Set<Instance.SectionLocation> toPropagate = chunks
+                    .parallelStream()
+                    .flatMap(chunk -> IntStream
+                            .range(chunk.getMinSection(), chunk.getMaxSection())
+                            .mapToObj(index -> Map.entry(index, chunk)))
+                    .map(chunkIndex -> {
+                        final Chunk chunk = chunkIndex.getValue();
+                        final int section = chunkIndex.getKey();
 
-                    return chunk.getSection(section).blockLight().calculateExternal(chunk.getInstance(), chunk, section);
-                });
+                        return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+                    })
+                    .flatMap(lightSet -> lightSet.flip().stream())
+                    .collect(Collectors.toSet()).parallelStream()
+                    .flatMap(sectionLocation -> {
+                        final Chunk chunk = sectionLocation.chunk();
+                        final int section = sectionLocation.sectionY();
+                        Light light = chunk.getSection(section).blockLight();
+                        light.calculateExternal(chunk.getInstance(), chunk, section);
+                        return light.flip().stream();
+                    }).collect(Collectors.toSet());
 
-        instance.flushQueue(toPropagate);
-        while (instance.flushQueue() > 0);
+            instance.flushQueue(toPropagate);
+            while (instance.flushQueue() > 0);
+        }
     }
 
     public static void relight(Chunk chunk, int section) {
-        Stream<Instance.SectionLocation> toPropagate =
-                chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+        synchronized (chunk.getInstance()) {
+            var light = chunk.getSection(section).blockLight();
 
-        chunk.getInstance().flushQueue(toPropagate);
-        while (chunk.getInstance().flushQueue() > 0);
+            light.calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+            chunk.getInstance().flushQueue(light.flip());
+            while (chunk.getInstance().flushQueue() > 0);
+        }
     }
 }

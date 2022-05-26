@@ -38,6 +38,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
  * WARNING: not thread-safe.
  */
 public class DynamicChunk extends Chunk {
+
     private List<Section> sections;
 
     // Key = ChunkUtils#getBlockIndex
@@ -72,7 +73,8 @@ public class DynamicChunk extends Chunk {
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
 
-        ChunkUtils.relight(this, y / 16);
+        if (instance.hasLighting())
+            ChunkUtils.relight(this, y / 16);
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler

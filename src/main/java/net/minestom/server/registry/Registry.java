@@ -164,6 +164,7 @@ public final class Registry {
         private final boolean air;
         private final boolean solid;
         private final boolean liquid;
+        private final boolean occludes;
         private final int lightEmission;
         private final String blockEntity;
         private final int blockEntityId;
@@ -184,6 +185,7 @@ public final class Registry {
             this.jumpFactor = main.getDouble("jumpFactor", 1);
             this.air = main.getBoolean("air", false);
             this.solid = main.getBoolean("solid");
+            this.occludes = main.getBoolean("occludes", true);
             this.liquid = main.getBoolean("liquid", false);
             this.lightEmission = main.getInt("lightEmission", 0);
             {
@@ -249,6 +251,10 @@ public final class Registry {
 
         public boolean isSolid() {
             return solid;
+        }
+
+        public boolean occludes() {
+            return occludes;
         }
 
         public boolean isLiquid() {

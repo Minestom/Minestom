@@ -13,6 +13,7 @@ import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -116,7 +117,9 @@ final class ShapeImpl implements Shape {
     }
 
     static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        return new ShapeImpl(parseRegistryBoundingBoxString(collision), parseRegistryBoundingBoxString(occlusion), blockEntry);
+        BoundingBox[] collisionBoundingBoxes = blockEntry.isSolid() ? parseRegistryBoundingBoxString(collision) : new BoundingBox[0];
+        BoundingBox[] occlusionBoundingBoxes = blockEntry.occludes() ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
+        return new ShapeImpl(collisionBoundingBoxes, occlusionBoundingBoxes, blockEntry);
     }
 
     @Override

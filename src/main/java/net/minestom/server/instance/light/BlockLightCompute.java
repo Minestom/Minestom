@@ -7,7 +7,9 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Objects;
 
 import static net.minestom.server.instance.light.BlockLight.buildInternalQueue;
 
@@ -17,9 +19,9 @@ final class BlockLightCompute {
     static final int SIDE_LENGTH = 16 * 16;
     static final int SECTION_SIZE = 16;
 
-    static @NotNull Result compute(Palette palette) {
+    static @NotNull Result compute(Palette blockPalette) {
         Block[] blocks = new Block[4096];
-        return BlockLightCompute.compute(blocks, buildInternalQueue(palette, blocks));
+        return BlockLightCompute.compute(blocks, buildInternalQueue(blockPalette, blocks));
     }
 
     static @NotNull Result compute(Block[] blocks, IntArrayFIFOQueue lightPre) {
@@ -27,7 +29,7 @@ final class BlockLightCompute {
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
         byte[] lightArray = new byte[LIGHT_LENGTH];
 
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+        var lightSources = new LinkedList<Integer>();
 
         while(!lightPre.isEmpty()) {
             int index = lightPre.dequeueInt();
@@ -39,11 +41,11 @@ final class BlockLightCompute {
             final int newIndex = x | (z << 4) | (y << 8);
             placeLight(lightArray, newIndex, newLightLevel);
 
-            lightSources.enqueue(index);
+            lightSources.add(index);
         }
 
         while (!lightSources.isEmpty()) {
-            final int index = lightSources.dequeueInt();
+            final int index = lightSources.poll();
             final int x = index & 15;
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
@@ -75,7 +77,7 @@ final class BlockLightCompute {
                     continue;
                 if (getLight(lightArray, newIndex) + 2 <= lightLevel) {
                     placeLight(lightArray, newIndex, newLightLevel);
-                    lightSources.enqueue(newIndex | (newLightLevel << 12));
+                    lightSources.add(newIndex | (newLightLevel << 12));
                 }
             }
         }

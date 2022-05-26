@@ -23,6 +23,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.ChunkSnapshot;
@@ -51,12 +52,10 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -111,7 +110,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final Pointers pointers;
 
     // Lighting
-    private Set<SectionLocation> updateQueue = ConcurrentHashMap.newKeySet();
+    private List<SectionLocation> updateQueue = List.of();
+    private boolean lightUpdates = true;
 
     public record SectionLocation(Chunk chunk, int sectionY) {
         @Override
@@ -727,28 +727,33 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return chunk.getSection(sectionY);
     }
 
-    public void flushQueue(Stream<SectionLocation> queue) {
-        while (flushQueue() > 0);
-
+    public void flushQueue(Set<SectionLocation> queue) {
         synchronized (this) {
-            this.updateQueue = queue.flatMap(sectionLocation -> {
-                sectionLocation.chunk.invalidate();
-                return getSection(sectionLocation.chunk, sectionLocation.sectionY)
-                        .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
-            }).collect(Collectors.toSet());
+            while (flushQueue() > 0);
+
+            this.updateQueue = queue.parallelStream().map(sectionLocation -> {
+                    sectionLocation.chunk.invalidate();
+                    return getSection(sectionLocation.chunk, sectionLocation.sectionY).blockLight()
+                            .calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+                }).toList().parallelStream().flatMap(light -> light.flip().stream())
+                .distinct()
+                .toList();
         }
     }
 
-    public int flushQueue() {
+    public long flushQueue() {
         synchronized (this) {
-            this.updateQueue = updateQueue.parallelStream().flatMap(sectionLocation -> {
-                sectionLocation.chunk.invalidate();
-                return getSection(sectionLocation.chunk, sectionLocation.sectionY)
-                        .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
-            }).collect(Collectors.toSet());
-        }
+            this.updateQueue = updateQueue
+                .parallelStream()
+                .map(sectionLocation -> {
+                    sectionLocation.chunk.invalidate();
+                    return getSection(sectionLocation.chunk, sectionLocation.sectionY).blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+                }).toList().parallelStream().flatMap(light -> light.flip().stream())
+                .distinct()
+                .toList();
 
-        return this.updateQueue.size();
+            return this.updateQueue.size();
+        }
     }
 
     /**
@@ -784,5 +789,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    public boolean hasLighting() {
+        return lightUpdates;
+    }
+
+    public void setHasLighting(boolean lightUpdates) {
+        this.lightUpdates = lightUpdates;
     }
 }

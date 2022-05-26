@@ -1,12 +1,13 @@
 package net.minestom.server.instance.light;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -35,6 +36,28 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(8, 100 + y, 8), Math.max(0, 14 - Math.abs(y)));
         }
 
+        assertLightInstance(instance, expectedLights);
+    }
+
+    @Test
+    public void testTorch(Env env) {
+        Instance instance = env.createFlatInstance();
+        instance.setGenerator(unit -> {
+            unit.modifier().fillHeight(39, 40, Block.STONE);
+            unit.modifier().fillHeight(50, 51, Block.STONE);
+        });
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(1, 40,1 , Block.TORCH);
+
+        Map<Vec, Integer> expectedLights = Map.ofEntries(
+                entry(new Vec(2, 40, 2), 12)
+        );
         assertLightInstance(instance, expectedLights);
     }
 
@@ -337,13 +360,13 @@ public class BlockLightMergeIntegrationTest {
         assertLightInstance(instance, expectedLights);
     }
 
-    byte lightVal(Instance instance, Vec pos) {
+    static byte lightVal(Instance instance, Vec pos) {
         final Vec modPos = new Vec(((pos.blockX() % 16) + 16) % 16, ((pos.blockY() % 16) + 16) % 16, ((pos.blockZ() % 16) + 16) % 16);
         Chunk chunk = instance.getChunkAt(pos.blockX(), pos.blockZ());
         return (byte) chunk.getSectionAt(pos.blockY()).blockLight().getLevel(modPos.blockX(), modPos.blockY(), modPos.blockZ());
     }
 
-    void assertLightInstance(Instance instance, Map<Vec, Integer> expectedLights) {
+    static void assertLightInstance(Instance instance, Map<Vec, Integer> expectedLights) {
         List<String> errors = new ArrayList<>();
         for (var entry : expectedLights.entrySet()) {
             final Integer expected = entry.getValue();

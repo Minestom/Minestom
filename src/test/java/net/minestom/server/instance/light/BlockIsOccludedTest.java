@@ -31,6 +31,16 @@ public class BlockIsOccludedTest {
     }
 
     @Test
+    public void blockSpruceLeaves() {
+        Shape shape = Block.SPRUCE_LEAVES.registry().collisionShape();
+        Shape airBlock = Block.AIR.registry().collisionShape();
+
+        for (BlockFace face : BlockFace.values()) {
+            assertFalse(shape.isOccluded(airBlock, face));
+        }
+    }
+
+    @Test
     public void blockCauldron() {
         Shape shape = Block.CAULDRON.registry().collisionShape();
         Shape airBlock = Block.AIR.registry().collisionShape();
