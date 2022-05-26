@@ -8,7 +8,7 @@ import net.minestom.server.entity.PlayerSkin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord forwarding support. This does not count as a security feature and you will still be required to manage your firewall.
+ * BungeeCord forwarding support. This does not count as a security feature, and you will still be required to manage your firewall.
  * <p>
  * Please consider using {@link net.minestom.server.extras.velocity.VelocityProxy} instead.
  */
@@ -39,15 +39,15 @@ public final class BungeeCordProxy {
 
         for (JsonElement element : array) {
             JsonObject jsonObject = element.getAsJsonObject();
-            final String name = jsonObject.get("name").getAsString();
-            final String value = jsonObject.get("value").getAsString();
-            final String signature = jsonObject.get("signature").getAsString();
+            JsonElement name = jsonObject.get("name");
+            if (name == null || !name.getAsString().equals("textures")) continue;
 
-            if (name.equals("textures")) {
-                skinTexture = value;
-                skinSignature = signature;
-            }
+            JsonElement value = jsonObject.get("value");
+            JsonElement signature = jsonObject.get("signature");
+            if (value == null || signature == null) continue;
 
+            skinTexture = value.getAsString();
+            skinSignature = signature.getAsString();
         }
 
         if (skinTexture != null && skinSignature != null) {
