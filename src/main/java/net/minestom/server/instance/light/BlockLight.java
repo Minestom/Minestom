@@ -161,6 +161,8 @@ final class BlockLight implements Light {
             toUpdate.add(neighbor);
         }
 
+        toUpdate.add(new Instance.SectionLocation(chunk, sectionY));
+
         this.borders = result.borders();
         return toUpdate.stream();
     }
@@ -194,7 +196,7 @@ final class BlockLight implements Light {
         System.out.println("Calculating external light for chunk " + chunk + " " + sectionY);
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
-        Set<Instance.SectionLocation> needsUpdate = new HashSet<>();
+        Set<Instance.SectionLocation> toUpdate = new HashSet<>();
 
         IntArrayFIFOQueue queue = buildExternalQueue(neighbors, chunk, sectionY);
         BlockLightCompute.Result result = BlockLightCompute.compute(blocks(blockPalette), queue);
@@ -216,7 +218,7 @@ final class BlockLight implements Light {
             // var current = bordersPropagation[face.ordinal()];
 
             if (!compareBorders(next, current)) {
-                needsUpdate.add(neighbor);
+                toUpdate.add(neighbor);
             }
         }
 
@@ -224,7 +226,7 @@ final class BlockLight implements Light {
             this.bordersPropagation = combineBorders(bordersPropagation, borderTemp);
         }
 
-        return needsUpdate.stream();
+        return toUpdate.stream();
     }
 
     private byte[][] combineBorders(byte[][] b1, byte[][] b2) {

@@ -730,19 +730,23 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public void flushQueue(Stream<SectionLocation> queue) {
         while (flushQueue() > 0);
 
-        this.updateQueue = queue.flatMap(sectionLocation -> {
-            sectionLocation.chunk.invalidate();
-            return getSection(sectionLocation.chunk, sectionLocation.sectionY)
-                    .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
-        }).collect(Collectors.toSet());
+        synchronized (this) {
+            this.updateQueue = queue.flatMap(sectionLocation -> {
+                sectionLocation.chunk.invalidate();
+                return getSection(sectionLocation.chunk, sectionLocation.sectionY)
+                        .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+            }).collect(Collectors.toSet());
+        }
     }
 
     public int flushQueue() {
-        this.updateQueue = updateQueue.stream().flatMap(sectionLocation -> {
-            sectionLocation.chunk.invalidate();
-            return getSection(sectionLocation.chunk, sectionLocation.sectionY)
-                    .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
-        }).collect(Collectors.toSet());
+        synchronized (this) {
+            this.updateQueue = updateQueue.parallelStream().flatMap(sectionLocation -> {
+                sectionLocation.chunk.invalidate();
+                return getSection(sectionLocation.chunk, sectionLocation.sectionY)
+                        .blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+            }).collect(Collectors.toSet());
+        }
 
         return this.updateQueue.size();
     }
