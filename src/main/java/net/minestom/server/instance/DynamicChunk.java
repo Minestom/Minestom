@@ -247,7 +247,6 @@ public class DynamicChunk extends Chunk {
                 emptyBlockMask.set(index);
             }
         }
-
         return new LightData(true,
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
