@@ -1,9 +1,10 @@
 package net.minestom.server.instance.light;
 
-import net.minestom.server.instance.*;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public interface Light {
@@ -15,9 +16,10 @@ public interface Light {
         return new BlockLight(blockPalette);
     }
 
-    void copyFrom(byte @NotNull [] array);
+    @ApiStatus.Internal
+    byte[] array();
 
-    byte[] bake();
+    void copyFrom(byte @NotNull [] array);
 
     void applyPropagations(Instance instance, Chunk chunk, int sectionY);
 

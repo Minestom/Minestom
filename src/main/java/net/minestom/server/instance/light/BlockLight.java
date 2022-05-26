@@ -162,7 +162,7 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public byte[] bake() {
+    public byte[] array() {
         return bake(contentPropagation, content);
     }
 
@@ -268,7 +268,7 @@ final class BlockLight implements Light {
 
     @Override
     public int getLevel(int x, int y, int z) {
-        var array = bake();
+        var array = array();
         int index = x | (z << 4) | (y << 8);
         return BlockLightCompute.getLight(array, index);
     }
