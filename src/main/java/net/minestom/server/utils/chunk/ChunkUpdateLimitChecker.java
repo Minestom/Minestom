@@ -1,17 +1,16 @@
 package net.minestom.server.utils.chunk;
 
 import net.minestom.server.instance.Chunk;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
-public class ChunkUpdateLimitChecker {
+@ApiStatus.Internal
+public final class ChunkUpdateLimitChecker {
     private final int historySize;
-    private final Queue<Chunk> chunkHistory;
+    private final long[] chunkHistory;
 
     public ChunkUpdateLimitChecker(int historySize) {
         this.historySize = historySize;
-        this.chunkHistory = new ArrayDeque<>(historySize);
+        this.chunkHistory = new long[historySize];
     }
 
     /**
@@ -21,11 +20,16 @@ public class ChunkUpdateLimitChecker {
      * @return {@code true} if it's a new chunk in the history
      */
     public boolean addToHistory(Chunk chunk) {
-        boolean result = !chunkHistory.contains(chunk);
-        if (chunkHistory.size() == historySize) {
-            chunkHistory.remove();
+        final long index = ChunkUtils.getChunkIndex(chunk);
+        boolean result = true;
+        int lastIndex = historySize-1;
+        for (int i = 0; i < lastIndex; i++) {
+            if (chunkHistory[i] == index) {
+                result = false;
+            }
+            chunkHistory[i] = chunkHistory[i+1];
         }
-        chunkHistory.offer(chunk);
+        chunkHistory[lastIndex] = index;
         return result;
     }
 }
