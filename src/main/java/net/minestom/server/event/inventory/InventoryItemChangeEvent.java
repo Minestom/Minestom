@@ -1,6 +1,7 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.event.trait.InventoryEvent;
+import net.minestom.server.event.trait.MultipleItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
@@ -15,19 +16,17 @@ import org.jetbrains.annotations.Nullable;
  * @see PlayerInventoryItemChangeEvent
  */
 @SuppressWarnings("JavadocReference")
-public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
+public class InventoryItemChangeEvent implements MultipleItemEvent, InventoryEvent, RecursiveEvent {
 
     private final Inventory inventory;
     private final int slot;
-    private final ItemStack previousItem;
-    private final ItemStack newItem;
+    private final ItemStack[] itemStacks;
 
     public InventoryItemChangeEvent(@Nullable Inventory inventory, int slot,
                                     @NotNull ItemStack previousItem, @NotNull ItemStack newItem) {
         this.inventory = inventory;
         this.slot = slot;
-        this.previousItem = previousItem;
-        this.newItem = newItem;
+        this.itemStacks = new ItemStack[]{ previousItem, newItem };
     }
 
     /**
@@ -45,7 +44,7 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
      * @return a previous item that was on changed slot.
      */
     public @NotNull ItemStack getPreviousItem() {
-        return previousItem;
+        return itemStacks[0];
     }
 
     /**
@@ -54,11 +53,14 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
      * @return a new item on a changed slot.
      */
     public @NotNull ItemStack getNewItem() {
-        return newItem;
+        return itemStacks[1];
     }
 
     @Override
     public @Nullable Inventory getInventory() {
         return inventory;
     }
+
+    @Override
+    public @NotNull ItemStack[] getItemStacks() { return itemStacks; }
 }
