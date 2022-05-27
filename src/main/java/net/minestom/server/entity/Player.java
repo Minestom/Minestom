@@ -72,6 +72,7 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -168,6 +169,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
+    private ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(4);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -2020,6 +2022,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public Player asPlayer() {
         return this;
+    }
+
+    protected void sendChunkUpdates(Chunk newChunk) {
+        sendPacket(new UpdateViewPositionPacket(newChunk.getChunkX(), newChunk.getChunkZ()));
+        if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
+            ChunkUtils.forDifferingChunksInRange(newChunk.getChunkX(), newChunk.getChunkZ(),
+                    this.currentChunk.getChunkX(), this.currentChunk.getChunkZ(),
+                    MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
+        }
     }
 
     /**
