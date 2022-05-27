@@ -195,7 +195,7 @@ public final class ChunkUtils {
             if (!currentChunks.contains(newChunk)) newCallback.accept(getChunkCoordX(newChunk), getChunkCoordZ(newChunk));
         }
         for (long currentChunk : currentChunks) {
-            if (!newChunks.contains(currentChunk)) newCallback.accept(getChunkCoordX(currentChunk), getChunkCoordZ(currentChunk));
+            if (!newChunks.contains(currentChunk)) oldCallback.accept(getChunkCoordX(currentChunk), getChunkCoordZ(currentChunk));
         }
     }
 
