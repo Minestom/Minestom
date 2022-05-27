@@ -1,5 +1,7 @@
 package net.minestom.server.utils.chunk;
 
+import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
@@ -183,6 +185,18 @@ public final class ChunkUtils {
 
     public static void forChunksInRange(@NotNull Point point, int range, IntegerBiConsumer consumer) {
         forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
+    }
+
+    public static void forDifferingChunks(LongSet currentChunks, int newChunkX, int newChunkZ, int range,
+                                          @NotNull IntegerBiConsumer newCallback, @NotNull IntegerBiConsumer oldCallback) {
+        final LongArraySet newChunks = new LongArraySet();
+        forChunksInRange(newChunkX, newChunkZ, range, (x, z) -> newChunks.add(getChunkIndex(x, z)));
+        for (long newChunk : newChunks) {
+            if (!currentChunks.contains(newChunk)) newCallback.accept(getChunkCoordX(newChunk), getChunkCoordZ(newChunk));
+        }
+        for (long currentChunk : currentChunks) {
+            if (!newChunks.contains(currentChunk)) newCallback.accept(getChunkCoordX(currentChunk), getChunkCoordZ(currentChunk));
+        }
     }
 
     /**

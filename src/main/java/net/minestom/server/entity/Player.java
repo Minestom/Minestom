@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
@@ -123,12 +125,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
+    private final LongSet chunksLoadedByClient = new LongArraySet();
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
             try {
                 if (chunk != null) {
                     chunk.sendChunk(this);
+                    chunksLoadedByClient.add(ChunkUtils.getChunkIndex(chunk));
                     EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
                 }
             } catch (Exception e) {
@@ -139,6 +143,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+        chunksLoadedByClient.remove(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
 
@@ -169,7 +174,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
-    private ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(4);
+    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(4);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -2027,9 +2032,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void sendChunkUpdates(Chunk newChunk) {
         sendPacket(new UpdateViewPositionPacket(newChunk.getChunkX(), newChunk.getChunkZ()));
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
-            ChunkUtils.forDifferingChunksInRange(newChunk.getChunkX(), newChunk.getChunkZ(),
-                    this.currentChunk.getChunkX(), this.currentChunk.getChunkZ(),
-                    MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
+            ChunkUtils.forDifferingChunks(chunksLoadedByClient, this.currentChunk.getChunkX(),
+                    this.currentChunk.getChunkZ(), MinecraftServer.getChunkViewDistance(),
+                    chunkAdder, chunkRemover);
         }
     }
 
