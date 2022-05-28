@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
                               int serverPort, int nextState) implements ClientPreplayPacket {
@@ -35,9 +34,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
      * @param invalidVersionText the text
      */
     public static void setInvalidVersionText(@NotNull Component invalidVersionText) {
-        HandshakePacket.invalidVersionText = invalidVersionText.replaceText(
-                builder -> builder.match(Pattern.quote("{version}")).replacement(MinecraftServer.VERSION_NAME)
-        );
+        HandshakePacket.invalidVersionText = invalidVersionText;
     }
 
     /**
