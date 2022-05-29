@@ -1,16 +1,15 @@
 package net.minestom.server.event.book;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EditBookEvent implements PlayerEvent, EntityInstanceEvent, ItemEvent {
+public class EditBookEvent implements PlayerInstanceEvent, ItemEvent {
 
     private final Player player;
     private final ItemStack itemStack;

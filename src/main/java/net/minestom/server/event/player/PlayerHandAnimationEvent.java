@@ -2,14 +2,13 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when the player swings his hand.
  */
-public class PlayerHandAnimationEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerHandAnimationEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final Player.Hand hand;

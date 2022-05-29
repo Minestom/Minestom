@@ -3,8 +3,7 @@ package net.minestom.server.event.player;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +16,7 @@ import java.util.function.Supplier;
  * Called every time a {@link Player} write and send something in the chat.
  * The event can be cancelled to do not send anything, and the format can be changed.
  */
-public class PlayerChatEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final Collection<Player> recipients;

@@ -1,14 +1,13 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player receive a new chunk data.
  */
-public class PlayerChunkLoadEvent implements PlayerEvent, EntityInstanceEvent {
+public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private final int chunkX, chunkZ;
