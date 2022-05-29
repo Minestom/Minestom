@@ -2,15 +2,14 @@ package net.minestom.server.event.player;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player die in {@link Player#kill()}.
  */
-public class PlayerDeathEvent implements PlayerEvent, EntityInstanceEvent {
+public class PlayerDeathEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private Component deathText;

@@ -2,12 +2,11 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerPacketEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerPacketEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final ClientPacket packet;
