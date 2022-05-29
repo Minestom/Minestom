@@ -63,6 +63,10 @@ final class BlockLight implements Light {
         return lightSources;
     }
 
+    private static Block getBlock(Palette palette, int x, int y, int z) {
+        return Block.fromStateId((short)palette.get(x, y, z));
+    }
+
     private static IntArrayFIFOQueue buildExternalQueue(Block[] blocks, Map<BlockFace, Instance.SectionLocation> neighbors) {
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
         for (BlockFace face : BlockFace.values()) {
@@ -87,9 +91,9 @@ final class BlockLight implements Light {
                     Section otherSection = neighborSection.chunk().getSection(neighborSection.sectionY());
 
                     final Block blockFrom = (switch (face) {
-                        case NORTH, SOUTH -> otherSection.blockLight().getBlock(bx, by, 15 - k);
-                        case WEST, EAST -> otherSection.blockLight().getBlock(15 - k, bx, by);
-                        default -> otherSection.blockLight().getBlock(bx, 15 - k, by);
+                        case NORTH, SOUTH -> getBlock(otherSection.blockPalette(), bx, by, 15 - k);
+                        case WEST, EAST -> getBlock(otherSection.blockPalette(), 15 - k, bx, by);
+                        default -> getBlock(otherSection.blockPalette(), bx, 15 - k, by);
                     });
 
                     Block blockTo = blocks[posTo];
@@ -202,11 +206,6 @@ final class BlockLight implements Light {
             if (a[i] > b[i]) return false;
         }
         return true;
-    }
-
-    @Override
-    public Block getBlock(int x, int y, int z) {
-        return Block.fromStateId((short)blockPalette.get(x, y, z));
     }
 
     public Block[] blocks() {

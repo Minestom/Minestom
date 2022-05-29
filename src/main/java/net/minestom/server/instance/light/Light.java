@@ -26,8 +26,6 @@ public interface Light {
 
     void copyFrom(byte @NotNull [] array);
 
-    Block getBlock(int x, int y, int z);
-
     @ApiStatus.Internal
     Light calculateExternal(Instance instance, Chunk chunk, int sectionY);
 
