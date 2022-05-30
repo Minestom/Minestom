@@ -4,13 +4,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PickupItemEvent implements EntityEvent, EntityInstanceEvent, ItemEvent, CancellableEvent {
+public class PickupItemEvent implements EntityInstanceEvent, ItemEvent, CancellableEvent {
 
     private final LivingEntity livingEntity;
     private final ItemEntity itemEntity;

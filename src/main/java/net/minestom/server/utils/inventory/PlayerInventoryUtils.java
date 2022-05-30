@@ -76,4 +76,20 @@ public final class PlayerInventoryUtils {
         }
         return slot;
     }
+
+    /**
+     * Used to convert the clients inventory slot to a Minestom slot.
+     * The client's inventory does not count the crafting slots.
+     *
+     * @param slot the client slot
+     * @return a slot which can be used internally with Minestom
+     */
+    public static int convertClientInventorySlot(int slot) {
+        if (slot == 36) return BOOTS_SLOT;
+        if (slot == 37) return LEGGINGS_SLOT;
+        if (slot == 38) return CHESTPLATE_SLOT;
+        if (slot == 39) return HELMET_SLOT;
+        if (slot == 40) return OFFHAND_SLOT;
+        return slot;
+    }
 }

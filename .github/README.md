@@ -1,5 +1,7 @@
+![banner](banner_dark.png#gh-dark-mode-only)
+![banner](banner_light.png#gh-light-mode-only)
+
 # Minestom
-![banner](banner.png)
 
 [![license](https://img.shields.io/github/license/Minestom/Minestom?style=for-the-badge&color=b2204c)](../LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)  
