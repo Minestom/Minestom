@@ -6,8 +6,10 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
@@ -16,12 +18,15 @@ import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -211,7 +216,16 @@ public class ArgumentTest {
     public void testArgumentNbtCompoundTag() {
         var arg = ArgumentType.NbtCompound("nbt_compound");
 
-        // TODO: Finish
+        assertEquals(NBT.Compound(mut -> mut.put("long_array", NBT.LongArray(12, 49, 119))), arg.parse("{\"long_array\":[L;12L,49L,119L]}"));
+        assertEquals(NBT.Compound(mut -> mut.put("nested", NBT.Compound(mut2 ->
+                mut2.put("complex", NBT.IntArray(124, 999, 33256))
+            ))
+        ), arg.parse("{\"nested\": {\"complex\": [I;124,999,33256]}}"));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("string"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("\"string\""));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("44"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("[I;11,49,33]"));
 
         assertEquals("NbtCompound<nbt_compound>", arg.toString());
     }
@@ -220,7 +234,16 @@ public class ArgumentTest {
     public void testArgumentNbtTag() {
         var arg = ArgumentType.NBT("nbt");
 
-        // TODO: Finish
+        assertEquals(NBT.String("string"), arg.parse("string"));
+        assertEquals(NBT.String("string"), arg.parse("\"string\""));
+        assertEquals(NBT.Int(44), arg.parse("44"));
+        assertEquals(NBT.IntArray(11, 49, 33), arg.parse("[I;11,49,33]"));
+        assertEquals(NBT.Compound(mut -> mut.put("long_array", NBT.LongArray(12, 49, 119))), arg.parse("{\"long_array\":[L;12L,49L,119L]}"));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("\"unbalanced string"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("dd}"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("{unquoted: string)}"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("{\"array\": [D;123L,5L]}"));
 
         assertEquals("NBT<nbt>", arg.toString());
     }
@@ -239,7 +262,6 @@ public class ArgumentTest {
     public void testArgumentTime() {
         var arg = ArgumentType.Time("time");
 
-        // TODO: Fix argument durations - d=24000t, s=20t, t=1t
         assertEquals(Duration.of(20, TimeUnit.SERVER_TICK), arg.parse("20"));
         assertEquals(Duration.of(40, TimeUnit.SERVER_TICK), arg.parse("40t"));
         assertEquals(Duration.of(60, TimeUnit.SECOND), arg.parse("60s"));
@@ -311,7 +333,25 @@ public class ArgumentTest {
     public void testArgumentRelativeBlockPosition() {
         var arg = ArgumentType.RelativeBlockPosition("relative_block_position");
 
-        // TODO: Complete
+        var vec = new Vec(-3, 14, 255);
+
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), arg.parse("-3 14 +255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), arg.parse("~-3 14 +255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, true, false), arg.parse("-3 ~14 +255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), arg.parse("-3 14 ~+255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, true, true), arg.parse("~-3 ~14 ~+255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, true, true), arg.parse("^-3 ^14 ^+255"));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3.50 14 +255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 14.25 +255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 14 +255.75"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 14 +-255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 text -255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 14 ~~+255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("^-3 ~14 ^+255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("^-3 14 ^+255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1 2"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1 2 3 4"));
 
         assertEquals("RelativeBlockPosition<relative_block_position>", arg.toString());
     }
@@ -320,7 +360,22 @@ public class ArgumentTest {
     public void testArgumentRelativeVec2() {
         var arg = ArgumentType.RelativeVec2("relative_vec_2");
 
-        // TODO: Complete
+        var vec = new Vec(-3, 14.25);
+
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), arg.parse("-3 14.25"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), arg.parse("~-3 14.25"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), arg.parse("-3 ~14.25"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), arg.parse("-3 ~14.25"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, true), arg.parse("~-3 ~14.25"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, false, true), arg.parse("^-3 ^14.25"));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 +-14"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 text"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("~~-3 14"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("^-3 ~14"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("^-3 14"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1 2 3"));
 
         assertEquals("RelativeVec2<relative_vec_2>", arg.toString());
     }
@@ -329,7 +384,22 @@ public class ArgumentTest {
     public void testArgumentRelativeVec3() {
         var arg = ArgumentType.RelativeVec3("relative_vec_3");
 
-        // TODO: Complete
+        var vec = new Vec(-3, 14.25, 255);
+
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), arg.parse("-3 14.25 +255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), arg.parse("~-3 14.25 +255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, true, false), arg.parse("-3 ~14.25 +255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), arg.parse("-3 14.25 ~+255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, true, true), arg.parse("~-3 ~14.25 ~+255"));
+        assertEquals(new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, true, true), arg.parse("^-3 ^14.25 ^+255"));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 14 +-255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 text -255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("-3 14 ~~+255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("^-3 ~14 ^+255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("^-3 14 ^+255"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1 2"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1 2 3 4"));
 
         assertEquals("RelativeVec3<relative_vec_3>", arg.toString());
     }
@@ -349,23 +419,45 @@ public class ArgumentTest {
     public void testArgumentCommand() {
         var arg = ArgumentType.Command("command");
 
-        // TODO: Complete
+        // TODO: Complete - Requires `env`
 
         assertEquals("Command<command>", arg.toString());
     }
 
     @Test
     public void testArgumentEnum() {
-        var arg = ArgumentType.Enum("enum", null); // TODO: Class
 
-        // TODO: Complete
+        enum ExampleEnum { FIRST, SECOND, Third, fourth }
+
+        var arg = ArgumentType.Enum("enum", ExampleEnum.class);
+
+        arg.setFormat(ArgumentEnum.Format.DEFAULT);
+        assertEquals(ExampleEnum.FIRST, arg.parse("FIRST"));
+        assertEquals(ExampleEnum.SECOND, arg.parse("SECOND"));
+        assertEquals(ExampleEnum.Third, arg.parse("Third"));
+        assertEquals(ExampleEnum.fourth, arg.parse("fourth"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("invalid argument"));
+
+        arg.setFormat(ArgumentEnum.Format.UPPER_CASED);
+        assertEquals(ExampleEnum.FIRST, arg.parse("FIRST"));
+        assertEquals(ExampleEnum.SECOND, arg.parse("SECOND"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("Third"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("fourth"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("invalid argument"));
+
+        arg.setFormat(ArgumentEnum.Format.LOWER_CASED);
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("FIRST"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("SECOND"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("Third"));
+        assertEquals(ExampleEnum.fourth, arg.parse("fourth"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("invalid argument"));
 
         assertEquals("Enum<enum>", arg.toString());
     }
 
     @Test
     public void testArgumentGroup() {
-        var arg = ArgumentType.Group("group", null); // TODO: Arguments
+        var arg = ArgumentType.Group("group" /*, arguments */ ); // TODO: Arguments
 
         // TODO: Complete
 
@@ -385,9 +477,13 @@ public class ArgumentTest {
 
     @Test
     public void testArgumentLoop() {
-        var arg = ArgumentType.Loop("loop", null); // TODO: Arguments
+        var arg = ArgumentType.Loop("loop", ArgumentType.String("string"), ArgumentType.String("string2").map(s -> {
+            throw new IllegalArgumentException("This argument should never be triggered");
+        }));
 
-        // TODO: Complete
+        assertEquals(List.of("a", "b", "c"), arg.parse("a b c"));
+        assertEquals(List.of("a", "b"), arg.parse("a b"));
+        System.out.println(arg.parse("a b c d"));
 
         assertEquals("Loop<loop>", arg.toString());
     }
@@ -396,7 +492,12 @@ public class ArgumentTest {
     public void testArgumentString() {
         var arg = ArgumentType.String("string");
 
-        // TODO: Complete
+        assertEquals("text", arg.parse("text"));
+        assertEquals("more text", arg.parse("\"more text\""));
+        assertEquals("more text, but with \"escaped\" quotes", arg.parse("\"more text, but with \\\"escaped\\\" quotes\""));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("\"unclosed quotes"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("\"unescaped \" quotes\""));
 
         assertEquals("String<string>", arg.toString());
     }

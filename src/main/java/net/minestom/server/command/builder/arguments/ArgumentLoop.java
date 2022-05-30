@@ -78,4 +78,9 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("Loop<%s>", getId());
+    }
 }
