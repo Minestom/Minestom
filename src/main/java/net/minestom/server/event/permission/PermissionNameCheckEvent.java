@@ -3,6 +3,8 @@ package net.minestom.server.event.permission;
 import net.minestom.server.event.trait.PermissionEvent;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.permission.PermissionVerifier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called on {@link PermissionHandler#hasPermission(String, PermissionVerifier)}
@@ -14,13 +16,13 @@ public class PermissionNameCheckEvent implements PermissionEvent {
     private Result result;
 
     /**
-     * Creates a new permission check event with the given permission & verifier.
+     * Creates a new permission check event with the given permission and verifier.
      *
      * @param permissionHandler the permission handler
      * @param permissionName    the permission name
      * @param verifier          the verifier
      */
-    public PermissionNameCheckEvent(PermissionHandler permissionHandler, String permissionName, PermissionVerifier verifier) {
+    public PermissionNameCheckEvent(@NotNull PermissionHandler permissionHandler, @NotNull String permissionName, @Nullable PermissionVerifier verifier) {
         this.permissionHandler = permissionHandler;
         this.permissionName = permissionName;
         this.verifier = verifier;
@@ -32,7 +34,7 @@ public class PermissionNameCheckEvent implements PermissionEvent {
      *
      * @return the permission name
      */
-    public String getPermissionName() {
+    public @NotNull String getPermissionName() {
         return permissionName;
     }
 
@@ -41,22 +43,22 @@ public class PermissionNameCheckEvent implements PermissionEvent {
      *
      * @return the verifier
      */
-    public PermissionVerifier getVerifier() {
+    public @Nullable PermissionVerifier getVerifier() {
         return verifier;
     }
 
     @Override
-    public PermissionHandler getPermissionHandler() {
+    public @NotNull PermissionHandler getPermissionHandler() {
         return permissionHandler;
     }
 
     @Override
-    public Result getResult() {
+    public @NotNull Result getResult() {
         return result;
     }
 
     @Override
-    public void setResult(Result result) {
+    public void setResult(@NotNull Result result) {
         this.result = result;
     }
 }

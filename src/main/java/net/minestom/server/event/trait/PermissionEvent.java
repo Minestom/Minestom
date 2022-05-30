@@ -1,6 +1,7 @@
 package net.minestom.server.event.trait;
 
 import net.minestom.server.permission.PermissionHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an event called on a {@link PermissionHandler}
@@ -11,21 +12,21 @@ public interface PermissionEvent extends CancellableEvent {
      *
      * @return the {@link PermissionHandler} associated to this event.
      */
-    PermissionHandler getPermissionHandler();
+    @NotNull PermissionHandler getPermissionHandler();
 
     /**
      * Returns the result of the event.
      *
      * @return the result of the event.
      */
-    Result getResult();
+    @NotNull Result getResult();
 
     /**
      * Sets the result of the event.
      *
      * @param result the result of the event.
      */
-    void setResult(Result result);
+    void setResult(@NotNull Result result);
 
     @Override
     default boolean isCancelled() {
