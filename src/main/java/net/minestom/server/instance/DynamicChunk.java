@@ -232,8 +232,9 @@ public class DynamicChunk extends Chunk {
 
         int index = 0;
         for (Section section : sections) {
-            if (instance.hasLighting())
+            if (instance.hasLighting()) {
                 ChunkUtils.updateSection(instance, this.chunkX, index + minSection, chunkZ);
+            }
 
             index++;
 
