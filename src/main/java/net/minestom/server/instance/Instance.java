@@ -726,9 +726,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     public void flushQueue(Set<SectionLocation> queue) {
-        synchronized (this) {
-            while (flushQueue() > 0);
+        while (flushQueue() > 0);
 
+        synchronized (this) {
             this.updateQueue = queue.parallelStream().map(sectionLocation -> {
                     sectionLocation.chunk.invalidate();
                     return getSection(sectionLocation.chunk, sectionLocation.sectionY).blockLight()

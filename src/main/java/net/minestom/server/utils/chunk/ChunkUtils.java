@@ -277,67 +277,62 @@ public final class ChunkUtils {
     }
 
     public static void relight(Instance instance, Collection<Chunk> chunks) {
-        synchronized (instance) {
-            Set<Point> toPropagate = chunks
-                    .parallelStream()
-                    .flatMap(chunk -> IntStream
-                            .range(chunk.getMinSection(), chunk.getMaxSection())
-                            .mapToObj(index -> Map.entry(index, chunk)))
-                    .map(chunkIndex -> {
-                        final Chunk chunk = chunkIndex.getValue();
-                        final int section = chunkIndex.getKey();
+        Set<Point> toPropagate = chunks
+            .parallelStream()
+            .flatMap(chunk -> IntStream
+                    .range(chunk.getMinSection(), chunk.getMaxSection())
+                    .mapToObj(index -> Map.entry(index, chunk)))
+            .map(chunkIndex -> {
+                final Chunk chunk = chunkIndex.getValue();
+                final int section = chunkIndex.getKey();
 
-                        chunk.getSection(section).blockLight().invalidate();
+                chunk.getSection(section).blockLight().invalidate();
 
-                        return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
-                    }).collect(Collectors.toSet());
+                return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
+            }).collect(Collectors.toSet());
 
-            relight(instance, toPropagate);
-        }
+        relight(instance, toPropagate);
     }
 
     public static void updateSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        synchronized (instance) {
-            Set<Point> collected = new HashSet<>();
-            for (int x = chunkX - 1; x <= chunkX + 1; x++) {
-                for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                    for (int y = sectionY - 1; y <= sectionY + 1; y++) {
-                        Chunk chunkCheck = instance.getChunk(x, z);
-                        Point sectionPosition = new Vec(x, y, z);
-                        if (chunkCheck == null) continue;
+        Set<Point> collected = new HashSet<>();
+        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                for (int y = sectionY - 1; y <= sectionY + 1; y++) {
+                    Chunk chunkCheck = instance.getChunk(x, z);
+                    Point sectionPosition = new Vec(x, y, z);
+                    if (chunkCheck == null) continue;
 
-                        if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                            collected.add(new Vec(x, y, z));
-                        }
+                    if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
+                        collected.add(new Vec(x, y, z));
                     }
                 }
             }
-
-            relight(instance, collected);
         }
+
+        relight(instance, collected);
     }
 
     private static void relight(Instance instance, Set<Point> sections) {
-        synchronized (instance) {
-            Set<Instance.SectionLocation> toPropagate = sections
-                    .parallelStream()
-                    .map(chunkIndex -> {
-                        final Chunk chunk = instance.getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
-                        final int section = chunkIndex.blockY();
+        Set<Instance.SectionLocation> toPropagate = sections
+                .parallelStream()
+                .map(chunkIndex -> {
+                    final Chunk chunk = instance.getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
+                    final int section = chunkIndex.blockY();
+                    if (chunk == null) return null;
 
-                        return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
-                    }).flatMap(lightSet -> lightSet.flip().stream()).collect(Collectors.toSet()).parallelStream()
-                    .flatMap(sectionLocation -> {
-                        final Chunk chunk = sectionLocation.chunk();
-                        final int section = sectionLocation.sectionY();
-                        Light light = chunk.getSection(section).blockLight();
-                        light.calculateExternal(chunk.getInstance(), chunk, section);
-                        return light.flip().stream();
-                    }).collect(Collectors.toSet());
+                    return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+                }).filter(Objects::nonNull).flatMap(lightSet -> lightSet.flip().stream()).collect(Collectors.toSet()).parallelStream()
+                .flatMap(sectionLocation -> {
+                    final Chunk chunk = sectionLocation.chunk();
+                    final int section = sectionLocation.sectionY();
+                    Light light = chunk.getSection(section).blockLight();
+                    light.calculateExternal(chunk.getInstance(), chunk, section);
+                    return light.flip().stream();
+                }).collect(Collectors.toSet());
 
-            instance.flushQueue(toPropagate);
-            while (instance.flushQueue() > 0) ;
-        }
+        instance.flushQueue(toPropagate);
+        while (instance.flushQueue() > 0) ;
     }
 
 }
