@@ -292,6 +292,16 @@ public final class ChunkUtils {
             }).collect(Collectors.toSet());
 
         relight(instance, toPropagate);
+
+        chunks.parallelStream()
+            .flatMap(chunk -> IntStream
+                .range(chunk.getMinSection(), chunk.getMaxSection())
+                .mapToObj(index -> Map.entry(index, chunk)))
+            .forEach(chunkIndex -> {
+                final Chunk chunk = chunkIndex.getValue();
+                final int section = chunkIndex.getKey();
+                chunk.getSection(section).blockLight().array();
+            });
     }
 
     public static void updateSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
