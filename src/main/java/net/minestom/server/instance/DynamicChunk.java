@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
@@ -73,6 +74,23 @@ public class DynamicChunk extends Chunk {
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (neighborChunk == null) continue;
+                neighborChunk.invalidate();
+
+                for (int k = -1; k <= 1; k++) {
+                    Vec neighborPos = new Vec(chunkX + i, ChunkUtils.getChunkCoordinate(y) + k, chunkZ + j);
+
+                    if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
+                        neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
+                    }
+                }
+            }
+        }
+
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler

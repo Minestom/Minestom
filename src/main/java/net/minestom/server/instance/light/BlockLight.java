@@ -8,6 +8,7 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -29,7 +30,7 @@ final class BlockLight implements Light {
     private byte[][] bordersPropagation;
     private byte[][] bordersPropagationSwap;
     private boolean isValid = false;
-    private Set<Instance.SectionLocation> toUpdateSet;
+    private Set<Instance.SectionLocation> toUpdateSet = new HashSet<>();
     private boolean isValidBase = true;
 
     BlockLight(Palette blockPalette) {
@@ -136,6 +137,12 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
+        Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        if (chunk == null) {
+            this.toUpdateSet = Set.of();
+            return this;
+        }
+
         if (this.isValidBase) {
             this.toUpdateSet = Set.of();
             return this;
@@ -143,29 +150,7 @@ final class BlockLight implements Light {
 
         this.isValidBase = true;
 
-        // System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
-
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                for (int y = -1; y <= 1; y++) {
-                    Vec neighborPos = new Vec(chunkX, sectionY, chunkZ).add(x, y, z);
-
-                    Chunk neighborChunk = instance.getChunk(neighborPos.blockX(), neighborPos.blockZ());
-                    if (neighborChunk == null) continue;
-
-                    if (neighborPos.blockY() >= neighborChunk.getMinSection()  && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
-                        neighborChunk.invalidate();
-                    }
-                }
-            }
-        }
-
-        Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk == null) {
-            this.toUpdateSet = Set.of();
-            return this;
-        }
+        System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
 
         Set<Instance.SectionLocation> toUpdate = new HashSet<>();
 
@@ -178,13 +163,20 @@ final class BlockLight implements Light {
         this.borders = new byte[FACES.length][];
         Arrays.setAll(borders, i -> new byte[SIDE_LENGTH]);
 
-        var neighbors = instance.getNeighbors(chunk, sectionY);
-
         // Propagate changes to neighbors and self
-        for (BlockFace face : BlockFace.values()) {
-            Instance.SectionLocation neighbor = neighbors.get(face);
-            if (neighbor == null) continue;
-            toUpdate.add(neighbor);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (neighborChunk == null) continue;
+
+                for (int k = -1; k <= 1; k++) {
+                    Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
+
+                    if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
+                        toUpdate.add(new Instance.SectionLocation(neighborChunk, neighborPos.blockY()));
+                    }
+                }
+            }
         }
 
         toUpdate.add(new Instance.SectionLocation(chunk, sectionY));
@@ -241,7 +233,7 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        // System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
+        System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
         if (!isValid) clearCache();
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
@@ -266,7 +258,7 @@ final class BlockLight implements Light {
             // var current = bordersPropagation[face.ordinal()];
 
             if (!compareBorders(next, current)) {
-                // System.out.println("[ADDING] " + neighbor.chunk().getChunkX() + " " + neighbor.sectionY() + " " + neighbor.chunk().getChunkZ() + " " + face);
+                System.out.println("[ADDING] " + neighbor.chunk().getChunkX() + " " + neighbor.sectionY() + " " + neighbor.chunk().getChunkZ() + " " + face);
                 toUpdate.add(neighbor);
             }
         }

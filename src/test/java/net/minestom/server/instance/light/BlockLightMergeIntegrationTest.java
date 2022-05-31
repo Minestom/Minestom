@@ -412,6 +412,45 @@ public class BlockLightMergeIntegrationTest {
         assertLightInstance(instance, expectedLights);
     }
 
+
+    @Test
+    public void testDiagonalRemoval2(Env env) {
+        Instance instance = env.createFlatInstance();
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(1, 40, 1, Block.TORCH);
+        instance.setBlock(1, 40, 17, Block.TORCH);
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
+        instance.setBlock(1, 40, 17, Block.AIR);
+
+        var expectedLights = Map.ofEntries(
+                entry(new Vec(-3, 40, 2), 9)
+        );
+
+        System.out.println("_______________________");
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+        assertLightInstance(instance, expectedLights);
+    }
+
     @Test
     public void testDouble(Env env) {
         Instance instance = env.createFlatInstance();
