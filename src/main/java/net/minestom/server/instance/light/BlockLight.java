@@ -189,6 +189,7 @@ final class BlockLight implements Light {
     @Override
     public void invalidate() {
         this.isValidBase = false;
+        invalidatePropagation();
     }
 
     private void clearCache() {
@@ -206,7 +207,8 @@ final class BlockLight implements Light {
         freePropagation();
         return baked;
     }
-;    private boolean compareBorders(byte[] a, byte[] b) {
+
+    private boolean compareBorders(byte[] a, byte[] b) {
         if (b == null && a == null) return true;
         if (b == null || a == null) return false;
 
@@ -317,6 +319,7 @@ final class BlockLight implements Light {
         this.isValid = false;
         this.bordersPropagation = null;
         this.contentPropagation = null;
+        this.baked = null;
     }
 
     private void freePropagation() {
