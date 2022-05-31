@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,8 +20,14 @@ import java.util.concurrent.CompletableFuture;
 public class SharedInstance extends Instance {
     private final InstanceContainer instanceContainer;
 
+    @Deprecated
     public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
-        super(uniqueId, instanceContainer.getDimensionType());
+        super(uniqueId, instanceContainer.getDimensionType(), NamespaceID.from("minestom", "world"));
+        this.instanceContainer = instanceContainer;
+    }
+
+    public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer, @NotNull NamespaceID id) {
+        super(uniqueId, instanceContainer.getDimensionType(), id);
         this.instanceContainer = instanceContainer;
     }
 

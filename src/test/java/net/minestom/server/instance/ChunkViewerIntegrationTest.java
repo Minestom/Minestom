@@ -5,6 +5,7 @@ import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +24,7 @@ public class ChunkViewerIntegrationTest {
             // Chunks get their viewers from the instance
             // Ensuring that the system works with shared instances is therefore important
             var manager = env.process().instance();
-            instance = manager.createSharedInstance((InstanceContainer) instance);
+            instance = manager.createSharedInstance((InstanceContainer) instance, NamespaceID.from("minestom", "world"));
         }
 
         var chunk = instance.loadChunk(0, 0).join();

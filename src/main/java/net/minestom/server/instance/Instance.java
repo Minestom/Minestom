@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
@@ -31,6 +32,7 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -87,6 +89,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // the uuid of this instance
     protected UUID uniqueId;
+    protected final NamespaceID id;
 
     // instance custom data
     private final TagHandler tagHandler = TagHandler.newHandler();
@@ -107,10 +110,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
+     * @deprecated use {@link #Instance(UUID, DimensionType, NamespaceID)} instead.
      */
+    @Deprecated
     public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+        this(uniqueId, dimensionType, NamespaceID.from("minestom", "world"));
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param uniqueId      the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
+     * @param id           the {@link Key} of the instance
+     */
+    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID id) {
         Check.argCondition(!dimensionType.isRegistered(),
                 "The dimension " + dimensionType.getName() + " is not registered! Please use DimensionTypeManager#addDimension");
+        this.id = id;
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;
 
@@ -584,6 +601,15 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public @NotNull UUID getUniqueId() {
         return uniqueId;
+    }
+
+    /**
+     * Get the instance name.
+     *
+     * @return the instance name
+     */
+    public @NotNull NamespaceID getId() {
+        return id;
     }
 
     /**

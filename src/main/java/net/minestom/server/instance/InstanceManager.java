@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -23,7 +24,7 @@ public final class InstanceManager {
     /**
      * Registers an {@link Instance} internally.
      * <p>
-     * Note: not necessary if you created your instance using {@link #createInstanceContainer()} or {@link #createSharedInstance(InstanceContainer)}
+     * Note: not necessary if you created your instance using {@link #createInstanceContainer()} or {@link #createSharedInstance(InstanceContainer, NamespaceID)}
      * but only if you instantiated your instance object manually
      *
      * @param instance the {@link Instance} to register
@@ -42,19 +43,24 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     @ApiStatus.Experimental
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
-        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID id) {
+        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader, id);
         registerInstance(instanceContainer);
         return instanceContainer;
     }
 
+    @Deprecated
     public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
-        return createInstanceContainer(dimensionType, null);
+        return createInstanceContainer(dimensionType, NamespaceID.from("minestom", "world"));
+    }
+
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @NotNull NamespaceID id) {
+        return createInstanceContainer(dimensionType, null, id);
     }
 
     @ApiStatus.Experimental
-    public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
-        return createInstanceContainer(DimensionType.OVERWORLD, loader);
+    public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader, @NotNull NamespaceID id) {
+        return createInstanceContainer(DimensionType.OVERWORLD, loader, id);
     }
 
     /**
@@ -63,7 +69,7 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public @NotNull InstanceContainer createInstanceContainer() {
-        return createInstanceContainer(DimensionType.OVERWORLD, null);
+        return createInstanceContainer(DimensionType.OVERWORLD, NamespaceID.from("minestom", "world"));
     }
 
     /**
@@ -91,12 +97,24 @@ public final class InstanceManager {
      * @return the created {@link SharedInstance}
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
-    public @NotNull SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer) {
+    public @NotNull SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer, @NotNull NamespaceID id) {
         Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
         Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
 
-        final SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
+        final SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer, id);
         return registerSharedInstance(sharedInstance);
+    }
+
+    /**
+     * Creates and register a {@link SharedInstance}.
+     *
+     * @param instanceContainer the container assigned to the shared instance
+     * @return the created {@link SharedInstance}
+     * @throws IllegalStateException if {@code instanceContainer} is not registered
+     */
+    @Deprecated
+    public @NotNull SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer) {
+        return this.createSharedInstance(instanceContainer, NamespaceID.from("minestom", "world"));
     }
 
     /**
@@ -142,6 +160,13 @@ public final class InstanceManager {
                 .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
                 .findFirst();
         return instance.orElse(null);
+    }
+
+    public @Nullable Instance getInstance(@NotNull NamespaceID id) {
+        return getInstances().stream()
+                .filter(someInstance -> someInstance.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     /**

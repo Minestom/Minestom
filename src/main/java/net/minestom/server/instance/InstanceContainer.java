@@ -1,6 +1,27 @@
 package net.minestom.server.instance;
 
+import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
+import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
+import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
+
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -19,6 +40,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
@@ -32,17 +54,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Supplier;
-
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -76,15 +87,20 @@ public class InstanceContainer extends Instance {
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     @ApiStatus.Experimental
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
-        super(uniqueId, dimensionType);
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID id) {
+        super(uniqueId, dimensionType, id);
         setChunkSupplier(DynamicChunk::new);
-        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader("world")));
+        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader(id.value())));
         this.chunkLoader.loadInstance(this);
     }
 
+    @Deprecated
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
-        this(uniqueId, dimensionType, null);
+        this(uniqueId, dimensionType, NamespaceID.from("minestom", "world"));
+    }
+
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID id) {
+        this(uniqueId, dimensionType, null, id);
     }
 
     @Override
@@ -471,7 +487,7 @@ public class InstanceContainer extends Instance {
      * @see #getSrcInstance() to retrieve the "creation source" of the copied instance
      */
     public synchronized InstanceContainer copy() {
-        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
+        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType(), getId());
         copiedInstance.srcInstance = this;
         copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
         for (Chunk chunk : chunks.values()) {

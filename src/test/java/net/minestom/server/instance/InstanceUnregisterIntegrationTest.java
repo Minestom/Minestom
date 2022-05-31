@@ -4,6 +4,7 @@ import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.player.PlayerTickEvent;
+import net.minestom.server.utils.NamespaceID;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -18,7 +19,7 @@ public class InstanceUnregisterIntegrationTest {
         // Ensure that unregistering a shared instance does not unload the container chunks
         var instanceManager = env.process().instance();
         var instance = instanceManager.createInstanceContainer();
-        var shared1 = instanceManager.createSharedInstance(instance);
+        var shared1 = instanceManager.createSharedInstance(instance, NamespaceID.from("minestom", "world"));
         var connection = env.createConnection();
         var player = connection.connect(shared1, new Pos(0, 40, 0)).join();
 
@@ -26,7 +27,7 @@ public class InstanceUnregisterIntegrationTest {
         listener.followup();
         env.tick();
 
-        player.setInstance(instanceManager.createSharedInstance(instance)).join();
+        player.setInstance(instanceManager.createSharedInstance(instance, NamespaceID.from("minestom", "world"))).join();
         listener.followup();
         env.tick();
 

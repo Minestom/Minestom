@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.api.Collector;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
@@ -91,7 +92,7 @@ public class PlayerIntegrationTest {
         env.process().dimension().addDimension(testDimension);
 
         var instance = env.createFlatInstance();
-        var instance2 = env.process().instance().createInstanceContainer(testDimension);
+        var instance2 = env.process().instance().createInstanceContainer(testDimension, NamespaceID.from("minestom", "world"));
 
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
