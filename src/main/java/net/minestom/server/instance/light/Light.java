@@ -39,4 +39,6 @@ public interface Light {
 
     @ApiStatus.Internal
     Light calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ);
+
+    void invalidate();
 }

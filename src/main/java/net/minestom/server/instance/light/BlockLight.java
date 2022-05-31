@@ -30,6 +30,7 @@ final class BlockLight implements Light {
     private byte[][] bordersPropagationSwap;
     private boolean isValid = false;
     private Set<Instance.SectionLocation> toUpdateSet;
+    private boolean isValidBase = true;
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -37,12 +38,16 @@ final class BlockLight implements Light {
 
     @Override
     public Set<Instance.SectionLocation> flip() {
-        this.bordersPropagation = this.bordersPropagationSwap;
-        this.contentPropagation = this.contentPropagationSwap;
+        if (this.bordersPropagationSwap != null)
+            this.bordersPropagation = this.bordersPropagationSwap;
+
+        if (this.contentPropagationSwap != null)
+            this.contentPropagation = this.contentPropagationSwap;
 
         this.bordersPropagationSwap = null;
         this.contentPropagationSwap = null;
 
+        if (toUpdateSet == null) return Set.of();
         return toUpdateSet;
     }
 
@@ -131,7 +136,12 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        // System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
+        if (this.isValidBase) {
+            this.toUpdateSet = Set.of();
+            return this;
+        }
+
+        System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
@@ -179,7 +189,14 @@ final class BlockLight implements Light {
         this.borders = result.borders();
 
         this.toUpdateSet = toUpdate;
+        this.isValidBase = true;
+
         return this;
+    }
+
+    @Override
+    public void invalidate() {
+        this.isValidBase = false;
     }
 
     private void clearCache() {
@@ -223,7 +240,7 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        // System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
+        System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
         if (!isValid) clearCache();
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
@@ -248,7 +265,7 @@ final class BlockLight implements Light {
             // var current = bordersPropagation[face.ordinal()];
 
             if (!compareBorders(next, current)) {
-                // System.out.println("[ADDING] " + neighbor.chunk().getChunkX() + " " + neighbor.sectionY() + " " + neighbor.chunk().getChunkZ() + " " + face);
+                System.out.println("[ADDING] " + neighbor.chunk().getChunkX() + " " + neighbor.sectionY() + " " + neighbor.chunk().getChunkZ() + " " + face);
                 toUpdate.add(neighbor);
             }
         }

@@ -5,7 +5,6 @@ import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
@@ -36,6 +35,13 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(8, 100 + y, 8), Math.max(0, 14 - Math.abs(y)));
         }
 
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y + 6, z);
+                }
+            }
+        }
         assertLightInstance(instance, expectedLights);
     }
 
@@ -58,6 +64,15 @@ public class BlockLightMergeIntegrationTest {
         Map<Vec, Integer> expectedLights = Map.ofEntries(
                 entry(new Vec(2, 40, 2), 12)
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -80,6 +95,14 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(-2, 60 + y, 8), Math.max(0, 8 - Math.abs(y)));
         }
 
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -93,6 +116,15 @@ public class BlockLightMergeIntegrationTest {
         }
 
         instance.setBlock(4, 100,8 , Block.TORCH);
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y + 6, z);
+                }
+            }
+        }
+
         instance.setBlock(4, 100,8 , Block.AIR);
 
         Map<Vec, Integer> expectedLights = new HashMap<>();
@@ -101,6 +133,14 @@ public class BlockLightMergeIntegrationTest {
         }
         for (int y = -15; y <= 15; ++y) {
             expectedLights.put(new Vec(-2, 100 + y, 8), 0);
+        }
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y + 6, z);
+                }
+            }
         }
 
         assertLightInstance(instance, expectedLights);
@@ -133,6 +173,14 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(0, 40, 4), 2)
         );
 
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -163,6 +211,14 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -191,6 +247,15 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-2, 40, 7), 0)
 
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -240,6 +305,15 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-1, 40, 20), 1)
 
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -262,7 +336,17 @@ public class BlockLightMergeIntegrationTest {
         instance.setBlock(-1, 40, 5, Block.MAGMA_BLOCK);
         instance.setBlock(-2, 41, 4, Block.STONE);
 
+
         instance.setBlock(-2, 40, 4, Block.TORCH);
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         instance.setBlock(-2, 40, 4, Block.STONE);
 
         Map<Vec, Integer> expectedLights = Map.ofEntries(
@@ -271,6 +355,15 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-4, 40, 4), 2)
 
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -291,6 +384,14 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(2, 40, 18), 6)
 
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
         assertLightInstance(instance, expectedLights);
 
         instance.setBlock(-2, 40, 14, Block.AIR);
@@ -301,6 +402,13 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(2, 40, 18), 0)
 
         );
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
         assertLightInstance(instance, expectedLights);
     }
 
@@ -320,6 +428,15 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-4, 40, 25), 7),
                 entry(new Vec(-4, 40, 18), 8)
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
 
         instance.setBlock(-2, 40, 14, Block.AIR);
@@ -328,6 +445,15 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-4, 40, 25), 7),
                 entry(new Vec(-4, 40, 18), 0)
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 
@@ -350,6 +476,15 @@ public class BlockLightMergeIntegrationTest {
         var expectedLights = Map.ofEntries(
                 entry(new Vec(-2, 40, -1), 0)
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
 
         instance.setBlock(-1, 40, -1, Block.AIR);
@@ -357,6 +492,15 @@ public class BlockLightMergeIntegrationTest {
         expectedLights = Map.ofEntries(
                 entry(new Vec(-2, 40, -1), 13)
         );
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                for (int y = -3; y <= 3; y++) {
+                    ChunkUtils.updateSection(instance, x, y, z);
+                }
+            }
+        }
+
         assertLightInstance(instance, expectedLights);
     }
 

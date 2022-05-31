@@ -72,9 +72,7 @@ public class DynamicChunk extends Chunk {
         section.blockPalette()
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
-
-        if (instance.hasLighting())
-            ChunkUtils.relight(this, y / 16);
+        section.blockLight().invalidate();
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -234,7 +232,11 @@ public class DynamicChunk extends Chunk {
 
         int index = 0;
         for (Section section : sections) {
+            if (instance.hasLighting())
+                ChunkUtils.updateSection(instance, this.chunkX, index + minSection, chunkZ);
+
             index++;
+
             final byte[] skyLight = section.skyLight().array();
             final byte[] blockLight = section.blockLight().array();
             if (skyLight.length != 0) {

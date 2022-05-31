@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.Section;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.function.IntegerBiConsumer;
@@ -11,10 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -278,6 +276,27 @@ public final class ChunkUtils {
         return ((coordinate - 1) | 15) + 1;
     }
 
+    public static void relight(Instance instance, Set<Point> sections) {
+        Set<Instance.SectionLocation> toPropagate  = sections
+                .parallelStream()
+                .map(chunkIndex -> {
+                    final Chunk chunk = instance.getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
+                    final int section = chunkIndex.blockY();
+
+                    return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+                }).flatMap(lightSet -> lightSet.flip().stream()).collect(Collectors.toSet()).parallelStream()
+                .flatMap(sectionLocation -> {
+                    final Chunk chunk = sectionLocation.chunk();
+                    final int section = sectionLocation.sectionY();
+                    Light light = chunk.getSection(section).blockLight();
+                    light.calculateExternal(chunk.getInstance(), chunk, section);
+                    return light.flip().stream();
+                }).collect(Collectors.toSet());
+
+        instance.flushQueue(toPropagate);
+        while (instance.flushQueue() > 0);
+    }
+
     public static void relight(Instance instance, Collection<Chunk> chunks) {
         synchronized (instance) {
             Set<Instance.SectionLocation> toPropagate = chunks
@@ -306,13 +325,24 @@ public final class ChunkUtils {
         }
     }
 
-    public static void relight(Chunk chunk, int section) {
-        synchronized (chunk.getInstance()) {
-            var light = chunk.getSection(section).blockLight();
+    public static void updateSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
+        synchronized (instance) {
+            Set<Point> collected = new HashSet<>();
+            for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+                for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                    for (int y = sectionY - 1; y <= sectionY + 1; y++) {
+                        Chunk chunkCheck = instance.getChunk(x, z);
+                        Point sectionPosition = new Vec(x, y, z);
+                        if (chunkCheck == null) continue;
 
-            light.calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
-            chunk.getInstance().flushQueue(light.flip());
-            while (chunk.getInstance().flushQueue() > 0);
+                        if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
+                            collected.add(new Vec(x, y, z));
+                        }
+                    }
+                }
+            }
+
+            relight(instance, collected);
         }
     }
 }
