@@ -168,12 +168,14 @@ final class BlockLight implements Light {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
                 if (neighborChunk == null) continue;
+                neighborChunk.invalidate();
 
                 for (int k = -1; k <= 1; k++) {
                     Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
 
                     if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
                         toUpdate.add(new Instance.SectionLocation(neighborChunk, neighborPos.blockY()));
+                        neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
                     }
                 }
             }
