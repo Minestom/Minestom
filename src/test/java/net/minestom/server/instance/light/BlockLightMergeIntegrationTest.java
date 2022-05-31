@@ -412,7 +412,6 @@ public class BlockLightMergeIntegrationTest {
         assertLightInstance(instance, expectedLights);
     }
 
-
     @Test
     public void testDiagonalRemoval2(Env env) {
         Instance instance = env.createFlatInstance();
@@ -438,8 +437,6 @@ public class BlockLightMergeIntegrationTest {
         var expectedLights = Map.ofEntries(
                 entry(new Vec(-3, 40, 2), 9)
         );
-
-        System.out.println("_______________________");
 
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
