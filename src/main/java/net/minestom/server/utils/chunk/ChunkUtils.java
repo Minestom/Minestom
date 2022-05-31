@@ -277,54 +277,57 @@ public final class ChunkUtils {
     }
 
     public static void relight(Instance instance, Collection<Chunk> chunks) {
-        Set<Point> toPropagate = chunks
-            .parallelStream()
-            .flatMap(chunk -> IntStream
-                    .range(chunk.getMinSection(), chunk.getMaxSection())
-                    .mapToObj(index -> Map.entry(index, chunk)))
-            .map(chunkIndex -> {
-                final Chunk chunk = chunkIndex.getValue();
-                final int section = chunkIndex.getKey();
+        synchronized (instance) {
+            Set<Point> toPropagate = chunks
+                    .parallelStream()
+                    .flatMap(chunk -> IntStream
+                            .range(chunk.getMinSection(), chunk.getMaxSection())
+                            .mapToObj(index -> Map.entry(index, chunk)))
+                    .map(chunkIndex -> {
+                        final Chunk chunk = chunkIndex.getValue();
+                        final int section = chunkIndex.getKey();
 
-                chunk.getSection(section).blockLight().invalidate();
+                        chunk.getSection(section).blockLight().invalidate();
 
-                return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
-            }).collect(Collectors.toSet());
+                        return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
+                    }).collect(Collectors.toSet());
 
-        relight(instance, toPropagate);
+            relight(instance, toPropagate);
 
-        chunks.parallelStream()
-            .flatMap(chunk -> IntStream
-                .range(chunk.getMinSection(), chunk.getMaxSection())
-                .mapToObj(index -> Map.entry(index, chunk)))
-            .forEach(chunkIndex -> {
-                final Chunk chunk = chunkIndex.getValue();
-                final int section = chunkIndex.getKey();
-                chunk.getSection(section).blockLight().array();
-            });
+            chunks.parallelStream()
+                    .flatMap(chunk -> IntStream
+                            .range(chunk.getMinSection(), chunk.getMaxSection())
+                            .mapToObj(index -> Map.entry(index, chunk)))
+                    .forEach(chunkIndex -> {
+                        final Chunk chunk = chunkIndex.getValue();
+                        final int section = chunkIndex.getKey();
+                        chunk.getSection(section).blockLight().array();
+                    });
+        }
     }
 
     public static void updateSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        Set<Point> collected = new HashSet<>();
-        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
-            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                for (int y = sectionY - 1; y <= sectionY + 1; y++) {
-                    Chunk chunkCheck = instance.getChunk(x, z);
-                    Point sectionPosition = new Vec(x, y, z);
-                    if (chunkCheck == null) continue;
+        synchronized (instance) {
+            Set<Point> collected = new HashSet<>();
+            for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+                for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                    for (int y = sectionY - 1; y <= sectionY + 1; y++) {
+                        Chunk chunkCheck = instance.getChunk(x, z);
+                        Point sectionPosition = new Vec(x, y, z);
+                        if (chunkCheck == null) continue;
 
-                    if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                        collected.add(new Vec(x, y, z));
+                        if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
+                            collected.add(new Vec(x, y, z));
+                        }
                     }
                 }
             }
-        }
 
-        relight(instance, collected);
+            relight(instance, collected);
+        }
     }
 
     private static void relight(Instance instance, Set<Point> sections) {
-        synchronized (instance) {
             Set<Instance.SectionLocation> toPropagate = sections
                     .parallelStream()
                     .map(chunkIndex -> {
@@ -343,6 +346,5 @@ public final class ChunkUtils {
                     }).collect(Collectors.toSet());
 
             instance.flushQueue(toPropagate);
-        }
     }
 }

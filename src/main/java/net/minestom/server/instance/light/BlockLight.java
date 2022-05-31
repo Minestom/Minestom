@@ -201,9 +201,8 @@ final class BlockLight implements Light {
 
     @Override
     public byte[] array() {
-        if (!isValid) clearCache();
-
         if (baked != null) return baked;
+        if (!isValid) clearCache();
         freePropagation();
         return baked;
     }
