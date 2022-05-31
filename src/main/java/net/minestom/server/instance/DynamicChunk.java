@@ -80,17 +80,8 @@ public class DynamicChunk extends Chunk {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
                 if (neighborChunk == null) continue;
                 neighborChunk.invalidate();
-
-                for (int k = -1; k <= 1; k++) {
-                    Vec neighborPos = new Vec(chunkX + i, ChunkUtils.getChunkCoordinate(y) + k, chunkZ + j);
-
-                    if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
-                    }
-                }
             }
         }
-
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
