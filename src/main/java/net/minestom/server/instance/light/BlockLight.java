@@ -147,10 +147,9 @@ final class BlockLight implements Light {
             this.toUpdateSet = Set.of();
             return this;
         }
-
         this.isValidBase = true;
 
-        System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
+        // System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
 
         Set<Instance.SectionLocation> toUpdate = new HashSet<>();
 
@@ -182,7 +181,6 @@ final class BlockLight implements Light {
 
         toUpdate.add(new Instance.SectionLocation(chunk, sectionY));
         this.borders = result.borders();
-
         this.toUpdateSet = toUpdate;
 
         return this;
@@ -234,7 +232,7 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
+        // System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
         if (!isValid) clearCache();
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
@@ -256,10 +254,9 @@ final class BlockLight implements Light {
 
             byte[] next = borderTemp[face.ordinal()];
             byte[] current = getBorderPropagation(face);
-            // var current = bordersPropagation[face.ordinal()];
 
             if (!compareBorders(next, current)) {
-                System.out.println("[ADDING] " + neighbor.chunk().getChunkX() + " " + neighbor.sectionY() + " " + neighbor.chunk().getChunkZ() + " " + face);
+                // System.out.println("[ADDING] " + neighbor.chunk().getChunkX() + " " + neighbor.sectionY() + " " + neighbor.chunk().getChunkZ() + " " + face);
                 toUpdate.add(neighbor);
             }
         }
