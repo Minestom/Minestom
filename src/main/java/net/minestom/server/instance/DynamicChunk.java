@@ -75,6 +75,7 @@ public class DynamicChunk extends Chunk {
         //section.skyLight().invalidate(); TODO
         section.blockLight().invalidate();
 
+        // Invalidate neighbor chunks, since they can be updated by this block change
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
