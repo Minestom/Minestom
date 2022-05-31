@@ -87,15 +87,15 @@ public class PlayerInit {
                 {
                     var instance = player.getInstance();
                     MinecraftServer.getSchedulerManager().scheduleTask(() -> {
-                        IntStream.range(0, 45).forEach(value -> {
+                        IntStream.range(0, 15).forEach(value -> {
                             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 250;
                             int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 250;
                             var pos = new Vec(x, 40, z);
                             instance.setBlock(pos, Block.GLOWSTONE);
 
                             // Force update
-                            // var chunk = (DynamicChunk) instance.getChunkAt(pos);
-                            // chunk.createLightPacket();
+                            var chunk = (DynamicChunk) instance.getChunkAt(pos);
+                            chunk.createLightPacket();
                         });
 
                     }, TaskSchedule.nextTick(), TaskSchedule.nextTick());
@@ -116,7 +116,7 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
-                ItemStack itemStack = ItemStack.builder(Material.TORCH)
+                ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .meta(itemMetaBuilder ->
                                 itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
@@ -139,7 +139,7 @@ public class PlayerInit {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(ServerTickMonitorEvent.class, event -> {
-                // System.out.println("tick " + event.getTickMonitor().getTickTime());
+                System.out.println("tick " + event.getTickMonitor().getTickTime());
             });
 
     static {
