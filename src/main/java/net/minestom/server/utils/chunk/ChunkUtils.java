@@ -314,25 +314,25 @@ public final class ChunkUtils {
     }
 
     private static void relight(Instance instance, Set<Point> sections) {
-        Set<Instance.SectionLocation> toPropagate = sections
-                .parallelStream()
-                .map(chunkIndex -> {
-                    final Chunk chunk = instance.getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
-                    final int section = chunkIndex.blockY();
-                    if (chunk == null) return null;
+        synchronized (instance) {
+            Set<Instance.SectionLocation> toPropagate = sections
+                    .parallelStream()
+                    .map(chunkIndex -> {
+                        final Chunk chunk = instance.getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
+                        final int section = chunkIndex.blockY();
+                        if (chunk == null) return null;
 
-                    return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
-                }).filter(Objects::nonNull).flatMap(lightSet -> lightSet.flip().stream()).collect(Collectors.toSet()).parallelStream()
-                .flatMap(sectionLocation -> {
-                    final Chunk chunk = sectionLocation.chunk();
-                    final int section = sectionLocation.sectionY();
-                    Light light = chunk.getSection(section).blockLight();
-                    light.calculateExternal(chunk.getInstance(), chunk, section);
-                    return light.flip().stream();
-                }).collect(Collectors.toSet());
+                        return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+                    }).filter(Objects::nonNull).flatMap(lightSet -> lightSet.flip().stream()).collect(Collectors.toSet()).parallelStream()
+                    .flatMap(sectionLocation -> {
+                        final Chunk chunk = sectionLocation.chunk();
+                        final int section = sectionLocation.sectionY();
+                        Light light = chunk.getSection(section).blockLight();
+                        light.calculateExternal(chunk.getInstance(), chunk, section);
+                        return light.flip().stream();
+                    }).collect(Collectors.toSet());
 
-        instance.flushQueue(toPropagate);
-        while (instance.flushQueue() > 0) ;
+            instance.flushQueue(toPropagate);
+        }
     }
-
 }

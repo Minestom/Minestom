@@ -324,6 +324,8 @@ final class BlockLight implements Light {
 
     private void freePropagation() {
         this.baked = bake(content, contentPropagation);
+        this.content = null;
+        this.borders = null;
         this.bordersPropagation = null;
         this.contentPropagation = null;
     }

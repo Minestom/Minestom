@@ -726,21 +726,22 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     public void flushQueue(Set<SectionLocation> queue) {
-        while (flushQueue() > 0);
-
         synchronized (this) {
+            while (flushQueue() > 0);
+
             this.updateQueue = queue.parallelStream().map(sectionLocation -> {
                     sectionLocation.chunk.invalidate();
                     return getSection(sectionLocation.chunk, sectionLocation.sectionY).blockLight()
-                            .calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
+                    .calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
                 }).toList().parallelStream().flatMap(light -> light.flip().stream())
                 .distinct()
                 .toList();
+
+            while (flushQueue() > 0);
         }
     }
 
-    public long flushQueue() {
-        synchronized (this) {
+    private long flushQueue() {
             this.updateQueue = updateQueue
                 .parallelStream()
                 .map(sectionLocation -> {
@@ -751,7 +752,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
                 .toList();
 
             return this.updateQueue.size();
-        }
     }
 
     /**
