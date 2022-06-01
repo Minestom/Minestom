@@ -209,6 +209,8 @@ final class BlockLight implements Light {
         if (!isValid) clearCache();
         if (baked != null) return baked;
         freePropagation();
+
+        if (baked == null) return new byte[16 * 16 * 16 / 2];
         return baked;
     }
 
@@ -325,6 +327,7 @@ final class BlockLight implements Light {
     }
 
     private void freePropagation() {
+        if (content == null) return;
         this.baked = bake(content, contentPropagation);
 
         // Lower memory usage
