@@ -327,8 +327,9 @@ final class BlockLight implements Light {
     }
 
     private void freePropagation() {
-        if (content == null) return;
+        if (content == null && contentPropagation == null) return;
         this.baked = bake(content, contentPropagation);
+        if (Arrays.equals(this.baked, new byte[16 * 16 * 16 / 2])) baked = null;
 
         // Lower memory usage
         {
