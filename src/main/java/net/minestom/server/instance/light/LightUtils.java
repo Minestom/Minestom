@@ -11,6 +11,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class LightUtils {
+    private static final Boolean lock = true;
+
     private static void flushQueue(Instance instance, Set<Point> queue) {
         var updateQueue =
             queue.parallelStream()
@@ -48,7 +50,7 @@ public class LightUtils {
                 return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
             }).collect(Collectors.toSet());
 
-        synchronized (instance) {
+        synchronized (lock) {
             relight(instance, toPropagate);
         }
 
@@ -81,7 +83,7 @@ public class LightUtils {
             }
         }
 
-        synchronized (instance) {
+        synchronized (lock) {
             relight(instance, collected);
         }
 
