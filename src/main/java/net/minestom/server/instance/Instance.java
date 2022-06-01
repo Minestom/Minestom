@@ -788,50 +788,50 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     public void relightSection(int chunkX, int sectionY, int chunkZ) {
-        synchronized (this) {
-            Set<Point> collected = new HashSet<>();
-            for (int x = chunkX - 1; x <= chunkX + 1; x++) {
-                for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                    for (int y = sectionY - 1; y <= sectionY + 1; y++) {
-                        Chunk chunkCheck = getChunk(x, z);
-                        Point sectionPosition = new Vec(x, y, z);
-                        if (chunkCheck == null) continue;
+        Set<Point> collected = new HashSet<>();
+        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                for (int y = sectionY - 1; y <= sectionY + 1; y++) {
+                    Chunk chunkCheck = getChunk(x, z);
+                    Point sectionPosition = new Vec(x, y, z);
+                    if (chunkCheck == null) continue;
 
-                        if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                            collected.add(new Vec(x, y, z));
-                        }
+                    if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
+                        collected.add(new Vec(x, y, z));
                     }
                 }
             }
-
-            relight(collected);
         }
+
+        relight(collected);
     }
 
-    public void relight(Set<Point> sections) {
-        Set<Point> toPropagate = sections
-            .parallelStream()
-            .map(chunkIndex -> {
-                final Chunk chunk = getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
-                final int section = chunkIndex.blockY();
-                if (chunk == null) return null;
+    private void relight(Set<Point> sections) {
+        synchronized (this) {
+            Set<Point> toPropagate = sections
+                .parallelStream()
+                .map(chunkIndex -> {
+                    final Chunk chunk = getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
+                    final int section = chunkIndex.blockY();
+                    if (chunk == null) return null;
 
-                return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
-            }).filter(Objects::nonNull)
-            .flatMap(lightSet -> lightSet.flip().stream())
-            .collect(Collectors.toSet())
-            .parallelStream()
-            .flatMap(sectionLocation -> {
-                final Chunk chunk = getChunk(sectionLocation.blockX(), sectionLocation.blockZ());
-                final int section = sectionLocation.blockY();
-                if (chunk == null) return Stream.empty();
+                    return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
+                }).filter(Objects::nonNull)
+                .flatMap(lightSet -> lightSet.flip().stream())
+                .collect(Collectors.toSet())
+                .parallelStream()
+                .flatMap(sectionLocation -> {
+                    final Chunk chunk = getChunk(sectionLocation.blockX(), sectionLocation.blockZ());
+                    final int section = sectionLocation.blockY();
+                    if (chunk == null) return Stream.empty();
 
-                final Light light = chunk.getSection(section).blockLight();
-                light.calculateExternal(chunk.getInstance(), chunk, section);
-                return light.flip().stream();
-            }).collect(Collectors.toSet());
+                    final Light light = chunk.getSection(section).blockLight();
+                    light.calculateExternal(chunk.getInstance(), chunk, section);
+                    return light.flip().stream();
+                }).collect(Collectors.toSet());
 
-        flushQueue(toPropagate);
+            flushQueue(toPropagate);
+        }
     }
 
     /**
