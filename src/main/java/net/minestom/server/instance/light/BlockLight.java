@@ -210,7 +210,7 @@ final class BlockLight implements Light {
         if (baked != null) return baked;
         freePropagation();
 
-        if (baked == null) return new byte[16 * 16 * 16 / 2];
+        if (baked == null) return new byte[LIGHT_LENGTH];
         return baked;
     }
 
@@ -284,12 +284,12 @@ final class BlockLight implements Light {
     }
 
     private byte[] bake(byte[] content1, byte[] content2) {
-        if (content1 == null && content2 == null) return new byte[16 * 16 * 16 / 2];
+        if (content1 == null && content2 == null) return new byte[LIGHT_LENGTH];
 
         if (content1 == null) return content2;
         if (content2 == null) return content1;
 
-        byte[] lightMax = new byte[16 * 16 * 16 / 2];
+        byte[] lightMax = new byte[LIGHT_LENGTH];
         for (int i = 0; i < content1.length; i++) {
             // Lower
             byte l1 = (byte) (content1[i] & 0x0F);
@@ -329,7 +329,7 @@ final class BlockLight implements Light {
     private void freePropagation() {
         if (content == null && contentPropagation == null) return;
         this.baked = bake(content, contentPropagation);
-        if (Arrays.equals(this.baked, new byte[16 * 16 * 16 / 2])) baked = null;
+        if (Arrays.equals(this.baked, new byte[LIGHT_LENGTH])) baked = null;
 
         // Lower memory usage
         {
