@@ -83,6 +83,7 @@ public class LightUtils {
             }
 
             relight(instance, collected);
+            instance.getChunk(chunkX, chunkZ).getSection(sectionY).blockLight().array(); // Free memory
         }
     }
 

@@ -327,7 +327,7 @@ final class BlockLight implements Light {
     private void freePropagation() {
         this.baked = bake(content, contentPropagation);
 
-        // Lower memory usage (doesn't work)
+        // Lower memory usage
         {
             this.content = null;
             this.borders = null;
