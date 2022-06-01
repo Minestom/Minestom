@@ -65,7 +65,6 @@ final class BlockLightCompute {
                         case BOTTOM, TOP -> x * SECTION_SIZE + z;
                         case NORTH, SOUTH -> x * SECTION_SIZE + y;
                     };
-
                     border[borderIndex] = newLightLevel;
                     continue;
                 }
@@ -81,7 +80,6 @@ final class BlockLightCompute {
                 }
             }
         }
-
         return new Result(lightArray, borders);
     }
 

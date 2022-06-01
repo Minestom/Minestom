@@ -7,13 +7,9 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.item.Material;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
