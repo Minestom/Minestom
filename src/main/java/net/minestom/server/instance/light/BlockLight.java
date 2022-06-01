@@ -328,11 +328,17 @@ final class BlockLight implements Light {
 
     private void freePropagation() {
         this.baked = bake(content, contentPropagation);
+
+        // Lower memory usage
         this.content = null;
         this.borders = null;
         this.bordersPropagation = null;
         this.contentPropagation = null;
         this.isValidBase = false;
+
+        // Lower cpu usage
+        // this.bordersPropagation = null;
+        // this.contentPropagation = null;
     }
 
     @Override
