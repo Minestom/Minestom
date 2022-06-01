@@ -94,8 +94,8 @@ public class PlayerInit {
                             instance.setBlock(pos, Block.GLOWSTONE);
 
                             // Force update
-                            var chunk = (DynamicChunk) instance.getChunkAt(pos);
-                            chunk.createLightPacket();
+                            // var chunk = (DynamicChunk) instance.getChunkAt(pos);
+                            // chunk.createLightPacket();
                         });
 
                     }, TaskSchedule.nextTick(), TaskSchedule.nextTick());
