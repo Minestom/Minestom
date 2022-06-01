@@ -52,15 +52,15 @@ public class LightUtils {
             relight(instance, toPropagate);
 
             chunks.parallelStream()
-                .flatMap(chunk -> IntStream
-                        .range(chunk.getMinSection(), chunk.getMaxSection())
-                        .mapToObj(index -> Map.entry(index, chunk)))
-                .forEach(chunkIndex -> {
-                    final Chunk chunk = chunkIndex.getValue();
-                    final int section = chunkIndex.getKey();
-                    chunk.getSection(section).blockLight().array();
-                    chunk.getSection(section).skyLight().array();
-                });
+                    .flatMap(chunk -> IntStream
+                            .range(chunk.getMinSection(), chunk.getMaxSection())
+                            .mapToObj(index -> Map.entry(index, chunk)))
+                    .forEach(chunkIndex -> {
+                        final Chunk chunk = chunkIndex.getValue();
+                        final int section = chunkIndex.getKey();
+                        chunk.getSection(section).blockLight().array();
+                        chunk.getSection(section).skyLight().array();
+                    });
         }
     }
 
@@ -69,10 +69,11 @@ public class LightUtils {
             Set<Point> collected = new HashSet<>();
             for (int x = chunkX - 1; x <= chunkX + 1; x++) {
                 for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                    Chunk chunkCheck = instance.getChunk(x, z);
+                    if (chunkCheck == null) continue;
+
                     for (int y = sectionY - 1; y <= sectionY + 1; y++) {
-                        Chunk chunkCheck = instance.getChunk(x, z);
                         Point sectionPosition = new Vec(x, y, z);
-                        if (chunkCheck == null) continue;
 
                         if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
                             collected.add(new Vec(x, y, z));

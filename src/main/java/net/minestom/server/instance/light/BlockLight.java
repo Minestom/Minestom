@@ -244,9 +244,7 @@ final class BlockLight implements Light {
         Set<Point> toUpdate = new HashSet<>();
 
         Block[] blocks = blocks();
-
         IntArrayFIFOQueue queue = buildExternalQueue(instance, blocks, neighbors);
-
         BlockLightCompute.Result result = BlockLightCompute.compute(blocks, queue);
 
         byte[] contentPropagationTemp = result.light();
@@ -330,19 +328,19 @@ final class BlockLight implements Light {
         this.baked = bake(content, contentPropagation);
 
         // Lower memory usage (doesn't work)
-        // {
-        //     this.content = null;
-        //     this.borders = null;
-        //     this.bordersPropagation = null;
-        //     this.contentPropagation = null;
-        //     this.isValidBase = false;
-        // }
-
-        // Lower cpu usage
         {
+            this.content = null;
+            this.borders = null;
             this.bordersPropagation = null;
             this.contentPropagation = null;
+            this.isValidBase = false;
         }
+
+        // Lower cpu usage
+        // {
+        //     this.bordersPropagation = null;
+        //     this.contentPropagation = null;
+        // }
     }
 
     @Override
