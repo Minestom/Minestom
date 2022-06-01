@@ -39,7 +39,7 @@ public class WorldRelight {
                 entry(new Vec(105, 72, 256), 6)
         );
 
-        instance.relight(instance.getChunks());
+        LightUtils.relight(instance, instance.getChunks());
         assertLightInstance(instance, expectedLights);
     }
 
@@ -52,7 +52,7 @@ public class WorldRelight {
             }
         }
 
-        instance.relight(instance.getChunks());
+        LightUtils.relight(instance, instance.getChunks());
 
         var expectedLights = Map.ofEntries(
                 entry(new Vec(-1, 40, 0), 12),

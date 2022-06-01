@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.light.LightUtils;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
@@ -242,7 +243,7 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             if (instance.hasLighting()) {
-                instance.relightSection(this.chunkX, index + minSection, chunkZ);
+                LightUtils.relightSection(instance, this.chunkX, index + minSection, chunkZ);
             }
 
             index++;
