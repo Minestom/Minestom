@@ -34,57 +34,58 @@ public class LightUtils {
     }
 
     public static void relight(Instance instance, Collection<Chunk> chunks) {
+        Set<Point> toPropagate = chunks
+            .parallelStream()
+            .flatMap(chunk -> IntStream
+                    .range(chunk.getMinSection(), chunk.getMaxSection())
+                    .mapToObj(index -> Map.entry(index, chunk)))
+            .map(chunkIndex -> {
+                final Chunk chunk = chunkIndex.getValue();
+                final int section = chunkIndex.getKey();
+
+                chunk.getSection(section).blockLight().invalidate();
+
+                return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
+            }).collect(Collectors.toSet());
+
         synchronized (instance) {
-            Set<Point> toPropagate = chunks
-                    .parallelStream()
-                    .flatMap(chunk -> IntStream
-                            .range(chunk.getMinSection(), chunk.getMaxSection())
-                            .mapToObj(index -> Map.entry(index, chunk)))
-                    .map(chunkIndex -> {
-                        final Chunk chunk = chunkIndex.getValue();
-                        final int section = chunkIndex.getKey();
-
-                        chunk.getSection(section).blockLight().invalidate();
-
-                        return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
-                    }).collect(Collectors.toSet());
-
             relight(instance, toPropagate);
-
-            chunks.parallelStream()
-                    .flatMap(chunk -> IntStream
-                            .range(chunk.getMinSection(), chunk.getMaxSection())
-                            .mapToObj(index -> Map.entry(index, chunk)))
-                    .forEach(chunkIndex -> {
-                        final Chunk chunk = chunkIndex.getValue();
-                        final int section = chunkIndex.getKey();
-                        chunk.getSection(section).blockLight().array();
-                        chunk.getSection(section).skyLight().array();
-                    });
         }
+
+        chunks.parallelStream()
+            .flatMap(chunk -> IntStream
+                .range(chunk.getMinSection(), chunk.getMaxSection())
+                .mapToObj(index -> Map.entry(index, chunk)))
+            .forEach(chunkIndex -> {
+                final Chunk chunk = chunkIndex.getValue();
+                final int section = chunkIndex.getKey();
+                chunk.getSection(section).blockLight().array();
+                chunk.getSection(section).skyLight().array();
+            });
     }
 
     public static void relightSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        synchronized (instance) {
-            Set<Point> collected = new HashSet<>();
-            for (int x = chunkX - 1; x <= chunkX + 1; x++) {
-                for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                    Chunk chunkCheck = instance.getChunk(x, z);
-                    if (chunkCheck == null) continue;
+        Set<Point> collected = new HashSet<>();
+        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                Chunk chunkCheck = instance.getChunk(x, z);
+                if (chunkCheck == null) continue;
 
-                    for (int y = sectionY - 1; y <= sectionY + 1; y++) {
-                        Point sectionPosition = new Vec(x, y, z);
+                for (int y = sectionY - 1; y <= sectionY + 1; y++) {
+                    Point sectionPosition = new Vec(x, y, z);
 
-                        if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                            collected.add(new Vec(x, y, z));
-                        }
+                    if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
+                        collected.add(new Vec(x, y, z));
                     }
                 }
             }
-
-            relight(instance, collected);
-            instance.getChunk(chunkX, chunkZ).getSection(sectionY).blockLight().array(); // Free memory
         }
+
+        synchronized (instance) {
+            relight(instance, collected);
+        }
+
+        instance.getChunk(chunkX, chunkZ).getSection(sectionY).blockLight().array(); // Free memory
     }
 
     private static void relight(Instance instance, Set<Point> sections) {
