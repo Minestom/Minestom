@@ -92,8 +92,6 @@ public class BlockLightMergeIntegrationTest {
         LightUtils.relightSection(instance, 1, 2, 1);
         assertLightInstance(instance, expectedLights);
 
-        System.out.println("____________________");
-
         instance.setBlock(-2, 40,-2, Block.TORCH);
         expectedLights = Map.ofEntries(
                 entry(new Vec(2, 40, 2), 12)
@@ -471,6 +469,7 @@ public class BlockLightMergeIntegrationTest {
                 }
             }
         }
+
         assertLightInstance(instance, expectedLights);
     }
 

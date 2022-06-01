@@ -132,9 +132,10 @@ final class ShapeImpl implements Shape {
     public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
         final ShapeImpl shapeImpl = ((ShapeImpl) shape);
 
-        final boolean hasAirOcclusion = (((airOcclusion >> face.ordinal()) & 1) == 1);
         final boolean hasBlockOcclusion = (((blockOcclusion >> face.ordinal()) & 1) == 1);
         final boolean hasBlockOcclusionOther = ((shapeImpl.blockOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+
+        final boolean hasAirOcclusion = (((airOcclusion >> face.ordinal()) & 1) == 1);
         final boolean hasAirOcclusionOther = ((shapeImpl.airOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
         if (blockEntry.lightEmission() > 0) return hasBlockOcclusionOther;
 

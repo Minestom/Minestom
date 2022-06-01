@@ -52,15 +52,15 @@ public class LightUtils {
             relight(instance, toPropagate);
 
             chunks.parallelStream()
-                    .flatMap(chunk -> IntStream
-                            .range(chunk.getMinSection(), chunk.getMaxSection())
-                            .mapToObj(index -> Map.entry(index, chunk)))
-                    .forEach(chunkIndex -> {
-                        final Chunk chunk = chunkIndex.getValue();
-                        final int section = chunkIndex.getKey();
-                        chunk.getSection(section).blockLight().array();
-                        chunk.getSection(section).skyLight().array();
-                    });
+                .flatMap(chunk -> IntStream
+                        .range(chunk.getMinSection(), chunk.getMaxSection())
+                        .mapToObj(index -> Map.entry(index, chunk)))
+                .forEach(chunkIndex -> {
+                    final Chunk chunk = chunkIndex.getValue();
+                    final int section = chunkIndex.getKey();
+                    chunk.getSection(section).blockLight().array();
+                    chunk.getSection(section).skyLight().array();
+                });
         }
     }
 
@@ -82,21 +82,6 @@ public class LightUtils {
             }
 
             relight(instance, collected);
-
-            for (int x = chunkX - 2; x <= chunkX + 2; x++) {
-                for (int z = chunkZ - 2; z <= chunkZ + 2; z++) {
-                    for (int y = sectionY - 2; y <= sectionY + 2; y++) {
-                        Chunk chunkCheck = instance.getChunk(x, z);
-                        Point sectionPosition = new Vec(x, y, z);
-                        if (chunkCheck == null) continue;
-
-                        if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                            chunkCheck.getSection(y).blockLight().array();
-                            chunkCheck.getSection(y).skyLight().array();
-                        }
-                    }
-                }
-            }
         }
     }
 

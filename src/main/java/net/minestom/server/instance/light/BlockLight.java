@@ -206,8 +206,8 @@ final class BlockLight implements Light {
 
     @Override
     public byte[] array() {
-        if (baked != null) return baked;
         if (!isValid) clearCache();
+        if (baked != null) return baked;
         freePropagation();
         return baked;
     }
@@ -329,20 +329,20 @@ final class BlockLight implements Light {
     private void freePropagation() {
         this.baked = bake(content, contentPropagation);
 
-        // Lower memory usage
-        {
-            this.content = null;
-            this.borders = null;
-            this.bordersPropagation = null;
-            this.contentPropagation = null;
-            this.isValidBase = false;
-        }
-
-        // Lower cpu usage
+        // Lower memory usage (doesn't work)
         // {
+        //     this.content = null;
+        //     this.borders = null;
         //     this.bordersPropagation = null;
         //     this.contentPropagation = null;
+        //     this.isValidBase = false;
         // }
+
+        // Lower cpu usage
+        {
+            this.bordersPropagation = null;
+            this.contentPropagation = null;
+        }
     }
 
     @Override
