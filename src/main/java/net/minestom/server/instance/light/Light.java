@@ -1,8 +1,8 @@
 package net.minestom.server.instance.light;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,7 +22,7 @@ public interface Light {
     @ApiStatus.Internal
     byte[] array();
 
-    Set<Instance.SectionLocation> flip();
+    Set<Point> flip();
 
     void copyFrom(byte @NotNull [] array);
 

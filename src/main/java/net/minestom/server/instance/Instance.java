@@ -8,6 +8,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
@@ -108,22 +109,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final Pointers pointers;
 
     // Lighting
-    private List<SectionLocation> updateQueue = List.of();
+    private List<Point> updateQueue = List.of();
     private boolean lightUpdates = true;
-
-    public record SectionLocation(Chunk chunk, int sectionY) {
-        @Override
-        public int hashCode() {
-            return chunk.hashCode() ^ sectionY; // idk about this
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) return true;
-            if (!(obj instanceof SectionLocation other)) return false;
-            return (other.chunk.equals(chunk) && other.sectionY == sectionY);
-        }
-    }
 
     /**
      * Creates a new instance.
@@ -698,11 +685,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         explosion.apply(this);
     }
 
-    public Map<BlockFace, SectionLocation> getNeighbors(Chunk chunk, int sectionY) {
+    public Map<BlockFace, Point> getNeighbors(Chunk chunk, int sectionY) {
         int chunkX = chunk.chunkX;
         int chunkZ = chunk.chunkZ;
 
-        Map<BlockFace, SectionLocation> links = new HashMap<>();
+        Map<BlockFace, Point> links = new HashMap<>();
 
         for (BlockFace face : BlockFace.values()) {
             Direction direction = face.toDirection();
@@ -715,7 +702,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             if (foundChunk == null) continue;
             if (y - foundChunk.minSection > foundChunk.maxSection || y - foundChunk.minSection < 0) continue;
 
-            links.put(face, new SectionLocation(foundChunk, y));
+            links.put(face, new Vec(foundChunk.getChunkX(), y, foundChunk.getChunkZ()));
         }
 
         return links;
@@ -725,31 +712,46 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return chunk.getSection(sectionY);
     }
 
-    public void flushQueue(Set<SectionLocation> queue) {
-            while (flushQueue() > 0);
+    public void flushQueue(Set<Point> queue) {
+        while (flushQueue() > 0);
 
-            this.updateQueue = queue.parallelStream().map(sectionLocation -> {
-                    sectionLocation.chunk.invalidate();
-                    return getSection(sectionLocation.chunk, sectionLocation.sectionY).blockLight()
-                    .calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
-                }).toList().parallelStream().flatMap(light -> light.flip().stream())
-                .distinct()
-                .toList();
+        this.updateQueue = queue.parallelStream().map(sectionLocation -> {
+            Chunk chunk = getChunk(sectionLocation.blockX(), sectionLocation.blockZ());
+            if (chunk == null) return null;
 
-            while (flushQueue() > 0);
+            chunk.invalidate();
+            return getSection(chunk, sectionLocation.blockY()).blockLight()
+                    .calculateExternal(this, chunk, sectionLocation.blockY());
+        })
+            .filter(Objects::nonNull)
+            .toList()
+            .parallelStream()
+            .flatMap(light -> light.flip().stream())
+            .distinct()
+            .toList();
+
+        while (flushQueue() > 0);
     }
 
     private long flushQueue() {
-            this.updateQueue = updateQueue
-                    .parallelStream()
-                    .map(sectionLocation -> {
-                        sectionLocation.chunk.invalidate();
-                        return getSection(sectionLocation.chunk, sectionLocation.sectionY).blockLight().calculateExternal(this, sectionLocation.chunk, sectionLocation.sectionY);
-                    }).toList().parallelStream().flatMap(light -> light.flip().stream())
-                    .distinct()
-                    .toList();
+        this.updateQueue = updateQueue
+            .parallelStream()
+            .map(sectionLocation -> {
+                Chunk chunk = getChunk(sectionLocation.blockX(), sectionLocation.blockZ());
+                if (chunk == null) return null;
 
-            return this.updateQueue.size();
+                chunk.invalidate();
+                return getSection(chunk, sectionLocation.blockY()).blockLight()
+                        .calculateExternal(this, chunk, sectionLocation.blockY());
+            })
+                .filter(Objects::nonNull)
+                .toList()
+                .parallelStream()
+                .flatMap(light -> light.flip().stream())
+                .distinct()
+                .toList();
+
+        return this.updateQueue.size();
     }
 
     /**

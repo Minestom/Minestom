@@ -1,6 +1,7 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -8,7 +9,6 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -30,7 +30,7 @@ final class BlockLight implements Light {
     private byte[][] bordersPropagation;
     private byte[][] bordersPropagationSwap;
     private boolean isValid = false;
-    private Set<Instance.SectionLocation> toUpdateSet = new HashSet<>();
+    private Set<Point> toUpdateSet = new HashSet<>();
     private boolean isValidBase = true;
 
     BlockLight(Palette blockPalette) {
@@ -38,7 +38,7 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public Set<Instance.SectionLocation> flip() {
+    public Set<Point> flip() {
         if (this.bordersPropagationSwap != null)
             this.bordersPropagation = this.bordersPropagationSwap;
 
@@ -73,12 +73,14 @@ final class BlockLight implements Light {
         return Block.fromStateId((short)palette.get(x, y, z));
     }
 
-    private static IntArrayFIFOQueue buildExternalQueue(Block[] blocks, Map<BlockFace, Instance.SectionLocation> neighbors) {
+    private static IntArrayFIFOQueue buildExternalQueue(Instance instance, Block[] blocks, Map<BlockFace, Point> neighbors) {
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
         for (BlockFace face : BlockFace.values()) {
-            Instance.SectionLocation neighborSection = neighbors.get(face);
-            if (neighborSection == null) continue;
-            byte[] neighborFace = Instance.getSection(neighborSection.chunk(), neighborSection.sectionY()).blockLight().getBorderPropagation(face.getOppositeFace());
+            Point neighborSection = neighbors.get(face);
+            Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
+            if (chunk == null) continue;
+
+            byte[] neighborFace = Instance.getSection(chunk, neighborSection.blockY()).blockLight().getBorderPropagation(face.getOppositeFace());
             if (neighborFace == null) continue;
 
             for (int bx = 0; bx < 16; bx++) {
@@ -94,7 +96,7 @@ final class BlockLight implements Light {
                         default -> bx | (by << 4) | (k << 8);
                     };
 
-                    Section otherSection = neighborSection.chunk().getSection(neighborSection.sectionY());
+                    Section otherSection = chunk.getSection(neighborSection.blockY());
 
                     final Block blockFrom = (switch (face) {
                         case NORTH, SOUTH -> getBlock(otherSection.blockPalette(), bx, by, 15 - k);
@@ -151,7 +153,7 @@ final class BlockLight implements Light {
 
         // System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
 
-        Set<Instance.SectionLocation> toUpdate = new HashSet<>();
+        Set<Point> toUpdate = new HashSet<>();
 
         // Update single section with base lighting changes
         Block[] blocks = new Block[SECTION_SIZE * SECTION_SIZE * SECTION_SIZE];
@@ -172,14 +174,14 @@ final class BlockLight implements Light {
                     Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
 
                     if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        toUpdate.add(new Instance.SectionLocation(neighborChunk, neighborPos.blockY()));
+                        toUpdate.add(new Vec(neighborChunk.getChunkX(), neighborPos.blockY(), neighborChunk.getChunkZ()));
                         neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
                     }
                 }
             }
         }
 
-        toUpdate.add(new Instance.SectionLocation(chunk, sectionY));
+        toUpdate.add(new Vec(chunk.getChunkX(), sectionY, chunk.getChunkZ()));
         this.borders = result.borders();
         this.toUpdateSet = toUpdate;
 
@@ -237,10 +239,10 @@ final class BlockLight implements Light {
         if (!isValid) clearCache();
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
-        Set<Instance.SectionLocation> toUpdate = new HashSet<>();
+        Set<Point> toUpdate = new HashSet<>();
 
         Block[] blocks = blocks();
-        IntArrayFIFOQueue queue = buildExternalQueue(blocks, neighbors);
+        IntArrayFIFOQueue queue = buildExternalQueue(instance, blocks, neighbors);
         BlockLightCompute.Result result = BlockLightCompute.compute(blocks, queue);
 
         byte[] contentPropagationTemp = result.light();

@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.Section;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.function.IntegerBiConsumer;
@@ -17,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -328,7 +328,7 @@ public final class ChunkUtils {
     }
 
     private static void relight(Instance instance, Set<Point> sections) {
-            Set<Instance.SectionLocation> toPropagate = sections
+            Set<Point> toPropagate = sections
                     .parallelStream()
                     .map(chunkIndex -> {
                         final Chunk chunk = instance.getChunk(chunkIndex.blockX(), chunkIndex.blockZ());
@@ -336,11 +336,16 @@ public final class ChunkUtils {
                         if (chunk == null) return null;
 
                         return chunk.getSection(section).blockLight().calculateInternal(chunk.getInstance(), chunk.getChunkX(), section, chunk.getChunkZ());
-                    }).filter(Objects::nonNull).flatMap(lightSet -> lightSet.flip().stream()).collect(Collectors.toSet()).parallelStream()
+                    }).filter(Objects::nonNull)
+                    .flatMap(lightSet -> lightSet.flip().stream())
+                    .collect(Collectors.toSet())
+                    .parallelStream()
                     .flatMap(sectionLocation -> {
-                        final Chunk chunk = sectionLocation.chunk();
-                        final int section = sectionLocation.sectionY();
-                        Light light = chunk.getSection(section).blockLight();
+                        final Chunk chunk = instance.getChunk(sectionLocation.blockX(), sectionLocation.blockZ());
+                        final int section = sectionLocation.blockY();
+                        if (chunk == null) return Stream.empty();
+
+                        final Light light = chunk.getSection(section).blockLight();
                         light.calculateExternal(chunk.getInstance(), chunk, section);
                         return light.flip().stream();
                     }).collect(Collectors.toSet());
