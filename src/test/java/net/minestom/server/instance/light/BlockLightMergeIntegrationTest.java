@@ -6,7 +6,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
