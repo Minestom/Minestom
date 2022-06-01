@@ -70,11 +70,11 @@ final class BlockLightCompute {
                 }
                 // Section
                 final int newIndex = xO | (zO << 4) | (yO << 8);
-                final Block currentBlock = Objects.requireNonNullElse(blocks[x | (z << 4) | (y << 8)], Block.AIR);
-                final Block propagatedBlock = Objects.requireNonNullElse(blocks[newIndex], Block.AIR);
-                if (currentBlock.registry().collisionShape().isOccluded(propagatedBlock.registry().collisionShape(), face))
-                    continue;
                 if (getLight(lightArray, newIndex) + 2 <= lightLevel) {
+                    final Block currentBlock = Objects.requireNonNullElse(blocks[x | (z << 4) | (y << 8)], Block.AIR);
+                    final Block propagatedBlock = Objects.requireNonNullElse(blocks[newIndex], Block.AIR);
+                    if (currentBlock.registry().collisionShape().isOccluded(propagatedBlock.registry().collisionShape(), face))
+                        continue;
                     placeLight(lightArray, newIndex, newLightLevel);
                     lightSources.add(newIndex | (newLightLevel << 12));
                 }
