@@ -38,6 +38,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -660,6 +661,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void chat(@NotNull String message) {
         addPacketToQueue(new ClientChatMessagePacket(message));
+    }
+
+    public void playBlockAction(@NotNull Point point, byte actionId, byte actionParam) {
+        Check.stateCondition(instance == null, "Instance should be not null");
+        this.playBlockAction(instance.getBlock(point), point, actionId, actionParam);
+    }
+
+    public void playBlockAction(@NotNull Block block, @NotNull Point point, byte actionId, byte actionParam) {
+        BlockActionPacket packet = new BlockActionPacket();
+        packet.blockPosition = point;
+        packet.actionId = actionId;
+        packet.actionParam = actionParam;
+        packet.blockId = block.id();
+        playerConnection.sendPacket(packet);
     }
 
     @Override
