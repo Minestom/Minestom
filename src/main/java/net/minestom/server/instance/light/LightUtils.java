@@ -43,6 +43,7 @@ public class LightUtils {
                     .map(chunkIndex -> {
                         final Chunk chunk = chunkIndex.getValue();
                         final int section = chunkIndex.getKey();
+
                         chunk.getSection(section).blockLight().invalidate();
 
                         return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());

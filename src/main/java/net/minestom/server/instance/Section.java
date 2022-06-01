@@ -19,8 +19,6 @@ public record Section(Palette blockPalette, Palette biomePalette,
     public void clear() {
         this.blockPalette.fill(0);
         this.biomePalette.fill(0);
-        this.skyLight.invalidate();
-        this.blockLight.invalidate();
     }
 
     @Override

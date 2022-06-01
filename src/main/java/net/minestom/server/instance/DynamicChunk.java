@@ -73,6 +73,7 @@ public class DynamicChunk extends Chunk {
         section.blockPalette()
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
+
         section.blockLight().invalidate();
 
         // Invalidate neighbor chunks, since they can be updated by this block change

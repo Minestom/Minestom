@@ -156,8 +156,6 @@ final class BlockLight implements Light {
         }
         this.isValidBase = true;
 
-        System.out.println("[INTERNAL] " + chunkX + " " + sectionY + " " + chunkZ);
-
         Set<Point> toUpdate = new HashSet<>();
 
         // Update single section with base lighting changes
@@ -240,7 +238,6 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        System.out.println("[EXTERNAL] " + chunk.getChunkX() + " " + sectionY + " " + chunk.getChunkZ());
         if (!isValid) clearCache();
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
@@ -266,7 +263,6 @@ final class BlockLight implements Light {
             byte[] current = getBorderPropagation(face);
 
             if (!compareBorders(next, current)) {
-                System.out.println("[ADDING] " + chunk.getChunkX() + " " + neighbor.blockY() + " " + chunk.getChunkZ() + " " + face);
                 toUpdate.add(neighbor);
             }
         }
@@ -332,8 +328,6 @@ final class BlockLight implements Light {
 
     private void freePropagation() {
         this.baked = bake(content, contentPropagation);
-        this.content = null;
-        this.borders = null;
         this.bordersPropagation = null;
         this.contentPropagation = null;
     }
