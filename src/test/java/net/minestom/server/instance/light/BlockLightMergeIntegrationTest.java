@@ -67,11 +67,36 @@ public class BlockLightMergeIntegrationTest {
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
+                    LightUtils.relightSection(instance, x, y, z);
                 }
             }
         }
 
+        assertLightInstance(instance, expectedLights);
+    }
+
+    @Test
+    public void testTorch2(Env env) {
+        Instance instance = env.createFlatInstance();
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(1, 40,1 , Block.TORCH);
+        Map<Vec, Integer> expectedLights = Map.ofEntries(
+                entry(new Vec(2, 40, 2), 12)
+        );
+        LightUtils.relightSection(instance, 1, 2, 1);
+        assertLightInstance(instance, expectedLights);
+
+        instance.setBlock(-2, 40,-2, Block.TORCH);
+        expectedLights = Map.ofEntries(
+                entry(new Vec(2, 40, 2), 12)
+        );
+        LightUtils.relightSection(instance, -1, 2, -1);
         assertLightInstance(instance, expectedLights);
     }
 
