@@ -758,33 +758,30 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     public void relight(Collection<Chunk> chunks) {
-        synchronized (this) {
-            Set<Point> toPropagate = chunks
-                    .parallelStream()
-                    .flatMap(chunk -> IntStream
-                            .range(chunk.getMinSection(), chunk.getMaxSection())
-                            .mapToObj(index -> Map.entry(index, chunk)))
-                    .map(chunkIndex -> {
-                        final Chunk chunk = chunkIndex.getValue();
-                        final int section = chunkIndex.getKey();
+        Set<Point> toPropagate = chunks
+            .parallelStream()
+            .flatMap(chunk -> IntStream
+                .range(chunk.getMinSection(), chunk.getMaxSection())
+                .mapToObj(index -> Map.entry(index, chunk)))
+            .map(chunkIndex -> {
+                final Chunk chunk = chunkIndex.getValue();
+                final int section = chunkIndex.getKey();
+                chunk.getSection(section).blockLight().invalidate();
 
-                        chunk.getSection(section).blockLight().invalidate();
+                return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
+            }).collect(Collectors.toSet());
 
-                        return new Vec(chunk.getChunkX(), section, chunk.getChunkZ());
-                    }).collect(Collectors.toSet());
+        relight(toPropagate);
 
-            relight(toPropagate);
-
-            chunks.parallelStream()
-                    .flatMap(chunk -> IntStream
-                            .range(chunk.getMinSection(), chunk.getMaxSection())
-                            .mapToObj(index -> Map.entry(index, chunk)))
-                    .forEach(chunkIndex -> {
-                        final Chunk chunk = chunkIndex.getValue();
-                        final int section = chunkIndex.getKey();
-                        chunk.getSection(section).blockLight().array();
-                    });
-        }
+        chunks.parallelStream()
+            .flatMap(chunk -> IntStream
+                .range(chunk.getMinSection(), chunk.getMaxSection())
+                .mapToObj(index -> Map.entry(index, chunk)))
+            .forEach(chunkIndex -> {
+                final Chunk chunk = chunkIndex.getValue();
+                final int section = chunkIndex.getKey();
+                chunk.getSection(section).blockLight().array();
+            });
     }
 
     public void relightSection(int chunkX, int sectionY, int chunkZ) {
@@ -827,6 +824,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
                     final Light light = chunk.getSection(section).blockLight();
                     light.calculateExternal(chunk.getInstance(), chunk, section);
+
                     return light.flip().stream();
                 }).collect(Collectors.toSet());
 

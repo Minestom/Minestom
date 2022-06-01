@@ -75,12 +75,15 @@ final class BlockLight implements Light {
 
     private static IntArrayFIFOQueue buildExternalQueue(Instance instance, Block[] blocks, Map<BlockFace, Point> neighbors) {
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+
         for (BlockFace face : BlockFace.values()) {
             Point neighborSection = neighbors.get(face);
+            if (neighborSection == null) continue;
+
             Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
             if (chunk == null) continue;
 
-            byte[] neighborFace = Instance.getSection(chunk, neighborSection.blockY()).blockLight().getBorderPropagation(face.getOppositeFace());
+            byte[] neighborFace = chunk.getSection(neighborSection.blockY()).blockLight().getBorderPropagation(face.getOppositeFace());
             if (neighborFace == null) continue;
 
             for (int bx = 0; bx < 16; bx++) {
@@ -104,6 +107,7 @@ final class BlockLight implements Light {
                         default -> getBlock(otherSection.blockPalette(), bx, 15 - k, by);
                     });
 
+                    if (blocks == null) continue;
                     Block blockTo = blocks[posTo];
 
                     if (blockTo == null && blockFrom != null) {
@@ -128,6 +132,7 @@ final class BlockLight implements Light {
                 }
             }
         }
+
         return lightSources;
     }
 
@@ -242,7 +247,9 @@ final class BlockLight implements Light {
         Set<Point> toUpdate = new HashSet<>();
 
         Block[] blocks = blocks();
+
         IntArrayFIFOQueue queue = buildExternalQueue(instance, blocks, neighbors);
+
         BlockLightCompute.Result result = BlockLightCompute.compute(blocks, queue);
 
         byte[] contentPropagationTemp = result.light();
