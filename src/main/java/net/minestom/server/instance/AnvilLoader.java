@@ -1,8 +1,10 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -35,6 +37,13 @@ public class AnvilLoader implements IChunkLoader {
     private final Path path;
     private final Path levelPath;
     private final Path regionPath;
+
+    private static class RegionCache extends ConcurrentHashMap<IntIntImmutablePair, Set<IntIntImmutablePair>> {}
+
+    /**
+     * Represents the chunks currently loaded per region. Used to determine when a region file can be unloaded.
+     */
+    private final Acquirable<RegionCache> perRegionLoadedChunks = Acquirable.of(new RegionCache());
 
     public AnvilLoader(@NotNull Path path) {
         this.path = path;
@@ -112,6 +121,12 @@ public class AnvilLoader implements IChunkLoader {
             // Block entities
             loadTileEntities(chunk, chunkReader);
         }
+        perRegionLoadedChunks.sync(cache -> {
+            int regionX = CoordinatesKt.chunkToRegion(chunkX);
+            int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
+            var chunks = cache.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), r -> new HashSet<>()); // region cache may have been removed on another thread due to unloadChunk
+            chunks.add(new IntIntImmutablePair(chunkX, chunkZ));
+        });
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -124,6 +139,10 @@ public class AnvilLoader implements IChunkLoader {
                 if (!Files.exists(regionPath)) {
                     return null;
                 }
+                perRegionLoadedChunks.sync(cache -> {
+                    Set<IntIntImmutablePair> previousVersion = cache.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
+                    assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
+                });
                 return new RegionFile(new RandomAccessFile(regionPath.toFile(), "rw"), regionX, regionZ, instance.getDimensionType().getMinY(), instance.getDimensionType().getMaxY()-1);
             } catch (IOException | AnvilException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
@@ -371,6 +390,37 @@ public class AnvilLoader implements IChunkLoader {
             }
         }
         chunkColumn.setTileEntities(NBT.List(NBTType.TAG_Compound, tileEntities));
+    }
+
+    /**
+     * Unload a given chunk. Also unloads a region when no chunk from that region is loaded.
+     * @param chunk the chunk to unload
+     */
+    @Override
+    public void unloadChunk(Chunk chunk) {
+        final int regionX = CoordinatesKt.chunkToRegion(chunk.chunkX);
+        final int regionZ = CoordinatesKt.chunkToRegion(chunk.chunkZ);
+
+        final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
+        perRegionLoadedChunks.sync(cache -> {
+            Set<IntIntImmutablePair> chunks = cache.get(regionKey);
+            if(chunks != null) { // if null, trying to unload a chunk from a region that was not created by the AnvilLoader
+                // don't check return value, trying to unload a chunk not created by the AnvilLoader is valid
+                chunks.remove(new IntIntImmutablePair(chunk.chunkX, chunk.chunkZ));
+
+                if(chunks.isEmpty()) {
+                    cache.remove(regionKey);
+                    RegionFile regionFile = alreadyLoaded.remove(RegionFile.Companion.createFileName(regionX, regionZ));
+                    if(regionFile != null) {
+                        try {
+                            regionFile.close();
+                        } catch (IOException e) {
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override

@@ -228,6 +228,9 @@ public class InstanceContainer extends Instance {
         // Clear cache
         this.chunks.remove(getChunkIndex(chunkX, chunkZ));
         chunk.unload();
+        if(chunkLoader != null) {
+            chunkLoader.unloadChunk(chunk);
+        }
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.deletePartition(chunk);
     }

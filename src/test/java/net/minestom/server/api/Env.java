@@ -52,4 +52,8 @@ public interface Env {
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         return instance;
     }
+
+    default void destroyInstance(Instance instance) {
+        process().instance().unregisterInstance(instance);
+    }
 }

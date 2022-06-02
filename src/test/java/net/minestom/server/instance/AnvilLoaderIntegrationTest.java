@@ -3,7 +3,9 @@ package net.minestom.server.instance;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.world.biomes.Biome;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,7 +28,7 @@ public class AnvilLoaderIntegrationTest {
     @BeforeAll
     public static void prepareTest() throws IOException {
         // https://stackoverflow.com/a/60621544
-        Files.walkFileTree(testRoot, new SimpleFileVisitor<Path>() {
+        Files.walkFileTree(testRoot, new SimpleFileVisitor<>() {
 
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
@@ -50,8 +52,7 @@ public class AnvilLoaderIntegrationTest {
     public void loadHouse(Env env) {
         // load a world that contains only a basic house and make sure it is loaded properly
 
-        // TODO: unload instance + Anvil region files (test fails at cleanup time otherwise)
-        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
+        AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
             public boolean supportsParallelLoading() {
@@ -62,15 +63,25 @@ public class AnvilLoaderIntegrationTest {
             public boolean supportsParallelSaving() {
                 return false;
             }
-        });
+        };
+        Instance instance = env.createFlatInstance(chunkLoader);
 
         Consumer<Chunk> checkChunk = chunk -> {
-            assertEquals(-4, chunk.getMinSection());
-            assertEquals(19, chunk.getMaxSection());
+            synchronized (chunk) {
+                assertEquals(-4, chunk.getMinSection());
+                assertEquals(20, chunk.getMaxSection());
 
-            // TODO: skylight
-            // TODO: block light
-            // TODO: biomes
+                // TODO: skylight
+                // TODO: block light
+                for (int y = 0; y < 16; y++) {
+                    for (int x = 0; x < 16; x++) {
+                        for (int z = 0; z < 16; z++) {
+                            Biome b = chunk.getBiome(x, y, z);
+                            assertEquals(NamespaceID.from("minecraft:plains"), b.name());
+                        }
+                    }
+                }
+            }
         };
 
         for (int x = -2; x < 2; x++) {
@@ -131,17 +142,32 @@ public class AnvilLoaderIntegrationTest {
         // flower pot
         assertEquals(Block.OAK_PLANKS, instance.getBlock(-1, 1, -3));
         assertEquals(Block.POTTED_POPPY, instance.getBlock(-1, 2, -3));
+
+        env.destroyInstance(instance);
     }
 
     @Test
     public void loadAndSaveChunk(Env env) throws InterruptedException {
-        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
+            // Force loads inside current thread
+            @Override
+            public boolean supportsParallelLoading() {
+                return false;
+            }
+
+            @Override
+            public boolean supportsParallelSaving() {
+                return false;
+            }
+        });
         Chunk originalChunk = instance.loadChunk(0,0).join();
 
-        instance.saveChunkToStorage(originalChunk);
-        instance.unloadChunk(originalChunk);
-        while(!originalChunk.isLoaded()) {
-            Thread.sleep(1);
+        synchronized (originalChunk) {
+            instance.saveChunkToStorage(originalChunk);
+            instance.unloadChunk(originalChunk);
+            while(originalChunk.isLoaded()) {
+                Thread.sleep(1);
+            }
         }
 
         Chunk reloadedChunk = instance.loadChunk(0,0).join();
@@ -157,11 +183,13 @@ public class AnvilLoaderIntegrationTest {
 
             Assertions.assertArrayEquals(originalWriter.toByteArray(), reloadedWriter.toByteArray());
         }
+
+        env.destroyInstance(instance);
     }
 
     @AfterAll
     public static void cleanupTest() throws IOException {
-        Files.walkFileTree(worldFolder, new SimpleFileVisitor<Path>() {
+        Files.walkFileTree(worldFolder, new SimpleFileVisitor<>() {
 
             @Override
             public FileVisitResult postVisitDirectory(Path dir, IOException e)
