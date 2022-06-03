@@ -1,12 +1,9 @@
 package net.minestom.server.utils.chunk;
 
-import it.unimi.dsi.fastutil.longs.LongArraySet;
-import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
@@ -186,24 +183,6 @@ public final class ChunkUtils {
 
     public static void forChunksInRange(@NotNull Point point, int range, IntegerBiConsumer consumer) {
         forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
-    }
-
-    public static void forDifferingChunks(LongSet currentChunks, int newChunkX, int newChunkZ, int range,
-                                          @NotNull IntegerBiConsumer newCallback, @NotNull IntegerBiConsumer oldCallback) {
-        final int minX = newChunkX - range, minZ = newChunkZ - range;
-        final int maxX = newChunkX + range, maxZ = newChunkZ + range;
-        for (int x = minX; x <= maxX; x++) {
-            outer: for (int z = minZ; z <= maxZ; z++) {
-                final long newChunk = ChunkUtils.getChunkIndex(x, z);
-                for (long currentChunk : currentChunks) if (currentChunk == newChunk) continue outer;
-                newCallback.accept(x, z);
-            }
-        }
-        for (long currentChunk : currentChunks) {
-            final int x = ChunkUtils.getChunkCoordX(currentChunk);
-            final int z = ChunkUtils.getChunkCoordZ(currentChunk);
-            if (x < minX || x > maxX || z < minZ || z > maxZ) oldCallback.accept(x, z);
-        }
     }
 
     /**

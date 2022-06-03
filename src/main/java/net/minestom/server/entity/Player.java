@@ -1,7 +1,5 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.longs.LongArraySet;
-import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
@@ -125,14 +123,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
-    private final LongSet chunksLoadedByClient = new LongArraySet();
+    /**
+     * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
+     * in the range of {@link MinecraftServer#getChunkViewDistance()}
+     */
+    private Vec chunksLoadedByClient = Vec.ZERO;
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
             try {
                 if (chunk != null) {
                     chunk.sendChunk(this);
-                    chunksLoadedByClient.add(ChunkUtils.getChunkIndex(chunk));
                     EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
                 }
             } catch (Exception e) {
@@ -143,7 +144,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-        chunksLoadedByClient.remove(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
 
@@ -2030,11 +2030,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
-        sendPacket(new UpdateViewPositionPacket(newChunk.getChunkX(), newChunk.getChunkZ()));
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
-            ChunkUtils.forDifferingChunks(chunksLoadedByClient, this.currentChunk.getChunkX(),
-                    this.currentChunk.getChunkZ(), MinecraftServer.getChunkViewDistance(),
-                    chunkAdder, chunkRemover);
+            sendPacket(new UpdateViewPositionPacket(newChunk.getChunkX(), newChunk.getChunkZ()));
+            ChunkUtils.forDifferingChunksInRange(newChunk.getChunkX(), newChunk.getChunkZ(),
+                    (int) chunksLoadedByClient.x(), (int) chunksLoadedByClient.z(),
+                    MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
+            chunksLoadedByClient = new Vec(newChunk.getChunkX(), newChunk.getChunkZ());
         }
     }
 
