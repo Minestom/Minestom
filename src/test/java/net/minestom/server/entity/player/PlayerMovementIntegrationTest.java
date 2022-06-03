@@ -1,12 +1,23 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.api.Collector;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.api.TestConnection;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
+import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
+import net.minestom.server.utils.MathUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,5 +55,37 @@ public class PlayerMovementIntegrationTest {
 
         // Position update should only be sent once per tick independently of the number of packets
         tracker.assertSingle();
+    }
+
+    @Test
+    public void chunkUpdateDebounceTest(Env env) {
+        final Instance flatInstance = env.createFlatInstance();
+        final TestConnection connection = env.createConnection();
+        final CompletableFuture<@NotNull Player> future = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
+        final Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
+        future.thenAccept(player -> {
+            final int viewDiameter = MinecraftServer.getChunkViewDistance() * 2;
+            int totalUpdatePackets = MathUtils.square(viewDiameter);
+            chunkDataPacketCollector.assertCount(totalUpdatePackets);
+            player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, 0.5), true));
+            player.interpretPacketQueue();
+            chunkDataPacketCollector.assertCount(totalUpdatePackets += viewDiameter);
+            player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, -0.5), true));
+            player.interpretPacketQueue();
+            chunkDataPacketCollector.assertCount(totalUpdatePackets += viewDiameter);
+            player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, -0.5), true));
+            player.interpretPacketQueue();
+            chunkDataPacketCollector.assertCount(totalUpdatePackets += viewDiameter);
+            player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, 0.5), true));
+            player.interpretPacketQueue();
+            chunkDataPacketCollector.assertCount(totalUpdatePackets);
+            player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, -0.5), true));
+            player.interpretPacketQueue();
+            chunkDataPacketCollector.assertCount(totalUpdatePackets);
+            // Abuse the fact that there is no delta check
+            player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(16.5, 40, -16.5), true));
+            player.interpretPacketQueue();
+            chunkDataPacketCollector.assertCount(totalUpdatePackets + (viewDiameter * 2 - 1));
+        });
     }
 }
