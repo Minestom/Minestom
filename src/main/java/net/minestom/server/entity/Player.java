@@ -2031,11 +2031,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     protected void sendChunkUpdates(Chunk newChunk) {
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
-            sendPacket(new UpdateViewPositionPacket(newChunk.getChunkX(), newChunk.getChunkZ()));
-            ChunkUtils.forDifferingChunksInRange(newChunk.getChunkX(), newChunk.getChunkZ(),
-                    (int) chunksLoadedByClient.x(), (int) chunksLoadedByClient.z(),
+            final int newX = newChunk.getChunkX();
+            final int newZ = newChunk.getChunkZ();
+            final Vec old = chunksLoadedByClient;
+            sendPacket(new UpdateViewPositionPacket(newX, newZ));
+            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
                     MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
-            chunksLoadedByClient = new Vec(newChunk.getChunkX(), newChunk.getChunkZ());
+            chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
 
