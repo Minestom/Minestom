@@ -85,8 +85,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.workerQueue = worker.queue();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
-        POOL.register(this, tickBuffer);
-        POOL.register(this, waitingBuffers);
     }
 
     public void processPackets(BinaryBuffer readBuffer, PacketProcessor packetProcessor) {
@@ -203,7 +201,16 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void disconnect() {
         super.disconnect();
-        this.workerQueue.relaxedOffer(() -> this.worker.disconnect(this, channel));
+        this.workerQueue.relaxedOffer(() -> {
+            this.worker.disconnect(this, channel);
+            final BinaryBuffer tick = tickBuffer.get();
+            if (tick != null) {
+                POOL.add(tick);
+                this.tickBuffer.set(null);
+            }
+            for (BinaryBuffer buffer : waitingBuffers) POOL.add(buffer);
+            this.waitingBuffers.clear();
+        });
     }
 
     public @NotNull SocketChannel getChannel() {
