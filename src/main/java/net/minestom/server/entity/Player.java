@@ -2040,7 +2040,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
             ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
                     MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
-            chunksLoadedByClient = new Vec(newX, newZ);
+            this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
 

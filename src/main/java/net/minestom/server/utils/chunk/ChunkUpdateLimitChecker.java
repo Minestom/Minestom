@@ -22,12 +22,12 @@ public final class ChunkUpdateLimitChecker {
     public boolean addToHistory(Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk);
         boolean result = true;
-        int lastIndex = historySize-1;
+        final int lastIndex = historySize - 1;
         for (int i = 0; i < lastIndex; i++) {
             if (chunkHistory[i] == index) {
                 result = false;
             }
-            chunkHistory[i] = chunkHistory[i+1];
+            chunkHistory[i] = chunkHistory[i + 1];
         }
         chunkHistory[lastIndex] = index;
         return result;
