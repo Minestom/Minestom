@@ -65,6 +65,7 @@ public class PlayerMovementIntegrationTest {
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         final Player player = future.join();
         final int viewDiameter = MinecraftServer.getChunkViewDistance() * 2 + 1;
+        final int sleep = 100;
         // Initial join
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDiameter));
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
@@ -73,35 +74,35 @@ public class PlayerMovementIntegrationTest {
         chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, 0.5), true));
         player.interpretPacketQueue();
-        Thread.sleep(1000);
+        Thread.sleep(sleep);
         chunkDataPacketCollector.assertCount(viewDiameter);
 
         // Move to next chunk
         chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, -0.5), true));
         player.interpretPacketQueue();
-        Thread.sleep(1000);
+        Thread.sleep(sleep);
         chunkDataPacketCollector.assertCount(viewDiameter);
 
         // Move to next chunk
         chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, -0.5), true));
         player.interpretPacketQueue();
-        Thread.sleep(1000);
+        Thread.sleep(sleep);
         chunkDataPacketCollector.assertCount(viewDiameter);
 
         // Move to next chunk
         chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, 0.5), true));
         player.interpretPacketQueue();
-        Thread.sleep(1000);
+        Thread.sleep(sleep);
         chunkDataPacketCollector.assertEmpty();
 
         // Move to next chunk
         chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, -0.5), true));
         player.interpretPacketQueue();
-        Thread.sleep(1000);
+        Thread.sleep(sleep);
         chunkDataPacketCollector.assertEmpty();
 
         // Move to next chunk
@@ -109,7 +110,7 @@ public class PlayerMovementIntegrationTest {
         // Abuse the fact that there is no delta check
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(16.5, 40, -16.5), true));
         player.interpretPacketQueue();
-        Thread.sleep(1000);
+        Thread.sleep(sleep);
         chunkDataPacketCollector.assertCount(viewDiameter * 2 - 1);
     }
 }
