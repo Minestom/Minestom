@@ -1,5 +1,6 @@
 package net.minestom.server.extensions;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minestom.server.utils.PlatformUtils;
@@ -16,6 +17,7 @@ final class DependencyImpl {
         // Parse object
         String id;
         boolean optional = false;
+        Maven[] internalDependencies = new Maven[0];
         if (json.isJsonPrimitive()) {
             id = json.getAsString();
         } else if (json.isJsonObject()) {
@@ -24,10 +26,24 @@ final class DependencyImpl {
             if (object.has("optional")) {
                 optional = object.get("optional").getAsBoolean();
             }
+            if (object.has("internalDependencies")) {
+                JsonArray indDeps = object.getAsJsonArray("internalDependencies");
+                internalDependencies = new Maven[indDeps.size()];
+                for (int i = 0; i < indDeps.size(); i++) {
+                    Dependency dep = fromJson(indDeps.get(i));
+                    if (dep == null) {
+                        LOGGER.error("Indirect dependency '{}' of '{}' resolved to null.", indDeps.get(i).getAsJsonObject(), id);
+                    } else if (dep instanceof Maven mvnDep) {
+                        internalDependencies[i] = mvnDep;
+                    } else {
+                        LOGGER.error("Indirect dependency '{}' of '{}' is not a valid maven dependency.", dep.id(), id);
+                    }
+                }
+            }
 
             // Platform validation
             if (!isApplicableToCurrentPlatform(object)) {
-                LOGGER.debug("Dependency {} is not applicable to current platform", id);
+                LOGGER.debug("Dependency '{}' is not applicable to current platform", id);
                 return null;
             }
         } else {
@@ -38,10 +54,12 @@ final class DependencyImpl {
         // Create dependency
         String[] idSplit = id.split(":");
         return switch (idSplit.length) {
-            case 1 -> Dependency.newExtensionDependency(idSplit[0], null, optional);
-            case 2 -> Dependency.newExtensionDependency(idSplit[0], idSplit[1], optional);
-            case 3 -> Dependency.newMavenDependency(idSplit[0], idSplit[1], idSplit[2], null, optional);
-            case 4 -> Dependency.newMavenDependency(idSplit[0], idSplit[1], idSplit[2], idSplit[3], optional);
+            case 1 -> Dependency.newExtensionDependency(idSplit[0], null, optional, internalDependencies);
+            case 2 -> Dependency.newExtensionDependency(idSplit[0], idSplit[1], optional, internalDependencies);
+            case 3 ->
+                    Dependency.newMavenDependency(idSplit[0], idSplit[1], idSplit[2], null, optional, internalDependencies);
+            case 4 ->
+                    Dependency.newMavenDependency(idSplit[0], idSplit[1], idSplit[2], idSplit[3], optional, internalDependencies);
             default -> {
                 LOGGER.error("Invalid dependency format: {}", json.getAsString());
                 yield null;
@@ -49,7 +67,7 @@ final class DependencyImpl {
         };
     }
 
-    record Extension(String id, String version, boolean isOptional)
+    record Extension(String id, String version, boolean isOptional, @Nullable Maven[] internalDependencies)
             implements Dependency.Extension {
         Extension {
             Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
@@ -57,7 +75,8 @@ final class DependencyImpl {
         }
     }
 
-    record Maven(String groupId, String artifactId, String version, String classifier, boolean isOptional)
+    record Maven(String groupId, String artifactId, String version, String classifier, boolean isOptional,
+                 @Nullable Maven[] internalDependencies)
             implements Dependency.Maven {
         @Override
         public @NotNull String id() {

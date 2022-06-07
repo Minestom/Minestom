@@ -1,24 +1,18 @@
 package net.minestom.server.extensions;
 
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HierarchyClassLoader extends URLClassLoader {
     private final List<HierarchyClassLoader> children = new CopyOnWriteArrayList<>();
 
-    public HierarchyClassLoader(String name, URL[] urls) {
-        super("Ext_" + name, urls, MinecraftServer.class.getClassLoader());
-    }
-
     public HierarchyClassLoader(String name, URL[] urls, ClassLoader parent) {
-        super("Ext_" + name, urls, parent);
+        super("HCL_" + name, urls, parent);
     }
 
     @Override
@@ -38,20 +32,25 @@ public class HierarchyClassLoader extends URLClassLoader {
             for (HierarchyClassLoader child : children) {
                 try {
                     return child.loadClass(name, resolve);
-                } catch (ClassNotFoundException ignored) {}
+                } catch (ClassNotFoundException ignored) {
+                }
             }
             throw e;
         }
     }
 
-    public InputStream getResourceAsStreamWithChildren(@NotNull String name) {
-        InputStream in = getResourceAsStream(name);
-        if (in != null) return in;
+    @Nullable
+    @Override
+    public URL getResource(String name) {
+        URL resource = super.getResource(name);
+        if (resource != null) {
+            return resource;
+        }
 
         for (HierarchyClassLoader child : children) {
-            InputStream childInput = child.getResourceAsStreamWithChildren(name);
-            if (childInput != null)
-                return childInput;
+            if ((resource = child.getResource(name)) != null) {
+                return resource;
+            }
         }
 
         return null;

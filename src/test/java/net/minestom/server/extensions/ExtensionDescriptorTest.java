@@ -2,8 +2,7 @@ package net.minestom.server.extensions;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minestom.server.extensions.ExtensionDescriptor;
-import net.minestom.server.extensions.HierarchyClassLoader;
+import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,10 +20,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 public class ExtensionDescriptorTest {
-    private final HierarchyClassLoader EMPTY_CLASS_LOADER = new HierarchyClassLoader("<test>", new URL[0]);
+    private final HierarchyClassLoader EMPTY_CLASS_LOADER = new HierarchyClassLoader("<test>", new URL[0], MinecraftServer.class.getClassLoader());
 
     //
     // Validation Tests

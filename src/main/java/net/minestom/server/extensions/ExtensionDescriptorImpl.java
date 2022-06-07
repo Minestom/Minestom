@@ -2,9 +2,9 @@ package net.minestom.server.extensions;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 import java.nio.file.Path;
@@ -83,7 +83,7 @@ record ExtensionDescriptorImpl(
                 name, version, authors, entrypoint,
                 repositories, dependencies, meta,
                 parentDirectory.resolve(name),
-                new HierarchyClassLoader("Ext_" + name, classpath)
+                new HierarchyClassLoader("EXT_" + name, classpath, MinecraftServer.class.getClassLoader())
         );
     }
 

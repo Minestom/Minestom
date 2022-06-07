@@ -1,17 +1,15 @@
 package net.minestom.server.extensions;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jboss.shrinkwrap.resolver.api.NonTransitiveResolutionStrategy;
-import org.jboss.shrinkwrap.resolver.api.ResolutionStrategy;
 import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolvedArtifact;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenCoordinate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +23,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.channels.Channel;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -34,7 +31,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class ExtensionManager {
@@ -250,7 +246,7 @@ public final class ExtensionManager {
         return true;
     }
 
-    HierarchyClassLoader loadMavenDependency(ExtensionDescriptor extension, Dependency.Maven dependency, ConfigurableMavenResolverSystem mavenResolver) {
+    HierarchyClassLoader loadMavenDependency(ExtensionDescriptor extension, Dependency.Maven dependency, ConfigurableMavenResolverSystem mavenResolver, ClassLoader parent) {
         final String coordinate;
         if (dependency.classifier() == null)
             coordinate = String.format("%s:%s:%s", dependency.groupId(), dependency.artifactId(), dependency.version());
@@ -318,7 +314,7 @@ public final class ExtensionManager {
         }
 
         // Create the classloader
-        HierarchyClassLoader dependencyClassLoader = new HierarchyClassLoader(coordinate, files);
+        HierarchyClassLoader dependencyClassLoader = new HierarchyClassLoader("MVN_" + coordinate, files, parent);
         externalDependencies.put(coordinate, dependencyClassLoader);
         return dependencyClassLoader;
     }
@@ -330,16 +326,28 @@ public final class ExtensionManager {
         HierarchyClassLoader dependencyClassLoader = null;
         if (dep instanceof Dependency.Extension dependency) {
             ExtensionDescriptor descriptor = extensionsById.get(dependency.id().toUpperCase(Locale.ROOT));
-            //todo what happens if extension does not exist?
-            boolean loaded = loadExtension(descriptor, extensionsById);
-            if (!loaded) return false;
+            if (descriptor == null) {
+                LOGGER.error("Extension descriptor for dependency '{}' was not found.", dependency.id());
+                // Maybe throw an exception instead to be more safe?
+                return false;
+            }
+            if (!loadExtension(descriptor, extensionsById)) {
+                return false;
+            }
             dependencyClassLoader = descriptor.classLoader();
         } else if (dep instanceof Dependency.Maven dependency) {
-            dependencyClassLoader = loadMavenDependency(target, dependency, mavenResolver);
+            dependencyClassLoader = loadMavenDependency(target, dependency, mavenResolver, MinecraftServer.class.getClassLoader());
         }
 
         // Add classloader to target
         Check.stateCondition(dependencyClassLoader == null, "An error occurred while loading a dependency. (extension={0}, dependency={1})", target, dep);
+        for (Dependency.Maven indDep : dep.internalDependencies()) {
+            HierarchyClassLoader internalDependencyLoader = loadMavenDependency(target, indDep, mavenResolver, dependencyClassLoader);
+            Check.stateCondition(internalDependencyLoader == null, "An error occurred while loading a dependency. (extension={0}, dependency={1})", target, dep);
+            for (URL url : internalDependencyLoader.getURLs()) {
+                dependencyClassLoader.addURL(url);
+            }
+        }
         target.classLoader().addChild(dependencyClassLoader);
         return true;
     }

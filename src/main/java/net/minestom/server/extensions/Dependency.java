@@ -1,21 +1,17 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.minestom.server.utils.PlatformUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public sealed interface Dependency permits Dependency.Extension, Dependency.Maven {
 
-    static Dependency newExtensionDependency(@NotNull String name, @Nullable String version, boolean optional) {
-        return new DependencyImpl.Extension(name, version, optional);
+    static Dependency newExtensionDependency(@NotNull String name, @Nullable String version, boolean optional, @NotNull Maven[] internalDependencies) {
+        return new DependencyImpl.Extension(name, version, optional, internalDependencies);
     }
 
-    static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, @Nullable String classifier, boolean optional) {
-        return new DependencyImpl.Maven(groupId, artifactId, version, classifier, optional);
+    static Dependency newMavenDependency(@NotNull String groupId, @NotNull String artifactId, @Nullable String version, @Nullable String classifier, boolean optional, @NotNull Maven[] internalDependencies) {
+        return new DependencyImpl.Maven(groupId, artifactId, version, classifier, optional, internalDependencies);
     }
 
     /**
@@ -42,6 +38,8 @@ public sealed interface Dependency permits Dependency.Extension, Dependency.Mave
 
     boolean isOptional();
 
+    @NotNull Maven[] internalDependencies();
+
     /**
      * An extension dependency specified in an <code>extension.json</code> file.
      */
@@ -57,6 +55,8 @@ public sealed interface Dependency permits Dependency.Extension, Dependency.Mave
         @NotNull String version();
 
         @Nullable String classifier();
+
+        @NotNull Maven[] internalDependencies();
     }
 
 }

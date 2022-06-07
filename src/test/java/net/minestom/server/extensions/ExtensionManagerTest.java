@@ -1,6 +1,7 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.JsonObject;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.util.TestUtil;
@@ -103,13 +104,13 @@ public class ExtensionManagerTest {
             for (String dep : stub.dependencies) {
                 String name = dep.replace("?", "");
                 dependencies.add(Dependency.newExtensionDependency(
-                        name + name, null, dep.endsWith("?")));
+                        name + name, null, dep.endsWith("?"), new Dependency.Maven[0]));
             }
             ExtensionDescriptor descriptor = new ExtensionDescriptorImpl(
                     // Single letter extension names are not valid, so we do A > AA
                     stub.name + stub.name, "1.0.0", List.of(), "entrypoint",
                     List.of(), dependencies, new JsonObject(), Paths.get("."),
-                    new HierarchyClassLoader("Ext_" + stub.name, new URL[0])
+                    new HierarchyClassLoader("Ext_" + stub.name, new URL[0], MinecraftServer.class.getClassLoader())
             );
             extensionsByName.put(descriptor.name().toUpperCase(Locale.ROOT), descriptor);
         }
@@ -151,7 +152,7 @@ public class ExtensionManagerTest {
         return new ExtensionDescriptorImpl(
                 name, "1.0.0", List.of(), mainClass,
                 List.of(), List.of(), new JsonObject(), dataRoot.resolve(name),
-                new HierarchyClassLoader("Ext_" + name, new URL[0])
+                new HierarchyClassLoader("Ext_" + name, new URL[0], MinecraftServer.class.getClassLoader())
         );
     }
 

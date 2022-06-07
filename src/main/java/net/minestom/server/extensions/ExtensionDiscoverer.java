@@ -14,10 +14,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -173,9 +175,9 @@ public interface ExtensionDiscoverer {
 
     ExtensionDiscoverer DEFAULT = extensionDirectory -> {
         List<ExtensionDescriptor> allDescriptors = new ArrayList<>();
-        FILESYSTEM.discover(extensionDirectory).forEach(allDescriptors::add);
-        INDEV.discover(extensionDirectory).forEach(allDescriptors::add);
-        AUTOSCAN.discover(extensionDirectory).forEach(allDescriptors::add);
+        allDescriptors.addAll(FILESYSTEM.discover(extensionDirectory));
+        allDescriptors.addAll(INDEV.discover(extensionDirectory));
+        allDescriptors.addAll(AUTOSCAN.discover(extensionDirectory));
         return allDescriptors;
     };
 
