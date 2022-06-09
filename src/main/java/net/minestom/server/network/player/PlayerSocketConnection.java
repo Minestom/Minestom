@@ -203,11 +203,8 @@ public class PlayerSocketConnection extends PlayerConnection {
         super.disconnect();
         this.workerQueue.relaxedOffer(() -> {
             this.worker.disconnect(this, channel);
-            final BinaryBuffer tick = tickBuffer.get();
-            if (tick != null) {
-                POOL.add(tick);
-                this.tickBuffer.set(null);
-            }
+            final BinaryBuffer tick = tickBuffer.getAndSet(null);
+            if (tick != null) POOL.add(tick);
             for (BinaryBuffer buffer : waitingBuffers) POOL.add(buffer);
             this.waitingBuffers.clear();
         });
@@ -405,6 +402,8 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void writeBufferSync0(@NotNull ByteBuffer buffer, int index, int length) {
         BinaryBuffer localBuffer = tickBuffer.getPlain();
+        if (localBuffer == null)
+            return; // Socket is closed
         final int capacity = localBuffer.capacity();
         if (length <= capacity) {
             if (!localBuffer.canWrite(length)) localBuffer = updateLocalBuffer();
@@ -425,7 +424,10 @@ public class PlayerSocketConnection extends PlayerConnection {
         final List<BinaryBuffer> waitingBuffers = this.waitingBuffers;
         if (!channel.isConnected()) throw new ClosedChannelException();
         if (waitingBuffers.isEmpty()) {
-            tickBuffer.getPlain().writeChannel(channel);
+            BinaryBuffer localBuffer = tickBuffer.getPlain();
+            if (localBuffer == null)
+                return; // Socket is closed
+            localBuffer.writeChannel(channel);
         } else {
             // Write as much as possible from the waiting list
             Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
