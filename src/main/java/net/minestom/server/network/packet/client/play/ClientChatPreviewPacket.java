@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 public record ClientChatPreviewPacket(int queryId, @NotNull String query) implements ClientPacket {
     public ClientChatPreviewPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readSizedString(256));
+        this(reader.readInt(), reader.readSizedString(256));
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(queryId);
+        writer.writeInt(queryId);
         writer.writeSizedString(query);
     }
 }
