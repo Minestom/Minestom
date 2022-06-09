@@ -104,7 +104,7 @@ public class ExtensionManagerTest {
             for (String dep : stub.dependencies) {
                 String name = dep.replace("?", "");
                 dependencies.add(Dependency.newExtensionDependency(
-                        name + name, null, dep.endsWith("?"), new Dependency.Maven[0]));
+                        name + name, null, dep.endsWith("?"), new ArrayList<>()));
             }
             ExtensionDescriptor descriptor = new ExtensionDescriptorImpl(
                     // Single letter extension names are not valid, so we do A > AA

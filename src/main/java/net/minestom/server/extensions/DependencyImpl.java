@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 final class DependencyImpl {
     private static final Logger LOGGER = LoggerFactory.getLogger(Dependency.class);
 
@@ -17,7 +21,7 @@ final class DependencyImpl {
         // Parse object
         String id;
         boolean optional = false;
-        Maven[] internalDependencies = new Maven[0];
+        List<Dependency.Maven> internalDependencies = new ArrayList<>();
         if (json.isJsonPrimitive()) {
             id = json.getAsString();
         } else if (json.isJsonObject()) {
@@ -28,17 +32,18 @@ final class DependencyImpl {
             }
             if (object.has("internalDependencies")) {
                 JsonArray indDeps = object.getAsJsonArray("internalDependencies");
-                internalDependencies = new Maven[indDeps.size()];
+                internalDependencies = new ArrayList<>();
                 for (int i = 0; i < indDeps.size(); i++) {
                     Dependency dep = fromJson(indDeps.get(i));
                     if (dep == null) {
                         LOGGER.error("Indirect dependency '{}' of '{}' resolved to null.", indDeps.get(i).getAsJsonObject(), id);
                     } else if (dep instanceof Maven mvnDep) {
-                        internalDependencies[i] = mvnDep;
+                        internalDependencies.add(mvnDep);
                     } else {
                         LOGGER.error("Indirect dependency '{}' of '{}' is not a valid maven dependency.", dep.id(), id);
                     }
                 }
+                internalDependencies = Collections.unmodifiableList(internalDependencies);
             }
 
             // Platform validation
@@ -67,7 +72,7 @@ final class DependencyImpl {
         };
     }
 
-    record Extension(String id, String version, boolean isOptional, @Nullable Maven[] internalDependencies)
+    record Extension(String id, String version, boolean isOptional, @NotNull List<Maven> internalDependencies)
             implements Dependency.Extension {
         Extension {
             Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
@@ -76,7 +81,7 @@ final class DependencyImpl {
     }
 
     record Maven(String groupId, String artifactId, String version, String classifier, boolean isOptional,
-                 @Nullable Maven[] internalDependencies)
+                 @NotNull List<Maven> internalDependencies)
             implements Dependency.Maven {
         @Override
         public @NotNull String id() {
