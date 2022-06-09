@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 final class DependencyImpl {
@@ -43,7 +42,6 @@ final class DependencyImpl {
                         LOGGER.error("Indirect dependency '{}' of '{}' is not a valid maven dependency.", dep.id(), id);
                     }
                 }
-                internalDependencies = Collections.unmodifiableList(internalDependencies);
             }
 
             // Platform validation
@@ -77,12 +75,18 @@ final class DependencyImpl {
         Extension {
             Check.argCondition(id.isEmpty(), "Extension dependencies must have an id");
             Check.argCondition(!id.matches(ExtensionDescriptorImpl.NAME_REGEX), "Invalid extension name: " + id);
+            internalDependencies = List.copyOf(internalDependencies);
         }
     }
 
     record Maven(String groupId, String artifactId, String version, String classifier, boolean isOptional,
                  @NotNull List<Maven> internalDependencies)
             implements Dependency.Maven {
+
+        Maven {
+            internalDependencies = List.copyOf(internalDependencies);
+        }
+        
         @Override
         public @NotNull String id() {
             return artifactId();
