@@ -71,6 +71,15 @@ public class BinaryWriter extends OutputStream {
         }
     }
 
+    public void writeNullableComponent(@Nullable Component component) {
+        if (component == null) {
+            writeBoolean(false);
+        } else {
+            writeBoolean(true);
+            writeComponent(component);
+        }
+    }
+
     /**
      * Writes a component to the buffer as a sized string.
      *

@@ -10,6 +10,7 @@ import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -202,6 +203,10 @@ public class BinaryReader extends InputStream {
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
+    }
+
+    public @Nullable Component readNullableComponent() {
+        return readBoolean() ? readComponent() : null;
     }
 
     public Component readComponent() {
