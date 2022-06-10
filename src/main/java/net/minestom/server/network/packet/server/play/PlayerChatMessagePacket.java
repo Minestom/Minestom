@@ -15,22 +15,27 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
+// TODO Check the need of ComponentHolding
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(@NotNull Component message, @NotNull ChatPosition position, @NotNull UUID uuid,
+public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullable Component unsignedContent,
+                                      @NotNull ChatPosition position, @NotNull UUID uuid,
                                       @NotNull Component displayName, @Nullable Component teamDisplayName,
                                       long timestamp, long salt,
                                       byte[] signature) implements ComponentHoldingServerPacket {
     public PlayerChatMessagePacket(BinaryReader reader) {
-        this(reader.readComponent(), ChatPosition.fromPacketID(reader.readVarInt()), reader.readUuid(),
+        this(reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
+                ChatPosition.fromPacketID(reader.readVarInt()), reader.readUuid(),
                 reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
                 reader.readLong(), reader.readLong(), reader.readByteArray());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeComponent(message);
+        writer.writeComponent(signedContent);
+        writer.writeBoolean(unsignedContent != null);
+        if (unsignedContent != null) writer.writeComponent(unsignedContent);
         writer.writeVarInt((byte) position.ordinal());
         writer.writeUuid(uuid);
         writer.writeComponent(displayName);
@@ -48,12 +53,12 @@ public record PlayerChatMessagePacket(@NotNull Component message, @NotNull ChatP
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(message);
+        return Collections.singleton(signedContent);
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new PlayerChatMessagePacket(operator.apply(message), position,
+        return new PlayerChatMessagePacket(signedContent, unsignedContent, position,
                 uuid, displayName, teamDisplayName, timestamp, salt, signature);
     }
 }
