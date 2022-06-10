@@ -126,6 +126,10 @@ public class BinaryReader extends InputStream {
         return readSizedString(Integer.MAX_VALUE);
     }
 
+    public @Nullable String readNullableSizedString() {
+        return readNullable(this::readSizedString);
+    }
+
     public byte[] readBytes(int length) {
         byte[] bytes = new byte[length];
         buffer.get(bytes);
@@ -206,7 +210,7 @@ public class BinaryReader extends InputStream {
     }
 
     public @Nullable Component readNullableComponent() {
-        return readBoolean() ? readComponent() : null;
+        return readNullable(this::readComponent);
     }
 
     public Component readComponent() {
@@ -302,5 +306,9 @@ public class BinaryReader extends InputStream {
         buffer.get(output, 0, output.length);
         //buffer.get(startingPosition, output);
         return output;
+    }
+
+    public <T> @Nullable T readNullable(Supplier<T> reader) {
+        return readBoolean() ? reader.get() : null;
     }
 }

@@ -72,12 +72,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeNullableComponent(@Nullable Component component) {
-        if (component == null) {
-            writeBoolean(false);
-        } else {
-            writeBoolean(true);
-            writeComponent(component);
-        }
+        writeNullable(component, this::writeComponent);
     }
 
     /**
@@ -199,6 +194,10 @@ public class BinaryWriter extends OutputStream {
         final var bytes = string.getBytes(StandardCharsets.UTF_8);
         writeVarInt(bytes.length);
         writeBytes(bytes);
+    }
+
+    public void writeNullableSizedString(@Nullable String string) {
+        writeNullable(string, this::writeSizedString);
     }
 
     /**
@@ -336,11 +335,15 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeNullable(@Nullable Writeable writeable) {
-        if (writeable == null) {
+        writeNullable(writeable, this::write);
+    }
+
+    public <T> void writeNullable(T object, Consumer<T> writer) {
+        if (object == null) {
             writeBoolean(false);
         } else {
             writeBoolean(true);
-            write(writeable);
+            writer.accept(object);
         }
     }
 
