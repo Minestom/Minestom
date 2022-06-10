@@ -28,7 +28,7 @@ public record PlayerPublicKey(Instant expiresAt, PublicKey publicKey, byte[] sig
     }
 
     public boolean isValid() {
-        return expiresAt.isAfter(Instant.now()) && SignatureValidator.YGGDRASIL_VALIDATOR.validate(signedPayload(), signature());
+        return expiresAt.isAfter(Instant.now()) && SignatureValidator.YGGDRASIL.validate(signedPayload(), signature());
     }
 
     @Override

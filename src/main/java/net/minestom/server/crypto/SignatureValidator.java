@@ -7,8 +7,8 @@ import java.security.*;
 
 @FunctionalInterface
 public interface SignatureValidator {
-    SignatureValidator NO_VALIDATOR = (payload, signature) -> true;
-    SignatureValidator YGGDRASIL_VALIDATOR = createYggdrasilValidator();
+    SignatureValidator NONE = (payload, signature) -> true;
+    SignatureValidator YGGDRASIL = createYggdrasilValidator();
 
     boolean validate(byte[] payload, byte[] signature);
 
