@@ -5,13 +5,13 @@ import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.message.MessageSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Called every time a {@link Player} write and send something in the chat.
@@ -21,21 +21,31 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final Collection<Player> recipients;
-    private final Supplier<Component> defaultChatFormat;
-    private String message;
+    private final String rawMessage;
     private Function<PlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
     private MessageSignature signature;
+    private MessageSender sender;
+    private final Component message;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
-                           @NotNull Supplier<Component> defaultChatFormat,
-                           @NotNull String message, @NotNull MessageSignature signature) {
+                           @NotNull String rawMessage, @NotNull MessageSignature signature,
+                           @NotNull MessageSender sender, @NotNull Component message) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
-        this.defaultChatFormat = defaultChatFormat;
+        this.rawMessage = rawMessage;
         this.message = message;
         this.signature = signature;
+        this.sender = sender;
+    }
+
+    public MessageSender getSender() {
+        return sender;
+    }
+
+    public void setSender(MessageSender sender) {
+        this.sender = sender;
     }
 
     /**
@@ -63,17 +73,12 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return the sender's message
      */
-    public @NotNull String getMessage() {
-        return message;
+    public @NotNull String getRawMessage() {
+        return rawMessage;
     }
 
-    /**
-     * Used to change the message.
-     *
-     * @param message the new message
-     */
-    public void setMessage(@NotNull String message) {
-        this.message = message;
+    public @NotNull Component getMessage() {
+        return message;
     }
 
     /**
@@ -85,10 +90,6 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      */
     public @Nullable Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
         return chatFormat;
-    }
-
-    public @NotNull Supplier<@NotNull Component> getDefaultChatFormat() {
-        return defaultChatFormat;
     }
 
     @Override

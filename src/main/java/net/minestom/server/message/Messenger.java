@@ -2,13 +2,11 @@ package net.minestom.server.message;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerChatMessagePacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
@@ -16,7 +14,6 @@ import org.jglrxavpok.hephaistos.parser.SNBTParser;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -245,13 +242,11 @@ public final class Messenger {
      * @param player   the player
      * @param message  the message
      * @param position the position
-     * @param uuid     the UUID of the sender, if any
      * @return if the message was sent
      */
-    //fixme
-    public static boolean sendMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
+    public static boolean sendSystemMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position) {
         if (getChatMessageType(player).accepts(position)) {
-            player.sendPacket(new SystemChatPacket(message, 1));
+            player.sendPacket(new SystemChatPacket(message, position.getID()));
             return true;
         }
         return false;
@@ -261,15 +256,11 @@ public final class Messenger {
      * Sends a message to some players, respecting their chat settings.
      *
      * @param recipients  the players
-     * @param message  the message
-     * @param position the position
      */
-    public static void sendSignedPlayerMessage(@NotNull Collection<Player> recipients, @NotNull Component message,
-                                               @NotNull ChatPosition position, @NotNull MessageSender sender,
-                                               @NotNull MessageSignature signature) {
+    public static void sendMessage(@NotNull Collection<Player> recipients, @NotNull PlayerChatMessagePacket packet) {
         PacketUtils.sendGroupedPacket(recipients.stream().filter(x -> x.getSettings().getChatMessageType() == null ||
-                        x.getSettings().getChatMessageType().accepts(position)).collect(Collectors.toList()),
-                PlayerChatMessagePacket.signed(message, position, sender, signature));
+                        x.getSettings().getChatMessageType().accepts(ChatPosition.fromPacketID(packet.type())))
+                .collect(Collectors.toList()), packet);
     }
 
     /**

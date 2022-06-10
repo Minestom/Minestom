@@ -40,6 +40,14 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
                 sender.displayName(), sender.teamName(), signature);
     }
 
+    public static PlayerChatMessagePacket signedWithUnsignedContent(@NotNull Component message,
+                                                                    @NotNull Component unsignedContent,
+                                                                    ChatPosition type, @NotNull MessageSender sender,
+                                                                    @NotNull MessageSignature signature) {
+        return new PlayerChatMessagePacket(message, unsignedContent, type.getID(), sender.uuid(),
+                sender.displayName(), sender.teamName(), signature);
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeComponent(signedContent);

@@ -47,6 +47,7 @@ import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -90,6 +91,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -107,6 +110,7 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final int PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     private static final int PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
@@ -204,6 +208,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Adventure
     private Identity identity;
     private final Pointers pointers;
+    private Component lastPreviewedMessage;
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
@@ -664,7 +669,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
+        if (type == MessageType.SYSTEM)
+            Messenger.sendSystemMessage(this, message, ChatPosition.SYSTEM_MESSAGE);
+        else
+            Messenger.sendMessage(Collections.singleton(this), PlayerChatMessagePacket.unsigned(message,
+                    ChatPosition.CHAT, MessageSender.forUnsigned(Component.text("SYSTEM"))));
     }
 
     /**
@@ -2059,6 +2068,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     public void toggleChatPreview(boolean on) {
         playerConnection.sendPacket(on ? ServerDataPacket.TOGGLE_PREVIEW_ON : ServerDataPacket.TOGGLE_PREVIEW_OFF);
+    }
+
+    public @Nullable Component getLastPreviewedMessage() {
+        return lastPreviewedMessage;
+    }
+
+    public void setLastPreviewedMessage(@Nullable Component lastPreviewedMessage) {
+        this.lastPreviewedMessage = lastPreviewedMessage;
     }
 
     /**

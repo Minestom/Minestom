@@ -15,9 +15,10 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientChatPreviewPacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import net.minestom.server.network.packet.server.play.ChatPreviewPacket;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.packet.server.play.PlayerChatMessagePacket;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class ChatMessageListener {
@@ -42,40 +43,47 @@ public class ChatMessageListener {
         }
 
         final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
-        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, message), message, packet.signature());
+        final Component expectedMessage = Objects.requireNonNullElse(player.getLastPreviewedMessage(), Component.text(message));
+        PlayerChatEvent event = new PlayerChatEvent(player, players, message, packet.signature(), MessageSender.forSigned(player), expectedMessage);
 
         // Call the event
-        EventDispatcher.callCancellable(playerChatEvent, () -> {
-            final Function<PlayerChatEvent, Component> formatFunction = playerChatEvent.getChatFormatFunction();
+        EventDispatcher.callCancellable(event, () -> {
+            player.setLastPreviewedMessage(null);
+            final Collection<Player> recipients = event.getRecipients();
+            if (recipients.isEmpty()) return;
 
-            Component textObject;
+            // TODO Maybe change format to BiFunction<Player, String, Component>?
+            final Function<PlayerChatEvent, Component> formatFunction = event.getChatFormatFunction();
 
             if (formatFunction != null) {
-                // Custom format
-                textObject = formatFunction.apply(playerChatEvent);
+                // Let the event modify the message
+                if (event.getSender().unsigned()) {
+                    // Event handler set unsigned sender, send message as unsigned -> players with
+                    // "Only Show Secure Chat" option enabled won't see this message
+                    Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket
+                            .unsigned(formatFunction.apply(event), ChatPosition.CHAT, event.getSender()));
+                } else {
+                    // Send both version of message -> players will see different versions based on
+                    // their "Only Show Secure Chat" option
+                    Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket
+                            .signedWithUnsignedContent(event.getMessage(), formatFunction.apply(event),
+                                    ChatPosition.CHAT, event.getSender(), event.getSignature()));
+                }
             } else {
-                // Default format
-                textObject = playerChatEvent.getDefaultChatFormat().get();
-            }
-
-            final Collection<Player> recipients = playerChatEvent.getRecipients();
-            if (!recipients.isEmpty()) {
-                // delegate to the messenger to avoid sending messages we shouldn't be
-                Messenger.sendSignedPlayerMessage(recipients, textObject, ChatPosition.CHAT,
-                        new MessageSender(player.getUuid(), player.getDisplayName() != null ? player.getDisplayName() :
-                                Component.text(player.getUsername()), player.getTeam() == null ?
-                                null : player.getTeam().getTeamDisplayName()), packet.signature());
+                // There is no way the message got modified, send it with the original signature
+                // TODO Should we handle poor design where the signature or sender uuid got altered?
+                Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket.signed(event.getMessage(),
+                        ChatPosition.CHAT, event.getSender(), event.getSignature()));
             }
         });
-    }
-
-    private static @NotNull Component buildDefaultChatMessage(@NotNull Player player, @NotNull String message) {
-        return Component.text(message);
     }
 
     public static void previewListener(ClientChatPreviewPacket packet, Player player) {
         final PlayerChatPreviewEvent event = new PlayerChatPreviewEvent(player, packet.queryId(), packet.query());
         MinecraftServer.getGlobalEventHandler().callCancellable(event,
-                () -> player.sendPacket(new ChatPreviewPacket(event.getId(), event.getResult())));
+                () -> {
+                    player.sendPacket(new ChatPreviewPacket(event.getId(), event.getResult()));
+                    player.setLastPreviewedMessage(event.getResult());
+                });
     }
 }
