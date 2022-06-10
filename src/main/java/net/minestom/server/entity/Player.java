@@ -1897,7 +1897,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 Collections.emptyList();
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName));
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName,
+                        getPlayerConnection().getPlayerPublicKey()));
     }
 
     /**

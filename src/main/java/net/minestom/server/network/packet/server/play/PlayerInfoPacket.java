@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -128,7 +129,8 @@ public record PlayerInfoPacket(@NotNull Action action,
     }
 
     public record AddPlayer(UUID uuid, String name, List<Property> properties, GameMode gameMode, int ping,
-                            Component displayName) implements Entry, ComponentHolder<AddPlayer> {
+                            Component displayName, @Nullable PlayerPublicKey playerPublicKey) implements Entry,
+            ComponentHolder<AddPlayer> {
         public AddPlayer {
             properties = List.copyOf(properties);
         }
@@ -137,7 +139,7 @@ public record PlayerInfoPacket(@NotNull Action action,
             this(uuid, reader.readSizedString(),
                     reader.readVarIntList(Property::new),
                     GameMode.values()[reader.readVarInt()], reader.readVarInt(),
-                    reader.readBoolean() ? reader.readComponent() : null);
+                    reader.readBoolean() ? reader.readComponent() : null, reader.readBoolean() ? new PlayerPublicKey(reader) : null);
         }
 
         @Override
@@ -148,7 +150,7 @@ public record PlayerInfoPacket(@NotNull Action action,
             writer.writeVarInt(ping);
             writer.writeBoolean(displayName != null);
             if (displayName != null) writer.writeComponent(displayName);
-            writer.writeBoolean(false);
+            writer.writeNullable(playerPublicKey);
         }
 
         @Override
@@ -159,7 +161,7 @@ public record PlayerInfoPacket(@NotNull Action action,
         @Override
         public @NotNull AddPlayer copyWithOperator(@NotNull UnaryOperator<Component> operator) {
             return displayName != null ?
-                    new AddPlayer(uuid, name, properties, gameMode, ping, operator.apply(displayName)) : this;
+                    new AddPlayer(uuid, name, properties, gameMode, ping, operator.apply(displayName), playerPublicKey) : this;
         }
 
         public record Property(@NotNull String name, @NotNull String value,

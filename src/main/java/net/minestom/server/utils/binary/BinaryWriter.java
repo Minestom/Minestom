@@ -9,6 +9,7 @@ import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
@@ -322,6 +323,15 @@ public class BinaryWriter extends OutputStream {
         } catch (IOException e) {
             // should not throw, as nbtWriter points to this PacketWriter
             MinecraftServer.getExceptionManager().handleException(e);
+        }
+    }
+
+    public void writeNullable(@Nullable Writeable writeable) {
+        if (writeable == null) {
+            writeBoolean(false);
+        } else {
+            writeBoolean(true);
+            write(writeable);
         }
     }
 

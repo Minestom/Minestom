@@ -122,7 +122,8 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
                 new PlayerInfoPacket.UpdateLatency(UUID.randomUUID(), 5)));
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(UUID.randomUUID(), "TheMode911", List.of(new PlayerInfoPacket.AddPlayer.Property("name", "value")), GameMode.CREATIVE, 5, COMPONENT)));
+                new PlayerInfoPacket.AddPlayer(UUID.randomUUID(), "TheMode911", List.of(new PlayerInfoPacket.AddPlayer.Property("name", "value")), GameMode.CREATIVE, 5, COMPONENT, null)));
+        // TODO Test with public key
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER, new PlayerInfoPacket.RemovePlayer(UUID.randomUUID())));
 
         //SERVER_PACKETS.add(new MultiBlockChangePacket(5,5,5,true, new long[]{0,5,543534,1321}));
