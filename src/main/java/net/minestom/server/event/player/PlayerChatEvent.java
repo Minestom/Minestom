@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -25,14 +26,16 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private Function<PlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
+    private MessageSignature signature;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
                            @NotNull Supplier<Component> defaultChatFormat,
-                           @NotNull String message) {
+                           @NotNull String message, @NotNull MessageSignature signature) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
         this.defaultChatFormat = defaultChatFormat;
         this.message = message;
+        this.signature = signature;
     }
 
     /**
@@ -101,5 +104,13 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     @Override
     public @NotNull Player getPlayer() {
         return player;
+    }
+
+    public MessageSignature getSignature() {
+        return signature;
+    }
+
+    public void setSignature(@NotNull MessageSignature signature) {
+        this.signature = signature;
     }
 }
