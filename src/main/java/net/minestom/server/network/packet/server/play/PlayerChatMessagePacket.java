@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -15,18 +14,17 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-// TODO Check the need of ComponentHolding
 /**
  * Represents an outgoing chat message packet.
  */
 public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullable Component unsignedContent,
-                                      @NotNull ChatPosition position, @NotNull UUID uuid,
+                                      int type, @NotNull UUID uuid,
                                       @NotNull Component displayName, @Nullable Component teamDisplayName,
                                       long timestamp, long salt,
                                       byte[] signature) implements ComponentHoldingServerPacket {
     public PlayerChatMessagePacket(BinaryReader reader) {
         this(reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
-                ChatPosition.fromPacketID(reader.readVarInt()), reader.readUuid(),
+                reader.readVarInt(), reader.readUuid(),
                 reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
                 reader.readLong(), reader.readLong(), reader.readByteArray());
     }
@@ -36,7 +34,7 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
         writer.writeComponent(signedContent);
         writer.writeBoolean(unsignedContent != null);
         if (unsignedContent != null) writer.writeComponent(unsignedContent);
-        writer.writeVarInt((byte) position.ordinal());
+        writer.writeVarInt(type);
         writer.writeUuid(uuid);
         writer.writeComponent(displayName);
         writer.writeBoolean(teamDisplayName != null);
@@ -58,7 +56,7 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new PlayerChatMessagePacket(signedContent, unsignedContent, position,
+        return new PlayerChatMessagePacket(signedContent, unsignedContent, type,
                 uuid, displayName, teamDisplayName, timestamp, salt, signature);
     }
 }
