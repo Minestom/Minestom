@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.client.login;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -16,23 +17,32 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public record LoginStartPacket(@NotNull String username, Test test) implements ClientPreplayPacket {
+public record LoginStartPacket(@NotNull String username, @Nullable PlayerPublicKey publicKey) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
     public LoginStartPacket(BinaryReader reader) {
         this(reader.readSizedString(16), reader.readBoolean() ?
-                new Test(reader.readLong(), reader.readByteArray(), reader.readByteArray()) : null);
-    }
-
-    record Test(long timestamp, byte[] key, byte[] signature) {
+                new PlayerPublicKey(reader) : null);
     }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
+        connection.setPlayerPublicKey(publicKey);
+
+        //TODO Verification toggling
+        if (publicKey != null) {
+            if (!publicKey.isValid()) {
+                // TODO Configurable message
+                connection.sendPacket(new LoginDisconnectPacket(Component.text("Invalid signature", NamedTextColor.RED)));
+                connection.disconnect();
+            }
+        }
+
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
         // Proxy support (only for socket clients) and cache the login username
         if (isSocketConnection) {
@@ -83,5 +93,11 @@ public record LoginStartPacket(@NotNull String username, Test test) implements C
         if (username.length() > 16)
             throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");
         writer.writeSizedString(username);
+        if (publicKey == null) {
+            writer.writeBoolean(false);
+        } else {
+            writer.writeBoolean(true);
+            writer.write(publicKey);
+        }
     }
 }
