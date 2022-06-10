@@ -57,7 +57,7 @@ public final class PacketListenerManager {
         setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
         setListener(ClientSpectatePacket.class, SpectateListener::listener);
         setListener(ClientEditBookPacket.class, BookListener::listener);
-        setListener(ClientChatPreviewPacket.class, ChatPreviewListener::listener);
+        setListener(ClientChatPreviewPacket.class, ChatMessageListener::previewListener);
     }
 
     /**

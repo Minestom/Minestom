@@ -6,12 +6,15 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerChatPreviewEvent;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.client.play.ClientChatPreviewPacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
+import net.minestom.server.network.packet.server.play.ChatPreviewPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -70,4 +73,9 @@ public class ChatMessageListener {
         return Component.text(message);
     }
 
+    public static void previewListener(ClientChatPreviewPacket packet, Player player) {
+        final PlayerChatPreviewEvent event = new PlayerChatPreviewEvent(player, packet.queryId(), packet.query());
+        MinecraftServer.getGlobalEventHandler().callCancellable(event,
+                () -> player.sendPacket(new ChatPreviewPacket(event.getId(), event.getResult())));
+    }
 }
