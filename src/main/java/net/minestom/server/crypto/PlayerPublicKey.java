@@ -27,12 +27,8 @@ public record PlayerPublicKey(Instant expiresAt, PublicKey publicKey, byte[] sig
         return (expiresAt.toEpochMilli() + KeyUtils.rsaPublicKeyToString(publicKey)).getBytes(StandardCharsets.US_ASCII);
     }
 
-    public boolean isExpired() {
-        return expiresAt.isBefore(Instant.now());
-    }
-
     public boolean isValid() {
-        return !isExpired() && SignatureValidator.YGGDRASIL_VALIDATOR.validate(signedPayload(), signature());
+        return expiresAt.isAfter(Instant.now()) && SignatureValidator.YGGDRASIL_VALIDATOR.validate(signedPayload(), signature());
     }
 
     @Override
