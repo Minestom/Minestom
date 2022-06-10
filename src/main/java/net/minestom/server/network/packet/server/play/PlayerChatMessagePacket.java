@@ -1,6 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.crypto.MessageSignature;
+import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.MessageSender;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -20,28 +23,32 @@ import java.util.function.UnaryOperator;
 public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullable Component unsignedContent,
                                       int type, @NotNull UUID uuid,
                                       @NotNull Component displayName, @Nullable Component teamDisplayName,
-                                      long timestamp, long salt,
-                                      byte[] signature) implements ComponentHoldingServerPacket {
+                                      @NotNull MessageSignature signature) implements ComponentHoldingServerPacket {
     public PlayerChatMessagePacket(BinaryReader reader) {
-        this(reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
-                reader.readVarInt(), reader.readUuid(),
-                reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
-                reader.readLong(), reader.readLong(), reader.readByteArray());
+        this(reader.readComponent(), reader.readNullableComponent(), reader.readVarInt(), reader.readUuid(),
+                reader.readComponent(), reader.readNullableComponent(), new MessageSignature(reader));
+    }
+
+    public static PlayerChatMessagePacket unsigned(@NotNull Component message, ChatPosition type, @NotNull MessageSender sender) {
+        return new PlayerChatMessagePacket(message, null, type.getID(), MessageSignature.UNSIGNED_SENDER,
+                sender.displayName(), sender.teamName(), MessageSignature.UNSIGNED);
+    }
+
+    public static PlayerChatMessagePacket signed(@NotNull Component message, ChatPosition type, @NotNull MessageSender sender,
+                                                 @NotNull MessageSignature signature) {
+        return new PlayerChatMessagePacket(message, null, type.getID(), sender.uuid(),
+                sender.displayName(), sender.teamName(), signature);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeComponent(signedContent);
-        writer.writeBoolean(unsignedContent != null);
-        if (unsignedContent != null) writer.writeComponent(unsignedContent);
+        writer.writeNullableComponent(unsignedContent);
         writer.writeVarInt(type);
         writer.writeUuid(uuid);
         writer.writeComponent(displayName);
-        writer.writeBoolean(teamDisplayName != null);
-        if (teamDisplayName != null) writer.writeComponent(teamDisplayName);
-        writer.writeLong(timestamp);
-        writer.writeLong(salt);
-        writer.writeByteArray(signature);
+        writer.writeNullableComponent(teamDisplayName);
+        writer.write(signature);
     }
 
     @Override
@@ -57,6 +64,6 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         return new PlayerChatMessagePacket(signedContent, unsignedContent, type,
-                uuid, displayName, teamDisplayName, timestamp, salt, signature);
+                uuid, displayName, teamDisplayName, signature);
     }
 }

@@ -1,13 +1,13 @@
 package net.minestom.server.listener;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
@@ -58,20 +58,16 @@ public class ChatMessageListener {
             final Collection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {
                 // delegate to the messenger to avoid sending messages we shouldn't be
-                Messenger.sendMessage(recipients, textObject, ChatPosition.CHAT, player.getUuid());
+                Messenger.sendSignedPlayerMessage(recipients, textObject, ChatPosition.CHAT,
+                        new MessageSender(player.getUuid(), player.getDisplayName() != null ? player.getDisplayName() :
+                                Component.text(player.getUsername()), player.getTeam() == null ?
+                                null : player.getTeam().getTeamDisplayName()), packet.signature());
             }
         });
     }
 
     private static @NotNull Component buildDefaultChatMessage(@NotNull Player player, @NotNull String message) {
-        final String username = player.getUsername();
-        return Component.translatable("chat.type.text")
-                .args(Component.text(username)
-                                .insertion(username)
-                                .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
-                                .hoverEvent(player),
-                        Component.text(message)
-                );
+        return Component.text(message);
     }
 
 }

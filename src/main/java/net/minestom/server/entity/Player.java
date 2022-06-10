@@ -24,6 +24,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -672,7 +673,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param message the message that the player will send
      */
     public void chat(@NotNull String message) {
-        addPacketToQueue(new ClientChatMessagePacket(message, 0, 0, new byte[0], false));
+        addPacketToQueue(new ClientChatMessagePacket(message, MessageSignature.UNSIGNED, false));
     }
 
     @Override
