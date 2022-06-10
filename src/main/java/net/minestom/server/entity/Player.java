@@ -2057,6 +2057,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
+    public void toggleChatPreview(boolean on) {
+        playerConnection.sendPacket(on ? ServerDataPacket.TOGGLE_PREVIEW_ON : ServerDataPacket.TOGGLE_PREVIEW_OFF);
+    }
+
     /**
      * Represents the main or off hand of the player.
      */

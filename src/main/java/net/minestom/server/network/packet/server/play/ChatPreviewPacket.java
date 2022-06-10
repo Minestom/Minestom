@@ -15,14 +15,13 @@ import java.util.function.UnaryOperator;
 
 public record ChatPreviewPacket(int queryId, @Nullable Component preview) implements ComponentHoldingServerPacket {
     public ChatPreviewPacket(BinaryReader reader) {
-        this(reader.readInt(), reader.readBoolean() ? reader.readComponent() : null);
+        this(reader.readInt(), reader.readNullableComponent());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(queryId);
-        writer.writeBoolean(preview != null);
-        if (preview != null) writer.writeComponent(preview);
+        writer.writeNullableComponent(preview);
     }
 
     @Override

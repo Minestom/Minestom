@@ -7,6 +7,9 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public record SetChatPreviewPacket(boolean enable) implements ServerPacket {
+    public static final SetChatPreviewPacket ENABLE = new SetChatPreviewPacket(true);
+    public static final SetChatPreviewPacket DISABLE = new SetChatPreviewPacket(true);
+
     public SetChatPreviewPacket(BinaryReader reader) {
         this(reader.readBoolean());
     }
