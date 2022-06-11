@@ -60,7 +60,12 @@ final class TagHandlerImpl implements TagHandler {
             SPMCMap entries = local.entries;
             if (present) {
                 if (!isView) {
-                    entries.put(tagIndex, valueToEntry(local, tag, value));
+                    Entry previous = entries.get(tagIndex);
+                    if (previous != null && previous.tag().shareValue(tag)) {
+                        previous.updateValue(value);
+                    } else {
+                        entries.put(tagIndex, valueToEntry(local, tag, value));
+                    }
                 } else {
                     local.updateContent((NBTCompound) tag.entry.write(value));
                     return;
@@ -163,7 +168,7 @@ final class TagHandlerImpl implements TagHandler {
                 // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
                 TagHandlerImpl tmp = local;
                 local = new TagHandlerImpl(tmp);
-                if (entry != null && entry.updatedNbt() instanceof NBTCompound compound) {
+                if (entry != null && entry.nbt() instanceof NBTCompound compound) {
                     local.updateContent(compound);
                 }
                 tmp.entries.put(pathIndex, new PathEntry(path.name(), local));
@@ -179,7 +184,7 @@ final class TagHandlerImpl implements TagHandler {
             if (!entries.isEmpty()) {
                 MutableNBTCompound tmp = new MutableNBTCompound();
                 for (Entry<?> entry : entries.values()) {
-                    if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
+                    if (entry != null) tmp.put(entry.tag().getKey(), entry.nbt());
                 }
                 cache = new Cache(entries.clone(), tmp.toCompound());
             } else cache = Cache.EMPTY;
@@ -214,7 +219,7 @@ final class TagHandlerImpl implements TagHandler {
             return (T) entry.value();
         }
         // Value must be parsed from nbt if the tag is different
-        final NBT nbt = entry.updatedNbt();
+        final NBT nbt = entry.nbt();
         final Serializers.Entry<T, NBT> serializerEntry = tag.entry;
         final NBTType<NBT> type = serializerEntry.nbtType();
         return type == null || type == nbt.getID() ? serializerEntry.read(nbt) : tag.createDefault();
@@ -230,7 +235,7 @@ final class TagHandlerImpl implements TagHandler {
                 return null;
             if (entry instanceof PathEntry pathEntry) {
                 result = pathEntry.value;
-            } else if (entry.updatedNbt() instanceof NBTCompound compound) {
+            } else if (entry.nbt() instanceof NBTCompound compound) {
                 // Slow path forcing a conversion of the structure to NBTCompound
                 // TODO should the handler be cached inside the entry?
                 result = fromCompound(compound);
@@ -260,12 +265,14 @@ final class TagHandlerImpl implements TagHandler {
 
         T value();
 
-        NBT updatedNbt();
+        NBT nbt();
+
+        void updateValue(T value);
     }
 
     private static final class TagEntry<T> implements Entry<T> {
         private final Tag<T> tag;
-        private final T value;
+        volatile T value;
         volatile NBT nbt;
 
         TagEntry(Tag<T> tag, T value) {
@@ -284,10 +291,16 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         @Override
-        public NBT updatedNbt() {
+        public NBT nbt() {
             NBT nbt = this.nbt;
             if (nbt == null) this.nbt = nbt = tag.entry.write(value);
             return nbt;
+        }
+
+        @Override
+        public void updateValue(T value) {
+            this.value = value;
+            this.nbt = null;
         }
     }
 
@@ -298,8 +311,13 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         @Override
-        public NBTCompound updatedNbt() {
+        public NBTCompound nbt() {
             return value.asCompound();
+        }
+
+        @Override
+        public void updateValue(TagHandlerImpl value) {
+            throw new UnsupportedOperationException("Cannot update a path entry");
         }
     }
 
