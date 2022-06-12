@@ -29,7 +29,7 @@ public class ChatMessageListener {
     public static void commandChatListener(ClientCommandChatPacket packet, Player player) {
         final String command = packet.message();
         if (Messenger.canReceiveCommand(player)) {
-            COMMAND_MANAGER.execute(player, command);
+            COMMAND_MANAGER.execute(player, command, packet.argumentsSignature().signatures().size() > 0 ? packet.argumentsSignature() : null);
         } else {
             Messenger.sendRejectionMessage(player);
         }

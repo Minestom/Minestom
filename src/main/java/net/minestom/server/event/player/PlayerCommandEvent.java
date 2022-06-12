@@ -1,9 +1,11 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called every time a player send a message starting by '/'.
@@ -12,10 +14,11 @@ public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent
 
     private final Player player;
     private String command;
+    private @Nullable ArgumentsSignature signature;
 
     private boolean cancelled;
 
-    public PlayerCommandEvent(@NotNull Player player, @NotNull String command) {
+    public PlayerCommandEvent(@NotNull Player player, @NotNull String command, @Nullable ArgumentsSignature signature) {
         this.player = player;
         this.command = command;
     }
@@ -52,5 +55,13 @@ public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent
     @Override
     public @NotNull Player getPlayer() {
         return player;
+    }
+
+    public @Nullable ArgumentsSignature getSignature() {
+        return signature;
+    }
+
+    public void setSignature(@Nullable ArgumentsSignature signature) {
+        this.signature = signature;
     }
 }

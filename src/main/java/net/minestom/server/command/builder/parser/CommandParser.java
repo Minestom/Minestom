@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandDispatcher;
@@ -127,7 +128,7 @@ public final class CommandParser {
                 maxArguments = argsSize;
 
                 // Fill arguments map
-                finalContext = new CommandContext(validSyntaxHolder.commandString());
+                finalContext = new CommandContext(validSyntaxHolder.commandString(), context.getSignature());
                 for (var entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
                     final ArgumentParser.ArgumentResult argumentResult = entry.getValue();
@@ -148,7 +149,8 @@ public final class CommandParser {
     public static ArgumentQueryResult findEligibleArgument(@NotNull Command command, String[] args, String commandString,
                                                            boolean trailingSpace, boolean forceCorrect,
                                                            Predicate<CommandSyntax> syntaxPredicate,
-                                                           Predicate<Argument<?>> argumentPredicate) {
+                                                           Predicate<Argument<?>> argumentPredicate,
+                                                           @Nullable ArgumentsSignature signature) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
@@ -158,7 +160,7 @@ public final class CommandParser {
                 continue;
             }
 
-            final CommandContext context = new CommandContext(commandString);
+            final CommandContext context = new CommandContext(commandString, signature);
 
             final Argument<?>[] commandArguments = syntax.getArguments();
             int inputIndex = 0;

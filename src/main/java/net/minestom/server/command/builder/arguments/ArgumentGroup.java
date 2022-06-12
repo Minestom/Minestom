@@ -28,7 +28,7 @@ public class ArgumentGroup extends Argument<CommandContext> {
         List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
         CommandParser.parse(null, group, input.split(StringUtils.SPACE), input, validSyntaxes, null);
 
-        CommandContext context = new CommandContext(input);
+        CommandContext context = new CommandContext(input, null);
         CommandParser.findMostCorrectSyntax(validSyntaxes, context);
         if (validSyntaxes.isEmpty()) {
             throw new ArgumentSyntaxException("Invalid arguments", input, INVALID_ARGUMENTS_ERROR);

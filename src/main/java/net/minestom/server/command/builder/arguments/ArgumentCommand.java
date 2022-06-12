@@ -28,7 +28,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
                 shortcut + StringUtils.SPACE + input
                 : input;
         CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
-        CommandResult result = dispatcher.parse(commandString);
+        CommandResult result = dispatcher.parse(commandString, null);
 
         if (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS)
             throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);

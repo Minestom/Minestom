@@ -1,6 +1,7 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -8,12 +9,15 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerChatPreviewEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.message.MessageSender;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
@@ -52,6 +56,8 @@ public class Main {
         commandManager.register(new AutoViewCommand());
         commandManager.register(new SaveCommand());
         commandManager.register(new GamemodeCommand());
+        commandManager.register(new CommandSignTest());
+        commandManager.register(new ChatPreviewCommand());
 
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
@@ -92,6 +98,22 @@ public class Main {
             // on legacy versions, colors will be converted to the section format so it'll work there too
             responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
             //responseData.setPlayersHidden(true);
+        }).addListener(PlayerChatPreviewEvent.class, e -> {
+            if (e.getQuery().contains("!")) {
+                e.setResult(null);
+            } else {
+                e.setResult(Component.empty()
+                        .append(Component.text("PREPEND>", TextColor.color(255,0,255)))
+                        .append(Component.text(e.getQuery()))
+                        .append(Component.text("<APPEND", TextColor.color(255,0,255))));
+//                e.setResult(Component.text(e.getQuery(), NamedTextColor.BLACK));
+            }
+        }).addListener(PlayerChatEvent.class, e -> {
+            final MessageSender s = e.getSender();
+            e.setSender(new MessageSender(
+                    s.displayName().clickEvent(ClickEvent.suggestCommand("/msg "+e.getPlayer().getUsername())).color(NamedTextColor.DARK_GREEN),
+                    Component.text("Team Name").color(NamedTextColor.GOLD)
+            ));
         });
 
         PlayerInit.init();

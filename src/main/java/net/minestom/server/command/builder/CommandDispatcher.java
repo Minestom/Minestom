@@ -3,6 +3,7 @@ package net.minestom.server.command.builder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -87,11 +88,11 @@ public class CommandDispatcher {
      * @param commandString the command with the argument(s)
      * @return the command result
      */
-    public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
-        CommandResult commandResult = parse(commandString);
+    public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString, @Nullable ArgumentsSignature signature) {
+        CommandResult commandResult = parse(commandString, signature);
         ParsedCommand parsedCommand = commandResult.parsedCommand;
         if (parsedCommand != null) {
-            commandResult.commandData = parsedCommand.execute(source);
+            commandResult.commandData = parsedCommand.execute(source, signature);
         }
         return commandResult;
     }
@@ -102,7 +103,7 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the parsing result
      */
-    public @NotNull CommandResult parse(@NotNull String commandString) {
+    public @NotNull CommandResult parse(@NotNull String commandString, @Nullable ArgumentsSignature signature) {
         commandString = commandString.trim();
         // Verify if the result is cached
         {
@@ -124,7 +125,7 @@ public class CommandDispatcher {
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand( commandQueryResult, commandName, commandString, result);
+        findParsedCommand( commandQueryResult, commandName, commandString, result, signature);
 
         // Cache result
         this.cache.put(commandString, result);
@@ -135,7 +136,8 @@ public class CommandDispatcher {
     private @NotNull ParsedCommand findParsedCommand(@NotNull CommandQueryResult commandQueryResult,
                                                       @NotNull String commandName,
                                                       @NotNull String commandString,
-                                                      @NotNull CommandResult result) {
+                                                      @NotNull CommandResult result,
+                                                     @Nullable ArgumentsSignature signature) {
         final Command command = commandQueryResult.command();
         String[] args = commandQueryResult.args();
         final boolean hasArgument = args.length > 0;
@@ -159,7 +161,7 @@ public class CommandDispatcher {
                 final CommandSyntax syntax = optionalSyntax.get();
                 parsedCommand.syntax = syntax;
                 parsedCommand.executor = syntax.getExecutor();
-                parsedCommand.context = new CommandContext(input);
+                parsedCommand.context = new CommandContext(input, signature);
 
                 result.type = CommandResult.Type.SUCCESS;
                 result.parsedCommand = parsedCommand;
@@ -169,7 +171,7 @@ public class CommandDispatcher {
                 final CommandExecutor defaultExecutor = command.getDefaultExecutor();
                 if (defaultExecutor != null) {
                     parsedCommand.executor = defaultExecutor;
-                    parsedCommand.context = new CommandContext(input);
+                    parsedCommand.context = new CommandContext(input, signature);
 
                     result.type = CommandResult.Type.SUCCESS;
                     result.parsedCommand = parsedCommand;
@@ -194,7 +196,7 @@ public class CommandDispatcher {
 
         // Check if there is at least one correct syntax
         if (!validSyntaxes.isEmpty()) {
-            CommandContext context = new CommandContext(input);
+            CommandContext context = new CommandContext(input, signature);
             // Search the syntax with all perfect args
             final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, context);
             if (finalValidSyntax != null) {
@@ -233,7 +235,7 @@ public class CommandDispatcher {
 
         // No syntax found
         result.type = CommandResult.Type.INVALID_SYNTAX;
-        result.parsedCommand = ParsedCommand.withDefaultExecutor(command, input);
+        result.parsedCommand = ParsedCommand.withDefaultExecutor(command, input, signature);
         return result.parsedCommand;
     }
 }

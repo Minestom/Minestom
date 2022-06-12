@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * Manager used to register {@link Command commands}.
  * <p>
- * It is also possible to simulate a command using {@link #execute(CommandSender, String)}.
+ * It is also possible to simulate a command using {@link #execute(CommandSender, String, ArgumentsSignature)}.
  */
 public final class CommandManager {
 
@@ -97,17 +97,17 @@ public final class CommandManager {
      * @param command the raw command string (without the command prefix)
      * @return the execution result
      */
-    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
+    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command, @Nullable ArgumentsSignature signature) {
         // Command event
         if (sender instanceof Player player) {
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
+            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command, signature);
             EventDispatcher.call(playerCommandEvent);
             if (playerCommandEvent.isCancelled())
                 return CommandResult.of(CommandResult.Type.CANCELLED, command);
             command = playerCommandEvent.getCommand();
         }
         // Process the command
-        final CommandResult result = dispatcher.execute(sender, command);
+        final CommandResult result = dispatcher.execute(sender, command, signature);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
@@ -120,10 +120,10 @@ public final class CommandManager {
      * Executes the command using a {@link ServerSender}. This can be used
      * to run a silent command (nothing is printed to console).
      *
-     * @see #execute(CommandSender, String)
+     * @see #execute(CommandSender, String, ArgumentsSignature)
      */
     public @NotNull CommandResult executeServerCommand(@NotNull String command) {
-        return execute(serverSender, command);
+        return execute(serverSender, command, null);
     }
 
     public @NotNull CommandDispatcher getDispatcher() {
@@ -210,7 +210,7 @@ public final class CommandManager {
             }
 
             final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command(),
-                    commandQueryResult.args(), input, false, true, syntax -> true, argument -> true);
+                    commandQueryResult.args(), input, false, true, syntax -> true, argument -> true, null);
             if (queryResult == null) {
                 // Invalid argument, return command node (default to root)
                 final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command(), 0);

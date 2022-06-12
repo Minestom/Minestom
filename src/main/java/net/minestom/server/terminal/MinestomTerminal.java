@@ -6,13 +6,7 @@ import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.listener.TabCompleteListener;
 import org.jetbrains.annotations.ApiStatus;
-import org.jline.reader.Candidate;
-import org.jline.reader.Completer;
-import org.jline.reader.EndOfFileException;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.ParsedLine;
-import org.jline.reader.UserInterruptException;
+import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -44,7 +38,7 @@ public class MinestomTerminal {
                 try {
                     command = reader.readLine(PROMPT);
                     var commandManager = MinecraftServer.getCommandManager();
-                    commandManager.execute(commandManager.getConsoleSender(), command);
+                    commandManager.execute(commandManager.getConsoleSender(), command, null);
                 } catch (UserInterruptException e) {
                     // Handle Ctrl + C
                     System.exit(0);

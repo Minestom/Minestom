@@ -3,7 +3,6 @@ package net.minestom.server.crypto;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,11 +54,7 @@ public interface SignatureValidator {
     }
 
     /**
-     * Can be used to verify signatures of {@link net.minestom.server.network.packet.client.play.ClientChatMessagePacket}
-     * and {@link ClientCommandChatPacket#signatures()}. For command args the signature is generated for the given
-     * value wrapped in {@link Component#text(String)} or for the preview if it's present regardless of the arg node
-     * name. Vanilla implementation of argument signing can be found at (Mojang mappings):
-     * <i>net.minecraft.client.player.LocalPlayer#signCommandArguments</i><br>
+     * Can be used to verify signatures of chat messages and command arguments.
      *
      * @param validator validator acquired from {@link SignatureValidator#from(Player)}
      * @param signature signature data

@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -25,10 +26,16 @@ public class CommandContext {
     protected Map<String, Object> args = new HashMap<>();
     protected Map<String, String> rawArgs = new HashMap<>();
     private CommandData returnData;
+    private final @Nullable ArgumentsSignature signature;
 
-    public CommandContext(@NotNull String input) {
+    public CommandContext(@NotNull String input, @Nullable ArgumentsSignature signature) {
         this.input = input;
         this.commandName = input.split(StringUtils.SPACE)[0];
+        this.signature = signature;
+    }
+
+    public @Nullable ArgumentsSignature getSignature() {
+        return signature;
     }
 
     public @NotNull String getInput() {

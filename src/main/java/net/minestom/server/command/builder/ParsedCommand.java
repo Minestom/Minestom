@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -39,9 +40,9 @@ public class ParsedCommand {
      * @param source the command source
      * @return the command data, null if none
      */
-    public @Nullable CommandData execute(@NotNull CommandSender source) {
+    public @Nullable CommandData execute(@NotNull CommandSender source, @Nullable ArgumentsSignature signature) {
         // Global listener
-        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString)), commandString);
+        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString, signature)), commandString);
         // Command condition check
         {
             // Parents
@@ -98,12 +99,12 @@ public class ParsedCommand {
         return context.getReturnData();
     }
 
-    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
+    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input, @Nullable ArgumentsSignature signature) {
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
         parsedCommand.commandString = input;
         parsedCommand.executor = command.getDefaultExecutor();
-        parsedCommand.context = new CommandContext(input);
+        parsedCommand.context = new CommandContext(input, signature);
         return parsedCommand;
     }
 }
