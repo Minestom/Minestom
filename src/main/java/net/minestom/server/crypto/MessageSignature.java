@@ -13,8 +13,8 @@ public record MessageSignature(UUID signer, Instant timestamp, long salt, byte[]
     public static final UUID UNSIGNED_SENDER = new UUID(0,0);
     public static final MessageSignature UNSIGNED = new MessageSignature(UNSIGNED_SENDER, Instant.ofEpochMilli(0), 0, new byte[0]);
 
-    public MessageSignature(UUID sender, BinaryReader reader) {
-        this(sender, Instant.ofEpochMilli(reader.readLong()), reader.readLong(), reader.readByteArray());
+    public MessageSignature(UUID signer, BinaryReader reader) {
+        this(signer, Instant.ofEpochMilli(reader.readLong()), reader.readLong(), reader.readByteArray());
     }
 
     @Contract("_ -> new")
