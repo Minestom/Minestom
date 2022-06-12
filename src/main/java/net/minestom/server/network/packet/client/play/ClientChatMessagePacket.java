@@ -14,7 +14,7 @@ public record ClientChatMessagePacket(@NotNull String message, MessageSignature 
     }
 
     public ClientChatMessagePacket(BinaryReader reader) {
-        this(reader.readSizedString(256), new MessageSignature(reader), reader.readBoolean());
+        this(reader.readSizedString(256), new MessageSignature(null, reader), reader.readBoolean());
     }
 
     @Override

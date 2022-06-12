@@ -44,7 +44,8 @@ public class ChatMessageListener {
 
         final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
         final Component expectedMessage = Objects.requireNonNullElse(player.getLastPreviewedMessage(), Component.text(message));
-        PlayerChatEvent event = new PlayerChatEvent(player, players, message, packet.signature(), MessageSender.forSigned(player), expectedMessage);
+        PlayerChatEvent event = new PlayerChatEvent(player, players, message, packet.signature().withSigner(player.getUuid()),
+                MessageSender.from(player), expectedMessage);
 
         // Call the event
         EventDispatcher.callCancellable(event, () -> {
@@ -57,8 +58,8 @@ public class ChatMessageListener {
 
             if (formatFunction != null) {
                 // Let the event modify the message
-                if (event.getSender().unsigned()) {
-                    // Event handler set unsigned sender, send message as unsigned -> players with
+                if (event.getSignature().unsigned()) {
+                    // Event handler set message unsigned -> players with
                     // "Only Show Secure Chat" option enabled won't see this message
                     Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket
                             .unsigned(formatFunction.apply(event), ChatPosition.CHAT, event.getSender()));
@@ -71,7 +72,7 @@ public class ChatMessageListener {
                 }
             } else {
                 // There is no way the message got modified, send it with the original signature
-                // TODO Should we handle poor design where the signature or sender uuid got altered?
+                // TODO Should we handle poor design where the signature got altered?
                 Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket.signed(event.getMessage(),
                         ChatPosition.CHAT, event.getSender(), event.getSignature()));
             }

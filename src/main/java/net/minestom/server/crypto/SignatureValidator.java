@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.util.UUID;
 
 /**
  * General purpose functional interface to verify signatures.<br>
@@ -63,17 +62,16 @@ public interface SignatureValidator {
      * <i>net.minecraft.client.player.LocalPlayer#signCommandArguments</i><br>
      *
      * @param validator validator acquired from {@link SignatureValidator#from(Player)}
-     * @param signer uuid of the player who signed this component
      * @param signature signature data
      * @param component the component that was signed
      * @return true if the signature is valid
      */
-    static boolean validate(SignatureValidator validator, UUID signer, MessageSignature signature, Component component) {
+    static boolean validate(SignatureValidator validator, MessageSignature signature, Component component) {
         final byte[] componentBytes = GsonComponentSerializer.gson().serialize(component).getBytes(StandardCharsets.UTF_8);
         byte[] signerDetails = new byte[32+ componentBytes.length];
         ByteBuffer bytebuffer = ByteBuffer.wrap(signerDetails).order(ByteOrder.BIG_ENDIAN);
         bytebuffer.putLong(signature.salt());
-        bytebuffer.putLong(signer.getMostSignificantBits()).putLong(signer.getLeastSignificantBits());
+        bytebuffer.putLong(signature.signer().getMostSignificantBits()).putLong(signature.signer().getLeastSignificantBits());
         bytebuffer.putLong(signature.timestamp().getEpochSecond());
         bytebuffer.put(componentBytes);
         return validator.validate(bytebuffer.array(), signature.signature());

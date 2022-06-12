@@ -669,8 +669,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (type == MessageType.SYSTEM)
             Messenger.sendSystemMessage(this, message, ChatPosition.SYSTEM_MESSAGE);
         else
-            Messenger.sendMessage(Collections.singleton(this), PlayerChatMessagePacket.unsigned(message,
-                    ChatPosition.CHAT, MessageSender.forUnsigned(Component.text("SYSTEM"))));
+            Messenger.sendMessage(List.of(this), PlayerChatMessagePacket.unsigned(message,
+                    // TODO get name from source if possible
+                    ChatPosition.CHAT, new MessageSender(Component.empty(), null)));
     }
 
     /**

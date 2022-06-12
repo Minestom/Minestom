@@ -20,23 +20,26 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullable Component unsignedContent,
-                                      int type, @NotNull UUID uuid,
+public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullable Component unsignedContent, int type,
                                       @NotNull Component displayName, @Nullable Component teamDisplayName,
                                       @NotNull MessageSignature signature) implements ComponentHoldingServerPacket {
-    public PlayerChatMessagePacket(BinaryReader reader) {
-        this(reader.readComponent(), reader.readNullableComponent(), reader.readVarInt(), reader.readUuid(),
-                reader.readComponent(), reader.readNullableComponent(), new MessageSignature(reader));
+    public static PlayerChatMessagePacket read(BinaryReader reader) {
+        final Component signed = reader.readComponent();
+        final Component unsigned = reader.readNullableComponent();
+        final int type = reader.readVarInt();
+        final UUID sender = reader.readUuid();
+        return new PlayerChatMessagePacket(signed, unsigned, type, reader.readComponent(),
+                reader.readNullableComponent(), new MessageSignature(sender, reader));
     }
 
     public static PlayerChatMessagePacket unsigned(@NotNull Component message, ChatPosition type, @NotNull MessageSender sender) {
-        return new PlayerChatMessagePacket(message, null, type.getID(), MessageSignature.UNSIGNED_SENDER,
+        return new PlayerChatMessagePacket(message, null, type.getID(),
                 sender.displayName(), sender.teamName(), MessageSignature.UNSIGNED);
     }
 
     public static PlayerChatMessagePacket signed(@NotNull Component message, ChatPosition type, @NotNull MessageSender sender,
                                                  @NotNull MessageSignature signature) {
-        return new PlayerChatMessagePacket(message, null, type.getID(), sender.uuid(),
+        return new PlayerChatMessagePacket(message, null, type.getID(),
                 sender.displayName(), sender.teamName(), signature);
     }
 
@@ -44,7 +47,7 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
                                                                     @NotNull Component unsignedContent,
                                                                     ChatPosition type, @NotNull MessageSender sender,
                                                                     @NotNull MessageSignature signature) {
-        return new PlayerChatMessagePacket(message, unsignedContent, type.getID(), sender.uuid(),
+        return new PlayerChatMessagePacket(message, unsignedContent, type.getID(),
                 sender.displayName(), sender.teamName(), signature);
     }
 
@@ -53,7 +56,7 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
         writer.writeComponent(signedContent);
         writer.writeNullableComponent(unsignedContent);
         writer.writeVarInt(type);
-        writer.writeUuid(uuid);
+        writer.writeUuid(signature.signer());
         writer.writeComponent(displayName);
         writer.writeNullableComponent(teamDisplayName);
         writer.write(signature);
@@ -71,7 +74,6 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new PlayerChatMessagePacket(signedContent, unsignedContent, type,
-                uuid, displayName, teamDisplayName, signature);
+        return new PlayerChatMessagePacket(signedContent, unsignedContent, type, displayName, teamDisplayName, signature);
     }
 }
