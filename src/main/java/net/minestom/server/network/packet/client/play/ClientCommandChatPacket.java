@@ -10,7 +10,7 @@ import java.util.Map;
 
 public record ClientCommandChatPacket(@NotNull String message, long timestamp,
                                       long salt, Map<String, byte[]> signatures,
-                                      boolean signed) implements ClientPacket {
+                                      boolean signedPreview) implements ClientPacket {
     public ClientCommandChatPacket {
         signatures = Map.copyOf(signatures);
     }
@@ -29,7 +29,7 @@ public record ClientCommandChatPacket(@NotNull String message, long timestamp,
             writer.writeSizedString(s);
             writer.writeByteArray(bytes);
         });
-        writer.writeBoolean(signed);
+        writer.writeBoolean(signedPreview);
     }
 
     private static Map<String, byte[]> readSignature(BinaryReader reader) {
