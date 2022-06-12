@@ -1,12 +1,19 @@
 package net.minestom.server.network.packet.client.play;
 
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.minecraft.SignableArgument;
+import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public record ClientCommandChatPacket(@NotNull String message, long timestamp,
                                       long salt, Map<String, byte[]> signatures,
@@ -18,6 +25,27 @@ public record ClientCommandChatPacket(@NotNull String message, long timestamp,
     public ClientCommandChatPacket(BinaryReader reader) {
         this(reader.readSizedString(256), reader.readLong(),
                 reader.readLong(), readSignature(reader), reader.readBoolean());
+    }
+
+    /**
+     * Constructs a new {@link MessageSignature} to use in validation
+     *
+     * @param signer player's uuid who sent this packet
+     * @return null if the client didn't sign the parameter
+     */
+    @Contract("_, _ -> new")
+    public @Nullable MessageSignature signatureOf(String parameterName, UUID signer) {
+        final byte[] signature = signatures.get(parameterName);
+        return signature == null ? null : new MessageSignature(signer, Instant.ofEpochMilli(timestamp), salt, signature);
+    }
+
+    /**
+     * @see #signatureOf(String, UUID)
+     */
+    @SuppressWarnings("ConstantConditions")
+    @Contract("_, _ -> new")
+    public <T extends Argument<?> & SignableArgument> @Nullable MessageSignature signatureOf(T argument, UUID signer) {
+        return signatureOf(argument.getId(), signer);
     }
 
     @Override
