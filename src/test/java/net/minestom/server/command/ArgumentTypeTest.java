@@ -483,7 +483,6 @@ public class ArgumentTypeTest {
 
         assertEquals(List.of("a", "b", "c"), arg.parse("a b c"));
         assertEquals(List.of("a", "b"), arg.parse("a b"));
-        System.out.println(arg.parse("a b c d"));
 
         assertEquals("Loop<loop>", arg.toString());
     }
