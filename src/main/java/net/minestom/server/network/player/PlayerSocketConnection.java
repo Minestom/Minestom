@@ -1,5 +1,6 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -22,8 +23,6 @@ import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -45,7 +44,7 @@ import java.util.zip.DataFormatException;
  */
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(PlayerSocketConnection.class);
     private static final ObjectPool<BinaryBuffer> POOL = ObjectPool.BUFFER_POOL;
 
     private final Worker worker;

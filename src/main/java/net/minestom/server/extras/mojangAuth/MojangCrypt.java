@@ -1,9 +1,8 @@
 package net.minestom.server.extras.mojangAuth;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -12,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.*;
 
 public final class MojangCrypt {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MojangCrypt.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(MojangCrypt.class);
 
     public static @Nullable KeyPair generateKeyPair() {
         try {

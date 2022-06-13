@@ -1,11 +1,10 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public final class DiscoveredExtension {
     /** Static logger for this class. */
-    public static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
+    public static final ComponentLogger LOGGER = ComponentLogger.logger(DiscoveredExtension.class);
 
     /** The regex that this name must pass. If it doesn't, it will not be accepted. */
     public static final String NAME_REGEX = "[A-Za-z][_A-Za-z0-9]+";

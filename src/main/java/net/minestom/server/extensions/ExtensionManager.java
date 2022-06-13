@@ -1,6 +1,7 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.Gson;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
@@ -11,8 +12,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -27,7 +26,7 @@ import java.util.zip.ZipFile;
 
 public class ExtensionManager {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
+    public static final ComponentLogger LOGGER = ComponentLogger.logger(ExtensionManager.class);
 
     public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
     public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
@@ -337,7 +336,7 @@ public class ExtensionManager {
         try {
             Field loggerField = Extension.class.getDeclaredField("logger");
             loggerField.setAccessible(true);
-            loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
+            loggerField.set(extension, ComponentLogger.logger(extensionClass));
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur
             serverProcess.exception().handleException(e);

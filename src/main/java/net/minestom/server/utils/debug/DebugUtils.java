@@ -1,9 +1,8 @@
 package net.minestom.server.utils.debug;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.utils.PropertyUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utils class useful for debugging purpose.
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public final class DebugUtils {
     public static boolean INSIDE_TEST = PropertyUtils.getBoolean("minestom.inside-test", false);
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(DebugUtils.class);
+    public static final ComponentLogger LOGGER = ComponentLogger.logger(DebugUtils.class);
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 

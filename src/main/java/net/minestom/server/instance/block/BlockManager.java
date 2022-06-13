@@ -2,14 +2,13 @@ package net.minestom.server.instance.block;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public final class BlockManager {
-    private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(BlockManager.class);
     // Namespace -> handler supplier
     private final Map<String, Supplier<BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
     // block id -> block placement rule
