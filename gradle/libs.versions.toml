@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-adventure = "4.10.1"
+adventure = "4.11.0"
 kotlin = "1.6.20"
 hydrazine = "1.7.2"
 dependencyGetter = "v1.0.1"
@@ -47,6 +47,7 @@ adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "ad
 adventure-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
+adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logger-slf4j", version.ref = "adventure" }
 
 # Kotlin
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
@@ -100,6 +101,6 @@ jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", versio
 
 kotlin = ["kotlin-stdlib-jdk8", "kotlin-reflect"]
 flare = ["flare", "flare-fastutil"]
-adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain"]
+adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
 logging = ["tinylog-api", "tinylog-impl", "tinylog-slf4j"]
 terminal = ["jline", "jline-jansi"]
