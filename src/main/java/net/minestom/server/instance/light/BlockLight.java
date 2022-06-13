@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -144,6 +145,8 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
+        if (!requiresUpdate()) return this;
+
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
             this.toUpdateSet = Set.of();
@@ -195,6 +198,11 @@ final class BlockLight implements Light {
     public void invalidate() {
         this.isValidBase = false;
         invalidatePropagation();
+    }
+
+    @Override
+    public boolean requiresUpdate() {
+        return !isValidBase;
     }
 
     private void clearCache() {
@@ -327,7 +335,9 @@ final class BlockLight implements Light {
     }
 
     private void freePropagation() {
-        if (content == null && contentPropagation == null) return;
+        if (content == null && contentPropagation == null) {
+            return;
+        }
         this.baked = bake(content, contentPropagation);
         if (Arrays.equals(this.baked, new byte[LIGHT_LENGTH])) baked = null;
 

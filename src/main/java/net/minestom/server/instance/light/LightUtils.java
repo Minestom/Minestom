@@ -62,32 +62,63 @@ public class LightUtils {
                 final Chunk chunk = chunkIndex.getValue();
                 final int section = chunkIndex.getKey();
                 chunk.getSection(section).blockLight().array();
-                chunk.getSection(section).skyLight().array();
             });
     }
 
-    public static void relightSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
+    private static Set<Point> getNearbyRequired(Instance instance, Point point) {
         Set<Point> collected = new HashSet<>();
-        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
-            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+        for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
+            for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
 
-                for (int y = sectionY - 1; y <= sectionY + 1; y++) {
+                for (int y = point.blockY() - 1; y <= point.blockY() + 1; y++) {
+                    if (y == point.blockY() && x == point.blockX() && point.blockZ() == z) continue;
                     Point sectionPosition = new Vec(x, y, z);
 
                     if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                        collected.add(new Vec(x, y, z));
+                        if (chunkCheck.getSection(sectionPosition.blockY()).blockLight().requiresUpdate()) {
+                            collected.add(sectionPosition);
+                        }
                     }
                 }
             }
         }
 
+        return collected;
+    }
+
+    private static Set<Point> collectRequiredNearby(Instance instance, Point point) {
+        final Set<Point> found = new HashSet<>();
+        final ArrayDeque<Point> toCheck = new ArrayDeque<>();
+
+        toCheck.add(point);
+        found.add(point);
+
+        while (toCheck.size() > 0) {
+            final Point current = toCheck.poll();
+            final Set<Point> nearby = getNearbyRequired(instance, current);
+            nearby.forEach(p -> {
+                if (!found.contains(p)) {
+                    found.add(p);
+                    toCheck.add(p);
+                }
+            });
+        }
+
+        return found;
+    }
+
+    public static void relightSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
+        Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
+
         synchronized (lock) {
             relight(instance, collected);
         }
 
-        instance.getChunk(chunkX, chunkZ).getSection(sectionY).blockLight().array(); // Free memory
+        Chunk c = instance.getChunk(chunkX, chunkZ);
+        if (c != null)
+            c.getSection(sectionY).blockLight().array(); // Free memory
     }
 
     private static void relight(Instance instance, Set<Point> sections) {

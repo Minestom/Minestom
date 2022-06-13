@@ -41,4 +41,6 @@ public interface Light {
     Light calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ);
 
     void invalidate();
+
+    boolean requiresUpdate();
 }
