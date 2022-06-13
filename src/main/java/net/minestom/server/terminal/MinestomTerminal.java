@@ -90,7 +90,7 @@ public class MinestomTerminal {
                 final Suggestion suggestion = TabCompleteListener.getSuggestion(consoleSender, text);
                 if (suggestion != null) {
                     suggestion.getEntries().stream()
-                            .map(SuggestionEntry::getEntry)
+                            .map(SuggestionEntry::entry)
                             .map(Candidate::new)
                             .forEach(candidates::add);
                 }

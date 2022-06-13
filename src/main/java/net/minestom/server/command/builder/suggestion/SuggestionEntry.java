@@ -4,23 +4,18 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SuggestionEntry {
-    private final String entry;
-    private final Component tooltip;
-
-    public SuggestionEntry(@NotNull String entry, @Nullable Component tooltip) {
-        this.entry = entry;
-        this.tooltip = tooltip;
-    }
+public record SuggestionEntry(@NotNull String entry, @Nullable Component tooltip) {
 
     public SuggestionEntry(@NotNull String entry) {
         this(entry, null);
     }
 
+    @Deprecated
     public @NotNull String getEntry() {
         return entry;
     }
 
+    @Deprecated
     public @Nullable Component getTooltip() {
         return tooltip;
     }
