@@ -336,10 +336,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the view of the entity so that it looks in a direction to the given position if
      * it is different from the entity's current position.
      *
-     * @param position the position to look at.
+     * @param point the point to look at.
      */
-    public void lookAt(@NotNull Pos position) {
-        final Pos newPosition = this.position.withLookAt(position);
+    public void lookAt(@NotNull Point point) {
+        final Pos newPosition = this.position.add(0, getEyeHeight(), 0).withLookAt(point);
         setView(newPosition.yaw(), newPosition.pitch());
     }
 
@@ -350,8 +350,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void lookAt(@NotNull Entity entity) {
         Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
-        double eyeHeightDifference = entity.getEyeHeight() - getEyeHeight();
-        lookAt(entity.position.withY(entity.position.y() + eyeHeightDifference));
+        lookAt(entity.position.withY(entity.position.y() + entity.getEyeHeight()));
     }
 
     /**
@@ -582,14 +581,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // World border collision
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
+        final boolean isPlayer = this instanceof Player;
+        final boolean flying = isPlayer && ((Player) this).isFlying();
         if (!positionChanged) {
-            if (hasVelocity || newVelocity.isZero()) {
+            if (flying) {
+                this.velocity = Vec.ZERO;
+                return;
+            } else if (hasVelocity || newVelocity.isZero()) {
                 this.velocity = noGravity ? Vec.ZERO : new Vec(
                         0,
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                sendPacketToViewers(getVelocityPacket());
+                if (!isPlayer) sendPacketToViewers(getVelocityPacket());
                 return;
             }
         }
@@ -613,15 +617,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            updateVelocity(wasOnGround, positionBeforeMove, newVelocity);
+            updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
+        if (!isPlayer && (hasVelocity || gravityTickCount > 0)) {
             sendPacketToViewers(getVelocityPacket());
         }
     }
 
-    protected void updateVelocity(boolean wasOnGround, Pos positionBeforeMove, Vec newVelocity) {
+    protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
         EntitySpawnType type = entityType.registry().spawnType();
         final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
         final double drag;
@@ -632,11 +636,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
         } else drag = airDrag;
 
+        double gravity = flying ? 0 : gravityAcceleration;
+        double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
+
         this.velocity = newVelocity
-                // Apply drag
+                // Apply gravity and drag
                 .apply((x, y, z) -> new Vec(
                         x * drag,
-                        !hasNoGravity() ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
+                        !hasNoGravity() ? (y - gravity) * gravityDrag : y,
                         z * drag
                 ))
                 // Convert from block/tick to block/sec
@@ -1374,11 +1381,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) { // Update visible chunks
-                player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
-                ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
-                        MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
-            }
+            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
             refreshCurrentChunk(newChunk);
         }
     }

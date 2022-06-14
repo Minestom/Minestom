@@ -1,15 +1,16 @@
 package net.minestom.server.utils.collection;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ObjectArrayTest {
 
-    @Test
-    public void testArray() {
-        ObjectArray<String> array = new ObjectArray<>();
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void objectArray(boolean concurrent) {
+        ObjectArray<String> array = concurrent ? ObjectArray.concurrent() : ObjectArray.singleThread();
 
         array.set(50, "Hey");
         assertEquals("Hey", array.get(50));
@@ -32,5 +33,19 @@ public class ObjectArrayTest {
         assertNull(array.get(49));
         assertNull(array.get(251));
         assertNull(array.get(Integer.MAX_VALUE));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void arrayCopy(boolean concurrent) {
+        ObjectArray<String> array = concurrent ? ObjectArray.concurrent() : ObjectArray.singleThread();
+
+        array.set(1, "Hey");
+        String[] copyCache = array.arrayCopy(String.class);
+        assertArrayEquals(new String[]{null, "Hey"}, copyCache);
+
+        array.set(2, "Hey2");
+        assertArrayEquals(new String[]{null, "Hey", "Hey2"}, array.arrayCopy(String.class));
+        assertArrayEquals(new String[]{null, "Hey"}, copyCache, "The copy cache should not be modified");
     }
 }

@@ -72,6 +72,7 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -122,6 +123,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
+    /**
+     * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
+     * in the range of {@link MinecraftServer#getChunkViewDistance()}
+     */
+    private Vec chunksLoadedByClient = Vec.ZERO;
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
@@ -168,6 +174,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
+    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(6);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -613,7 +620,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
-            sendPacket(new UpdateViewPositionPacket(spawnPosition.chunkX(), spawnPosition.chunkZ()));
+            final int chunkX = spawnPosition.chunkX();
+            final int chunkZ = spawnPosition.chunkZ();
+            chunksLoadedByClient = new Vec(chunkX, chunkZ);
+            sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
             ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
         }
 
@@ -2020,6 +2030,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public Player asPlayer() {
         return this;
+    }
+
+    protected void sendChunkUpdates(Chunk newChunk) {
+        if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
+            final int newX = newChunk.getChunkX();
+            final int newZ = newChunk.getChunkZ();
+            final Vec old = chunksLoadedByClient;
+            sendPacket(new UpdateViewPositionPacket(newX, newZ));
+            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
+                    MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
+            this.chunksLoadedByClient = new Vec(newX, newZ);
+        }
     }
 
     /**

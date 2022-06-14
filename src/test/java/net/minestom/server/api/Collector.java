@@ -27,7 +27,7 @@ public interface Collector<T> {
 
     default void assertCount(int count) {
         List<T> elements = collect();
-        assertEquals(count, elements.size(), "Expected " + count + " element(s), got " + elements);
+        assertEquals(count, elements.size(), "Expected " + count + " element(s), got " + elements.size() + ": " + elements);
     }
 
     default void assertSingle() {

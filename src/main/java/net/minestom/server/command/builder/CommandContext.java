@@ -86,10 +86,7 @@ public class CommandContext {
     }
 
     public String getRaw(@NotNull String identifier) {
-        return rawArgs.computeIfAbsent(identifier, s -> {
-            throw new NullPointerException(
-                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
-        });
+        return rawArgs.get(identifier);
     }
 
     public void setArg(@NotNull String id, Object value, String rawInput) {

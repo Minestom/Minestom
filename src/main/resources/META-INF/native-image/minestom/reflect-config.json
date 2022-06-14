@@ -63,11 +63,11 @@
 },
 {
   "name":"com.github.benmanes.caffeine.cache.SIW",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.SSW",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.StripedBuffer",
@@ -75,11 +75,11 @@
 },
 {
   "name":"com.github.benmanes.caffeine.cache.WI",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
 },
 {
   "name":"com.github.benmanes.caffeine.cache.WS",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.CacheLoader","boolean"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
 },
 {
   "name":"java.lang.ProcessHandle",
@@ -99,20 +99,24 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"net.minestom.server.event.EventNodeImpl$Handle",
-  "fields":[{"name":"updated"}]
+  "name":"net.minestom.server.entity.Metadata",
+  "fields":[{"name":"notifyAboutChanges"}]
 },
 {
-  "name":"net.minestom.server.network.packet.server.CachedPacket",
-  "fields":[{"name":"packet"}]
+  "name":"net.minestom.server.event.EventNodeLazyImpl",
+  "fields":[{"name":"mapped"}]
 },
 {
-  "name":"net.minestom.server.network.packet.server.LazyPacket",
-  "fields":[{"name":"packet"}]
+  "name":"net.minestom.server.item.metadata.BundleMeta$Builder",
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.tag.TagHandler"] }]
 },
 {
-  "name":"net.minestom.server.thread.AcquirableImpl",
-  "fields":[{"name":"assignedThread"}]
+  "name":"net.minestom.server.timer.TaskImpl",
+  "fields":[{"name":"parked"}]
+},
+{
+  "name": "net.minestom.server.terminal.MinestomConsoleWriter",
+  "methods": [{"name":"<init>","parameterTypes":["java.util.Map"] }]
 },
 {
   "name":"org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
@@ -192,11 +196,15 @@
   ]
 },
 {
-  "name":"sun.security.provider.NativePRNG",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"sun.security.provider.DRBG",
+  "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
 },
 {
   "name":"sun.security.provider.SHA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA2$SHA256",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 }
 ]

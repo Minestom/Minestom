@@ -81,9 +81,9 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
 
         final long block = values[index];
-        final long clear = (1L << bitsPerEntry) - 1;
+        final long clear = (1L << bitsPerEntry) - 1L;
         final long oldBlock = block >> bitIndex & clear;
-        values[index] = block & ~(clear << bitIndex) | (value & clear) << bitIndex;
+        values[index] = block & ~(clear << bitIndex) | ((long) value << bitIndex);
         // Check if block count needs to be updated
         final boolean currentAir = oldBlock == 0;
         if (currentAir != (value == 0)) this.count += currentAir ? 1 : -1;
@@ -216,6 +216,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     }
 
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
+        if (!consumeEmpty && count == 0) return;
         final long[] values = this.values;
         final int dimension = this.dimension();
         final int bitsPerEntry = this.bitsPerEntry;
@@ -228,30 +229,17 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
-            int index = i * valuesPerLong;
-            final int maxIndex = Math.min(index + valuesPerLong, size);
-            if (value == 0) {
-                // No values in this long, skip
-                if (consumeEmpty) {
-                    for (; index < maxIndex; index++) {
-                        final int y = index >> shiftedDimensionBitCount;
-                        final int z = index >> dimensionBitCount & dimensionMinus;
-                        final int x = index & dimensionMinus;
-                        consumer.accept(x, y, z, 0);
-                    }
-                }
-            } else {
-                int bitIndex = 0;
-                for (; index < maxIndex; index++) {
-                    final short paletteIndex = (short) (value >> bitIndex & magicMask);
-                    if (paletteIndex != 0 || consumeEmpty) {
-                        final int result = ids != null ? ids[paletteIndex] : paletteIndex;
-                        final int y = index >> shiftedDimensionBitCount;
-                        final int z = index >> dimensionBitCount & dimensionMinus;
-                        final int x = index & dimensionMinus;
-                        consumer.accept(x, y, z, result);
-                    }
-                    bitIndex += bitsPerEntry;
+            final int startIndex = i * valuesPerLong;
+            final int endIndex = Math.min(startIndex + valuesPerLong, size);
+            for (int index = startIndex; index < endIndex; index++) {
+                final int bitIndex = (index - startIndex) * bitsPerEntry;
+                final int paletteIndex = (int) (value >> bitIndex & magicMask);
+                if (consumeEmpty || paletteIndex != 0) {
+                    final int y = index >> shiftedDimensionBitCount;
+                    final int z = index >> dimensionBitCount & dimensionMinus;
+                    final int x = index & dimensionMinus;
+                    final int result = ids != null ? ids[paletteIndex] : paletteIndex;
+                    consumer.accept(x, y, z, result);
                 }
             }
         }
@@ -262,17 +250,15 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         assert paletteValues.length >= size;
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = 64 / bitsPerEntry;
+        final long clear = (1L << bitsPerEntry) - 1L;
         final long[] values = this.values;
-        final int magicMask = (1 << bitsPerEntry) - 1;
         for (int i = 0; i < values.length; i++) {
             long block = values[i];
-            int index = i * valuesPerLong;
-            final int maxIndex = Math.min(index + valuesPerLong, size);
-            int bitIndex = 0;
-            for (; index < maxIndex; index++) {
-                block &= ~((long) magicMask << bitIndex);
-                block |= (long) paletteValues[index] << bitIndex;
-                bitIndex += bitsPerEntry;
+            final int startIndex = i * valuesPerLong;
+            final int endIndex = Math.min(startIndex + valuesPerLong, size);
+            for (int index = startIndex; index < endIndex; index++) {
+                final int bitIndex = (index - startIndex) * bitsPerEntry;
+                block = block & ~(clear << bitIndex) | ((long) paletteValues[index] << bitIndex);
             }
             values[i] = block;
         }
@@ -301,6 +287,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
         final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
         if (lookup != -1) return lookup;
         this.paletteToValueList.add(value);
+        assert lastPaletteIndex < maxPaletteSize(bpe);
         return lastPaletteIndex;
     }
 

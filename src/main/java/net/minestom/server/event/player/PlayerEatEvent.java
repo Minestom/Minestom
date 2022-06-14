@@ -1,16 +1,15 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player is finished eating.
  */
-public class PlayerEatEvent implements ItemEvent, PlayerEvent, EntityInstanceEvent {
+public class PlayerEatEvent implements ItemEvent, PlayerInstanceEvent {
 
     private final Player player;
     private final ItemStack foodItem;

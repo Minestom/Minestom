@@ -162,9 +162,7 @@ public final class BoundingBox implements Shape {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         BoundingBox that = (BoundingBox) o;
-
         if (Double.compare(that.width, width) != 0) return false;
         if (Double.compare(that.height, height) != 0) return false;
         if (Double.compare(that.depth, depth) != 0) return false;

@@ -21,7 +21,7 @@ import static net.minestom.server.entity.Metadata.String;
 import static net.minestom.server.entity.Metadata.*;
 
 final class MetadataImpl {
-    static final ObjectArray<Metadata.Entry<?>> EMPTY_VALUES = new ObjectArray<>(20);
+    static final ObjectArray<Metadata.Entry<?>> EMPTY_VALUES = ObjectArray.singleThread(20);
 
     static {
         EMPTY_VALUES.set(TYPE_BYTE, Byte((byte) 0));
