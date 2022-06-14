@@ -285,13 +285,14 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
+        final int convertedKey = key == 40 ? PlayerInventoryUtils.OFFHAND_SLOT : key;
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final ItemStack heldItem = playerInventory.getItemStack(key);
+        final ItemStack heldItem = playerInventory.getItemStack(convertedKey);
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player,
-                isInWindow ? this : playerInventory, clickSlot, key, clicked, heldItem);
+                isInWindow ? this : playerInventory, clickSlot, convertedKey, clicked, heldItem);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -301,7 +302,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        playerInventory.setItemStack(key, clickResult.getCursor());
+        playerInventory.setItemStack(convertedKey, clickResult.getCursor());
         callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
         return true;
     }
