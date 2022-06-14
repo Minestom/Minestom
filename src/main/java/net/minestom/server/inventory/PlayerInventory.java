@@ -266,18 +266,19 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
+        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack heldItem = getItemStack(key);
+        final ItemStack heldItem = getItemStack(convertedKey);
         final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, key, clicked, heldItem);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, convertedKey, clicked, heldItem);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
         setItemStack(convertedSlot, clickResult.getClicked());
-        setItemStack(key, clickResult.getCursor());
+        setItemStack(convertedKey, clickResult.getCursor());
         callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
         return true;
     }
