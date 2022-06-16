@@ -33,13 +33,14 @@ final class TagHandlerImpl implements TagHandler {
         final NBTCompound compound = compoundLike.toCompound();
         TagHandlerImpl handler = new TagHandlerImpl();
         TagNbtSeparator.separate(compound, entry -> handler.setTag(entry.tag(), entry.value()));
+        handler.root.compound = compound;
         return handler;
     }
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
         VarHandle.fullFence();
-        return read(root, tag);
+        return root.getTag(tag);
     }
 
     @Override
@@ -73,7 +74,7 @@ final class TagHandlerImpl implements TagHandler {
         if (value != null) {
             Entry previous = entries.get(tagIndex);
             if (previous != null && previous.tag().shareValue(tag)) {
-                previous.updateValue(tagCopy(tag, value));
+                previous.updateValue(tag.copyValue(value));
             } else {
                 entries.put(tagIndex, valueToEntry(node, tag, value));
             }
@@ -105,7 +106,7 @@ final class TagHandlerImpl implements TagHandler {
         if (value != null) {
             Entry previous = entries.get(tagIndex);
             if (previous != null && previous.tag().shareValue(tag)) {
-                previous.updateValue(tagCopy(tag, value));
+                previous.updateValue(tag.copyValue(value));
             } else {
                 entries.put(tagIndex, valueToEntry(node, tag, value));
             }
@@ -125,13 +126,8 @@ final class TagHandlerImpl implements TagHandler {
                 return new Entry<>(nbtEntry.tag(), nbtEntry.value());
             }
         } else {
-            return new Entry<>(tag, tagCopy(tag, value));
+            return new Entry<>(tag, tag.copyValue(value));
         }
-    }
-
-    private <T> T tagCopy(Tag<T> tag, T value) {
-        final UnaryOperator<T> copy = tag.copy;
-        return copy != null ? copy.apply(value) : value;
     }
 
     private Node traversePathWrite(Node root, Tag.PathEntry[] paths,
@@ -197,7 +193,7 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public @NotNull TagReadable readableCopy() {
-        return new Cache(root.copy(null));
+        return root.copy(null);
     }
 
     @Override
@@ -250,14 +246,7 @@ final class TagHandlerImpl implements TagHandler {
         return node;
     }
 
-    private record Cache(Node root) implements TagReadable {
-        @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-            return read(root, tag);
-        }
-    }
-
-    final class Node {
+    final class Node implements TagReadable {
         final Node parent;
         final StaticIntMap<Entry<?>> entries;
         NBTCompound compound;
@@ -273,6 +262,11 @@ final class TagHandlerImpl implements TagHandler {
 
         Node() {
             this(null);
+        }
+
+        @Override
+        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+            return read(this, tag);
         }
 
         void updateContent(@NotNull NBTCompoundLike compoundLike) {

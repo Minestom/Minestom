@@ -210,6 +210,11 @@ public class Tag<T> {
         return supplier != null ? supplier.get() : null;
     }
 
+    final T copyValue(@NotNull T value) {
+        final UnaryOperator<T> copier = copy;
+        return copier != null ? copier.apply(value) : value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
