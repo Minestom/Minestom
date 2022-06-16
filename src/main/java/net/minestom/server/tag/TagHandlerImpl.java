@@ -45,75 +45,50 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        if (tag.isView()) {
-            final boolean present = value != null;
-            final Tag.PathEntry[] paths = tag.path;
-            Node node = traversePathWrite(root, paths, present);
-            if (node == null) return;
-            node.updateContent(present ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
-            if (!present && paths != null) recursiveClean(node, paths);
-            VarHandle.fullFence();
-            return;
-        }
-
         final int initialStamp = stamp.get();
         final Node node = traversePathWrite(root, tag.path, value != null);
         if (node == null)
             return; // Tried to remove an absent tag. Do nothing
-        if (tag.path != null) setTagWithPath(node, tag, value);
-        else setTagNoPath(node, tag, value);
+        // Handle view tags
+        if (tag.isView()) {
+            final boolean present = value != null;
+            final Tag.PathEntry[] paths = tag.path;
+            node.updateContent(present ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
+            if (!present && paths != null) recursiveClean(node, paths);
+            node.invalidate();
+            VarHandle.fullFence();
+            return;
+        }
+        // Normal tag
+        final int tagIndex = tag.index;
+        StaticIntMap<Entry<?>> entries = node.entries;
+        if (value != null) {
+            Entry previous = entries.get(tagIndex);
+            if (previous != null && previous.tag().shareValue(tag)) {
+                previous.updateValue(tag.copyValue(value));
+            } else {
+                entries.put(tagIndex, valueToEntry(node, tag, value));
+            }
+        } else {
+            // Remove recursively
+            entries.remove(tagIndex);
+            if (tag.path != null) recursiveClean(node, tag.path);
+        }
+        node.invalidate();
         // Tag handler mutation potentially failed (node map has been rehashed, changes may therefore not be visible)
         // The barrier also ensure propagation of cache invalidation
         final int finalStamp = stamp.get();
         if (initialStamp != finalStamp) setTag(tag, value);
     }
 
-    private <T> void setTagWithPath(@NotNull Node node, @NotNull Tag<T> tag, @Nullable T value) {
-        final int tagIndex = tag.index;
-        StaticIntMap<Entry<?>> entries = node.entries;
-        if (value != null) {
-            Entry previous = entries.get(tagIndex);
-            if (previous != null && previous.tag().shareValue(tag)) {
-                previous.updateValue(tag.copyValue(value));
-            } else {
-                entries.put(tagIndex, valueToEntry(node, tag, value));
-            }
-            Node tmp = node;
-            do {
-                tmp.invalidate();
-            } while ((tmp = tmp.parent) != null);
-        } else {
-            // Remove recursively
-            if (entries.getAndRemove(tagIndex) == null) return;
-            recursiveClean(node, tag.path);
-        }
-    }
-
     private void recursiveClean(Node node, Tag.PathEntry[] paths) {
         int i = paths.length;
         do {
             i--;
-            node.invalidate();
             if (node.entries.isEmpty() && node.parent != null) {
                 node.parent.entries.remove(paths[i].index());
             }
         } while ((node = node.parent) != null);
-    }
-
-    private <T> void setTagNoPath(@NotNull Node node, @NotNull Tag<T> tag, @Nullable T value) {
-        final int tagIndex = tag.index;
-        StaticIntMap<Entry<?>> entries = node.entries;
-        if (value != null) {
-            Entry previous = entries.get(tagIndex);
-            if (previous != null && previous.tag().shareValue(tag)) {
-                previous.updateValue(tag.copyValue(value));
-            } else {
-                entries.put(tagIndex, valueToEntry(node, tag, value));
-            }
-        } else {
-            entries.remove(tagIndex);
-        }
-        node.invalidate();
     }
 
     private <T> Entry<?> valueToEntry(Node parent, Tag<T> tag, @NotNull T value) {
@@ -186,6 +161,7 @@ final class TagHandlerImpl implements TagHandler {
         }
         // Invalidate the node parents
         if (newValue == null && tag.path != null) recursiveClean(node, tag.path);
+        node.invalidate();
         // Verify visibility
         if (initialStamp != stamp.get()) return updateTag0(tag, value, returnPrevious);
         else return returnPrevious ? (T) previousValue : newValue;
@@ -313,6 +289,7 @@ final class TagHandlerImpl implements TagHandler {
 
         void invalidate() {
             this.compound = null;
+            if (parent != null) parent.invalidate();
         }
     }
 
