@@ -245,7 +245,7 @@ public class DynamicChunk extends Chunk {
 
         int index = 0;
         for (Section section : sections) {
-            if (instance.hasLighting()) {
+            if (instance.hasLighting() && section.blockLight().requiresUpdate()) {
                 LightUtils.relightSection(instance, this.chunkX, index + minSection, chunkZ);
             }
 

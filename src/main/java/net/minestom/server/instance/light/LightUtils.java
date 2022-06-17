@@ -68,19 +68,21 @@ public class LightUtils {
 
     private static Set<Point> getNearbyRequired(Instance instance, Point point) {
         Set<Point> collected = new HashSet<>();
+        collected.add(point);
+
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
 
                 for (int y = point.blockY() - 1; y <= point.blockY() + 1; y++) {
-                    if (y == point.blockY() && x == point.blockX() && point.blockZ() == z) continue;
                     Point sectionPosition = new Vec(x, y, z);
 
                     if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
-                        if (chunkCheck.getSection(sectionPosition.blockY()).blockLight().requiresUpdate()) {
-                            collected.add(sectionPosition);
-                        }
+                        Section s = chunkCheck.getSection(sectionPosition.blockY());
+                        if (!s.blockLight().requiresUpdate()) continue;
+
+                        collected.add(sectionPosition);
                     }
                 }
             }
@@ -96,7 +98,7 @@ public class LightUtils {
         toCheck.add(point);
         found.add(point);
 
-        while (toCheck.size() > 0 && found.size() < 50) {
+        while (toCheck.size() > 0 && found.size() < 1000) {
             final Point current = toCheck.poll();
             final Set<Point> nearby = getNearbyRequired(instance, current);
             nearby.forEach(p -> {
@@ -115,9 +117,12 @@ public class LightUtils {
         if (c == null) return;
 
         Section s = c.getSection(sectionY);
-        if (!s.blockLight().requiresUpdate()) return;
 
-        Set<Point> collected = getNearbyRequired(instance, new Vec(chunkX, sectionY, chunkZ));
+        if (!s.blockLight().requiresCoreUpdate()) return;
+
+        Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
+        // System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size());
+        // System.out.println("Collected " + collected);
 
         synchronized (lock) {
             relight(instance, collected);

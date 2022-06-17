@@ -11,7 +11,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,9 +29,9 @@ final class BlockLight implements Light {
     private byte[][] borders;
     private byte[][] bordersPropagation;
     private byte[][] bordersPropagationSwap;
-    private boolean isValid = false;
+    private boolean isValidBorders = true;
     private Set<Point> toUpdateSet = new HashSet<>();
-    private boolean isValidBase = true;
+    private boolean isValidCore = true;
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -145,19 +144,18 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        if (!requiresUpdate()) return this;
-
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
             this.toUpdateSet = Set.of();
             return this;
         }
 
-        if (this.isValidBase) {
+        if (this.isValidCore) {
             this.toUpdateSet = Set.of();
             return this;
         }
-        this.isValidBase = true;
+        this.isValidBorders = true;
+        this.isValidCore = true;
 
         Set<Point> toUpdate = new HashSet<>();
 
@@ -196,25 +194,31 @@ final class BlockLight implements Light {
 
     @Override
     public void invalidate() {
-        this.isValidBase = false;
+        this.isValidBorders = false;
+        this.isValidCore = false;
         invalidatePropagation();
     }
 
     @Override
     public boolean requiresUpdate() {
-        return !isValidBase;
+        return !isValidBorders;
+    }
+
+    @Override
+    public boolean requiresCoreUpdate() {
+        return !isValidCore;
     }
 
     private void clearCache() {
         this.contentPropagation = null;
         this.bordersPropagation = null;
         baked = null;
-        isValid = true;
+        isValidBorders = true;
     }
 
     @Override
     public byte[] array() {
-        if (!isValid) clearCache();
+        if (!isValidBorders) clearCache();
         if (baked != null) return baked;
         freePropagation();
 
@@ -248,7 +252,7 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        if (!isValid) clearCache();
+        if (!isValidBorders) clearCache();
 
         var neighbors = instance.getNeighbors(chunk, sectionY);
         Set<Point> toUpdate = new HashSet<>();
@@ -317,7 +321,7 @@ final class BlockLight implements Light {
 
     @Override
     public byte[] getBorderPropagation(BlockFace face) {
-        if (!isValid) clearCache();
+        if (!isValidBorders) clearCache();
 
         if (borders == null && bordersPropagation == null) return new byte[SIDE_LENGTH];
         if (borders == null) return bordersPropagation[face.ordinal()];
@@ -328,7 +332,7 @@ final class BlockLight implements Light {
 
     @Override
     public void invalidatePropagation() {
-        this.isValid = false;
+        this.isValidBorders = false;
         this.bordersPropagation = null;
         this.contentPropagation = null;
         this.baked = null;
@@ -343,10 +347,11 @@ final class BlockLight implements Light {
 
         {
             this.content = null;
-            // this.borders = nulL
+            // this.borders = null
             this.bordersPropagation = null;
             this.contentPropagation = null;
-            // this.isValidBase = false;
+            this.isValidCore = false;
+            // this.isValidBorders = false;
         }
     }
 

@@ -19,6 +19,8 @@ public interface Light {
         return new BlockLight(blockPalette);
     }
 
+    boolean requiresCoreUpdate();
+
     @ApiStatus.Internal
     byte[] array();
 
