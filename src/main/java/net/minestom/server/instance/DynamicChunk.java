@@ -74,14 +74,16 @@ public class DynamicChunk extends Chunk {
                 .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
         //section.skyLight().invalidate(); TODO
 
-        section.blockLight().invalidate();
-
         // Invalidate neighbor chunks, since they can be updated by this block change
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
                 if (neighborChunk == null) continue;
                 neighborChunk.invalidate();
+
+                for (int k = -1; k <= 1; k++) {
+                    neighborChunk.getSection(ChunkUtils.getChunkCoordinate(y) + k).blockLight().invalidate();
+                }
             }
         }
 

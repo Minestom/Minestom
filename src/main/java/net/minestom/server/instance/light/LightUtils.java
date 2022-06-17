@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.Section;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -95,7 +96,7 @@ public class LightUtils {
         toCheck.add(point);
         found.add(point);
 
-        while (toCheck.size() > 0) {
+        while (toCheck.size() > 0 && found.size() < 50) {
             final Point current = toCheck.poll();
             final Set<Point> nearby = getNearbyRequired(instance, current);
             nearby.forEach(p -> {
@@ -110,15 +111,19 @@ public class LightUtils {
     }
 
     public static void relightSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
+        Chunk c = instance.getChunk(chunkX, chunkZ);
+        if (c == null) return;
+
+        Section s = c.getSection(sectionY);
+        if (!s.blockLight().requiresUpdate()) return;
+
+        Set<Point> collected = getNearbyRequired(instance, new Vec(chunkX, sectionY, chunkZ));
 
         synchronized (lock) {
             relight(instance, collected);
         }
 
-        Chunk c = instance.getChunk(chunkX, chunkZ);
-        if (c != null)
-            c.getSection(sectionY).blockLight().array(); // Free memory
+        c.getSection(sectionY).blockLight().array(); // Free memory
     }
 
     private static void relight(Instance instance, Set<Point> sections) {

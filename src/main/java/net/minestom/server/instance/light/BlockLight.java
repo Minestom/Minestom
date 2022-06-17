@@ -341,20 +341,13 @@ final class BlockLight implements Light {
         this.baked = bake(content, contentPropagation);
         if (Arrays.equals(this.baked, new byte[LIGHT_LENGTH])) baked = null;
 
-        // Lower memory usage
         {
             this.content = null;
-            this.borders = null;
+            // this.borders = nulL
             this.bordersPropagation = null;
             this.contentPropagation = null;
-            this.isValidBase = false;
+            // this.isValidBase = false;
         }
-
-        // Lower cpu usage
-        // {
-        //     this.bordersPropagation = null;
-        //     this.contentPropagation = null;
-        // }
     }
 
     @Override
