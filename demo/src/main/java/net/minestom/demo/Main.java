@@ -10,7 +10,6 @@ import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.player.PlayerChatEvent;
-import net.minestom.server.event.player.PlayerChatPreviewEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
@@ -98,16 +97,6 @@ public class Main {
             // on legacy versions, colors will be converted to the section format so it'll work there too
             responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
             //responseData.setPlayersHidden(true);
-        }).addListener(PlayerChatPreviewEvent.class, e -> {
-            if (e.getQuery().contains("!")) {
-                e.setResult(null);
-            } else {
-                e.setResult(Component.empty()
-                        .append(Component.text("PREPEND>", TextColor.color(255,0,255)))
-                        .append(Component.text(e.getQuery()))
-                        .append(Component.text("<APPEND", TextColor.color(255,0,255))));
-//                e.setResult(Component.text(e.getQuery(), NamedTextColor.BLACK));
-            }
         }).addListener(PlayerChatEvent.class, e -> {
             final MessageSender s = e.getSender();
             e.setSender(new MessageSender(

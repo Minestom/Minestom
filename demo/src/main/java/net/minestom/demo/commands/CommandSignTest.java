@@ -24,9 +24,9 @@ public class CommandSignTest extends Command {
                 Messenger.sendSystemMessage(player,
                         Component.text("Signature details: preview: ")
                                 .append(formatBoolean(context.getSignature().signedPreview()))
-                                .append(Component.text(", argument: "))
+                                .append(Component.text(", argument_signature: "))
                                 .append(format(SignatureValidator.validate(validator, signature, Component.text(context.get(message)))))
-                                .append(Component.text(", preview: "))
+                                .append(Component.text(", preview_signature: "))
                                 .append(format(SignatureValidator.validate(validator, signature, player.getLastPreviewedMessage()))),
                         ChatPosition.CHAT);
             } else {
