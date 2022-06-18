@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.MessageSignature;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -32,22 +31,22 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
                 reader.readNullableComponent(), new MessageSignature(sender, reader));
     }
 
-    public static PlayerChatMessagePacket unsigned(@NotNull Component message, ChatPosition type, @NotNull MessageSender sender) {
-        return new PlayerChatMessagePacket(message, null, type.getID(),
+    public static PlayerChatMessagePacket unsigned(@NotNull Component message, int type, @NotNull MessageSender sender) {
+        return new PlayerChatMessagePacket(message, null, type,
                 sender.displayName(), sender.teamName(), MessageSignature.UNSIGNED);
     }
 
-    public static PlayerChatMessagePacket signed(@NotNull Component message, ChatPosition type, @NotNull MessageSender sender,
+    public static PlayerChatMessagePacket signed(@NotNull Component message, int type, @NotNull MessageSender sender,
                                                  @NotNull MessageSignature signature) {
-        return new PlayerChatMessagePacket(message, null, type.getID(),
+        return new PlayerChatMessagePacket(message, null, type,
                 sender.displayName(), sender.teamName(), signature);
     }
 
     public static PlayerChatMessagePacket signedWithUnsignedContent(@NotNull Component message,
                                                                     @NotNull Component unsignedContent,
-                                                                    ChatPosition type, @NotNull MessageSender sender,
+                                                                    int type, @NotNull MessageSender sender,
                                                                     @NotNull MessageSignature signature) {
-        return new PlayerChatMessagePacket(message, unsignedContent, type.getID(),
+        return new PlayerChatMessagePacket(message, unsignedContent, type,
                 sender.displayName(), sender.teamName(), signature);
     }
 

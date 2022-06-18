@@ -7,7 +7,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerChatPreviewEvent;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
@@ -15,7 +14,6 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientChatPreviewPacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import net.minestom.server.network.packet.server.play.ChatPreviewPacket;
-import net.minestom.server.network.packet.server.play.PlayerChatMessagePacket;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -61,20 +59,18 @@ public class ChatMessageListener {
                 if (event.getSignature().unsigned()) {
                     // Event handler set message unsigned -> players with
                     // "Only Show Secure Chat" option enabled won't see this message
-                    Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket
-                            .unsigned(formatFunction.apply(event), ChatPosition.CHAT, event.getSender()));
+                    Messenger.sendUnsignedMessage(event.getRecipients(), event.getSender(), formatFunction.apply(event), event.getChatType());
                 } else {
                     // Send both version of message -> players will see different versions based on
                     // their "Only Show Secure Chat" option
-                    Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket
-                            .signedWithUnsignedContent(event.getMessage(), formatFunction.apply(event),
-                                    ChatPosition.CHAT, event.getSender(), event.getSignature()));
+                    Messenger.sendSignedMessage(event.getRecipients(), event.getSender(), event.getMessage(),
+                            formatFunction.apply(event), event.getSignature(), event.getChatType());
                 }
             } else {
                 // There is no way the message got modified, send it with the original signature
                 // TODO Should we handle poor design where the signature got altered?
-                Messenger.sendMessage(event.getRecipients(), PlayerChatMessagePacket.signed(event.getMessage(),
-                        ChatPosition.CHAT, event.getSender(), event.getSignature()));
+                Messenger.sendSignedMessage(event.getRecipients(), event.getSender(), event.getMessage(),
+                        event.getSignature(), event.getChatType());
             }
         });
     }

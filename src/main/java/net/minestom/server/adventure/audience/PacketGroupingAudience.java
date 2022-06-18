@@ -8,12 +8,14 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.ActionBarPacket;
 import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
@@ -58,8 +60,11 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        // FIXME: 2022. 06. 10.
-//        Messenger.send(this.getPlayers(), message, ChatPosition.fromMessageType(type), source.uuid());
+        if (type == MessageType.SYSTEM)
+            Messenger.sendSystemMessage(getPlayers(), message, CommonChatType.SYSTEM.getId());
+        else
+            Messenger.sendUnsignedMessage(getPlayers(), new MessageSender(Component.text("UNKNOWN SENDER",
+                    NamedTextColor.RED), null), message);
     }
 
     @Override

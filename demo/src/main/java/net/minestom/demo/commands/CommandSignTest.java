@@ -8,8 +8,9 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentMessage;
 import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.crypto.SignatureValidator;
 import net.minestom.server.entity.Player;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+
+import java.util.List;
 
 public class CommandSignTest extends Command {
     private static final ArgumentMessage message = ArgumentType.Message("message");
@@ -21,14 +22,13 @@ public class CommandSignTest extends Command {
             if (sender instanceof Player player) {
                 final MessageSignature signature = context.getSignature().signatureOf(message, player.getUuid());
                 final SignatureValidator validator = SignatureValidator.from(player);
-                Messenger.sendSystemMessage(player,
+                Messenger.sendSystemMessage(List.of(player),
                         Component.text("Signature details: preview: ")
                                 .append(formatBoolean(context.getSignature().signedPreview()))
                                 .append(Component.text(", argument_signature: "))
                                 .append(format(SignatureValidator.validate(validator, signature, Component.text(context.get(message)))))
                                 .append(Component.text(", preview_signature: "))
-                                .append(format(SignatureValidator.validate(validator, signature, player.getLastPreviewedMessage()))),
-                        ChatPosition.CHAT);
+                                .append(format(SignatureValidator.validate(validator, signature, player.getLastPreviewedMessage()))));
             } else {
                 // TODO Handle this case
             }

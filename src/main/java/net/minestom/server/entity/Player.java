@@ -45,10 +45,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.ChatPreference;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -667,11 +667,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         if (type == MessageType.SYSTEM)
-            Messenger.sendSystemMessage(this, message, ChatPosition.SYSTEM_MESSAGE);
+            Messenger.sendSystemMessage(List.of(this), message, CommonChatType.SYSTEM.getId());
         else
-            Messenger.sendMessage(List.of(this), PlayerChatMessagePacket.unsigned(message,
-                    // TODO get name from source if possible
-                    ChatPosition.CHAT, new MessageSender(Component.empty(), null)));
+            Messenger.sendUnsignedMessage(List.of(this), new MessageSender(Component.text("UNKNOWN SENDER",
+                    NamedTextColor.RED), null), message);
     }
 
     /**
@@ -2103,7 +2102,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         private String locale;
         private byte viewDistance;
-        private ChatMessageType chatMessageType;
+        private ChatPreference chatPreference;
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
@@ -2137,8 +2136,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @return the messages
          */
-        public @Nullable ChatMessageType getChatMessageType() {
-            return chatMessageType;
+        public @Nullable ChatPreference getChatMessageType() {
+            return chatPreference;
         }
 
         /**
@@ -2178,16 +2177,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @param locale             the player locale
          * @param viewDistance       the player view distance
-         * @param chatMessageType    the chat messages the player wishes to receive
+         * @param chatPreference    the chat messages the player wishes to receive
          * @param chatColors         if chat colors should be displayed
          * @param displayedSkinParts the player displayed skin parts
          * @param mainHand           the player main hand
          */
-        public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
+        public void refresh(String locale, byte viewDistance, ChatPreference chatPreference, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
             this.viewDistance = viewDistance;
-            this.chatMessageType = chatMessageType;
+            this.chatPreference = chatPreference;
             this.chatColors = chatColors;
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;

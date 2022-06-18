@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
  * Used to register {@link ChatType chat types} and retrieve their protocol id.
  */
 public final class ChatRegistryManager {
-    // TODO Should this be in an enum e.g. DefaultChatType?
-    public static final Key DEFAULT_CHAT = Key.key("minecraft:chat");
-
     private final AtomicInteger chatTypesId = new AtomicInteger();
     private final Int2ObjectMap<ChatType> idToType = new Int2ObjectOpenHashMap<>();
     private final Object2IntMap<ChatType> typeToId = new Object2IntOpenHashMap<>();
@@ -60,15 +57,22 @@ public final class ChatRegistryManager {
     /**
      * @return the protocol id of the type, -1 if it isn't registered
      */
-    public int getIdOf(ChatType type) {
+    public int idOf(ChatType type) {
         return typeToId.getOrDefault(type, -1);
     }
 
     /**
      * @return the protocol id of the type with the provided name, -1 if it isn't registered
      */
-    public int getIdOf(Key name) {
+    public int idOf(Key name) {
         return nameToId.getOrDefault(name, -1);
+    }
+
+    /**
+     * @return the protocol id of the type, -1 if it isn't registered
+     */
+    public int idOf(CommonChatType type) {
+        return idOf(type.getName());
     }
 
     /**
@@ -77,9 +81,16 @@ public final class ChatRegistryManager {
     @ApiStatus.Internal
     public void initDefaults() {
         // Player chat
-        if (getIdOf(DEFAULT_CHAT) == -1) {
-            addChatType(ChatType.chat(DEFAULT_CHAT, ChatDecoration.contentWithSender("chat.type.text").toTextDisplay()));
-            logDefaultRegistering(DEFAULT_CHAT);
+        CommonChatType.CHAT.setId(idOf(CommonChatType.CHAT));
+        if (!CommonChatType.CHAT.registered()) {
+            CommonChatType.CHAT.setId(addChatType(ChatType.chat(CommonChatType.CHAT.getName(), ChatDecoration.contentWithSender("chat.type.text").toTextDisplay())));
+            logDefaultRegistering(CommonChatType.CHAT.getName());
+        }
+        // System messages
+        CommonChatType.SYSTEM.setId(idOf(CommonChatType.SYSTEM));
+        if (!CommonChatType.SYSTEM.registered()) {
+            CommonChatType.SYSTEM.setId(addChatType(ChatType.chat(CommonChatType.SYSTEM.getName(), TextDisplay.undecorated())));
+            logDefaultRegistering(CommonChatType.SYSTEM.getName());
         }
         // TODO Should we add all default types?
     }
