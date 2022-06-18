@@ -23,8 +23,6 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
 
     void forValues(@NotNull Consumer<T> consumer);
 
-    boolean isEmpty();
-
     void updateContent(@NotNull StaticIntMap<T> content);
 
     @NotNull StaticIntMap<T> copy();
@@ -95,14 +93,6 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
             for (T value : array) {
                 if (value != null) consumer.accept(value);
             }
-        }
-
-        @Override
-        public boolean isEmpty() {
-            for (T value : this.array) {
-                if (value != null) return false;
-            }
-            return true;
         }
 
         @Override

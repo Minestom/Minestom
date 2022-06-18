@@ -51,10 +51,7 @@ final class TagHandlerImpl implements TagHandler {
             return; // Tried to remove an absent tag. Do nothing
         // Handle view tags
         if (tag.isView()) {
-            final boolean present = value != null;
-            final Tag.PathEntry[] paths = tag.path;
-            node.updateContent(present ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
-            if (!present && paths != null) recursiveClean(node, paths);
+            node.updateContent(value != null ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
             node.invalidate();
             VarHandle.fullFence();
             return;
@@ -72,23 +69,12 @@ final class TagHandlerImpl implements TagHandler {
         } else {
             // Remove recursively
             entries.remove(tagIndex);
-            if (tag.path != null) recursiveClean(node, tag.path);
         }
         node.invalidate();
         // Tag handler mutation potentially failed (node map has been rehashed, changes may therefore not be visible)
         // The barrier also ensure propagation of cache invalidation
         final int finalStamp = stamp.get();
         if (initialStamp != finalStamp) setTag(tag, value);
-    }
-
-    private void recursiveClean(Node node, Tag.PathEntry[] paths) {
-        int i = paths.length;
-        do {
-            i--;
-            if (node.entries.isEmpty() && node.parent != null) {
-                node.parent.entries.remove(paths[i].index());
-            }
-        } while ((node = node.parent) != null);
     }
 
     private <T> Entry<?> valueToEntry(Node parent, Tag<T> tag, @NotNull T value) {
@@ -159,8 +145,6 @@ final class TagHandlerImpl implements TagHandler {
         if (!node.entries.compareAndSet(tagIndex, previousEntry, newEntry)) {
             return updateTag0(tag, value, returnPrevious);
         }
-        // Invalidate the node parents
-        if (newValue == null && tag.path != null) recursiveClean(node, tag.path);
         node.invalidate();
         // Verify visibility
         if (initialStamp != stamp.get()) return updateTag0(tag, value, returnPrevious);
@@ -256,7 +240,13 @@ final class TagHandlerImpl implements TagHandler {
             NBTCompound compound;
             if (!CACHE_ENABLE || (compound = this.compound) == null) {
                 MutableNBTCompound tmp = new MutableNBTCompound();
-                this.entries.forValues(entry -> tmp.put(entry.tag().getKey(), entry.nbt()));
+                this.entries.forValues(entry -> {
+                    final Tag tag = entry.tag();
+                    final NBT nbt = entry.nbt();
+                    if (!tag.entry.isPath() || !((NBTCompound) nbt).isEmpty()) {
+                        tmp.put(tag.getKey(), nbt);
+                    }
+                });
                 this.compound = compound = tmp.toCompound();
             }
             return compound;
@@ -272,6 +262,8 @@ final class TagHandlerImpl implements TagHandler {
                 NBT nbt;
                 if (value instanceof Node node) {
                     Node copy = node.copy(result);
+                    if (copy == null)
+                        return; // Empty node
                     value = copy;
                     nbt = copy.compound;
                     assert nbt != null : "Node copy should also compute the compound";
@@ -282,7 +274,8 @@ final class TagHandlerImpl implements TagHandler {
                 tmp.put(tag.getKey(), nbt);
                 entries.put(tag.index, valueToEntry(result, tag, value));
             });
-
+            if (tmp.isEmpty() && parent != null)
+                return null; // Empty child node
             result.compound = tmp.toCompound();
             return result;
         }
