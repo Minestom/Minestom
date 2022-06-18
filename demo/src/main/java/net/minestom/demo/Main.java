@@ -1,6 +1,5 @@
 package net.minestom.demo;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -110,7 +109,7 @@ public class Main {
         });
 
         final ChatRegistryManager chatRegistryManager = MinecraftServer.getChatRegistryManager();
-        chatRegistryManager.addChatType(ChatType.chat(Key.key("minestom:chat"),
+        chatRegistryManager.addChatType(ChatType.chat(ChatRegistryManager.DEFAULT_CHAT,
                 ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED)).toTextDisplay()));
 
         PlayerInit.init();

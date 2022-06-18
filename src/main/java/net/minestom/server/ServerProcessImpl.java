@@ -230,6 +230,7 @@ final class ServerProcessImpl implements ServerProcess {
             exception.handleException(e);
             throw new RuntimeException(e);
         }
+        chatRegistryManager.initDefaults();
 
         // Start server
         server.start();
