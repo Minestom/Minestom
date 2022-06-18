@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ClosestEntityTarget</span>
 <span class="extends-implements">extends <a href="../TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a></span></div>
-<div class="block">Target the closest targetable entity (based on the class array)</div>
+<div class="block">Target the closest targetable entity (based on the target predicate)</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -101,10 +101,18 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,float,java.lang.Class...)" class="member-name-link">ClosestEntityTarget</a><wbr>(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,java.util.function.Predicate)" class="member-name-link">ClosestEntityTarget</a><wbr>(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+ double&nbsp;range,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;targetPredicate)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,float,java.lang.Class...)" class="member-name-link">ClosestEntityTarget</a><wbr>(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
  float&nbsp;range,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&gt;...&nbsp;entitiesTarget)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,java.util.function.Predicate)"><code>ClosestEntityTarget(EntityCreature, double, Predicate)</code></a></div>
+</div>
+</div>
 </div>
 </section>
 </li>
@@ -148,11 +156,37 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,float,java.lang.Class...)">
 <h3>ClosestEntityTarget</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
+<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
 </span><span class="modifiers">public</span>&nbsp;<span class="element-name">ClosestEntityTarget</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
  float&nbsp;range,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&gt;...&nbsp;entitiesTarget)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,java.util.function.Predicate)"><code>ClosestEntityTarget(EntityCreature, double, Predicate)</code></a></div>
+</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>entityCreature</code> - the entity (self)</dd>
+<dd><code>range</code> - the maximum range the entity can target others within</dd>
+<dd><code>entitiesTarget</code> - the entities to target by class</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,double,java.util.function.Predicate)">
+<h3>ClosestEntityTarget</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClosestEntityTarget</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+ double&nbsp;range,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;targetPredicate)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>entityCreature</code> - the entity (self)</dd>
+<dd><code>range</code> - the maximum range the entity can target others within</dd>
+<dd><code>targetPredicate</code> - the predicate used to check if the other entity can be targeted</dd>
+</dl>
 </section>
 </li>
 </ul>
