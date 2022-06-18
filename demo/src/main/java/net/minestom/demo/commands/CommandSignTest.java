@@ -2,6 +2,7 @@ package net.minestom.demo.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentMessage;
@@ -20,17 +21,26 @@ public class CommandSignTest extends Command {
 
         addSyntax(((sender, context) -> {
             if (sender instanceof Player player) {
-                final MessageSignature signature = context.getSignature().signatureOf(message, player.getUuid());
+                final ArgumentsSignature argumentsSignature = context.getSignature();
+                if (argumentsSignature == null) {
+                    Messenger.sendSystemMessage(List.of(player), Component.text("You didn't sign the arguments!", NamedTextColor.RED));
+                    return;
+                }
+                final MessageSignature signature = argumentsSignature.signatureOf(message, player.getUuid());
                 final SignatureValidator validator = SignatureValidator.from(player);
+                if (validator == null) {
+                    Messenger.sendSystemMessage(List.of(player), Component.text("There is no public key associated with your profile!", NamedTextColor.RED));
+                    return;
+                }
                 Messenger.sendSystemMessage(List.of(player),
                         Component.text("Signature details: preview: ")
-                                .append(formatBoolean(context.getSignature().signedPreview()))
+                                .append(formatBoolean(argumentsSignature.signedPreview()))
                                 .append(Component.text(", argument_signature: "))
                                 .append(format(SignatureValidator.validate(validator, signature, Component.text(context.get(message)))))
                                 .append(Component.text(", preview_signature: "))
                                 .append(format(SignatureValidator.validate(validator, signature, player.getLastPreviewedMessage()))));
             } else {
-                // TODO Handle this case
+                sender.sendMessage("Consoles luckily doesn't sign commands...");
             }
         }), message);
     }
