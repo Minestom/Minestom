@@ -139,7 +139,7 @@ public record PlayerInfoPacket(@NotNull Action action,
             this(uuid, reader.readSizedString(),
                     reader.readVarIntList(Property::new),
                     GameMode.values()[reader.readVarInt()], reader.readVarInt(),
-                    reader.readBoolean() ? reader.readComponent() : null, reader.readBoolean() ? new PlayerPublicKey(reader) : null);
+                    reader.readNullableComponent(), reader.readNullable(() -> new PlayerPublicKey(reader)));
         }
 
         @Override
@@ -148,8 +148,7 @@ public record PlayerInfoPacket(@NotNull Action action,
             writer.writeVarIntList(properties, BinaryWriter::write);
             writer.writeVarInt(gameMode.id());
             writer.writeVarInt(ping);
-            writer.writeBoolean(displayName != null);
-            if (displayName != null) writer.writeComponent(displayName);
+            writer.writeNullableComponent(displayName);
             writer.writeNullable(playerPublicKey);
         }
 
@@ -171,16 +170,14 @@ public record PlayerInfoPacket(@NotNull Action action,
             }
 
             public Property(BinaryReader reader) {
-                this(reader.readSizedString(), reader.readSizedString(),
-                        reader.readBoolean() ? reader.readSizedString() : null);
+                this(reader.readSizedString(), reader.readSizedString(), reader.readNullableSizedString());
             }
 
             @Override
             public void write(BinaryWriter writer) {
                 writer.writeSizedString(name);
                 writer.writeSizedString(value);
-                writer.writeBoolean(signature != null);
-                if (signature != null) writer.writeSizedString(signature);
+                writer.writeNullableSizedString(signature);
             }
         }
     }
@@ -210,13 +207,12 @@ public record PlayerInfoPacket(@NotNull Action action,
     public record UpdateDisplayName(@NotNull UUID uuid,
                                     @Nullable Component displayName) implements Entry, ComponentHolder<UpdateDisplayName> {
         public UpdateDisplayName(UUID uuid, BinaryReader reader) {
-            this(uuid, reader.readBoolean() ? reader.readComponent() : null);
+            this(uuid, reader.readNullableComponent());
         }
 
         @Override
         public void write(BinaryWriter writer) {
-            writer.writeBoolean(displayName != null);
-            if (displayName != null) writer.writeComponent(displayName);
+            writer.writeNullableComponent(displayName);
         }
 
         @Override
