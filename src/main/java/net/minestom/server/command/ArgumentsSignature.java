@@ -34,7 +34,6 @@ implements Writeable {
      * @param signer player's uuid who sent this packet
      * @return null if the client didn't sign the parameter
      */
-    @Contract("_, _ -> new")
     public @Nullable MessageSignature signatureOf(String parameterName, UUID signer) {
         final byte[] signature = signatures.get(parameterName);
         return signature == null ? null : new MessageSignature(signer, Instant.ofEpochMilli(timestamp), salt, signature);
@@ -43,7 +42,6 @@ implements Writeable {
     /**
      * @see #signatureOf(String, UUID)
      */
-    @SuppressWarnings("ConstantConditions")
     @Contract("_, _ -> new")
     public <T extends Argument<?> & SignableArgument> @Nullable MessageSignature signatureOf(T argument, UUID signer) {
         return signatureOf(argument.getId(), signer);
