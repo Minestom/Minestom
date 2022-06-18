@@ -10,6 +10,7 @@ import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
@@ -184,6 +185,10 @@ public final class MinecraftServer {
 
     public static BossBarManager getBossBarManager() {
         return serverProcess.bossBar();
+    }
+
+    public static ChatRegistryManager getChatRegistryManager() {
+        return serverProcess.chatRegistry();
     }
 
     public static PacketProcessor getPacketProcessor() {

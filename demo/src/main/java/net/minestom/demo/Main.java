@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -17,6 +18,10 @@ import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.message.MessageSender;
+import net.minestom.server.message.registry.ChatDecoration;
+import net.minestom.server.message.registry.ChatRegistryManager;
+import net.minestom.server.message.registry.ChatType;
+import net.minestom.server.message.registry.TextDisplay;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
@@ -104,6 +109,11 @@ public class Main {
                     Component.text("Team Name").color(NamedTextColor.GOLD)
             ));
         });
+
+        final ChatRegistryManager chatRegistryManager = MinecraftServer.getChatRegistryManager();
+        chatRegistryManager.addChatType(new ChatType(Key.key("minestom:chat"),
+                new TextDisplay(new ChatDecoration("%s|%s> %s", ChatDecoration.PARAM_ALL,
+                        Style.style(NamedTextColor.DARK_RED))), null, null));
 
         PlayerInit.init();
 

@@ -12,6 +12,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
@@ -137,6 +138,8 @@ public interface ServerProcess extends Snapshotable {
      * Handles the server ticks.
      */
     @NotNull Ticker ticker();
+
+    @NotNull ChatRegistryManager chatRegistry();
 
     void start(@NotNull SocketAddress socketAddress);
 

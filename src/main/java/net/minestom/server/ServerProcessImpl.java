@@ -16,6 +16,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
@@ -68,6 +69,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
+    private final ChatRegistryManager chatRegistryManager;
 
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
@@ -95,6 +97,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
+        this.chatRegistryManager = new ChatRegistryManager();
     }
 
     @Override
@@ -200,6 +203,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull Ticker ticker() {
         return ticker;
+    }
+
+    @Override
+    public @NotNull ChatRegistryManager chatRegistry() {
+        return chatRegistryManager;
     }
 
     @Override
