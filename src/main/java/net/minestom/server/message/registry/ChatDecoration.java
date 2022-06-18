@@ -28,33 +28,33 @@ import java.util.stream.Collectors;
  * @param style style of the template, params can override this
  */
 public record ChatDecoration(@NotNull String translationKey, @NotNull List<Parameter> params, @NotNull Style style) implements NBTCompoundWriteable {
-    private static final String REGEX_ONE_PARAM = "^(?:(?!%s).)*%s(?!.*%s).*$";
-    private static final String REGEX_TWO_PARAM = "^(?:(?!%s).)*%s(?:(?!%s).)*%s(?!.*%s).*$";
-    private static final String REGEX_THREE_PARAM = "^(?:(?!%s).)*%s(?:(?!%s).)*%s(?:(?!%s).)*%s(?!.*%s).*$";
+    private static final String REGEX_ONE_PARAM_OR_TRANSLATION_KEY = "(^(?:(?!%s).)*%s(?!.*%s).*$)|(^\\w+(\\.\\w+)*$)";
+    private static final String REGEX_TWO_PARAM_OR_TRANSLATION_KEY = "(^(?:(?!%s).)*%s(?:(?!%s).)*%s(?!.*%s).*$)|(^\\w+(\\.\\w+)*$)";
+    private static final String REGEX_THREE_PARAM_OR_TRANSLATION_KEY = "(^(?:(?!%s).)*%s(?:(?!%s).)*%s(?:(?!%s).)*%s(?!.*%s).*$)|(^\\w+(\\.\\w+)*$)";
     public static final List<Parameter> PARAM_ALL = List.of(Parameter.TEAM_NAME, Parameter.SENDER, Parameter.CONTENT);
     public static final List<Parameter> PARAM_NAME = List.of(Parameter.SENDER, Parameter.CONTENT);
 
-    public static ChatDecoration content(@Subst("%s") @Pattern(REGEX_ONE_PARAM) String template) {
+    public static ChatDecoration content(@Subst("%s") @Pattern(REGEX_ONE_PARAM_OR_TRANSLATION_KEY) String template) {
         return content(template, Style.style().build());
     }
 
-    public static ChatDecoration content(@Pattern(REGEX_ONE_PARAM) String template, Style style) {
+    public static ChatDecoration content(@Pattern(REGEX_ONE_PARAM_OR_TRANSLATION_KEY) String template, Style style) {
         return new ChatDecoration(template, List.of(Parameter.CONTENT), style);
     }
 
-    public static ChatDecoration contentWithSender(@Subst("%s%s") @Pattern(REGEX_TWO_PARAM) String template) {
+    public static ChatDecoration contentWithSender(@Subst("%s%s") @Pattern(REGEX_TWO_PARAM_OR_TRANSLATION_KEY) String template) {
         return contentWithSender(template, Style.style().build());
     }
 
-    public static ChatDecoration contentWithSender(@Pattern(REGEX_TWO_PARAM) String template, Style style) {
+    public static ChatDecoration contentWithSender(@Pattern(REGEX_TWO_PARAM_OR_TRANSLATION_KEY) String template, Style style) {
         return new ChatDecoration(template, PARAM_NAME, style);
     }
 
-    public static ChatDecoration full(@Subst("%s%s%s") @Pattern(REGEX_THREE_PARAM) String template) {
+    public static ChatDecoration full(@Subst("%s%s%s") @Pattern(REGEX_THREE_PARAM_OR_TRANSLATION_KEY) String template) {
         return full(template, Style.style().build());
     }
 
-    public static ChatDecoration full(@Pattern(REGEX_THREE_PARAM) String template, Style style) {
+    public static ChatDecoration full(@Pattern(REGEX_THREE_PARAM_OR_TRANSLATION_KEY) String template, Style style) {
         return new ChatDecoration(template, PARAM_ALL, style);
     }
 
