@@ -41,19 +41,24 @@ public class ChatPreviewCommand extends Command {
 
         addSyntax(((sender, context) -> {
             if (sender instanceof Player player) {
-                if (context.get(on)) {
-                    player.sendMessage("Chat preview: on");
-                    player.toggleChatPreview(true);
-                } else {
-                    player.sendMessage("Chat preview: off");
-                    player.toggleChatPreview(false);
-                }
+                final Boolean enable = context.get(on);
+                player.enableChatPreview(enable);
+                player.sendMessage("Chat preview: " + (enable ? "enabled" : "disabled"));
             }
-        }), on);
+        }), ArgumentType.Literal("enable"), on);
 
         addSyntax(((sender, context) -> {
             handler = context.getOrDefault(handlerArg, PreviewHandler.NULL);
             sender.sendMessage("Preview handler set to: " + handler.name());
-        }), handlerArg);
+        }), ArgumentType.Literal("handler"), handlerArg);
+
+
+        addSyntax(((sender, context) -> {
+            if (sender instanceof Player player) {
+                final Boolean enable = context.get(on);
+                player.toggleChatPreview(enable);
+                player.sendMessage("Chat preview: " + (enable ? "on" : "off"));
+            }
+        }), ArgumentType.Literal("toggle"), on);
     }
 }

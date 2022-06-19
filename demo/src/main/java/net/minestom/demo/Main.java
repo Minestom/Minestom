@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -112,6 +113,8 @@ public class Main {
         final ChatRegistryManager chatRegistryManager = MinecraftServer.getChatRegistryManager();
         chatRegistryManager.addChatType(ChatType.chat(CommonChatType.CHAT.getName(),
                 ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED)).toTextDisplay()));
+        chatRegistryManager.addChatType(ChatType.chat(CommonChatType.SYSTEM.getName(),
+                ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA).font(Key.key("minecraft:uniform"))).toTextDisplay()));
 
         PlayerInit.init();
 

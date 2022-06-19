@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 public record ServerDataPacket(@Nullable Component motd, @Nullable String iconBase64,
                                boolean previewsChat) implements ServerPacket {
-    public static final ServerDataPacket TOGGLE_PREVIEW_ON = new ServerDataPacket(null, null, true);
-    public static final ServerDataPacket TOGGLE_PREVIEW_OFF = new ServerDataPacket(null, null, false);
+    public static final ServerDataPacket PREVIEW_ENABLE = new ServerDataPacket(null, null, true);
+    public static final ServerDataPacket PREVIEW_DISABLE = new ServerDataPacket(null, null, false);
     public ServerDataPacket(BinaryReader reader) {
         this(reader.readNullableComponent(), reader.readNullableSizedString(), reader.readBoolean());
     }

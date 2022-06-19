@@ -2067,8 +2067,26 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
+    /**
+     * Used to enable or disable chat preview, can be called multiple times during play state
+     * however each invocation with enabled=true will result in a warning dialog client side.
+     * If you later want to toggle the preview serverside consider using {@link #toggleChatPreview(boolean)}.
+     *
+     * @param enable preview enabled?
+     */
+    public void enableChatPreview(boolean enable) {
+        playerConnection.sendPacket(enable ? ServerDataPacket.PREVIEW_ENABLE : ServerDataPacket.PREVIEW_DISABLE);
+    }
+
+    /**
+     * Used to toggle chat preview without prompting the player on each enable call.
+     * <p>
+     * NOTE: This method only has effect if chat preview was enabled using {@link #enableChatPreview(boolean)}!
+     *
+     * @param on
+     */
     public void toggleChatPreview(boolean on) {
-        playerConnection.sendPacket(on ? ServerDataPacket.TOGGLE_PREVIEW_ON : ServerDataPacket.TOGGLE_PREVIEW_OFF);
+        playerConnection.sendPacket(on ? SetChatPreviewPacket.ON : SetChatPreviewPacket.OFF);
     }
 
     public @Nullable Component getLastPreviewedMessage() {
