@@ -10,7 +10,7 @@ import java.util.Objects;
 public record MessageSender(@NotNull Component displayName, @Nullable Component teamName) {
 
     public static MessageSender from(Player player) {
-        return new MessageSender(Objects.requireNonNullElse(player.getDisplayName(),
+        return new MessageSender(Objects.requireNonNullElseGet(player.getDisplayName(), () ->
                 Component.text(player.getUsername())), player.getTeam() == null ? null :
                 player.getTeam().getTeamDisplayName());
     }
