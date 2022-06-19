@@ -2,6 +2,8 @@ package net.minestom.server.utils;
 
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.function.Supplier;
+
 /**
  * Used to mimic the final keyword
  *
@@ -28,7 +30,19 @@ public final class FinalObject<T> {
     }
 
     public boolean isSet() {
-        return obj != null;
+        return finalized;
+    }
+
+    public boolean optionalSet(T object) {
+        if (isSet()) return false;
+        set(object);
+        return true;
+    }
+
+    public boolean optionalSet(Supplier<T> objectSupplier) {
+        if (isSet()) return false;
+        set(objectSupplier.get());
+        return true;
     }
 
     public T get() {
