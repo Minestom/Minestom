@@ -7,7 +7,9 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.ObjectCache;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
@@ -17,20 +19,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * Used to register {@link ChatType chat types} and retrieve their protocol id.
+ * Used to register {@link ChatTypeBuilder chat types} and retrieve their protocol id.
  */
 public final class ChatRegistryManager {
     private final AtomicInteger chatTypesId = new AtomicInteger();
-    private final Int2ObjectMap<ChatType> idToType = new Int2ObjectOpenHashMap<>();
-    private final Object2IntMap<ChatType> typeToId = new Object2IntOpenHashMap<>();
+    private final Int2ObjectMap<NBTCompound> idToCompound = new Int2ObjectOpenHashMap<>();
     private final Object2IntMap<Key> nameToId = new Object2IntOpenHashMap<>();
     private final ObjectCache<NBTCompound> nbtCompoundCache = new ObjectCache<>(() -> {
         final MutableNBTCompound root = new MutableNBTCompound();
         root.set("type", NBT.String("minecraft:chat_type"));
-        root.set("value", NBT.List(NBTType.TAG_Compound, idToType.int2ObjectEntrySet().stream().map(x -> {
-            final MutableNBTCompound compound = new MutableNBTCompound();
+        root.set("value", NBT.List(NBTType.TAG_Compound, idToCompound.int2ObjectEntrySet().stream().map(x -> {
+            final MutableNBTCompound compound = new MutableNBTCompound(x.getValue());
             compound.setInt("id", x.getIntKey());
-            x.getValue().write(compound);
             return compound.toCompound();
         }).collect(Collectors.toList())));
         return root.toCompound();
@@ -40,25 +40,30 @@ public final class ChatRegistryManager {
      * Registers a new ChatType
      *
      * @param type type to register
-     * @return the protocol id of this type
+     * @return the registered type id
      */
-    public int addChatType(ChatType type) {
+    @Contract("_ -> new")
+    public ChatType addChatType(NBTCompound type) {
         final int id = chatTypesId.getAndIncrement();
-        idToType.put(id, type);
-        typeToId.put(type, id);
-        if (nameToId.containsKey(type.name())) {
-            MinecraftServer.LOGGER.warn("A ChatType has already been added with name: '{}'. This will overwrite name based lookups!", type.name());
+        final @Subst("chat") String name = type.getString("name");
+        if (name == null) {
+            throw new IllegalArgumentException("ChatType compound doesn't contain required name tag!");
         }
-        nameToId.put(type.name(), id);
+        final ChatType chatType = ChatType.of(id, Key.key(name));
+        idToCompound.put(id, type);
+        if (nameToId.containsKey(chatType.key())) {
+            MinecraftServer.LOGGER.warn("A ChatType has already been added with name: '{}'. This will overwrite name based lookups!", chatType.key());
+        }
+        nameToId.put(chatType.key(), id);
         nbtCompoundCache.invalidate();
-        return id;
+        return chatType;
     }
 
     /**
      * @return the protocol id of the type, -1 if it isn't registered
      */
     public int idOf(ChatType type) {
-        return typeToId.getOrDefault(type, -1);
+        return idOf(type.key());
     }
 
     /**
@@ -68,11 +73,8 @@ public final class ChatRegistryManager {
         return nameToId.getOrDefault(name, -1);
     }
 
-    /**
-     * @return the protocol id of the type, -1 if it isn't registered
-     */
-    public int idOf(CommonChatType type) {
-        return idOf(type.getName());
+    public boolean isRegistered(ChatType type) {
+        return idOf(type) != -1;
     }
 
     /**
@@ -81,22 +83,25 @@ public final class ChatRegistryManager {
     @ApiStatus.Internal
     public void initDefaults() {
         // Player chat
-        CommonChatType.CHAT.setId(idOf(CommonChatType.CHAT));
-        if (!CommonChatType.CHAT.registered()) {
-            CommonChatType.CHAT.setId(addChatType(ChatType.chat(CommonChatType.CHAT.getName(), ChatDecoration.contentWithSender("chat.type.text").toTextDisplay())));
-            logDefaultRegistering(CommonChatType.CHAT.getName());
+        if (!isRegistered(CommonChatType.CHAT)) {
+            CommonChatType.CHAT.setId(addChatType(ChatTypeBuilder.builder(CommonChatType.CHAT.key())
+                    .chat(ChatDecoration.contentWithSender("chat.type.text")).build()).id());
+            logDefaultRegistering(CommonChatType.CHAT);
+        } else {
+            CommonChatType.CHAT.setId(idOf(CommonChatType.CHAT));
         }
         // System messages
-        CommonChatType.SYSTEM.setId(idOf(CommonChatType.SYSTEM));
-        if (!CommonChatType.SYSTEM.registered()) {
-            CommonChatType.SYSTEM.setId(addChatType(ChatType.chat(CommonChatType.SYSTEM.getName(), TextDisplay.undecorated())));
-            logDefaultRegistering(CommonChatType.SYSTEM.getName());
+        if (!isRegistered(CommonChatType.SYSTEM)) {
+            CommonChatType.SYSTEM.setId(addChatType(ChatTypeBuilder.builder(CommonChatType.SYSTEM.key()).chat().build()).id());
+            logDefaultRegistering(CommonChatType.SYSTEM);
+        } else {
+            CommonChatType.SYSTEM.setId(idOf(CommonChatType.SYSTEM));
         }
         // TODO Should we add all default types?
     }
 
-    private void logDefaultRegistering(Key name) {
-        MinecraftServer.LOGGER.debug("Registering default ChatType for: {}", name);
+    private void logDefaultRegistering(ChatType type) {
+        MinecraftServer.LOGGER.debug("Registering default ChatType for: {}", type.key());
     }
 
     public NBTCompound toNBT() {

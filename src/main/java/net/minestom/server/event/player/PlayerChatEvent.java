@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.message.MessageSender;
+import net.minestom.server.message.registry.ChatType;
 import net.minestom.server.message.registry.CommonChatType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +30,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private MessageSignature signature;
     private MessageSender sender;
     private final Component message;
-    private int chatType;
+    private ChatType chatType;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
                            @NotNull String rawMessage, @NotNull MessageSignature signature,
@@ -40,7 +41,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
         this.message = message;
         this.signature = signature;
         this.sender = sender;
-        this.chatType = CommonChatType.CHAT.getId();
+        this.chatType = CommonChatType.CHAT;
     }
 
     public MessageSender getSender() {
@@ -118,11 +119,11 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
         this.signature = signature;
     }
 
-    public int getChatType() {
+    public ChatType getChatType() {
         return chatType;
     }
 
-    public void setChatType(int chatType) {
+    public void setChatType(ChatType chatType) {
         this.chatType = chatType;
     }
 }

@@ -20,7 +20,7 @@ import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.registry.ChatDecoration;
 import net.minestom.server.message.registry.ChatRegistryManager;
-import net.minestom.server.message.registry.ChatType;
+import net.minestom.server.message.registry.ChatTypeBuilder;
 import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -111,10 +111,13 @@ public class Main {
         });
 
         final ChatRegistryManager chatRegistryManager = MinecraftServer.getChatRegistryManager();
-        chatRegistryManager.addChatType(ChatType.chat(CommonChatType.CHAT.getName(),
-                ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED)).toTextDisplay()));
-        chatRegistryManager.addChatType(ChatType.chat(CommonChatType.SYSTEM.getName(),
-                ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA).font(Key.key("minecraft:uniform"))).toTextDisplay()));
+        chatRegistryManager.addChatType(ChatTypeBuilder.builder(CommonChatType.CHAT.key())
+                .chat(ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED)))
+                .build());
+        chatRegistryManager.addChatType(ChatTypeBuilder.builder(CommonChatType.SYSTEM.key())
+                .chat(ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA)
+                        .font(Key.key("minecraft:uniform"))))
+                .build());
 
         PlayerInit.init();
 

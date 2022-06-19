@@ -61,7 +61,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         if (type == MessageType.SYSTEM)
-            Messenger.sendSystemMessage(getPlayers(), message, CommonChatType.SYSTEM.getId());
+            Messenger.sendSystemMessage(getPlayers(), message, CommonChatType.SYSTEM);
         else
             Messenger.sendUnsignedMessage(getPlayers(), new MessageSender(Component.text("UNKNOWN SENDER",
                     NamedTextColor.RED), null), message);

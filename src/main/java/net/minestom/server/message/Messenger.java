@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.entity.Player;
+import net.minestom.server.message.registry.ChatType;
 import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.network.packet.server.play.PlayerChatMessagePacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
@@ -22,18 +23,13 @@ public final class Messenger {
     private Messenger() {
         //no instance
     }
-    private static SystemChatPacket CANNOT_SEND_PACKET;
+    private static Component REJECTION_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
 
-    static {
-        setRejectionMessage(Component.translatable("chat.cannotSend", NamedTextColor.RED));
-    }
-
-    // TODO Should we add overrides with CommonChatType and/or ChatType (and perform protocol id lookup behind the scenes)?
     // TODO Javadoc
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                          @NotNull Component message, @Nullable Component unsignedMessage,
-                                         @NotNull MessageSignature signature, int chatType) {
-        PacketUtils.sendGroupedPacket(recipients, new PlayerChatMessagePacket(message, unsignedMessage, chatType,
+                                         @NotNull MessageSignature signature, ChatType chatType) {
+        PacketUtils.sendGroupedPacket(recipients, new PlayerChatMessagePacket(message, unsignedMessage, chatType.id(),
                 sender.displayName(), sender.teamName(), signature),
                 player -> getChatPreference(player) == ChatPreference.FULL);
     }
@@ -41,39 +37,39 @@ public final class Messenger {
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                          @NotNull Component message, @Nullable Component unsignedMessage,
                                          @NotNull MessageSignature signature) {
-        sendSignedMessage(recipients, sender, message, unsignedMessage, signature, CommonChatType.CHAT.getId());
+        sendSignedMessage(recipients, sender, message, unsignedMessage, signature, CommonChatType.CHAT);
     }
 
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                          @NotNull Component message, @NotNull MessageSignature signature,
-                                         int chatType) {
+                                         ChatType chatType) {
         sendSignedMessage(recipients, sender, message, null, signature, chatType);
     }
 
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                          @NotNull Component message, @NotNull MessageSignature signature) {
-        sendSignedMessage(recipients, sender, message, null, signature, CommonChatType.CHAT.getId());
+        sendSignedMessage(recipients, sender, message, null, signature, CommonChatType.CHAT);
     }
 
     public static void sendUnsignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
-                                            @NotNull Component message, int chatType) {
+                                            @NotNull Component message, ChatType chatType) {
         sendSignedMessage(recipients, sender, message, null, MessageSignature.UNSIGNED, chatType);
     }
 
     public static void sendUnsignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                             @NotNull Component message) {
-        sendUnsignedMessage(recipients, sender, message, CommonChatType.CHAT.getId());
+        sendUnsignedMessage(recipients, sender, message, CommonChatType.CHAT);
     }
 
-    public static void sendSystemMessage(@NotNull Collection<Player> recipients, @NotNull Component message, int chatType) {
-        PacketUtils.sendGroupedPacket(recipients, new SystemChatPacket(message, chatType), player -> {
+    public static void sendSystemMessage(@NotNull Collection<Player> recipients, @NotNull Component message, ChatType chatType) {
+        PacketUtils.sendGroupedPacket(recipients, new SystemChatPacket(message, chatType.id()), player -> {
             final ChatPreference preference = getChatPreference(player);
             return preference == ChatPreference.FULL || preference == ChatPreference.SYSTEM;
         });
     }
 
     public static void sendSystemMessage(@NotNull Collection<Player> recipients, @NotNull Component message) {
-        sendSystemMessage(recipients, message, CommonChatType.SYSTEM.getId());
+        sendSystemMessage(recipients, message, CommonChatType.SYSTEM);
     }
 
     /**
@@ -97,7 +93,7 @@ public final class Messenger {
     }
 
     public static void setRejectionMessage(Component rejectionMessage) {
-        CANNOT_SEND_PACKET = new SystemChatPacket(rejectionMessage, CommonChatType.SYSTEM.getId());
+        REJECTION_MESSAGE = rejectionMessage;
     }
 
     /**
@@ -106,7 +102,7 @@ public final class Messenger {
      * @param player the player
      */
     public static void sendRejectionMessage(@NotNull Player player) {
-        player.sendPacket(CANNOT_SEND_PACKET);
+        player.sendPacket(new SystemChatPacket(REJECTION_MESSAGE, CommonChatType.SYSTEM.id()));
     }
 
     /**

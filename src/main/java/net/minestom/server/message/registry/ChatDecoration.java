@@ -58,10 +58,6 @@ public record ChatDecoration(@NotNull String translationKey, @NotNull List<Param
         return new ChatDecoration(template, PARAM_ALL, style);
     }
 
-    public TextDisplay toTextDisplay() {
-        return new TextDisplay(this);
-    }
-
     @Override
     public void write(MutableNBTCompound compound) {
         compound.setString("translation_key", translationKey);
