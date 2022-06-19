@@ -73,7 +73,7 @@ public final class Messenger {
     }
 
     public static void sendSystemMessage(@NotNull Collection<Player> recipients, @NotNull Component message) {
-        sendSystemMessage(recipients, message, CommonChatType.CHAT.getId());
+        sendSystemMessage(recipients, message, CommonChatType.SYSTEM.getId());
     }
 
     /**
