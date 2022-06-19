@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
-import net.minestom.server.command.ArgumentsSignature;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandDispatcher;
@@ -149,8 +148,7 @@ public final class CommandParser {
     public static ArgumentQueryResult findEligibleArgument(@NotNull Command command, String[] args, String commandString,
                                                            boolean trailingSpace, boolean forceCorrect,
                                                            Predicate<CommandSyntax> syntaxPredicate,
-                                                           Predicate<Argument<?>> argumentPredicate,
-                                                           @Nullable ArgumentsSignature signature) {
+                                                           Predicate<Argument<?>> argumentPredicate) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());

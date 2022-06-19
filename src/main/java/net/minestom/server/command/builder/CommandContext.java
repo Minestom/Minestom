@@ -26,14 +26,15 @@ public class CommandContext {
     protected Map<String, Object> args = new HashMap<>();
     protected Map<String, String> rawArgs = new HashMap<>();
     private CommandData returnData;
-    private @Nullable ArgumentsSignature signature;
+    private final @Nullable ArgumentsSignature signature;
 
     public CommandContext(@NotNull String input) {
         this.input = input;
         this.commandName = input.split(StringUtils.SPACE)[0];
+        this.signature = null;
     }
 
-    public CommandContext(CommandContext source, ArgumentsSignature signature) {
+    public CommandContext(CommandContext source, @Nullable ArgumentsSignature signature) {
         this.input = source.input;
         this.commandName = source.commandName;
         this.args = Map.copyOf(source.args);
