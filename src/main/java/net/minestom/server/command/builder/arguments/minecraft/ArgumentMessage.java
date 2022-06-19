@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ArgumentMessage extends Argument<String> implements SignableArgument {
     public ArgumentMessage(String id) {
-        super(id);
+        super(id, true, true);
     }
 
     @Override
