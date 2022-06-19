@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
+import net.minestom.server.ConfigurationManager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -19,7 +20,6 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.registry.ChatDecoration;
-import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.message.registry.ChatTypeBuilder;
 import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.ping.ResponseData;
@@ -110,11 +110,11 @@ public class Main {
             ));
         });
 
-        final ChatRegistryManager chatRegistryManager = MinecraftServer.getChatRegistryManager();
-        chatRegistryManager.addChatType(ChatTypeBuilder.builder(CommonChatType.CHAT.key())
+        final ConfigurationManager conf = MinecraftServer.getConfigurationManager();
+        conf.PLAYER_CHAT_TYPE.set(ChatTypeBuilder.builder(CommonChatType.CHAT.key())
                 .chat(ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED)))
                 .build());
-        chatRegistryManager.addChatType(ChatTypeBuilder.builder(CommonChatType.SYSTEM.key())
+        conf.SYSTEM_CHAT_TYPE.set(ChatTypeBuilder.builder(CommonChatType.SYSTEM.key())
                 .chat(ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA)
                         .font(Key.key("minecraft:uniform"))))
                 .build());

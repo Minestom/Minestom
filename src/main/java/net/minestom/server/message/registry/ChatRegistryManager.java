@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.kyori.adventure.key.Key;
+import net.minestom.server.ConfigurationManager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.ObjectCache;
 import org.intellij.lang.annotations.Subst;
@@ -78,30 +79,14 @@ public final class ChatRegistryManager {
     }
 
     /**
-     * Registers default types if the user didn't provide them before calling {@link MinecraftServer#start}
+     * Registers default types
      */
     @ApiStatus.Internal
     public void initDefaults() {
-        // Player chat
-        if (!isRegistered(CommonChatType.CHAT)) {
-            CommonChatType.CHAT.setId(addChatType(ChatTypeBuilder.builder(CommonChatType.CHAT.key())
-                    .chat(ChatDecoration.contentWithSender("chat.type.text")).build()).id());
-            logDefaultRegistering(CommonChatType.CHAT);
-        } else {
-            CommonChatType.CHAT.setId(idOf(CommonChatType.CHAT));
-        }
-        // System messages
-        if (!isRegistered(CommonChatType.SYSTEM)) {
-            CommonChatType.SYSTEM.setId(addChatType(ChatTypeBuilder.builder(CommonChatType.SYSTEM.key()).chat().build()).id());
-            logDefaultRegistering(CommonChatType.SYSTEM);
-        } else {
-            CommonChatType.SYSTEM.setId(idOf(CommonChatType.SYSTEM));
-        }
+        final ConfigurationManager conf = MinecraftServer.getConfigurationManager();
+        CommonChatType.CHAT.setId(addChatType(conf.PLAYER_CHAT_TYPE.get()).id());
+        CommonChatType.SYSTEM.setId(addChatType(conf.SYSTEM_CHAT_TYPE.get()).id());
         // TODO Should we add all default types?
-    }
-
-    private void logDefaultRegistering(ChatType type) {
-        MinecraftServer.LOGGER.debug("Registering default ChatType for: {}", type.key());
     }
 
     public NBTCompound toNBT() {

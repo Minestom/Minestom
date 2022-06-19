@@ -15,10 +15,6 @@ public enum CommonChatType implements ChatType {
         this.name = name;
     }
 
-    public boolean registered() {
-        return id.isSet();
-    }
-
     @ApiStatus.Internal
     public void setId(int id) {
         this.id.set(id);
