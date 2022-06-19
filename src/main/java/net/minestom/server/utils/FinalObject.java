@@ -1,7 +1,5 @@
 package net.minestom.server.utils;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.function.Supplier;
 
 /**
@@ -9,7 +7,6 @@ import java.util.function.Supplier;
  *
  * @param <T> type of the object
  */
-@ApiStatus.Internal
 public final class FinalObject<T> {
     private T obj;
     private boolean finalized;

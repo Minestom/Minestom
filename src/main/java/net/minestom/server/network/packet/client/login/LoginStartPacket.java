@@ -2,6 +2,8 @@ package net.minestom.server.network.packet.client.login;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.ConfigurationManager;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
@@ -33,12 +35,16 @@ public record LoginStartPacket(@NotNull String username, @Nullable PlayerPublicK
     @Override
     public void process(@NotNull PlayerConnection connection) {
         connection.setPlayerPublicKey(publicKey);
+        final ConfigurationManager config = MinecraftServer.getConfigurationManager();
 
-        //TODO Verification toggling
-        if (publicKey != null) {
-            if (!publicKey.isValid()) {
-                // TODO Configurable message
-                connection.sendPacket(new LoginDisconnectPacket(Component.text("Invalid signature", NamedTextColor.RED)));
+        if (config.REQUIRE_VALID_PLAYER_PUBLIC_KEY.get()) {
+            if (publicKey != null) {
+                if (!publicKey.isValid()) {
+                    connection.sendPacket(new LoginDisconnectPacket(config.INVALID_PLAYER_PUBLIC_KEY.get()));
+                    connection.disconnect();
+                }
+            } else {
+                connection.sendPacket(new LoginDisconnectPacket(config.MISSING_PLAYER_PUBLIC_KEY.get()));
                 connection.disconnect();
             }
         }

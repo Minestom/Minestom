@@ -141,6 +141,8 @@ public interface ServerProcess extends Snapshotable {
 
     @NotNull ChatRegistryManager chatRegistry();
 
+    @NotNull ConfigurationManager configuration();
+
     void start(@NotNull SocketAddress socketAddress);
 
     void stop();

@@ -191,6 +191,10 @@ public final class MinecraftServer {
         return serverProcess.chatRegistry();
     }
 
+    public static ConfigurationManager getConfigurationManager() {
+        return serverProcess.configuration();
+    }
+
     public static PacketProcessor getPacketProcessor() {
         return serverProcess.packetProcessor();
     }

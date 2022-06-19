@@ -70,6 +70,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
     private final ChatRegistryManager chatRegistryManager;
+    private final ConfigurationManager configurationManager;
 
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
@@ -98,6 +99,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
         this.chatRegistryManager = new ChatRegistryManager();
+        this.configurationManager = new ConfigurationManager();
     }
 
     @Override
@@ -211,10 +213,17 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public @NotNull ConfigurationManager configuration() {
+        return configurationManager;
+    }
+
+    @Override
     public void start(@NotNull SocketAddress socketAddress) {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
         }
+
+        configurationManager.initDefaults();
 
         extension.start();
         extension.gotoPreInit();
