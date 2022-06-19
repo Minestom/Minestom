@@ -8,6 +8,7 @@ import net.minestom.server.utils.crypto.KeyUtils;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.time.Instant;
+import java.util.Arrays;
 
 /**
  * Player's public key used to sign chat messages
@@ -36,5 +37,14 @@ public record PlayerPublicKey(Instant expiresAt, PublicKey publicKey, byte[] sig
         writer.writeLong(expiresAt().toEpochMilli());
         writer.writeByteArray(publicKey.getEncoded());
         writer.writeByteArray(signature());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PlayerPublicKey ppk) {
+            return expiresAt.equals(ppk.expiresAt) && publicKey.equals(ppk.publicKey) && Arrays.equals(signature, ppk.signature);
+        } else {
+            return false;
+        }
     }
 }

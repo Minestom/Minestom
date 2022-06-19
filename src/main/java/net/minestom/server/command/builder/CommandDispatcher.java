@@ -81,6 +81,10 @@ public class CommandDispatcher {
         return commandMap.getOrDefault(commandName, null);
     }
 
+    public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
+        return execute(source, commandString, null);
+    }
+
     /**
      * Checks if the command exists, and execute it.
      *
