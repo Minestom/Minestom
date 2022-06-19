@@ -677,7 +677,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Makes the player send a message (can be used for commands).
      *
      * @param message the message that the player will send
+     * @deprecated Due to Minecraft 1.19 changes, this method can only emulate unsigned messages which
+     * is unpredictable, therefore we are dropping official support for it.
      */
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
     public void chat(@NotNull String message) {
         addPacketToQueue(new ClientChatMessagePacket(message, MessageSignature.UNSIGNED, false));
     }
