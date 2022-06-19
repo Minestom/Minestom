@@ -2140,7 +2140,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @return the messages
          */
-        public @Nullable ChatPreference getChatMessageType() {
+        public @Nullable ChatPreference getChatPreference() {
             return chatPreference;
         }
 

@@ -116,6 +116,6 @@ public final class Messenger {
      * @return the chat message type
      */
     private static @NotNull ChatPreference getChatPreference(@NotNull Player player) {
-        return Objects.requireNonNullElse(player.getSettings().getChatMessageType(), ChatPreference.FULL);
+        return Objects.requireNonNullElse(player.getSettings().getChatPreference(), ChatPreference.FULL);
     }
 }
