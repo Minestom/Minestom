@@ -89,7 +89,7 @@ public class CommandDispatcher {
      * @return the command result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString, @Nullable ArgumentsSignature signature) {
-        CommandResult commandResult = parse(commandString, signature);
+        CommandResult commandResult = parse(commandString);
         ParsedCommand parsedCommand = commandResult.parsedCommand;
         if (parsedCommand != null) {
             commandResult.commandData = parsedCommand.execute(source, signature);
@@ -103,7 +103,7 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the parsing result
      */
-    public @NotNull CommandResult parse(@NotNull String commandString, @Nullable ArgumentsSignature signature) {
+    public @NotNull CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
         // Verify if the result is cached
         {
@@ -125,7 +125,7 @@ public class CommandDispatcher {
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand( commandQueryResult, commandName, commandString, result, signature);
+        findParsedCommand( commandQueryResult, commandName, commandString, result);
 
         // Cache result
         this.cache.put(commandString, result);
@@ -136,8 +136,7 @@ public class CommandDispatcher {
     private @NotNull ParsedCommand findParsedCommand(@NotNull CommandQueryResult commandQueryResult,
                                                       @NotNull String commandName,
                                                       @NotNull String commandString,
-                                                      @NotNull CommandResult result,
-                                                     @Nullable ArgumentsSignature signature) {
+                                                      @NotNull CommandResult result) {
         final Command command = commandQueryResult.command();
         String[] args = commandQueryResult.args();
         final boolean hasArgument = args.length > 0;
@@ -161,7 +160,7 @@ public class CommandDispatcher {
                 final CommandSyntax syntax = optionalSyntax.get();
                 parsedCommand.syntax = syntax;
                 parsedCommand.executor = syntax.getExecutor();
-                parsedCommand.context = new CommandContext(input, signature);
+                parsedCommand.context = new CommandContext(input);
 
                 result.type = CommandResult.Type.SUCCESS;
                 result.parsedCommand = parsedCommand;
@@ -171,7 +170,7 @@ public class CommandDispatcher {
                 final CommandExecutor defaultExecutor = command.getDefaultExecutor();
                 if (defaultExecutor != null) {
                     parsedCommand.executor = defaultExecutor;
-                    parsedCommand.context = new CommandContext(input, signature);
+                    parsedCommand.context = new CommandContext(input);
 
                     result.type = CommandResult.Type.SUCCESS;
                     result.parsedCommand = parsedCommand;
@@ -196,7 +195,7 @@ public class CommandDispatcher {
 
         // Check if there is at least one correct syntax
         if (!validSyntaxes.isEmpty()) {
-            CommandContext context = new CommandContext(input, signature);
+            CommandContext context = new CommandContext(input);
             // Search the syntax with all perfect args
             final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, context);
             if (finalValidSyntax != null) {
@@ -235,7 +234,7 @@ public class CommandDispatcher {
 
         // No syntax found
         result.type = CommandResult.Type.INVALID_SYNTAX;
-        result.parsedCommand = ParsedCommand.withDefaultExecutor(command, input, signature);
+        result.parsedCommand = ParsedCommand.withDefaultExecutor(command, input);
         return result.parsedCommand;
     }
 }

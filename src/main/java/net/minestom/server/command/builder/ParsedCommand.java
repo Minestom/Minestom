@@ -42,7 +42,7 @@ public class ParsedCommand {
      */
     public @Nullable CommandData execute(@NotNull CommandSender source, @Nullable ArgumentsSignature signature) {
         // Global listener
-        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString, signature)), commandString);
+        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString)), commandString);
         // Command condition check
         {
             // Parents
@@ -72,7 +72,7 @@ public class ParsedCommand {
                 if (commandCondition == null || commandCondition.canUse(source, commandString)) {
                     context.retrieveDefaultValues(syntax.getDefaultValuesMap());
                     try {
-                        executor.apply(source, context);
+                        executor.apply(source, new CommandContext(context, signature));
                     } catch (Throwable throwable) {
                         MinecraftServer.getExceptionManager().handleException(throwable);
                     }
@@ -80,7 +80,7 @@ public class ParsedCommand {
             } else {
                 // The executor is probably the default one
                 try {
-                    executor.apply(source, context);
+                    executor.apply(source, new CommandContext(context, signature));
                 } catch (Throwable throwable) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
                 }
@@ -99,12 +99,12 @@ public class ParsedCommand {
         return context.getReturnData();
     }
 
-    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input, @Nullable ArgumentsSignature signature) {
+    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
         parsedCommand.commandString = input;
         parsedCommand.executor = command.getDefaultExecutor();
-        parsedCommand.context = new CommandContext(input, signature);
+        parsedCommand.context = new CommandContext(input);
         return parsedCommand;
     }
 }

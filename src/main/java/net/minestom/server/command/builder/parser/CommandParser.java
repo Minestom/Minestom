@@ -128,7 +128,7 @@ public final class CommandParser {
                 maxArguments = argsSize;
 
                 // Fill arguments map
-                finalContext = new CommandContext(validSyntaxHolder.commandString(), context.getSignature());
+                finalContext = new CommandContext(validSyntaxHolder.commandString());
                 for (var entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
                     final ArgumentParser.ArgumentResult argumentResult = entry.getValue();
@@ -160,7 +160,7 @@ public final class CommandParser {
                 continue;
             }
 
-            final CommandContext context = new CommandContext(commandString, signature);
+            final CommandContext context = new CommandContext(commandString);
 
             final Argument<?>[] commandArguments = syntax.getArguments();
             int inputIndex = 0;
