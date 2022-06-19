@@ -41,7 +41,7 @@ public class ChatMessageListener {
         }
 
         final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
-        final Component expectedMessage = Objects.requireNonNullElse(player.getLastPreviewedMessage(), Component.text(message));
+        final Component expectedMessage = Objects.requireNonNullElseGet(player.getLastPreviewedMessage(), () -> Component.text(message));
         PlayerChatEvent event = new PlayerChatEvent(player, players, message, packet.signature().withSigner(player.getUuid()),
                 MessageSender.from(player), expectedMessage);
 
