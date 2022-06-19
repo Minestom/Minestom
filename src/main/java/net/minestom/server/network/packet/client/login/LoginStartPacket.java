@@ -93,11 +93,6 @@ public record LoginStartPacket(@NotNull String username, @Nullable PlayerPublicK
         if (username.length() > 16)
             throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");
         writer.writeSizedString(username);
-        if (publicKey == null) {
-            writer.writeBoolean(false);
-        } else {
-            writer.writeBoolean(true);
-            writer.write(publicKey);
-        }
+        writer.writeNullable(publicKey);
     }
 }
