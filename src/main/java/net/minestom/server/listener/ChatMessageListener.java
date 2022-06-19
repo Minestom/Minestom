@@ -31,6 +31,7 @@ public class ChatMessageListener {
         } else {
             Messenger.sendRejectionMessage(player);
         }
+        player.setLastPreviewedMessage(null);
     }
 
     public static void chatMessageListener(ClientChatMessagePacket packet, Player player) {
@@ -68,7 +69,6 @@ public class ChatMessageListener {
                 }
             } else {
                 // There is no way the message got modified, send it with the original signature
-                // TODO Should we handle poor design where the signature got altered?
                 Messenger.sendSignedMessage(event.getRecipients(), event.getSender(), event.getMessage(),
                         event.getSignature(), event.getChatType());
             }
