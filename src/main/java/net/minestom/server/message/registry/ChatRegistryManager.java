@@ -84,8 +84,8 @@ public final class ChatRegistryManager {
     @ApiStatus.Internal
     public void initDefaults() {
         final ConfigurationManager conf = MinecraftServer.getConfigurationManager();
-        CommonChatType.CHAT.setId(addChatType(conf.PLAYER_CHAT_TYPE.get()).id());
-        CommonChatType.SYSTEM.setId(addChatType(conf.SYSTEM_CHAT_TYPE.get()).id());
+        ((MutableChatTypeImpl) ChatType.CHAT).setId(addChatType(conf.PLAYER_CHAT_TYPE.get()).id());
+        ((MutableChatTypeImpl) ChatType.SYSTEM).setId(addChatType(conf.SYSTEM_CHAT_TYPE.get()).id());
         // TODO Should we add all default types?
     }
 

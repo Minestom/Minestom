@@ -15,7 +15,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
-import net.minestom.server.message.registry.CommonChatType;
+import net.minestom.server.message.registry.ChatType;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.ActionBarPacket;
 import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
@@ -61,7 +61,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         if (type == MessageType.SYSTEM)
-            Messenger.sendSystemMessage(getPlayers(), message, CommonChatType.SYSTEM);
+            Messenger.sendSystemMessage(getPlayers(), message, ChatType.SYSTEM);
         else
             Messenger.sendUnsignedMessage(getPlayers(), new MessageSender(Component.text("UNKNOWN SENDER",
                     NamedTextColor.RED), null), message);

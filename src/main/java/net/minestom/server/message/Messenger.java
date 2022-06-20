@@ -5,7 +5,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.registry.ChatType;
-import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.network.packet.server.play.PlayerChatMessagePacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -37,7 +36,7 @@ public final class Messenger {
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                          @NotNull Component message, @Nullable Component unsignedMessage,
                                          @NotNull MessageSignature signature) {
-        sendSignedMessage(recipients, sender, message, unsignedMessage, signature, CommonChatType.CHAT);
+        sendSignedMessage(recipients, sender, message, unsignedMessage, signature, ChatType.CHAT);
     }
 
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
@@ -48,7 +47,7 @@ public final class Messenger {
 
     public static void sendSignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                          @NotNull Component message, @NotNull MessageSignature signature) {
-        sendSignedMessage(recipients, sender, message, null, signature, CommonChatType.CHAT);
+        sendSignedMessage(recipients, sender, message, null, signature, ChatType.CHAT);
     }
 
     public static void sendUnsignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
@@ -58,7 +57,7 @@ public final class Messenger {
 
     public static void sendUnsignedMessage(@NotNull Collection<Player> recipients, @NotNull MessageSender sender,
                                             @NotNull Component message) {
-        sendUnsignedMessage(recipients, sender, message, CommonChatType.CHAT);
+        sendUnsignedMessage(recipients, sender, message, ChatType.CHAT);
     }
 
     public static void sendSystemMessage(@NotNull Collection<Player> recipients, @NotNull Component message, ChatType chatType) {
@@ -69,7 +68,7 @@ public final class Messenger {
     }
 
     public static void sendSystemMessage(@NotNull Collection<Player> recipients, @NotNull Component message) {
-        sendSystemMessage(recipients, message, CommonChatType.SYSTEM);
+        sendSystemMessage(recipients, message, ChatType.SYSTEM);
     }
 
     /**
@@ -102,7 +101,7 @@ public final class Messenger {
      * @param player the player
      */
     public static void sendRejectionMessage(@NotNull Player player) {
-        player.sendPacket(new SystemChatPacket(REJECTION_MESSAGE, CommonChatType.SYSTEM.id()));
+        player.sendPacket(new SystemChatPacket(REJECTION_MESSAGE, ChatType.SYSTEM.id()));
     }
 
     /**

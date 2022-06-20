@@ -48,7 +48,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatPreference;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
-import net.minestom.server.message.registry.CommonChatType;
+import net.minestom.server.message.registry.ChatType;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -667,7 +667,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         if (type == MessageType.SYSTEM)
-            Messenger.sendSystemMessage(List.of(this), message, CommonChatType.SYSTEM);
+            Messenger.sendSystemMessage(List.of(this), message, ChatType.SYSTEM);
         else
             Messenger.sendUnsignedMessage(List.of(this), new MessageSender(Component.text("UNKNOWN SENDER",
                     NamedTextColor.RED), null), message);

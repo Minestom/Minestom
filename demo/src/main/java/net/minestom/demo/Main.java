@@ -20,8 +20,8 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.registry.ChatDecoration;
+import net.minestom.server.message.registry.ChatType;
 import net.minestom.server.message.registry.ChatTypeBuilder;
-import net.minestom.server.message.registry.CommonChatType;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
@@ -111,10 +111,10 @@ public class Main {
         });
 
         final ConfigurationManager conf = MinecraftServer.getConfigurationManager();
-        conf.PLAYER_CHAT_TYPE.set(ChatTypeBuilder.builder(CommonChatType.CHAT.key())
+        conf.PLAYER_CHAT_TYPE.set(ChatTypeBuilder.builder(ChatType.CHAT.key())
                 .chat(ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED)))
                 .build());
-        conf.SYSTEM_CHAT_TYPE.set(ChatTypeBuilder.builder(CommonChatType.SYSTEM.key())
+        conf.SYSTEM_CHAT_TYPE.set(ChatTypeBuilder.builder(ChatType.SYSTEM.key())
                 .chat(ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA)
                         .font(Key.key("minecraft:uniform"))))
                 .build());
