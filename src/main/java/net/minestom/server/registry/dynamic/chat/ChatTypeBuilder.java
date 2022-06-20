@@ -1,14 +1,12 @@
 package net.minestom.server.registry.dynamic.chat;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.dynamic.DynamicRegistryElement;
-import net.minestom.server.registry.dynamic.DynamicRegistryElementBuilder;
-import net.minestom.server.registry.dynamic.DynamicRegistryElementFactory;
+import net.minestom.server.registry.dynamic.DynamicRegistryEntry;
+import net.minestom.server.registry.dynamic.DynamicRegistryEntryBuilder;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public final class ChatTypeBuilder implements DynamicRegistryElementBuilder<ChatType> {
+public final class ChatTypeBuilder implements DynamicRegistryEntryBuilder<ChatType> {
     private final Key key;
     @Nullable
     private TextDisplay chat;
@@ -75,17 +73,17 @@ public final class ChatTypeBuilder implements DynamicRegistryElementBuilder<Chat
     }
 
     @Override
-    public NBTCompound toNBT() {
-        return new ChatTypeImpl(-1, key, chat, overlay, narration).toNBT();
-    }
-
-    @Override
     public Key registry() {
-        return DynamicRegistryElement.CHAT_TYPE_REGISTRY;
+        return DynamicRegistryEntry.CHAT_TYPE_REGISTRY;
     }
 
     @Override
-    public DynamicRegistryElementFactory<ChatType> factory() {
-        return ChatType::fromNBT;
+    public Key name() {
+        return key;
+    }
+
+    @Override
+    public ChatType build(int id) {
+        return new ChatTypeImpl(id, key, chat, overlay, narration);
     }
 }

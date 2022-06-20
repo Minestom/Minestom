@@ -1,13 +1,13 @@
 package net.minestom.server.registry.dynamic.chat;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.dynamic.DynamicRegistryElement;
+import net.minestom.server.registry.dynamic.DynamicRegistryEntry;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import static net.minestom.server.registry.dynamic.chat.NBTCompoundWriteable.writeIfPresent;
 
-public interface ChatType extends DynamicRegistryElement {
+public interface ChatType extends DynamicRegistryEntry {
     ChatType CHAT = new DynamicChatTypeImpl(Key.key("minecraft:chat"));
     ChatType SYSTEM = new DynamicChatTypeImpl(Key.key("minecraft:system"));
 
@@ -24,6 +24,7 @@ public interface ChatType extends DynamicRegistryElement {
     default NBTCompound toNBT() {
         final MutableNBTCompound compound = new MutableNBTCompound();
         compound.setString("name", key().asString());
+        compound.setInt("id", id());
         final MutableNBTCompound element = new MutableNBTCompound();
         writeIfPresent("chat", chat(), element);
         writeIfPresent("overlay", overlay(), element);

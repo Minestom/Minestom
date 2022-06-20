@@ -9,6 +9,9 @@ import net.minestom.server.registry.dynamic.chat.DynamicChatTypeImpl;
 import net.minestom.server.utils.ObjectCache;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
@@ -16,43 +19,49 @@ import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 public final class DynamicRegistryManager implements NBTRepresentable {
     private final Set<Key> registries = new HashSet<>();
     private final Map<Key, AtomicInteger> idCounters = new HashMap<>();
     private final Map<Key, ObjectCache<NBTCompound>> compoundCaches = new HashMap<>();
-    private final Map<Key, List<NBTCompound>> registryElements = new HashMap<>();
-    private final Map<Key, Map<Key, NBTCompound>> registryElementsByName = new HashMap<>();
+    private final Map<Key, List<NBTCompound>> registryEntries = new HashMap<>();
+    private final Map<Key, Map<Key, NBTCompound>> registryEntriesByName = new HashMap<>();
 
-    public <T extends DynamicRegistryElement> T register(Key registry, DynamicRegistryElementFactory<T> factory, NBTCompound data) {
+    @Contract("_, _, null -> null")
+    public <T extends DynamicRegistryEntry> T register(@NotNull Key registry, @NotNull NBTCompound data,
+                                                       @Nullable Function<NBTCompound, T> factory) {
         final @Subst("minecraft:something") String name = data.getString("name");
         if (name == null) {
             throw new IllegalArgumentException("Data doesn't have required name tag!");
         }
 
-        registries.add(registry);
-
         final int id = idCounters.computeIfAbsent(registry, k -> new AtomicInteger()).getAndIncrement();
+        final NBTCompound compound = new MutableNBTCompound(data).setInt("id", id).toCompound();
 
-        final MutableNBTCompound compound = new MutableNBTCompound(data);
-        compound.setInt("id", id);
-        final NBTCompound dataWithId = compound.toCompound();
-        final T result = factory.apply(dataWithId);
-        registryElements.computeIfAbsent(registry, k -> new ArrayList<>()).add(dataWithId);
-        registryElementsByName.computeIfAbsent(Key.key(name), k -> new HashMap<>()).put(result.key(), dataWithId);
+        storeEntry(registry, Key.key(name), compound);
+
+        return factory == null ? null : factory.apply(compound);
+    }
+
+    public <T extends DynamicRegistryEntry> T register(DynamicRegistryEntryBuilder<T> builder) {
+        final T entry = builder.build(idCounters.computeIfAbsent(builder.registry(), k -> new AtomicInteger()).getAndIncrement());
+        final NBTCompound compound = entry.toNBT();
+        storeEntry(entry.registry(), entry.key(), compound);
+        return entry;
+    }
+
+    private void storeEntry(Key registry, Key name, NBTCompound entry) {
+        registries.add(registry);
+        registryEntries.computeIfAbsent(registry, k -> new ArrayList<>()).add(entry);
+        registryEntriesByName.computeIfAbsent(registry, k -> new HashMap<>()).put(name, entry);
 
         compoundCaches.computeIfAbsent(registry, k -> new ObjectCache<>(() -> {
             final MutableNBTCompound root = new MutableNBTCompound();
             root.set("type", NBT.String(k.asString()));
-            root.set("value", NBT.List(NBTType.TAG_Compound, registryElements.get(k)));
+            root.set("value", NBT.List(NBTType.TAG_Compound, registryEntries.get(k)));
             return root.toCompound();
         })).invalidate();
-
-        return result;
-    }
-
-    public <T extends DynamicRegistryElement> T register(DynamicRegistryElementBuilder<T> builder) {
-        return register(builder.registry(), builder.factory(), builder.toNBT());
     }
 
     public NBTCompound toNBT(Key registry) {

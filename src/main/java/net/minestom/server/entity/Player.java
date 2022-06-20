@@ -61,7 +61,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.dynamic.DynamicRegistryElement;
+import net.minestom.server.registry.dynamic.DynamicRegistryEntry;
 import net.minestom.server.registry.dynamic.chat.ChatType;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
@@ -253,7 +253,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionType = spawnInstance.getDimensionType();
 
         NBTCompound nbt = NBT.Compound(Map.of(
-                DynamicRegistryElement.CHAT_TYPE_REGISTRY.asString(), MinecraftServer.getDynamicRegistryManager().toNBT(DynamicRegistryElement.CHAT_TYPE_REGISTRY),
+                DynamicRegistryEntry.CHAT_TYPE_REGISTRY.asString(), MinecraftServer.getDynamicRegistryManager().toNBT(DynamicRegistryEntry.CHAT_TYPE_REGISTRY),
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
