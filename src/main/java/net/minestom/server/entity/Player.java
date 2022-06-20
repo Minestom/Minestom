@@ -667,11 +667,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        if (type == MessageType.SYSTEM)
+        if (type == MessageType.SYSTEM) {
             Messenger.sendSystemMessage(List.of(this), message, ChatType.SYSTEM);
-        else
+        } else {
             Messenger.sendUnsignedMessage(List.of(this), new MessageSender(Component.text("UNKNOWN SENDER",
                     NamedTextColor.RED), null), message);
+        }
     }
 
     /**

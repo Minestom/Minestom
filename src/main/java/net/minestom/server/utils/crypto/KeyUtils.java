@@ -13,8 +13,14 @@ public final class KeyUtils {
     private static final String RSA_HEADER = "-----BEGIN RSA PUBLIC KEY-----\n";
     private static final String RSA_FOOTER = "\n-----END RSA PUBLIC KEY-----\n";
 
-    public enum SignatureAlgorithm {SHA256withRSA,SHA1withRSA}
-    public enum KeyAlgorithm {RSA}
+    public enum SignatureAlgorithm {
+        SHA256withRSA,
+        SHA1withRSA
+    }
+
+    public enum KeyAlgorithm {
+        RSA
+    }
 
     private KeyUtils() {
         //no instance

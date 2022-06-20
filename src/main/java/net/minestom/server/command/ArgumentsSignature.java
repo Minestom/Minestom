@@ -15,13 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public record ArgumentsSignature(long timestamp, long salt, Map<String, byte[]> signatures, boolean signedPreview)
-implements Writeable {
-    public ArgumentsSignature(long timestamp, long salt, Map<String, byte[]> signatures, boolean signedPreview) {
-        this.timestamp = timestamp;
-        this.salt = salt;
-        this.signatures = Map.copyOf(signatures);
-        this.signedPreview = signedPreview;
+public record ArgumentsSignature(long timestamp, long salt, Map<String, byte[]> signatures, boolean signedPreview) implements Writeable {
+    public ArgumentsSignature {
+        signatures = Map.copyOf(signatures);
     }
 
     public ArgumentsSignature(BinaryReader reader) {
