@@ -1,14 +1,14 @@
-package net.minestom.server.message.registry;
+package net.minestom.server.registry.dynamic.chat;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.dynamic.DynamicRegistryElement;
+import net.minestom.server.registry.dynamic.DynamicRegistryElementBuilder;
+import net.minestom.server.registry.dynamic.DynamicRegistryElementFactory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
-import static net.minestom.server.message.registry.NBTCompoundWriteable.writeIfPresent;
-
-public final class ChatTypeBuilder {
+public final class ChatTypeBuilder implements DynamicRegistryElementBuilder<ChatType> {
     private final Key key;
     @Nullable
     private TextDisplay chat;
@@ -74,15 +74,18 @@ public final class ChatTypeBuilder {
         return narration(new Narration(decoration, priority));
     }
 
-    @Contract(" -> new")
-    public NBTCompound build() {
-        final MutableNBTCompound compound = new MutableNBTCompound();
-        compound.setString("name", key.asString());
-        final MutableNBTCompound element = new MutableNBTCompound();
-        writeIfPresent("chat", chat, element);
-        writeIfPresent("overlay", overlay, element);
-        writeIfPresent("narration", narration, element);
-        compound.set("element", element.toCompound());
-        return compound.toCompound();
+    @Override
+    public NBTCompound toNBT() {
+        return new ChatTypeImpl(-1, key, chat, overlay, narration).toNBT();
+    }
+
+    @Override
+    public Key registry() {
+        return DynamicRegistryElement.CHAT_TYPE_REGISTRY;
+    }
+
+    @Override
+    public DynamicRegistryElementFactory<ChatType> factory() {
+        return ChatType::fromNBT;
     }
 }

@@ -16,13 +16,13 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.dynamic.DynamicRegistryManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.terminal.MinestomTerminal;
@@ -69,7 +69,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
-    private final ChatRegistryManager chatRegistryManager;
+    private final DynamicRegistryManager dynamicRegistry;
     private final ConfigurationManager configurationManager;
 
     private final AtomicBoolean started = new AtomicBoolean();
@@ -98,7 +98,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
-        this.chatRegistryManager = new ChatRegistryManager();
+        this.dynamicRegistry = new DynamicRegistryManager();
         this.configurationManager = new ConfigurationManager();
     }
 
@@ -208,8 +208,8 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ChatRegistryManager chatRegistry() {
-        return chatRegistryManager;
+    public @NotNull DynamicRegistryManager dynamicRegistry() {
+        return dynamicRegistry;
     }
 
     @Override
@@ -239,7 +239,7 @@ final class ServerProcessImpl implements ServerProcess {
             exception.handleException(e);
             throw new RuntimeException(e);
         }
-        chatRegistryManager.initDefaults();
+        dynamicRegistry.initDefaults();
 
         // Start server
         server.start();

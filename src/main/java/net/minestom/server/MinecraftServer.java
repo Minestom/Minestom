@@ -10,7 +10,6 @@ import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
@@ -18,6 +17,7 @@ import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.dynamic.DynamicRegistryManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
@@ -187,8 +187,8 @@ public final class MinecraftServer {
         return serverProcess.bossBar();
     }
 
-    public static ChatRegistryManager getChatRegistryManager() {
-        return serverProcess.chatRegistry();
+    public static DynamicRegistryManager getDynamicRegistryManager() {
+        return serverProcess.dynamicRegistry();
     }
 
     public static ConfigurationManager getConfigurationManager() {

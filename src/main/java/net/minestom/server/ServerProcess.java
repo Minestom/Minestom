@@ -12,12 +12,12 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.registry.ChatRegistryManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.dynamic.DynamicRegistryManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.thread.ThreadDispatcher;
@@ -139,7 +139,7 @@ public interface ServerProcess extends Snapshotable {
      */
     @NotNull Ticker ticker();
 
-    @NotNull ChatRegistryManager chatRegistry();
+    @NotNull DynamicRegistryManager dynamicRegistry();
 
     @NotNull ConfigurationManager configuration();
 

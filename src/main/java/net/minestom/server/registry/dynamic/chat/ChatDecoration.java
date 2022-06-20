@@ -1,4 +1,4 @@
-package net.minestom.server.message.registry;
+package net.minestom.server.registry.dynamic.chat;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -58,6 +58,13 @@ public record ChatDecoration(@NotNull String translationKey, @NotNull List<Param
         return new ChatDecoration(template, PARAM_ALL, style);
     }
 
+    public static ChatDecoration fromNBT(NBTCompound compound) {
+        if (compound == null) return null;
+        return new ChatDecoration(compound.getString("translation_key"), compound.getList("parameters")
+                .getValue().stream().map(x -> Parameter.fromString(((String) x.getValue()))).collect(Collectors.toList()),
+                null);//fixme style parsing
+    }
+
     @Override
     public void write(MutableNBTCompound compound) {
         compound.setString("translation_key", translationKey);
@@ -76,6 +83,15 @@ public record ChatDecoration(@NotNull String translationKey, @NotNull List<Param
     }
 
     public enum Parameter {
-        SENDER, TEAM_NAME, CONTENT
+        SENDER, TEAM_NAME, CONTENT;
+
+        public static Parameter fromString(String string) {
+            return switch (string) {
+                case "sender" -> Parameter.SENDER;
+                case "team_name" -> Parameter.TEAM_NAME;
+                case "content" -> Parameter.CONTENT;
+                default -> null;
+            };
+        }
     }
 }

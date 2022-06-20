@@ -1,7 +1,6 @@
 package net.minestom.server.message;
 
 import net.kyori.adventure.audience.MessageType;
-import net.minestom.server.message.registry.ChatTypeBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,8 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The different positions for chat messages.
  *
- * @deprecated Replaced by {@link ChatTypeBuilder}, for more information refer to
- * {@link net.minestom.server.message.registry.ChatRegistryManager}. No methods should use this enum, only left
+ * @deprecated Replaced by ChatTypes. No methods should use this enum, only left
  * here to help resolve issues when updating.
  */
 @Deprecated(forRemoval = true)

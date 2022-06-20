@@ -1,4 +1,4 @@
-package net.minestom.server.message.registry;
+package net.minestom.server.registry.dynamic.chat;
 
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;

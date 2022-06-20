@@ -1,13 +1,14 @@
-package net.minestom.server.message.registry;
+package net.minestom.server.registry.dynamic.chat;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Locale;
 
-import static net.minestom.server.message.registry.NBTCompoundWriteable.writeIfPresent;
+import static net.minestom.server.registry.dynamic.chat.NBTCompoundWriteable.writeIfPresent;
 
 
 /**
@@ -40,7 +41,21 @@ public record Narration(@Nullable ChatDecoration decoration, @NotNull Priority p
         compound.set("priority", NBT.String(priority().name().toLowerCase(Locale.ROOT)));
     }
 
+    public static Narration fromNBT(NBTCompound compound) {
+        if (compound == null) return null;
+        return new Narration(ChatDecoration.fromNBT(compound.getCompound("decoration")),
+                Priority.fromString(compound.getString("priority")));
+    }
+
     public enum Priority {
-        CHAT, SYSTEM
+        CHAT, SYSTEM;
+
+        public static Priority fromString(String string) {
+            return switch (string) {
+                case "chat" -> Priority.CHAT;
+                case "system" -> Priority.SYSTEM;
+                default -> null;
+            };
+        }
     }
 }

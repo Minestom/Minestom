@@ -1,9 +1,10 @@
-package net.minestom.server.message.registry;
+package net.minestom.server.registry.dynamic.chat;
 
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
-import static net.minestom.server.message.registry.NBTCompoundWriteable.writeIfPresent;
+import static net.minestom.server.registry.dynamic.chat.NBTCompoundWriteable.writeIfPresent;
 
 /**
  * Used to display text either in chat or actionbar via {@link ChatTypeBuilder}
@@ -19,5 +20,12 @@ public record TextDisplay(@Nullable ChatDecoration decoration) implements NBTCom
     @Override
     public void write(MutableNBTCompound compound) {
         writeIfPresent("decoration", decoration, compound);
+    }
+
+    public static TextDisplay fromNBT(NBTCompound compound) {
+        if (compound == null) return null;
+        final NBTCompound d = compound.getCompound("decoration");
+        if (d == null) return undecorated();
+        return new TextDisplay(ChatDecoration.fromNBT(d));
     }
 }

@@ -15,11 +15,11 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.MessageSender;
 import net.minestom.server.message.Messenger;
-import net.minestom.server.message.registry.ChatType;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.ActionBarPacket;
 import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
+import net.minestom.server.registry.dynamic.chat.ChatType;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
