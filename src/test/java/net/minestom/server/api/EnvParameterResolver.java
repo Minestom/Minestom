@@ -1,5 +1,6 @@
 package net.minestom.server.api;
 
+import net.minestom.server.Configuration;
 import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -10,6 +11,6 @@ final class EnvParameterResolver extends TypeBasedParameterResolver<Env> {
     @Override
     public Env resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {
-        return new EnvImpl(MinecraftServer.updateProcess());
+        return new EnvImpl(MinecraftServer.updateProcess(Configuration.builder().build()));
     }
 }

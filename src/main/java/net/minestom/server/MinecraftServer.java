@@ -72,15 +72,19 @@ public final class MinecraftServer {
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
-        updateProcess();
+        return init(Configuration.builder().build());
+    }
+
+    public static MinecraftServer init(Configuration configuration) {
+        updateProcess(configuration);
         return new MinecraftServer();
     }
 
     @ApiStatus.Internal
-    public static ServerProcess updateProcess() {
+    public static ServerProcess updateProcess(Configuration configuration) {
         ServerProcess process;
         try {
-            process = new ServerProcessImpl();
+            process = new ServerProcessImpl(configuration);
             serverProcess = process;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -191,7 +195,7 @@ public final class MinecraftServer {
         return serverProcess.dynamicRegistry();
     }
 
-    public static ConfigurationManager getConfigurationManager() {
+    public static Configuration getConfiguration() {
         return serverProcess.configuration();
     }
 
@@ -328,12 +332,12 @@ public final class MinecraftServer {
      * @param address the server address
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
-    public void start(@NotNull SocketAddress address) {
+    public static void start(@NotNull SocketAddress address) {
         serverProcess.start(address);
         new TickSchedulerThread(serverProcess).start();
     }
 
-    public void start(@NotNull String address, int port) {
+    public static void start(@NotNull String address, int port) {
         start(new InetSocketAddress(address, port));
     }
 

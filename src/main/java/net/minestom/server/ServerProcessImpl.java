@@ -70,12 +70,13 @@ final class ServerProcessImpl implements ServerProcess {
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
     private final DynamicRegistryManager dynamicRegistry;
-    private final ConfigurationManager configurationManager;
+    private final Configuration configuration;
 
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() throws IOException {
+    public ServerProcessImpl(Configuration configuration) throws IOException {
+        this.configuration = configuration;
         this.exception = new ExceptionManager();
         this.extension = new ExtensionManager(this);
         this.connection = new ConnectionManager();
@@ -99,7 +100,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
         this.dynamicRegistry = new DynamicRegistryManager();
-        this.configurationManager = new ConfigurationManager();
     }
 
     @Override
@@ -213,8 +213,8 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ConfigurationManager configuration() {
-        return configurationManager;
+    public @NotNull Configuration configuration() {
+        return configuration;
     }
 
     @Override
@@ -222,8 +222,6 @@ final class ServerProcessImpl implements ServerProcess {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
         }
-
-        configurationManager.initDefaults();
 
         extension.start();
         extension.gotoPreInit();

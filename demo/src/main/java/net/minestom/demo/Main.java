@@ -8,7 +8,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
-import net.minestom.server.ConfigurationManager;
+import net.minestom.server.Configuration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -31,7 +31,11 @@ import java.time.Duration;
 public class Main {
 
     public static void main(String[] args) {
-        MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer minecraftServer = MinecraftServer.init(Configuration.builder()
+                        .setSystemChatType(ChatTypeBuilder.builder(ChatType.SYSTEM.key())
+                                .chat(ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA)
+                                        .font(Key.key("minecraft:uniform")))))
+                .build());
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
 
@@ -109,13 +113,6 @@ public class Main {
                     Component.text("Team Name").color(NamedTextColor.GOLD)
             ));
         });
-
-        final ConfigurationManager conf = MinecraftServer.getConfigurationManager();
-//        conf.PLAYER_CHAT_TYPE.set(ChatTypeBuilder.builder(ChatType.CHAT.key())
-//                .chat(ChatDecoration.full("%s | %s> %s", Style.style(NamedTextColor.DARK_RED))));
-        conf.SYSTEM_CHAT_TYPE.set(ChatTypeBuilder.builder(ChatType.SYSTEM.key())
-                .chat(ChatDecoration.content("SYSTEM: %s", Style.style(NamedTextColor.AQUA)
-                        .font(Key.key("minecraft:uniform")))));
 
         PlayerInit.init();
 

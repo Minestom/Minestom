@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.Configuration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
@@ -77,7 +78,7 @@ public class EventNodeMapTest {
 
     @Test
     public void entityLocal() {
-        var process = MinecraftServer.updateProcess();
+        var process = MinecraftServer.updateProcess(Configuration.builder().build());
         var node = process.eventHandler();
         var entity = new Entity(EntityType.ZOMBIE);
 

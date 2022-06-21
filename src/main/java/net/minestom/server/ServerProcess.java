@@ -141,7 +141,7 @@ public interface ServerProcess extends Snapshotable {
 
     @NotNull DynamicRegistryManager dynamicRegistry();
 
-    @NotNull ConfigurationManager configuration();
+    @NotNull Configuration configuration();
 
     void start(@NotNull SocketAddress socketAddress);
 

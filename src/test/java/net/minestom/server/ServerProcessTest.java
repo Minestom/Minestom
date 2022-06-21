@@ -13,7 +13,7 @@ public class ServerProcessTest {
     @Test
     public void init() {
         AtomicReference<ServerProcess> process = new AtomicReference<>();
-        assertDoesNotThrow(() -> process.set(MinecraftServer.updateProcess()));
+        assertDoesNotThrow(() -> process.set(MinecraftServer.updateProcess(Configuration.builder().build())));
         assertDoesNotThrow(() -> process.get().start(new InetSocketAddress("localhost", 25565)));
         assertThrows(Exception.class, () -> process.get().start(new InetSocketAddress("localhost", 25566)));
         assertDoesNotThrow(() -> process.get().stop());
@@ -21,7 +21,7 @@ public class ServerProcessTest {
 
     @Test
     public void tick() {
-        var process = MinecraftServer.updateProcess();
+        var process = MinecraftServer.updateProcess(Configuration.builder().build());
         process.start(new InetSocketAddress("localhost", 25565));
         var ticker = process.ticker();
         assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));

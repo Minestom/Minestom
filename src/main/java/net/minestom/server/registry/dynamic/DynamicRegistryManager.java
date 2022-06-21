@@ -1,7 +1,7 @@
 package net.minestom.server.registry.dynamic;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.ConfigurationManager;
+import net.minestom.server.Configuration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.registry.NBTRepresentable;
 import net.minestom.server.registry.dynamic.chat.ChatType;
@@ -79,8 +79,8 @@ public final class DynamicRegistryManager implements NBTRepresentable {
 
     @ApiStatus.Internal
     public void initDefaults() {
-        final ConfigurationManager config = MinecraftServer.getConfigurationManager();
-        ((DynamicChatTypeImpl) ChatType.CHAT).setBackingType(register(config.PLAYER_CHAT_TYPE.get()));
-        ((DynamicChatTypeImpl) ChatType.SYSTEM).setBackingType(register(config.SYSTEM_CHAT_TYPE.get()));
+        final Configuration config = MinecraftServer.getConfiguration();
+        ((DynamicChatTypeImpl) ChatType.CHAT).setBackingType(register(config.playerChatType()));
+        ((DynamicChatTypeImpl) ChatType.SYSTEM).setBackingType(register(config.systemChatType()));
     }
 }
