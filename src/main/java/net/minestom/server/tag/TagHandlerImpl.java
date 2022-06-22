@@ -44,10 +44,6 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        VarHandle.fullFence();
-        final Node node = traversePathWrite(root, tag, value != null);
-        if (node == null)
-            return; // Tried to remove an absent tag. Do nothing
         // Handle view tags
         if (tag.isView()) {
             synchronized (this) {
@@ -61,6 +57,10 @@ final class TagHandlerImpl implements TagHandler {
         }
         // Normal tag
         final int tagIndex = tag.index;
+        VarHandle.fullFence();
+        Node node = traversePathWrite(root, tag, value != null);
+        if (node == null)
+            return; // Tried to remove an absent tag. Do nothing
         StaticIntMap<Entry<?>> entries = node.entries;
         if (value != null) {
             Entry previous = entries.get(tagIndex);
@@ -68,14 +68,14 @@ final class TagHandlerImpl implements TagHandler {
                 previous.updateValue(tag.copyValue(value));
             } else {
                 synchronized (this) {
-                    Node syncNode = traversePathWrite(root, tag, true);
-                    syncNode.entries.put(tagIndex, valueToEntry(node, tag, value));
+                    node = traversePathWrite(root, tag, true);
+                    node.entries.put(tagIndex, valueToEntry(node, tag, value));
                 }
             }
         } else {
             synchronized (this) {
-                Node syncNode = traversePathWrite(root, tag, true);
-                syncNode.entries.remove(tagIndex);
+                node = traversePathWrite(root, tag, false);
+                if (node != null) node.entries.remove(tagIndex);
             }
         }
         node.invalidate();
@@ -98,8 +98,8 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
-        VarHandle.fullFence();
         final int tagIndex = tag.index;
+        VarHandle.fullFence();
         final Node node = traversePathWrite(root, tag, true);
         StaticIntMap<Entry<?>> entries = node.entries;
 
