@@ -29,6 +29,10 @@ public final class BlockManager {
         blockHandlerMap.put(namespace, handlerSupplier);
     }
 
+    public void registerHandler(@NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+        registerHandler(handlerSupplier.get().getNamespaceId(), handlerSupplier);
+    }
+
     public void registerHandler(@NotNull NamespaceID namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
         registerHandler(namespace.toString(), handlerSupplier);
     }
