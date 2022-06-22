@@ -121,13 +121,14 @@ public final class Biome {
     }
 
     public enum Precipitation {
-        RAIN, NONE, SNOW;
+        NONE, RAIN, SNOW;
     }
 
     public enum Category {
         NONE, TAIGA, EXTREME_HILLS, JUNGLE, MESA, PLAINS,
         SAVANNA, ICY, THE_END, BEACH, FOREST, OCEAN,
-        DESERT, RIVER, SWAMP, MUSHROOM, NETHER;
+        DESERT, RIVER, SWAMP, MUSHROOM, NETHER, UNDERGROUND,
+        MOUNTAIN;
     }
 
     public enum TemperatureModifier {
