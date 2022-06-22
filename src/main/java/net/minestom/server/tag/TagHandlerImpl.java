@@ -12,14 +12,12 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.VarHandle;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
     private static final boolean CACHE_ENABLE = PropertyUtils.getBoolean("minestom.tag-handler-cache", true);
     static final Serializers.Entry<Node, NBTCompound> NODE_SERIALIZER = new Serializers.Entry<>(NBTType.TAG_Compound, entries -> fromCompound(entries).root, Node::compound, true);
 
-    private final AtomicInteger stamp = new AtomicInteger();
     private final Node root;
 
     TagHandlerImpl(Node root) {
@@ -46,15 +44,19 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        final int initialStamp = stamp.get();
+        VarHandle.fullFence();
         final Node node = traversePathWrite(root, tag, value != null);
         if (node == null)
             return; // Tried to remove an absent tag. Do nothing
         // Handle view tags
         if (tag.isView()) {
-            node.updateContent(value != null ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
-            node.invalidate();
-            VarHandle.fullFence();
+            synchronized (this) {
+                Node syncNode = traversePathWrite(root, tag, value != null);
+                if (syncNode != null) {
+                    syncNode.updateContent(value != null ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
+                    syncNode.invalidate();
+                }
+            }
             return;
         }
         // Normal tag
@@ -65,22 +67,24 @@ final class TagHandlerImpl implements TagHandler {
             if (previous != null && previous.tag().shareValue(tag)) {
                 previous.updateValue(tag.copyValue(value));
             } else {
-                entries.put(tagIndex, valueToEntry(node, tag, value));
+                synchronized (this) {
+                    Node syncNode = traversePathWrite(root, tag, true);
+                    syncNode.entries.put(tagIndex, valueToEntry(node, tag, value));
+                }
             }
         } else {
-            // Remove recursively
-            entries.remove(tagIndex);
+            synchronized (this) {
+                Node syncNode = traversePathWrite(root, tag, true);
+                syncNode.entries.remove(tagIndex);
+            }
         }
         node.invalidate();
-        // Tag handler mutation potentially failed (node map has been rehashed, changes may therefore not be visible)
-        // The barrier also ensure propagation of cache invalidation
-        final int finalStamp = stamp.get();
-        if (initialStamp != finalStamp) setTag(tag, value);
+        VarHandle.fullFence();
     }
 
     @Override
     public <T> void updateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
-        updateAndGetTag(tag, value);
+        updateTag0(tag, value, false);
     }
 
     @Override
@@ -93,36 +97,45 @@ final class TagHandlerImpl implements TagHandler {
         return updateTag0(tag, value, true);
     }
 
-    private <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
+    private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
+        VarHandle.fullFence();
         final int tagIndex = tag.index;
-        final int initialStamp = stamp.get();
         final Node node = traversePathWrite(root, tag, true);
-        // Mutate
-        Entry previousEntry = node.entries.get(tagIndex);
-        final Object previousValue = previousEntry != null ? previousEntry.value() : tag.createDefault();
-        final T newValue = value.apply((T) previousValue);
-        Entry newEntry = newValue != null ? valueToEntry(node, tag, newValue) : null;
-        if (!node.entries.compareAndSet(tagIndex, previousEntry, newEntry)) {
-            return updateTag0(tag, value, returnPrevious);
+        StaticIntMap<Entry<?>> entries = node.entries;
+
+        final T previousValue;
+        final T newValue;
+        final Entry previousEntry = entries.get(tagIndex);
+        if (previousEntry == null) {
+            previousValue = tag.createDefault();
+            newValue = value.apply(previousValue);
+            entries.put(tagIndex, valueToEntry(node, tag, newValue));
+        } else {
+            previousValue = (T) previousEntry.value();
+            newValue = value.apply(previousValue);
+            Entry newEntry = newValue != null ? valueToEntry(node, tag, newValue) : null;
+            if (!entries.compareAndSet(tagIndex, previousEntry, newEntry)) {
+                return updateTag0(tag, value, returnPrevious);
+            }
         }
+
         node.invalidate();
-        // Verify visibility
-        if (initialStamp != stamp.get()) return updateTag0(tag, value, returnPrevious);
-        else return returnPrevious ? (T) previousValue : newValue;
+        VarHandle.fullFence();
+        return returnPrevious ? previousValue : newValue;
     }
 
     @Override
-    public @NotNull TagReadable readableCopy() {
+    public synchronized @NotNull TagReadable readableCopy() {
         return root.copy(null);
     }
 
     @Override
-    public @NotNull TagHandler copy() {
+    public synchronized @NotNull TagHandler copy() {
         return new TagHandlerImpl(root.copy(null));
     }
 
     @Override
-    public void updateContent(@NotNull NBTCompoundLike compound) {
+    public synchronized void updateContent(@NotNull NBTCompoundLike compound) {
         this.root.updateContent(compound);
     }
 
@@ -143,6 +156,7 @@ final class TagHandlerImpl implements TagHandler {
         return node;
     }
 
+    @Contract("_, _, true -> !null")
     private Node traversePathWrite(Node root, Tag<?> tag,
                                    boolean present) {
         final Tag.PathEntry[] paths = tag.path;
@@ -158,14 +172,25 @@ final class TagHandlerImpl implements TagHandler {
                 local = tmp;
             } else {
                 if (!present) return null;
-                // Empty path, create a new handler.
-                // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
-                Node tmp = local;
-                local = new Node(tmp);
-                if (entry != null && entry.nbt() instanceof NBTCompound compound) {
-                    local.updateContent(compound);
+                synchronized (this) {
+                    var synEntry = local.entries.get(pathIndex);
+                    if (synEntry != null && synEntry.tag.entry.isPath()) {
+                        // Existing path, continue navigating
+                        final Node tmp = (Node) synEntry.value;
+                        assert tmp.parent == local : "Path parent is invalid: " + tmp.parent + " != " + local;
+                        local = tmp;
+                        continue;
+                    }
+
+                    // Empty path, create a new handler.
+                    // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
+                    Node tmp = local;
+                    local = new Node(tmp);
+                    if (synEntry != null && synEntry.nbt() instanceof NBTCompound compound) {
+                        local.updateContent(compound);
+                    }
+                    tmp.entries.put(pathIndex, Entry.makePathEntry(path.name(), local));
                 }
-                tmp.entries.put(pathIndex, Entry.makePathEntry(path.name(), local));
             }
         }
         return local;
@@ -196,7 +221,7 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         Node(Node parent) {
-            this(parent, new StaticIntMap.Array<>(stamp));
+            this(parent, new StaticIntMap.Array<>());
         }
 
         Node() {
@@ -253,7 +278,7 @@ final class TagHandlerImpl implements TagHandler {
         @Contract("null -> !null")
         Node copy(Node parent) {
             MutableNBTCompound tmp = new MutableNBTCompound();
-            Node result = new Node(parent, new StaticIntMap.Array<>(stamp));
+            Node result = new Node(parent, new StaticIntMap.Array<>());
             StaticIntMap<Entry<?>> entries = result.entries;
             this.entries.forValues(entry -> {
                 Tag tag = entry.tag;
@@ -281,6 +306,7 @@ final class TagHandlerImpl implements TagHandler {
 
         void invalidate() {
             this.compound = null;
+            Node parent = this.parent;
             if (parent != null) parent.invalidate();
         }
     }
