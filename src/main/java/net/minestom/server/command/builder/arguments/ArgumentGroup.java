@@ -44,9 +44,4 @@ public class ArgumentGroup extends Argument<CommandContext> {
             group[i].processNodes(nodeMaker, executable && isLast);
         }
     }
-
-    @Override
-    public String toString() {
-        return String.format("Group<%s>", getId());
-    }
 }

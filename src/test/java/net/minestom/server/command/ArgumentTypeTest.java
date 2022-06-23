@@ -473,8 +473,6 @@ public class ArgumentTypeTest {
         assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234 1234 "));
         assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234"));
         assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234 abcd 1234.5678 extra"));
-
-        assertEquals("Group<group>", arg.toString());
     }
 
     @Test
@@ -496,8 +494,6 @@ public class ArgumentTypeTest {
 
         assertEquals(List.of("a", "b", "c"), arg.parse("a b c"));
         assertEquals(List.of("a", "b"), arg.parse("a b"));
-
-        assertEquals("Loop<loop>", arg.toString());
     }
 
     @Test

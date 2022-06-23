@@ -30,7 +30,7 @@ public class TabCompleteListener {
                     suggestion.getStart(),
                     suggestion.getLength(),
                     suggestion.getEntries().stream()
-                            .map(suggestionEntry -> new TabCompletePacket.Match(suggestionEntry.entry(), suggestionEntry.tooltip()))
+                            .map(suggestionEntry -> new TabCompletePacket.Match(suggestionEntry.getEntry(), suggestionEntry.getTooltip()))
                             .toList())
             );
         }
