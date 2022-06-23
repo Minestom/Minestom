@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -416,15 +417,6 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentCommand() {
-        var arg = ArgumentType.Command("command");
-
-        // TODO: Complete - Requires `env`
-
-        assertEquals("Command<command>", arg.toString());
-    }
-
-    @Test
     public void testArgumentEnum() {
 
         enum ExampleEnum { FIRST, SECOND, Third, fourth }
@@ -457,9 +449,30 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentGroup() {
-        var arg = ArgumentType.Group("group" /*, arguments */ ); // TODO: Arguments
+        var arg = ArgumentType.Group("group", ArgumentType.Integer("integer"), ArgumentType.String("string"), ArgumentType.Double("double"));
 
-        // TODO: Complete
+        System.out.println(arg.parse("1234 abcd 1234.5678"));
+
+        // Test normal input
+        var context1 = arg.parse("1234 1234 1234");
+        assertEquals(1234, context1.<Integer>get("integer"));
+        assertEquals("1234", context1.<String>get("string"));
+        assertEquals(1234.0, context1.<Double>get("double"));
+
+        // Test different input + trailing spaces
+        var context2 = arg.parse("1234 abcd 1234.5678   ");
+        assertEquals(1234, context2.<Integer>get("integer"));
+        assertEquals("abcd", context2.<String>get("string"));
+        assertEquals(1234.5678, context2.<Double>get("double"));
+
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse(""));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse(""));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse(""));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234.5678 1234 1234.5678"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234 1234 abcd"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234 1234 "));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234"));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse("1234 abcd 1234.5678 extra"));
 
         assertEquals("Group<group>", arg.toString());
     }
