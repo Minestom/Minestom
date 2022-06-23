@@ -1941,6 +1941,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         inventory.setItemInOffHand(itemStack);
     }
 
+    public @NotNull ItemStack getItemInHand(@NotNull Hand hand) {
+        return switch (hand) {
+            case MAIN -> getItemInMainHand();
+            case OFF -> getItemInOffHand();
+        };
+    }
+
+    public void setItemInHand(@NotNull Hand hand, @NotNull ItemStack itemStack) {
+        switch (hand) {
+            case MAIN -> setItemInMainHand(itemStack);
+            case OFF -> setItemInOffHand(itemStack);
+        };
+    }
+
     @Override
     public @NotNull ItemStack getHelmet() {
         return inventory.getHelmet();
