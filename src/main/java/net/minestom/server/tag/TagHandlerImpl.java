@@ -19,6 +19,7 @@ final class TagHandlerImpl implements TagHandler {
     static final Serializers.Entry<Node, NBTCompound> NODE_SERIALIZER = new Serializers.Entry<>(NBTType.TAG_Compound, entries -> fromCompound(entries).root, Node::compound, true);
 
     private final Node root;
+    private volatile Node copy;
 
     TagHandlerImpl(Node root) {
         this.root = root;
@@ -79,7 +80,6 @@ final class TagHandlerImpl implements TagHandler {
             }
         }
         node.invalidate();
-        VarHandle.fullFence();
     }
 
     @Override
@@ -113,8 +113,14 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public synchronized @NotNull TagReadable readableCopy() {
-        return root.copy(null);
+    public @NotNull TagReadable readableCopy() {
+        Node copy = this.copy;
+        if (copy == null) {
+            synchronized (this) {
+                this.copy = copy = root.copy(null);
+            }
+        }
+        return copy;
     }
 
     @Override
@@ -293,9 +299,10 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         void invalidate() {
-            this.compound = null;
-            Node parent = this.parent;
-            if (parent != null) parent.invalidate();
+            Node tmp = this;
+            do tmp.compound = null;
+            while ((tmp = tmp.parent) != null);
+            TagHandlerImpl.this.copy = null;
         }
     }
 

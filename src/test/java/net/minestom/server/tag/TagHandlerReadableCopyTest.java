@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TagHandlerReadableCopyTest {
 
@@ -35,6 +35,13 @@ public class TagHandlerReadableCopyTest {
         handler.setTag(tag, "test2");
         assertEquals("test2", handler.getTag(tag));
         assertEquals("test", copy.getTag(tag));
+    }
+
+    @Test
+    public void copyCacheReuse() {
+        var handler = TagHandler.newHandler();
+        handler.setTag(Tag.String("key"), "test");
+        assertSame(handler.readableCopy(), handler.readableCopy());
     }
 
     @Test
