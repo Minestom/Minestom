@@ -3,16 +3,12 @@ package net.minestom.server.tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
 sealed interface StaticIntMap<T> permits StaticIntMap.Array {
 
     T get(@Range(from = 0, to = Integer.MAX_VALUE) int key);
-
-    boolean compareAndSet(@Range(from = 0, to = Integer.MAX_VALUE) int key, T expected, T updated);
 
     void forValues(@NotNull Consumer<T> consumer);
 
@@ -28,7 +24,6 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
 
     final class Array<T> implements StaticIntMap<T> {
         private static final Object[] EMPTY_ARRAY = new Object[0];
-        private static final VarHandle ARRAY_UPDATER = MethodHandles.arrayElementVarHandle(Object[].class);
 
         private T[] array;
 
@@ -45,16 +40,6 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
         public T get(int key) {
             final T[] array = this.array;
             return key < array.length ? array[key] : null;
-        }
-
-        @Override
-        public boolean compareAndSet(@Range(from = 0, to = Integer.MAX_VALUE) int key, T expected, T updated) {
-            T[] array = this.array;
-            if (key >= array.length) {
-                updateArray(Arrays.copyOf(array, key * 2 + 1));
-                return false;
-            }
-            return ARRAY_UPDATER.compareAndSet(array, key, expected, updated);
         }
 
         @Override
