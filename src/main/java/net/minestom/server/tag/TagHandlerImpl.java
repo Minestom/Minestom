@@ -99,28 +99,16 @@ final class TagHandlerImpl implements TagHandler {
 
     private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
         final int tagIndex = tag.index;
-        VarHandle.fullFence();
         final Node node = traversePathWrite(root, tag, true);
         StaticIntMap<Entry<?>> entries = node.entries;
 
-        final T previousValue;
-        final T newValue;
         final Entry previousEntry = entries.get(tagIndex);
-        if (previousEntry == null) {
-            previousValue = tag.createDefault();
-            newValue = value.apply(previousValue);
-            entries.put(tagIndex, valueToEntry(node, tag, newValue));
-        } else {
-            previousValue = (T) previousEntry.value();
-            newValue = value.apply(previousValue);
-            Entry newEntry = newValue != null ? valueToEntry(node, tag, newValue) : null;
-            if (!entries.compareAndSet(tagIndex, previousEntry, newEntry)) {
-                return updateTag0(tag, value, returnPrevious);
-            }
-        }
+        final T previousValue = previousEntry != null ? (T) previousEntry.value() : tag.createDefault();
+        final T newValue = value.apply(previousValue);
+        if (newValue != null) entries.put(tagIndex, valueToEntry(node, tag, newValue));
+        else entries.remove(tagIndex);
 
         node.invalidate();
-        VarHandle.fullFence();
         return returnPrevious ? previousValue : newValue;
     }
 
