@@ -76,7 +76,8 @@ final class TagHandlerImpl implements TagHandler {
         } else {
             synchronized (this) {
                 node = traversePathWrite(root, tag, false);
-                if (node != null) node.entries.remove(tagIndex);
+                if (node == null) return;
+                node.entries.remove(tagIndex);
             }
         }
         node.invalidate();
