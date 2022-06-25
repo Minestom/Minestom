@@ -71,9 +71,9 @@ final class TagRecord {
     }
 
     static final class Serializer<T extends Record> implements TagSerializer<T> {
-        Constructor<T> constructor;
-        Entry[] entries;
-        Serializers.Entry<T, NBTCompound> serializerEntry;
+        final Constructor<T> constructor;
+        final Entry[] entries;
+        final Serializers.Entry<T, NBTCompound> serializerEntry;
 
         Serializer(Constructor<T> constructor, Entry[] entries) {
             this.constructor = constructor;
