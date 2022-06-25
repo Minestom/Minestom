@@ -2,7 +2,10 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,6 +83,29 @@ public class ItemTest {
         assertNull(item1.getDisplayName());
         assertNotNull(item2.getDisplayName());
         assertNotEquals(item1, item2, "Item builder should be reusable");
+    }
+
+    @Test
+    public void materialUpdate() {
+        var nbt = NBT.Compound(Map.of("key", NBT.String("value")));
+        var item1 = ItemStack.fromNBT(Material.DIAMOND, nbt, 5);
+        var item2 = item1.withMaterial(Material.GOLD_INGOT);
+
+        assertEquals(Material.DIAMOND, item1.material());
+        assertEquals(Material.GOLD_INGOT, item2.material());
+
+        assertEquals(nbt, item1.meta().toNBT());
+        assertEquals(nbt, item2.meta().toNBT());
+
+        assertEquals(5, item1.amount());
+        assertEquals(5, item2.amount());
+    }
+
+    @Test
+    public void amountUpdate() {
+        var item1 = ItemStack.of(Material.DIAMOND, 5);
+        assertEquals(5, item1.amount());
+        assertEquals(6, item1.withAmount(6).amount());
     }
 
     static ItemStack createItem() {
