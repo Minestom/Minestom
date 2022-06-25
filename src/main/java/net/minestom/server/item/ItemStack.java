@@ -99,14 +99,10 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
 
     @Contract(value = "_, -> new", pure = true)
-    default @NotNull ItemStack withMaterial(@NotNull Material material) {
-        return ItemStackImpl.create(material, amount(), meta());
-    }
+    @NotNull ItemStack withMaterial(@NotNull Material material);
 
     @Contract(value = "_, -> new", pure = true)
-    default @NotNull ItemStack withAmount(int amount) {
-        return ItemStackImpl.create(material(), amount, meta());
-    }
+    @NotNull ItemStack withAmount(int amount);
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
@@ -129,9 +125,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
-    default @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return ItemStackImpl.create(material(), amount(), meta);
-    }
+    @NotNull ItemStack withMeta(@NotNull ItemMeta meta);
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withDisplayName(@Nullable Component displayName) {

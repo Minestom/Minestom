@@ -31,9 +31,9 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
     }
 
-    static ItemStack create(Material material, int amount, ItemMeta meta) {
+    static ItemStack create(Material material, int amount, ItemMetaImpl meta) {
         if (amount <= 0) return AIR;
-        return new ItemStackImpl(material, amount, (ItemMetaImpl) meta);
+        return new ItemStackImpl(material, amount, meta);
     }
 
     static ItemStack create(Material material, int amount) {
@@ -64,8 +64,23 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
     }
 
     @Override
+    public @NotNull ItemStack withMaterial(@NotNull Material material) {
+        return new ItemStackImpl(material, amount, meta);
+    }
+
+    @Override
+    public @NotNull ItemStack withAmount(int amount) {
+        return create(material, amount, meta);
+    }
+
+    @Override
     public @NotNull ItemStack consume(int amount) {
         return DEFAULT_STACKING_RULE.apply(this, currentAmount -> currentAmount - amount);
+    }
+
+    @Override
+    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
+        return new ItemStackImpl(material, amount, (ItemMetaImpl) meta);
     }
 
     @Override
