@@ -20,28 +20,27 @@ import java.util.Map;
 
 @ApiStatus.Internal
 public final class ClickProcessor {
+    private static final StackingRule RULE = StackingRule.get();
 
     public static ClickResult.Single left(int slot, ItemStack clicked, ItemStack cursor) {
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final StackingRule clickedRule = clicked.getStackingRule();
-        if (cursorRule.canBeStacked(cursor, clicked)) {
+        if (RULE.canBeStacked(cursor, clicked)) {
             // Try to stack items
-            final int totalAmount = cursorRule.getAmount(cursor) + clickedRule.getAmount(clicked);
-            final int maxSize = cursorRule.getMaxSize(cursor);
-            if (!clickedRule.canApply(clicked, totalAmount)) {
+            final int totalAmount = RULE.getAmount(cursor) + RULE.getAmount(clicked);
+            final int maxSize = RULE.getMaxSize(cursor);
+            if (!RULE.canApply(clicked, totalAmount)) {
                 // Size is too big, stack as much as possible into clicked
-                cursor = cursorRule.apply(cursor, totalAmount - maxSize);
-                clicked = clickedRule.apply(clicked, maxSize);
+                cursor = RULE.apply(cursor, totalAmount - maxSize);
+                clicked = RULE.apply(clicked, maxSize);
             } else {
                 // Merge cursor item clicked
-                cursor = cursorRule.apply(cursor, 0);
-                clicked = clickedRule.apply(clicked, totalAmount);
+                cursor = RULE.apply(cursor, 0);
+                clicked = RULE.apply(clicked, totalAmount);
             }
         } else {
             // Items are not compatible, swap them
-            var temp = cursor;
+            final ItemStack tmp = cursor;
             cursor = clicked;
-            clicked = temp;
+            clicked = tmp;
         }
         if (cursor.isAir() && clicked.isAir()) {
             // return empty
@@ -51,32 +50,30 @@ public final class ClickProcessor {
     }
 
     public static ClickResult.Single right(int slot, ItemStack clicked, ItemStack cursor) {
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final StackingRule clickedRule = clicked.getStackingRule();
-        if (clickedRule.canBeStacked(clicked, cursor)) {
+        if (RULE.canBeStacked(clicked, cursor)) {
             // Items can be stacked
-            final int amount = clickedRule.getAmount(clicked) + 1;
-            if (!clickedRule.canApply(clicked, amount)) {
+            final int amount = RULE.getAmount(clicked) + 1;
+            if (!RULE.canApply(clicked, amount)) {
                 // Size too large, stop here
                 return new ClickResultImpl.Single(cursor, Map.of());
             } else {
                 // Add 1 to clicked
-                cursor = cursorRule.apply(cursor, operand -> operand - 1);
-                clicked = clickedRule.apply(clicked, amount);
+                cursor = RULE.apply(cursor, operand -> operand - 1);
+                clicked = RULE.apply(clicked, amount);
             }
         } else {
             // Items cannot be stacked
             if (cursor.isAir()) {
                 // Take half of clicked
-                final int amount = (int) Math.ceil((double) clickedRule.getAmount(clicked) / 2d);
-                cursor = cursorRule.apply(clicked, amount);
-                clicked = clickedRule.apply(clicked, operand -> operand / 2);
+                final int amount = (int) Math.ceil((double) RULE.getAmount(clicked) / 2d);
+                cursor = RULE.apply(clicked, amount);
+                clicked = RULE.apply(clicked, operand -> operand / 2);
             } else {
                 if (clicked.isAir()) {
                     // Put 1 to clicked
                     var tmp = cursor;
-                    cursor = cursorRule.apply(tmp, operand -> operand - 1);
-                    clicked = clickedRule.apply(tmp, 1);
+                    cursor = RULE.apply(tmp, operand -> operand - 1);
+                    clicked = RULE.apply(tmp, 1);
                 } else {
                     // Swap items
                     var tmp = cursor;
@@ -175,15 +172,14 @@ public final class ClickProcessor {
 
     public static ClickResult.Double doubleClick(PlayerInventory playerInventory, Inventory inventory, ItemStack cursor) {
         if (cursor.isAir()) return ClickResultImpl.Double.empty();
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final int amount = cursorRule.getAmount(cursor);
-        final int maxSize = cursorRule.getMaxSize(cursor);
+        final int amount = RULE.getAmount(cursor);
+        final int maxSize = RULE.getMaxSize(cursor);
         final int remainingAmount = maxSize - amount;
         if (remainingAmount == 0) {
             // Item is already full
             return new ClickResultImpl.Double(cursor, Map.of(), Map.of());
         }
-        ItemStack remaining = cursorRule.apply(cursor, remainingAmount);
+        ItemStack remaining = RULE.apply(cursor, remainingAmount);
         Map<Integer, ItemStack> playerChanges = new HashMap<>();
         Map<Integer, ItemStack> inventoryChanges = new HashMap<>();
         // Loop through open inventory
@@ -212,25 +208,24 @@ public final class ClickProcessor {
         // Update cursor based on the remaining
         if (remaining.isAir()) {
             // Item has been filled
-            remaining = cursorRule.apply(cursor, maxSize);
+            remaining = RULE.apply(cursor, maxSize);
         } else {
-            final int tookAmount = remainingAmount - cursorRule.getAmount(remaining);
-            remaining = cursorRule.apply(cursor, amount + tookAmount);
+            final int tookAmount = remainingAmount - RULE.getAmount(remaining);
+            remaining = RULE.apply(cursor, amount + tookAmount);
         }
         return new ClickResultImpl.Double(remaining, playerChanges, inventoryChanges);
     }
 
     public static ClickResult.Single doubleWithinPlayer(PlayerInventory inventory, ItemStack cursor) {
         if (cursor.isAir()) return ClickResultImpl.Single.empty();
-        final StackingRule cursorRule = cursor.getStackingRule();
-        final int amount = cursorRule.getAmount(cursor);
-        final int maxSize = cursorRule.getMaxSize(cursor);
+        final int amount = RULE.getAmount(cursor);
+        final int maxSize = RULE.getMaxSize(cursor);
         final int remainingAmount = maxSize - amount;
         if (remainingAmount == 0) {
             // Item is already full
             return new ClickResultImpl.Single(cursor, Map.of());
         }
-        ItemStack remaining = cursorRule.apply(cursor, remainingAmount);
+        ItemStack remaining = RULE.apply(cursor, remainingAmount);
         // Try taking from 9->35
         var result = TransactionType.TAKE.process(inventory, remaining, (slot, itemStack) -> true, 9, 36, 1);
         remaining = result.first();
@@ -251,10 +246,10 @@ public final class ClickProcessor {
         // Update cursor based on the remaining
         if (remaining.isAir()) {
             // Item has been filled
-            remaining = cursorRule.apply(cursor, maxSize);
+            remaining = RULE.apply(cursor, maxSize);
         } else {
-            final int tookAmount = remainingAmount - cursorRule.getAmount(remaining);
-            remaining = cursorRule.apply(cursor, amount + tookAmount);
+            final int tookAmount = remainingAmount - RULE.getAmount(remaining);
+            remaining = RULE.apply(cursor, amount + tookAmount);
         }
         return new ClickResultImpl.Single(remaining, changes);
     }
@@ -263,8 +258,7 @@ public final class ClickProcessor {
                                               ItemStack cursor, List<Pair<AbstractInventory, Integer>> slots) {
         if (cursor.isAir()) return ClickResultImpl.Double.empty();
         if (slots.isEmpty()) return new ClickResultImpl.Double(cursor, Map.of(), Map.of());
-        final StackingRule stackingRule = cursor.getStackingRule();
-        final int cursorAmount = stackingRule.getAmount(cursor);
+        final int cursorAmount = RULE.getAmount(cursor);
         final int slotCount = slots.size();
         // Should be size of each defined slot (if not full)
         final int slotSize = Math.max(1, (int) ((float) cursorAmount / (float) slotCount));
@@ -280,28 +274,26 @@ public final class ClickProcessor {
             int slot = s.right();
 
             ItemStack slotItem = inv.getItemStack(slot);
-            final StackingRule slotItemRule = slotItem.getStackingRule();
-            final int amount = slotItemRule.getAmount(slotItem);
-
+            final int amount = RULE.getAmount(slotItem);
             boolean mapOp = false;
-            if (stackingRule.canBeStacked(cursor, slotItem)) {
-                if (stackingRule.canApply(slotItem, amount + slotSize)) {
+            if (RULE.canBeStacked(cursor, slotItem)) {
+                if (RULE.canApply(slotItem, amount + slotSize)) {
                     // Append divided amount to slot
-                    slotItem = stackingRule.apply(slotItem, a -> a + slotSize);
+                    slotItem = RULE.apply(slotItem, a -> a + slotSize);
                     finalCursorAmount -= slotSize;
                 } else {
                     // Amount too big, fill as much as possible
-                    final int maxSize = stackingRule.getMaxSize(cursor);
+                    final int maxSize = RULE.getMaxSize(cursor);
                     final int removedAmount = maxSize - amount;
                     if (removedAmount <= 0)
                         continue;
-                    slotItem = stackingRule.apply(slotItem, maxSize);
+                    slotItem = RULE.apply(slotItem, maxSize);
                     finalCursorAmount -= removedAmount;
                 }
                 mapOp = true;
             } else if (slotItem.isAir()) {
                 // Slot is empty, add divided amount
-                slotItem = stackingRule.apply(cursor, slotSize);
+                slotItem = RULE.apply(cursor, slotSize);
                 finalCursorAmount -= slotSize;
 
                 mapOp = true;
@@ -317,14 +309,13 @@ public final class ClickProcessor {
                 }
             }
         }
-        return new ClickResultImpl.Double(stackingRule.apply(cursor, finalCursorAmount), playerChanges, inventoryChanges);
+        return new ClickResultImpl.Double(RULE.apply(cursor, finalCursorAmount), playerChanges, inventoryChanges);
     }
 
     public static ClickResult.Single leftDragWithinPlayer(PlayerInventory inventory, ItemStack cursor, List<Integer> slots) {
         if (cursor.isAir()) return ClickResultImpl.Single.empty();
         if (slots.isEmpty()) return new ClickResultImpl.Single(cursor, Map.of());
-        final StackingRule stackingRule = cursor.getStackingRule();
-        final int cursorAmount = stackingRule.getAmount(cursor);
+        final int cursorAmount = RULE.getAmount(cursor);
         final int slotCount = slots.size();
         // Should be size of each defined slot (if not full)
         final int slotSize = Math.max(1, (int) ((float) cursorAmount / (float) slotCount));
@@ -336,41 +327,39 @@ public final class ClickProcessor {
             if (finalCursorAmount <= 0)
                 break;
             ItemStack slotItem = inventory.getItemStack(slot);
-            final StackingRule slotItemRule = slotItem.getStackingRule();
-            final int amount = slotItemRule.getAmount(slotItem);
-            if (stackingRule.canBeStacked(cursor, slotItem)) {
-                if (stackingRule.canApply(slotItem, amount + slotSize)) {
+            final int amount = RULE.getAmount(slotItem);
+            if (RULE.canBeStacked(cursor, slotItem)) {
+                if (RULE.canApply(slotItem, amount + slotSize)) {
                     // Append divided amount to slot
-                    slotItem = stackingRule.apply(slotItem, a -> a + slotSize);
+                    slotItem = RULE.apply(slotItem, a -> a + slotSize);
                     finalCursorAmount -= slotSize;
                 } else {
                     // Amount too big, fill as much as possible
-                    final int maxSize = stackingRule.getMaxSize(cursor);
+                    final int maxSize = RULE.getMaxSize(cursor);
                     final int removedAmount = maxSize - amount;
                     if (removedAmount <= 0)
                         continue;
-                    slotItem = stackingRule.apply(slotItem, maxSize);
+                    slotItem = RULE.apply(slotItem, maxSize);
                     finalCursorAmount -= removedAmount;
                 }
                 changes.put(slot, slotItem);
             } else if (slotItem.isAir()) {
                 // Slot is empty, add divided amount
-                slotItem = stackingRule.apply(cursor, slotSize);
+                slotItem = RULE.apply(cursor, slotSize);
                 finalCursorAmount -= slotSize;
 
                 changes.put(slot, slotItem);
             }
         }
-        return new ClickResultImpl.Single(stackingRule.apply(cursor, finalCursorAmount), changes);
+        return new ClickResultImpl.Single(RULE.apply(cursor, finalCursorAmount), changes);
     }
 
     public static ClickResult.Double rightDrag(PlayerInventory playerInventory, Inventory inventory,
                                                ItemStack cursor, List<Pair<AbstractInventory, Integer>> slots) {
         if (cursor.isAir()) return ClickResultImpl.Double.empty();
         if (slots.isEmpty()) return new ClickResultImpl.Double(cursor, Map.of(), Map.of());
-        final StackingRule stackingRule = cursor.getStackingRule();
         // Place all waiting drag action
-        int finalCursorAmount = stackingRule.getAmount(cursor);
+        int finalCursorAmount = RULE.getAmount(cursor);
 
         Map<Integer, ItemStack> playerChanges = new HashMap<>();
         Map<Integer, ItemStack> inventoryChanges = new HashMap<>();
@@ -382,18 +371,17 @@ public final class ClickProcessor {
             boolean mapOp = false;
 
             ItemStack slotItem = inv.getItemStack(slot);
-            StackingRule slotItemRule = slotItem.getStackingRule();
-            if (stackingRule.canBeStacked(cursor, slotItem)) {
+            if (RULE.canBeStacked(cursor, slotItem)) {
                 // Compatible item in the slot, increment by 1
-                final int amount = slotItemRule.getAmount(slotItem) + 1;
-                if (stackingRule.canApply(slotItem, amount)) {
-                    slotItem = stackingRule.apply(slotItem, amount);
+                final int amount = RULE.getAmount(slotItem) + 1;
+                if (RULE.canApply(slotItem, amount)) {
+                    slotItem = RULE.apply(slotItem, amount);
                     finalCursorAmount -= 1;
                     mapOp = true;
                 }
             } else if (slotItem.isAir()) {
                 // No item at the slot, place one
-                slotItem = stackingRule.apply(cursor, 1);
+                slotItem = RULE.apply(cursor, 1);
                 finalCursorAmount -= 1;
                 mapOp = true;
             }
@@ -408,45 +396,40 @@ public final class ClickProcessor {
                 }
             }
         }
-        return new ClickResultImpl.Double(stackingRule.apply(cursor, finalCursorAmount), playerChanges, inventoryChanges);
+        return new ClickResultImpl.Double(RULE.apply(cursor, finalCursorAmount), playerChanges, inventoryChanges);
     }
 
     public static ClickResult.Single rightDragWithinPlayer(PlayerInventory inventory, ItemStack cursor, List<Integer> slots) {
         if (cursor.isAir()) return ClickResultImpl.Single.empty();
         if (slots.isEmpty()) return new ClickResultImpl.Single(cursor, Map.of());
-        final StackingRule stackingRule = cursor.getStackingRule();
         // Place all waiting drag action
-        int finalCursorAmount = stackingRule.getAmount(cursor);
+        int finalCursorAmount = RULE.getAmount(cursor);
 
         Map<Integer, ItemStack> changes = new HashMap<>();
         for (int slot : slots) {
             if (finalCursorAmount <= 0)
                 break;
             ItemStack slotItem = inventory.getItemStack(slot);
-            StackingRule slotItemRule = slotItem.getStackingRule();
-            if (stackingRule.canBeStacked(cursor, slotItem)) {
+            if (RULE.canBeStacked(cursor, slotItem)) {
                 // Compatible item in the slot, increment by 1
-                final int amount = slotItemRule.getAmount(slotItem) + 1;
-                if (stackingRule.canApply(slotItem, amount)) {
-                    slotItem = stackingRule.apply(slotItem, amount);
+                final int amount = RULE.getAmount(slotItem) + 1;
+                if (RULE.canApply(slotItem, amount)) {
+                    slotItem = RULE.apply(slotItem, amount);
                     finalCursorAmount -= 1;
                     changes.put(slot, slotItem);
                 }
             } else if (slotItem.isAir()) {
                 // No item at the slot, place one
-                slotItem = stackingRule.apply(cursor, 1);
+                slotItem = RULE.apply(cursor, 1);
                 finalCursorAmount -= 1;
                 changes.put(slot, slotItem);
             }
         }
-        return new ClickResultImpl.Single(stackingRule.apply(cursor, finalCursorAmount), changes);
+        return new ClickResultImpl.Single(RULE.apply(cursor, finalCursorAmount), changes);
     }
 
     public static ClickResult.Drop drop(boolean all, int slot, int button,
                                         @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final StackingRule clickedRule = clicked.getStackingRule();
-        final StackingRule cursorRule = cursor.getStackingRule();
-
         if (slot == -999) {
             // Click outside
             if (button == 0) {
@@ -454,17 +437,17 @@ public final class ClickProcessor {
                 return new ClickResultImpl.Drop(ItemStack.AIR, cursor);
             } else if (button == 1) {
                 // Right (drop 1)
-                final int remainingAmount = cursorRule.getAmount(cursor) - 1;
-                final ItemStack remaining = cursorRule.apply(cursor, remainingAmount);
-                final ItemStack dropItem = cursorRule.apply(cursor, 1);
+                final int remainingAmount = RULE.getAmount(cursor) - 1;
+                final ItemStack remaining = RULE.apply(cursor, remainingAmount);
+                final ItemStack dropItem = RULE.apply(cursor, 1);
                 return new ClickResultImpl.Drop(remaining, dropItem);
             }
         } else if (!all) {
             if (button == 0) {
                 // Drop key Q (drop 1)
-                final int remainingAmount = clickedRule.getAmount(clicked) - 1;
-                final ItemStack remaining = clickedRule.apply(clicked, remainingAmount);
-                final ItemStack dropItem = cursorRule.apply(clicked, 1);
+                final int remainingAmount = RULE.getAmount(clicked) - 1;
+                final ItemStack remaining = RULE.apply(clicked, remainingAmount);
+                final ItemStack dropItem = RULE.apply(clicked, 1);
                 return new ClickResultImpl.Drop(remaining, dropItem);
             } else if (button == 1) {
                 // Ctrl + Drop key Q (drop all)
