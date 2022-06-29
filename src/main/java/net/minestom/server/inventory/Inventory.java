@@ -317,7 +317,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         return dragHelper.test(player, slot, button, clickSlot, clickInv,
                 // Start
                 (clickType) -> {
-                    final var tmp = handlePreClick(clickInv, player, -999, clickType,
+                    final var tmp = handlePreClick(null, player, -999, clickType,
                             getCursorItem(player), ItemStack.AIR);
                     if (tmp.cancelled()) {
                         update();
@@ -335,7 +335,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 (clickType, entries) -> {
                     var slots = entries.stream().map(dragData -> Pair.of(dragData.inventory(), dragData.slot())).toList();
                     // Handle last drag
-                    final var tmp = handlePreClick(clickInv, player, -999, clickType,
+                    final var tmp = handlePreClick(null, player, -999, clickType,
                             getCursorItem(player), ItemStack.AIR);
                     if (tmp.cancelled()) {
                         update();

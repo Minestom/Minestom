@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class DragLeftClickIntegrationTest {
@@ -40,6 +39,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // Start
                 var event = events.get(0);
+                assertNull(event.getInventory());
                 assertEquals(ClickType.START_LEFT_DRAGGING, event.getClickType());
                 assertEquals(-999, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -48,6 +48,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // Slot 1
                 var event = events.get(1);
+                assertNull(event.getInventory());
                 assertEquals(ClickType.LEFT_DRAGGING, event.getClickType());
                 assertEquals(1, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -56,6 +57,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // Slot 2
                 var event = events.get(2);
+                assertNull(event.getInventory());
                 assertEquals(ClickType.LEFT_DRAGGING, event.getClickType());
                 assertEquals(2, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -64,6 +66,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // End
                 var event = events.get(3);
+                assertNull(event.getInventory());
                 assertEquals(ClickType.END_LEFT_DRAGGING, event.getClickType());
                 assertEquals(-999, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -148,7 +151,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // Start
                 var event = events.get(0);
-                assertEquals(inventory, event.getInventory());
+                assertNull(event.getInventory());
                 assertEquals(ClickType.START_LEFT_DRAGGING, event.getClickType());
                 assertEquals(-999, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -157,6 +160,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // Slot 1
                 var event = events.get(1);
+                assertEquals(inventory, event.getInventory());
                 assertEquals(ClickType.LEFT_DRAGGING, event.getClickType());
                 assertEquals(1, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -165,6 +169,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // Slot 2
                 var event = events.get(2);
+                assertEquals(inventory, event.getInventory());
                 assertEquals(ClickType.LEFT_DRAGGING, event.getClickType());
                 assertEquals(2, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
@@ -173,6 +178,7 @@ public class DragLeftClickIntegrationTest {
             {
                 // End
                 var event = events.get(3);
+                assertNull(event.getInventory());
                 assertEquals(ClickType.END_LEFT_DRAGGING, event.getClickType());
                 assertEquals(-999, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
