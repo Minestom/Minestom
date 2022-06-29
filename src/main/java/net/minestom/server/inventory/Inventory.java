@@ -250,16 +250,22 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     public boolean shiftClick(@NotNull Player player, int slot) {
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
+        final AbstractInventory inventory = isInWindow ? this : player.getInventory();
+        final ItemStack item = getItemStack(clickSlot);
         PlayerInventory playerInv = player.getInventory();
-        if (isInWindow) {
-            final ItemStack item = getItemStack(clickSlot);
-            return handleResult(ClickProcessor.shiftToPlayer(playerInv, item),
-                    itemStack -> setItemStack(clickSlot, itemStack), player, playerInv, ClickType.SHIFT_CLICK);
-        } else {
-            final ItemStack item = playerInv.getItemStack(clickSlot);
-            return handleResult(ClickProcessor.shiftToInventory(this, item),
-                    itemStack -> playerInv.setItemStack(clickSlot, itemStack), player, this, ClickType.SHIFT_CLICK);
-        }
+            final var tmp = handlePreClick(inventory, player, clickSlot, ClickType.START_SHIFT_CLICK,
+                    getCursorItem(player), inventory.getItemStack(clickSlot));
+            if (tmp.cancelled()) {
+                update();
+                return false;
+            }
+
+        var result = isInWindow ? ClickProcessor.shiftToPlayer(playerInv, item) : ClickProcessor.shiftToInventory(this, item);
+        var inverseInv = isInWindow ? player.getInventory() : this;
+        // TODO call pre-click for each changed slot
+        return handleResult(result,
+                itemStack -> inventory.setItemStack(clickSlot, itemStack), player, inverseInv, ClickType.SHIFT_CLICK);
+
     }
 
     @Override

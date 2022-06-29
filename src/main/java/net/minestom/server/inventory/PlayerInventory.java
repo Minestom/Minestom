@@ -14,6 +14,7 @@ import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
@@ -239,8 +240,27 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     public boolean shiftClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack shifted = getItemStack(convertedSlot);
-        return handleResult(ClickProcessor.shiftWithinPlayer(this, convertedSlot, shifted),
-                itemStack -> setItemStack(convertedSlot, itemStack), ClickType.SHIFT_CLICK);
+        final var tmp = handlePreClick(this, player, convertedSlot, ClickType.START_SHIFT_CLICK,
+                getCursorItem(), shifted);
+        if (tmp.cancelled()) {
+            update();
+            return false;
+        }
+        var result = ClickProcessor.shiftWithinPlayer(this, convertedSlot, shifted);
+        AtomicBoolean modified = new AtomicBoolean();
+        result.changedSlots().forEach((updateSlot, itemStack) -> {
+            final var tmp2 = handlePreClick(this, player, updateSlot, ClickType.SHIFT_CLICK,
+                    getCursorItem(), itemStack);
+            if (tmp2.cancelled()) {
+                modified.setPlain(true);
+                return;
+            }
+            setItemStack(updateSlot, itemStack);
+            callClickEvent(player, null, updateSlot, ClickType.SHIFT_CLICK, itemStack, getCursorItem());
+        });
+        setItemStack(convertedSlot, result.remaining());
+        if (modified.getPlain()) update();
+        return true;
     }
 
     @Override
