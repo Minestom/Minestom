@@ -344,13 +344,15 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                             return false;
                         }
                     }
-                    if (clickType == ClickType.LEFT_DRAGGING) {
-                        return handleResult(ClickProcessor.leftDrag(playerInv, this, getCursorItem(player), slots),
-                                itemStack -> setCursorItem(player, itemStack), player, clickType);
-                    } else {
-                        return handleResult(ClickProcessor.rightDrag(playerInv, this, getCursorItem(player), slots),
-                                itemStack -> setCursorItem(player, itemStack), player, clickType);
-                    }
+                    return switch (clickType) {
+                        case END_LEFT_DRAGGING ->
+                                handleResult(ClickProcessor.leftDrag(playerInv, this, getCursorItem(player), slots),
+                                        itemStack -> setCursorItem(player, itemStack), player, clickType);
+                        case END_RIGHT_DRAGGING ->
+                                handleResult(ClickProcessor.rightDrag(playerInv, this, getCursorItem(player), slots),
+                                        itemStack -> setCursorItem(player, itemStack), player, clickType);
+                        default -> throw new IllegalStateException("Invalid click type: " + clickType);
+                    };
                 });
     }
 

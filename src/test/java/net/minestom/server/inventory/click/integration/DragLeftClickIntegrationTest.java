@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -28,11 +29,6 @@ public class DragLeftClickIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
         var inventory = player.getInventory();
         var listener = env.listen(InventoryPreClickEvent.class);
-        // Empty drag FIXME
-        {
-            //listener.failFollowup();
-            //drag(player, List.of());
-        }
         // Drag to air
         {
             inventory.setCursorItem(ItemStack.of(Material.STONE, 64));
@@ -128,6 +124,115 @@ public class DragLeftClickIntegrationTest {
             });
             dragLeft(player, List.of(1, 2, 3));
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
+            assertEquals(ItemStack.of(Material.STONE, 32), inventory.getItemStack(1));
+            assertEquals(ItemStack.AIR, inventory.getItemStack(2));
+            assertEquals(ItemStack.of(Material.STONE, 32), inventory.getItemStack(3));
+        }
+    }
+
+    @Test
+    public void leftDragExternal(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = new Inventory(InventoryType.HOPPER, "test");
+        player.openInventory(inventory);
+        var listener = env.listen(InventoryPreClickEvent.class);
+        // Drag to air
+        {
+            inventory.setCursorItem(player, ItemStack.of(Material.STONE, 64));
+            List<InventoryPreClickEvent> events = new ArrayList<>();
+            listener.followup(events::add);
+            dragLeftOpenInventory(player, List.of(1, 2));
+            // start->slot->slot->end
+            assertEquals(4, events.size());
+            {
+                // Start
+                var event = events.get(0);
+                assertEquals(inventory, event.getInventory());
+                assertEquals(ClickType.START_LEFT_DRAGGING, event.getClickType());
+                assertEquals(-999, event.getSlot());
+                assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                assertEquals(ItemStack.AIR, event.getClickedItem());
+            }
+            {
+                // Slot 1
+                var event = events.get(1);
+                assertEquals(ClickType.LEFT_DRAGGING, event.getClickType());
+                assertEquals(1, event.getSlot());
+                assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                assertEquals(ItemStack.AIR, event.getClickedItem());
+            }
+            {
+                // Slot 2
+                var event = events.get(2);
+                assertEquals(ClickType.LEFT_DRAGGING, event.getClickType());
+                assertEquals(2, event.getSlot());
+                assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                assertEquals(ItemStack.AIR, event.getClickedItem());
+            }
+            {
+                // End
+                var event = events.get(3);
+                assertEquals(ClickType.END_LEFT_DRAGGING, event.getClickType());
+                assertEquals(2, event.getSlot());
+                assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                assertEquals(ItemStack.AIR, event.getClickedItem());
+            }
+
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
+            assertEquals(ItemStack.of(Material.STONE, 32), inventory.getItemStack(1));
+            assertEquals(ItemStack.of(Material.STONE, 32), inventory.getItemStack(2));
+        }
+        // Cancel start
+        {
+            inventory.clear();
+            inventory.setCursorItem(player, ItemStack.of(Material.STONE, 64));
+            listener.followup(event -> {
+                if (event.getClickType() == ClickType.START_LEFT_DRAGGING) {
+                    assertEquals(-999, event.getSlot());
+                    assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                    assertEquals(ItemStack.AIR, event.getClickedItem());
+                    event.setCancelled(true);
+                } else {
+                    fail("Start drag has been cancelled, following events should not be called");
+                }
+            });
+            dragLeftOpenInventory(player, List.of(1, 2));
+            assertEquals(ItemStack.of(Material.STONE, 64), inventory.getCursorItem(player));
+            assertEquals(ItemStack.AIR, inventory.getItemStack(1));
+            assertEquals(ItemStack.AIR, inventory.getItemStack(2));
+        }
+        // Cancel end
+        {
+            inventory.clear();
+            inventory.setCursorItem(player, ItemStack.of(Material.STONE, 64));
+            listener.followup(event -> {
+                if (event.getClickType() == ClickType.END_LEFT_DRAGGING) {
+                    assertEquals(2, event.getSlot());
+                    assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                    assertEquals(ItemStack.AIR, event.getClickedItem());
+                    event.setCancelled(true);
+                }
+            });
+            dragLeftOpenInventory(player, List.of(1, 2));
+            assertEquals(ItemStack.of(Material.STONE, 64), inventory.getCursorItem(player));
+            assertEquals(ItemStack.AIR, inventory.getItemStack(1));
+            assertEquals(ItemStack.AIR, inventory.getItemStack(2));
+        }
+        // Cancel step
+        {
+            inventory.clear();
+            inventory.setCursorItem(player, ItemStack.of(Material.STONE, 64));
+            listener.followup(event -> {
+                if (event.getClickType() == ClickType.LEFT_DRAGGING && event.getSlot() == 2) {
+                    assertEquals(2, event.getSlot());
+                    assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
+                    assertEquals(ItemStack.AIR, event.getClickedItem());
+                    event.setCancelled(true);
+                }
+            });
+            dragLeftOpenInventory(player, List.of(1, 2, 3));
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.STONE, 32), inventory.getItemStack(1));
             assertEquals(ItemStack.AIR, inventory.getItemStack(2));
             assertEquals(ItemStack.of(Material.STONE, 32), inventory.getItemStack(3));

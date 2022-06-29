@@ -293,13 +293,15 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
                             return false;
                         }
                     }
-                    if (clickType == ClickType.END_LEFT_DRAGGING) {
-                        return handleResult(ClickProcessor.leftDragWithinPlayer(this, getCursorItem(), slots),
-                                this::setCursorItem, clickType);
-                    } else {
-                        return handleResult(ClickProcessor.rightDragWithinPlayer(this, getCursorItem(), slots),
-                                this::setCursorItem, clickType);
-                    }
+                    return switch (clickType) {
+                        case END_LEFT_DRAGGING ->
+                                handleResult(ClickProcessor.leftDragWithinPlayer(this, getCursorItem(), slots),
+                                        this::setCursorItem, clickType);
+                        case END_RIGHT_DRAGGING ->
+                                handleResult(ClickProcessor.rightDragWithinPlayer(this, getCursorItem(), slots),
+                                        this::setCursorItem, clickType);
+                        default -> throw new IllegalStateException("Invalid click type: " + clickType);
+                    };
                 });
     }
 
