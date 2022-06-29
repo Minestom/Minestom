@@ -65,7 +65,7 @@ public class DragRightClickIntegrationTest {
                 // End
                 var event = events.get(3);
                 assertEquals(ClickType.END_RIGHT_DRAGGING, event.getClickType());
-                assertEquals(2, event.getSlot());
+                assertEquals(-999, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
                 assertEquals(ItemStack.AIR, event.getClickedItem());
             }
@@ -99,7 +99,7 @@ public class DragRightClickIntegrationTest {
             inventory.setCursorItem(ItemStack.of(Material.STONE, 64));
             listener.followup(event -> {
                 if (event.getClickType() == ClickType.END_RIGHT_DRAGGING) {
-                    assertEquals(2, event.getSlot());
+                    assertEquals(-999, event.getSlot());
                     assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
                     assertEquals(ItemStack.AIR, event.getClickedItem());
                     event.setCancelled(true);
@@ -174,7 +174,7 @@ public class DragRightClickIntegrationTest {
                 // End
                 var event = events.get(3);
                 assertEquals(ClickType.END_RIGHT_DRAGGING, event.getClickType());
-                assertEquals(2, event.getSlot());
+                assertEquals(-999, event.getSlot());
                 assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
                 assertEquals(ItemStack.AIR, event.getClickedItem());
             }
@@ -208,7 +208,7 @@ public class DragRightClickIntegrationTest {
             inventory.setCursorItem(player, ItemStack.of(Material.STONE, 64));
             listener.followup(event -> {
                 if (event.getClickType() == ClickType.END_RIGHT_DRAGGING) {
-                    assertEquals(2, event.getSlot());
+                    assertEquals(-999, event.getSlot());
                     assertEquals(ItemStack.of(Material.STONE, 64), event.getCursorItem());
                     assertEquals(ItemStack.AIR, event.getClickedItem());
                     event.setCancelled(true);

@@ -284,14 +284,11 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
                     // Handle each individual drag
                     var slots = entries.stream().map(DragHelper.Entry::slot).toList();
                     // Handle last drag
-                    {
-                        final int lastSlot = entries.get(entries.size() - 1).slot();
-                        final var tmp = handlePreClick(this, player, lastSlot, clickType,
-                                getCursorItem(), getItemStack(lastSlot));
-                        if (tmp.cancelled()) {
-                            update();
-                            return false;
-                        }
+                    final var tmp = handlePreClick(this, player, -999, clickType,
+                            getCursorItem(), ItemStack.AIR);
+                    if (tmp.cancelled()) {
+                        update();
+                        return false;
                     }
                     return switch (clickType) {
                         case END_LEFT_DRAGGING ->
