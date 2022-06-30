@@ -174,7 +174,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
-    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(6);
+    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(5);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -622,6 +622,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (updateChunks) {
             final int chunkX = spawnPosition.chunkX();
             final int chunkZ = spawnPosition.chunkZ();
+            chunkUpdateLimitChecker.addToHistory(ChunkUtils.getChunkIndex(chunkX, chunkZ));
             chunksLoadedByClient = new Vec(chunkX, chunkZ);
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
             ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
@@ -2033,7 +2034,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
-        if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
+        if (chunkUpdateLimitChecker.addToHistory(ChunkUtils.getChunkIndex(newChunk))) {
             final int newX = newChunk.getChunkX();
             final int newZ = newChunk.getChunkZ();
             final Vec old = chunksLoadedByClient;
