@@ -6,6 +6,10 @@ public sealed interface Config permits ConfigV0 {
         return new BuilderImpl();
     }
 
+    static Config defaults() {
+        return builder().build();
+    }
+
     static <T> Config load(T data, ConfigHandler.ConfigLoader<T> loader) {
         final ConfigHandler<ConfigV0, Config> handler = new ConfigHandler<>(ConfigV0.class, obj -> obj);
         handler.registerVersion(0, ConfigV0.class);
