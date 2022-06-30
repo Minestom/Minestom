@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.config.Config;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
@@ -68,11 +69,13 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
+    private final Config config;
 
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() throws IOException {
+    public ServerProcessImpl(Config config) throws IOException {
+        this.config = config;
         this.exception = new ExceptionManager();
         this.extension = new ExtensionManager(this);
         this.connection = new ConnectionManager();
@@ -200,6 +203,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull Ticker ticker() {
         return ticker;
+    }
+
+    @Override
+    public @NotNull Config config() {
+        return config;
     }
 
     @Override

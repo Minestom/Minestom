@@ -3,6 +3,7 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.config.Config;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -71,15 +72,24 @@ public final class MinecraftServer {
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
-        updateProcess();
+        return init(Config.defaults());
+    }
+
+    public static MinecraftServer init(Config config) {
+        updateProcess(config);
         return new MinecraftServer();
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
+        return updateProcess(Config.defaults());
+    }
+
+    @ApiStatus.Internal
+    public static ServerProcess updateProcess(Config config) {
         ServerProcess process;
         try {
-            process = new ServerProcessImpl();
+            process = new ServerProcessImpl(config);
             serverProcess = process;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -188,6 +198,10 @@ public final class MinecraftServer {
 
     public static @NotNull PacketProcessor getPacketProcessor() {
         return serverProcess.packetProcessor();
+    }
+
+    public static @NotNull Config getConfig() {
+        return serverProcess.config();
     }
 
     public static boolean isStarted() {
