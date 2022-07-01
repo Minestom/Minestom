@@ -5,20 +5,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public sealed interface Config permits ConfigV0 {
+public sealed interface Config permits Configs.V0 {
 
     static @NotNull Builder builder() {
         return new BuilderImpl();
     }
 
-    static  @NotNull Config defaults() {
+    static @NotNull Config defaults() {
         return builder().build();
     }
 
     @Contract("-> new")
-    static  @NotNull ConfigParser<Config> parser() {
+    static @NotNull ConfigParser<Config> parser() {
         return new ConfigParserImpl<>(Set.of(
-                VersionInfo.ofLatest(0, ConfigV0.class)
+                VersionInfo.ofLatest(0, Configs.V0.class)
         ), Config.class);
     }
 
