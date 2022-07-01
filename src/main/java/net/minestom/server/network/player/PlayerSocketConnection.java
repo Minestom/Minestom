@@ -349,8 +349,16 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
             final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
-            outgoing.call(new PlayerPacketOutEvent(player, serverPacket));
+            PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+            outgoing.call(event);
+
+            event.usePackets(p -> writeAbstractPacketSync(p, compressed));
+        } else {
+            writeAbstractPacketSync(packet, compressed);
         }
+    }
+
+    private void writeAbstractPacketSync(SendablePacket packet, boolean compressed) {
         // Write packet
         if (packet instanceof ServerPacket serverPacket) {
             writeServerPacketSync(serverPacket, compressed);
