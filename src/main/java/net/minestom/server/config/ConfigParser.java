@@ -4,25 +4,24 @@ import com.google.gson.annotations.JsonAdapter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.GsonRecordTypeAdapterFactory;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class ConfigParser<R> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigParser.class);
     private final Function<Config.Meta, R> configFactory;
     private final Class<? extends Config.Meta> latestConfigType;
-    private final Function<R, Object> configCleaner;
     private int latestVersion = -1;
     private final Int2ObjectMap<Class<? extends Config.Meta>> configClasses = new Int2ObjectOpenHashMap<>();
     private final Int2ObjectMap<Function<Object, Object>> configMigrators = new Int2ObjectOpenHashMap<>();
 
-    public ConfigParser(Set<VersionInfo<?>> versionInfoSet,
-                            Class<R> configType, Function<Config.Meta, R> configFactory, Function<R, Object> configCleaner) {
-        this.configCleaner = configCleaner;
+    public ConfigParser(Set<VersionInfo<?>> versionInfoSet, Class<R> configType, Function<Config.Meta, R> configFactory) {
         this.configFactory = configFactory;
         for (VersionInfo<?> info : versionInfoSet) {
             final int v = info.version();
@@ -35,7 +34,7 @@ public final class ConfigParser<R> {
     }
 
     public ConfigParser(Set<VersionInfo<?>> versionInfoSet, Class<R> configType) {
-        this(versionInfoSet, configType, configType::cast, x -> x);
+        this(versionInfoSet, configType, configType::cast);
     }
 
     /**
@@ -48,7 +47,7 @@ public final class ConfigParser<R> {
      * @return the latest config
      * @param <T> type of serialized data (source)
      */
-    public <T> R loadConfig(T data, Deserializer<T> deserializer) {
+    public <T> R loadConfig(T data, Deserializer<T> deserializer, @Nullable Consumer<Object> saveCallback) {
         try {
             final int version = deserializer.deserialize(data, Meta.class).version();
             final var sourceClass = configClasses.get(version);
@@ -64,7 +63,12 @@ public final class ConfigParser<R> {
                 conf = function.apply(conf);
             }
             if (latestConfigType.isAssignableFrom(conf.getClass())) {
-                return configFactory.apply(latestConfigType.cast(conf));
+                final Config.Meta cast = latestConfigType.cast(conf);
+                if (version != cast.version() && saveCallback != null) {
+                    // Version changed, and we have a serializer to write the new version
+                    saveCallback.accept(conf);
+                }
+                return configFactory.apply(cast);
             } else {
                 throw new RuntimeException("Latest configuration type mismatch.");
             }
@@ -74,14 +78,10 @@ public final class ConfigParser<R> {
     }
 
     /**
-     * Cleans the config from properties that shouldn't be serialized, if {@link ConfigParser#configFactory}
-     * is just a dummy function i.e. doesn't convert the type of the latest config then this call is redundant
-     *
-     * @param config config to clean
-     * @return an object with only serializable properties
+     * @see #loadConfig(Object, Deserializer, Consumer)
      */
-    public Object clean(R config) {
-        return configCleaner.apply(config);
+    public <T> R loadConfig(T data, Deserializer<T> deserializer) {
+        return loadConfig(data, deserializer, null);
     }
 
     @JsonAdapter(GsonRecordTypeAdapterFactory.class)

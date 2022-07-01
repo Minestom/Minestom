@@ -24,22 +24,27 @@ public class ConfigTest {
 
         // Load
         final Conf[] configV2 = new Conf[1];
-        assertDoesNotThrow(() -> configV2[0] = parser.loadConfig("""
-                {"version":0,"a":1,"b":"test"}
-                """, gson::fromJson));
+        assertDoesNotThrow(() -> configV2[0] = parser.loadConfig("{\"version\":0,\"a\":1,\"b\":\"test\"}",
+                gson::fromJson, n -> {
+                    // Save
+                    final String[] serialized = new String[1];
+                    assertDoesNotThrow(() -> serialized[0] = gson.toJson(n));
+                    assertEquals("{\"version\":2,\"a\":{\"a\":\"one\"}}", serialized[0]);
+                }));
         assertEquals("one", configV2[0].a().a);
-
-        // Save
-        final String[] serialized = new String[1];
-        assertDoesNotThrow(() -> serialized[0] = gson.toJson(parser.clean(configV2[0])));
-        assertEquals("""
-                {"version":2,"a":{"a":"one"}}""", serialized[0]);
     }
 
-    private record ConfigV0(int version, int a, String b) implements Config.Meta {}
-    private record ConfigV1(int version, int b) implements Config.Meta {}
-    private record Foo(String a) {}
-    private record ConfigV2(int version, Foo a) implements Config.Meta, Conf {}
+    private record ConfigV0(int version, int a, String b) implements Config.Meta {
+    }
+
+    private record ConfigV1(int version, int b) implements Config.Meta {
+    }
+
+    private record Foo(String a) {
+    }
+
+    private record ConfigV2(int version, Foo a) implements Config.Meta, Conf {
+    }
 
     private interface Conf {
         Foo a();
