@@ -25,7 +25,7 @@ import java.time.Duration;
 public class Main {
 
     public static void main(String[] args) {
-                final Gson gson = new Gson();
+        final Gson gson = new Gson();
         MinecraftServer minecraftServer = MinecraftServer.init(Config.parser().loadConfig(/* language=json */ """
                 {
                     "version": 0,
