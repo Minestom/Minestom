@@ -7,34 +7,36 @@ import net.minestom.server.utils.GsonRecordTypeAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
 import java.util.function.Function;
 
-public final class ConfigManagerImpl<R> implements ConfigManager<R> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigManagerImpl.class);
+public final class ConfigParser<R> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigParser.class);
     private final Function<Object, R> configFactory;
     private final Class<?> latestConfigType;
     private final Function<R, Object> configToRecord;
     private int latestVersion = -1;
-    private final Int2ObjectMap<Class<? extends ConfigMeta>> configClasses = new Int2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<Class<? extends Config.Meta>> configClasses = new Int2ObjectOpenHashMap<>();
     private final Int2ObjectMap<Function<Object, Object>> configMigrators = new Int2ObjectOpenHashMap<>();
 
-    public <T> ConfigManagerImpl(Class<T> latestConfigType, Function<T, R> configFactory, Function<R, Object> configCleaner) {
+    public <T> ConfigParser(Set<VersionInfo<?>> versionInfoSet,
+                            Class<R> configType, Function<T, R> configFactory, Function<R, Object> configCleaner) {
         this.configToRecord = configCleaner;
         this.configFactory = (Function<Object, R>) configFactory;
-        this.latestConfigType = latestConfigType;
+        for (VersionInfo<?> info : versionInfoSet) {
+            final int v = info.version();
+            configClasses.put(v, info.clazz());
+            configMigrators.put(v, (Function<Object, Object>) info.migrator());
+            latestVersion = Math.max(latestVersion, v);
+        }
+        this.latestConfigType = configClasses.get(latestVersion);
     }
 
-    public <T extends ConfigMeta> void registerVersion(int version, Class<T> clazz) {
-        configClasses.put(version, clazz);
-        latestVersion = Math.max(latestVersion, version);
+    public <T> ConfigParser(Set<VersionInfo<?>> versionInfoSet, Class<R> configType) {
+        this(versionInfoSet, configType, configType::cast, x -> x);
     }
 
-    public void registerMigrationStep(int fromVersion, Function<Object, Object> migrator) {
-        configMigrators.put(fromVersion, migrator);
-    }
-
-    @Override
-    public <T> R loadConfig(T data, ConfigManager.Deserializer<T> deserializer) {
+    public <T> R loadConfig(T data, Deserializer<T> deserializer) {
         try {
             final int version = deserializer.deserialize(data, Meta.class).version();
             final var sourceClass = configClasses.get(version);
@@ -59,12 +61,16 @@ public final class ConfigManagerImpl<R> implements ConfigManager<R> {
         }
     }
 
-    @Override
     public Object clean(R config) {
         return configToRecord.apply(config);
     }
 
     @JsonAdapter(GsonRecordTypeAdapterFactory.class)
-    private record Meta(int version) implements ConfigMeta {}
+    private record Meta(int version) implements Config.Meta {}
+
+    @FunctionalInterface
+    public interface Deserializer<T> {
+        <R> R deserialize(T data, Class<R> clazz) throws Throwable;
+    }
 
 }

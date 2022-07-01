@@ -2,6 +2,8 @@ package net.minestom.server.config;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.Set;
+
 public sealed interface Config permits ConfigV0 {
 
     static Builder builder() {
@@ -13,10 +15,10 @@ public sealed interface Config permits ConfigV0 {
     }
 
     @Contract("-> new")
-    static ConfigManager<Config> manager() {
-        final ConfigManagerImpl<Config> manager = new ConfigManagerImpl<>(ConfigV0.class, x -> x, x -> x);
-        manager.registerVersion(0, ConfigV0.class);
-        return manager;
+    static ConfigParser<Config> parser() {
+        return new ConfigParser<>(Set.of(
+                VersionInfo.of(0, ConfigV0.class)
+        ), Config.class);
     }
 
     int compressionThreshold();
@@ -24,5 +26,9 @@ public sealed interface Config permits ConfigV0 {
     interface Builder {
         Builder compressionThreshold(int compressionThreshold);
         Config build();
+    }
+
+    interface Meta {
+        int version();
     }
 }
