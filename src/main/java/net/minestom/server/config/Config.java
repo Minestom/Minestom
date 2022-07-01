@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public sealed interface Config permits Configs.V0 {
+public sealed interface Config permits Configs.InternalConfig {
 
     static @NotNull Builder builder() {
         return new BuilderImpl();
