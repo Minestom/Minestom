@@ -4,5 +4,5 @@ import com.google.gson.annotations.JsonAdapter;
 import net.minestom.server.utils.GsonRecordTypeAdapterFactory;
 
 @JsonAdapter(GsonRecordTypeAdapterFactory.class)
-record ConfigV0(int version) implements ConfigMeta, Config {
+record ConfigV0(int version, int compressionThreshold) implements ConfigMeta, Config {
 }

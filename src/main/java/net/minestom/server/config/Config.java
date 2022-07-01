@@ -19,7 +19,10 @@ public sealed interface Config permits ConfigV0 {
         return manager;
     }
 
+    int compressionThreshold();
+
     interface Builder {
+        Builder compressionThreshold(int compressionThreshold);
         Config build();
     }
 }

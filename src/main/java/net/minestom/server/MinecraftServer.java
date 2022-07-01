@@ -66,7 +66,6 @@ public final class MinecraftServer {
 
     private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
     private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
-    private static int compressionThreshold = 256;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -265,21 +264,9 @@ public final class MinecraftServer {
      *
      * @return the compression threshold, 0 means that compression is disabled
      */
+    @Deprecated
     public static int getCompressionThreshold() {
-        return compressionThreshold;
-    }
-
-    /**
-     * Changes the compression threshold of the server.
-     * <p>
-     * WARNING: this need to be called before {@link #start(SocketAddress)}.
-     *
-     * @param compressionThreshold the new compression threshold, 0 to disable compression
-     * @throws IllegalStateException if this is called after the server started
-     */
-    public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
-        MinecraftServer.compressionThreshold = compressionThreshold;
+        return getConfig().compressionThreshold();
     }
 
     /**

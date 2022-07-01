@@ -28,7 +28,8 @@ public class Main {
         final Gson gson = new Gson();
         MinecraftServer minecraftServer = MinecraftServer.init(Config.manager().loadConfig(/* language=json */ """
                 {
-                    "version": 0
+                    "version": 0,
+                    "compressionThreshold": 0
                 }
                 """, gson::fromJson));
 
