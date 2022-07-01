@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigTest {
 
@@ -24,14 +23,17 @@ public class ConfigTest {
 
         // Load
         final Conf[] configV2 = new Conf[1];
+        final boolean[] saveCalled = new boolean[1];
         assertDoesNotThrow(() -> configV2[0] = parser.loadConfig("{\"version\":0,\"a\":1,\"b\":\"test\"}",
                 gson::fromJson, n -> {
                     // Save
+                    saveCalled[0] = true;
                     final String[] serialized = new String[1];
                     assertDoesNotThrow(() -> serialized[0] = gson.toJson(n));
                     assertEquals("{\"version\":2,\"a\":{\"a\":\"one\"}}", serialized[0]);
                 }));
         assertEquals("one", configV2[0].a().a);
+        assertTrue(saveCalled[0], "Save method wasn't called after a version change");
     }
 
     private record ConfigV0(int version, int a, String b) implements Config.Meta {
