@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -8,6 +9,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.config.Config;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
@@ -23,7 +25,12 @@ import java.time.Duration;
 public class Main {
 
     public static void main(String[] args) {
-        MinecraftServer minecraftServer = MinecraftServer.init();
+        final Gson gson = new Gson();
+        MinecraftServer minecraftServer = MinecraftServer.init(Config.manager().loadConfig(/* language=json */ """
+                {
+                    "version": 0
+                }
+                """, gson::fromJson));
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
 

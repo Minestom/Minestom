@@ -1,26 +1,30 @@
 package net.minestom.server.config;
 
+import com.google.gson.annotations.JsonAdapter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.utils.GsonRecordTypeAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.Function;
 
-public final class ConfigSerializer<L extends ConfigMeta, R> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigSerializer.class);
-    private final Function<L, R> configFactory;
-    private final Class<L> latestConfigType;
+public final class ConfigManagerImpl<R> implements ConfigManager<R> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigManagerImpl.class);
+    private final Function<Object, R> configFactory;
+    private final Class<?> latestConfigType;
+    private final Function<R, Object> configToRecord;
     private int latestVersion = -1;
     private final Int2ObjectMap<Class<? extends ConfigMeta>> configClasses = new Int2ObjectOpenHashMap<>();
     private final Int2ObjectMap<Function<Object, Object>> configMigrators = new Int2ObjectOpenHashMap<>();
 
-    public ConfigSerializer(Class<L> latestConfigType, Function<L, R> configFactory) {
-        this.configFactory = configFactory;
+    public <T> ConfigManagerImpl(Class<T> latestConfigType, Function<T, R> configFactory, Function<R, Object> configCleaner) {
+        this.configToRecord = configCleaner;
+        this.configFactory = (Function<Object, R>) configFactory;
         this.latestConfigType = latestConfigType;
     }
 
-    public void registerVersion(int version, Class<? extends ConfigMeta> clazz) {
+    public <T extends ConfigMeta> void registerVersion(int version, Class<T> clazz) {
         configClasses.put(version, clazz);
         latestVersion = Math.max(latestVersion, version);
     }
@@ -29,18 +33,19 @@ public final class ConfigSerializer<L extends ConfigMeta, R> {
         configMigrators.put(fromVersion, migrator);
     }
 
-    public <T> R loadConfig(T data, ConfigLoader<T> loader) {
+    @Override
+    public <T> R loadConfig(T data, ConfigManager.Deserializer<T> deserializer) {
         try {
-            final int version = loader.load(data, Meta.class).version();
-            final Class<? extends ConfigMeta> sourceClass = configClasses.get(version);
+            final int version = deserializer.deserialize(data, Meta.class).version();
+            final var sourceClass = configClasses.get(version);
             if (sourceClass == null) throw new RuntimeException("Config version isn't supported.");
             final Deprecated deprecated = sourceClass.getAnnotation(Deprecated.class);
             if (deprecated != null) {
                 LOGGER.warn("Support for this config version will be removed in the next major version!");
             }
-            Object conf = loader.load(data, sourceClass);
+            Object conf = deserializer.deserialize(data, sourceClass);
             for (int i = version; i < latestVersion; i++) {
-                final Function<Object, Object> function = configMigrators.get(i);
+                final var function = configMigrators.get(i);
                 if (function == null) throw new RuntimeException("Migration step missing for %s -> %s".formatted(i, i+1));
                 conf = function.apply(conf);
             }
@@ -54,16 +59,12 @@ public final class ConfigSerializer<L extends ConfigMeta, R> {
         }
     }
 
-    /**
-     * Used to create a record that holds fields that should be serialized
-     */
-    public static Record configToRecord(Config config) {
-        // The config is currently backed by a record, so we can just return that
-        return (Record) config;
+    @Override
+    public Object clean(R config) {
+        return configToRecord.apply(config);
     }
 
-    public interface ConfigLoader<T> {
-        <R extends ConfigMeta> R load(T data, Class<R> clazz) throws Throwable;
-    }
+    @JsonAdapter(GsonRecordTypeAdapterFactory.class)
     private record Meta(int version) implements ConfigMeta {}
+
 }
