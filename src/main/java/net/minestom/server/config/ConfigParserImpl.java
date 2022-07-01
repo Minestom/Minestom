@@ -12,16 +12,17 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-final class ConfigParserImpl<R> implements ConfigParser<R> {
+record ConfigParserImpl<R>(Function<Config.Meta, R> configFactory,
+                           Class<? extends Config.Meta> latestConfigType,
+                           int latestVersion,
+                           Int2ObjectMap<Class<? extends Config.Meta>> configClasses,
+                           Int2ObjectMap<Function<Object, Object>> configMigrators) implements ConfigParser<R> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigParserImpl.class);
-    private final Function<Config.Meta, R> configFactory;
-    private final Class<? extends Config.Meta> latestConfigType;
-    private int latestVersion = -1;
-    private final Int2ObjectMap<Class<? extends Config.Meta>> configClasses = new Int2ObjectOpenHashMap<>();
-    private final Int2ObjectMap<Function<Object, Object>> configMigrators = new Int2ObjectOpenHashMap<>();
 
-    ConfigParserImpl(Set<VersionInfo<?>> versionInfoSet, Class<R> configType, Function<Config.Meta, R> configFactory) {
-        this.configFactory = configFactory;
+    static <R> ConfigParserImpl<R> create(Set<VersionInfo<?>> versionInfoSet, Class<R> configType, Function<Config.Meta, R> configFactory) {
+        int latestVersion = -1;
+        final Int2ObjectMap<Class<? extends Config.Meta>> configClasses = new Int2ObjectOpenHashMap<>();
+        final Int2ObjectMap<Function<Object, Object>> configMigrators = new Int2ObjectOpenHashMap<>();
         for (VersionInfo<?> info : versionInfoSet) {
             final int v = info.version();
             configClasses.put(v, info.clazz());
@@ -29,11 +30,12 @@ final class ConfigParserImpl<R> implements ConfigParser<R> {
             configMigrators.put(v, (Function<Object, Object>) info.migrator());
             latestVersion = Math.max(latestVersion, v);
         }
-        this.latestConfigType = configClasses.get(latestVersion);
+        Class<? extends Config.Meta> latestConfigType = configClasses.get(latestVersion);
+        return new ConfigParserImpl<>(configFactory, latestConfigType, latestVersion, configClasses, configMigrators);
     }
 
-    ConfigParserImpl(Set<VersionInfo<?>> versionInfoSet, Class<R> configType) {
-        this(versionInfoSet, configType, configType::cast);
+    static <R> ConfigParserImpl<R> create(Set<VersionInfo<?>> versionInfoSet, Class<R> configType) {
+        return create(versionInfoSet, configType, configType::cast);
     }
 
     @Override
