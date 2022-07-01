@@ -13,6 +13,6 @@ final class BuilderImpl implements Config.Builder {
 
     @Override
     public @NotNull Config build() {
-        return new ConfigV0(0, compressionThreshold);
+        return new Configs.V0(0, compressionThreshold);
     }
 }
