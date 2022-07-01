@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 /**
  * Serialization information for a given version
+ *
  * @param <T> type of the version
  */
 public interface VersionInfo<T extends Config.Meta> {
@@ -17,6 +18,7 @@ public interface VersionInfo<T extends Config.Meta> {
     }
 
     int version();
+
     Class<T> clazz();
 
     /**

@@ -14,7 +14,7 @@ public class ConfigTest {
     @Test
     public void gsonSerializationWithMigrationTest() {
         // Setup
-        final ConfigParser<Conf> parser = new ConfigParser<>(Set.of(
+        final ConfigParserImpl<Conf> parser = new ConfigParserImpl<>(Set.of(
                 VersionInfo.of(0, ConfigV0.class, x -> new ConfigV1(1, x.a)),
                 VersionInfo.of(1, ConfigV1.class, x -> new ConfigV2(2, new Foo(x.b == 1 ? "one" : "idk"))),
                 VersionInfo.ofLatest(2, ConfigV2.class)
