@@ -52,7 +52,13 @@ public final class GsonRecordTypeAdapterFactory implements TypeAdapterFactory {
                     reader.beginObject();
                     while (reader.hasNext()) {
                         String name = reader.nextName();
-                        argsMap.put(name, gson.getAdapter(typeMap.get(name)).read(reader));
+                        final TypeToken<?> typeToken = typeMap.get(name);
+                        if (typeToken == null) {
+                            // Ignore additional components that aren't part of the record
+                            reader.skipValue();
+                            continue;
+                        }
+                        argsMap.put(name, gson.getAdapter(typeToken).read(reader));
                     }
                     reader.endObject();
 
