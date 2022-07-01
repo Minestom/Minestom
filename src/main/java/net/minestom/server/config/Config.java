@@ -17,7 +17,7 @@ public sealed interface Config permits ConfigV0 {
     @Contract("-> new")
     static ConfigParser<Config> parser() {
         return new ConfigParser<>(Set.of(
-                VersionInfo.of(0, ConfigV0.class)
+                VersionInfo.ofLatest(0, ConfigV0.class)
         ), Config.class);
     }
 

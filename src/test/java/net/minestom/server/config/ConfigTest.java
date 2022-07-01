@@ -18,7 +18,7 @@ public class ConfigTest {
         final ConfigParser<Conf> parser = new ConfigParser<>(Set.of(
                 VersionInfo.of(0, ConfigV0.class, x -> new ConfigV1(1, x.a)),
                 VersionInfo.of(1, ConfigV1.class, x -> new ConfigV2(2, new Foo(x.b == 1 ? "one" : "idk"))),
-                VersionInfo.of(2, ConfigV2.class)
+                VersionInfo.ofLatest(2, ConfigV2.class)
         ), Conf.class);
         final Gson gson = new GsonBuilder().registerTypeAdapterFactory(new GsonRecordTypeAdapterFactory()).create();
 
