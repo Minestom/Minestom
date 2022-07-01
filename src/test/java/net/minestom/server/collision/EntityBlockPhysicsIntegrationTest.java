@@ -60,6 +60,21 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckShallowAngle(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(13, 99, 16, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(12.812, 100.0, 16.498)).join();
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.273, -0.0784, 0.0));
+        assertTrue(res.isOnGround());
+        assertTrue(res.collisionY());
+        assertEqualsPoint(new Vec(13.09, 100, 16.5), res.newPosition());
+        assertEqualsPoint(new Vec(0.273, 0, 0), res.newVelocity());
+    }
+
+    @Test
     public void entityPhysicsCheckFallFence(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.OAK_FENCE);
