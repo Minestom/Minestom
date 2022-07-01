@@ -44,6 +44,7 @@ public final class ConfigParser<R> {
      * @param deserializer serializer which has to tolerate partial reads i.e. when the passed class doesn't consume
      *                     all available data; for JSON data you can use e.g.
      *                     {@link com.google.gson.Gson#fromJson(String, Type)} here
+     * @param saveCallback executed when the serialized version is older and a new version should be written
      * @return the latest config
      * @param <T> type of serialized data (source)
      */
