@@ -2,14 +2,18 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentType;
 import org.junit.jupiter.api.Test;
 
+import java.lang.String;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static net.minestom.server.command.builder.arguments.ArgumentType.Boolean;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.String;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandExecutionTest {
@@ -27,7 +31,7 @@ public class CommandExecutionTest {
             boolean bool1 = context.get("bool1");
             boolean bool2 = context.get("bool2");
             bool.set(bool1 && bool2);
-        }, ArgumentType.Boolean("bool1"), ArgumentType.Boolean("bool2"));
+        }, Boolean("bool1"), Boolean("bool2"));
 
         assertFalse(bool.get());
 
@@ -70,15 +74,23 @@ public class CommandExecutionTest {
 
     @Test
     public void singleInteger() {
-        List<List<Argument<?>>> args = List.of(
-                List.of(ArgumentType.Integer("number"))
-        );
-        assertSyntax(args, "5", ExpectedExecution.FIRST_SYNTAX);
-        assertSyntax(args, "5 5", ExpectedExecution.DEFAULT);
-        assertSyntax(args, "", ExpectedExecution.DEFAULT);
+        List<Argument<?>> args = List.of(Integer("number"));
+        assertSingleSyntax(args, "5", ExpectedExecution.FIRST_SYNTAX, Map.of("number", 5));
+        assertSingleSyntax(args, "5 5", ExpectedExecution.DEFAULT);
+        assertSingleSyntax(args, "", ExpectedExecution.DEFAULT);
     }
 
-    private static void assertSyntax(List<List<Argument<?>>> args, String input, ExpectedExecution expected) {
+    @Test
+    public void singleString() {
+        List<Argument<?>> args = List.of(String("string"));
+        assertSingleSyntax(args, """
+                "value"
+                """, ExpectedExecution.FIRST_SYNTAX, Map.of("string", "value"));
+        assertSingleSyntax(args, "5 5", ExpectedExecution.DEFAULT);
+        assertSingleSyntax(args, "", ExpectedExecution.DEFAULT);
+    }
+
+    private static void assertSyntax(List<List<Argument<?>>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
         final String commandName = "name";
 
         var manager = new CommandManager();
@@ -86,6 +98,8 @@ public class CommandExecutionTest {
         manager.register(command);
 
         AtomicReference<ExpectedExecution> result = new AtomicReference<>();
+        AtomicReference<Map<String, Object>> values = new AtomicReference<>();
+
         command.setDefaultExecutor((sender, context) -> {
             if (!result.compareAndSet(null, ExpectedExecution.DEFAULT)) {
                 fail("Multiple execution: " + result.get());
@@ -99,12 +113,28 @@ public class CommandExecutionTest {
                 if (!result.compareAndSet(null, id)) {
                     fail("Multiple execution: " + result.get());
                 }
+                values.set(context.getMap());
             }, t.toArray(Argument[]::new));
         }
 
         final String executeString = commandName + " " + input;
         manager.executeServerCommand(executeString);
-        assertEquals(expected, result.get());
+        assertEquals(expectedExecution, result.get());
+        if (expectedValues != null) {
+            assertEquals(expectedValues, values.get());
+        }
+    }
+
+    private static void assertSyntax(List<List<Argument<?>>> args, String input, ExpectedExecution expectedExecution) {
+        assertSyntax(args, input, expectedExecution, null);
+    }
+
+    private static void assertSingleSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
+        assertSyntax(List.of(args), input, expectedExecution, expectedValues);
+    }
+
+    private static void assertSingleSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution) {
+        assertSingleSyntax(args, input, expectedExecution, null);
     }
 
     enum ExpectedExecution {
